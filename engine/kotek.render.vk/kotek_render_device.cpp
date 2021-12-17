@@ -90,6 +90,7 @@ namespace Kotek
 					vkDestroyDevice(this->m_p_device, nullptr);
 				}
 
+#ifdef KOTEK_DEBUG
 				PFN_vkDestroyDebugReportCallbackEXT p_destroy_callback =
 					(PFN_vkDestroyDebugReportCallbackEXT)vkGetInstanceProcAddr(
 						this->m_p_instance, "vkDestroyDebugReportCallbackEXT");
@@ -99,6 +100,7 @@ namespace Kotek
 					p_destroy_callback(this->m_p_instance,
 						this->m_debug_report_callback_instance, nullptr);
 				}
+#endif
 
 				if (this->m_p_instance)
 				{
@@ -380,6 +382,7 @@ namespace Kotek
 				KOTEK_ASSERT(
 					status == VK_SUCCESS, "failed to create VkInstance!");
 
+#ifdef KOTEK_DEBUG
 				VkDebugReportCallbackCreateInfoEXT info_debug_callback = {};
 
 				info_debug_callback.sType =
@@ -403,6 +406,7 @@ namespace Kotek
 
 				KOTEK_ASSERT(
 					status == VK_SUCCESS, "can't create debug report callback");
+#endif
 			}
 
 			void kotek_render_device::initializeDevice(
