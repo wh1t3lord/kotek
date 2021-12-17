@@ -25,7 +25,7 @@ namespace Kotek
 				m_hashed_type(typeid(ComponentType).hash_code()),
 				m_current_index(0)
 			{
-				KOTEK_ASSERT(array_size,
+				KOTEK_ASSERT(array_size > 0,
 					"you must create allocator with array_size > 0! {}",
 					this->GetDebugName().get_as_is());
 
