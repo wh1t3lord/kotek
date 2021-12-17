@@ -8,20 +8,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 
 if (WIN32)
-include_directories("../../deps/vld/include/")
+include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
 endif()
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-find_package(TBB REQUIRED PATHS "../../deps/")
-find_package(Boost COMPONENTS json container unit_test_framework REQUIRED PATHS "../../deps/")
-find_package(fmt REQUIRED PATHS "../../deps/")
+find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(Boost COMPONENTS json container unit_test_framework REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(fmt REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(Vulkan REQUIRED)
-find_package(glfw3 3.3 REQUIRED PATHS "../../deps/")
-find_package(mimalloc 1.7 REQUIRED PATHS "../../deps/mimalloc/${CMAKE_BUILD_TYPE}/")
+find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(mimalloc 1.7 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-	find_package(glm REQUIRED PATHS "../../deps/")
+	find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 endif()
 
 if(TBB_FOUND)

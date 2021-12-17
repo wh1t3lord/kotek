@@ -5,23 +5,23 @@ project(kotek.render VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories("../../deps/ktx/include/")
+include_directories("../../${KOTEK_DEPS_FOLDER}/ktx/include/")
 
 if (WIN32)
-include_directories("../../deps/vld/include/")
+include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
 endif()
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-link_directories("../../deps/ktx/lib/")
+link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/lib/")
 
 find_package(Vulkan REQUIRED)
 
-find_package(TBB REQUIRED PATHS "../../deps/")
-find_package(glfw3 3.3 REQUIRED PATHS "../../deps/")
+find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-	find_package(glm REQUIRED PATHS "../../deps/")
+	find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 endif()
  
 add_library(${PROJECT_NAME} STATIC

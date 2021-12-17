@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.19.3)
 project(kotek.core.memory VERSION 1 LANGUAGES CXX)
 
 if (WIN32)
-include_directories("../../deps/vld/include/")
+include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
 endif()
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
@@ -14,8 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message("DETECTING LIBRARIES for ${PROJECT_NAME}")
 
-find_package(mimalloc 1.7 REQUIRED PATHS "../../deps/mimalloc/${CMAKE_BUILD_TYPE}/")
-find_package(TBB REQUIRED PATHS "../../deps/")
+find_package(mimalloc 1.7 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
+find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 add_library(${PROJECT_NAME} STATIC 
 	"main_core_memory_dll.cpp"

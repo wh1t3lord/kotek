@@ -5,24 +5,24 @@ project(kotek.render.vk VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories("../../deps/shaderc/${CMAKE_BUILD_TYPE}/include/")
+include_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/include/")
 
 if (WIN32)
-include_directories("../../deps/vld/include/")
+include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
 endif()
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-link_directories("../../deps/ktx/lib/")
-link_directories("../../deps/shaderc/${CMAKE_BUILD_TYPE}/lib/")
+link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/lib/")
+link_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
 
 find_package(Vulkan REQUIRED)
-find_package(Boost COMPONENTS unit_test_framework REQUIRED PATHS "../../deps/")
-find_package(glfw3 3.3 REQUIRED PATHS "../../deps/")
-find_package(TBB REQUIRED PATHS "../../deps/")
+find_package(Boost COMPONENTS unit_test_framework REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    find_package(glm REQUIRED PATHS "../../deps/")
+    find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 endif()
 
 message("DETECTING LIBRARIES for ${PROJECT_NAME}")

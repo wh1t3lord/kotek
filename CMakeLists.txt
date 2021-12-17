@@ -3,6 +3,10 @@ project(kotek.engine)
 
 message("[Engine]: build type is '${CMAKE_BUILD_TYPE}'")
 
+if (WIN32)
+	set(KOTEK_DEPS_FOLDER "kotek-engine-deps-win32")
+endif()
+
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	add_definitions(
 		-DKOTEK_DEBUG
@@ -78,7 +82,7 @@ endif()
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
 	add_definitions(-DKOTEK_MATH_LIBRARY_GLM)
-	set(glm_DIR "../../deps/glm/cmake/glm/")
+	set(glm_DIR "../../${KOTEK_DEPS_FOLDER}/glm/cmake/glm/")
 elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
 	add_definitions(-DKOTEK_MATH_LIBRARY_DXM)
 elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "EIGEN")
