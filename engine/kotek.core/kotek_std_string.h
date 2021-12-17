@@ -2,12 +2,16 @@
 
 #include "kotek_std_alias_casting.h"
 #include "kotek_std_alias_string.h"
+
+// TODO: use ICU library for converting things warning STL4017
 #include <codecvt>
 
 namespace Kotek
 {
 	namespace ktk
 	{
+		// TODO: remove warning warning C4244: 'argument': conversion from
+		// 'const wchar_t' to 'const _Elem', possible loss of data
 		class string
 		{
 		public:

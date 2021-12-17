@@ -205,7 +205,7 @@ namespace Kotek
 					->uploadTextureWithData(p_texture, p_data);
 			}
 
-			const ktk::vector<VkDescriptorSet>&
+			ktk::vector<VkDescriptorSet>
 			ktkRenderGraphResourceManager::GetDescriptorSets(
 				const ktk::string& pipeline_name) const noexcept
 			{
@@ -236,7 +236,7 @@ namespace Kotek
 						}
 					}
 
-					return ktk::vector<VkDescriptorSet>();
+					return {};
 				}
 
 				return this->m_storage_descriptor_sets.at(pipeline_name);

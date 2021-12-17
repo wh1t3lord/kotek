@@ -72,7 +72,7 @@ namespace Kotek
 				void uploadTextureWithData(
 					const ktk::string& texture_name, void* p_data) noexcept;
 
-				const ktk::vector<VkDescriptorSet>& GetDescriptorSets(
+				ktk::vector<VkDescriptorSet> GetDescriptorSets(
 					const ktk::string& pipeline_name) const noexcept;
 
 				VkRenderPass GetRenderPass(
