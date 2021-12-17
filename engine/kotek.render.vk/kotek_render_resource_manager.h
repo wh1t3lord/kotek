@@ -1,0 +1,166 @@
+#pragma once
+
+#include "../kotek.core.api/kotek_api.h"
+#include "../kotek.core/kotek_std.h"
+
+// Resource management structures
+#include "kotek_render_command_list_ring.h"
+#include "kotek_render_dynamic_buffer_ring.h"
+#include "kotek_render_resource_view_heap.h"
+#include "kotek_render_shader_manager.h"
+#include "kotek_render_static_buffer_pool.h"
+#include "kotek_render_texture_manager.h"
+#include "kotek_render_upload_heap.h"
+
+namespace Kotek
+{
+	namespace Render
+	{
+		namespace vk
+		{
+			class kotek_render_swapchain;
+			class kotek_render_device;
+		} // namespace vk
+	}     // namespace Render
+} // namespace Kotek
+
+namespace Kotek
+{
+	namespace Render
+	{
+		namespace vk
+		{
+			// We are queuing (backBufferCount + 0.5) frames, so we need to
+			// triple buffer the resources that get modified each frame
+			constexpr ktk::uint32_t _kSwapchainBackBuffers = 3;
+
+			class ktkRenderResourceManager
+				: public Core::kotek_i_render_resource_manager
+			{
+			public:
+				ktkRenderResourceManager(kotek_render_device* p_device,
+					Core::ktkMainManager* p_manager);
+				ktkRenderResourceManager(void) = delete;
+				~ktkRenderResourceManager(void);
+
+				ktkRenderResourceManager(
+					const ktkRenderResourceManager&) = delete;
+				ktkRenderResourceManager& operator=(
+					const ktkRenderResourceManager&) = delete;
+				ktkRenderResourceManager(
+					ktkRenderResourceManager&&) = delete;
+				ktkRenderResourceManager& operator=(
+					ktkRenderResourceManager&&) = delete;
+
+				void initialize(Core::kotek_i_render_device* p_raw_device,
+					Core::kotek_i_render_swapchain* p_raw_swapchain) override;
+
+				void shutdown(
+					Core::kotek_i_render_device* p_raw_device) override;
+
+				void resize(kotek_render_device* p_render_device,
+					kotek_render_swapchain* p_render_swapchain);
+
+				kotek_render_dynamic_buffer_ring* GetDynamicBufferRing(
+					void) noexcept;
+
+				kotek_render_upload_heap* getUploadHeap(void) noexcept;
+
+				kotek_render_texture_manager* getTextureManager(void) noexcept;
+
+				kotek_render_resource_view_heap* GetCreatorHeap(void) noexcept;
+
+				kotek_render_shader_manager* getShaderManager(void) noexcept;
+
+				VkRenderPass getSwapchainRenderPass(void) const noexcept;
+
+				const VkFramebuffer getSwapchainFrameBuffer(
+					ktk::uint32_t acquired_swapchain_index) const noexcept;
+
+				const VkDescriptorPool getDescriptorPool(void) const noexcept;
+
+				/*
+				  VkShaderModule loadShader(Core::ktkMainManager& main_manager,
+				                                   const ktk::string& path,
+				                                   shader_type_t type) noexcept
+				  {
+				    return this->m_manager_shader.loadShader(main_manager, path,
+				  type);
+				  }
+
+				  VkShaderModule loadShader(Core::ktkMainManager& main_manager,
+				                                   const ktk::string& path)
+				  noexcept
+				  {
+				    return this->m_manager_shader.loadShader(main_manager,
+				  path);
+				  }
+
+				  VkShaderModule loadShaderAsString(kotek_render_device*
+				  p_render_device, const ktk::string& code_as_string,
+				  shader_type_t type) noexcept
+				  {
+				    return
+				  this->m_manager_shader.loadShaderAsString(p_render_device,
+				                                                     code_as_string,
+				  type);
+				  }*/
+
+				VkPipelineShaderStageCreateInfo buildShader(
+					shader_type_t type, VkShaderModule p_module) noexcept;
+
+				void uploadAllResourcesToGPU(void) noexcept;
+
+				VkImage GetSwapchainImage(
+					ktk::uint32_t acquired_index) const noexcept;
+
+			private:
+				void createStaticAllocators(
+					kotek_render_device* p_render_device) noexcept;
+				void destroyStaticAllocators(
+					kotek_render_device* p_render_device) noexcept;
+
+				void createSwapchainRTVs(kotek_render_device* p_render_device,
+					kotek_render_swapchain* p_render_swapchain);
+				void destroySwapchainRTVs(kotek_render_device* p_render_device);
+
+				void createDSV(void);
+
+				void createSwapchainRenderPass(
+					kotek_render_device* p_render_device,
+					kotek_render_swapchain* p_render_swapchain);
+				void createSwapchainImages(kotek_render_device* p_render_device,
+					kotek_render_swapchain* p_render_swapchain);
+				void createSwapchainImagesView(
+					kotek_render_device* p_render_device,
+					kotek_render_swapchain* p_render_swapchain);
+				void createSwapchainFrameBuffers(
+					kotek_render_device* p_render_device);
+
+				void destroySwapchainRenderPass(
+					kotek_render_device* p_render_device);
+				void destroySwapchainImagesView(
+					kotek_render_device* p_render_device);
+				void destroySwapchainFrameBuffers(
+					kotek_render_device* p_render_device);
+
+			private:
+				ktk::uint32_t m_swapchain_image_count;
+				VkRenderPass m_p_render_pass_swapchain;
+				kotek_render_device* m_p_device;
+				ktk::vector<VkImage> m_swapchain_images;
+				ktk::vector<VkImageView> m_swapchain_images_view;
+				ktk::vector<VkFramebuffer> m_swapchain_framebuffers;
+
+				kotek_render_static_buffer_pool m_static_buffer_cpu_access;
+				kotek_render_static_buffer_pool m_static_buffer_gpu_access_only;
+				kotek_render_resource_view_heap m_resource_view_heap;
+				kotek_render_dynamic_buffer_ring m_dynamic_buffer_ring;
+				kotek_render_upload_heap m_upload_heap;
+
+				kotek_render_shader_manager m_manager_shader;
+				kotek_render_texture_manager m_manager_texture;
+			};
+		} // namespace vk
+	}     // namespace Render
+} // namespace Kotek

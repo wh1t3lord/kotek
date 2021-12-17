@@ -1,0 +1,43 @@
+# exclude all dot files except .git, appveyor and travis files
+.*
+!.clang-format
+!.git*
+!.appveyor*
+!.travis.yml
+
+[Xx]64/
+[Bb]uild/
+
+# exclude binaries and temporary files
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+bin*/
+!deps/**
+!deps/vld/bin/**
+!deps/TBB/bin/**
+!deps/shaderc/lib/**
+!deps/Boost/**
+!deps/Bullet/**
+!deps/mimalloc/**
+!deps/TBB/**
+!deps/KTX-Software/**
+!deps/FMT/**
+!deps/glfw3/**
+!deps/Profilers/**
+!deps/DirectXMath/**
+intermediate/
+intermediate_plugs/
+out/
+CMakeFiles/
+*.aps
+*.user
+*.PVS-Studio.*
+*.gch
+*.so
+*.a
+*.o
+*.cache
+# exclude doxygen output
+doc/doxygen/html/*
+user_data/
