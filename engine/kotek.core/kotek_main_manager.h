@@ -64,8 +64,6 @@ namespace Kotek
 			int getARGC(void) const noexcept;
 			char** getARGV(void) const noexcept;
 
-			void dumpAll(void) noexcept;
-
 			void LoadDynamicLibraryUserGame(
 				const ktk::string& library_name) noexcept;
 			void UnLoadDynamicLibraryUserGame() noexcept;
@@ -77,8 +75,6 @@ namespace Kotek
 #endif
 			bool IsContainsConsoleCommandLineArgument(
 				const ktk::string& your_argument) const noexcept;
-		private:
-			void dumpProfiler(void) noexcept;
 
 		private:
 			int m_argc;

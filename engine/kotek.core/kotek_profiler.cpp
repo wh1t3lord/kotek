@@ -1,7 +1,7 @@
 #include "kotek_profiler.h"
 
 #ifdef KOTEK_USE_CPU_PROFILER
- 
+
 #endif
 
 namespace Kotek
@@ -13,7 +13,7 @@ namespace Kotek
 		ktkProfiler::~ktkProfiler(void)
 		{
 #ifdef KOTEK_USE_CPU_PROFILER
- 
+
 #endif
 		}
 
@@ -21,21 +21,16 @@ namespace Kotek
 			const ktk::string& path_where_to_save)
 		{
 #ifdef KOTEK_USE_CPU_PROFILER
-			ktk::string build_path = path_where_to_save;
-			ktk::string build_filename = your_test_name;
-
-			build_filename += ".pltraw";
-			build_path.appendPath(build_filename);
-
-			KOTEK_ASSERT(build_path.get_as_legacy().size() <= 256,
-				"you can't use string that contains more "
-				"than 256 symbols!");
-
-	
+			tracy::StartupProfiler();
 #endif
 		}
 
-		void ktkProfiler::Shutdown(void) {}
+		void ktkProfiler::Shutdown(void)
+		{
+#ifdef KOTEK_CPU_PROFILER
+			tracy::ShutdownProfiler();
+#endif
+		}
 
 	} // namespace Core
 } // namespace Kotek

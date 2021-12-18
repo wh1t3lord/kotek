@@ -34,7 +34,6 @@ namespace Kotek
 		{
 			this->m_manager_filesystem->Shutdown();
 			this->m_manager_input->Shutdown();
-			this->m_manager_profiler->Shutdown();
 		}
 
 		ktkProfiler* ktkMainManager::GetProfiler(void) const noexcept
@@ -129,9 +128,6 @@ namespace Kotek
 			return this->m_argv;
 		}
 
-		// TODO: create dumper for this operations, now it's for test
-		void ktkMainManager::dumpAll(void) noexcept { this->dumpProfiler(); }
-
 		void ktkMainManager::LoadDynamicLibraryUserGame(
 			const ktk::string& library_name) noexcept
 		{
@@ -165,11 +161,6 @@ namespace Kotek
 					   [your_argument](const ktk::string& argument) -> bool {
 						   return argument == your_argument;
 					   }) != this->m_parsed_command_line_arguments.end();
-		}
-
-		// TODO: delete
-		void ktkMainManager::dumpProfiler(void) noexcept
-		{
 		}
 
 	} // namespace Core

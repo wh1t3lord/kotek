@@ -123,6 +123,9 @@ namespace Kotek
 
 			void kotek_render_command_list_ring::OnBeginFrame()
 			{
+				// TODO: if it is true you need to delete that assertion and make fixes
+				KOTEK_ASSERT(this->m_frame_index != ktk::kMax_UINT32, "overflow you need to set zero your frame index");
+
 				this->m_p_current_frame = &this->m_frames.at(
 					this->m_frame_index % this->m_number_of_frames);
 
