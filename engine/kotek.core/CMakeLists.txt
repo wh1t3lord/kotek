@@ -21,7 +21,9 @@ find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(mimalloc 1.7 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-	find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+    find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
+    find_package(directxmath REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 endif()
 
 if(TBB_FOUND)
@@ -95,6 +97,7 @@ add_library(${PROJECT_NAME} STATIC
 	"kotek_std_math_vector2f.h"
 	"kotek_std_math_vector3f.h"
 	"kotek_std_math_vector4f.h"
+	"kotek_std_math_quaternionf.h"
 	"kotek_std_math.h"
     "kotek_std_alias_ui.h"
     "kotek_std_alias_containers.h"
@@ -138,7 +141,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../includ
 target_include_directories(${PROJECT_NAME} PRIVATE ${Vulkan_INCLUDE_DIR})
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-	target_include_directories(${PROJECT_NAME} PRIVATE ${GLM_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} glm::glm)
+elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
+    target_link_libraries(${PROJECT_NAME} Microsoft::DirectXMath)
 endif()
 
 target_link_libraries(${PROJECT_NAME} kotek.core.api)

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "kotek_std_alias_math.h"
+
 namespace Kotek
 {
 	namespace ktk

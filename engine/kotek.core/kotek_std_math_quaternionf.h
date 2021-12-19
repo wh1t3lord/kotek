@@ -8,19 +8,23 @@ namespace Kotek
 	{
 		namespace math
 		{
-			class vector4f
+			class quaternionf
 			{
 			public:
-				vector4f(float x, float y, float z, float w) {}
-				~vector4f(void) {}
+				quaternionf(float x, float y, float z, float w) :
+					m_base(x, y, z, w)
+				{
+				}
 
-				const base_vec4_t& GetBaseType(void) const noexcept
+				~quaternionf(void) {}
+
+				const base_quat_t& GetBaseType(void) const noexcept
 				{
 					return this->m_base;
 				}
 
 			private:
-				base_vec4_t m_base;
+				base_quat_t m_base;
 			};
 		} // namespace math
 	}     // namespace ktk

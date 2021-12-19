@@ -7,6 +7,7 @@
 
 [Xx]64/
 [Bb]uild/
+[Bb]uild*/
 
 # exclude binaries and temporary files
 CMakeCache.txt

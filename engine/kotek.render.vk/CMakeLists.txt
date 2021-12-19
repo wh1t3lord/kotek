@@ -23,6 +23,8 @@ find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
     find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
+    find_package(directxmath REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 endif()
 
 message("DETECTING LIBRARIES for ${PROJECT_NAME}")
@@ -89,7 +91,9 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../includ
 target_include_directories(${PROJECT_NAME} PRIVATE ${Vulkan_INCLUDE_DIR})
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    target_include_directories(${PROJECT_NAME} PRIVATE ${GLM_INCLUDE_DIRS})
+    target_link_libraries(${PROJECT_NAME} glm::glm)
+elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
+    target_link_libraries(${PROJECT_NAME} Microsoft::DirectXMath)
 endif()
 
 target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
