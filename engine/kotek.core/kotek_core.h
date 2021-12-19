@@ -19,5 +19,6 @@ namespace Kotek
 
 		void RegisterTests_String_ForModule_Core(void);
 		void RegisterTests_Filesystem_ForModule_Core(void);
+		void RegisterTests_Math_ForModuleCore(void);
 	} // namespace Core
 } // namespace Kotek

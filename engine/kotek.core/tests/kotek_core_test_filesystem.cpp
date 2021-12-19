@@ -9,7 +9,7 @@ namespace Kotek
 	{
 		void RegisterTests_Filesystem_ForModule_Core(void)
 		{
-#ifdef KOTEK_DEBUG
+#ifdef KOTEK_USE_TESTS
 			KOTEK_MESSAGE("registered!");
 #endif
 		}

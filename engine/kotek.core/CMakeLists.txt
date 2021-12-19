@@ -47,7 +47,8 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON")
 	message("[Engine]: adding tests for runtime in project ${PROJECT_NAME}")
 	set(to_include_tests 
 		"tests/kotek_core_test_filesystem.cpp"
-		"tests/kotek_core_test_string.cpp")
+		"tests/kotek_core_test_string.cpp"
+		"tests/kotek_core_test_math.cpp")
 elseif("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "OFF")
 	# TODO: add support for own projects for unit testing
 	message("[Engine]: creating test projects for project ${PROJECT_NAME}")
@@ -90,6 +91,11 @@ add_library(${PROJECT_NAME} STATIC
     "kotek_std_alias_numerics.h"
     "kotek_std_utility.h"
     "kotek_std_alias_math.h"
+	"kotek_std_math_vector1f.h"
+	"kotek_std_math_vector2f.h"
+	"kotek_std_math_vector3f.h"
+	"kotek_std_math_vector4f.h"
+	"kotek_std_math.h"
     "kotek_std_alias_ui.h"
     "kotek_std_alias_containers.h"
     "kotek_std_alias_casting.h"
