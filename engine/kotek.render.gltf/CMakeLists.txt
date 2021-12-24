@@ -30,7 +30,6 @@ add_library(${PROJECT_NAME} STATIC
 	"kotek_render_gltf.h"
 	"kotek_gltf_model.h"
 	"kotek_gltf_model.cpp"
-	"kotek_gltf.h"
 	"main_render_gltf_dll.cpp"
 )
 

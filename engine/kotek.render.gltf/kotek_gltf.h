@@ -72,17 +72,17 @@ namespace Kotek
 				this->m_p_data = p_data;
 			}
 
-			const ktk::vec4_t& getMin(void) const noexcept
+			const ktk::math::vec4_t& getMin(void) const noexcept
 			{
 				return this->m_min;
 			}
-			void setMin(const ktk::vec4_t& vec) noexcept { this->m_min = vec; }
+			void setMin(const ktk::math::vec4_t& vec) noexcept { this->m_min = vec; }
 
-			const ktk::vec4_t& getMax(void) const noexcept
+			const ktk::math::vec4_t& getMax(void) const noexcept
 			{
 				return this->m_max;
 			}
-			void setMax(const ktk::vec4_t& vec) noexcept { this->m_max = vec; }
+			void setMax(const ktk::math::vec4_t& vec) noexcept { this->m_max = vec; }
 
 		private:
 			int m_count;
@@ -90,8 +90,8 @@ namespace Kotek
 			int m_dimension;
 			int m_type;
 			const float* m_p_data;
-			ktk::vec4_t m_min;
-			ktk::vec4_t m_max;
+			ktk::math::vec4_t m_min;
+			ktk::math::vec4_t m_max;
 		};
 
 		class kotek_gltf_primitives
@@ -104,27 +104,27 @@ namespace Kotek
 			}
 			~kotek_gltf_primitives(void) {}
 
-			const ktk::vec4_t& getCenter(void) const noexcept
+			const ktk::math::vec4_t& getCenter(void) const noexcept
 			{
 				return this->m_center;
 			}
-			void setCenter(const ktk::vec4_t& vec) noexcept
+			void setCenter(const ktk::math::vec4_t& vec) noexcept
 			{
 				this->m_center = vec;
 			}
 
-			const ktk::vec4_t& getRadius(void) const noexcept
+			const ktk::math::vec4_t& getRadius(void) const noexcept
 			{
 				return this->m_radius;
 			}
-			void setRadius(const ktk::vec4_t& vec) noexcept
+			void setRadius(const ktk::math::vec4_t& vec) noexcept
 			{
 				this->m_radius = vec;
 			}
 
 		private:
-			ktk::vec4_t m_center;
-			ktk::vec4_t m_radius;
+			ktk::math::vec4_t m_center;
+			ktk::math::vec4_t m_radius;
 		};
 
 		class kotek_gltf_mesh
@@ -168,28 +168,28 @@ namespace Kotek
 				this->m_rotation = data;
 			}
 
-			const ktk::vec4_t& getTranslation(void) const noexcept
+			const ktk::math::vec4_t& getTranslation(void) const noexcept
 			{
 				return this->m_translation;
 			}
-			void setTranslation(const ktk::vec4_t& data) noexcept
+			void setTranslation(const ktk::math::vec4_t& data) noexcept
 			{
 				this->m_translation = data;
 			}
 
-			const ktk::vec4_t& getScale(void) const noexcept
+			const ktk::math::vec4_t& getScale(void) const noexcept
 			{
 				return this->m_scale;
 			}
-			void setScale(const ktk::vec4_t& data) noexcept
+			void setScale(const ktk::math::vec4_t& data) noexcept
 			{
 				this->m_scale = data;
 			}
 
 		private:
 			ktk::mat4x4_t m_rotation;
-			ktk::vec4_t m_translation;
-			ktk::vec4_t m_scale;
+			ktk::math::vec4_t m_translation;
+			ktk::math::vec4_t m_scale;
 		};
 
 		class kotek_gltf_node
@@ -366,11 +366,11 @@ namespace Kotek
 				this->m_outer_cone_angle = value;
 			}
 
-			const ktk::vec4_t& getColor(void) const noexcept
+			const ktk::math::vec4_t& getColor(void) const noexcept
 			{
 				return this->m_color;
 			}
-			void setColor(const ktk::vec4_t& data) noexcept
+			void setColor(const ktk::math::vec4_t& data) noexcept
 			{
 				this->m_color = data;
 			}
@@ -381,7 +381,7 @@ namespace Kotek
 			float m_intensity;
 			float m_inner_cone_angle;
 			float m_outer_cone_angle;
-			ktk::vec4_t m_color;
+			ktk::math::vec4_t m_color;
 		};
 
 		class kotek_gltf_light_instance

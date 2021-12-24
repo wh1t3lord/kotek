@@ -8,34 +8,31 @@ namespace Kotek
 	{
 		namespace math
 		{
-			class vector1f
+			class matrix2x2f
 			{
 			public:
-				vector1f(void) = default;
-				vector1f(float x) : m_base(x) {}
-				vector1f(const base_vec1_t& data) : m_base(data) {}
+				matrix2x2f(void) {}
+				~matrix2x2f(void) {}
 
-				~vector1f() {}
-
-				const base_vec1_t& GetBaseType(void) const noexcept
+				const base_mat2x2_t& GetBaseType(void) const noexcept
 				{
 					return this->m_base;
 				}
 
-				vector1f& operator=(const vector1f& data)
+				matrix2x2f& operator=(const matrix2x2f& data)
 				{
 					this->m_base = data.m_base;
 					return *this;
 				}
 
-				vector1f& operator=(const base_vec1_t& data) 
+				matrix2x2f& operator=(const base_mat2x2_t& data)
 				{
 					this->m_base = data;
 					return *this;
 				}
 
 			private:
-				base_vec1_t m_base;
+				base_mat2x2_t m_base;
 			};
 		} // namespace math
 	}     // namespace ktk

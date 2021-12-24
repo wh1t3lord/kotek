@@ -1,7 +1,6 @@
 #pragma once
 
 #include "../kotek.core/kotek_file.h"
-#include "kotek_gltf.h"
 
 namespace Kotek
 {
