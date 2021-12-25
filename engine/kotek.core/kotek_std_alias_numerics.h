@@ -1,5 +1,6 @@
 #pragma once
 
+#include "kotek_std_alias_math.h"
 #include <cstddef>
 #include <cstdint>
 
@@ -18,6 +19,15 @@ namespace Kotek
 		using size_t = std::size_t;
 		using entity_t = uint64_t;
 		using enum_base_t = int;
+
+		// TODO: make choosing by cmake flag, that if we have ORIGINAL state
+		// means float, double, long double are original types, SEMI means
+		// double_t and long_double_t are original, but float based on
+		// math::base_decimal_t DEFAULT all types are based on one type is
+		// math::base_decimal_t
+		using float_t = math::base_decimal_t;
+		using double_t = math::base_decimal_t;
+		using long_double_t = math::base_decimal_t;
 
 		constexpr uint32_t kMemoryConvertValue_Gigabytes = 1073741824;
 		constexpr uint32_t kMemoryConvertValue_Megabytes = 1048576;

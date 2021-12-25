@@ -256,8 +256,10 @@ namespace Kotek
 						  "TESTING\n\n\n\n\n\n\n\n\n\n\n\n");
 
 			ktk::vector<const char*> argv_test = {"C:/test"};
-			boost::unit_test_framework::unit_test_main(
+			auto status = boost::unit_test_framework::unit_test_main(
 				init_unit_test, 1, const_cast<char**>(argv_test.data()));
+
+			KOTEK_ASSERT(status == 0, "you have got failed tests");
 
 			KOTEK_MESSAGE("\n\n\n\n\nUNIT TESTING UNIT TESTING UNIT TESTING");
 	#endif

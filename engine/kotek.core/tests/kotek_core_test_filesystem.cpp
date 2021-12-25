@@ -25,7 +25,7 @@ namespace Kotek
 			bool status = instance.IsValidPath(instance.GetFolderByEnum(
 				folder_index_t::kFolderIndex_UserTests));
 
-			BOOST_CHECK(status);
+			BOOST_REQUIRE(status);
 
 			instance.Shutdown();
 		}
@@ -59,7 +59,7 @@ namespace Kotek
 
 			bool status = fs.IsValidPath(path);
 
-			BOOST_CHECK(status);
+			BOOST_REQUIRE(status);
 
 			fs.Shutdown();
 		}

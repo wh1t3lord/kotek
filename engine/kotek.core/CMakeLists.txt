@@ -99,6 +99,8 @@ add_library(${PROJECT_NAME} STATIC
 	"kotek_std_math_vector4f.h"
 	"kotek_std_math_quaternionf.h"
 	"kotek_std_math_matrix_2x2_f.h"
+	"kotek_std_math_matrix_3x3_f.h"
+	"kotek_std_math_matrix_4x4_f.h"
 	"kotek_std_math.h"
     "kotek_std_alias_ui.h"
     "kotek_std_alias_containers.h"

@@ -27,7 +27,7 @@ namespace Kotek
 
 			instance += "a";
 
-			BOOST_CHECK(instance == "a");
+			BOOST_REQUIRE(instance == "a");
 		}
 
 		BOOST_AUTO_TEST_CASE(string_plus_one_tchar_symbol)
@@ -36,28 +36,28 @@ namespace Kotek
 
 			instance += KOTEK_TEXT("x");
 
-			BOOST_CHECK(instance == KOTEK_TEXT("x"));
+			BOOST_REQUIRE(instance == KOTEK_TEXT("x"));
 		}
 
 		BOOST_AUTO_TEST_CASE(string_equality_by_char_string)
 		{
 			ktk::string instance("test");
 
-			BOOST_CHECK(instance == "test");
+			BOOST_REQUIRE(instance == "test");
 		}
 
 		BOOST_AUTO_TEST_CASE(string_equality_by_tchar_string)
 		{
 			ktk::string instance(KOTEK_TEXT("test_tchar"));
 
-			BOOST_CHECK(instance == KOTEK_TEXT("test_tchar"));
+			BOOST_REQUIRE(instance == KOTEK_TEXT("test_tchar"));
 		}
 
 		BOOST_AUTO_TEST_CASE(string_construct_by_int)
 		{
 			ktk::string instance(std::numeric_limits<int>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<int>::max()).c_str());
 		}
 
@@ -65,7 +65,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<unsigned int>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<unsigned int>::max())
 					.c_str());
 		}
@@ -74,7 +74,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<float>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<float>::max()).c_str());
 		}
 
@@ -82,7 +82,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<double>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<double>::max()).c_str());
 		}
 
@@ -90,7 +90,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<long long>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<long long>::max()).c_str());
 		}
 
@@ -98,7 +98,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<short int>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<short int>::max()).c_str());
 		}
 
@@ -106,7 +106,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<signed int>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<signed int>::max()).c_str());
 		}
 
@@ -114,7 +114,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<long int>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<long int>::max()).c_str());
 		}
 
@@ -122,7 +122,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<long long int>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<long long int>::max())
 					.c_str());
 		}
@@ -131,7 +131,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<wchar_t>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<wchar_t>::max()).c_str());
 		}
 
@@ -139,7 +139,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<char8_t>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<char8_t>::max()).c_str());
 		}
 
@@ -147,7 +147,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<char16_t>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<char16_t>::max()).c_str());
 		}
 
@@ -155,7 +155,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<char32_t>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<char32_t>::max()).c_str());
 		}
 
@@ -163,7 +163,7 @@ namespace Kotek
 		{
 			ktk::string instance(std::numeric_limits<long double>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(std::numeric_limits<long double>::max())
 					.c_str());
 		}
@@ -173,7 +173,7 @@ namespace Kotek
 			ktk::string instance(
 				std::numeric_limits<unsigned long long int>::max());
 
-			BOOST_CHECK(instance ==
+			BOOST_REQUIRE(instance ==
 				std::to_string(
 					std::numeric_limits<unsigned long long int>::max())
 					.c_str());
@@ -183,7 +183,7 @@ namespace Kotek
 		{
 			ktk::string instance = 255355;
 
-			BOOST_CHECK(instance == "255355");
+			BOOST_REQUIRE(instance == "255355");
 		}
 
 		BOOST_AUTO_TEST_CASE(string_construct_by_plus_number)
@@ -192,7 +192,7 @@ namespace Kotek
 
 			instance += 35;
 
-			BOOST_CHECK(instance == "35");
+			BOOST_REQUIRE(instance == "35");
 		}
 
 		BOOST_AUTO_TEST_CASE(string_auto_cast_to_number)
@@ -201,21 +201,21 @@ namespace Kotek
 
 			int test = instance;
 
-			BOOST_CHECK(test == 255);
+			BOOST_REQUIRE(test == 255);
 		}
 
 		BOOST_AUTO_TEST_CASE(string_recursive_adding_from_global_operator_plus)
 		{
 			ktk::string instance = "hello_";
 
-			BOOST_CHECK(((instance + ktk::string("world")) +
+			BOOST_REQUIRE(((instance + ktk::string("world")) +
 							ktk::string("kek")) == "hello_worldkek");
 		}
 
 		BOOST_AUTO_TEST_CASE(string_const_ref_global_operator_plus)
 		{
 			auto p_test = [](const ktk::string& test) -> void
-			{ BOOST_CHECK((test + ktk::string("kek")) == "hellokek"); };
+			{ BOOST_REQUIRE((test + ktk::string("kek")) == "hellokek"); };
 
 			p_test("hello");
 		}
@@ -224,7 +224,7 @@ namespace Kotek
 		{
 			auto p_test = [](const ktk::string& test,
 							  const ktk::string& test2) -> void
-			{ BOOST_CHECK((test + test2) == "hellokek"); };
+			{ BOOST_REQUIRE((test + test2) == "hellokek"); };
 
 			p_test("hello", "kek");
 		}
@@ -234,7 +234,7 @@ namespace Kotek
 		{
 			auto p_test = [](const ktk::string& test,
 							  const ktk::string_legacy& test2) -> void
-			{ BOOST_CHECK((test + test2) == "hellokek"); };
+			{ BOOST_REQUIRE((test + test2) == "hellokek"); };
 
 			p_test("hello", "kek");
 		}
@@ -245,7 +245,7 @@ namespace Kotek
 		{
 			auto p_test = [](const ktk::string& test,
 							  const ktk::string_unicode& test2) -> void
-			{ BOOST_CHECK((test + test2) == "hellokek"); };
+			{ BOOST_REQUIRE((test + test2) == "hellokek"); };
 
 			p_test("hello", KOTEK_TEXT("kek"));
 		}
@@ -255,7 +255,7 @@ namespace Kotek
 		{
 			auto p_test = [](const ktk::string& test,
 							  const ktk::string_unicode& test2) -> void
-			{ BOOST_CHECK((test + test2) == KOTEK_TEXT("hellokek")); };
+			{ BOOST_REQUIRE((test + test2) == KOTEK_TEXT("hellokek")); };
 
 			p_test("hello", KOTEK_TEXT("kek"));
 		}

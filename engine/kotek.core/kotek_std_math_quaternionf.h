@@ -11,25 +11,53 @@ namespace Kotek
 			class quaternionf
 			{
 			public:
-				quaternionf(void) = default;
-				quaternionf(float x, float y, float z, float w) :
+				quaternionf(base_decimal_t x, base_decimal_t y,
+					base_decimal_t z, base_decimal_t w) :
 					m_base(x, y, z, w)
 				{
 				}
-
 				quaternionf(const base_quat_t& data) : m_base(data) {}
+				quaternionf(const quaternionf& data) : m_base(data.m_base) {}
 
-				~quaternionf(void) {}
-
-				const base_quat_t& GetBaseType(void) const noexcept
-				{
-					return this->m_base;
-				}
+				quaternionf(void) = default;
+				~quaternionf(void) = default;
 
 				quaternionf& operator=(const quaternionf& data)
 				{
 					this->m_base = data.m_base;
 					return *this;
+				}
+
+				base_decimal_t Get_X(void) const noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					return this->m_base.x;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+				}
+
+				base_decimal_t Get_Y(void) const noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					return this->m_base.y;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+				}
+
+				base_decimal_t Get_Z(void) const noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					return this->m_base.z;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+				}
+
+				base_decimal_t Get_W(void) const noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					return this->m_base.w;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
 				}
 
 			private:

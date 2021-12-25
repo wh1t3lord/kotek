@@ -11,21 +11,44 @@ namespace Kotek
 			class vector3f
 			{
 			public:
-				vector3f(void) = default;
-				vector3f(float x, float y, float z) : m_base(x, y, z) {}
-				vector3f(const base_vec3_t& data) : m_base(data) {}
-
-				~vector3f() {}
-
-				const base_vec3_t& GetBaseType(void) const noexcept
+				vector3f(base_decimal_t x, base_decimal_t y, base_decimal_t z) :
+					m_base(x, y, z)
 				{
-					return this->m_base;
 				}
+				vector3f(const base_vec3_t& data) : m_base(data) {}
+				vector3f(const vector3f& data) : m_base(data.m_base) {}
+
+				vector3f(void) = default;
+				~vector3f() = default;
 
 				vector3f& operator=(const vector3f& data)
 				{
 					this->m_base = data.m_base;
 					return *this;
+				}
+
+				base_decimal_t Get_X(void) const noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					return this->m_base.x;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+				}
+
+				base_decimal_t Get_Y(void) const noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					return this->m_base.y;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+				}
+
+				base_decimal_t Get_Z(void) const noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					return this->m_base.z;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
 				}
 
 			private:

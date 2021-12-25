@@ -21,6 +21,7 @@ namespace Kotek
 #ifdef KOTEK_USE_TESTS
 			RegisterTests_String_ForModule_Core();
 			RegisterTests_Filesystem_ForModule_Core();
+			RegisterTests_Math_ForModule_Core();
 #endif
 		}
 
