@@ -19,13 +19,8 @@ namespace Kotek
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 				vector1f(const base_vec1_t& data) : m_base(data) {}
 #endif
-
 				vector1f(const vector1f& data) : m_base(data.m_base) {}
-
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 				vector1f(void) : m_base{} {}
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-#endif
 #pragma endregion
 
 				~vector1f() = default;
@@ -37,11 +32,25 @@ namespace Kotek
 					return *this;
 				}
 
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				vector1f& operator=(base_vec1_t data)
+				{
+					this->m_base = data;
+					return *this;
+				}
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 				vector1f& operator=(const base_vec1_t& data)
 				{
 					this->m_base = data;
 					return *this;
 				}
+
+				vector1f& operator=(base_decimal_t data)
+				{
+					this->m_base = data;
+					return *this;
+				}
+#endif
 
 				vector1f& operator+=(base_decimal_t value)
 				{
