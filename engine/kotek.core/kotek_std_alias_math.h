@@ -7,14 +7,38 @@
 	#include <DirectXMath.h>
 #endif
 
+#include <limits>
+
 namespace Kotek
 {
 	namespace ktk
 	{
 		namespace math
 		{
-			using base_decimal_t = float;
+#pragma region Constants
+			constexpr float kEpsilon_Float =
+				std::numeric_limits<float>::epsilon();
+			constexpr double kEpsilon_Double =
+				std::numeric_limits<double>::epsilon();
+			constexpr long double kEpsilon_LongDouble =
+				std::numeric_limits<long double>::epsilon();
 
+			constexpr float kMin_Float = std::numeric_limits<float>::min();
+			constexpr double kMin_Double = std::numeric_limits<double>::min();
+			constexpr long double kMin_LongDouble =
+				std::numeric_limits<long double>::min();
+
+			constexpr float kMax_Float = std::numeric_limits<float>::max();
+			constexpr double kMax_Double = std::numeric_limits<double>::max();
+			constexpr long double kMax_LongDouble =
+				std::numeric_limits<long double>::max();
+#pragma endregion
+
+#pragma region Aliases
+			using base_decimal_t = float;
+#pragma endregion
+
+#pragma region Math aliases
 #ifdef KOTEK_USE_MATH_LIBRARY_GLM
 			using base_vec1_t = glm::vec1;
 			using base_vec2_t = glm::vec2;
@@ -37,6 +61,7 @@ namespace Kotek
 
 			using base_quat_t = base_vec4_t;
 #endif
+#pragma endregion
 		} // namespace math
 	}     // namespace ktk
 } // namespace Kotek

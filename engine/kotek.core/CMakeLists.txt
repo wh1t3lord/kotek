@@ -92,6 +92,7 @@ add_library(${PROJECT_NAME} STATIC
 	"kotek_std.h"
     "kotek_std_alias_numerics.h"
     "kotek_std_utility.h"
+	"kotek_std_utility.cpp"
     "kotek_std_alias_math.h"
 	"kotek_std_math_vector1f.h"
 	"kotek_std_math_vector2f.h"

@@ -11,6 +11,7 @@ namespace Kotek
 			class vector1f
 			{
 			public:
+#pragma region Constructors
 				vector1f(base_decimal_t x) : m_base(x) {}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -25,9 +26,11 @@ namespace Kotek
 				vector1f(void) : m_base{} {}
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 #endif
+#pragma endregion
 
 				~vector1f() = default;
 
+#pragma region Assigment operators
 				vector1f& operator=(const vector1f& data)
 				{
 					this->m_base = data.m_base;
@@ -209,6 +212,47 @@ namespace Kotek
 					return *this;
 				}
 #endif
+#pragma endregion
+
+#pragma region Unary operators
+				vector1f operator+() const noexcept { return *this; }
+				vector1f operator-() const noexcept
+				{
+					return vector1f(-this->m_base);
+				}
+#pragma endregion
+
+#pragma region Comparison operators
+				bool operator==(const vector1f& data) const noexcept
+				{
+					auto casted_original = DirectX::XMLoadFloat(&this->m_base);
+					auto casted_argument = DirectX::XMLoadFloat(&data.m_base);
+
+					return DirectX::XMVector2Equal(
+						casted_original, casted_argument);
+				}
+
+				bool operator!=(const vector1f& data) const noexcept
+				{
+					auto casted_original = DirectX::XMLoadFloat(&this->m_base);
+					auto casted_argument = DirectX::XMLoadFloat(&data.m_base);
+
+					return DirectX::XMVector2NotEqual(
+						casted_original, casted_argument);
+				}
+#pragma endregion
+
+#pragma region Cast operators
+
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				operator DirectX::XMVECTOR() const noexcept
+				{
+					return DirectX::XMLoadFloat(&this->m_base);
+				}
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+
+#pragma endregion
 
 				base_decimal_t Get_X(void) const noexcept
 				{
@@ -236,6 +280,149 @@ namespace Kotek
 			private:
 				base_vec1_t m_base;
 			};
+
+#pragma region Binary operators
+			inline vector1f operator+(
+				const vector1f& a, const vector1f& b) noexcept
+			{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				DirectX::XMVECTOR v1 = a;
+				DirectX::XMVECTOR v2 = b;
+				auto temp = DirectX::XMVectorAdd(v1, v2);
+
+				vector1f result;
+				float value;
+				DirectX::XMStoreFloat(&value, temp);
+
+				result.Set_X(value);
+
+				return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+			}
+
+			inline vector1f operator-(
+				const vector1f& a, const vector1f& b) noexcept
+			{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				DirectX::XMVECTOR v1 = a;
+				DirectX::XMVECTOR v2 = b;
+				auto temp = DirectX::XMVectorSubtract(v1, v2);
+
+				vector1f result;
+				float value;
+				DirectX::XMStoreFloat(&value, temp);
+
+				result.Set_X(value);
+
+				return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+			}
+
+			inline vector1f operator*(
+				const vector1f& a, const vector1f& b) noexcept
+			{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				DirectX::XMVECTOR v1 = a;
+				DirectX::XMVECTOR v2 = b;
+				auto temp = DirectX::XMVectorMultiply(v1, v2);
+
+				vector1f result;
+				float value;
+
+				DirectX::XMStoreFloat(&value, temp);
+
+				result.Set_X(value);
+
+				return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+			}
+
+			inline vector1f operator*(
+				const vector1f& a, base_decimal_t b) noexcept
+			{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				DirectX::XMVECTOR v1 = a;
+				auto temp = DirectX::XMVectorScale(v1, b);
+
+				vector1f result;
+				float value;
+
+				DirectX::XMStoreFloat(&value, temp);
+
+				result.Set_X(value);
+
+				return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+			}
+
+			inline vector1f operator*(
+				base_decimal_t a, const vector1f& b) noexcept
+			{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				DirectX::XMVECTOR v1 = b;
+				auto temp = DirectX::XMVectorScale(v1, a);
+
+				vector1f result;
+				float value;
+
+				DirectX::XMStoreFloat(&value, temp);
+
+				result.Set_X(value);
+
+				return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+			}
+
+			inline vector1f operator/(
+				const vector1f& a, const vector1f& b) noexcept
+			{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				DirectX::XMVECTOR v1 = a;
+				DirectX::XMVECTOR v2 = b;
+				auto temp = DirectX::XMVectorDivide(v1, v2);
+
+				vector1f result;
+				float value;
+
+				DirectX::XMStoreFloat(&value, temp);
+
+				result.Set_X(value);
+
+				return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+			}
+
+			inline vector1f operator/(
+				const vector1f& a, base_decimal_t b) noexcept
+			{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				DirectX::XMVECTOR v1 = a;
+				auto temp = DirectX::XMVectorScale(v1, 1.f / b);
+
+				vector1f result;
+				float value;
+
+				DirectX::XMStoreFloat(&value, temp);
+
+				result.Set_X(value);
+
+				return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+			}
+
+#pragma endregion
 		} // namespace math
 	}     // namespace ktk
 } // namespace Kotek
