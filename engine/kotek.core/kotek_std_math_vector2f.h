@@ -27,12 +27,6 @@ namespace Kotek
 					return *this;
 				}
 
-				vector2f& operator=(const base_vec2_t& data) noexcept
-				{
-					this->m_base = data;
-					return *this;
-				}
-
 				vector2f& operator+=(const vector2f& data) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM

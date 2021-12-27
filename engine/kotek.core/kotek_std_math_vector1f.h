@@ -32,26 +32,6 @@ namespace Kotek
 					return *this;
 				}
 
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-				vector1f& operator=(base_vec1_t data)
-				{
-					this->m_base = data;
-					return *this;
-				}
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-				vector1f& operator=(const base_vec1_t& data)
-				{
-					this->m_base = data;
-					return *this;
-				}
-
-				vector1f& operator=(base_decimal_t data)
-				{
-					this->m_base = data;
-					return *this;
-				}
-#endif
-
 				vector1f& operator+=(base_decimal_t value)
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
