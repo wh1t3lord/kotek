@@ -138,10 +138,187 @@ namespace Kotek
 				{
 					return this->operator-=(data);
 				}
+
+				matrix3x3f& operator*=(const matrix3x3f& data) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					DirectX::XMMATRIX m1 = *this;
+					DirectX::XMMATRIX m2 = data;
+
+					auto result = DirectX::XMMatrixMultiply(m1, m2);
+
+					DirectX::XMStoreFloat3x3(&this->m_base, result);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+
+					return *this;
+				}
+
+				matrix3x3f& operator*=(const base_mat3x3_t& data) noexcept
+				{
+					return this->operator*=(data);
+				}
+
+				matrix3x3f& operator*=(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._11));
+					DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._21));
+					DirectX::XMVECTOR row_original_2 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._31));
+
+					row_original_0 =
+						DirectX::XMVectorScale(row_original_0, value);
+					row_original_1 =
+						DirectX::XMVectorScale(row_original_1, value);
+					row_original_2 =
+						DirectX::XMVectorScale(row_original_2, value);
+
+					DirectX::XMStoreFloat3(
+						reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._11),
+						row_original_0);
+					DirectX::XMStoreFloat3(
+						reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._21),
+						row_original_1);
+					DirectX::XMStoreFloat3(
+						reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._31),
+						row_original_2);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+
+					return *this;
+				}
+
+				matrix3x3f& operator/=(const matrix3x3f& data) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._11));
+					DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._21));
+					DirectX::XMVECTOR row_original_2 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._31));
+
+					DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&data.m_base._11));
+					DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&data.m_base._21));
+					DirectX::XMVECTOR row_argument_2 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&data.m_base._31));
+
+					row_original_0 =
+						DirectX::XMVectorDivide(row_original_0, row_argument_0);
+					row_original_1 =
+						DirectX::XMVectorDivide(row_original_1, row_argument_1);
+					row_original_2 =
+						DirectX::XMVectorDivide(row_original_2, row_argument_2);
+
+					DirectX::XMStoreFloat3(
+						reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._11),
+						row_original_0);
+					DirectX::XMStoreFloat3(
+						reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._21),
+						row_original_1);
+					DirectX::XMStoreFloat3(
+						reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._31),
+						row_original_2);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				matrix3x3f& operator/=(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._11));
+					DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._21));
+					DirectX::XMVECTOR row_original_2 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._31));
+
+					base_decimal_t factor = 1.f / value;
+
+					row_original_0 =
+						DirectX::XMVectorScale(row_original_0, factor);
+					row_original_1 =
+						DirectX::XMVectorScale(row_original_1, factor);
+					row_original_2 =
+						DirectX::XMVectorScale(row_original_2, factor);
+
+					DirectX::XMStoreFloat3(
+						reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._11),
+						row_original_0);
+					DirectX::XMStoreFloat3(
+						reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._21),
+						row_original_1);
+					DirectX::XMStoreFloat3(
+						reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._31),
+						row_original_2);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+
+					return *this;
+				}
 #pragma endregion
 
 #pragma region Unary operators
+				matrix3x3f operator+() const noexcept { return *this; }
 
+				matrix3x3f operator-() const noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._11));
+					DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._21));
+					DirectX::XMVECTOR row_original_2 = DirectX::XMLoadFloat3(
+						reinterpret_cast<const DirectX::XMFLOAT3*>(
+							&this->m_base._31));
+
+					row_original_0 = DirectX::XMVectorNegate(row_original_0);
+					row_original_1 = DirectX::XMVectorNegate(row_original_1);
+					row_original_2 = DirectX::XMVectorNegate(row_original_2);
+
+					matrix3x3f result;
+
+					DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(
+											   &result.m_base._11),
+						row_original_0);
+
+					DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(
+											   &result.m_base._21),
+						row_original_1);
+
+					DirectX::XMStoreFloat3(reinterpret_cast<DirectX::XMFLOAT3*>(
+											   &result.m_base._31),
+						row_original_2);
+
+					return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+				}
 #pragma endregion
 
 #pragma region Comparison operators
@@ -210,7 +387,16 @@ namespace Kotek
 				}
 #pragma endregion
 
-#pragma region
+#pragma region Cast operators
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				operator DirectX::XMMATRIX(void) const noexcept
+				{
+					return DirectX::XMLoadFloat3x3(&this->m_base);
+				}
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+#pragma endregion
 
 				base_decimal_t Get_00(void) const noexcept
 				{
@@ -293,9 +479,226 @@ namespace Kotek
 #endif
 				}
 
+				matrix3x3f& Set_00(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._11 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+					return *this;
+				}
+
+				matrix3x3f& Set_01(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._12 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				matrix3x3f& Set_02(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._13 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				matrix3x3f& Set_10(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._21 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				matrix3x3f& Set_11(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._22 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				matrix3x3f& Set_12(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._23 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				matrix3x3f& Set_20(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._31 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				matrix3x3f& Set_21(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._32 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				matrix3x3f& Set_22(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._33 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				matrix3x3f& Set_Base(const base_mat3x3_t& data) noexcept
+				{
+					this->m_base = data;
+					return *this;
+				}
+
+				base_mat3x3_t& Get_Base(void) noexcept { return this->m_base; }
+				const base_mat3x3_t& Get_Base(void) const noexcept
+				{
+					return this->m_base;
+				}
+
 			private:
 				base_mat3x3_t m_base;
 			};
+
+#pragma region Binary operators
+			inline matrix3x3f operator+(
+				const matrix3x3f& left, const matrix3x3f& right) noexcept
+			{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				DirectX::XMFLOAT3 left_row_0 = {
+					left.Get_00(), left.Get_01(), left.Get_02()};
+				DirectX::XMFLOAT3 left_row_1 = {
+					left.Get_10(), left.Get_11(), left.Get_12()};
+				DirectX::XMFLOAT3 left_row_2 = {
+					left.Get_20(), left.Get_21(), left.Get_22()};
+
+				DirectX::XMFLOAT3 right_row_0 = {
+					right.Get_00(), right.Get_01(), right.Get_02()};
+				DirectX::XMFLOAT3 right_row_1 = {
+					right.Get_10(), right.Get_11(), right.Get_12()};
+				DirectX::XMFLOAT3 right_row_2 = {
+					right.Get_20(), right.Get_21(), right.Get_22()};
+
+				DirectX::XMVECTOR row_original_0 =
+					DirectX::XMLoadFloat3(&left_row_0);
+				DirectX::XMVECTOR row_original_1 =
+					DirectX::XMLoadFloat3(&left_row_1);
+				DirectX::XMVECTOR row_original_2 =
+					DirectX::XMLoadFloat3(&left_row_2);
+
+				DirectX::XMVECTOR row_argument_0 =
+					DirectX::XMLoadFloat3(&right_row_0);
+				DirectX::XMVECTOR row_argument_1 =
+					DirectX::XMLoadFloat3(&right_row_1);
+				DirectX::XMVECTOR row_argument_2 =
+					DirectX::XMLoadFloat3(&right_row_2);
+
+				row_original_0 =
+					DirectX::XMVectorAdd(row_original_0, row_argument_0);
+				row_original_1 =
+					DirectX::XMVectorAdd(row_original_1, row_argument_1);
+				row_original_2 =
+					DirectX::XMVectorAdd(row_original_2, row_argument_2);
+
+				matrix3x3f result;
+
+				DirectX::XMStoreFloat3(
+					reinterpret_cast<DirectX::XMFLOAT3*>(&result.Get_Base()),
+					row_original_0);
+				DirectX::XMStoreFloat3(
+					reinterpret_cast<DirectX::XMFLOAT3*>(&result.Get_Base()),
+					row_original_1);
+				DirectX::XMStoreFloat3(
+					reinterpret_cast<DirectX::XMFLOAT3*>(&result.Get_Base()),
+					row_original_2);
+
+				return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+			}
+
+			inline matrix3x3f operator-(
+				const matrix3x3f& left, const matrix3x3f& right) noexcept
+			{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				DirectX::XMFLOAT3 left_row_0 = {
+					left.Get_00(), left.Get_01(), left.Get_02()};
+				DirectX::XMFLOAT3 left_row_1 = {
+					left.Get_10(), left.Get_11(), left.Get_12()};
+				DirectX::XMFLOAT3 left_row_2 = {
+					left.Get_20(), left.Get_21(), left.Get_22()};
+
+				DirectX::XMFLOAT3 right_row_0 = {
+					right.Get_00(), right.Get_01(), right.Get_02()};
+				DirectX::XMFLOAT3 right_row_1 = {
+					right.Get_10(), right.Get_11(), right.Get_12()};
+				DirectX::XMFLOAT3 right_row_2 = {
+					right.Get_20(), right.Get_21(), right.Get_22()};
+
+				DirectX::XMVECTOR row_original_0 =
+					DirectX::XMLoadFloat3(&left_row_0);
+				DirectX::XMVECTOR row_original_1 =
+					DirectX::XMLoadFloat3(&left_row_1);
+				DirectX::XMVECTOR row_original_2 =
+					DirectX::XMLoadFloat3(&left_row_2);
+
+				DirectX::XMVECTOR row_argument_0 =
+					DirectX::XMLoadFloat3(&right_row_0);
+				DirectX::XMVECTOR row_argument_1 =
+					DirectX::XMLoadFloat3(&right_row_1);
+				DirectX::XMVECTOR row_argument_2 =
+					DirectX::XMLoadFloat3(&right_row_2);
+
+				row_original_0 =
+					DirectX::XMVectorSubtract(row_original_0, row_argument_0);
+				row_original_1 =
+					DirectX::XMVectorSubtract(row_original_1, row_argument_1);
+				row_original_2 =
+					DirectX::XMVectorSubtract(row_original_2, row_argument_2);
+
+				matrix3x3f result;
+
+				DirectX::XMStoreFloat3(
+					reinterpret_cast<DirectX::XMFLOAT3*>(&result.Get_Base()),
+					row_original_0);
+				DirectX::XMStoreFloat3(
+					reinterpret_cast<DirectX::XMFLOAT3*>(&result.Get_Base()),
+					row_original_1);
+				DirectX::XMStoreFloat3(
+					reinterpret_cast<DirectX::XMFLOAT3*>(&result.Get_Base()),
+					row_original_2);
+
+				return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+			}
+#pragma endregion
 		} // namespace math
 	}     // namespace ktk
 } // namespace Kotek

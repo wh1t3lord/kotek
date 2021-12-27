@@ -272,6 +272,12 @@ namespace Kotek
 				}
 #endif
 
+				base_vec1_t& Get_Base(void) noexcept { return this->m_base; }
+				const base_vec1_t& Get_Base(void) const noexcept
+				{
+					return this->m_base;
+				}
+
 			private:
 				base_vec1_t m_base;
 			};
