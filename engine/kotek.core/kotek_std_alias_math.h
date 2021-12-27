@@ -56,6 +56,7 @@ namespace Kotek
 			using base_vec3_t = DirectX::XMFLOAT3;
 			using base_vec4_t = DirectX::XMFLOAT4;
 
+			using base_mat2x2_t = DirectX::XMFLOAT3X3;
 			using base_mat3x3_t = DirectX::XMFLOAT3X3;
 			using base_mat4x4_t = DirectX::XMFLOAT4X4;
 
