@@ -1257,11 +1257,12 @@ namespace Kotek
 		#pragma region Vector4
 		BOOST_AUTO_TEST_CASE(vector4f_testing_constructor_default)
 		{
-			Kotek::ktk::math::vector3f test1;
+			Kotek::ktk::math::vector4f test1;
 
 			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 0.0f));
 			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), 0.0f));
 			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), 0.0f));
+			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), 0.0f));
 		}
 
 		BOOST_AUTO_TEST_CASE(vector4f_testing_constructor_based_on_number)
