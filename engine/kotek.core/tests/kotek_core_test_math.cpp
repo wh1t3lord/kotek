@@ -576,7 +576,7 @@ namespace Kotek
 			test1 *= test2;
 
 			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 11.0f));
-			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), 1613.44f));
+			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), (6.4f * 252.1f)));
 		}
 
 		BOOST_AUTO_TEST_CASE(
