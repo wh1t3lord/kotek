@@ -99,13 +99,15 @@ namespace Kotek
 
 				vector2f& operator*=(const base_vec2_t& data) noexcept
 				{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-					DirectX::XMVECTOR casted_original = *this;
-					DirectX::XMVECTOR casted_argument =
-						DirectX::XMLoadFloat2(&data);
-					auto result = DirectX::XMVectorMultiply(
-						casted_original, casted_argument);
+					return this->operator*=(data);
+				}
 
+				vector2f& operator*=(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					DirectX::XMVECTOR v1 = *this;
+					auto result = DirectX::XMVectorScale(v1, value);
+					
 					DirectX::XMStoreFloat2(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
