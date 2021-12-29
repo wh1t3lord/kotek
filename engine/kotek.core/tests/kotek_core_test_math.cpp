@@ -582,97 +582,129 @@ namespace Kotek
 		BOOST_AUTO_TEST_CASE(
 			vector2f_testing_divide_equal_operator_based_on_number_its_scale)
 		{
-			Kotek::ktk::math::vector1f test1 = 8.4f;
-			Kotek::ktk::math::base_decimal_t test2 = 2.6f;
+			Kotek::ktk::math::vector2f test1 = {8.4f, 2.6f};
+			Kotek::ktk::math::base_decimal_t test2 = 2.0f;
 
 			test1 /= test2;
 
-			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.6f)));
+			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.0f)));
+			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), (2.6f / 2.0f)));
 		}
 
 		BOOST_AUTO_TEST_CASE(
 			vector2f_testing_divide_equal_operator_based_on_vector_its_divide)
 		{
-			Kotek::ktk::math::vector1f test1 = 8.4f;
-			Kotek::ktk::math::vector1f test2 = 2.6f;
+			Kotek::ktk::math::vector2f test1 = {8.4f, 3.5f};
+			Kotek::ktk::math::vector2f test2 = {2.0f, 0.5f};
 
 			test1 /= test2;
 
-			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.6f)));
+			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.0f)));
+			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), (3.5f / 0.5f)));
 		}
 
 		BOOST_AUTO_TEST_CASE(
 			vector2f_testing_modulo_equal_operator_based_on_number)
 		{
-			Kotek::ktk::math::vector1f test1 = 5.3f;
+			Kotek::ktk::math::vector2f test1 = {4.0f, 6.0f};
 			Kotek::ktk::math::base_decimal_t test2 = 2.0f;
 
 			test1 %= test2;
 
 			BOOST_CHECK(
-				Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(5.3f, 2.0f))));
+				Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(4.0f, 2.0f))));
+			BOOST_CHECK(
+				Kotek::ktk::is_equal(test1.Get_Y(), (std::fmod(6.0f, 2.0f))));
 		}
 
 		BOOST_AUTO_TEST_CASE(
 			vector2f_testing_modulo_equal_operator_based_on_vector)
 		{
-			Kotek::ktk::math::vector1f test1 = 5.3f;
-			Kotek::ktk::math::vector1f test2 = 2.0f;
+			Kotek::ktk::math::vector2f test1 = {4.0f, 6.0f};
+			Kotek::ktk::math::vector2f test2 = {2.0f, 3.0f};
 
 			test1 %= test2;
 
 			BOOST_CHECK(
-				Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(5.3f, 2.0f))));
+				Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(4.0f, 2.0f))));
+			BOOST_CHECK(
+				Kotek::ktk::is_equal(test1.Get_Y(), (std::fmod(6.0f, 3.0f))));
 		}
 
 		BOOST_AUTO_TEST_CASE(vector2f_testing_unary_plus_operator)
 		{
-			Kotek::ktk::math::vector1f test1 = 10.0f;
+			Kotek::ktk::math::vector2f test1 = {10.0f, 5.0f};
 
 			test1 = +test1;
 
 			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 10.0f));
+			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), 5.0f));
 		}
 
 		BOOST_AUTO_TEST_CASE(vector2f_testing_unary_minus_operator)
 		{
-			Kotek::ktk::math::vector1f test1 = 10.0f;
+			Kotek::ktk::math::vector2f test1 = {10.0f, 5.0f};
 
 			test1 = -test1;
 
 			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), -10.0f));
+			BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), -5.0f));
 		}
 
 		BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_zeros)
 		{
-			Kotek::ktk::math::vector1f test1;
-			Kotek::ktk::math::vector1f test2;
+			Kotek::ktk::math::vector2f test1;
+			Kotek::ktk::math::vector2f test2;
 
 			BOOST_CHECK(test1 == test2);
 		}
 
 		BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_random)
 		{
-			Kotek::ktk::math::vector1f test1(150.15125f);
-			Kotek::ktk::math::vector1f test2(150.15125f);
+			Kotek::ktk::math::vector2f test1(150.15125f, 1515.1414f);
+			Kotek::ktk::math::vector2f test2(150.15125f, 1515.1414f);
 
 			BOOST_CHECK(test1 == test2);
 		}
 
-		BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_different)
+		BOOST_AUTO_TEST_CASE(
+			vector2f_testing_comparison_equal_different_last_field)
 		{
-			Kotek::ktk::math::vector1f test1(15.3f);
-			Kotek::ktk::math::vector1f test2(15.0f);
+			Kotek::ktk::math::vector2f test1(15.3f, 4.4f);
+			Kotek::ktk::math::vector2f test2(15.0f, 4.4f);
 
 			bool result = test1 == test2;
 
 			BOOST_CHECK(result == false);
 		}
 
-		BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_different_dirty)
+		BOOST_AUTO_TEST_CASE(
+			vector2f_testing_comparison_equal_different_first_field)
 		{
-			Kotek::ktk::math::vector1f test1(15.14152f);
-			Kotek::ktk::math::vector1f test2(15.14151f);
+			Kotek::ktk::math::vector2f test1(15.0f, 4.3f);
+			Kotek::ktk::math::vector2f test2(15.0f, 4.4f);
+
+			bool result = test1 == test2;
+
+			BOOST_CHECK(result == false);
+		}
+
+		BOOST_AUTO_TEST_CASE(
+			vector2f_testing_comparison_equal_different_dirty_last_field)
+		{
+			Kotek::ktk::math::vector2f test1(15.14152f, 0.0f);
+			Kotek::ktk::math::vector2f test2(15.14151f, 0.0f);
+
+			bool result = test1 == test2;
+
+			BOOST_CHECK(result == false);
+		}
+
+		BOOST_AUTO_TEST_CASE(
+			vector2f_testing_comparison_equal_different_dirty_first_field)
+		{
+			Kotek::ktk::math::vector2f test1(0.0f, 15.14152f);
+			Kotek::ktk::math::vector2f test2(0.0f, 15.14151f);
 
 			bool result = test1 == test2;
 
@@ -681,8 +713,8 @@ namespace Kotek
 
 		BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_zeros)
 		{
-			Kotek::ktk::math::vector1f test1;
-			Kotek::ktk::math::vector1f test2;
+			Kotek::ktk::math::vector2f test1;
+			Kotek::ktk::math::vector2f test2;
 
 			bool result = test1 != test2;
 
@@ -691,8 +723,8 @@ namespace Kotek
 
 		BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_different)
 		{
-			Kotek::ktk::math::vector1f test1(5.0f);
-			Kotek::ktk::math::vector1f test2(2.0f);
+			Kotek::ktk::math::vector2f test1(5.0f, 0.0f);
+			Kotek::ktk::math::vector2f test2(2.0f, 0.0f);
 
 			bool result = test1 != test2;
 
@@ -701,8 +733,8 @@ namespace Kotek
 
 		BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_equal_dirty)
 		{
-			Kotek::ktk::math::vector1f test1(151.25151f);
-			Kotek::ktk::math::vector1f test2(151.25151f);
+			Kotek::ktk::math::vector2f test1(151.25151f, 0.0f);
+			Kotek::ktk::math::vector2f test2(151.25151f, 0.0f);
 
 			bool result = test1 != test2;
 
@@ -711,8 +743,8 @@ namespace Kotek
 
 		BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_dirty)
 		{
-			Kotek::ktk::math::vector1f test1(150.10502f);
-			Kotek::ktk::math::vector1f test2(150.10509f);
+			Kotek::ktk::math::vector2f test1(150.10502f, 0.0f);
+			Kotek::ktk::math::vector2f test2(150.10509f, 0.0f);
 
 			bool result = test1 != test2;
 
@@ -722,101 +754,87 @@ namespace Kotek
 		#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		BOOST_AUTO_TEST_CASE(vector2f_testing_cast_operator_xmvector)
 		{
-			Kotek::ktk::math::vector1f test1(150.0f);
+			Kotek::ktk::math::vector2f test1(150.0f, 151.0f);
 
 			DirectX::XMVECTOR vec = test1;
 
-			float value = DirectX::XMVectorGetX(vec);
+			float value_x = DirectX::XMVectorGetX(vec);
+			float value_y = DirectX::XMVectorGetY(vec);
 
-			BOOST_CHECK(Kotek::ktk::is_equal(value, test1.Get_X()));
+			BOOST_CHECK(Kotek::ktk::is_equal(value_x, test1.Get_X()));
+			BOOST_CHECK(Kotek::ktk::is_equal(value_y, test1.Get_Y()));
 		}
 		#endif
 
 		BOOST_AUTO_TEST_CASE(vector2f_testing_binary_plus_operator_both_vectors)
 		{
-			Kotek::ktk::math::vector1f test1(50.5f);
-			Kotek::ktk::math::vector1f test2(5.5f);
+			Kotek::ktk::math::vector2f test1(50.5f, 2.5f);
+			Kotek::ktk::math::vector2f test2(5.5f, 0.5f);
 
 			auto new_vector = test1 + test2;
 
-			BOOST_CHECK(new_vector == 56.0f);
-		}
-
-		BOOST_AUTO_TEST_CASE(
-			vector2f_testing_binary_plus_operator_vector_number)
-		{
-			Kotek::ktk::math::vector1f test1(50.5f);
-			Kotek::ktk::math::base_decimal_t test2(5.5f);
-
-			auto new_vector = test1 + test2;
-
-			BOOST_CHECK(new_vector == 56.0f);
+			BOOST_CHECK(Kotek::ktk::is_equal(50.5f + 5.5f, new_vector.Get_X()));
+			BOOST_CHECK(Kotek::ktk::is_equal(2.5f + 0.5f, new_vector.Get_Y()));
 		}
 
 		BOOST_AUTO_TEST_CASE(
 			vector2f_testing_binary_subtract_operator_both_vectors)
 		{
-			Kotek::ktk::math::vector1f test1(50.5f);
-			Kotek::ktk::math::vector1f test2(0.5f);
+			Kotek::ktk::math::vector2f test1(50.5f, 25.0f);
+			Kotek::ktk::math::vector2f test2(0.5f, 5.0f);
 
 			auto new_vector = test1 - test2;
 
-			BOOST_CHECK(new_vector == 50.0f);
-		}
-
-		BOOST_AUTO_TEST_CASE(
-			vector2f_testing_binary_subtract_operator_vector_number)
-		{
-			Kotek::ktk::math::vector1f test1(50.5f);
-			Kotek::ktk::math::base_decimal_t test2(0.5f);
-
-			auto new_vector = test1 - test2;
-
-			BOOST_CHECK(new_vector == 50.0f);
+			BOOST_CHECK(Kotek::ktk::is_equal(50.5f - 0.5f, new_vector.Get_X()));
+			BOOST_CHECK(Kotek::ktk::is_equal(25.0f - 5.0f, new_vector.Get_Y()));
 		}
 
 		BOOST_AUTO_TEST_CASE(
 			vector2f_testing_binary_mutiply_operator_both_vectors)
 		{
-			Kotek::ktk::math::vector1f test1(5.5f);
-			Kotek::ktk::math::vector1f test2(2.2f);
+			Kotek::ktk::math::vector2f test1(5.5f, 25.5f);
+			Kotek::ktk::math::vector2f test2(2.2f, 5.5f);
 
 			auto new_vector = test1 * test2;
 
-			BOOST_CHECK(new_vector == 12.1f);
+			BOOST_CHECK(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.Get_X()));
+			BOOST_CHECK(Kotek::ktk::is_equal(25.5f * 5.5f, new_vector.Get_Y()));
 		}
 
 		BOOST_AUTO_TEST_CASE(
 			vector2f_testing_binary_multiply_operator_vector_number)
 		{
-			Kotek::ktk::math::vector1f test1(5.5f);
+			Kotek::ktk::math::vector2f test1(5.5f, 2.5f);
 			Kotek::ktk::math::base_decimal_t test2(2.2f);
 
 			auto new_vector = test1 * test2;
 
-			BOOST_CHECK(new_vector == 12.1f);
+			BOOST_CHECK(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.Get_X()));
+			BOOST_CHECK(Kotek::ktk::is_equal(2.5f * 2.2f, new_vector.Get_Y()));
 		}
 
 		BOOST_AUTO_TEST_CASE(
 			vector2f_testing_binary_divide_operator_both_vectors)
 		{
-			Kotek::ktk::math::vector1f test1(6.6f);
-			Kotek::ktk::math::vector1f test2(0.2f);
+			Kotek::ktk::math::vector2f test1(6.6f, 3.6f);
+			Kotek::ktk::math::vector2f test2(0.2f, 0.4f);
 
 			auto new_vector = test1 / test2;
 
-			BOOST_CHECK(new_vector == 33.0f);
+			BOOST_CHECK(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.Get_X()));
+			BOOST_CHECK(Kotek::ktk::is_equal(3.6f / 0.4f, new_vector.Get_Y()));
 		}
 
 		BOOST_AUTO_TEST_CASE(
 			vector2f_testing_binary_divide_operator_vector_number)
 		{
-			Kotek::ktk::math::vector1f test1(6.6f);
+			Kotek::ktk::math::vector2f test1(6.6f, 3.6f);
 			Kotek::ktk::math::base_decimal_t test2(0.2f);
 
 			auto new_vector = test1 / test2;
 
-			BOOST_CHECK(new_vector == 33.0f);
+			BOOST_CHECK(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.Get_X()));
+			BOOST_CHECK(Kotek::ktk::is_equal(3.6f / 0.2f, new_vector.Get_Y()));
 		}
 		#pragma endregion
 

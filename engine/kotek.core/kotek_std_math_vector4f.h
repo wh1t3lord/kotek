@@ -117,6 +117,19 @@ namespace Kotek
 					return *this;
 				}
 
+				vector4f& operator*=(base_decimal_t value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					DirectX::XMVECTOR v1 = *this;
+					auto result = DirectX::XMVectorScale(v1, value);
+
+					DirectX::XMStoreFloat4(&this->m_base, result);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
 				vector4f& operator/=(const vector4f& data) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -146,6 +159,11 @@ namespace Kotek
 
 #endif
 					return *this;
+				}
+
+				vector4f& operator/=(base_decimal_t value) noexcept
+				{
+					return this->operator*=(1.f / value);
 				}
 
 				vector4f& operator%=(base_decimal_t value) noexcept
@@ -263,8 +281,8 @@ namespace Kotek
 					return *this;
 				}
 
-				vector4f& Set_W(base_decimal_t value) noexcept 
-				{ 
+				vector4f& Set_W(base_decimal_t value) noexcept
+				{
 					this->m_base.w = value;
 					return *this;
 				}

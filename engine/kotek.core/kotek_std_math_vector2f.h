@@ -146,6 +146,11 @@ namespace Kotek
 					return *this;
 				}
 
+				vector2f& operator/=(base_decimal_t value) noexcept 
+				{
+					return this->operator*=(1.f / value);
+				}
+
 				vector2f& operator%=(base_decimal_t value) noexcept
 				{
 					this->m_base.x = std::fmod(this->m_base.x, value);
@@ -355,17 +360,7 @@ namespace Kotek
 				const vector2f& left, base_decimal_t right) noexcept
 			{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-				DirectX::XMVECTOR v1 = left;
-				auto temp = DirectX::XMVectorScale(v1, 1.f / right);
-
-				vector2f result;
-				base_vec2_t data;
-
-				DirectX::XMStoreFloat2(&data, temp);
-
-				result.Set_Base(data);
-
-				return result;
+				return operator*(left, 1.f / right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
 #endif
