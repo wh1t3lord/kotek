@@ -6,7 +6,7 @@ resources:
 
 jobs:
 - job: Windows_MSVC
-  pool: Hosted VS2019
+  pool: 'windows-2019'
 
   steps:
   - script: mkdir build
