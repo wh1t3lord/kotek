@@ -1,0 +1,26 @@
+resources:
+  repositories:
+  - repository: self
+    checkoutOptions:
+      submodules: true
+
+jobs:
+- job: Windows_MSVC
+  pool: Hosted VS2019
+
+  steps:
+  - script: mkdir build
+    displayName: Make build directory
+
+  - task: CMake@1
+    displayName: 'Generate Solution Files'
+    inputs:
+      cmakeArgs: '-DCMAKE_BUILD_TYPE=Debug ../'
+
+
+  - task: VSBuild@1
+    displayName: 'Build solution kotek.sln'
+    inputs:
+      solution: 'build/kotek.sln'
+      platform: 'x64'
+      configuration: 'Debug'
