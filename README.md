@@ -18,11 +18,12 @@ THIS PROJECT DOESNT HAVE THE 1.0v. It means if you want to use it for serious de
 
 - git clone this repo
 - navigate to repo
+- git checkout main
 - mkdir build (or create manually through File Explorer)
+- git submodule update --init --recursive --remote
 - cd build
 - cmake .. (but it's better to check Building section before writing this command)
 - Build the project 
-- Place all appropriate wxWidget's dlls into output bin folder (repo/build/bin/CMAKE_BUILD_TYPE/)
 - Run the project
 
 # Project overview
@@ -47,18 +48,35 @@ All other flags will be set ON or any other parameter that somehow specifies it.
 
 Defaults if you don't specify them
 
-| Flag | Value |
-| ----------- | ----------- |
-| -DKOTEK_UNICODE | ON |
-| -DKOTEK_SDK | ON |
-| -DKOTEK_CPU_PROFILER | ON |
-| -DKOTEK_GPU_PROFILER | ON |
-| -DKOTEK_MATH_LIBRARY | GLM |
-| -DKOTEK_MATH_PRECISION | FLOAT |
-| -DKOTEK_USER_DEPS_ENGINE | nothing |
-| -DKOTEK_USER_DEPS_GAME | nothing |
-| -DKOTEK_TESTS | ON |
-| -DKOTEK_TESTS_RUNTIME | ON |
+LINUX Platform:
+
+| Flag | Release | Debug |
+| ----------- | ----------- | ----------- |
+| -DKOTEK_UNICODE | ON |  ON |
+| -DKOTEK_SDK | ON |  ON |
+| -DKOTEK_CPU_PROFILER | ON |  OFF |
+| -DKOTEK_GPU_PROFILER | ON |  OFF |
+| -DKOTEK_MATH_LIBRARY | GLM |  GLM |
+| -DKOTEK_MATH_PRECISION | FLOAT |  FLOAT |
+| -DKOTEK_USER_DEPS_ENGINE | nothing |  nothing |
+| -DKOTEK_USER_DEPS_GAME | nothing |  nothing |
+| -DKOTEK_TESTS | OFF |  ON |
+| -DKOTEK_TESTS_RUNTIME | OFF |  ON |
+
+WINDOWS Platform:
+
+| Flag | Release | Debug |
+| ----------- | ----------- | ----------- |
+| -DKOTEK_UNICODE | ON |  ON |
+| -DKOTEK_SDK | ON |  ON |
+| -DKOTEK_CPU_PROFILER | ON |  OFF |
+| -DKOTEK_GPU_PROFILER | ON |  OFF |
+| -DKOTEK_MATH_LIBRARY | DXM | DXM |
+| -DKOTEK_MATH_PRECISION | FLOAT |  FLOAT |
+| -DKOTEK_USER_DEPS_ENGINE | nothing |  nothing |
+| -DKOTEK_USER_DEPS_GAME | nothing |  nothing |
+| -DKOTEK_TESTS | OFF |  ON |
+| -DKOTEK_TESTS_RUNTIME | OFF |  ON |
 
 
 * -DCMAKE_BUILD_TYPE=STATUS
