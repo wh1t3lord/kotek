@@ -46,7 +46,7 @@ THIS PROJECT DOESNT HAVE THE 1.0v. It means if you want to use it for serious de
 | Windows 10 | Visual Studio 2019 | Debug |  "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM" | This solution uses GLM as math library |
 
 ### Status
-The order in accordance with previous table.
+The order is in accordance with the previous table.
 
 | Status |
 | ----------- |
