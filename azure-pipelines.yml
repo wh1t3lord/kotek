@@ -5,7 +5,7 @@ resources:
       submodules: true
 
 jobs:
-- job: Windows_MSVC
+- job: Windows_MSVC_DefaultArguments_Debug
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
   pool:
@@ -20,7 +20,6 @@ jobs:
     lfs: true
     submodules: true
   - script: mkdir build
-  - script: 'echo "$(Build.SourcesDirectory)"'
     displayName: Make build directory
 
   - task: CMake@1
@@ -33,5 +32,65 @@ jobs:
     displayName: 'Build solution kotek.engine.sln'
     inputs:
       solution: 'build/kotek.engine.sln'
+      platform: 'x64'
+      configuration: 'Debug'
+      
+- job: Windows_MSVC_DefaultArguments_Release
+  variables:
+    VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
+  pool:
+    vmImage: windows-2019
+
+  steps:
+  - script: "git config --global --add filter.lfs.required true"
+  - script: 'git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"'
+  - script: 'git config --global --add filter.lfs.process "git-lfs filter-process"'
+  - script: 'git config --global --add filter.lfs.clean "git-lfs clean -- %f"'
+  - checkout: self
+    lfs: true
+    submodules: true
+  - script: mkdir build_release
+    displayName: Make build directory
+
+  - task: CMake@1
+    displayName: 'Generate Solution Files'
+    inputs:
+      cmakeArgs: '-DCMAKE_BUILD_TYPE=Release ../'
+
+
+  - task: VSBuild@1
+    displayName: 'Build solution kotek.engine.sln'
+    inputs:
+      solution: 'build_release/kotek.engine.sln'
+      platform: 'x64'
+      configuration: 'Release'
+
+- job: Windows_MSVC_GLM_Debug
+  variables:
+    VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
+  pool:
+    vmImage: windows-2019
+
+  steps:
+  - script: "git config --global --add filter.lfs.required true"
+  - script: 'git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"'
+  - script: 'git config --global --add filter.lfs.process "git-lfs filter-process"'
+  - script: 'git config --global --add filter.lfs.clean "git-lfs clean -- %f"'
+  - checkout: self
+    lfs: true
+    submodules: true
+  - script: mkdir build_glm
+    displayName: Make build directory
+
+  - task: CMake@1
+    displayName: 'Generate Solution Files'
+    inputs:
+      cmakeArgs: '-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM ../'
+
+
+  - task: VSBuild@1
+    displayName: 'Build solution kotek.engine.sln'
+    inputs:
+      solution: 'build_glm/kotek.engine.sln'
       platform: 'x64'
       configuration: 'Debug'

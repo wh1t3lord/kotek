@@ -36,6 +36,14 @@ THIS PROJECT DOESNT HAVE THE 1.0v. It means if you want to use it for serious de
 - Две экосистемы, одна для игры, другая для движка
 - Поддерживает пока что Windows
 
+# Build status
+
+| Platform | Compiler | Configuration | CMake commands | Description | Status |
+| ----------- | ----------- | ----------- | ----------- | ----------- |
+| Windows 10 | Visual Studio 2019 | Debug |  "-DCMAKE_BUILD_TYPE=Debug" | This configuration generating the solution with full defaults arguments. So check the section 'Default arguments' in order to understand what values takes cmake by itself | |
+| Windows 10 | Visual Studio 2019 | Release |  "-DCMAKE_BUILD_TYPE=Release" | This configuration generating the solution with full defaults arguments. So check the section 'Default arguments' in order to understand what values takes cmake by itself | |
+| Windows 10 | Visual Studio 2019 | Debug |  "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM" | This solution uses GLM as math library | |
+
 # Building
 
 This project is based on cmake version 3.19.3 and for generating solution you need to understand the following commands before write "cmake -DCMAKE_BUILD_TYPE=YOUR_BUILD_TYPE .."
@@ -46,6 +54,7 @@ What will it be if you just write "cmake -DCMAKE_BUILD_TYPE=YOUR_BUILD_TYPE .."?
 
 All other flags will be set ON or any other parameter that somehow specifies it.
 
+## Default arguments
 Defaults if you don't specify them
 
 LINUX Platform:
