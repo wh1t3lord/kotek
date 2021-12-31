@@ -23,8 +23,8 @@ jobs:
 
 
   - task: VSBuild@1
-    displayName: 'Build solution kotek.sln'
+    displayName: 'Build solution kotek.engine.sln'
     inputs:
-      solution: 'build/kotek.sln'
+      solution: 'build/kotek.engine.sln'
       platform: 'x64'
       configuration: 'Debug'
