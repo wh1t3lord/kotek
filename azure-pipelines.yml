@@ -6,6 +6,8 @@ resources:
 
 jobs:
 - job: Windows_MSVC
+  variables:
+    VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
   pool:
     vmImage: windows-2019
 
