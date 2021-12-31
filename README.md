@@ -18,7 +18,7 @@ THIS PROJECT DOESNT HAVE THE 1.0v. It means if you want to use it for serious de
 
 - git clone this repo
 - navigate to repo
-- git checkout main
+- git checkout main (kotek-engine-deps-win32 too!!!!)
 - mkdir build (or create manually through File Explorer)
 - git submodule update --init --recursive --remote
 - cd build
