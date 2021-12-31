@@ -77,7 +77,11 @@ if ("${KOTEK_GPU_PROFILER}" STREQUAL "ON")
 endif()
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "")
-	set(KOTEK_MATH_LIBRARY "GLM")
+	if (WIN32)
+		set(KOTEK_MATH_LIBRARY "DXM")
+	else()
+		set(KOTEK_MATH_LIBRARY "GLM")
+	endif()
 endif()
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")

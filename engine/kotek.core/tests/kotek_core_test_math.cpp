@@ -1966,6 +1966,39 @@ namespace Kotek
 				}
 			}
 		}
+
+		BOOST_AUTO_TEST_CASE(
+			matrix4x4f_assignment_multiply_operator_base_decimal)
+		{
+			Kotek::ktk::math::base_decimal_t value = 15.0f;
+			Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+				6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f,
+				15.0f, 16.0f);
+
+			test *= value;
+
+			BOOST_CHECK(Kotek::ktk::is_equal(1.0f * value, test.Get_00()));
+			BOOST_CHECK(Kotek::ktk::is_equal(2.0f * value, test.Get_01()));
+			BOOST_CHECK(Kotek::ktk::is_equal(3.0f * value, test.Get_02()));
+			BOOST_CHECK(Kotek::ktk::is_equal(4.0f * value, test.Get_03()));
+			BOOST_CHECK(Kotek::ktk::is_equal(5.0f * value, test.Get_10()));
+			BOOST_CHECK(Kotek::ktk::is_equal(6.0f * value, test.Get_11()));
+			BOOST_CHECK(Kotek::ktk::is_equal(7.0f * value, test.Get_12()));
+			BOOST_CHECK(Kotek::ktk::is_equal(8.0f * value, test.Get_13()));
+			BOOST_CHECK(Kotek::ktk::is_equal(9.0f * value, test.Get_20()));
+			BOOST_CHECK(Kotek::ktk::is_equal(10.0f * value, test.Get_21()));
+			BOOST_CHECK(Kotek::ktk::is_equal(11.0f * value, test.Get_22()));
+			BOOST_CHECK(Kotek::ktk::is_equal(12.0f * value, test.Get_23()));
+			BOOST_CHECK(Kotek::ktk::is_equal(13.0f * value, test.Get_30()));
+			BOOST_CHECK(Kotek::ktk::is_equal(14.0f * value, test.Get_31()));
+			BOOST_CHECK(Kotek::ktk::is_equal(15.0f * value, test.Get_32()));
+			BOOST_CHECK(Kotek::ktk::is_equal(16.0f * value, test.Get_33()));
+		}
+
+		BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_divide_operator) 
+		{
+			
+		}
 		#pragma endregion
 
 	#endif
