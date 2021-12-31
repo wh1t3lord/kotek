@@ -1866,29 +1866,105 @@ namespace Kotek
 			BOOST_CHECK(Kotek::ktk::is_equal(16.0f, test.Get_33()));
 		}
 
-		BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_plus_operator_universal)
+		BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_plus_operator)
 		{
-			Kotek::ktk::math::matrix4x4f test;
+			Kotek::ktk::math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f,
+				22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+				31.0f, 32.0f);
 
 			test += {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f,
 				10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
 
-			BOOST_CHECK(Kotek::ktk::is_equal(1.0f, test.Get_00()));
-			BOOST_CHECK(Kotek::ktk::is_equal(2.0f, test.Get_01()));
-			BOOST_CHECK(Kotek::ktk::is_equal(3.0f, test.Get_02()));
-			BOOST_CHECK(Kotek::ktk::is_equal(4.0f, test.Get_03()));
-			BOOST_CHECK(Kotek::ktk::is_equal(5.0f, test.Get_10()));
-			BOOST_CHECK(Kotek::ktk::is_equal(6.0f, test.Get_11()));
-			BOOST_CHECK(Kotek::ktk::is_equal(7.0f, test.Get_12()));
-			BOOST_CHECK(Kotek::ktk::is_equal(8.0f, test.Get_13()));
-			BOOST_CHECK(Kotek::ktk::is_equal(9.0f, test.Get_20()));
-			BOOST_CHECK(Kotek::ktk::is_equal(10.0f, test.Get_21()));
-			BOOST_CHECK(Kotek::ktk::is_equal(11.0f, test.Get_22()));
-			BOOST_CHECK(Kotek::ktk::is_equal(12.0f, test.Get_23()));
-			BOOST_CHECK(Kotek::ktk::is_equal(13.0f, test.Get_30()));
-			BOOST_CHECK(Kotek::ktk::is_equal(14.0f, test.Get_31()));
-			BOOST_CHECK(Kotek::ktk::is_equal(15.0f, test.Get_32()));
-			BOOST_CHECK(Kotek::ktk::is_equal(16.0f, test.Get_33()));
+			BOOST_CHECK(Kotek::ktk::is_equal(17.0f + 1.0f, test.Get_00()));
+			BOOST_CHECK(Kotek::ktk::is_equal(18.0f + 2.0f, test.Get_01()));
+			BOOST_CHECK(Kotek::ktk::is_equal(19.0f + 3.0f, test.Get_02()));
+			BOOST_CHECK(Kotek::ktk::is_equal(20.0f + 4.0f, test.Get_03()));
+			BOOST_CHECK(Kotek::ktk::is_equal(21.0f + 5.0f, test.Get_10()));
+			BOOST_CHECK(Kotek::ktk::is_equal(22.0f + 6.0f, test.Get_11()));
+			BOOST_CHECK(Kotek::ktk::is_equal(23.0f + 7.0f, test.Get_12()));
+			BOOST_CHECK(Kotek::ktk::is_equal(24.0f + 8.0f, test.Get_13()));
+			BOOST_CHECK(Kotek::ktk::is_equal(25.0f + 9.0f, test.Get_20()));
+			BOOST_CHECK(Kotek::ktk::is_equal(26.0f + 10.0f, test.Get_21()));
+			BOOST_CHECK(Kotek::ktk::is_equal(27.0f + 11.0f, test.Get_22()));
+			BOOST_CHECK(Kotek::ktk::is_equal(28.0f + 12.0f, test.Get_23()));
+			BOOST_CHECK(Kotek::ktk::is_equal(29.0f + 13.0f, test.Get_30()));
+			BOOST_CHECK(Kotek::ktk::is_equal(30.0f + 14.0f, test.Get_31()));
+			BOOST_CHECK(Kotek::ktk::is_equal(31.0f + 15.0f, test.Get_32()));
+			BOOST_CHECK(Kotek::ktk::is_equal(32.0f + 16.0f, test.Get_33()));
+		}
+
+		BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_minus_operator)
+		{
+			Kotek::ktk::math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f,
+				22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+				31.0f, 32.0f);
+
+			test -= {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f,
+				10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
+
+			BOOST_CHECK(Kotek::ktk::is_equal(17.0f - 1.0f, test.Get_00()));
+			BOOST_CHECK(Kotek::ktk::is_equal(18.0f - 2.0f, test.Get_01()));
+			BOOST_CHECK(Kotek::ktk::is_equal(19.0f - 3.0f, test.Get_02()));
+			BOOST_CHECK(Kotek::ktk::is_equal(20.0f - 4.0f, test.Get_03()));
+			BOOST_CHECK(Kotek::ktk::is_equal(21.0f - 5.0f, test.Get_10()));
+			BOOST_CHECK(Kotek::ktk::is_equal(22.0f - 6.0f, test.Get_11()));
+			BOOST_CHECK(Kotek::ktk::is_equal(23.0f - 7.0f, test.Get_12()));
+			BOOST_CHECK(Kotek::ktk::is_equal(24.0f - 8.0f, test.Get_13()));
+			BOOST_CHECK(Kotek::ktk::is_equal(25.0f - 9.0f, test.Get_20()));
+			BOOST_CHECK(Kotek::ktk::is_equal(26.0f - 10.0f, test.Get_21()));
+			BOOST_CHECK(Kotek::ktk::is_equal(27.0f - 11.0f, test.Get_22()));
+			BOOST_CHECK(Kotek::ktk::is_equal(28.0f - 12.0f, test.Get_23()));
+			BOOST_CHECK(Kotek::ktk::is_equal(29.0f - 13.0f, test.Get_30()));
+			BOOST_CHECK(Kotek::ktk::is_equal(30.0f - 14.0f, test.Get_31()));
+			BOOST_CHECK(Kotek::ktk::is_equal(31.0f - 15.0f, test.Get_32()));
+			BOOST_CHECK(Kotek::ktk::is_equal(32.0f - 16.0f, test.Get_33()));
+		}
+
+		// TODO: add overloads for matrix4x3 and other
+		BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_multiply_operator)
+		{
+			Kotek::ktk::math::matrix4x4f copy(17.0f, 18.0f, 19.0f, 20.0f, 21.0f,
+				22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+				31.0f, 32.0f);
+
+			Kotek::ktk::math::matrix4x4f copy2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+				6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f,
+				15.0f, 16.0f};
+
+			Kotek::ktk::math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f,
+				22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+				31.0f, 32.0f);
+
+			test *= {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f,
+				10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
+
+			Kotek::ktk::vector<Kotek::ktk::math::base_decimal_t> data;
+
+			for (int i = 0; i < 4; ++i)
+			{
+				for (int j = 0; j < 4; ++j)
+				{
+					Kotek::ktk::math::base_decimal_t value = 0.0f;
+
+					for (int k = 0; k < 4; ++k)
+					{
+						value += copy(i, k) * copy2(k, j);
+					}
+
+					data.push_back(value);
+				}
+			}
+
+			Kotek::ktk::size_t current_index = 0;
+			for (int i = 0; i < 4; ++i)
+			{
+				for (int j = 0; j < 4; ++j)
+				{
+					BOOST_CHECK(
+						Kotek::ktk::is_equal(data[current_index], test(i, j)));
+					current_index += 1;
+				}
+			}
 		}
 		#pragma endregion
 

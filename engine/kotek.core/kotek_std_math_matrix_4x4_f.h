@@ -455,6 +455,27 @@ namespace Kotek
 #endif
 #pragma endregion
 
+#pragma region Get operators
+				base_decimal_t operator()(
+					ktk::size_t row, ktk::size_t column) const
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					return this->m_base.operator()(row, column);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+				}
+
+				base_decimal_t& operator()(ktk::size_t row, ktk::size_t column)
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					return this->m_base.operator()(row, column);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+				}
+#pragma endregion
+
 				base_decimal_t Get_00(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
