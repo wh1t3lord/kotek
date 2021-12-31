@@ -36,12 +36,6 @@ namespace Kotek
 					return *this;
 				}
 
-				matrix4x4f& operator=(const base_mat4x4_t& data)
-				{
-					this->m_base = data;
-					return *this;
-				}
-
 				matrix4x4f& operator+=(const matrix4x4f& data) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -96,11 +90,6 @@ namespace Kotek
 
 #endif
 					return *this;
-				}
-
-				matrix4x4f& operator+=(const base_mat4x4_t& data) noexcept
-				{
-					return this->operator+=(data);
 				}
 
 				matrix4x4f& operator-=(const matrix4x4f& data) noexcept
@@ -159,11 +148,6 @@ namespace Kotek
 					return *this;
 				}
 
-				matrix4x4f& operator-=(const base_mat4x4_t& data) noexcept
-				{
-					return this->operator-=(data);
-				}
-
 				matrix4x4f& operator*=(const matrix4x4f& data) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -178,11 +162,6 @@ namespace Kotek
 #endif
 
 					return *this;
-				}
-
-				matrix4x4f& operator*=(const base_mat4x4_t& data) noexcept
-				{
-					return this->operator*=(data);
 				}
 
 				matrix4x4f& operator*=(base_decimal_t value) noexcept
