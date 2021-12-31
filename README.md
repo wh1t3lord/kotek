@@ -39,11 +39,20 @@ THIS PROJECT DOESNT HAVE THE 1.0v. It means if you want to use it for serious de
 # Build status
 
 ## Windows
-| Platform | Compiler | Configuration | CMake commands | Description | Status |
-| ----------- | ----------- | ----------- | ----------- | ----------- | ----------- |
-| Windows 10 | Visual Studio 2019 | Debug |  "-DCMAKE_BUILD_TYPE=Debug" | This configuration generating the solution with full defaults arguments. So check the section 'Default arguments' in order to understand what values cmake takes by itself | [![Build Status](https://dev.azure.com/microsoftmatvey/kotek/_apis/build/status/kotek?branchName=main&jobName=Windows_MSVC_DefaultArguments_Debug)](https://dev.azure.com/microsoftmatvey/kotek/_build/latest?definitionId=2&branchName=main) |
-| Windows 10 | Visual Studio 2019 | Release |  "-DCMAKE_BUILD_TYPE=Release" | This configuration generating the solution with full defaults arguments. So check the section 'Default arguments' in order to understand what values cmake takes by itself | [![Build Status](https://dev.azure.com/microsoftmatvey/kotek/_apis/build/status/kotek?branchName=main&jobName=Windows_MSVC_DefaultArguments_Release)](https://dev.azure.com/microsoftmatvey/kotek/_build/latest?definitionId=2&branchName=main) |
-| Windows 10 | Visual Studio 2019 | Debug |  "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM" | This solution uses GLM as math library | [![Build Status](https://dev.azure.com/microsoftmatvey/kotek/_apis/build/status/kotek?branchName=main&jobName=Windows_MSVC_GLM_Debug)](https://dev.azure.com/microsoftmatvey/kotek/_build/latest?definitionId=2&branchName=main) |
+| Platform | Compiler | Configuration | CMake commands | Description |
+| ----------- | ----------- | ----------- | ----------- | ----------- |
+| Windows 10 | Visual Studio 2019 | Debug |  "-DCMAKE_BUILD_TYPE=Debug" | This configuration generating the solution with full defaults arguments. So check the section 'Default arguments' in order to understand what values cmake takes by itself |
+| Windows 10 | Visual Studio 2019 | Release |  "-DCMAKE_BUILD_TYPE=Release" | This configuration generating the solution with full defaults arguments. So check the section 'Default arguments' in order to understand what values cmake takes by itself |
+| Windows 10 | Visual Studio 2019 | Debug |  "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM" | This solution uses GLM as math library |
+
+### Status
+The order in accordance with previous table.
+
+| Status |
+| ----------- |
+| [![Build Status Windows Default Arguments Debug](https://dev.azure.com/microsoftmatvey/kotek/_apis/build/status/kotek?branchName=main&jobName=Windows_MSVC_DefaultArguments_Debug)](https://dev.azure.com/microsoftmatvey/kotek/_build/latest?definitionId=2&branchName=main) |
+| [![Build Status Windows Default Arguments Release](https://dev.azure.com/microsoftmatvey/kotek/_apis/build/status/kotek?branchName=main&jobName=Windows_MSVC_DefaultArguments_Release)](https://dev.azure.com/microsoftmatvey/kotek/_build/latest?definitionId=2&branchName=main) |
+| [![Build Status Windows Default Arguments GLM Debug](https://dev.azure.com/microsoftmatvey/kotek/_apis/build/status/kotek?branchName=main&jobName=Windows_MSVC_GLM_Debug)](https://dev.azure.com/microsoftmatvey/kotek/_build/latest?definitionId=2&branchName=main) |
 
 ## Linux
 
