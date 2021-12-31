@@ -50,7 +50,7 @@ The order is in accordance with the previous table.
 
 | Status |
 | ----------- |
-| ![Build Status Windows Default Arguments Debug](https://dev.azure.com/microsoftmatvey/kotek/_apis/build/status/kotek?branchName=main&jobName=Windows_MSVC_DefaultArguments_Debug)] |
+| ![Build Status Windows Default Arguments Debug](https://dev.azure.com/microsoftmatvey/kotek/_apis/build/status/kotek?branchName=main&jobName=Windows_MSVC_DefaultArguments_Debug) |
 | ![Build Status Windows Default Arguments Release](https://dev.azure.com/microsoftmatvey/kotek/_apis/build/status/kotek?branchName=main&jobName=Windows_MSVC_DefaultArguments_Release) |
 | ![Build Status Windows Default Arguments GLM Debug](https://dev.azure.com/microsoftmatvey/kotek/_apis/build/status/kotek?branchName=main&jobName=Windows_MSVC_GLM_Debug) |
 
