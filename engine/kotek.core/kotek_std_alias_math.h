@@ -9,6 +9,9 @@
 
 #include <limits>
 
+#undef min
+#undef max
+
 namespace Kotek
 {
 	namespace ktk
