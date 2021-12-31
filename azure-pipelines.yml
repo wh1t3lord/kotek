@@ -11,6 +11,7 @@ jobs:
 
   steps:
   - script: mkdir build
+  - script: 'echo "$(Build.SourcesDirectory)"'
     displayName: Make build directory
 
   - task: CMake@1

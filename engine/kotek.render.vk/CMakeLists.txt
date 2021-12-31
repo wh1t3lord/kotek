@@ -30,6 +30,8 @@ endif()
 message("DETECTING LIBRARIES for ${PROJECT_NAME}")
 
 message("${CMAKE_CURRENT_SOURCE_DIR}")
+message("Vulkan Headers: " + Vulkan::Headers)
+message("Vulkan libraries: " + Vulkan::Vulkan)
 
 add_library(${PROJECT_NAME} STATIC
 	"kotek_render_vk.h"
@@ -88,7 +90,7 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
-target_include_directories(${PROJECT_NAME} PRIVATE ${Vulkan_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE Vulkan::Headers)
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
     target_link_libraries(${PROJECT_NAME} glm::glm)
