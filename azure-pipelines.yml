@@ -34,7 +34,7 @@ jobs:
       solution: 'build/kotek.engine.sln'
       platform: 'x64'
       configuration: 'Debug'
-      
+
 - job: Windows_MSVC_DefaultArguments_Release
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
@@ -49,7 +49,7 @@ jobs:
   - checkout: self
     lfs: true
     submodules: true
-  - script: mkdir build_release
+  - script: mkdir build
     displayName: Make build directory
 
   - task: CMake@1
@@ -61,7 +61,7 @@ jobs:
   - task: VSBuild@1
     displayName: 'Build solution kotek.engine.sln'
     inputs:
-      solution: 'build_release/kotek.engine.sln'
+      solution: 'build/kotek.engine.sln'
       platform: 'x64'
       configuration: 'Release'
 
@@ -79,7 +79,7 @@ jobs:
   - checkout: self
     lfs: true
     submodules: true
-  - script: mkdir build_glm
+  - script: mkdir build
     displayName: Make build directory
 
   - task: CMake@1
@@ -91,6 +91,6 @@ jobs:
   - task: VSBuild@1
     displayName: 'Build solution kotek.engine.sln'
     inputs:
-      solution: 'build_glm/kotek.engine.sln'
+      solution: 'build/kotek.engine.sln'
       platform: 'x64'
       configuration: 'Debug'
