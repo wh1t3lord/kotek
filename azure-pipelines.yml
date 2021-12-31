@@ -12,6 +12,14 @@ jobs:
     vmImage: windows-2019
 
   steps:
+  - script: |
+    git config --global --add filter.lfs.required true
+    git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"
+    git config --global --add filter.lfs.process "git-lfs filter-process"
+    git config --global --add filter.lfs.clean "git-lfs clean -- %f"
+  - checkout: self
+    lfs: true
+    submodules: true
   - script: mkdir build
   - script: 'echo "$(Build.SourcesDirectory)"'
     displayName: Make build directory
