@@ -187,7 +187,7 @@ namespace Kotek
 					row_original_2 =
 						DirectX::XMVectorScale(row_original_2, value);
 					row_original_3 =
-						DirectX::XMVectorScale(row_original_2, value);
+						DirectX::XMVectorScale(row_original_3, value);
 
 					DirectX::XMStoreFloat4(
 						reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base._11),
@@ -204,7 +204,6 @@ namespace Kotek
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
 #endif
-
 					return *this;
 				}
 
@@ -390,13 +389,13 @@ namespace Kotek
 							&data.m_base._41));
 
 					bool is_equal_0 =
-						DirectX::XMVector3Equal(row_original_0, row_argument_0);
+						DirectX::XMVector4Equal(row_original_0, row_argument_0);
 					bool is_equal_1 =
-						DirectX::XMVector3Equal(row_original_1, row_argument_1);
+						DirectX::XMVector4Equal(row_original_1, row_argument_1);
 					bool is_equal_2 =
-						DirectX::XMVector3Equal(row_original_2, row_argument_2);
+						DirectX::XMVector4Equal(row_original_2, row_argument_2);
 					bool is_equal_3 =
-						DirectX::XMVector3Equal(row_original_3, row_argument_3);
+						DirectX::XMVector4Equal(row_original_3, row_argument_3);
 
 					return (
 						is_equal_0 && is_equal_1 && is_equal_2 && is_equal_3);
@@ -430,13 +429,13 @@ namespace Kotek
 						reinterpret_cast<const DirectX::XMFLOAT4*>(
 							&data.m_base._41));
 
-					bool is_equal_0 = DirectX::XMVector3NotEqual(
+					bool is_equal_0 = DirectX::XMVector4NotEqual(
 						row_original_0, row_argument_0);
-					bool is_equal_1 = DirectX::XMVector3NotEqual(
+					bool is_equal_1 = DirectX::XMVector4NotEqual(
 						row_original_1, row_argument_1);
-					bool is_equal_2 = DirectX::XMVector3NotEqual(
+					bool is_equal_2 = DirectX::XMVector4NotEqual(
 						row_original_2, row_argument_2);
-					bool is_equal_3 = DirectX::XMVector3NotEqual(
+					bool is_equal_3 = DirectX::XMVector4NotEqual(
 						row_original_3, row_argument_3);
 
 					return (
