@@ -101,7 +101,7 @@ add_subdirectory("engine/kotek.core.memory")
 add_subdirectory("engine/kotek.engine.window")
 add_subdirectory("engine/kotek.game")
 add_subdirectory("engine/kotek.render")
-add_subdirectory("engine/kotek.render.gltf")
+add_subdirectory("engine/kotek.render.model")
 
 if (WIN32)
 	# DEPRECATED: undo comments when you finish vulkan renderer!
