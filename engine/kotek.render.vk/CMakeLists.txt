@@ -100,7 +100,7 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
 target_link_libraries(${PROJECT_NAME} kotek.core)
-target_link_libraries(${PROJECT_NAME} kotek.render.gltf)
+target_link_libraries(${PROJECT_NAME} kotek.render.model)
 target_link_libraries(${PROJECT_NAME} shaderc_combined)
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} glfw)

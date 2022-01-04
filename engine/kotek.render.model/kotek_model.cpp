@@ -1,15 +1,15 @@
-#include "kotek_gltf_model.h"
+#include "kotek_model.h"
 #include "../kotek.core/kotek_main_manager.h"
 
 namespace Kotek
 {
 	namespace Render
 	{
-		kotek_gltf_model::kotek_gltf_model(void) {}
+		kotek_model::kotek_model(void) {}
 
-		kotek_gltf_model::~kotek_gltf_model(void) {}
+		kotek_model::~kotek_model(void) {}
 
-		bool kotek_gltf_model::load(
+		bool kotek_model::load(
 			Core::ktkMainManager& main_manager, const ktk::string& path)
 		{
 			if (path.empty())

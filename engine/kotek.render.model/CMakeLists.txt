@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19.3)
 
-project(kotek.render.gltf VERSION 1 LANGUAGES CXX)
+project(kotek.render.model VERSION 1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -14,7 +14,7 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
  
 find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}")
+find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/assimp/${CMAKE_BUILD_TYPE}")
 find_package(Vulkan REQUIRED)
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
@@ -45,4 +45,4 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} kotek.core)
 target_link_libraries(${PROJECT_NAME} TBB::tbb)
-target_link_libraries(${PROJECT_NAME} PUBLIC ${ASSIMP_LIBRARIES}) 
+target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIBRARIES}) 

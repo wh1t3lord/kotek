@@ -42,7 +42,7 @@ elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
 endif()
 
 target_link_libraries(${PROJECT_NAME} kotek.core)
-target_link_libraries(${PROJECT_NAME} kotek.render.gltf)
+target_link_libraries(${PROJECT_NAME} kotek.render.model)
 target_link_libraries(${PROJECT_NAME} glfw)
 
 if (WIN32)
