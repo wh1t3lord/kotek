@@ -25,7 +25,7 @@ namespace Kotek
 #endif
 			}
 
-			void ktkRenderSwapchain::initialize(
+			void ktkRenderSwapchain::Initialize(
 				Core::ktkIRenderDevice* p_raw_render_device)
 			{
 				ktkRenderDevice* p_render_device =
@@ -83,13 +83,13 @@ namespace Kotek
 						"can't create semaphore. See status: {}", status);
 				}
 
-				this->create(p_render_device, p_render_device->getWidth(),
+				this->Create(p_render_device, p_render_device->getWidth(),
 					p_render_device->getHeight());
 
 				KOTEK_MESSAGE("swapchain is initialized");
 			}
 
-			void ktkRenderSwapchain::shutdown(
+			void ktkRenderSwapchain::Shutdown(
 				Core::ktkIRenderDevice* p_raw_render_device)
 			{
 				ktkRenderDevice* p_render_device =
@@ -125,7 +125,7 @@ namespace Kotek
 				KOTEK_MESSAGE("swapchain is shutdown");
 			}
 
-			void ktkRenderSwapchain::resize(
+			void ktkRenderSwapchain::Resize(
 				Core::ktkIRenderDevice* p_raw_render_device, int width,
 				int height)
 			{
@@ -143,10 +143,10 @@ namespace Kotek
 
 				vkDestroySwapchainKHR(p_device, this->m_p_swapchain, nullptr);
 
-				this->create(p_render_device, width, height);
+				this->Create(p_render_device, width, height);
 			}
 
-			ktk::uint32_t ktkRenderSwapchain::wait(
+			ktk::uint32_t ktkRenderSwapchain::Wait(
 				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
@@ -181,7 +181,7 @@ namespace Kotek
 				return this->m_image_index;
 			}
 
-			void ktkRenderSwapchain::present(
+			void ktkRenderSwapchain::Present(
 				Core::ktkMainManager& main_manager,
 				ktkRenderDevice* p_render_device) noexcept
 			{
@@ -224,58 +224,58 @@ namespace Kotek
 				}
 			}
 
-			VkSwapchainKHR ktkRenderSwapchain::getSwapchain(
+			VkSwapchainKHR ktkRenderSwapchain::GetSwapchain(
 				void) const noexcept
 			{
 				return this->m_p_swapchain;
 			}
 
-			void ktkRenderSwapchain::setSwapchainFormat(
+			void ktkRenderSwapchain::SetSwapchainFormat(
 				VkFormat texture_format) noexcept
 			{
 				this->m_swapchain_format.format = texture_format;
 			}
 
-			void ktkRenderSwapchain::setSwapchainColorSpace(
+			void ktkRenderSwapchain::SetSwapchainColorSpace(
 				VkColorSpaceKHR color_space) noexcept
 			{
 				this->m_swapchain_format.colorSpace = color_space;
 			}
 
-			VkFormat ktkRenderSwapchain::getSwapchainFormat(
+			VkFormat ktkRenderSwapchain::GetSwapchainFormat(
 				void) const noexcept
 			{
 				return this->m_swapchain_format.format;
 			}
 
-			VkColorSpaceKHR ktkRenderSwapchain::getSwapchainColorSpace(
+			VkColorSpaceKHR ktkRenderSwapchain::GetSwapchainColorSpace(
 				void) const noexcept
 			{
 				return this->m_swapchain_format.colorSpace;
 			}
 
-			VkSemaphore ktkRenderSwapchain::getSemaphore_ImageAvailable(
+			VkSemaphore ktkRenderSwapchain::GetSemaphore_ImageAvailable(
 				void) const noexcept
 			{
 				return this->m_semaphores_image_available.at(
 					this->m_semaphore_index_previous);
 			}
 
-			VkSemaphore ktkRenderSwapchain::getSemaphore_RenderFinished(
+			VkSemaphore ktkRenderSwapchain::GetSemaphore_RenderFinished(
 				void) const noexcept
 			{
 				return this->m_semaphores_finished_render.at(
 					this->m_semaphore_index);
 			}
 
-			VkFence ktkRenderSwapchain::getFence_CommandExecuted(
+			VkFence ktkRenderSwapchain::GetFence_CommandExecuted(
 				void) const noexcept
 			{
 				return this->m_executed_fences.at(
 					this->m_semaphore_index_previous);
 			}
 
-			bool ktkRenderSwapchain::canVSYNCTurnOff(
+			bool ktkRenderSwapchain::CanVSYNCTurnOff(
 				const ktk::vector<VkPresentModeKHR>& modes) const noexcept
 			{
 				if (modes.empty())
@@ -300,7 +300,7 @@ namespace Kotek
 				return this->m_image_index;
 			}
 
-			void ktkRenderSwapchain::create(
+			void ktkRenderSwapchain::Create(
 				ktkRenderDevice* p_render_device, int width,
 				int height) noexcept
 			{

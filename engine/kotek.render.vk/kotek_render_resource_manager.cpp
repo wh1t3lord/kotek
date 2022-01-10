@@ -295,7 +295,7 @@ namespace Kotek
 				VkAttachmentDescription attachments[1];
 
 				attachments[0].format =
-					p_render_swapchain->getSwapchainFormat();
+					p_render_swapchain->GetSwapchainFormat();
 				attachments[0].samples = VK_SAMPLE_COUNT_1_BIT;
 				attachments[0].loadOp = VK_ATTACHMENT_LOAD_OP_DONT_CARE;
 				attachments[0].storeOp = VK_ATTACHMENT_STORE_OP_STORE;
@@ -362,7 +362,7 @@ namespace Kotek
 				ktkRenderSwapchain* p_render_swapchain)
 			{
 				VkDevice p_device = p_render_device->getDevice();
-				VkSwapchainKHR p_swapchain = p_render_swapchain->getSwapchain();
+				VkSwapchainKHR p_swapchain = p_render_swapchain->GetSwapchain();
 
 				KOTEK_ASSERT(p_device,
 					"you must initialize device before using resource manager "
@@ -442,7 +442,7 @@ namespace Kotek
 
 					info.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 					info.pNext = nullptr;
-					info.format = p_render_swapchain->getSwapchainFormat();
+					info.format = p_render_swapchain->GetSwapchainFormat();
 					info.components.r = VK_COMPONENT_SWIZZLE_R;
 					info.components.g = VK_COMPONENT_SWIZZLE_G;
 					info.components.b = VK_COMPONENT_SWIZZLE_B;

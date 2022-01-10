@@ -54,14 +54,9 @@ namespace Kotek
 		public:
 			virtual ~ktkIRenderSwapchain(void) {}
 
-			// TODO: change signature on void
-			virtual void initialize(ktkIRenderDevice* p_render_device) = 0;
-
-			// TODO: change signature on void
-			virtual void shutdown(ktkIRenderDevice* p_render_device) = 0;
-
-			// TODO: change signature on void, but int keep
-			virtual void resize(ktkIRenderDevice* p_render_device,
+			virtual void Initialize(ktkIRenderDevice* p_render_device) = 0;
+			virtual void Shutdown(ktkIRenderDevice* p_render_device) = 0;
+			virtual void Resize(ktkIRenderDevice* p_render_device,
 				int width, int height) = 0;
 		};
 

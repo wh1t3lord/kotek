@@ -53,7 +53,7 @@ namespace Kotek
 
 			p_render_manager_device->initialize(main_manager);
 
-			p_render_manager_swapchain->initialize(
+			p_render_manager_swapchain->Initialize(
 				p_render_manager_device.get());
 
 			p_render_manager_render_resource->initialize(
@@ -71,7 +71,7 @@ namespace Kotek
 		{
 			main_manager.getRenderDevice()->GPUFlush();
 
-			main_manager.getRenderSwapchainManager()->shutdown(
+			main_manager.getRenderSwapchainManager()->Shutdown(
 				main_manager.getRenderDevice());
 			main_manager.getRenderResourceManager()->shutdown(
 				main_manager.getRenderDevice());

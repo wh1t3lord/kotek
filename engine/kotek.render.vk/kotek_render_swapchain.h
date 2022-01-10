@@ -31,43 +31,43 @@ namespace Kotek
 				ktkRenderSwapchain(void);
 				~ktkRenderSwapchain(void);
 
-				void initialize(
+				void Initialize(
 					Core::ktkIRenderDevice* p_render_device) override;
-				void shutdown(
+				void Shutdown(
 					Core::ktkIRenderDevice* p_render_device) override;
-				void resize(Core::ktkIRenderDevice* p_render_device,
+				void Resize(Core::ktkIRenderDevice* p_render_device,
 					int width, int height) override;
 
-				ktk::uint32_t wait(
+				ktk::uint32_t Wait(
 					ktkRenderDevice* p_render_device) noexcept;
-				void present(Core::ktkMainManager& main_manager,
+				void Present(Core::ktkMainManager& main_manager,
 					ktkRenderDevice* p_render_device) noexcept;
 
-				VkSwapchainKHR getSwapchain(void) const noexcept;
+				VkSwapchainKHR GetSwapchain(void) const noexcept;
 
-				void setSwapchainFormat(VkFormat texture_format) noexcept;
+				void SetSwapchainFormat(VkFormat texture_format) noexcept;
 
-				void setSwapchainColorSpace(
+				void SetSwapchainColorSpace(
 					VkColorSpaceKHR color_space) noexcept;
 
-				VkFormat getSwapchainFormat(void) const noexcept;
+				VkFormat GetSwapchainFormat(void) const noexcept;
 
-				VkColorSpaceKHR getSwapchainColorSpace(void) const noexcept;
+				VkColorSpaceKHR GetSwapchainColorSpace(void) const noexcept;
 
-				VkSemaphore getSemaphore_ImageAvailable(void) const noexcept;
+				VkSemaphore GetSemaphore_ImageAvailable(void) const noexcept;
 
-				VkSemaphore getSemaphore_RenderFinished(void) const noexcept;
+				VkSemaphore GetSemaphore_RenderFinished(void) const noexcept;
 
-				VkFence getFence_CommandExecuted(void) const noexcept;
+				VkFence GetFence_CommandExecuted(void) const noexcept;
 
 				// Can we turn off Vsync or not?
-				bool canVSYNCTurnOff(
+				bool CanVSYNCTurnOff(
 					const ktk::vector<VkPresentModeKHR>& modes) const noexcept;
 
 				ktk::uint32_t GetAcquiredImageIndex(void) const noexcept;
 
 			private:
-				void create(ktkRenderDevice* p_render_device, int width,
+				void Create(ktkRenderDevice* p_render_device, int width,
 					int height) noexcept;
 
 			private:
