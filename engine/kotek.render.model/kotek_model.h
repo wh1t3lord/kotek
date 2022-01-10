@@ -6,13 +6,13 @@ namespace Kotek
 {
 	namespace Render
 	{
-		class kotek_model
+		class ktkModel
 		{
 		public:
-			kotek_model(void);
-			~kotek_model(void);
+			ktkModel(void);
+			~ktkModel(void);
 
-			bool load(
+			bool Load(
 				Core::ktkMainManager& main_manager, const ktk::string& path);
 
 		private:

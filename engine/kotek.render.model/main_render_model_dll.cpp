@@ -1,4 +1,4 @@
-#include "kotek_render_gltf.h"
+#include "kotek_render_model.h"
 
 namespace Kotek
 {

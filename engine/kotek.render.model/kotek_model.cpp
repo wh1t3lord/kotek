@@ -5,11 +5,11 @@ namespace Kotek
 {
 	namespace Render
 	{
-		kotek_model::kotek_model(void) {}
+		ktkModel::ktkModel(void) {}
 
-		kotek_model::~kotek_model(void) {}
+		ktkModel::~ktkModel(void) {}
 
-		bool kotek_model::load(
+		bool ktkModel::Load(
 			Core::ktkMainManager& main_manager, const ktk::string& path)
 		{
 			if (path.empty())
