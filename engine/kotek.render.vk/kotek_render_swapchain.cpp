@@ -9,7 +9,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			kotek_render_swapchain::kotek_render_swapchain() :
+			ktkRenderSwapchain::ktkRenderSwapchain() :
 				m_semaphore_index(0), m_semaphore_index_previous(0),
 				m_p_swapchain(nullptr)
 			{
@@ -18,14 +18,14 @@ namespace Kotek
 #endif
 			}
 
-			kotek_render_swapchain::~kotek_render_swapchain()
+			ktkRenderSwapchain::~ktkRenderSwapchain()
 			{
 #ifdef KOTEK_DEBUG
 				KOTEK_MESSAGE("~dtor");
 #endif
 			}
 
-			void kotek_render_swapchain::initialize(
+			void ktkRenderSwapchain::initialize(
 				Core::ktkIRenderDevice* p_raw_render_device)
 			{
 				ktkRenderDevice* p_render_device =
@@ -89,7 +89,7 @@ namespace Kotek
 				KOTEK_MESSAGE("swapchain is initialized");
 			}
 
-			void kotek_render_swapchain::shutdown(
+			void ktkRenderSwapchain::shutdown(
 				Core::ktkIRenderDevice* p_raw_render_device)
 			{
 				ktkRenderDevice* p_render_device =
@@ -125,7 +125,7 @@ namespace Kotek
 				KOTEK_MESSAGE("swapchain is shutdown");
 			}
 
-			void kotek_render_swapchain::resize(
+			void ktkRenderSwapchain::resize(
 				Core::ktkIRenderDevice* p_raw_render_device, int width,
 				int height)
 			{
@@ -146,7 +146,7 @@ namespace Kotek
 				this->create(p_render_device, width, height);
 			}
 
-			ktk::uint32_t kotek_render_swapchain::wait(
+			ktk::uint32_t ktkRenderSwapchain::wait(
 				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
@@ -181,7 +181,7 @@ namespace Kotek
 				return this->m_image_index;
 			}
 
-			void kotek_render_swapchain::present(
+			void ktkRenderSwapchain::present(
 				Core::ktkMainManager& main_manager,
 				ktkRenderDevice* p_render_device) noexcept
 			{
@@ -224,58 +224,58 @@ namespace Kotek
 				}
 			}
 
-			VkSwapchainKHR kotek_render_swapchain::getSwapchain(
+			VkSwapchainKHR ktkRenderSwapchain::getSwapchain(
 				void) const noexcept
 			{
 				return this->m_p_swapchain;
 			}
 
-			void kotek_render_swapchain::setSwapchainFormat(
+			void ktkRenderSwapchain::setSwapchainFormat(
 				VkFormat texture_format) noexcept
 			{
 				this->m_swapchain_format.format = texture_format;
 			}
 
-			void kotek_render_swapchain::setSwapchainColorSpace(
+			void ktkRenderSwapchain::setSwapchainColorSpace(
 				VkColorSpaceKHR color_space) noexcept
 			{
 				this->m_swapchain_format.colorSpace = color_space;
 			}
 
-			VkFormat kotek_render_swapchain::getSwapchainFormat(
+			VkFormat ktkRenderSwapchain::getSwapchainFormat(
 				void) const noexcept
 			{
 				return this->m_swapchain_format.format;
 			}
 
-			VkColorSpaceKHR kotek_render_swapchain::getSwapchainColorSpace(
+			VkColorSpaceKHR ktkRenderSwapchain::getSwapchainColorSpace(
 				void) const noexcept
 			{
 				return this->m_swapchain_format.colorSpace;
 			}
 
-			VkSemaphore kotek_render_swapchain::getSemaphore_ImageAvailable(
+			VkSemaphore ktkRenderSwapchain::getSemaphore_ImageAvailable(
 				void) const noexcept
 			{
 				return this->m_semaphores_image_available.at(
 					this->m_semaphore_index_previous);
 			}
 
-			VkSemaphore kotek_render_swapchain::getSemaphore_RenderFinished(
+			VkSemaphore ktkRenderSwapchain::getSemaphore_RenderFinished(
 				void) const noexcept
 			{
 				return this->m_semaphores_finished_render.at(
 					this->m_semaphore_index);
 			}
 
-			VkFence kotek_render_swapchain::getFence_CommandExecuted(
+			VkFence ktkRenderSwapchain::getFence_CommandExecuted(
 				void) const noexcept
 			{
 				return this->m_executed_fences.at(
 					this->m_semaphore_index_previous);
 			}
 
-			bool kotek_render_swapchain::canVSYNCTurnOff(
+			bool ktkRenderSwapchain::canVSYNCTurnOff(
 				const ktk::vector<VkPresentModeKHR>& modes) const noexcept
 			{
 				if (modes.empty())
@@ -294,13 +294,13 @@ namespace Kotek
 				return false;
 			}
 
-			ktk::uint32_t kotek_render_swapchain::GetAcquiredImageIndex(
+			ktk::uint32_t ktkRenderSwapchain::GetAcquiredImageIndex(
 				void) const noexcept
 			{
 				return this->m_image_index;
 			}
 
-			void kotek_render_swapchain::create(
+			void ktkRenderSwapchain::create(
 				ktkRenderDevice* p_render_device, int width,
 				int height) noexcept
 			{

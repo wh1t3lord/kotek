@@ -10,7 +10,7 @@ namespace Kotek
 		{
 			class ktkRenderResourceManager;
 			class ktkRenderDevice;
-			class kotek_render_swapchain;
+			class ktkRenderSwapchain;
 		} // namespace vk
 	}     // namespace Render
 } // namespace Kotek

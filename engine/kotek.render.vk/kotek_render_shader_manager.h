@@ -60,7 +60,7 @@ namespace Kotek
 		namespace vk
 		{
 			class ktkRenderDevice;
-			class kotek_render_swapchain;
+			class ktkRenderSwapchain;
 			class ktkRenderResourceManager;
 			class descriptor_set_info_t;
 		} // namespace vk

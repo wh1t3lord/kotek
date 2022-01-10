@@ -25,11 +25,11 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_swapchain : public Core::ktkIRenderSwapchain
+			class ktkRenderSwapchain : public Core::ktkIRenderSwapchain
 			{
 			public:
-				kotek_render_swapchain(void);
-				~kotek_render_swapchain(void);
+				ktkRenderSwapchain(void);
+				~ktkRenderSwapchain(void);
 
 				void initialize(
 					Core::ktkIRenderDevice* p_render_device) override;

@@ -18,7 +18,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_swapchain;
+			class ktkRenderSwapchain;
 			class ktkRenderDevice;
 		} // namespace vk
 	}     // namespace Render
@@ -60,7 +60,7 @@ namespace Kotek
 					Core::ktkIRenderDevice* p_raw_device) override;
 
 				void resize(ktkRenderDevice* p_render_device,
-					kotek_render_swapchain* p_render_swapchain);
+					ktkRenderSwapchain* p_render_swapchain);
 
 				kotek_render_dynamic_buffer_ring* GetDynamicBufferRing(
 					void) noexcept;
@@ -122,19 +122,19 @@ namespace Kotek
 					ktkRenderDevice* p_render_device) noexcept;
 
 				void createSwapchainRTVs(ktkRenderDevice* p_render_device,
-					kotek_render_swapchain* p_render_swapchain);
+					ktkRenderSwapchain* p_render_swapchain);
 				void destroySwapchainRTVs(ktkRenderDevice* p_render_device);
 
 				void createDSV(void);
 
 				void createSwapchainRenderPass(
 					ktkRenderDevice* p_render_device,
-					kotek_render_swapchain* p_render_swapchain);
+					ktkRenderSwapchain* p_render_swapchain);
 				void createSwapchainImages(ktkRenderDevice* p_render_device,
-					kotek_render_swapchain* p_render_swapchain);
+					ktkRenderSwapchain* p_render_swapchain);
 				void createSwapchainImagesView(
 					ktkRenderDevice* p_render_device,
-					kotek_render_swapchain* p_render_swapchain);
+					ktkRenderSwapchain* p_render_swapchain);
 				void createSwapchainFrameBuffers(
 					ktkRenderDevice* p_render_device);
 

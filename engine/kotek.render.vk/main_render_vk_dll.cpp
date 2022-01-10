@@ -38,7 +38,7 @@ namespace Kotek
 			main_manager.setRenderDevice(p_render_manager_device);
 
 			auto p_render_manager_swapchain =
-				std::make_shared<vk::kotek_render_swapchain>();
+				std::make_shared<vk::ktkRenderSwapchain>();
 			main_manager.setRenderSwapchainManager(p_render_manager_swapchain);
 
 			auto p_render_manager_render_resource =

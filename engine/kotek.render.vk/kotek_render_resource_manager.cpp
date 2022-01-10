@@ -62,8 +62,8 @@ namespace Kotek
 				ktkRenderDevice* p_render_device =
 					static_cast<ktkRenderDevice*>(p_raw_device);
 
-				kotek_render_swapchain* p_render_swapchain =
-					static_cast<kotek_render_swapchain*>(p_raw_swapchain);
+				ktkRenderSwapchain* p_render_swapchain =
+					static_cast<ktkRenderSwapchain*>(p_raw_swapchain);
 
 				this->createSwapchainRTVs(p_render_device, p_render_swapchain);
 				this->createStaticAllocators(p_render_device);
@@ -91,7 +91,7 @@ namespace Kotek
 
 			void ktkRenderResourceManager::resize(
 				ktkRenderDevice* p_render_device,
-				kotek_render_swapchain* p_render_swapchain)
+				ktkRenderSwapchain* p_render_swapchain)
 			{
 				this->destroySwapchainRTVs(p_render_device);
 				this->createSwapchainRTVs(p_render_device, p_render_swapchain);
@@ -267,7 +267,7 @@ namespace Kotek
 
 			void ktkRenderResourceManager::createSwapchainRTVs(
 				ktkRenderDevice* p_render_device,
-				kotek_render_swapchain* p_render_swapchain)
+				ktkRenderSwapchain* p_render_swapchain)
 			{
 				this->createSwapchainImages(
 					p_render_device, p_render_swapchain);
@@ -290,7 +290,7 @@ namespace Kotek
 
 			void ktkRenderResourceManager::createSwapchainRenderPass(
 				ktkRenderDevice* p_render_device,
-				kotek_render_swapchain* p_render_swapchain)
+				ktkRenderSwapchain* p_render_swapchain)
 			{
 				VkAttachmentDescription attachments[1];
 
@@ -359,7 +359,7 @@ namespace Kotek
 
 			void ktkRenderResourceManager::createSwapchainImages(
 				ktkRenderDevice* p_render_device,
-				kotek_render_swapchain* p_render_swapchain)
+				ktkRenderSwapchain* p_render_swapchain)
 			{
 				VkDevice p_device = p_render_device->getDevice();
 				VkSwapchainKHR p_swapchain = p_render_swapchain->getSwapchain();
@@ -416,7 +416,7 @@ namespace Kotek
 
 			void ktkRenderResourceManager::createSwapchainImagesView(
 				ktkRenderDevice* p_render_device,
-				kotek_render_swapchain* p_render_swapchain)
+				ktkRenderSwapchain* p_render_swapchain)
 			{
 				VkDevice p_device = p_render_device->getDevice();
 

@@ -126,7 +126,7 @@ namespace Kotek
 
 				p_raw_swapchain->resize(this, width, height);
 				p_render_resource_manager->resize(this,
-					static_cast<kotek_render_swapchain*>(p_raw_swapchain));
+					static_cast<ktkRenderSwapchain*>(p_raw_swapchain));
 				p_raw_renderer->Resize();
 			}
 
