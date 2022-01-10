@@ -17,7 +17,7 @@ namespace Kotek
 			}
 
 			void kotek_render_dynamic_buffer_ring::initialize(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				ktk::uint32_t number_of_back_buffers,
 				ktk::uint32_t memory_total_size,
 				const ktk::string& debug_name) noexcept
@@ -96,7 +96,7 @@ namespace Kotek
 			}
 
 			void kotek_render_dynamic_buffer_ring::shutdown(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -163,7 +163,7 @@ namespace Kotek
 			}
 
 			void kotek_render_dynamic_buffer_ring::SetDescriptorSet(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				ktk::uint32_t binding_index, ktk::uint32_t size,
 				VkDescriptorType descriptor_type,
 				VkDescriptorSet p_set) noexcept
@@ -200,7 +200,7 @@ namespace Kotek
 			}
 
 			void kotek_render_dynamic_buffer_ring::SetDescriptorSet(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				ktk::uint32_t binding_index, VkSampler p_sampler,
 				VkImageLayout layout, VkImageView p_view,
 				VkDescriptorType descriptor_type,

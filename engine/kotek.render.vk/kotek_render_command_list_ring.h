@@ -8,7 +8,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_device;
+			class ktkRenderDevice;
 		}
 	} // namespace Render
 } // namespace Kotek
@@ -55,16 +55,16 @@ namespace Kotek
 				kotek_render_command_list_ring(void);
 				~kotek_render_command_list_ring(void);
 
-				void initialize(kotek_render_device* p_render_device,
+				void initialize(ktkRenderDevice* p_render_device,
 					ktk::uint32_t number_of_back_buffers,
 					ktk::uint32_t command_list_per_frame,
 					bool is_compute = false) noexcept;
 
-				void Shutdown(kotek_render_device* p_render_device);
+				void Shutdown(ktkRenderDevice* p_render_device);
 
 				void OnBeginFrame();
 
-				VkCommandBuffer GetNewCommandList(kotek_render_device* p_device);
+				VkCommandBuffer GetNewCommandList(ktkRenderDevice* p_device);
 
 				const ktk::vector<VkCommandBuffer>& GetAllCommandsBufferForCurrentFrame(
 					void) const noexcept;

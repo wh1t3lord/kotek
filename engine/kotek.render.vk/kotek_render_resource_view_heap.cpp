@@ -20,7 +20,7 @@ namespace Kotek
 			}
 
 			void kotek_render_resource_view_heap::initialize(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				ktk::uint32_t descriptor_count_cbv,
 				ktk::uint32_t descriptor_count_srv,
 				ktk::uint32_t descriptor_count_uav,
@@ -75,7 +75,7 @@ namespace Kotek
 			}
 
 			void kotek_render_resource_view_heap::shutdown(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -86,7 +86,7 @@ namespace Kotek
 			}
 
 			bool kotek_render_resource_view_heap::AllocDescriptor(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				VkDescriptorSetLayout p_layout, VkDescriptorSet* p_set) noexcept
 			{
 				// TODO: cpu sync
@@ -115,7 +115,7 @@ namespace Kotek
 			}
 
 			bool kotek_render_resource_view_heap::AllocDescriptor(
-				kotek_render_device* p_render_device, ktk::int32_t size,
+				ktkRenderDevice* p_render_device, ktk::int32_t size,
 				const VkSampler* p_samplers, VkDescriptorSetLayout* p_layout,
 				VkDescriptorSet* p_descriptor) noexcept
 			{
@@ -137,7 +137,7 @@ namespace Kotek
 			}
 
 			bool kotek_render_resource_view_heap::createDescriptorSetLayout(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				ktk::vector<VkDescriptorSetLayoutBinding>*
 					p_descriptor_layout_binding,
 				VkDescriptorSetLayout* p_layout) noexcept
@@ -166,7 +166,7 @@ namespace Kotek
 
 			bool kotek_render_resource_view_heap::
 				createDescriptorSetLayoutAndAllocDescriptorSet(
-					kotek_render_device* p_render_device,
+					ktkRenderDevice* p_render_device,
 					ktk::vector<VkDescriptorSetLayoutBinding>*
 						p_descriptor_layout_binding,
 					VkDescriptorSetLayout* p_layout,
@@ -195,7 +195,7 @@ namespace Kotek
 			}
 
 			void kotek_render_resource_view_heap::freeDescriptor(
-				kotek_render_device* p_render_device, VkDescriptorSet p_set)
+				ktkRenderDevice* p_render_device, VkDescriptorSet p_set)
 			{
 				VkDevice p_device = p_render_device->getDevice();
 

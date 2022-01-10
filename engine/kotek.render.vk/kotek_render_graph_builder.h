@@ -20,7 +20,7 @@ namespace Kotek
 		{
 			class kotek_render_graph;
 			class ktkRenderResourceManager;
-			class kotek_render_device;
+			class ktkRenderDevice;
 			class ktkRenderGraphResourceManager;
 		} // namespace vk
 	}     // namespace Render
@@ -135,7 +135,7 @@ namespace Kotek
 				ktkRenderResourceManager* m_p_manager_render_resource;
 				Core::ktkProfiler* m_p_profiler;
 				Core::ktkMainManager* m_p_main_manager;
-				kotek_render_device* m_p_device;
+				ktkRenderDevice* m_p_device;
 				ktkRenderGraphResourceManager*
 					m_p_manager_render_graph_resource;
 				ktk::string m_backbuffer_name;

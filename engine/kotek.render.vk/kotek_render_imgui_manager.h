@@ -9,7 +9,7 @@ namespace Kotek
 		namespace vk
 		{
 			class ktkRenderResourceManager;
-			class kotek_render_device;
+			class ktkRenderDevice;
 			class kotek_render_swapchain;
 		} // namespace vk
 	}     // namespace Render
@@ -30,33 +30,33 @@ namespace Kotek
 
 				void initialize(
 					Core::ktkMainManager& main_manager) noexcept override;
-				void shutdown(Core::kotek_i_render_device*
+				void shutdown(Core::ktkIRenderDevice*
 						p_raw_device) noexcept override;
 				void draw(VkCommandBuffer p_cmd,
-					kotek_render_device* p_render_device,
+					ktkRenderDevice* p_render_device,
 					ktkRenderResourceManager*
 						p_render_resource_manager) noexcept;
 
 			private:
-				void createFontTexture(kotek_render_device* p_render_device,
+				void createFontTexture(ktkRenderDevice* p_render_device,
 					ktkRenderResourceManager*
 						p_render_resource_manager) noexcept;
 				void destroyFontTexture(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				void createImageView(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 				void destroyImageView(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
-				void createImage(kotek_render_device* p_render_device) noexcept;
+				void createImage(ktkRenderDevice* p_render_device) noexcept;
 				void destroyImage(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				void createImageMemoryAndBind(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 				void destroyImageMemory(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				void copyBufferToImage(ktkRenderResourceManager*
 						p_render_resource_manager) noexcept;
@@ -65,27 +65,27 @@ namespace Kotek
 						p_render_resource_manager) noexcept;
 				void flushHeap(
 					ktkRenderResourceManager* p_render_resource_manager,
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				void createSampler(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 				void destroySampler(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
-				void compileShaders(kotek_render_device* p_render_device,
+				void compileShaders(ktkRenderDevice* p_render_device,
 					ktkRenderResourceManager*
 						p_render_resource_manager) noexcept;
 
 				void destroyPipelineLayout(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 				void destroyPipeline(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				void destroyDescriptorSetLayout(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				void updatePipeline(VkRenderPass p_render_pass,
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 			private:
 				ktk::uint32_t m_current_descriptor_index;

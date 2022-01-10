@@ -8,7 +8,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_device;
+			class ktkRenderDevice;
 		}
 	} // namespace Render
 } // namespace Kotek
@@ -26,12 +26,12 @@ namespace Kotek
 				~kotek_render_upload_heap(void);
 
 				void initialize(
-					kotek_render_device* p_render_device, ktk::uint32_t size);
-				void shutdown(kotek_render_device* p_render_device);
+					ktkRenderDevice* p_render_device, ktk::uint32_t size);
+				void shutdown(ktkRenderDevice* p_render_device);
 
 				ktk::uint8_t* subAllocate(ktk::size_t size) noexcept;
 				ktk::uint8_t* beginSubAllocate(
-					kotek_render_device* p_render_device,
+					ktkRenderDevice* p_render_device,
 					ktk::size_t size) noexcept;
 
 				void endSubAllocate(void);
@@ -41,9 +41,9 @@ namespace Kotek
 				void addPreBarrier(VkImageMemoryBarrier p_barrier) noexcept;
 				void addPostBarrier(VkImageMemoryBarrier p_barrier) noexcept;
 
-				void flush(kotek_render_device* p_render_device) noexcept;
+				void flush(ktkRenderDevice* p_render_device) noexcept;
 				void flushAndFinish(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				ktk::size_t getOffset(
 					const ktk::uint8_t* const p_allocated_part_from_heap)
@@ -57,26 +57,26 @@ namespace Kotek
 
 			private:
 				void createCommandPool(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 				void destroyCommandPool(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				void createBuffer(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 				void destroyBuffer(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				void createCommandBuffer(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 				void destroyCommandBuffer(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
-				void createFence(kotek_render_device* p_render_device) noexcept;
+				void createFence(ktkRenderDevice* p_render_device) noexcept;
 				void destroyFence(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				void beginCommandBuffer(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 			private:
 				ktk::uint32_t m_total_size;

@@ -28,17 +28,17 @@ namespace Kotek
 				ktk::string translateVkResultToString(VkResult result) noexcept;
 			} // namespace helper
 
-			class kotek_render_device : public Core::kotek_i_render_device
+			class ktkRenderDevice : public Core::ktkIRenderDevice
 			{
 			public:
-				kotek_render_device(void);
-				~kotek_render_device(void);
+				ktkRenderDevice(void);
+				~ktkRenderDevice(void);
 
 				void initialize(Core::ktkMainManager& main_manager) override;
 				void shutdown(void) override;
-				void resize(Core::kotek_i_render_swapchain* p_raw_swapchain,
+				void resize(Core::ktkIRenderSwapchain* p_raw_swapchain,
 					Core::kotek_i_renderer* p_raw_renderer,
-					Core::kotek_i_render_resource_manager*
+					Core::ktkIRenderResourceManager*
 						p_raw_resource_manager,
 					int width, int height) override;
 				int getWidth(void) const noexcept override;
@@ -120,11 +120,11 @@ namespace Kotek
 
 				kotek_render_instance_properties createInstanceProperties(
 					void) noexcept;
-				kotek_render_device_properties createDeviceProperties(
+				ktkRenderDeviceProperties createDeviceProperties(
 					void) noexcept;
 
 				bool checkExtensionFP16(
-					kotek_render_device_properties* p_prop) noexcept;
+					ktkRenderDeviceProperties* p_prop) noexcept;
 
 				void createSurface(Core::ktkMainManager& main_manager) noexcept;
 

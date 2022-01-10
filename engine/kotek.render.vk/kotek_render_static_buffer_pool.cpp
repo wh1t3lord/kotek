@@ -21,7 +21,7 @@ namespace Kotek
 			}
 
 			void kotek_render_static_buffer_pool::initialize(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				ktk::uint32_t total_memory_size, bool is_use_gpu_memory,
 				const ktk::string& vma_name_allocation)
 			{
@@ -193,7 +193,7 @@ namespace Kotek
 			}
 
 			void kotek_render_static_buffer_pool::shutdown(
-				kotek_render_device* p_render_device)
+				ktkRenderDevice* p_render_device)
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -296,7 +296,7 @@ namespace Kotek
 			}
 
 			void kotek_render_static_buffer_pool::freeUploadHeap(
-				kotek_render_device* p_render_device)
+				ktkRenderDevice* p_render_device)
 			{
 				if (this->m_is_use_video_memory)
 				{

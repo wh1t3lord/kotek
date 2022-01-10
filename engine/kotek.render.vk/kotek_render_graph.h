@@ -19,7 +19,7 @@ namespace Kotek
 		{
 			class kotek_render_graph_render_pass;
 			class kotek_render_command_list_ring;
-			class kotek_render_device;
+			class ktkRenderDevice;
 		} // namespace vk
 	}     // namespace Render
 } // namespace Kotek
@@ -40,7 +40,7 @@ namespace Kotek
 					const ktk::vector<kotek_render_graph_render_pass*>& passes,
 					const ktk::vector<ktkRenderGraphNode>& nodes,
 					kotek_render_command_list_ring* p_command_list_ring,
-					kotek_render_device* p_device,
+					ktkRenderDevice* p_device,
 					Core::ktkProfiler* p_profiler);
 
 				kotek_render_graph(void);
@@ -60,7 +60,7 @@ namespace Kotek
 				ktk::vector<kotek_render_graph_render_pass*> m_passes;
 				ktk::vector<ktkRenderGraphNode> m_nodes;
 				kotek_render_command_list_ring* m_p_command_list_ring;
-				kotek_render_device* m_p_render_device;
+				ktkRenderDevice* m_p_render_device;
 				Core::ktkProfiler* m_p_profiler;
 			};
 		} // namespace vk

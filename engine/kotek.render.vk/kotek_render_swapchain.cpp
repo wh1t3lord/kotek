@@ -26,10 +26,10 @@ namespace Kotek
 			}
 
 			void kotek_render_swapchain::initialize(
-				Core::kotek_i_render_device* p_raw_render_device)
+				Core::ktkIRenderDevice* p_raw_render_device)
 			{
-				kotek_render_device* p_render_device =
-					static_cast<kotek_render_device*>(p_raw_render_device);
+				ktkRenderDevice* p_render_device =
+					static_cast<ktkRenderDevice*>(p_raw_render_device);
 
 				KOTEK_ASSERT(p_render_device->getWidth() != -1,
 					"you didn't set width for render device");
@@ -90,10 +90,10 @@ namespace Kotek
 			}
 
 			void kotek_render_swapchain::shutdown(
-				Core::kotek_i_render_device* p_raw_render_device)
+				Core::ktkIRenderDevice* p_raw_render_device)
 			{
-				kotek_render_device* p_render_device =
-					static_cast<kotek_render_device*>(p_raw_render_device);
+				ktkRenderDevice* p_render_device =
+					static_cast<ktkRenderDevice*>(p_raw_render_device);
 
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -126,11 +126,11 @@ namespace Kotek
 			}
 
 			void kotek_render_swapchain::resize(
-				Core::kotek_i_render_device* p_raw_render_device, int width,
+				Core::ktkIRenderDevice* p_raw_render_device, int width,
 				int height)
 			{
-				kotek_render_device* p_render_device =
-					static_cast<kotek_render_device*>(p_raw_render_device);
+				ktkRenderDevice* p_render_device =
+					static_cast<ktkRenderDevice*>(p_raw_render_device);
 
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -147,7 +147,7 @@ namespace Kotek
 			}
 
 			ktk::uint32_t kotek_render_swapchain::wait(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -183,7 +183,7 @@ namespace Kotek
 
 			void kotek_render_swapchain::present(
 				Core::ktkMainManager& main_manager,
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkPresentInfoKHR info = {};
 
@@ -301,7 +301,7 @@ namespace Kotek
 			}
 
 			void kotek_render_swapchain::create(
-				kotek_render_device* p_render_device, int width,
+				ktkRenderDevice* p_render_device, int width,
 				int height) noexcept
 			{
 #ifdef KOTEK_DEBUG

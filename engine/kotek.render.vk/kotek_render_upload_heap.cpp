@@ -20,7 +20,7 @@ namespace Kotek
 			kotek_render_upload_heap::~kotek_render_upload_heap() {}
 
 			void kotek_render_upload_heap::initialize(
-				kotek_render_device* p_render_device, ktk::uint32_t size)
+				ktkRenderDevice* p_render_device, ktk::uint32_t size)
 			{
 				this->m_total_size = size;
 
@@ -33,7 +33,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::shutdown(
-				kotek_render_device* p_render_device)
+				ktkRenderDevice* p_render_device)
 			{
 				this->m_total_size = 0;
 
@@ -78,7 +78,7 @@ namespace Kotek
 			// When I just can place syncs in Suballocate method and get my
 			// certain part of buffer
 			ktk::uint8_t* kotek_render_upload_heap::beginSubAllocate(
-				kotek_render_device* p_render_device, ktk::size_t size) noexcept
+				ktkRenderDevice* p_render_device, ktk::size_t size) noexcept
 			{
 				ktk::uint8_t* p_result = nullptr;
 
@@ -126,7 +126,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::flush(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkResult status = {};
 
@@ -147,7 +147,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::flushAndFinish(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				// TODO: sync here
 
@@ -275,7 +275,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::createCommandPool(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				KOTEK_ASSERT(this->m_p_command_pool == nullptr,
 					"you must delete your command pool, because it's not empty "
@@ -306,7 +306,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::destroyCommandPool(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -316,7 +316,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::createBuffer(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				KOTEK_ASSERT(this->m_p_buffer == nullptr,
 					"you must delete your buffer, because it's not empty and "
@@ -410,7 +410,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::destroyBuffer(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -422,7 +422,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::createCommandBuffer(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -444,7 +444,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::destroyCommandBuffer(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -455,7 +455,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::createFence(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -475,7 +475,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::destroyFence(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -485,7 +485,7 @@ namespace Kotek
 			}
 
 			void kotek_render_upload_heap::beginCommandBuffer(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 

@@ -19,7 +19,7 @@ namespace Kotek
 		namespace vk
 		{
 			class kotek_render_swapchain;
-			class kotek_render_device;
+			class ktkRenderDevice;
 		} // namespace vk
 	}     // namespace Render
 } // namespace Kotek
@@ -34,11 +34,13 @@ namespace Kotek
 			// triple buffer the resources that get modified each frame
 			constexpr ktk::uint32_t _kSwapchainBackBuffers = 3;
 
+			// TODO: delete functions about creation resources for swapchain,
+			// because render graph resource manager have already implemented it
 			class ktkRenderResourceManager
-				: public Core::kotek_i_render_resource_manager
+				: public Core::ktkIRenderResourceManager
 			{
 			public:
-				ktkRenderResourceManager(kotek_render_device* p_device,
+				ktkRenderResourceManager(ktkRenderDevice* p_device,
 					Core::ktkMainManager* p_manager);
 				ktkRenderResourceManager(void) = delete;
 				~ktkRenderResourceManager(void);
@@ -47,18 +49,17 @@ namespace Kotek
 					const ktkRenderResourceManager&) = delete;
 				ktkRenderResourceManager& operator=(
 					const ktkRenderResourceManager&) = delete;
-				ktkRenderResourceManager(
-					ktkRenderResourceManager&&) = delete;
+				ktkRenderResourceManager(ktkRenderResourceManager&&) = delete;
 				ktkRenderResourceManager& operator=(
 					ktkRenderResourceManager&&) = delete;
 
-				void initialize(Core::kotek_i_render_device* p_raw_device,
-					Core::kotek_i_render_swapchain* p_raw_swapchain) override;
+				void initialize(Core::ktkIRenderDevice* p_raw_device,
+					Core::ktkIRenderSwapchain* p_raw_swapchain) override;
 
 				void shutdown(
-					Core::kotek_i_render_device* p_raw_device) override;
+					Core::ktkIRenderDevice* p_raw_device) override;
 
-				void resize(kotek_render_device* p_render_device,
+				void resize(ktkRenderDevice* p_render_device,
 					kotek_render_swapchain* p_render_swapchain);
 
 				kotek_render_dynamic_buffer_ring* GetDynamicBufferRing(
@@ -96,7 +97,7 @@ namespace Kotek
 				  path);
 				  }
 
-				  VkShaderModule loadShaderAsString(kotek_render_device*
+				  VkShaderModule loadShaderAsString(ktkRenderDevice*
 				  p_render_device, const ktk::string& code_as_string,
 				  shader_type_t type) noexcept
 				  {
@@ -116,38 +117,38 @@ namespace Kotek
 
 			private:
 				void createStaticAllocators(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 				void destroyStaticAllocators(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
-				void createSwapchainRTVs(kotek_render_device* p_render_device,
+				void createSwapchainRTVs(ktkRenderDevice* p_render_device,
 					kotek_render_swapchain* p_render_swapchain);
-				void destroySwapchainRTVs(kotek_render_device* p_render_device);
+				void destroySwapchainRTVs(ktkRenderDevice* p_render_device);
 
 				void createDSV(void);
 
 				void createSwapchainRenderPass(
-					kotek_render_device* p_render_device,
+					ktkRenderDevice* p_render_device,
 					kotek_render_swapchain* p_render_swapchain);
-				void createSwapchainImages(kotek_render_device* p_render_device,
+				void createSwapchainImages(ktkRenderDevice* p_render_device,
 					kotek_render_swapchain* p_render_swapchain);
 				void createSwapchainImagesView(
-					kotek_render_device* p_render_device,
+					ktkRenderDevice* p_render_device,
 					kotek_render_swapchain* p_render_swapchain);
 				void createSwapchainFrameBuffers(
-					kotek_render_device* p_render_device);
+					ktkRenderDevice* p_render_device);
 
 				void destroySwapchainRenderPass(
-					kotek_render_device* p_render_device);
+					ktkRenderDevice* p_render_device);
 				void destroySwapchainImagesView(
-					kotek_render_device* p_render_device);
+					ktkRenderDevice* p_render_device);
 				void destroySwapchainFrameBuffers(
-					kotek_render_device* p_render_device);
+					ktkRenderDevice* p_render_device);
 
 			private:
 				ktk::uint32_t m_swapchain_image_count;
 				VkRenderPass m_p_render_pass_swapchain;
-				kotek_render_device* m_p_device;
+				ktkRenderDevice* m_p_device;
 				ktk::vector<VkImage> m_swapchain_images;
 				ktk::vector<VkImageView> m_swapchain_images_view;
 				ktk::vector<VkFramebuffer> m_swapchain_framebuffers;

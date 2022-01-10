@@ -13,7 +13,7 @@ namespace Kotek
 				const ktk::vector<kotek_render_graph_render_pass*>& passes,
 				const ktk::vector<ktkRenderGraphNode>& nodes,
 				kotek_render_command_list_ring* p_command_list_ring,
-				kotek_render_device* p_device,
+				ktkRenderDevice* p_device,
 				Core::ktkProfiler* p_profiler) :
 				m_passes(passes),
 				m_nodes(nodes), m_p_command_list_ring(p_command_list_ring),

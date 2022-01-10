@@ -7,11 +7,11 @@ namespace Kotek
 	namespace Core
 	{
 		class ktkMainManager;
-		class kotek_i_render_device;
-		class kotek_i_render_swapchain;
+		class ktkIRenderDevice;
+		class ktkIRenderSwapchain;
 		class kotek_i_render_graph;
 		class kotek_i_render_imgui;
-		class kotek_i_render_resource_manager;
+		class ktkIRenderResourceManager;
 		class kotek_i_renderer;
 		class ktkProfiler;
 		class ktkConsole;
@@ -29,10 +29,10 @@ namespace Kotek
 {
 	namespace Core
 	{
-		class kotek_i_render_device
+		class ktkIRenderDevice
 		{
 		public:
-			virtual ~kotek_i_render_device(void) {}
+			virtual ~ktkIRenderDevice(void) {}
 
 			// TODO: change signature on void
 			virtual void initialize(Core::ktkMainManager& main_manager) = 0;
@@ -40,42 +40,42 @@ namespace Kotek
 			virtual void shutdown(void) = 0;
 
 			// TODO: change signature on void
-			virtual void resize(kotek_i_render_swapchain* p_raw_swapchain,
+			virtual void resize(ktkIRenderSwapchain* p_raw_swapchain,
 				kotek_i_renderer* p_raw_renderer,
-				kotek_i_render_resource_manager* p_raw_resource_manager,
+				ktkIRenderResourceManager* p_raw_resource_manager,
 				int width, int height) = 0;
 			virtual int getWidth(void) const noexcept = 0;
 			virtual int getHeight(void) const noexcept = 0;
 			virtual void GPUFlush(void) = 0;
 		};
 
-		class kotek_i_render_swapchain
+		class ktkIRenderSwapchain
 		{
 		public:
-			virtual ~kotek_i_render_swapchain(void) {}
+			virtual ~ktkIRenderSwapchain(void) {}
 
 			// TODO: change signature on void
-			virtual void initialize(kotek_i_render_device* p_render_device) = 0;
+			virtual void initialize(ktkIRenderDevice* p_render_device) = 0;
 
 			// TODO: change signature on void
-			virtual void shutdown(kotek_i_render_device* p_render_device) = 0;
+			virtual void shutdown(ktkIRenderDevice* p_render_device) = 0;
 
 			// TODO: change signature on void, but int keep
-			virtual void resize(kotek_i_render_device* p_render_device,
+			virtual void resize(ktkIRenderDevice* p_render_device,
 				int width, int height) = 0;
 		};
 
-		class kotek_i_render_resource_manager
+		class ktkIRenderResourceManager
 		{
 		public:
-			virtual ~kotek_i_render_resource_manager(void) {}
+			virtual ~ktkIRenderResourceManager(void) {}
 
 			// TODO: change signature on void
-			virtual void initialize(kotek_i_render_device* p_raw_device,
-				kotek_i_render_swapchain* p_raw_swapchain) = 0;
+			virtual void initialize(ktkIRenderDevice* p_raw_device,
+				ktkIRenderSwapchain* p_raw_swapchain) = 0;
 
 			// TODO: change signature on void
-			virtual void shutdown(kotek_i_render_device* p_raw_device) = 0;
+			virtual void shutdown(ktkIRenderDevice* p_raw_device) = 0;
 		};
 
 		class kotek_i_render_imgui
@@ -88,7 +88,7 @@ namespace Kotek
 
 			// TODO: change signature on void
 			virtual void shutdown(
-				kotek_i_render_device* p_raw_device) noexcept = 0;
+				ktkIRenderDevice* p_raw_device) noexcept = 0;
 		};
 
 		class kotek_i_render_graph

@@ -11,7 +11,7 @@ namespace Kotek
 		{
 			kotek_render_shader_manager::kotek_render_shader_manager(
 				Core::ktkMainManager* p_manager) :
-				m_p_render_device(static_cast<kotek_render_device*>(
+				m_p_render_device(static_cast<ktkRenderDevice*>(
 					p_manager->getRenderDevice())),
 				m_p_main_manager(p_manager),
 				m_p_filesystem(p_manager->GetFileSystem())

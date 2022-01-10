@@ -11,7 +11,7 @@ namespace Kotek
 		{
 			ktkRenderGraphResourceManager::ktkRenderGraphResourceManager(
 				Core::ktkMainManager& main_manager) :
-				m_p_render_device(static_cast<kotek_render_device*>(
+				m_p_render_device(static_cast<ktkRenderDevice*>(
 					main_manager.getRenderDevice())),
 				m_p_manager_resource(static_cast<ktkRenderResourceManager*>(
 					main_manager.getRenderResourceManager())),

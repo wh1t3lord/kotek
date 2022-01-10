@@ -30,8 +30,11 @@ namespace Kotek
 		{
 			KOTEK_CPU_PROFILE();
 
+			main_manager.SetFeatureStatus(
+				Core::eEngineFeature::kEngineRender_Vulkan);
+
 			auto p_render_manager_device =
-				std::make_shared<vk::kotek_render_device>();
+				std::make_shared<vk::ktkRenderDevice>();
 			main_manager.setRenderDevice(p_render_manager_device);
 
 			auto p_render_manager_swapchain =

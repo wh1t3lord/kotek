@@ -19,7 +19,7 @@ namespace Kotek
 				m_p_manager_render_resource(
 					static_cast<ktkRenderResourceManager*>(
 						main_manager.getRenderResourceManager())),
-				m_p_device(static_cast<kotek_render_device*>(
+				m_p_device(static_cast<ktkRenderDevice*>(
 					main_manager.getRenderDevice())),
 				m_p_profiler(main_manager.GetGameManager()->GetProfiler()),
 				m_p_main_manager(&main_manager)

@@ -8,7 +8,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_device;
+			class ktkRenderDevice;
 		}
 	} // namespace Render
 } // namespace Kotek
@@ -25,11 +25,11 @@ namespace Kotek
 				kotek_render_static_buffer_pool(void);
 				~kotek_render_static_buffer_pool(void);
 
-				void initialize(kotek_render_device* p_render_device,
+				void initialize(ktkRenderDevice* p_render_device,
 					ktk::uint32_t total_memory_size, bool is_use_gpu_memory,
 					const ktk::string& vma_name_allocation);
 
-				void shutdown(kotek_render_device* p_render_device);
+				void shutdown(ktkRenderDevice* p_render_device);
 
 				bool allocBuffer(ktk::uint32_t number_of_elements,
 					ktk::uint32_t stride_in_bytes, void** p_data,
@@ -41,7 +41,7 @@ namespace Kotek
 
 				void uploadData(VkCommandBuffer p_command) noexcept;
 
-				void freeUploadHeap(kotek_render_device* p_render_device);
+				void freeUploadHeap(ktkRenderDevice* p_render_device);
 
 			private:
 				bool m_is_use_video_memory;

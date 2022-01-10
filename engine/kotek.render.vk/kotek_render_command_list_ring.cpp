@@ -15,7 +15,7 @@ namespace Kotek
 			kotek_render_command_list_ring::~kotek_render_command_list_ring() {}
 
 			void kotek_render_command_list_ring::initialize(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				ktk::uint32_t number_of_back_buffers,
 				ktk::uint32_t command_list_per_frame, bool is_compute) noexcept
 			{
@@ -103,7 +103,7 @@ namespace Kotek
 			}
 
 			void kotek_render_command_list_ring::Shutdown(
-				kotek_render_device* p_render_device)
+				ktkRenderDevice* p_render_device)
 			{
 				for (ktk::uint32_t i = 0; i < this->m_number_of_frames; ++i)
 				{
@@ -135,7 +135,7 @@ namespace Kotek
 			}
 
 			VkCommandBuffer kotek_render_command_list_ring::GetNewCommandList(
-				kotek_render_device* p_device)
+				ktkRenderDevice* p_device)
 			{
 				ktk::uint32_t current_call =
 					this->m_p_current_frame->GetUsedCalls();

@@ -63,57 +63,58 @@ namespace Kotek
 			this->m_p_game_manager = p_game_manager;
 		}
 
-		kotek_i_render_device* ktkMainManager::getRenderDevice(
+		ktkIRenderDevice* ktkMainManager::getRenderDevice(
 			void) const noexcept
 		{
 			return this->m_manager_render_device.get();
 		}
 
 		void ktkMainManager::setRenderDevice(
-			ktk::shared_ptr<kotek_i_render_device> pointer) noexcept
+			ktk::shared_ptr<ktkIRenderDevice> pointer) noexcept
 		{
 			this->m_manager_render_device = pointer;
 		}
 
-		kotek_i_render_resource_manager*
+		ktkIRenderResourceManager*
 		ktkMainManager::getRenderResourceManager(void) const noexcept
 		{
 			return this->m_manager_render_resource.get();
 		}
 
 		void ktkMainManager::setRenderResourceManager(
-			ktk::shared_ptr<kotek_i_render_resource_manager> pointer) noexcept
+			ktk::shared_ptr<ktkIRenderResourceManager> pointer) noexcept
 		{
 			this->m_manager_render_resource = pointer;
 		}
 
-		kotek_i_render_swapchain* ktkMainManager::getRenderSwapchainManager(
+		ktkIRenderSwapchain* ktkMainManager::getRenderSwapchainManager(
 			void) const noexcept
 		{
 			return this->m_manager_swapchain.get();
 		}
 
 		void ktkMainManager::setRenderSwapchainManager(
-			ktk::shared_ptr<kotek_i_render_swapchain> pointer) noexcept
+			ktk::shared_ptr<ktkIRenderSwapchain> pointer) noexcept
 		{
 			this->m_manager_swapchain = pointer;
 		}
 
-		bool ktkMainManager::isFeatureEnabled(
-			engine_feature_index_t id) const noexcept
+		bool ktkMainManager::IsFeatureEnabled(
+			eEngineFeature id) const noexcept
 		{
 			if (this->m_engine_flags.find(id) == this->m_engine_flags.end())
 			{
-				KOTEK_MESSAGE(
+				KOTEK_MESSAGE_WARNING(
 					"engine doesn't register feature by id: [{}]", id);
+
 				return false;
 			}
 
 			return this->m_engine_flags.at(id);
 		}
 
-		void ktkMainManager::setFeatureStatus(
-			engine_feature_index_t id, bool status) noexcept
+		void ktkMainManager::SetFeatureStatus(
+			eEngineFeature id, bool status) noexcept
 		{
 			this->m_engine_flags[id] = status;
 		}

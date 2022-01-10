@@ -34,7 +34,7 @@ namespace Kotek
 #pragma endregion
 
 			ktkRenderResourceManager::ktkRenderResourceManager(
-				kotek_render_device* p_device,
+				ktkRenderDevice* p_device,
 				Core::ktkMainManager* p_manager) :
 				m_swapchain_image_count(0),
 				m_p_render_pass_swapchain(nullptr), m_p_device(p_device),
@@ -56,11 +56,11 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::initialize(
-				Core::kotek_i_render_device* p_raw_device,
-				Core::kotek_i_render_swapchain* p_raw_swapchain)
+				Core::ktkIRenderDevice* p_raw_device,
+				Core::ktkIRenderSwapchain* p_raw_swapchain)
 			{
-				kotek_render_device* p_render_device =
-					static_cast<kotek_render_device*>(p_raw_device);
+				ktkRenderDevice* p_render_device =
+					static_cast<ktkRenderDevice*>(p_raw_device);
 
 				kotek_render_swapchain* p_render_swapchain =
 					static_cast<kotek_render_swapchain*>(p_raw_swapchain);
@@ -75,10 +75,10 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::shutdown(
-				Core::kotek_i_render_device* p_raw_device)
+				Core::ktkIRenderDevice* p_raw_device)
 			{
-				kotek_render_device* p_render_device =
-					static_cast<kotek_render_device*>(p_raw_device);
+				ktkRenderDevice* p_render_device =
+					static_cast<ktkRenderDevice*>(p_raw_device);
 
 				this->destroyStaticAllocators(p_render_device);
 				this->destroySwapchainRTVs(p_render_device);
@@ -90,7 +90,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::resize(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				kotek_render_swapchain* p_render_swapchain)
 			{
 				this->destroySwapchainRTVs(p_render_device);
@@ -232,7 +232,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::createStaticAllocators(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				this->m_resource_view_heap.initialize(p_render_device,
 					_kDescriptorCount_CBV, _kDescriptorCount_SRV,
@@ -256,7 +256,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::destroyStaticAllocators(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				this->m_dynamic_buffer_ring.shutdown(p_render_device);
 				this->m_resource_view_heap.shutdown(p_render_device);
@@ -266,7 +266,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::createSwapchainRTVs(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				kotek_render_swapchain* p_render_swapchain)
 			{
 				this->createSwapchainImages(
@@ -279,7 +279,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::destroySwapchainRTVs(
-				kotek_render_device* p_render_device)
+				ktkRenderDevice* p_render_device)
 			{
 				this->destroySwapchainFrameBuffers(p_render_device);
 				this->destroySwapchainRenderPass(p_render_device);
@@ -289,7 +289,7 @@ namespace Kotek
 			void ktkRenderResourceManager::createDSV() {}
 
 			void ktkRenderResourceManager::createSwapchainRenderPass(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				kotek_render_swapchain* p_render_swapchain)
 			{
 				VkAttachmentDescription attachments[1];
@@ -358,7 +358,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::createSwapchainImages(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				kotek_render_swapchain* p_render_swapchain)
 			{
 				VkDevice p_device = p_render_device->getDevice();
@@ -415,7 +415,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::createSwapchainImagesView(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				kotek_render_swapchain* p_render_swapchain)
 			{
 				VkDevice p_device = p_render_device->getDevice();
@@ -466,7 +466,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::createSwapchainFrameBuffers(
-				kotek_render_device* p_render_device)
+				ktkRenderDevice* p_render_device)
 			{
 				this->m_swapchain_framebuffers.resize(
 					this->m_swapchain_images_view.size());
@@ -506,7 +506,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::destroySwapchainRenderPass(
-				kotek_render_device* p_render_device)
+				ktkRenderDevice* p_render_device)
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -523,7 +523,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::destroySwapchainImagesView(
-				kotek_render_device* p_render_device)
+				ktkRenderDevice* p_render_device)
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -540,7 +540,7 @@ namespace Kotek
 			}
 
 			void ktkRenderResourceManager::destroySwapchainFrameBuffers(
-				kotek_render_device* p_render_device)
+				ktkRenderDevice* p_render_device)
 			{
 				VkDevice p_device = p_render_device->getDevice();
 

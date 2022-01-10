@@ -166,7 +166,7 @@ namespace Kotek
 					const ktk::string& pipeline_name) const noexcept;
 
 			private:
-				kotek_render_device* m_p_render_device;
+				ktkRenderDevice* m_p_render_device;
 				ktkRenderResourceManager* m_p_manager_resource;
 				Core::ktkProfiler* m_p_profiler;
 

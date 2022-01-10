@@ -12,7 +12,7 @@ namespace Kotek
 		{
 			constexpr VkFormat kImageFormat =
 				VkFormat::VK_FORMAT_R8G8B8A8_UNORM;
-			class kotek_render_device;
+			class ktkRenderDevice;
 			class kotek_render_graph_resource_storage;
 			class kotek_render_upload_heap;
 			class ktkRenderResourceManager;
@@ -792,7 +792,7 @@ namespace Kotek
 			class kotek_render_texture_manager
 			{
 			public:
-				kotek_render_texture_manager(kotek_render_device* p_device,
+				kotek_render_texture_manager(ktkRenderDevice* p_device,
 					kotek_render_upload_heap* p_heap);
 
 				kotek_render_texture_manager() = delete;
@@ -863,7 +863,7 @@ namespace Kotek
 					VkImageType type_image) noexcept;
 
 			private:
-				kotek_render_device* m_p_device;
+				ktkRenderDevice* m_p_device;
 				kotek_render_upload_heap* m_p_heap;
 			};
 
@@ -881,14 +881,14 @@ namespace Kotek
 
 				virtual void onSetupInput(
 					kotek_render_graph_storage_input& storage,
-					kotek_render_device* p_device,
+					ktkRenderDevice* p_device,
 					Core::ktkFileSystem* p_file_system)
 				{
 				}
 
 				virtual void onSetupOutput(
 					kotek_render_graph_storage_output& storage,
-					kotek_render_device* p_device)
+					ktkRenderDevice* p_device)
 				{
 				}
 

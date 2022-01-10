@@ -9,7 +9,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_device;
+			class ktkRenderDevice;
 		}
 	} // namespace Render
 
@@ -25,23 +25,23 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_swapchain : public Core::kotek_i_render_swapchain
+			class kotek_render_swapchain : public Core::ktkIRenderSwapchain
 			{
 			public:
 				kotek_render_swapchain(void);
 				~kotek_render_swapchain(void);
 
 				void initialize(
-					Core::kotek_i_render_device* p_render_device) override;
+					Core::ktkIRenderDevice* p_render_device) override;
 				void shutdown(
-					Core::kotek_i_render_device* p_render_device) override;
-				void resize(Core::kotek_i_render_device* p_render_device,
+					Core::ktkIRenderDevice* p_render_device) override;
+				void resize(Core::ktkIRenderDevice* p_render_device,
 					int width, int height) override;
 
 				ktk::uint32_t wait(
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 				void present(Core::ktkMainManager& main_manager,
-					kotek_render_device* p_render_device) noexcept;
+					ktkRenderDevice* p_render_device) noexcept;
 
 				VkSwapchainKHR getSwapchain(void) const noexcept;
 
@@ -67,7 +67,7 @@ namespace Kotek
 				ktk::uint32_t GetAcquiredImageIndex(void) const noexcept;
 
 			private:
-				void create(kotek_render_device* p_render_device, int width,
+				void create(ktkRenderDevice* p_render_device, int width,
 					int height) noexcept;
 
 			private:

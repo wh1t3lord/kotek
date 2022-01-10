@@ -59,7 +59,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_device;
+			class ktkRenderDevice;
 			class kotek_render_swapchain;
 			class ktkRenderResourceManager;
 			class descriptor_set_info_t;
@@ -487,7 +487,7 @@ namespace Kotek
 			private:
 				Core::ktkFileSystem* m_p_filesystem;
 				Core::ktkMainManager* m_p_main_manager;
-				kotek_render_device* m_p_render_device;
+				ktkRenderDevice* m_p_render_device;
 			};
 
 		} // namespace vk

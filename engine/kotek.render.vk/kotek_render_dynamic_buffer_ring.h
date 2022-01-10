@@ -9,7 +9,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_device;
+			class ktkRenderDevice;
 		}
 	} // namespace Render
 } // namespace Kotek
@@ -28,12 +28,12 @@ namespace Kotek
 				kotek_render_dynamic_buffer_ring(void);
 				~kotek_render_dynamic_buffer_ring(void);
 
-				void initialize(kotek_render_device* p_render_device,
+				void initialize(ktkRenderDevice* p_render_device,
 					ktk::uint32_t number_of_back_buffers,
 					ktk::uint32_t memory_total_size,
 					const ktk::string& debug_name) noexcept;
 
-				void shutdown(kotek_render_device* p_render_device) noexcept;
+				void shutdown(ktkRenderDevice* p_render_device) noexcept;
 
 				bool allocConstantBuffer(ktk::uint32_t size, void** p_data,
 					VkDescriptorBufferInfo* p_out) noexcept;
@@ -48,11 +48,11 @@ namespace Kotek
 
 				void OnBeginFrame(void);
 
-				void SetDescriptorSet(kotek_render_device* p_render_device,
+				void SetDescriptorSet(ktkRenderDevice* p_render_device,
 					ktk::uint32_t binding_index, ktk::uint32_t size, VkDescriptorType descriptor_type,
 					VkDescriptorSet p_set) noexcept;
 
-				void SetDescriptorSet(kotek_render_device* p_render_device,
+				void SetDescriptorSet(ktkRenderDevice* p_render_device,
 					ktk::uint32_t binding_index, VkSampler p_sampler,
 					VkImageLayout layout, VkImageView p_view, VkDescriptorType descriptor_type,
 					VkDescriptorSet p_set) noexcept;

@@ -12,11 +12,17 @@ namespace Kotek
 {
 	namespace Core
 	{
-		enum class engine_feature_index_t : int
+		enum class eEngineFeature : int
 		{
 			kEngineWindowed,
-			kEngineMSAA,
-			kEngineVSYNC
+			kEngineRender_MSAA,
+			kEngineRender_VSYNC,
+			kEngineRender_Vulkan,
+			kEngineRender_DirectX_9,
+			kEngineRender_DirectX_11,
+			kEngineRender_DirectX_12,
+			kEngineRender_OpenGL,
+			kEngineRender_Software
 		};
 
 		class ktkMainManager
@@ -38,28 +44,28 @@ namespace Kotek
 			ktkIGameManager* GetGameManager(void) const noexcept;
 			void SetGameManager(ktkIGameManager* p_game_manager) noexcept;
 
-			kotek_i_render_device* getRenderDevice(void) const noexcept;
+			ktkIRenderDevice* getRenderDevice(void) const noexcept;
 
 			void setRenderDevice(
-				ktk::shared_ptr<kotek_i_render_device> pointer) noexcept;
+				ktk::shared_ptr<ktkIRenderDevice> pointer) noexcept;
 
-			kotek_i_render_resource_manager* getRenderResourceManager(
+			ktkIRenderResourceManager* getRenderResourceManager(
 				void) const noexcept;
 
 			void setRenderResourceManager(
-				ktk::shared_ptr<kotek_i_render_resource_manager>
+				ktk::shared_ptr<ktkIRenderResourceManager>
 					pointer) noexcept;
 
-			kotek_i_render_swapchain* getRenderSwapchainManager(
+			ktkIRenderSwapchain* getRenderSwapchainManager(
 				void) const noexcept;
 
 			void setRenderSwapchainManager(
-				ktk::shared_ptr<kotek_i_render_swapchain> pointer) noexcept;
+				ktk::shared_ptr<ktkIRenderSwapchain> pointer) noexcept;
 
-			bool isFeatureEnabled(engine_feature_index_t id) const noexcept;
+			bool IsFeatureEnabled(eEngineFeature id) const noexcept;
 
-			void setFeatureStatus(
-				engine_feature_index_t id, bool status) noexcept;
+			void SetFeatureStatus(
+				eEngineFeature id, bool status = true) noexcept;
 
 			int getARGC(void) const noexcept;
 			char** getARGV(void) const noexcept;
@@ -82,15 +88,15 @@ namespace Kotek
 			ktkIGameManager* m_p_game_manager;
 			char** m_argv;
 			ktk::vector<ktk::string> m_parsed_command_line_arguments;
-			ktk::unordered_map<engine_feature_index_t, bool> m_engine_flags;
+			ktk::unordered_map<eEngineFeature, bool> m_engine_flags;
 			ktkDynamicLibrary m_dynamic_library_user_game;
 			ktk::shared_ptr<ktkIFileSystem> m_manager_filesystem;
 			ktk::shared_ptr<ktkIInput> m_manager_input;
-			ktk::shared_ptr<kotek_i_render_device> m_manager_render_device;
-			ktk::shared_ptr<kotek_i_render_resource_manager>
+			ktk::shared_ptr<ktkIRenderDevice> m_manager_render_device;
+			ktk::shared_ptr<ktkIRenderResourceManager>
 				m_manager_render_resource;
 			ktk::shared_ptr<kotek_i_render_graph> m_manager_render_graph;
-			ktk::shared_ptr<kotek_i_render_swapchain> m_manager_swapchain;
+			ktk::shared_ptr<ktkIRenderSwapchain> m_manager_swapchain;
 			ktk::shared_ptr<ktkProfiler> m_manager_profiler;
 		};
 	} // namespace Core

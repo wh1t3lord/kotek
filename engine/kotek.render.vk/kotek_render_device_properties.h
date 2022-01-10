@@ -8,14 +8,14 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_device_properties
+			class ktkRenderDeviceProperties
 			{
 			public:
-				kotek_render_device_properties(void);
-				kotek_render_device_properties(
-					const kotek_render_device_properties&) = default;
+				ktkRenderDeviceProperties(void);
+				ktkRenderDeviceProperties(
+					const ktkRenderDeviceProperties&) = default;
 
-				~kotek_render_device_properties(void);
+				~ktkRenderDeviceProperties(void);
 
 				bool initialize(VkPhysicalDevice p_device) noexcept;
 

@@ -57,7 +57,7 @@ namespace Kotek
 // 					main_manager.GetWindow()->GetHandle(), true);
 
 				//   this->createFontTexture(
-				//       static_cast<kotek_render_device*>(main_manager.getRenderDevice()),
+				//       static_cast<ktkRenderDevice*>(main_manager.getRenderDevice()),
 				//       static_cast<ktkRenderResourceManager*>(
 				//           main_manager.getRenderResourceManager()));
 
@@ -67,7 +67,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::shutdown(
-				Core::kotek_i_render_device* p_raw_device) noexcept
+				Core::ktkIRenderDevice* p_raw_device) noexcept
 			{
 				ImGui_ImplVulkan_Shutdown();
 
@@ -75,14 +75,14 @@ namespace Kotek
 
 				ImGui::DestroyContext();
 
-				kotek_render_device* p_render_device =
-					static_cast<kotek_render_device*>(p_raw_device);
+				ktkRenderDevice* p_render_device =
+					static_cast<ktkRenderDevice*>(p_raw_device);
 
 				// this->destroyFontTexture(p_render_device);
 			}
 
 			void kotek_render_imgui_manager::draw(VkCommandBuffer p_cmd,
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				ktkRenderResourceManager*
 					p_render_resource_manager) noexcept
 			{
@@ -287,7 +287,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::createFontTexture(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				ktkRenderResourceManager*
 					p_render_resource_manager) noexcept
 			{
@@ -307,7 +307,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::destroyFontTexture(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				KOTEK_ASSERT(this->m_shader_stages.empty() == false,
 					"it is empty vector can't be!");
@@ -323,7 +323,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::createImageView(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -356,7 +356,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::destroyImageView(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -366,7 +366,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::createImage(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -408,7 +408,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::destroyImage(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -418,7 +418,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::createImageMemoryAndBind(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -468,7 +468,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::destroyImageMemory(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -574,7 +574,7 @@ namespace Kotek
 
 			void kotek_render_imgui_manager::flushHeap(
 				ktkRenderResourceManager* p_render_resource_manager,
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				kotek_render_upload_heap* p_heap =
 					p_render_resource_manager->getUploadHeap();
@@ -583,7 +583,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::createSampler(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -610,7 +610,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::destroySampler(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -620,7 +620,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::compileShaders(
-				kotek_render_device* p_render_device,
+				ktkRenderDevice* p_render_device,
 				ktkRenderResourceManager*
 					p_render_resource_manager) noexcept
 			{
@@ -814,7 +814,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::destroyPipelineLayout(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -825,7 +825,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::destroyPipeline(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -835,7 +835,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::destroyDescriptorSetLayout(
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				VkDevice p_device = p_render_device->getDevice();
 
@@ -847,7 +847,7 @@ namespace Kotek
 
 			void kotek_render_imgui_manager::updatePipeline(
 				VkRenderPass p_render_pass,
-				kotek_render_device* p_render_device) noexcept
+				ktkRenderDevice* p_render_device) noexcept
 			{
 				if (p_render_pass == nullptr)
 				{

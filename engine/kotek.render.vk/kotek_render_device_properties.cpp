@@ -6,11 +6,11 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			kotek_render_device_properties::kotek_render_device_properties() {}
+			ktkRenderDeviceProperties::ktkRenderDeviceProperties() {}
 
-			kotek_render_device_properties::~kotek_render_device_properties() {}
+			ktkRenderDeviceProperties::~ktkRenderDeviceProperties() {}
 
-			bool kotek_render_device_properties::initialize(
+			bool ktkRenderDeviceProperties::initialize(
 				VkPhysicalDevice p_device) noexcept
 			{
 				ktk::uint32_t extension_count = 0;
@@ -118,7 +118,7 @@ namespace Kotek
 				return true;
 			}
 
-			bool kotek_render_device_properties::isExtensionPresent(
+			bool ktkRenderDeviceProperties::isExtensionPresent(
 				const char* extension_name) noexcept
 			{
 				return std::find_if(this->m_device_extension_properties.begin(),
@@ -130,7 +130,7 @@ namespace Kotek
 						   }) != this->m_device_extension_properties.end();
 			}
 
-			bool kotek_render_device_properties::addExtensionName(
+			bool ktkRenderDeviceProperties::addExtensionName(
 				const char* extension_name) noexcept
 			{
 				if (this->isExtensionPresent(extension_name))
@@ -145,7 +145,7 @@ namespace Kotek
 				return false;
 			}
 
-			void* kotek_render_device_properties::getNext(void) const noexcept
+			void* ktkRenderDeviceProperties::getNext(void) const noexcept
 			{
 				if (this->m_p_next.has_value())
 					return std::any_cast<void*>(this->m_p_next);
@@ -153,20 +153,20 @@ namespace Kotek
 				return static_cast<void*>(nullptr);
 			}
 
-			void kotek_render_device_properties::setNext(void* p_data) noexcept
+			void ktkRenderDeviceProperties::setNext(void* p_data) noexcept
 			{
 				this->m_p_next = p_data;
 			}
 
 			ktk::uint32_t
-			kotek_render_device_properties::getCountExtensionsName(
+			ktkRenderDeviceProperties::getCountExtensionsName(
 				void) const noexcept
 			{
 				return this->m_device_extension_names.size();
 			}
 
 			const char* const*
-			kotek_render_device_properties::getDataExtensionsName(
+			ktkRenderDeviceProperties::getDataExtensionsName(
 				void) const noexcept
 			{
 				return this->m_device_extension_names.data();

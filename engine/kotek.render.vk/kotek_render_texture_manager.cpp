@@ -9,7 +9,7 @@ namespace Kotek
 		namespace vk
 		{
 			kotek_render_texture_manager::kotek_render_texture_manager(
-				kotek_render_device* p_device,
+				ktkRenderDevice* p_device,
 				kotek_render_upload_heap* p_heap) :
 				m_p_device(p_device),
 				m_p_heap(p_heap)
