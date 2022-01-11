@@ -130,7 +130,7 @@ namespace Kotek
 			{
 				VkResult status = {};
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -209,7 +209,7 @@ namespace Kotek
 				info_submit.signalSemaphoreCount = 0;
 				info_submit.pSignalSemaphores = nullptr;
 
-				VkQueue p_graphics_queue = p_render_device->getQueue_Graphics();
+				VkQueue p_graphics_queue = p_render_device->GetQueue_Graphics();
 
 				KOTEK_ASSERT(p_graphics_queue,
 					"you must initialize device (VkQueue = Graphics)");
@@ -220,7 +220,7 @@ namespace Kotek
 				KOTEK_ASSERT(status == VK_SUCCESS,
 					"failed to vkSubmitQueue. See status");
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -282,7 +282,7 @@ namespace Kotek
 					"and "
 					"after that call this method");
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -291,7 +291,7 @@ namespace Kotek
 				info.sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO;
 				info.pNext = nullptr;
 				info.queueFamilyIndex =
-					p_render_device->getFamilyQueueIndex_Graphics();
+					p_render_device->GetFamilyQueueIndex_Graphics();
 				info.flags = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT;
 
 				VkResult status = vkCreateCommandPool(
@@ -308,7 +308,7 @@ namespace Kotek
 			void kotek_render_upload_heap::destroyCommandPool(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -342,7 +342,7 @@ namespace Kotek
 					"you must specify your allocation size otherwise invalid "
 					"value here");
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -373,8 +373,8 @@ namespace Kotek
 				info_alloc.allocationSize = memory_requirements.size;
 				info_alloc.memoryTypeIndex = 0;
 
-				bool is_valid = p_render_device->isMemoryTypeFromProperties(
-					p_render_device->getCurrentPhysicalDeviceMemoryProperties(),
+				bool is_valid = p_render_device->IsMemoryTypeFromProperties(
+					p_render_device->GetCurrentPhysicalDeviceMemoryProperties(),
 					memory_requirements.memoryTypeBits,
 					VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT,
 					&info_alloc.memoryTypeIndex);
@@ -412,7 +412,7 @@ namespace Kotek
 			void kotek_render_upload_heap::destroyBuffer(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -424,7 +424,7 @@ namespace Kotek
 			void kotek_render_upload_heap::createCommandBuffer(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -446,7 +446,7 @@ namespace Kotek
 			void kotek_render_upload_heap::destroyCommandBuffer(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -457,7 +457,7 @@ namespace Kotek
 			void kotek_render_upload_heap::createFence(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -477,7 +477,7 @@ namespace Kotek
 			void kotek_render_upload_heap::destroyFence(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -487,7 +487,7 @@ namespace Kotek
 			void kotek_render_upload_heap::beginCommandBuffer(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 

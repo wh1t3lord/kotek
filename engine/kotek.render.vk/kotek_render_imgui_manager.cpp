@@ -186,7 +186,7 @@ namespace Kotek
 				int vtx_offset = 0;
 				int idx_offset = 0;
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "invalid device (VkDevice)");
 
@@ -325,7 +325,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::createImageView(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -358,7 +358,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::destroyImageView(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -368,7 +368,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::createImage(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -410,7 +410,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::destroyImage(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -420,7 +420,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::createImageMemoryAndBind(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -439,8 +439,8 @@ namespace Kotek
 				info_alloc.allocationSize = memory_requirements.size;
 				info_alloc.memoryTypeIndex = 0;
 
-				bool is_valid = p_render_device->isMemoryTypeFromProperties(
-					p_render_device->getCurrentPhysicalDeviceMemoryProperties(),
+				bool is_valid = p_render_device->IsMemoryTypeFromProperties(
+					p_render_device->GetCurrentPhysicalDeviceMemoryProperties(),
 					memory_requirements.memoryTypeBits,
 					VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 					&info_alloc.memoryTypeIndex);
@@ -470,7 +470,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::destroyImageMemory(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -585,7 +585,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::createSampler(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must intialize device (VkDevice)");
 
@@ -612,7 +612,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::destroySampler(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -734,7 +734,7 @@ namespace Kotek
 				info_descriptor_layout.bindingCount = 3;
 				info_descriptor_layout.pBindings = bindings;
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "your device is invalid (VkDevice)");
 
@@ -816,7 +816,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::destroyPipelineLayout(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "invalid device (VkDevice)");
 
@@ -827,7 +827,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::destroyPipeline(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "invalid device (VkDevice)");
 
@@ -837,7 +837,7 @@ namespace Kotek
 			void kotek_render_imgui_manager::destroyDescriptorSetLayout(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "invalid device (VkDevice)");
 
@@ -856,7 +856,7 @@ namespace Kotek
 					return;
 				}
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "invalid device (VkDevice)");
 

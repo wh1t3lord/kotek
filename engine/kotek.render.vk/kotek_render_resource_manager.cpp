@@ -350,7 +350,7 @@ namespace Kotek
 				info.pDependencies = &dep;
 
 				VkResult status =
-					vkCreateRenderPass(p_render_device->getDevice(), &info,
+					vkCreateRenderPass(p_render_device->GetDevice(), &info,
 						nullptr, &this->m_p_render_pass_swapchain);
 
 				KOTEK_ASSERT(status == VK_SUCCESS,
@@ -361,7 +361,7 @@ namespace Kotek
 				ktkRenderDevice* p_render_device,
 				ktkRenderSwapchain* p_render_swapchain)
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 				VkSwapchainKHR p_swapchain = p_render_swapchain->GetSwapchain();
 
 				KOTEK_ASSERT(p_device,
@@ -404,9 +404,9 @@ namespace Kotek
 				{
 					ktk::string formatted = ktk::format("Swapchain Image #{}", index);
 
-					this->m_p_device->getHelper()
+					this->m_p_device->GetHelper()
 						.getDebug()
-						.setDebugNameToResource(this->m_p_device->getDevice(),
+						.setDebugNameToResource(this->m_p_device->GetDevice(),
 							VkObjectType::VK_OBJECT_TYPE_IMAGE, p_image, formatted.get_as_legacy().c_str());
 
 					++index;
@@ -418,7 +418,7 @@ namespace Kotek
 				ktkRenderDevice* p_render_device,
 				ktkRenderSwapchain* p_render_swapchain)
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device,
 					"you must initialize device before use resource manager "
@@ -471,12 +471,12 @@ namespace Kotek
 				this->m_swapchain_framebuffers.resize(
 					this->m_swapchain_images_view.size());
 
-				ktk::uint32_t width = p_render_device->getWidth();
-				ktk::uint32_t height = p_render_device->getHeight();
+				ktk::uint32_t width = p_render_device->GetWidth();
+				ktk::uint32_t height = p_render_device->GetHeight();
 
 				VkResult status = VK_ERROR_UNKNOWN;
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device,
 					"you must initialize device before use resource manager");
@@ -508,7 +508,7 @@ namespace Kotek
 			void ktkRenderResourceManager::destroySwapchainRenderPass(
 				ktkRenderDevice* p_render_device)
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device,
 					"you must initialize device before use resource manager "
@@ -525,7 +525,7 @@ namespace Kotek
 			void ktkRenderResourceManager::destroySwapchainImagesView(
 				ktkRenderDevice* p_render_device)
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device,
 					"you must initialize device before using resource manager "
@@ -542,7 +542,7 @@ namespace Kotek
 			void ktkRenderResourceManager::destroySwapchainFrameBuffers(
 				ktkRenderDevice* p_render_device)
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device,
 					"you must initialize device before using resource manager "

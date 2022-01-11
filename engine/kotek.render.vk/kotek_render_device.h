@@ -22,10 +22,10 @@ namespace Kotek
 		{
 			namespace helper
 			{
-				ktk::string translateVkColorSpaceToString(
+				ktk::string TranslateVkColorSpaceToString(
 					VkColorSpaceKHR color_space) noexcept;
-				ktk::string translateVkFormatToString(VkFormat format) noexcept;
-				ktk::string translateVkResultToString(VkResult result) noexcept;
+				ktk::string TranslateVkFormatToString(VkFormat format) noexcept;
+				ktk::string TranslateVkResultToString(VkResult result) noexcept;
 			} // namespace helper
 
 			class ktkRenderDevice : public Core::ktkIRenderDevice
@@ -34,101 +34,103 @@ namespace Kotek
 				ktkRenderDevice(void);
 				~ktkRenderDevice(void);
 
-				void initialize(Core::ktkMainManager& main_manager) override;
-				void shutdown(void) override;
-				void resize(Core::ktkIRenderSwapchain* p_raw_swapchain,
+				void Initialize(Core::ktkMainManager& main_manager) override;
+				void Shutdown(void) override;
+				void Resize(Core::ktkIRenderSwapchain* p_raw_swapchain,
 					Core::kotek_i_renderer* p_raw_renderer,
-					Core::ktkIRenderResourceManager*
-						p_raw_resource_manager,
+					Core::ktkIRenderResourceManager* p_raw_resource_manager,
 					int width, int height) override;
-				int getWidth(void) const noexcept override;
-				int getHeight(void) const noexcept override;
+				int GetWidth(void) const noexcept override;
+				int GetHeight(void) const noexcept override;
 
 				void GPUFlush(void) override;
 
-				VmaAllocator getAllocator(void) const noexcept;
+				VmaAllocator GetAllocator(void) const noexcept;
 
-				ktk::uint32_t getFamilyQueueIndex_Graphics(void) const noexcept;
+				ktk::uint32_t GetFamilyQueueIndex_Graphics(void) const noexcept;
 
-				ktk::uint32_t getFamilyQueueIndex_Present(void) const noexcept;
+				ktk::uint32_t GetFamilyQueueIndex_Present(void) const noexcept;
 
-				ktk::uint32_t getFamilyQueueIndex_Compute(void) const noexcept;
+				ktk::uint32_t GetFamilyQueueIndex_Compute(void) const noexcept;
 
-				VkDevice getDevice(void) const noexcept;
+				VkDevice GetDevice(void) const noexcept;
 
-				VkPhysicalDevice getCurrentPhysicalDevice(void) const noexcept;
+				VkPhysicalDevice GetCurrentPhysicalDevice(void) const noexcept;
 
-				VkSurfaceKHR getSurface(void) const noexcept;
-				void setWidth(int width) noexcept;
-				void setHeight(int height) noexcept;
+				VkSurfaceKHR GetSurface(void) const noexcept;
+				void SetWidth(int width) noexcept;
+				void SetHeight(int height) noexcept;
 
-				bool isMemoryTypeFromProperties(
+				bool IsMemoryTypeFromProperties(
 					const VkPhysicalDeviceMemoryProperties& memory_properties,
 					ktk::uint32_t type_bits, VkFlags mask_requirements,
 					ktk::uint32_t* p_type_index) noexcept;
 
 				const VkPhysicalDeviceProperties&
-				getCurrentPhysicalDeviceProperties(void) const noexcept;
-				const VkPhysicalDeviceProperties2&
-				getCurrentPhysicalDeviceProperties2(void) const noexcept;
-				const VkPhysicalDeviceMemoryProperties&
-				getCurrentPhysicalDeviceMemoryProperties(void) const noexcept;
+				GetCurrentPhysicalDeviceProperties(void) const noexcept;
 
-				VkSurfaceFormatKHR getCurrentPhysicalDeviceSurfaceFormat(
+				const VkPhysicalDeviceProperties2&
+				GetCurrentPhysicalDeviceProperties2(void) const noexcept;
+
+				const VkPhysicalDeviceMemoryProperties&
+				GetCurrentPhysicalDeviceMemoryProperties(void) const noexcept;
+
+				VkSurfaceFormatKHR GetCurrentPhysicalDeviceSurfaceFormat(
 					void) const noexcept;
 
-				VkQueue getQueue_Graphics(void) const noexcept;
-				VkQueue getQueue_Compute(void) const noexcept;
-				VkQueue getQueue_Present(void) const noexcept;
-				const VkInstance getInstance(void) const noexcept;
-				const kotek_render_helper_device& getHelper(
+				VkQueue GetQueue_Graphics(void) const noexcept;
+				VkQueue GetQueue_Compute(void) const noexcept;
+				VkQueue GetQueue_Present(void) const noexcept;
+				const VkInstance GetInstance(void) const noexcept;
+				const kotek_render_helper_device& GetHelper(
 					void) const noexcept;
 
 			private:
-				void initializeAllocator(VkDevice p_device,
+				void InitializeAllocator(VkDevice p_device,
 					VkPhysicalDevice p_physical_device,
 					VkInstance p_instance) noexcept;
-				void destroyAllocator(void) noexcept;
-				void initializeInstance(void) noexcept;
+				void DestroyAllocator(void) noexcept;
+				void InitializeInstance(void) noexcept;
 
 				// This initialized both and physical and non physical just all
-				void initializeDevice(
+				void InitializeDevice(
 					Core::ktkMainManager& main_manager) noexcept;
 
-				void initializeIndeciesOfQueueFamilies(
+				void InitializeIndeciesOfQueueFamilies(
 					ktk::uint32_t queue_count,
 					const ktk::vector<VkQueueFamilyProperties>&
 						queue_props) noexcept;
 
 				// This enumerates and chooses the physical device, method in
 				// initializeDevice
-				void initializePhysicalDevice(void) noexcept;
+				void InitializePhysicalDevice(void) noexcept;
 
-				void initializeHelper(void) noexcept;
+				void InitializeHelper(void) noexcept;
 
 				// TODO: try to add feature for changing videocard from user
 				// menu GPU only
 				// TODO: try to add console command for switching GPU by
 				// indexing
 				// TODO: refactor these methods
-				bool chooseDiscretePhysicalDevice(
-					const ktk::vector<VkPhysicalDevice>& devices) noexcept;
-				bool chooseIntegratePhysicalDevice(
+				bool ChooseDiscretePhysicalDevice(
 					const ktk::vector<VkPhysicalDevice>& devices) noexcept;
 
-				void initializeQueues(void) noexcept;
+				bool ChooseIntegratePhysicalDevice(
+					const ktk::vector<VkPhysicalDevice>& devices) noexcept;
 
-				kotek_render_instance_properties createInstanceProperties(
-					void) noexcept;
-				ktkRenderDeviceProperties createDeviceProperties(
+				void InitializeQueues(void) noexcept;
+
+				kotek_render_instance_properties CreateInstanceProperties(
 					void) noexcept;
 
-				bool checkExtensionFP16(
+				ktkRenderDeviceProperties CreateDeviceProperties(void) noexcept;
+
+				bool CheckExtensionFP16(
 					ktkRenderDeviceProperties* p_prop) noexcept;
 
-				void createSurface(Core::ktkMainManager& main_manager) noexcept;
+				void CreateSurface(Core::ktkMainManager& main_manager) noexcept;
 
-				ktk::uint32_t getApiVersion(void) const noexcept;
+				ktk::uint32_t GetApiVersion(void) const noexcept;
 
 				/// <summary>
 				/// Prints your api version by formatted string where pattern is
@@ -141,14 +143,14 @@ namespace Kotek
 				/// <param name="pattern">your format string</param>
 				/// <param name="api_version">your api version for
 				/// formatting</param> <returns></returns>
-				void printApiVersion(const ktk::string& pattern,
+				void PrintApiVersion(const ktk::string& pattern,
 					ktk::uint32_t api_version) const noexcept;
 
-				void printSurfaceFormats(
+				void PrintSurfaceFormats(
 					const ktk::vector<VkSurfaceFormatKHR>& formats)
 					const noexcept;
 
-				void printInformationAboutPhysicalDevice(
+				void PrintInformationAboutPhysicalDevice(
 					const VkPhysicalDeviceProperties& props) const noexcept;
 
 			private:
@@ -190,36 +192,37 @@ namespace Kotek
 	}     // namespace Render
 } // namespace Kotek
 
+// TODO: remove because of tracy
 #ifdef KOTEK_DEBUG
 
 	#define KOTEK_DEBUG_VK_SET_OBJECT_NAME(your_device_class_pointer,       \
 		object_type, p_resource, legacy_string_name)                        \
-		your_device_class_pointer->getHelper()                              \
+		your_device_class_pointer->GetHelper()                              \
 			.getDebug()                                                     \
-			.setDebugNameToResource(your_device_class_pointer->getDevice(), \
+			.setDebugNameToResource(your_device_class_pointer->GetDevice(), \
 				object_type, p_resource, legacy_string_name);
 
 	#define KOTEK_DEBUG_VK_BEGIN_MARKER(                                    \
 		your_device_class_pointer, p_vk_command_buffer, legacy_string_name) \
-		your_device_class_pointer->getHelper().getDebug().debugMarkerBegin( \
+		your_device_class_pointer->GetHelper().getDebug().debugMarkerBegin( \
 			p_vk_command_buffer, legacy_string_name);
 
 	#define KOTEK_DEBUG_VK_INSERT_MARKER(                                    \
 		your_device_class_pointer, p_vk_command_buffer, legacy_string_name)  \
-		your_device_class_pointer->getHelper().getDebug().debugMarkerInsert( \
+		your_device_class_pointer->GetHelper().getDebug().debugMarkerInsert( \
 			p_vk_command_buffer, legacy_string_name);
 
 	#define KOTEK_DEBUG_VK_END_MARKER(                                    \
 		your_device_class_pointer, p_vk_command_buffer)                   \
-		your_device_class_pointer->getHelper().getDebug().debugMarkerEnd( \
+		your_device_class_pointer->GetHelper().getDebug().debugMarkerEnd( \
 			p_vk_command_buffer);
 
 	#define KOTEK_DEBUG_VK_SET_TAG(your_device_class_pointer,                  \
 		casted_object_to_uint64_t, debug_report_object_type_ext_value,         \
 		numeric_name, p_data, size_of_your_p_data)                             \
-		your_device_class_pointer->getHelper()                                 \
+		your_device_class_pointer->GetHelper()                                 \
 			.getDebug()                                                        \
-			.setDebugTagToResource(your_device_class_pointer->getDevice(),     \
+			.setDebugTagToResource(your_device_class_pointer->GetDevice(),     \
 				casted_object_to_uint64_t, debug_report_object_type_ext_value, \
 				numeric_name, p_data, size_of_your_p_data);
 

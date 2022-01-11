@@ -50,12 +50,12 @@ namespace Kotek
 						if (is_compute)
 						{
 							info_pool.queueFamilyIndex =
-								p_render_device->getFamilyQueueIndex_Compute();
+								p_render_device->GetFamilyQueueIndex_Compute();
 						}
 						else
 						{
 							info_pool.queueFamilyIndex =
-								p_render_device->getFamilyQueueIndex_Graphics();
+								p_render_device->GetFamilyQueueIndex_Graphics();
 						}
 
 						info_pool.flags = VK_COMMAND_POOL_CREATE_TRANSIENT_BIT;
@@ -63,7 +63,7 @@ namespace Kotek
 						VkCommandPool p_pool = nullptr;
 
 						VkResult status =
-							vkCreateCommandPool(p_render_device->getDevice(),
+							vkCreateCommandPool(p_render_device->GetDevice(),
 								&info_pool, nullptr, &p_pool);
 
 						KOTEK_ASSERT(
@@ -85,7 +85,7 @@ namespace Kotek
 						VkCommandBuffer p_buffer = nullptr;
 
 						status = vkAllocateCommandBuffers(
-							p_render_device->getDevice(), &info_buffer,
+							p_render_device->GetDevice(), &info_buffer,
 							&p_buffer);
 
 						KOTEK_ASSERT(status == VK_SUCCESS,
@@ -110,11 +110,11 @@ namespace Kotek
 					for (ktk::uint32_t j = 0;
 						 j < this->m_command_lists_per_frame; ++j)
 					{
-						vkFreeCommandBuffers(p_render_device->getDevice(),
+						vkFreeCommandBuffers(p_render_device->GetDevice(),
 							this->m_frames.at(i).GetCommandPools().at(j), 1,
 							&this->m_frames[i].GetCommandBuffers().at(j));
 
-						vkDestroyCommandPool(p_render_device->getDevice(),
+						vkDestroyCommandPool(p_render_device->GetDevice(),
 							this->m_frames.at(i).GetCommandPools().at(j),
 							nullptr);
 					}
@@ -140,7 +140,7 @@ namespace Kotek
 				ktk::uint32_t current_call =
 					this->m_p_current_frame->GetUsedCalls();
 
-				auto status = vkResetCommandPool(p_device->getDevice(),
+				auto status = vkResetCommandPool(p_device->GetDevice(),
 					this->m_p_current_frame->GetCommandPools().at(current_call),
 					0);
 

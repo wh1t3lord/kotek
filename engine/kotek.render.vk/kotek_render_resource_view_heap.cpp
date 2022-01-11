@@ -63,7 +63,7 @@ namespace Kotek
 					sizeof(p_pools_and_their_sizes[0]);
 				info.pPoolSizes = p_pools_and_their_sizes;
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -77,7 +77,7 @@ namespace Kotek
 			void kotek_render_resource_view_heap::shutdown(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -91,7 +91,7 @@ namespace Kotek
 			{
 				// TODO: cpu sync
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -142,7 +142,7 @@ namespace Kotek
 					p_descriptor_layout_binding,
 				VkDescriptorSetLayout* p_layout) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -172,7 +172,7 @@ namespace Kotek
 					VkDescriptorSetLayout* p_layout,
 					VkDescriptorSet* p_set) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -197,7 +197,7 @@ namespace Kotek
 			void kotek_render_resource_view_heap::freeDescriptor(
 				ktkRenderDevice* p_render_device, VkDescriptorSet p_set)
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 

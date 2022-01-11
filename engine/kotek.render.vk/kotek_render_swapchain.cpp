@@ -31,9 +31,10 @@ namespace Kotek
 				ktkRenderDevice* p_render_device =
 					static_cast<ktkRenderDevice*>(p_raw_render_device);
 
-				KOTEK_ASSERT(p_render_device->getWidth() != -1,
+				KOTEK_ASSERT(p_render_device->GetWidth() != -1,
 					"you didn't set width for render device");
-				KOTEK_ASSERT(p_render_device->getHeight() != -1,
+
+				KOTEK_ASSERT(p_render_device->GetHeight() != -1,
 					"you didn't set height for render device");
 
 				VkResult status;
@@ -44,7 +45,7 @@ namespace Kotek
 				this->m_semaphores_finished_render.resize(
 					_kSwapchainBackBuffers);
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device,
 					"you must initialize device before calling this method");
@@ -83,8 +84,8 @@ namespace Kotek
 						"can't create semaphore. See status: {}", status);
 				}
 
-				this->Create(p_render_device, p_render_device->getWidth(),
-					p_render_device->getHeight());
+				this->Create(p_render_device, p_render_device->GetWidth(),
+					p_render_device->GetHeight());
 
 				KOTEK_MESSAGE("swapchain is initialized");
 			}
@@ -95,7 +96,7 @@ namespace Kotek
 				ktkRenderDevice* p_render_device =
 					static_cast<ktkRenderDevice*>(p_raw_render_device);
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device,
 					"you must initialize (early calling) device before "
@@ -132,7 +133,7 @@ namespace Kotek
 				ktkRenderDevice* p_render_device =
 					static_cast<ktkRenderDevice*>(p_raw_render_device);
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device,
 					"you must initialize (early calling) device before "
@@ -149,7 +150,7 @@ namespace Kotek
 			ktk::uint32_t ktkRenderSwapchain::Wait(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -197,7 +198,7 @@ namespace Kotek
 				info.pImageIndices = &this->m_image_index;
 				info.pResults = nullptr;
 
-				VkQueue p_queue_present = p_render_device->getQueue_Present();
+				VkQueue p_queue_present = p_render_device->GetQueue_Present();
 
 				KOTEK_ASSERT(p_queue_present,
 					"you must initialize device (VkQueue=Present)");
@@ -311,10 +312,10 @@ namespace Kotek
 
 				VkSurfaceCapabilitiesKHR surface_caps;
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 				VkPhysicalDevice p_physical_device =
-					p_render_device->getCurrentPhysicalDevice();
-				VkSurfaceKHR p_surface = p_render_device->getSurface();
+					p_render_device->GetCurrentPhysicalDevice();
+				VkSurfaceKHR p_surface = p_render_device->GetSurface();
 
 				KOTEK_ASSERT(p_device,
 					"you must initialize device before using swapchain "
@@ -418,7 +419,7 @@ namespace Kotek
 
 				// TODO: implement HDR support
 				this->m_swapchain_format =
-					p_render_device->getCurrentPhysicalDeviceSurfaceFormat();
+					p_render_device->GetCurrentPhysicalDeviceSurfaceFormat();
 
 				info_swapchain.sType =
 					VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR;
@@ -445,9 +446,10 @@ namespace Kotek
 				info_swapchain.pQueueFamilyIndices = nullptr;
 
 				ktk::uint32_t queue_family_index_graphics =
-					p_render_device->getFamilyQueueIndex_Graphics();
+					p_render_device->GetFamilyQueueIndex_Graphics();
+
 				ktk::uint32_t queue_family_index_present =
-					p_render_device->getFamilyQueueIndex_Present();
+					p_render_device->GetFamilyQueueIndex_Present();
 
 				if (queue_family_index_graphics != queue_family_index_present)
 				{

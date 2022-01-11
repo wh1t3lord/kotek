@@ -55,7 +55,7 @@ namespace Kotek
 				result.setCreateInfoSampler(info.getSamplerCreateInfo());
 				result.setTextureType(type);
 
-				this->allocateTexture(this->m_p_device->getAllocator(), result);
+				this->allocateTexture(this->m_p_device->GetAllocator(), result);
 				this->validateTexture(result);
 
 				return result;
@@ -154,13 +154,13 @@ namespace Kotek
 				info_view.subresourceRange.levelCount = 1;
 				info_view.subresourceRange.layerCount = 1;
 
-				status = vkCreateImageView(this->m_p_device->getDevice(),
+				status = vkCreateImageView(this->m_p_device->GetDevice(),
 					&info_view, nullptr, &p_image_view);
 
 				KOTEK_ASSERT(
 					status == false, "failed to vkCreateImageView, see status");
 
-				status = vkCreateSampler(this->m_p_device->getDevice(),
+				status = vkCreateSampler(this->m_p_device->GetDevice(),
 					&texture.getCreateInfoSampler(), nullptr, &p_sampler);
 
 				KOTEK_ASSERT(
@@ -178,12 +178,12 @@ namespace Kotek
 						static_cast<float>(
 							ktk::kMemoryConvertValue_Megabytes)));
 
-				this->m_p_device->getHelper().getDebug().setDebugNameToResource(
-					this->m_p_device->getDevice(),
+				this->m_p_device->GetHelper().getDebug().setDebugNameToResource(
+					this->m_p_device->GetDevice(),
 					VkObjectType::VK_OBJECT_TYPE_IMAGE, p_image, texture.getTextureName().get_as_legacy().c_str());
 
-				this->m_p_device->getHelper().getDebug().setDebugNameToResource(
-					this->m_p_device->getDevice(),
+				this->m_p_device->GetHelper().getDebug().setDebugNameToResource(
+					this->m_p_device->GetDevice(),
 					VkObjectType::VK_OBJECT_TYPE_IMAGE_VIEW, p_image_view,
 					texture.getTextureName().get_as_legacy().c_str());
 #endif
@@ -235,10 +235,10 @@ namespace Kotek
 					texture.getTextureName().get_as_is());
 #endif
 
-				vkDestroyImageView(this->m_p_device->getDevice(),
+				vkDestroyImageView(this->m_p_device->GetDevice(),
 					texture.getImageViewHandle(), nullptr);
 
-				vkDestroySampler(this->m_p_device->getDevice(),
+				vkDestroySampler(this->m_p_device->GetDevice(),
 					texture.getImageSamplerHandle(), nullptr);
 
 				vmaDestroyImage(p_allocator, texture.getImageHandle(),
@@ -289,7 +289,7 @@ namespace Kotek
 							.layerCount = 1}});
 
 				ktk::size_t pixels_per_block =
-					this->m_p_device->getHelper().getPixelsPerBlockByFormat(
+					this->m_p_device->GetHelper().getPixelsPerBlockByFormat(
 						p_texture->getCreateInfoImage().format);
 
 				// TODO: we must to ensure that upload_size contains valid size
@@ -300,7 +300,7 @@ namespace Kotek
 						 static_cast<ktk::size_t>(
 							 p_texture->getCreateInfoImage().extent.height)) *
 						static_cast<ktk::size_t>(
-							this->m_p_device->getHelper()
+							this->m_p_device->GetHelper()
 								.getSizeInBytesByFormat(
 									p_texture->getCreateInfoImage().format))) /
 					static_cast<ktk::size_t>(pixels_per_block);

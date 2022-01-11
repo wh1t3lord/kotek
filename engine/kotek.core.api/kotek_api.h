@@ -34,18 +34,15 @@ namespace Kotek
 		public:
 			virtual ~ktkIRenderDevice(void) {}
 
-			// TODO: change signature on void
-			virtual void initialize(Core::ktkMainManager& main_manager) = 0;
-
-			virtual void shutdown(void) = 0;
-
-			// TODO: change signature on void
-			virtual void resize(ktkIRenderSwapchain* p_raw_swapchain,
+			virtual void Initialize(Core::ktkMainManager& main_manager) = 0;
+			virtual void Shutdown(void) = 0;
+			virtual void Resize(ktkIRenderSwapchain* p_raw_swapchain,
 				kotek_i_renderer* p_raw_renderer,
 				ktkIRenderResourceManager* p_raw_resource_manager,
 				int width, int height) = 0;
-			virtual int getWidth(void) const noexcept = 0;
-			virtual int getHeight(void) const noexcept = 0;
+
+			virtual int GetWidth(void) const noexcept = 0;
+			virtual int GetHeight(void) const noexcept = 0;
 			virtual void GPUFlush(void) = 0;
 		};
 

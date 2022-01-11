@@ -32,7 +32,7 @@ namespace Kotek
 				this->m_p_data = nullptr;
 				this->m_memory_offset = 0;
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -75,8 +75,8 @@ namespace Kotek
 					VK_MEMORY_PROPERTY_HOST_COHERENT_BIT;
 				info_alloc.allocationSize = memory_requirements.size;
 
-				bool is_matched = p_render_device->isMemoryTypeFromProperties(
-					p_render_device->getCurrentPhysicalDeviceMemoryProperties(),
+				bool is_matched = p_render_device->IsMemoryTypeFromProperties(
+					p_render_device->GetCurrentPhysicalDeviceMemoryProperties(),
 					memory_requirements.memoryTypeBits,
 					VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
 						VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
@@ -146,9 +146,9 @@ namespace Kotek
 						memory_requirements_gpu.size;
 
 					bool is_matched_gpu =
-						p_render_device->isMemoryTypeFromProperties(
+						p_render_device->IsMemoryTypeFromProperties(
 							p_render_device
-								->getCurrentPhysicalDeviceMemoryProperties(),
+								->GetCurrentPhysicalDeviceMemoryProperties(),
 							memory_requirements_gpu.memoryTypeBits,
 							VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT,
 							&info_alloc_gpu.memoryTypeIndex);
@@ -195,7 +195,7 @@ namespace Kotek
 			void kotek_render_static_buffer_pool::shutdown(
 				ktkRenderDevice* p_render_device)
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -300,7 +300,7 @@ namespace Kotek
 			{
 				if (this->m_is_use_video_memory)
 				{
-					VkDevice p_device = p_render_device->getDevice();
+					VkDevice p_device = p_render_device->GetDevice();
 
 					KOTEK_ASSERT(
 						p_device, "you must initialize device (VkDevice)");

@@ -22,7 +22,7 @@ namespace Kotek
 				ktk::uint32_t memory_total_size,
 				const ktk::string& debug_name) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -65,8 +65,8 @@ namespace Kotek
 				info_alloc.allocationSize = memory_requirements.size;
 				info_alloc.memoryTypeIndex = 0;
 
-				bool is_valid = p_render_device->isMemoryTypeFromProperties(
-					p_render_device->getCurrentPhysicalDeviceMemoryProperties(),
+				bool is_valid = p_render_device->IsMemoryTypeFromProperties(
+					p_render_device->GetCurrentPhysicalDeviceMemoryProperties(),
 					memory_requirements.memoryTypeBits,
 					VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT |
 						VK_MEMORY_PROPERTY_HOST_COHERENT_BIT,
@@ -98,7 +98,7 @@ namespace Kotek
 			void kotek_render_dynamic_buffer_ring::shutdown(
 				ktkRenderDevice* p_render_device) noexcept
 			{
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -192,7 +192,7 @@ namespace Kotek
 				write.dstArrayElement = 0;
 				write.dstBinding = binding_index;
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -235,7 +235,7 @@ namespace Kotek
 				writes[0].dstArrayElement = 0;
 				writes[0].pImageInfo = &info;
 
-				VkDevice p_device = p_render_device->getDevice();
+				VkDevice p_device = p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device,
 					"you can't have an invalid VkDevice instance, initialize "

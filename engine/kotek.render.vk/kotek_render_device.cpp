@@ -60,24 +60,23 @@ namespace Kotek
 
 			ktkRenderDevice::~ktkRenderDevice() {}
 
-			void ktkRenderDevice::initialize(
-				Core::ktkMainManager& main_manager)
+			void ktkRenderDevice::Initialize(Core::ktkMainManager& main_manager)
 			{
 				this->m_p_profiler = main_manager.GetProfiler();
 
 				KOTEK_CPU_PROFILE();
 
-				this->initializeInstance();
-				this->initializeDevice(main_manager);
-				this->initializeAllocator(this->m_p_device,
+				this->InitializeInstance();
+				this->InitializeDevice(main_manager);
+				this->InitializeAllocator(this->m_p_device,
 					this->m_p_current_physical_device, this->m_p_instance);
-				this->initializeHelper();
+				this->InitializeHelper();
 			}
 
-			void ktkRenderDevice::shutdown()
+			void ktkRenderDevice::Shutdown()
 			{
 				this->m_helper.shutdown();
-				this->destroyAllocator();
+				this->DestroyAllocator();
 
 				if (this->m_p_surface)
 				{
@@ -108,7 +107,7 @@ namespace Kotek
 				}
 			}
 
-			void ktkRenderDevice::resize(
+			void ktkRenderDevice::Resize(
 				Core::ktkIRenderSwapchain* p_raw_swapchain,
 				Core::kotek_i_renderer* p_raw_renderer,
 				Core::ktkIRenderResourceManager* p_raw_resource_manager,
@@ -125,17 +124,17 @@ namespace Kotek
 						p_raw_resource_manager);
 
 				p_raw_swapchain->Resize(this, width, height);
-				p_render_resource_manager->resize(this,
-					static_cast<ktkRenderSwapchain*>(p_raw_swapchain));
+				p_render_resource_manager->resize(
+					this, static_cast<ktkRenderSwapchain*>(p_raw_swapchain));
 				p_raw_renderer->Resize();
 			}
 
-			int ktkRenderDevice::getWidth() const noexcept
+			int ktkRenderDevice::GetWidth() const noexcept
 			{
 				return this->m_width;
 			}
 
-			int ktkRenderDevice::getHeight() const noexcept
+			int ktkRenderDevice::GetHeight() const noexcept
 			{
 				return this->m_height;
 			}
@@ -145,56 +144,56 @@ namespace Kotek
 				vkDeviceWaitIdle(this->m_p_device);
 			}
 
-			VmaAllocator ktkRenderDevice::getAllocator(void) const noexcept
+			VmaAllocator ktkRenderDevice::GetAllocator(void) const noexcept
 			{
 				return this->m_p_allocator;
 			}
 
-			ktk::uint32_t ktkRenderDevice::getFamilyQueueIndex_Graphics(
+			ktk::uint32_t ktkRenderDevice::GetFamilyQueueIndex_Graphics(
 				void) const noexcept
 			{
 				return this->m_queue_index_graphics;
 			}
 
-			ktk::uint32_t ktkRenderDevice::getFamilyQueueIndex_Present(
+			ktk::uint32_t ktkRenderDevice::GetFamilyQueueIndex_Present(
 				void) const noexcept
 			{
 				return this->m_queue_index_present;
 			}
 
-			ktk::uint32_t ktkRenderDevice::getFamilyQueueIndex_Compute(
+			ktk::uint32_t ktkRenderDevice::GetFamilyQueueIndex_Compute(
 				void) const noexcept
 			{
 				return this->m_queue_index_compute;
 			}
 
-			VkDevice ktkRenderDevice::getDevice(void) const noexcept
+			VkDevice ktkRenderDevice::GetDevice(void) const noexcept
 			{
 				return this->m_p_device;
 			}
 
-			VkPhysicalDevice ktkRenderDevice::getCurrentPhysicalDevice(
+			VkPhysicalDevice ktkRenderDevice::GetCurrentPhysicalDevice(
 				void) const noexcept
 			{
 				return this->m_p_current_physical_device;
 			}
 
-			VkSurfaceKHR ktkRenderDevice::getSurface(void) const noexcept
+			VkSurfaceKHR ktkRenderDevice::GetSurface(void) const noexcept
 			{
 				return this->m_p_surface;
 			}
 
-			void ktkRenderDevice::setWidth(int width) noexcept
+			void ktkRenderDevice::SetWidth(int width) noexcept
 			{
 				this->m_width = width;
 			}
 
-			void ktkRenderDevice::setHeight(int height) noexcept
+			void ktkRenderDevice::SetHeight(int height) noexcept
 			{
 				this->m_height = height;
 			}
 
-			bool ktkRenderDevice::isMemoryTypeFromProperties(
+			bool ktkRenderDevice::IsMemoryTypeFromProperties(
 				const VkPhysicalDeviceMemoryProperties& memory_properties,
 				ktk::uint32_t type_bits, VkFlags mask_requirements,
 				ktk::uint32_t* p_type_index) noexcept
@@ -218,21 +217,21 @@ namespace Kotek
 			}
 
 			const VkPhysicalDeviceProperties&
-			ktkRenderDevice::getCurrentPhysicalDeviceProperties(
+			ktkRenderDevice::GetCurrentPhysicalDeviceProperties(
 				void) const noexcept
 			{
 				return this->m_current_physical_device_properties;
 			}
 
 			const VkPhysicalDeviceProperties2&
-			ktkRenderDevice::getCurrentPhysicalDeviceProperties2(
+			ktkRenderDevice::GetCurrentPhysicalDeviceProperties2(
 				void) const noexcept
 			{
 				return this->m_current_physical_device_properties2;
 			}
 
 			const VkPhysicalDeviceMemoryProperties&
-			ktkRenderDevice::getCurrentPhysicalDeviceMemoryProperties(
+			ktkRenderDevice::GetCurrentPhysicalDeviceMemoryProperties(
 				void) const noexcept
 			{
 				return this->m_current_physical_device_memory_properties;
@@ -240,12 +239,13 @@ namespace Kotek
 
 			// TODO: support hdr
 			VkSurfaceFormatKHR
-			ktkRenderDevice::getCurrentPhysicalDeviceSurfaceFormat(
+			ktkRenderDevice::GetCurrentPhysicalDeviceSurfaceFormat(
 				void) const noexcept
 			{
 				KOTEK_ASSERT(this->m_p_current_physical_device,
 					"you must initialize your physical device (too early "
 					"calling)");
+
 				KOTEK_ASSERT(this->m_p_surface,
 					"you must initialize your surface (too early calling)");
 
@@ -268,39 +268,38 @@ namespace Kotek
 					"vector "
 					"of VkSurfaceFormatKHR)");
 
-				this->printSurfaceFormats(formats);
+				this->PrintSurfaceFormats(formats);
 
 				return formats.front();
 			}
 
-			VkQueue ktkRenderDevice::getQueue_Graphics(void) const noexcept
+			VkQueue ktkRenderDevice::GetQueue_Graphics(void) const noexcept
 			{
 				return this->m_p_queue_graphics;
 			}
 
-			VkQueue ktkRenderDevice::getQueue_Compute(void) const noexcept
+			VkQueue ktkRenderDevice::GetQueue_Compute(void) const noexcept
 			{
 				return this->m_p_queue_compute;
 			}
 
-			VkQueue ktkRenderDevice::getQueue_Present(void) const noexcept
+			VkQueue ktkRenderDevice::GetQueue_Present(void) const noexcept
 			{
 				return this->m_p_queue_present;
 			}
 
-			const VkInstance ktkRenderDevice::getInstance(
-				void) const noexcept
+			const VkInstance ktkRenderDevice::GetInstance(void) const noexcept
 			{
 				return this->m_p_instance;
 			}
 
-			const kotek_render_helper_device& ktkRenderDevice::getHelper(
+			const kotek_render_helper_device& ktkRenderDevice::GetHelper(
 				void) const noexcept
 			{
 				return this->m_helper;
 			}
 
-			void ktkRenderDevice::initializeAllocator(VkDevice p_device,
+			void ktkRenderDevice::InitializeAllocator(VkDevice p_device,
 				VkPhysicalDevice p_physical_device,
 				VkInstance p_instance) noexcept
 			{
@@ -325,24 +324,24 @@ namespace Kotek
 					"failed to vmaCreateAllocator. See status");
 			}
 
-			void ktkRenderDevice::destroyAllocator(void) noexcept
+			void ktkRenderDevice::DestroyAllocator(void) noexcept
 			{
 				vmaDestroyAllocator(this->m_p_allocator);
 			}
 
-			void ktkRenderDevice::initializeInstance() noexcept
+			void ktkRenderDevice::InitializeInstance() noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
 				constexpr ktk::uint32_t required_version = VK_API_VERSION_1_1;
 
-				const ktk::uint32_t user_version = this->getApiVersion();
+				const ktk::uint32_t user_version = this->GetApiVersion();
 
-				this->printApiVersion(
+				this->PrintApiVersion(
 					"Required version of Vulkan INSTANCE: {}.{}.{}.{}",
 					required_version);
 
-				this->printApiVersion(
+				this->PrintApiVersion(
 					"User version of Vulkan INSTANCE: {}.{}.{}.{}",
 					user_version);
 
@@ -359,7 +358,7 @@ namespace Kotek
 				info.apiVersion = required_version;
 
 				kotek_render_instance_properties props_instance =
-					this->createInstanceProperties();
+					this->CreateInstanceProperties();
 
 				VkInstanceCreateInfo info_instance = {};
 
@@ -409,15 +408,15 @@ namespace Kotek
 #endif
 			}
 
-			void ktkRenderDevice::initializeDevice(
+			void ktkRenderDevice::InitializeDevice(
 				Core::ktkMainManager& main_manager) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
-				this->initializePhysicalDevice();
+				this->InitializePhysicalDevice();
 
 				ktkRenderDeviceProperties props =
-					this->createDeviceProperties();
+					this->CreateDeviceProperties();
 
 				VkResult status = VK_SUCCESS;
 
@@ -463,9 +462,9 @@ namespace Kotek
 					this->m_p_current_physical_device,
 					&this->m_current_physical_device_properties2);
 
-				this->createSurface(main_manager);
+				this->CreateSurface(main_manager);
 
-				this->initializeIndeciesOfQueueFamilies(
+				this->InitializeIndeciesOfQueueFamilies(
 					queue_family_count, queue_props);
 
 				float queue_priorities[1] = {0.0f};
@@ -532,10 +531,10 @@ namespace Kotek
 				KOTEK_ASSERT(status == VK_SUCCESS,
 					"failed to vkCreateDevice see status code");
 
-				this->initializeQueues();
+				this->InitializeQueues();
 			}
 
-			void ktkRenderDevice::initializeIndeciesOfQueueFamilies(
+			void ktkRenderDevice::InitializeIndeciesOfQueueFamilies(
 				ktk::uint32_t queue_count,
 				const ktk::vector<VkQueueFamilyProperties>&
 					queue_props) noexcept
@@ -625,7 +624,7 @@ namespace Kotek
 #endif
 			}
 
-			void ktkRenderDevice::initializePhysicalDevice() noexcept
+			void ktkRenderDevice::InitializePhysicalDevice() noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -650,7 +649,7 @@ namespace Kotek
 					"required count");
 
 				bool is_picked_discrete_videocard =
-					this->chooseDiscretePhysicalDevice(
+					this->ChooseDiscretePhysicalDevice(
 						this->m_physical_devices);
 
 				bool is_picked_videocard = true;
@@ -658,7 +657,7 @@ namespace Kotek
 				if (is_picked_discrete_videocard == false)
 				{
 					bool is_picked_integrate_videocard =
-						this->chooseIntegratePhysicalDevice(
+						this->ChooseIntegratePhysicalDevice(
 							this->m_physical_devices);
 
 					is_picked_videocard = is_picked_discrete_videocard ||
@@ -670,14 +669,14 @@ namespace Kotek
 					"discrete type not integrate type");
 			}
 
-			void ktkRenderDevice::initializeHelper(void) noexcept
+			void ktkRenderDevice::InitializeHelper(void) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
 				this->m_helper.initialize(this->m_p_device, this->m_p_instance);
 			}
 
-			bool ktkRenderDevice::chooseDiscretePhysicalDevice(
+			bool ktkRenderDevice::ChooseDiscretePhysicalDevice(
 				const ktk::vector<VkPhysicalDevice>& devices) noexcept
 			{
 				if (devices.empty())
@@ -699,7 +698,7 @@ namespace Kotek
 						this->m_p_current_physical_device = p_device;
 
 #ifdef KOTEK_DEBUG
-						this->printInformationAboutPhysicalDevice(props);
+						this->PrintInformationAboutPhysicalDevice(props);
 #endif
 						break;
 					}
@@ -711,7 +710,7 @@ namespace Kotek
 						this->m_p_current_physical_device = p_device;
 
 #ifdef KOTEK_DEBUG
-						this->printInformationAboutPhysicalDevice(props);
+						this->PrintInformationAboutPhysicalDevice(props);
 #endif
 						break;
 					}
@@ -720,7 +719,7 @@ namespace Kotek
 				return true;
 			}
 
-			bool ktkRenderDevice::chooseIntegratePhysicalDevice(
+			bool ktkRenderDevice::ChooseIntegratePhysicalDevice(
 				const ktk::vector<VkPhysicalDevice>& devices) noexcept
 			{
 				if (devices.empty())
@@ -742,7 +741,7 @@ namespace Kotek
 						this->m_p_current_physical_device = p_device;
 
 #ifdef KOTEK_DEBUG
-						this->printInformationAboutPhysicalDevice(props);
+						this->PrintInformationAboutPhysicalDevice(props);
 #endif
 
 						break;
@@ -758,7 +757,7 @@ namespace Kotek
 						this->m_p_current_physical_device = p_device;
 
 #ifdef KOTEK_DEBUG
-						this->printInformationAboutPhysicalDevice(props);
+						this->PrintInformationAboutPhysicalDevice(props);
 #endif
 
 						break;
@@ -768,7 +767,7 @@ namespace Kotek
 				return true;
 			}
 
-			void ktkRenderDevice::initializeQueues() noexcept
+			void ktkRenderDevice::InitializeQueues() noexcept
 			{
 				KOTEK_ASSERT(this->m_p_device, "can't be invalid");
 
@@ -795,7 +794,7 @@ namespace Kotek
 			}
 
 			kotek_render_instance_properties
-			ktkRenderDevice::createInstanceProperties() noexcept
+			ktkRenderDevice::CreateInstanceProperties() noexcept
 			{
 				kotek_render_instance_properties result;
 
@@ -893,13 +892,13 @@ namespace Kotek
 			}
 
 			ktkRenderDeviceProperties
-			ktkRenderDevice::createDeviceProperties() noexcept
+			ktkRenderDevice::CreateDeviceProperties() noexcept
 			{
 				ktkRenderDeviceProperties result;
 
 				result.initialize(this->m_p_current_physical_device);
 
-				bool is_fp16_supported = this->checkExtensionFP16(&result);
+				bool is_fp16_supported = this->CheckExtensionFP16(&result);
 
 				if (is_fp16_supported)
 				{
@@ -917,7 +916,7 @@ namespace Kotek
 				return result;
 			}
 
-			bool ktkRenderDevice::checkExtensionFP16(
+			bool ktkRenderDevice::CheckExtensionFP16(
 				ktkRenderDeviceProperties* p_prop) noexcept
 			{
 				KOTEK_ASSERT(p_prop, "you must pass a valid object");
@@ -976,34 +975,15 @@ namespace Kotek
 				return is_enabled_fp16;
 			}
 
-			void ktkRenderDevice::createSurface(
+			void ktkRenderDevice::CreateSurface(
 				Core::ktkMainManager& main_manager) noexcept
 			{
-				/* TODO: delete
-				                const Engine::ktkWindow* p_window =
-				   main_manager.GetGameManager()->GetWindow();
-
-				                KOTEK_ASSERT(
-				                    p_window, "your application's window must be
-				   valid");
-
-				                VkResult status = VK_SUCCESS;
-
-				                status =
-				   glfwCreateWindowSurface(this->m_p_instance,
-				                    p_window->GetHandle(), nullptr,
-				   &this->m_p_surface);
-
-				                KOTEK_ASSERT(
-				                    status == VK_SUCCESS, "can't create window
-				   surface");*/
-
 				this->m_p_surface = static_cast<VkSurfaceKHR>(
 					main_manager.GetGameManager()->CreateSurface(
 						this->m_p_instance, nullptr));
 			}
 
-			ktk::uint32_t ktkRenderDevice::getApiVersion() const noexcept
+			ktk::uint32_t ktkRenderDevice::GetApiVersion() const noexcept
 			{
 				ktk::uint32_t result = 0;
 
@@ -1015,8 +995,7 @@ namespace Kotek
 				return result;
 			}
 
-			void ktkRenderDevice::printApiVersion(
-				const ktk::string& pattern,
+			void ktkRenderDevice::PrintApiVersion(const ktk::string& pattern,
 				ktk::uint32_t api_version) const noexcept
 			{
 				KOTEK_MESSAGE_STRING(pattern, ((api_version >> 29)),
@@ -1024,22 +1003,23 @@ namespace Kotek
 					((api_version >> 12) & 0x3FFU), (api_version & 0xFFFU));
 			}
 
-			void ktkRenderDevice::printSurfaceFormats(
+			void ktkRenderDevice::PrintSurfaceFormats(
 				const ktk::vector<VkSurfaceFormatKHR>& formats) const noexcept
 			{
 				// TODO: translate enums to strings
 #ifdef KOTEK_DEBUG
 				for (const auto& format : formats)
 				{
-					KOTEK_MESSAGE("Surface format: {}", format.format);
+					KOTEK_MESSAGE("Surface format: {}",
+						helper::TranslateVkFormatToString(format.format).get_as_is());
 					KOTEK_MESSAGE("Surface color space: {}",
-						helper::translateVkColorSpaceToString(format.colorSpace)
+						helper::TranslateVkColorSpaceToString(format.colorSpace)
 							.get_as_is());
 				}
 #endif
 			}
 
-			void ktkRenderDevice::printInformationAboutPhysicalDevice(
+			void ktkRenderDevice::PrintInformationAboutPhysicalDevice(
 				const VkPhysicalDeviceProperties& props) const noexcept
 			{
 				auto p_get_name_of_device_type =
@@ -1087,9 +1067,11 @@ namespace Kotek
 
 				KOTEK_MESSAGE(
 					"name: {}", ktk::string(props.deviceName).get_as_is());
-				this->printApiVersion(
+
+				this->PrintApiVersion(
 					"videocard API VERSION DEVICE: {}.{}.{}.{}",
 					props.apiVersion);
+
 				KOTEK_MESSAGE("device type: {}",
 					p_get_name_of_device_type(props.deviceType).get_as_is());
 
@@ -1098,7 +1080,7 @@ namespace Kotek
 
 			namespace helper
 			{
-				ktk::string translateVkColorSpaceToString(
+				ktk::string TranslateVkColorSpaceToString(
 					VkColorSpaceKHR color_space) noexcept
 				{
 					switch (color_space)
@@ -1184,13 +1166,13 @@ namespace Kotek
 					}
 					}
 				}
-				ktk::string translateVkFormatToString(VkFormat format) noexcept
+				ktk::string TranslateVkFormatToString(VkFormat format) noexcept
 				{ // TODO: continue next time, but finish this function
 					return "VK_FORMAT_DOESNT_IMPLEMENTED";
 				}
 
 				// TODO: continue this
-				ktk::string translateVkResultToString(VkResult result) noexcept
+				ktk::string TranslateVkResultToString(VkResult result) noexcept
 				{
 					switch (result)
 					{

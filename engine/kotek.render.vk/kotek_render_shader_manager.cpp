@@ -97,7 +97,7 @@ namespace Kotek
 				info_module.codeSize =
 					shader_code.size() * sizeof(ktk::uint32_t);
 
-				VkDevice p_device = this->m_p_render_device->getDevice();
+				VkDevice p_device = this->m_p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
@@ -205,7 +205,7 @@ namespace Kotek
 				info.pNext = nullptr;
 				info.codeSize = shader_code.size() * sizeof(ktk::uint32_t);
 
-				VkDevice p_device = this->m_p_render_device->getDevice();
+				VkDevice p_device = this->m_p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "your device is invalid (VkDevice)");
 
@@ -229,7 +229,7 @@ namespace Kotek
 				if (instance.getModule() == nullptr)
 					return;
 
-				vkDestroyShaderModule(this->m_p_render_device->getDevice(),
+				vkDestroyShaderModule(this->m_p_render_device->GetDevice(),
 					instance.getModule(), nullptr);
 			}
 

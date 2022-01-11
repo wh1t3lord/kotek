@@ -48,10 +48,10 @@ namespace Kotek
 				p_render_manager_render_resource);
 
 			// TODO: load from user settings
-			p_render_manager_device->setWidth(main_manager.GetGameManager()->GetWindowWidth());
-			p_render_manager_device->setHeight(main_manager.GetGameManager()->GetWindowHeight());
+			p_render_manager_device->SetWidth(main_manager.GetGameManager()->GetWindowWidth());
+			p_render_manager_device->SetHeight(main_manager.GetGameManager()->GetWindowHeight());
 
-			p_render_manager_device->initialize(main_manager);
+			p_render_manager_device->Initialize(main_manager);
 
 			p_render_manager_swapchain->Initialize(
 				p_render_manager_device.get());
@@ -76,7 +76,7 @@ namespace Kotek
 			main_manager.getRenderResourceManager()->shutdown(
 				main_manager.getRenderDevice());
 			main_manager.GetGameManager()->GetRenderer()->Shutdown();
-			main_manager.getRenderDevice()->shutdown();
+			main_manager.getRenderDevice()->Shutdown();
 
 			return true;
 		}

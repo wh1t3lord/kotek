@@ -119,8 +119,8 @@ namespace Kotek
 					this->m_p_manager_resource->getTextureManager()
 						->createTexture(kBackBufferName,
 							{helper::InitializeImageForFramebuffer(
-								 this->m_p_render_device->getWidth(),
-								 this->m_p_render_device->getHeight()),
+								 this->m_p_render_device->GetWidth(),
+								 this->m_p_render_device->GetHeight()),
 								helper::InitializeSampler()},
 							e_texture_type_t::kTextureType_Single);
 			}
@@ -352,7 +352,7 @@ namespace Kotek
 						pipeline_name.get_as_is());
 #endif
 					vkDestroyDescriptorSetLayout(
-						this->m_p_render_device->getDevice(),
+						this->m_p_render_device->GetDevice(),
 						p_descriptor_layout, nullptr);
 				}
 
@@ -367,7 +367,7 @@ namespace Kotek
 						pipeline_name.get_as_is());
 #endif
 					vkDestroyPipelineLayout(
-						this->m_p_render_device->getDevice(), p_pipeline_layout,
+						this->m_p_render_device->GetDevice(), p_pipeline_layout,
 						nullptr);
 				}
 
@@ -399,11 +399,11 @@ namespace Kotek
 				{
 					this->m_p_manager_resource->getTextureManager()
 						->destroyTexture(
-							this->m_p_render_device->getAllocator(), &texture);
+							this->m_p_render_device->GetAllocator(), &texture);
 				}
 
 				this->m_p_manager_resource->getTextureManager()->destroyTexture(
-					this->m_p_render_device->getAllocator(),
+					this->m_p_render_device->GetAllocator(),
 					&this->m_backbuffer_texture);
 
 				this->m_all_render_graph_textures.clear();
@@ -413,7 +413,7 @@ namespace Kotek
 			void ktkRenderGraphResourceManager::DestroyRenderPasses(
 				void) noexcept
 			{
-				auto* p_device = this->m_p_render_device->getDevice();
+				auto* p_device = this->m_p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "your device is invalid");
 
@@ -429,7 +429,7 @@ namespace Kotek
 			void ktkRenderGraphResourceManager::DestroyFrameBuffers(
 				void) noexcept
 			{
-				auto* p_device = this->m_p_render_device->getDevice();
+				auto* p_device = this->m_p_render_device->GetDevice();
 
 				KOTEK_ASSERT(
 					p_device, "you can't have an invalid device (VkDevice)");
@@ -445,7 +445,7 @@ namespace Kotek
 
 			void ktkRenderGraphResourceManager::DestroyPipelines(void) noexcept
 			{
-				VkDevice p_device = this->m_p_render_device->getDevice();
+				VkDevice p_device = this->m_p_render_device->GetDevice();
 
 				KOTEK_ASSERT(
 					p_device, "you can't have an invalid device (VkDevice)");
@@ -714,7 +714,7 @@ namespace Kotek
 					VkDescriptorSetLayout p_layout = nullptr;
 
 					auto status = vkCreateDescriptorSetLayout(
-						this->m_p_render_device->getDevice(), &info, nullptr,
+						this->m_p_render_device->GetDevice(), &info, nullptr,
 						&p_layout);
 
 					KOTEK_ASSERT(status == VK_SUCCESS,
@@ -732,7 +732,7 @@ namespace Kotek
 					VkPipelineLayout p_pipeline = nullptr;
 
 					status = vkCreatePipelineLayout(
-						this->m_p_render_device->getDevice(), &info_pipeline,
+						this->m_p_render_device->GetDevice(), &info_pipeline,
 						nullptr, &p_pipeline);
 
 					KOTEK_ASSERT(status == VK_SUCCESS,
@@ -886,7 +886,7 @@ namespace Kotek
 				KOTEK_ASSERT(
 					p_pass, "you must create a valid VkRenderPass handle!");
 
-				auto* p_device = this->m_p_render_device->getDevice();
+				auto* p_device = this->m_p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "your device is invalid");
 
@@ -897,8 +897,8 @@ namespace Kotek
 				info.renderPass = p_pass;
 				info.pAttachments = attachments.data();
 				info.attachmentCount = attachments.size();
-				info.width = this->m_p_render_device->getWidth();
-				info.height = this->m_p_render_device->getHeight();
+				info.width = this->m_p_render_device->GetWidth();
+				info.height = this->m_p_render_device->GetHeight();
 				info.layers = 1; // TODO: think about it ???
 
 				VkFramebuffer p_frame_buffer = nullptr;
@@ -955,7 +955,7 @@ namespace Kotek
 				info.dependencyCount = dependencies.size();
 				info.pDependencies = dependencies.data();
 
-				auto* p_device = this->m_p_render_device->getDevice();
+				auto* p_device = this->m_p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device, "your device is invalid");
 
@@ -1081,7 +1081,7 @@ namespace Kotek
 					"each pipeline must contain shaders, but you don't have "
 					"equality! Some pipeline is missed");
 
-				VkDevice p_device = this->m_p_render_device->getDevice();
+				VkDevice p_device = this->m_p_render_device->GetDevice();
 
 				KOTEK_ASSERT(p_device,
 					"you must have initialized VkDevice. It's invalid.");
