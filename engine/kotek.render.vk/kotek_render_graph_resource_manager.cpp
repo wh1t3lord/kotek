@@ -23,17 +23,17 @@ namespace Kotek
 			{
 			}
 
-			void ktkRenderGraphResourceManager::initialize(
-				e_kotek_render_graph_builder_type_t type_of_framebuffer,
-				e_kotek_render_graph_builder_pipeline_rendering_type_t
+			void ktkRenderGraphResourceManager::Initialize(
+				eRenderGraphBuilderType type_of_framebuffer,
+				eRenderGraphBuilderPipelineRenderingType
 					type_videocard_pipeline)
 			{
 			}
 
-			void ktkRenderGraphResourceManager::shutdown(void)
+			void ktkRenderGraphResourceManager::Shutdown(void)
 			{
-				this->destroyTextures();
-				this->destroyShaders();
+				this->DestroyTextures();
+				this->DestroyShaders();
 				this->DestroyFrameBuffers();
 				this->DestroyRenderPasses();
 				this->DestroyPipelines();
@@ -43,13 +43,13 @@ namespace Kotek
 
 			void ktkRenderGraphResourceManager::
 				CreateShadersAndLayoutsWithDescriptorSets(
-					const kotek_render_graph_storage_input&
+					const ktkRenderGraphStorageInput&
 						storage_input_of_render_pass) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
-				this->createShaders_Modules(
-					storage_input_of_render_pass.getShaders());
+				this->CreateShaders_Modules(
+					storage_input_of_render_pass.GetShaders());
 				this->createDescriptorSetLayouts_And_PipelineLayouts(
 					storage_input_of_render_pass);
 				this->CreateDescriptorSets(storage_input_of_render_pass);
@@ -58,15 +58,15 @@ namespace Kotek
 			void ktkRenderGraphResourceManager::
 				CreateSynchronizationPrimitivesAndRenderPass(
 					const ktk::string& render_pass_name,
-					const kotek_render_graph_storage_input&
+					const ktkRenderGraphStorageInput&
 						storage_of_render_pass_input,
-					const kotek_render_graph_storage_output&
+					const ktkRenderGraphStorageOutput&
 						storage_of_render_pass_output,
 					const ktk::unordered_map<ktk::texture_id_t,
-						kotek_render_graph_resource_info_t<
-							kotek_render_texture_info_t>>& texture_to_create,
+						ktkRenderGraphResourceInfo<
+							ktkRenderTextureInfo>>& texture_to_create,
 					const ktk::unordered_map<ktk::string,
-						kotek_render_graph_resource_info_t<VkBufferCreateInfo>>&
+						ktkRenderGraphResourceInfo<VkBufferCreateInfo>>&
 						buffer_to_create) noexcept
 			{
 				const auto& subpass_dependecies =
@@ -81,14 +81,14 @@ namespace Kotek
 					render_pass_name, storage_of_render_pass_input);
 			}
 
-			void ktkRenderGraphResourceManager::createTexture(
-				const kotek_render_graph_resource_info_t<
-					kotek_render_texture_info_t>& info) noexcept
+			void ktkRenderGraphResourceManager::CreateTexture(
+				const ktkRenderGraphResourceInfo<
+					ktkRenderTextureInfo>& info) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
-				const ktk::string& texture_name = info.getResourceName();
-				const ktk::string& render_pass_name = info.getRenderPassName();
+				const ktk::string& texture_name = info.GetResourceName();
+				const ktk::string& render_pass_name = info.GetRenderPassName();
 
 				if (this->m_all_render_graph_textures.find(texture_name) !=
 					this->m_all_render_graph_textures.end())
@@ -99,15 +99,15 @@ namespace Kotek
 				}
 
 				this->m_all_render_graph_textures[texture_name] =
-					this->m_p_manager_resource->getTextureManager()
-						->createTexture(info);
+					this->m_p_manager_resource->GetTextureManager()
+						->CreateTexture(info);
 
 				this->m_storage_render_passes_textures[render_pass_name]
 													  [texture_name] =
 					&this->m_all_render_graph_textures.at(texture_name);
 			}
 
-			void ktkRenderGraphResourceManager::createBackBuffer(
+			void ktkRenderGraphResourceManager::CreateBackBuffer(
 				const ktk::string& backbuffer_name) noexcept
 			{
 				KOTEK_CPU_PROFILE();
@@ -116,21 +116,21 @@ namespace Kotek
 					"you must specify your backbuffer (give a name to it)");
 
 				this->m_backbuffer_texture =
-					this->m_p_manager_resource->getTextureManager()
-						->createTexture(kBackBufferName,
+					this->m_p_manager_resource->GetTextureManager()
+						->CreateTexture(kBackBufferName,
 							{helper::InitializeImageForFramebuffer(
 								 this->m_p_render_device->GetWidth(),
 								 this->m_p_render_device->GetHeight()),
 								helper::InitializeSampler()},
-							e_texture_type_t::kTextureType_Single);
+							eTextureType::kTextureType_Single);
 			}
 
-			const kotek_render_texture*
-			ktkRenderGraphResourceManager::getTexture(
+			const ktkRenderTexture*
+			ktkRenderGraphResourceManager::GetTexture(
 				const ktk::string& render_pass_name,
 				const ktk::string& texture_name) const noexcept
 			{
-				const kotek_render_texture* p_result = nullptr;
+				const ktkRenderTexture* p_result = nullptr;
 
 				if (render_pass_name.empty())
 				{
@@ -173,20 +173,20 @@ namespace Kotek
 
 			const ktk::unordered_map<ktk::render_pass_id_t,
 				ktk::unordered_map<ktk::texture_id_t,
-					kotek_render_graph_texture*>>&
-			ktkRenderGraphResourceManager::getRenderGraph_RenderPasses_Textures(
+					ktkRenderGraphTexture*>>&
+			ktkRenderGraphResourceManager::GetRenderGraph_RenderPasses_Textures(
 				void) const noexcept
 			{
 				return this->m_storage_render_passes_textures;
 			}
 
-			void ktkRenderGraphResourceManager::uploadTextureWithData(
+			void ktkRenderGraphResourceManager::UploadTextureWithData(
 				const ktk::string& texture_name, void* p_data) noexcept
 			{
 				KOTEK_ASSERT(texture_name.empty() == false,
 					"can't find texture with empty name");
 
-				kotek_render_texture* p_texture = nullptr;
+				ktkRenderTexture* p_texture = nullptr;
 
 				if (this->m_all_render_graph_textures.find(texture_name) ==
 					this->m_all_render_graph_textures.end())
@@ -201,8 +201,8 @@ namespace Kotek
 						&this->m_all_render_graph_textures.at(texture_name);
 				}
 
-				this->m_p_manager_resource->getTextureManager()
-					->uploadTextureWithData(p_texture, p_data);
+				this->m_p_manager_resource->GetTextureManager()
+					->UploadTextureWithData(p_texture, p_data);
 			}
 
 			ktk::vector<VkDescriptorSet>
@@ -334,14 +334,14 @@ namespace Kotek
 				return this->m_storage_pipeline_layouts.at(pipeline_name);
 			}
 
-			const kotek_render_texture*
+			const ktkRenderTexture*
 			ktkRenderGraphResourceManager::GetBackBufferTexture(
 				void) const noexcept
 			{
 				return &this->m_backbuffer_texture;
 			}
 
-			void ktkRenderGraphResourceManager::destroyShaders(void) noexcept
+			void ktkRenderGraphResourceManager::DestroyShaders(void) noexcept
 			{
 				for (const auto& [pipeline_name, p_descriptor_layout] :
 					this->m_storage_descriptor_set_layouts)
@@ -392,17 +392,17 @@ namespace Kotek
 				this->m_storage_shaders.clear();
 			}
 
-			void ktkRenderGraphResourceManager::destroyTextures(void) noexcept
+			void ktkRenderGraphResourceManager::DestroyTextures(void) noexcept
 			{
 				for (auto& [texture_name, texture] :
 					this->m_all_render_graph_textures)
 				{
-					this->m_p_manager_resource->getTextureManager()
-						->destroyTexture(
+					this->m_p_manager_resource->GetTextureManager()
+						->DestroyTexture(
 							this->m_p_render_device->GetAllocator(), &texture);
 				}
 
-				this->m_p_manager_resource->getTextureManager()->destroyTexture(
+				this->m_p_manager_resource->GetTextureManager()->DestroyTexture(
 					this->m_p_render_device->GetAllocator(),
 					&this->m_backbuffer_texture);
 
@@ -459,7 +459,7 @@ namespace Kotek
 				this->m_storage_pipelines.clear();
 			}
 
-			bool ktkRenderGraphResourceManager::isFileOrSourceCodeString(
+			bool ktkRenderGraphResourceManager::IsFileOrSourceCodeString(
 				const ktk::string& string_to_analyze) noexcept
 			{
 				KOTEK_CPU_PROFILE();
@@ -482,7 +482,7 @@ namespace Kotek
 				return true;
 			}
 
-			bool ktkRenderGraphResourceManager::isFileWithFormat(
+			bool ktkRenderGraphResourceManager::IsFileWithFormat(
 				const ktk::string& path_name) noexcept
 			{
 				KOTEK_CPU_PROFILE();
@@ -502,7 +502,7 @@ namespace Kotek
 				return true;
 			}
 
-			void ktkRenderGraphResourceManager::createShaders_Modules(
+			void ktkRenderGraphResourceManager::CreateShaders_Modules(
 				const ktk::unordered_map<ktk::pipeline_id_t,
 					ktk::unordered_map<shader_type_t, shader_loading_data_t>>&
 					render_graph_builder_data) noexcept
@@ -557,7 +557,7 @@ namespace Kotek
 							ktk::string shader_string_copy =
 								std::get<ktk::string>(shader_data.getData());
 
-							if (this->isFileWithFormat(shader_string_copy) ==
+							if (this->IsFileWithFormat(shader_string_copy) ==
 								false)
 							{
 								// means without format
@@ -604,15 +604,15 @@ namespace Kotek
 
 			ktk::vector<VkSubpassDependency>
 			ktkRenderGraphResourceManager::CreateSubpassDependencies(
-				const kotek_render_graph_storage_output& storage_output,
+				const ktkRenderGraphStorageOutput& storage_output,
 				const ktk::unordered_map<ktk::texture_id_t,
-					kotek_render_graph_resource_info_t<
-						kotek_render_texture_info_t>>&
+					ktkRenderGraphResourceInfo<
+						ktkRenderTextureInfo>>&
 					texture_to_create) noexcept
 			{
 				ktk::vector<VkSubpassDependency> result;
 
-				if (storage_output.getImages().empty())
+				if (storage_output.GetImages().empty())
 				{
 					VkSubpassDependency dependency = {};
 
@@ -640,7 +640,7 @@ namespace Kotek
 
 			void ktkRenderGraphResourceManager::
 				createDescriptorSetLayouts_And_PipelineLayouts(
-					const kotek_render_graph_storage_input& storage) noexcept
+					const ktkRenderGraphStorageInput& storage) noexcept
 			{
 				ktk::vector<VkDescriptorSetLayoutBinding>
 					all_bindings_for_whole_pipeline;
@@ -677,10 +677,10 @@ namespace Kotek
 						map_shader_type_and_shader_module)
 					{
 						const auto& bindings_for_current_shader =
-							this->collectDescriptorSetLayoutBingings(
+							this->CollectDescriptorSetLayoutBingings(
 								shader_module);
 						const auto& validation_data =
-							this->collectValidationData(shader_module);
+							this->CollectValidationData(shader_module);
 
 						for (const auto& [descriptor_set_index, datas] :
 							validation_data)
@@ -747,7 +747,7 @@ namespace Kotek
 					all_bindings_for_whole_pipeline.clear();
 				}
 
-				this->validateInputDataForShaders(storage.getShadersInputData(),
+				this->ValidateInputDataForShaders(storage.GetShadersInputData(),
 					validate_info_from_spirv_reflect);
 
 				this->m_validation_info_for_descriptor_sets_about_whole_user_pipeline =
@@ -755,13 +755,11 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphResourceManager::CreateDescriptorSets(
-				const kotek_render_graph_storage_input& storage) noexcept
+				const ktkRenderGraphStorageInput& storage) noexcept
 			{
-				// TODO: implement this tomorrow (wednesday)
-
 				for (const auto& [pipeline_name,
 						 map_descriptor_index_descriptor_data] :
-					storage.getShadersInputData())
+					storage.GetShadersInputData())
 				{
 					for (const auto& [descriptor_index, descriptor_data] :
 						map_descriptor_index_descriptor_data)
@@ -794,7 +792,7 @@ namespace Kotek
 								const ktk::string& texture_name =
 									data.GetData_RenderGraphTextureName();
 
-								const auto* p_texture = this->getTexture(
+								const auto* p_texture = this->GetTexture(
 									data.GetRenderPassName(), texture_name);
 
 								KOTEK_ASSERT(p_texture,
@@ -809,10 +807,10 @@ namespace Kotek
 									->GetDynamicBufferRing()
 									->SetDescriptorSet(this->m_p_render_device,
 										data.getBindingIndex(),
-										p_texture->getImageSamplerHandle(),
+										p_texture->GetImageSamplerHandle(),
 										VkImageLayout::
 											VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
-										p_texture->getImageViewHandle(),
+										p_texture->GetImageViewHandle(),
 										data.getDescriptorType(), p_descriptor);
 							}
 						}
@@ -825,7 +823,7 @@ namespace Kotek
 
 			void ktkRenderGraphResourceManager::CreateFrameBuffers(
 				const ktk::string& render_pass_name,
-				const kotek_render_graph_storage_output& storage) noexcept
+				const ktkRenderGraphStorageOutput& storage) noexcept
 			{
 				if (this->m_storage_render_passes_framebuffers.find(
 						render_pass_name) !=
@@ -841,10 +839,10 @@ namespace Kotek
 
 				// TODO: think about validation (???) because user can pass in
 				// not right order
-				if (storage.getImages().empty())
+				if (storage.GetImages().empty())
 				{
 					KOTEK_ASSERT(
-						this->m_backbuffer_texture.getImageViewHandle(),
+						this->m_backbuffer_texture.GetImageViewHandle(),
 						"VkImageView handle is invalid for back buffer");
 
 					if (storage.IsUseBackBuffer() == false)
@@ -860,22 +858,22 @@ namespace Kotek
 					}
 
 					attachments.push_back(
-						this->m_backbuffer_texture.getImageViewHandle());
+						this->m_backbuffer_texture.GetImageViewHandle());
 				}
 				else
 				{
-					for (const auto& [texture_name, info] : storage.getImages())
+					for (const auto& [texture_name, info] : storage.GetImages())
 					{
 						const auto* p_texture =
-							this->getTexture(render_pass_name, texture_name);
+							this->GetTexture(render_pass_name, texture_name);
 
 						KOTEK_ASSERT(p_texture, "your texture is invalid {}",
-							p_texture->getTextureName().get_as_is());
-						KOTEK_ASSERT(p_texture->getImageViewHandle(),
+							p_texture->GetTextureName().get_as_is());
+						KOTEK_ASSERT(p_texture->GetImageViewHandle(),
 							"VkImageView handle is invalid {}",
-							p_texture->getTextureName().get_as_is());
+							p_texture->GetTextureName().get_as_is());
 
-						attachments.push_back(p_texture->getImageViewHandle());
+						attachments.push_back(p_texture->GetImageViewHandle());
 					}
 				}
 
@@ -916,7 +914,7 @@ namespace Kotek
 			void ktkRenderGraphResourceManager::CreateRenderPass(
 				const ktk::string& render_pass_name,
 				const ktk::vector<VkSubpassDependency>& dependencies,
-				const kotek_render_graph_storage_output&
+				const ktkRenderGraphStorageOutput&
 					storage_output) noexcept
 			{
 				if (this->m_storage_render_passes_render_passes_handles.find(
@@ -973,11 +971,11 @@ namespace Kotek
 
 			ktk::vector<VkAttachmentReference>
 			ktkRenderGraphResourceManager::CreateRenderPassAttachmentReferences(
-				const kotek_render_graph_storage_output& storage) noexcept
+				const ktkRenderGraphStorageOutput& storage) noexcept
 			{
 				ktk::vector<VkAttachmentReference> result;
 
-				if (storage.getImages().empty())
+				if (storage.GetImages().empty())
 				{
 					// TODO: add depth buffer for back buffer (?);
 					VkAttachmentReference ref = {};
@@ -997,13 +995,13 @@ namespace Kotek
 
 			ktk::vector<VkSubpassDescription>
 			ktkRenderGraphResourceManager::CreateRenderPassSubpassDescriptions(
-				const kotek_render_graph_storage_output& storage,
+				const ktkRenderGraphStorageOutput& storage,
 				const ktk::vector<VkAttachmentReference>&
 					color_references) noexcept
 			{
 				ktk::vector<VkSubpassDescription> result;
 
-				if (storage.getImages().empty())
+				if (storage.GetImages().empty())
 				{
 					// TODO: add depth buffer for back buffer (?);
 					VkSubpassDescription desc = {};
@@ -1025,13 +1023,13 @@ namespace Kotek
 
 			ktk::vector<VkAttachmentDescription> ktkRenderGraphResourceManager::
 				CreateRenderPassAttachmentDescription(
-					const kotek_render_graph_storage_output& storage) noexcept
+					const ktkRenderGraphStorageOutput& storage) noexcept
 			{
 				ktk::vector<VkAttachmentDescription> result;
 
 				// TODO: think about samples
 
-				if (storage.getImages().empty())
+				if (storage.GetImages().empty())
 				{
 					VkAttachmentDescription desc = {};
 
@@ -1060,10 +1058,10 @@ namespace Kotek
 			// physical device, so you need create a wrapper for physical device
 			void ktkRenderGraphResourceManager::CreatePipelines(
 				const ktk::string& render_pass_name,
-				const kotek_render_graph_storage_input& storage) noexcept
+				const ktkRenderGraphStorageInput& storage) noexcept
 			{
 				if (storage.GetPipelinesInfo().empty() &&
-					storage.getShaders().empty())
+					storage.GetShaders().empty())
 				{
 					KOTEK_MESSAGE_WARNING("you don't create "
 										  "VkPipeline for render pass: {}",
@@ -1077,7 +1075,7 @@ namespace Kotek
 					"handle");
 
 				KOTEK_ASSERT(storage.GetPipelinesInfo().size() ==
-						storage.getShaders().size(),
+						storage.GetShaders().size(),
 					"each pipeline must contain shaders, but you don't have "
 					"equality! Some pipeline is missed");
 
@@ -1153,7 +1151,7 @@ namespace Kotek
 			}
 
 			ktk::vector<VkDescriptorSetLayoutBinding>
-			ktkRenderGraphResourceManager::collectDescriptorSetLayoutBingings(
+			ktkRenderGraphResourceManager::CollectDescriptorSetLayoutBingings(
 				const kotek_render_shader_manager::shader_module_t&
 					your_module) noexcept
 			{
@@ -1233,7 +1231,7 @@ namespace Kotek
 
 			ktk::unordered_map<ktk::uint32_t,
 				ktk::vector<descriptor_set_info_t>>
-			ktkRenderGraphResourceManager::collectValidationData(
+			ktkRenderGraphResourceManager::CollectValidationData(
 				const kotek_render_shader_manager::shader_module_t&
 					your_module) noexcept
 			{
@@ -1302,7 +1300,7 @@ namespace Kotek
 				return result;
 			}
 
-			void ktkRenderGraphResourceManager::validateInputDataForShaders(
+			void ktkRenderGraphResourceManager::ValidateInputDataForShaders(
 				const ktk::unordered_map<ktk::string,
 					ktk::unordered_map<ktk::uint32_t,
 						ktk::vector<shader_input_data_t>>>& storage,

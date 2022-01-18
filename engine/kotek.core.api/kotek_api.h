@@ -9,7 +9,7 @@ namespace Kotek
 		class ktkMainManager;
 		class ktkIRenderDevice;
 		class ktkIRenderSwapchain;
-		class kotek_i_render_graph;
+		class ktkIRenderGraph;
 		class kotek_i_render_imgui;
 		class ktkIRenderResourceManager;
 		class kotek_i_renderer;
@@ -83,13 +83,13 @@ namespace Kotek
 				ktkIRenderDevice* p_raw_device) noexcept = 0;
 		};
 
-		class kotek_i_render_graph
+		class ktkIRenderGraph
 		{
 		public:
-			virtual ~kotek_i_render_graph(void) {}
+			virtual ~ktkIRenderGraph(void) {}
 
-			virtual void initialize(void) = 0;
-			virtual void shutdown(void) = 0;
+			virtual void Initialize(void) = 0;
+			virtual void Shutdown(void) = 0;
 		};
 
 		class kotek_i_renderer

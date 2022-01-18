@@ -9,8 +9,8 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			kotek_render_graph::kotek_render_graph(
-				const ktk::vector<kotek_render_graph_render_pass*>& passes,
+			ktkRenderGraph::ktkRenderGraph(
+				const ktk::vector<ktkRenderGraphRenderPass*>& passes,
 				const ktk::vector<ktkRenderGraphNode>& nodes,
 				kotek_render_command_list_ring* p_command_list_ring,
 				ktkRenderDevice* p_device,
@@ -38,15 +38,15 @@ namespace Kotek
 					"you must initialize render device");
 			}
 
-			kotek_render_graph::kotek_render_graph(void) : m_p_profiler(nullptr)
+			ktkRenderGraph::ktkRenderGraph(void) : m_p_profiler(nullptr)
 			{
 			}
 
-			kotek_render_graph::~kotek_render_graph(void) {}
+			ktkRenderGraph::~ktkRenderGraph(void) {}
 
-			void kotek_render_graph::initialize(void) {}
+			void ktkRenderGraph::Initialize(void) {}
 
-			void kotek_render_graph::shutdown(void)
+			void ktkRenderGraph::Shutdown(void)
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -54,7 +54,7 @@ namespace Kotek
 				{
 #ifdef KOTEK_DEBUG
 					KOTEK_MESSAGE("deleting render pass {}",
-						p_item->getName().get_as_is());
+						p_item->GetName().get_as_is());
 #endif
 					delete p_item;
 					p_item = nullptr;
@@ -68,15 +68,15 @@ namespace Kotek
 				this->m_p_command_list_ring = nullptr;
 			}
 
-			void kotek_render_graph::UpdateAll(void)
+			void ktkRenderGraph::UpdateAll(void)
 			{
 				for (auto*& p_pass : this->m_passes)
 				{
-					p_pass->onUpdate();
+					p_pass->OnUpdate();
 				}
 			}
 
-			void kotek_render_graph::RenderAll(void)
+			void ktkRenderGraph::RenderAll(void)
 			{
 				ktk::size_t index = 0;
 
@@ -96,7 +96,7 @@ namespace Kotek
 					KOTEK_ASSERT(status == VkResult::VK_SUCCESS,
 						"failed to vkBeginCommandBuffer");
 
-					p_pass->onRender(this->m_nodes.at(index), p_command_buffer);
+					p_pass->OnRender(this->m_nodes.at(index), p_command_buffer);
 
 					++index;
 				}
@@ -123,13 +123,13 @@ namespace Kotek
 
 			}
 
-			ktk::uint32_t kotek_render_graph::GetNodesCount(void) const noexcept
+			ktk::uint32_t ktkRenderGraph::GetNodesCount(void) const noexcept
 			{
 				return this->m_nodes.size();
 			}
 
 			kotek_render_command_list_ring*
-			kotek_render_graph::GetCommandListRing(void) const noexcept
+			ktkRenderGraph::GetCommandListRing(void) const noexcept
 			{
 				return this->m_p_command_list_ring;
 			}

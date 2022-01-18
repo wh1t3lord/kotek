@@ -13,7 +13,7 @@ namespace Kotek
 			constexpr VkFormat kImageFormat =
 				VkFormat::VK_FORMAT_R8G8B8A8_UNORM;
 			class ktkRenderDevice;
-			class kotek_render_graph_resource_storage;
+			class ktkRenderGraph_resource_storage;
 			class kotek_render_upload_heap;
 			class ktkRenderResourceManager;
 			class ktkRenderGraphResourceManager;
@@ -37,7 +37,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			enum class e_kotek_render_graph_builder_type_t : ktk::enum_base_t
+			enum class eRenderGraphBuilderType : ktk::enum_base_t
 			{
 				/// <summary>
 				/// Uses backbuffer only, so you have only one render target for
@@ -52,9 +52,8 @@ namespace Kotek
 				kRenderBuilderFor_Undefined
 			};
 
-			enum class
-				e_kotek_render_graph_builder_pipeline_rendering_type_t : ktk::
-					enum_base_t
+			enum class eRenderGraphBuilderPipelineRenderingType : ktk::
+				enum_base_t
 			{
 				kRenderBuilderBasedOnPipeline_Orthodox,
 
@@ -62,7 +61,7 @@ namespace Kotek
 				kRenderBuilderBasedOnPipeline_RTX
 			};
 
-			enum class e_resource_synchronization_status_t : ktk::enum_base_t
+			enum class eResourceSynchronizationStatus : ktk::enum_base_t
 			{
 				kEmpty,
 				kFromOutputToInput,
@@ -83,7 +82,7 @@ namespace Kotek
 			/// array it's 1D or 2D Cubemap means you have a cubemap which is
 			/// had a type 2D from image and from view it's CUBEMAP
 			/// </summary>
-			enum class e_texture_type_t : ktk::enum_base_t
+			enum class eTextureType : ktk::enum_base_t
 			{
 				kTextureType_Single,
 				kTextureType_Array,
@@ -171,19 +170,18 @@ namespace Kotek
 				VkPipelineTessellationStateCreateInfo m_state_tessellation;
 			};
 
-			class kotek_render_texture_create_info_t
+			class ktkRenderTextureCreateInfo
 			{
 			public:
-				kotek_render_texture_create_info_t(
-					const VkImageCreateInfo& info_image,
+				ktkRenderTextureCreateInfo(const VkImageCreateInfo& info_image,
 					const VkSamplerCreateInfo& info_sampler) :
 					m_info_image(info_image),
 					m_info_sampler(info_sampler)
 				{
 				}
 
-				kotek_render_texture_create_info_t(void) = default;
-				~kotek_render_texture_create_info_t(void) = default;
+				ktkRenderTextureCreateInfo(void) = default;
+				~ktkRenderTextureCreateInfo(void) = default;
 
 				void setImageCreateInfo(const VkImageCreateInfo& info) noexcept
 				{
@@ -213,60 +211,57 @@ namespace Kotek
 			};
 
 			template <typename CreateInfo>
-			class kotek_render_texture_info
+			class ktkRenderTextureInfoBase
 			{
 			public:
-				kotek_render_texture_info(
-					e_texture_type_t type, CreateInfo info) :
-					m_type_texture(type),
-					m_info_create(info)
+				ktkRenderTextureInfoBase(eTextureType type, CreateInfo info) :
+					m_type_texture(type), m_info_create(info)
 				{
 				}
 
-				kotek_render_texture_info(void) :
-					m_type_texture(e_texture_type_t::kTextureType_Unknown),
+				ktkRenderTextureInfoBase(void) :
+					m_type_texture(eTextureType::kTextureType_Unknown),
 					m_info_create({})
 				{
 				}
 
-				~kotek_render_texture_info(void) {}
+				~ktkRenderTextureInfoBase(void) {}
 
-				void setTypeTexture(e_texture_type_t type) noexcept
+				void SetTypeTexture(eTextureType type) noexcept
 				{
 					this->m_type_texture = type;
 				}
 
-				e_texture_type_t getTypeTexture(void) const noexcept
+				eTextureType GetTypeTexture(void) const noexcept
 				{
 					return this->m_type_texture;
 				}
 
-				void setCreateInfo(const CreateInfo& info) noexcept
+				void SetCreateInfo(const CreateInfo& info) noexcept
 				{
 					this->m_info_create = info;
 				}
 
-				const CreateInfo& getCreateInfo(void) const noexcept
+				const CreateInfo& GetCreateInfo(void) const noexcept
 				{
 					return this->m_info_create;
 				}
 
 			private:
-				e_texture_type_t m_type_texture;
+				eTextureType m_type_texture;
 				CreateInfo m_info_create;
 			};
 
-			using kotek_render_texture_create_info_base_t =
-				kotek_render_texture_create_info_t;
+			using ktkRenderTextureCreateInfoBase = ktkRenderTextureCreateInfo;
 
-			using kotek_render_texture_info_t = kotek_render_texture_info<
-				kotek_render_texture_create_info_base_t>;
+			using ktkRenderTextureInfo =
+				ktkRenderTextureInfoBase<ktkRenderTextureCreateInfoBase>;
 
-			class kotek_render_graph_storage_input
+			class ktkRenderGraphStorageInput
 			{
 			public:
-				kotek_render_graph_storage_input(void) {}
-				~kotek_render_graph_storage_input(void) {}
+				ktkRenderGraphStorageInput(void) {}
+				~ktkRenderGraphStorageInput(void) {}
 
 				/*
 				 * If you want to add output image from previous pass as input
@@ -285,9 +280,9 @@ namespace Kotek
 				 *
 				 *
 				 */
-				void addImage(const ktk::string& image_name,
-					const kotek_render_texture_create_info_base_t& info_create,
-					e_texture_type_t type) noexcept
+				void AddImage(const ktk::string& image_name,
+					const ktkRenderTextureCreateInfoBase& info_create,
+					eTextureType type) noexcept
 				{
 					if (image_name.empty())
 					{
@@ -304,29 +299,28 @@ namespace Kotek
 						return;
 					}
 
-					kotek_render_texture_info_t result;
+					ktkRenderTextureInfo result;
 
-					result.setCreateInfo(info_create);
-					result.setTypeTexture(type);
+					result.SetCreateInfo(info_create);
+					result.SetTypeTexture(type);
 
 					this->m_input_images[image_name] = result;
 				}
 
-				void addBuffer(const ktk::string& buffer_name,
+				void AddBuffer(const ktk::string& buffer_name,
 					const VkBufferCreateInfo& info_buffer) noexcept
 				{
 					this->m_input_buffers[buffer_name] = info_buffer;
 				}
 
-				const ktk::unordered_map<ktk::string,
-					kotek_render_texture_info_t>&
-				getImages(void) const noexcept
+				const ktk::unordered_map<ktk::string, ktkRenderTextureInfo>&
+				GetImages(void) const noexcept
 				{
 					return this->m_input_images;
 				}
 
 				const ktk::unordered_map<ktk::string, VkBufferCreateInfo>&
-				getBuffers(void) const noexcept
+				GetBuffers(void) const noexcept
 				{
 					return this->m_input_buffers;
 				}
@@ -342,7 +336,7 @@ namespace Kotek
 				//  ABSOLUTE PATH ARGUMENT IS NOT RELATIVE!!!
 
 				// TODO: add support for uber shaders
-				void addShader(const ktk::string& pipeline_name,
+				void AddShader(const ktk::string& pipeline_name,
 					shader_type_t type,
 					const shader_loading_data_t& data) noexcept
 				{
@@ -372,7 +366,7 @@ namespace Kotek
 					this->m_input_shaders[pipeline_name][type] = data;
 				}
 
-				void addShaderInputData(const ktk::string& pipeline_name,
+				void AddShaderInputData(const ktk::string& pipeline_name,
 					ktk::uint32_t descriptor_set_index,
 					const shader_input_data_t& data) noexcept
 				{
@@ -399,7 +393,7 @@ namespace Kotek
 
 				const ktk::unordered_map<ktk::string,
 					ktk::unordered_map<shader_type_t, shader_loading_data_t>>&
-				getShaders(void) const noexcept
+				GetShaders(void) const noexcept
 				{
 					return this->m_input_shaders;
 				}
@@ -407,7 +401,7 @@ namespace Kotek
 				const ktk::unordered_map<ktk::string,
 					ktk::unordered_map<ktk::uint32_t,
 						ktk::vector<shader_input_data_t>>>&
-				getShadersInputData(void) const noexcept
+				GetShadersInputData(void) const noexcept
 				{
 					return this->m_input_shaders_data;
 				}
@@ -426,7 +420,7 @@ namespace Kotek
 				}
 
 			private:
-				ktk::unordered_map<ktk::string, kotek_render_texture_info_t>
+				ktk::unordered_map<ktk::string, ktkRenderTextureInfo>
 					m_input_images;
 
 				ktk::unordered_map<ktk::string,
@@ -445,28 +439,30 @@ namespace Kotek
 					m_input_buffers;
 			};
 
-			class kotek_render_graph_storage_output
+			class ktkRenderGraphStorageOutput
 			{
 			public:
-				kotek_render_graph_storage_output(void) : m_is_use_backbuffer_by_default(true) {}
-				~kotek_render_graph_storage_output(void) {}
+				ktkRenderGraphStorageOutput(void) :
+					m_is_use_backbuffer_by_default(true)
+				{
+				}
+				~ktkRenderGraphStorageOutput(void) {}
 
-				const ktk::unordered_map<ktk::string,
-					kotek_render_texture_info_t>&
-				getImages(void) const noexcept
+				const ktk::unordered_map<ktk::string, ktkRenderTextureInfo>&
+				GetImages(void) const noexcept
 				{
 					return this->m_output_images;
 				}
 
 				const ktk::unordered_map<ktk::string, VkBufferCreateInfo>&
-				getBuffers(void) const noexcept
+				GetBuffers(void) const noexcept
 				{
 					return this->m_output_buffers;
 				}
 
-				void addImage(const ktk::string& texture_name,
-					const kotek_render_texture_create_info_base_t& info,
-					e_texture_type_t type) noexcept
+				void AddImage(const ktk::string& texture_name,
+					const ktkRenderTextureCreateInfoBase& info,
+					eTextureType type) noexcept
 				{
 					if (this->m_output_images.find(texture_name) !=
 						this->m_output_images.end())
@@ -476,15 +472,15 @@ namespace Kotek
 							"already in map!");
 					}
 
-					kotek_render_texture_info_t result;
+					ktkRenderTextureInfo result;
 
-					result.setTypeTexture(type);
-					result.setCreateInfo(info);
+					result.SetTypeTexture(type);
+					result.SetCreateInfo(info);
 
 					this->m_output_images[texture_name] = result;
 				}
 
-				void addBuffer(const ktk::string& buffer_name,
+				void AddBuffer(const ktk::string& buffer_name,
 					const VkBufferCreateInfo& info) noexcept
 				{
 					if (this->m_output_buffers.find(buffer_name) !=
@@ -498,7 +494,7 @@ namespace Kotek
 					this->m_output_buffers[buffer_name] = info;
 				}
 
-				bool empty(void) const noexcept;
+				bool Empty(void) const noexcept;
 
 				void SetUseBackBuffer(bool status) noexcept
 				{
@@ -512,7 +508,7 @@ namespace Kotek
 
 			private:
 				bool m_is_use_backbuffer_by_default;
-				ktk::unordered_map<ktk::string, kotek_render_texture_info_t>
+				ktk::unordered_map<ktk::string, ktkRenderTextureInfo>
 					m_output_images;
 				ktk::unordered_map<ktk::string, VkBufferCreateInfo>
 					m_output_buffers;
@@ -528,112 +524,112 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			class kotek_render_texture
+			class ktkRenderTexture
 			{
 			public:
-				kotek_render_texture(void) :
+				ktkRenderTexture(void) :
 					m_info({}), m_p_alloc(nullptr), m_p_image(nullptr),
 					m_p_image_view(nullptr), m_p_sampler(nullptr),
-					m_type_texture(e_texture_type_t::kTextureType_Unknown)
+					m_type_texture(eTextureType::kTextureType_Unknown)
 				{
 				}
 
-				~kotek_render_texture(void) {}
+				~ktkRenderTexture(void) {}
 
-				void setCreateInfoImage(const VkImageCreateInfo& info) noexcept
+				void SetCreateInfoImage(const VkImageCreateInfo& info) noexcept
 				{
 					this->m_info = info;
 				}
 
-				const VkImageCreateInfo& getCreateInfoImage(void) const noexcept
+				const VkImageCreateInfo& GetCreateInfoImage(void) const noexcept
 				{
 					return this->m_info;
 				}
 
-				void setCreateInfoSampler(
+				void SetCreateInfoSampler(
 					const VkSamplerCreateInfo& info) noexcept
 				{
 					this->m_info_sampler = info;
 				}
 
-				const VkSamplerCreateInfo& getCreateInfoSampler(
+				const VkSamplerCreateInfo& GetCreateInfoSampler(
 					void) const noexcept
 				{
 					return this->m_info_sampler;
 				}
 
-				VmaAllocation getAllocation(void) const noexcept
+				VmaAllocation GetAllocation(void) const noexcept
 				{
 					return this->m_p_alloc;
 				}
 
-				void setAllocation(VmaAllocation p_saved_pointer) noexcept
+				void SetAllocation(VmaAllocation p_saved_pointer) noexcept
 				{
 					this->m_p_alloc = p_saved_pointer;
 				}
 
-				const ktk::string& getPathName(void) const noexcept
+				const ktk::string& GetPathName(void) const noexcept
 				{
 					return this->m_path_name;
 				}
 
-				void setPathName(const ktk::string& path_name) noexcept
+				void SetPathName(const ktk::string& path_name) noexcept
 				{
 					this->m_path_name = path_name;
 				}
 
-				const ktk::string& getTextureName(void) const noexcept
+				const ktk::string& GetTextureName(void) const noexcept
 				{
 					return this->m_texture_name;
 				}
 
-				void setTextureName(const ktk::string& texture_name) noexcept
+				void SetTextureName(const ktk::string& texture_name) noexcept
 				{
 					this->m_texture_name = texture_name;
 				}
 
-				void setImageHandle(VkImage p_image) noexcept
+				void SetImageHandle(VkImage p_image) noexcept
 				{
 					this->m_p_image = p_image;
 				}
 
-				VkImage getImageHandle(void) const noexcept
+				VkImage GetImageHandle(void) const noexcept
 				{
 					return this->m_p_image;
 				}
 
-				void setImageViewHandle(VkImageView p_image_view) noexcept
+				void SetImageViewHandle(VkImageView p_image_view) noexcept
 				{
 					this->m_p_image_view = p_image_view;
 				}
 
-				VkImageView getImageViewHandle(void) const noexcept
+				VkImageView GetImageViewHandle(void) const noexcept
 				{
 					return this->m_p_image_view;
 				}
 
-				void setTextureType(e_texture_type_t type) noexcept
+				void SetTextureType(eTextureType type) noexcept
 				{
 					this->m_type_texture = type;
 				}
 
-				e_texture_type_t getTextureType(void) const noexcept
+				eTextureType GetTextureType(void) const noexcept
 				{
 					return this->m_type_texture;
 				}
 
-				void setImageSamplerHandle(VkSampler p_sampler) noexcept
+				void SetImageSamplerHandle(VkSampler p_sampler) noexcept
 				{
 					this->m_p_sampler = p_sampler;
 				}
 
-				VkSampler getImageSamplerHandle(void) const noexcept
+				VkSampler GetImageSamplerHandle(void) const noexcept
 				{
 					return this->m_p_sampler;
 				}
 
 			private:
-				e_texture_type_t m_type_texture;
+				eTextureType m_type_texture;
 				VkImageCreateInfo m_info;
 				VkSamplerCreateInfo m_info_sampler;
 				VkImage m_p_image;
@@ -645,86 +641,85 @@ namespace Kotek
 			};
 
 			template <typename CreateInfoType>
-			class kotek_render_graph_resource_info_t
+			class ktkRenderGraphResourceInfo
 			{
 			public:
-				kotek_render_graph_resource_info_t(
-					const ktk::string& render_pass_name,
+				ktkRenderGraphResourceInfo(const ktk::string& render_pass_name,
 					const ktk::string& resource_name,
 					const CreateInfoType& info) :
 					m_render_pass_name(render_pass_name),
 					m_resource_name(resource_name), m_info(info),
-					m_status(e_resource_synchronization_status_t::kEmpty),
+					m_status(eResourceSynchronizationStatus::kEmpty),
 					m_is_created_from_output(false)
 				{
 				}
 
-				kotek_render_graph_resource_info_t(void) :
-					m_status(e_resource_synchronization_status_t::kEmpty),
+				ktkRenderGraphResourceInfo(void) :
+					m_status(eResourceSynchronizationStatus::kEmpty),
 					m_is_created_from_output(false)
 				{
 				}
 
-				kotek_render_graph_resource_info_t(
-					const kotek_render_graph_resource_info_t&) = default;
-				kotek_render_graph_resource_info_t& operator=(
-					const kotek_render_graph_resource_info_t& info) = default;
-				kotek_render_graph_resource_info_t(
-					kotek_render_graph_resource_info_t&&) = default;
-				kotek_render_graph_resource_info_t& operator=(
-					kotek_render_graph_resource_info_t&&) = default;
+				ktkRenderGraphResourceInfo(
+					const ktkRenderGraphResourceInfo&) = default;
+				ktkRenderGraphResourceInfo& operator=(
+					const ktkRenderGraphResourceInfo& info) = default;
+				ktkRenderGraphResourceInfo(
+					ktkRenderGraphResourceInfo&&) = default;
+				ktkRenderGraphResourceInfo& operator=(
+					ktkRenderGraphResourceInfo&&) = default;
 
-				~kotek_render_graph_resource_info_t(void) {}
+				~ktkRenderGraphResourceInfo(void) {}
 
-				const ktk::string& getRenderPassName(void) const noexcept
+				const ktk::string& GetRenderPassName(void) const noexcept
 				{
 					return this->m_render_pass_name;
 				}
 
-				void setRenderPassName(
+				void SetRenderPassName(
 					const ktk::string& render_pass_name) noexcept
 				{
 					this->m_render_pass_name = render_pass_name;
 				}
 
-				const ktk::string& getResourceName(void) const noexcept
+				const ktk::string& GetResourceName(void) const noexcept
 				{
 					return this->m_resource_name;
 				}
 
-				void setResourceName(const ktk::string& resource_name) noexcept
+				void SetResourceName(const ktk::string& resource_name) noexcept
 				{
 					this->m_resource_name = resource_name;
 				}
 
-				const CreateInfoType& getInfo(void) const noexcept
+				const CreateInfoType& GetInfo(void) const noexcept
 				{
 					return this->m_info;
 				}
 
-				void setInfo(const CreateInfoType& info) noexcept
+				void SetInfo(const CreateInfoType& info) noexcept
 				{
 					this->m_info = info;
 				}
 
-				e_resource_synchronization_status_t getStatus(
+				eResourceSynchronizationStatus GetStatus(
 					void) const noexcept
 				{
 					return this->m_status;
 				}
 
-				void setStatus(
-					e_resource_synchronization_status_t value) noexcept
+				void SetStatus(
+					eResourceSynchronizationStatus value) noexcept
 				{
 					this->m_status = value;
 				}
 
-				void setCreatedFromOutput(bool status) noexcept
+				void SetCreatedFromOutput(bool status) noexcept
 				{
 					this->m_is_created_from_output = status;
 				}
 
-				bool isCreatedFromOutput(void) const noexcept
+				bool IsCreatedFromOutput(void) const noexcept
 				{
 					return this->m_is_created_from_output;
 				}
@@ -736,33 +731,33 @@ namespace Kotek
 				/// output it must use in input
 				/// </summary>
 				bool m_is_created_from_output;
-				e_resource_synchronization_status_t m_status;
+				eResourceSynchronizationStatus m_status;
 				CreateInfoType m_info;
 				ktk::string m_render_pass_name;
 				ktk::string m_resource_name;
 			};
 
-			class kotek_render_graph_texture : public kotek_render_texture
+			class ktkRenderGraphTexture : public ktkRenderTexture
 			{
 			public:
-				kotek_render_graph_texture(const kotek_render_texture& data);
-				kotek_render_graph_texture(void) : kotek_render_texture() {}
-				~kotek_render_graph_texture(void) {}
+				ktkRenderGraphTexture(const ktkRenderTexture& data);
+				ktkRenderGraphTexture(void) : ktkRenderTexture() {}
+				~ktkRenderGraphTexture(void) {}
 
-				void setInfo(const kotek_render_graph_resource_info_t<
-					kotek_render_texture_info_t>& info) noexcept
+				void SetInfo(
+					const ktkRenderGraphResourceInfo<ktkRenderTextureInfo>&
+						info) noexcept
 				{
 					this->m_info_graph = info;
 				}
 
-				const kotek_render_graph_resource_info_t<
-					kotek_render_texture_info_t>&
-				getInfo(void) const noexcept
+				const ktkRenderGraphResourceInfo<ktkRenderTextureInfo>& GetInfo(
+					void) const noexcept
 				{
 					return this->m_info_graph;
 				}
 
-				void setRenderPassName(const ktk::string& name) noexcept
+				void SetRenderPassName(const ktk::string& name) noexcept
 				{
 					if (name.empty())
 					{
@@ -774,14 +769,13 @@ namespace Kotek
 					this->m_render_pass_name = name;
 				}
 
-				const ktk::string& getRenderPassName(void) const noexcept
+				const ktk::string& GetRenderPassName(void) const noexcept
 				{
 					return this->m_render_pass_name;
 				}
 
 			private:
-				kotek_render_graph_resource_info_t<kotek_render_texture_info_t>
-					m_info_graph;
+				ktkRenderGraphResourceInfo<ktkRenderTextureInfo> m_info_graph;
 				ktk::string m_render_pass_name;
 			};
 
@@ -789,47 +783,45 @@ namespace Kotek
 			 * This manager doesn't store textures or anything related to
 			 * resources Only loads and user handles it
 			 */
-			class kotek_render_texture_manager
+			class ktkRenderTextureManager
 			{
 			public:
-				kotek_render_texture_manager(ktkRenderDevice* p_device,
+				ktkRenderTextureManager(ktkRenderDevice* p_device,
 					kotek_render_upload_heap* p_heap);
 
-				kotek_render_texture_manager() = delete;
+				ktkRenderTextureManager() = delete;
 
-				~kotek_render_texture_manager();
+				~ktkRenderTextureManager();
 
-				void initialize();
-				void shutdown();
+				void Initialize();
+				void Shutdown();
 
-				void uploadTextureWithData(
-					kotek_render_texture* p_texture, void* p_data) noexcept;
+				void UploadTextureWithData(
+					ktkRenderTexture* p_texture, void* p_data) noexcept;
 
 				// TODO: think about uploading heap, because maybe I need to
 				// move it to streaming manager (?)
-				void uploadAll(void) noexcept;
+				void UploadAll(void) noexcept;
 
-				kotek_render_texture createTexture(
-					const ktk::string& texture_name,
-					const kotek_render_texture_create_info_base_t& info,
-					e_texture_type_t type) noexcept;
+				ktkRenderTexture CreateTexture(const ktk::string& texture_name,
+					const ktkRenderTextureCreateInfoBase& info,
+					eTextureType type) noexcept;
 
-				kotek_render_graph_texture createTexture(
-					const kotek_render_graph_resource_info_t<
-						kotek_render_texture_info_t>& info) noexcept;
+				ktkRenderGraphTexture CreateTexture(
+					const ktkRenderGraphResourceInfo<ktkRenderTextureInfo>&
+						info) noexcept;
 
-				void destroyTexture(VmaAllocator p_allocator,
-					kotek_render_texture* p_texture) noexcept;
+				void DestroyTexture(VmaAllocator p_allocator,
+					ktkRenderTexture* p_texture) noexcept;
 
-				void destroyTexture(VmaAllocator p_allocator,
-					kotek_render_texture& texture) noexcept;
+				void DestroyTexture(VmaAllocator p_allocator,
+					ktkRenderTexture& texture) noexcept;
 
 			private:
-				void allocateTexture(VmaAllocator p_allocator,
-					kotek_render_texture& texture) noexcept;
+				void AllocateTexture(VmaAllocator p_allocator,
+					ktkRenderTexture& texture) noexcept;
 
-				bool validateTexture(
-					const kotek_render_texture& texture) noexcept;
+				bool ValidateTexture(const ktkRenderTexture& texture) noexcept;
 
 				/// <summary>
 				/// Specifies only flat type (not array) of VkImageViewTyp by
@@ -838,7 +830,7 @@ namespace Kotek
 				/// <param name="type"></param>
 				/// <param name="type_image"></param>
 				/// <returns></returns>
-				VkImageViewType detectTypeByTextureFormat(
+				VkImageViewType DetectTypeByTextureFormat(
 					VkImageType type_image) noexcept;
 
 				/// <summary>
@@ -846,7 +838,7 @@ namespace Kotek
 				/// </summary>
 				/// <param name="type"></param>
 				/// <param name="type_image"></param>
-				VkImageViewType detectTypeArrayByTextureFormat(
+				VkImageViewType DetectTypeArrayByTextureFormat(
 					VkImageType type_image) noexcept;
 
 				/// <summary>
@@ -856,10 +848,10 @@ namespace Kotek
 				/// </summary>
 				/// <param name="type_image"></param>
 				/// <returns>VkImageViewType::</returns>
-				VkImageViewType detectTypeCubemapByTextureFormat(
+				VkImageViewType DetectTypeCubemapByTextureFormat(
 					VkImageType type_image) noexcept;
 
-				VkImageViewType detectTypeCubemapArrayByTextureFormat(
+				VkImageViewType DetectTypeCubemapArrayByTextureFormat(
 					VkImageType type_image) noexcept;
 
 			private:
@@ -867,36 +859,36 @@ namespace Kotek
 				kotek_render_upload_heap* m_p_heap;
 			};
 
-			class kotek_render_graph_render_pass
+			class ktkRenderGraphRenderPass
 			{
-				friend class kotek_render_graph_builder;
+				friend class ktkRenderGraph_builder;
 
 			public:
-				kotek_render_graph_render_pass(void) :
-					m_p_manager_resource_graph{},
-					m_p_manager_resource{}
+				ktkRenderGraphRenderPass(void) :
+					m_p_manager_resource_graph{}, m_p_manager_resource{}
 				{
 				}
-				virtual ~kotek_render_graph_render_pass(void) = default;
+				virtual ~ktkRenderGraphRenderPass(void) = default;
 
-				virtual void onSetupInput(
-					kotek_render_graph_storage_input& storage,
+				virtual void OnSetupInput(ktkRenderGraphStorageInput& storage,
 					ktkRenderDevice* p_device,
 					Core::ktkFileSystem* p_file_system)
 				{
 				}
 
-				virtual void onSetupOutput(
-					kotek_render_graph_storage_output& storage,
+				virtual void OnSetupOutput(ktkRenderGraphStorageOutput& storage,
 					ktkRenderDevice* p_device)
 				{
 				}
 
-				virtual void onCreatedResources(void) {}
+				virtual void OnCreatedResources(void) {}
 
-				virtual void onUpdate() {}
+				virtual void OnUpdate() {}
 
-				virtual void onRender(const ktkRenderGraphNode& node, VkCommandBuffer p_command_buffer) {}
+				virtual void OnRender(const ktkRenderGraphNode& node,
+					VkCommandBuffer p_command_buffer)
+				{
+				}
 
 				/// <summary>
 				/// Don't set it by your own hands, because this method is
@@ -907,7 +899,7 @@ namespace Kotek
 				/// value and that means for human being it's hard to understand
 				/// what is written in hash instead of reading rational
 				/// string</param> <returns>nothing</returns>
-				void setName(const ktk::string& name) noexcept
+				void SetName(const ktk::string& name) noexcept
 				{
 					KOTEK_ASSERT(name.empty() == false,
 						"you can't set an empty name for this structure, you "
@@ -917,14 +909,13 @@ namespace Kotek
 					this->m_name = name;
 				}
 
-				const ktk::string& getName(void) const noexcept
+				const ktk::string& GetName(void) const noexcept
 				{
 					return this->m_name;
 				}
 
 			private:
-				void initialize(
-					ktkRenderResourceManager* p_manager_resource,
+				void Initialize(ktkRenderResourceManager* p_manager_resource,
 					ktkRenderGraphResourceManager*
 						p_manager_resource_graph) noexcept
 				{
@@ -948,8 +939,8 @@ namespace Kotek
 
 			namespace helper
 			{
-				ktk::string translateRenderGraphBuilderTypeToString(
-					e_kotek_render_graph_builder_type_t type) noexcept;
+				ktk::string TranslateRenderGraphBuilderTypeToString(
+					eRenderGraphBuilderType type) noexcept;
 
 				VkGraphicsPipelineCreateInfo InitializeGraphicsPipeline(
 					bool is_use_tesselation,

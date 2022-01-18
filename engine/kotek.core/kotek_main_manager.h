@@ -95,7 +95,7 @@ namespace Kotek
 			ktk::shared_ptr<ktkIRenderDevice> m_manager_render_device;
 			ktk::shared_ptr<ktkIRenderResourceManager>
 				m_manager_render_resource;
-			ktk::shared_ptr<kotek_i_render_graph> m_manager_render_graph;
+			ktk::shared_ptr<ktkIRenderGraph> m_manager_render_graph;
 			ktk::shared_ptr<ktkIRenderSwapchain> m_manager_swapchain;
 			ktk::shared_ptr<ktkProfiler> m_manager_profiler;
 		};

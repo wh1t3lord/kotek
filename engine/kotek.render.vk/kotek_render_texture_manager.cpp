@@ -8,7 +8,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			kotek_render_texture_manager::kotek_render_texture_manager(
+			ktkRenderTextureManager::ktkRenderTextureManager(
 				ktkRenderDevice* p_device,
 				kotek_render_upload_heap* p_heap) :
 				m_p_device(p_device),
@@ -19,25 +19,25 @@ namespace Kotek
 				KOTEK_ASSERT(this->m_p_heap, "you can't pass an invalid heap");
 			}
 
-			kotek_render_texture_manager::~kotek_render_texture_manager() {}
+			ktkRenderTextureManager::~ktkRenderTextureManager() {}
 
-			void kotek_render_texture_manager::initialize() {}
+			void ktkRenderTextureManager::Initialize() {}
 
-			void kotek_render_texture_manager::shutdown() {}
+			void ktkRenderTextureManager::Shutdown() {}
 
-			void kotek_render_texture_manager::uploadAll(void) noexcept
+			void ktkRenderTextureManager::UploadAll(void) noexcept
 			{
 				this->m_p_heap->flushAndFinish(this->m_p_device);
 			}
 
-			kotek_render_texture kotek_render_texture_manager::createTexture(
+			ktkRenderTexture ktkRenderTextureManager::CreateTexture(
 				const ktk::string& texture_name,
-				const kotek_render_texture_create_info_base_t& info,
-				e_texture_type_t type) noexcept
+				const ktkRenderTextureCreateInfoBase& info,
+				eTextureType type) noexcept
 			{
-				kotek_render_texture result;
+				ktkRenderTexture result;
 
-				if (type == e_texture_type_t::kTextureType_Unknown)
+				if (type == eTextureType::kTextureType_Unknown)
 				{
 					KOTEK_ASSERT(
 						false, "it can't be unknown use enum correctly!");
@@ -50,36 +50,36 @@ namespace Kotek
 					return result;
 				}
 
-				result.setTextureName(texture_name);
-				result.setCreateInfoImage(info.getImageCreateInfo());
-				result.setCreateInfoSampler(info.getSamplerCreateInfo());
-				result.setTextureType(type);
+				result.SetTextureName(texture_name);
+				result.SetCreateInfoImage(info.getImageCreateInfo());
+				result.SetCreateInfoSampler(info.getSamplerCreateInfo());
+				result.SetTextureType(type);
 
-				this->allocateTexture(this->m_p_device->GetAllocator(), result);
-				this->validateTexture(result);
+				this->AllocateTexture(this->m_p_device->GetAllocator(), result);
+				this->ValidateTexture(result);
 
 				return result;
 			}
 
-			kotek_render_graph_texture
-			kotek_render_texture_manager::createTexture(
-				const kotek_render_graph_resource_info_t<
-					kotek_render_texture_info_t>& info) noexcept
+			ktkRenderGraphTexture
+			ktkRenderTextureManager::CreateTexture(
+				const ktkRenderGraphResourceInfo<
+					ktkRenderTextureInfo>& info) noexcept
 			{
-				kotek_render_graph_texture result(this->createTexture(
-					info.getResourceName(), info.getInfo().getCreateInfo(),
-					info.getInfo().getTypeTexture()));
+				ktkRenderGraphTexture result(this->CreateTexture(
+					info.GetResourceName(), info.GetInfo().GetCreateInfo(),
+					info.GetInfo().GetTypeTexture()));
 
-				result.setInfo(info);
-				result.setRenderPassName(info.getRenderPassName());
+				result.SetInfo(info);
+				result.SetRenderPassName(info.GetRenderPassName());
 
 				return result;
 			}
 
 			// TODO: refactor this
-			void kotek_render_texture_manager::allocateTexture(
+			void ktkRenderTextureManager::AllocateTexture(
 				VmaAllocator p_allocator,
-				kotek_render_texture& texture) noexcept
+				ktkRenderTexture& texture) noexcept
 			{
 				KOTEK_ASSERT(p_allocator,
 					"you can't pass an invalid vmaAllocator instance");
@@ -90,7 +90,7 @@ namespace Kotek
 				VkSampler p_sampler = nullptr;
 
 				const auto& texture_name =
-					texture.getTextureName().get_as_legacy();
+					texture.GetTextureName().get_as_legacy();
 
 				VmaAllocationCreateInfo info = {};
 				info.usage = VMA_MEMORY_USAGE_GPU_ONLY;
@@ -100,7 +100,7 @@ namespace Kotek
 				VmaAllocationInfo info_gpu = {};
 
 				VkResult status =
-					vmaCreateImage(p_allocator, &texture.getCreateInfoImage(),
+					vmaCreateImage(p_allocator, &texture.GetCreateInfoImage(),
 						&info, &p_image, &p_alloc, &info_gpu);
 
 				KOTEK_ASSERT(status == VK_SUCCESS,
@@ -110,31 +110,31 @@ namespace Kotek
 
 				VkImageViewType view_type =
 					VkImageViewType::VK_IMAGE_VIEW_TYPE_MAX_ENUM;
-				VkImageType image_type = texture.getCreateInfoImage().imageType;
+				VkImageType image_type = texture.GetCreateInfoImage().imageType;
 
-				switch (texture.getTextureType())
+				switch (texture.GetTextureType())
 				{
-				case e_texture_type_t::kTextureType_Single:
+				case eTextureType::kTextureType_Single:
 				{
-					view_type = this->detectTypeByTextureFormat(image_type);
+					view_type = this->DetectTypeByTextureFormat(image_type);
 					break;
 				}
-				case e_texture_type_t::kTextureType_Array:
+				case eTextureType::kTextureType_Array:
 				{
 					view_type =
-						this->detectTypeArrayByTextureFormat(image_type);
+						this->DetectTypeArrayByTextureFormat(image_type);
 					break;
 				}
-				case e_texture_type_t::kTextureType_Cubemap_Single:
+				case eTextureType::kTextureType_Cubemap_Single:
 				{
 					view_type =
-						this->detectTypeCubemapByTextureFormat(image_type);
+						this->DetectTypeCubemapByTextureFormat(image_type);
 					break;
 				}
-				case e_texture_type_t::kTextureType_Cubemap_Array:
+				case eTextureType::kTextureType_Cubemap_Array:
 				{
 					view_type =
-						this->detectTypeCubemapArrayByTextureFormat(image_type);
+						this->DetectTypeCubemapArrayByTextureFormat(image_type);
 					break;
 				}
 				default:
@@ -147,7 +147,7 @@ namespace Kotek
 
 				info_view.sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO;
 				info_view.image = p_image;
-				info_view.format = texture.getCreateInfoImage().format;
+				info_view.format = texture.GetCreateInfoImage().format;
 				info_view.viewType = view_type;
 				info_view.subresourceRange.aspectMask =
 					VK_IMAGE_ASPECT_COLOR_BIT;
@@ -161,59 +161,59 @@ namespace Kotek
 					status == false, "failed to vkCreateImageView, see status");
 
 				status = vkCreateSampler(this->m_p_device->GetDevice(),
-					&texture.getCreateInfoSampler(), nullptr, &p_sampler);
+					&texture.GetCreateInfoSampler(), nullptr, &p_sampler);
 
 				KOTEK_ASSERT(
 					status == false, "failed to vkCreateImageView, see status");
 
-				texture.setAllocation(p_alloc);
-				texture.setImageHandle(p_image);
-				texture.setImageViewHandle(p_image_view);
-				texture.setImageSamplerHandle(p_sampler);
+				texture.SetAllocation(p_alloc);
+				texture.SetImageHandle(p_image);
+				texture.SetImageViewHandle(p_image_view);
+				texture.SetImageSamplerHandle(p_sampler);
 
 #ifdef KOTEK_DEBUG
 				KOTEK_MESSAGE("allocated texture [{}] for {:.3f} Mbs",
-					texture.getTextureName().get_as_is(),
+					texture.GetTextureName().get_as_is(),
 					static_cast<float>(static_cast<float>(info_gpu.size) /
 						static_cast<float>(
 							ktk::kMemoryConvertValue_Megabytes)));
 
 				this->m_p_device->GetHelper().getDebug().setDebugNameToResource(
 					this->m_p_device->GetDevice(),
-					VkObjectType::VK_OBJECT_TYPE_IMAGE, p_image, texture.getTextureName().get_as_legacy().c_str());
+					VkObjectType::VK_OBJECT_TYPE_IMAGE, p_image, texture.GetTextureName().get_as_legacy().c_str());
 
 				this->m_p_device->GetHelper().getDebug().setDebugNameToResource(
 					this->m_p_device->GetDevice(),
 					VkObjectType::VK_OBJECT_TYPE_IMAGE_VIEW, p_image_view,
-					texture.getTextureName().get_as_legacy().c_str());
+					texture.GetTextureName().get_as_legacy().c_str());
 #endif
 			}
 
-			bool kotek_render_texture_manager::validateTexture(
-				const kotek_render_texture& texture) noexcept
+			bool ktkRenderTextureManager::ValidateTexture(
+				const ktkRenderTexture& texture) noexcept
 			{
-				if (texture.getAllocation() == nullptr)
+				if (texture.GetAllocation() == nullptr)
 				{
 					KOTEK_ASSERT(false,
 						"your vmaAllocation in texture class can't be nullptr");
 					return false;
 				}
 
-				if (texture.getImageHandle() == nullptr)
+				if (texture.GetImageHandle() == nullptr)
 				{
 					KOTEK_ASSERT(false,
 						"your VkImage in texture class can't be nullptr");
 					return false;
 				}
 
-				if (texture.getImageViewHandle() == nullptr)
+				if (texture.GetImageViewHandle() == nullptr)
 				{
 					KOTEK_ASSERT(false,
 						"your VkImageView in texture class can't be nullptr");
 					return false;
 				}
 
-				if (texture.getTextureName().empty())
+				if (texture.GetTextureName().empty())
 				{
 					KOTEK_ASSERT(false, "you must name your texture!");
 					return false;
@@ -222,9 +222,9 @@ namespace Kotek
 				return true;
 			}
 
-			void kotek_render_texture_manager::destroyTexture(
+			void ktkRenderTextureManager::DestroyTexture(
 				VmaAllocator p_allocator,
-				kotek_render_texture& texture) noexcept
+				ktkRenderTexture& texture) noexcept
 			{
 				KOTEK_ASSERT(
 					p_allocator, "you can't pass an invalid VmaAllocator");
@@ -232,28 +232,28 @@ namespace Kotek
 #ifdef KOTEK_DEBUG
 				// TODO: add allocation size what texture has
 				KOTEK_MESSAGE("deallocating texture {}",
-					texture.getTextureName().get_as_is());
+					texture.GetTextureName().get_as_is());
 #endif
 
 				vkDestroyImageView(this->m_p_device->GetDevice(),
-					texture.getImageViewHandle(), nullptr);
+					texture.GetImageViewHandle(), nullptr);
 
 				vkDestroySampler(this->m_p_device->GetDevice(),
-					texture.getImageSamplerHandle(), nullptr);
+					texture.GetImageSamplerHandle(), nullptr);
 
-				vmaDestroyImage(p_allocator, texture.getImageHandle(),
-					texture.getAllocation());
+				vmaDestroyImage(p_allocator, texture.GetImageHandle(),
+					texture.GetAllocation());
 			}
 
-			void kotek_render_texture_manager::destroyTexture(
+			void ktkRenderTextureManager::DestroyTexture(
 				VmaAllocator p_allocator,
-				kotek_render_texture* p_texture) noexcept
+				ktkRenderTexture* p_texture) noexcept
 			{
-				this->destroyTexture(p_allocator, *p_texture);
+				this->DestroyTexture(p_allocator, *p_texture);
 			}
 
-			void kotek_render_texture_manager::uploadTextureWithData(
-				kotek_render_texture* p_texture, void* p_data) noexcept
+			void ktkRenderTextureManager::UploadTextureWithData(
+				ktkRenderTexture* p_texture, void* p_data) noexcept
 			{
 				KOTEK_ASSERT(p_texture,
 					"you can't pass an invalid kotek_render_texture "
@@ -266,7 +266,7 @@ namespace Kotek
 						.newLayout = VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
 						.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
 						.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-						.image = p_texture->getImageHandle(),
+						.image = p_texture->GetImageHandle(),
 						.subresourceRange = {
 							.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
 							.baseMipLevel = 0,
@@ -281,7 +281,7 @@ namespace Kotek
 						.newLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
 						.srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
 						.dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-						.image = p_texture->getImageHandle(),
+						.image = p_texture->GetImageHandle(),
 						.subresourceRange = {
 							.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
 							.baseMipLevel = 0,
@@ -290,19 +290,19 @@ namespace Kotek
 
 				ktk::size_t pixels_per_block =
 					this->m_p_device->GetHelper().getPixelsPerBlockByFormat(
-						p_texture->getCreateInfoImage().format);
+						p_texture->GetCreateInfoImage().format);
 
 				// TODO: we must to ensure that upload_size contains valid size
 				// for using in memcpy function
 				ktk::size_t upload_size =
 					((static_cast<ktk::size_t>(
-						  p_texture->getCreateInfoImage().extent.width) *
+						  p_texture->GetCreateInfoImage().extent.width) *
 						 static_cast<ktk::size_t>(
-							 p_texture->getCreateInfoImage().extent.height)) *
+							 p_texture->GetCreateInfoImage().extent.height)) *
 						static_cast<ktk::size_t>(
 							this->m_p_device->GetHelper()
 								.getSizeInBytesByFormat(
-									p_texture->getCreateInfoImage().format))) /
+									p_texture->GetCreateInfoImage().format))) /
 					static_cast<ktk::size_t>(pixels_per_block);
 
 				ktk::uint8_t* p_allocated =
@@ -320,20 +320,20 @@ namespace Kotek
 				info_copy.imageSubresource.layerCount = 1;
 				info_copy.imageSubresource.baseArrayLayer = 0;
 				info_copy.imageExtent.width =
-					p_texture->getCreateInfoImage().extent.width;
+					p_texture->GetCreateInfoImage().extent.width;
 				info_copy.imageExtent.height =
-					p_texture->getCreateInfoImage().extent.height;
+					p_texture->GetCreateInfoImage().extent.height;
 				info_copy.imageExtent.depth =
-					p_texture->getCreateInfoImage().extent.depth;
+					p_texture->GetCreateInfoImage().extent.depth;
 				info_copy.imageOffset = VkOffset3D{0,0,0};
 				
 				ktk::memory::memcpy(p_allocated, p_data, upload_size);
 
-				this->m_p_heap->addCopy(p_texture->getImageHandle(), info_copy);
+				this->m_p_heap->addCopy(p_texture->GetImageHandle(), info_copy);
 			}
 
 			VkImageViewType
-			kotek_render_texture_manager::detectTypeByTextureFormat(
+			ktkRenderTextureManager::DetectTypeByTextureFormat(
 				VkImageType type_image) noexcept
 			{
 				switch (type_image)
@@ -366,7 +366,7 @@ namespace Kotek
 			}
 
 			VkImageViewType
-			kotek_render_texture_manager::detectTypeArrayByTextureFormat(
+			ktkRenderTextureManager::DetectTypeArrayByTextureFormat(
 				VkImageType type_image) noexcept
 			{
 				switch (type_image)
@@ -394,7 +394,7 @@ namespace Kotek
 			}
 
 			VkImageViewType
-			kotek_render_texture_manager::detectTypeCubemapByTextureFormat(
+			ktkRenderTextureManager::DetectTypeCubemapByTextureFormat(
 				VkImageType type_image) noexcept
 			{
 				switch (type_image)
@@ -417,7 +417,7 @@ namespace Kotek
 			}
 
 			VkImageViewType
-			kotek_render_texture_manager::detectTypeCubemapArrayByTextureFormat(
+			ktkRenderTextureManager::DetectTypeCubemapArrayByTextureFormat(
 				VkImageType type_image) noexcept
 			{
 				switch (type_image)
@@ -439,7 +439,7 @@ namespace Kotek
 				}
 			}
 
-			bool kotek_render_graph_storage_output::empty(void) const noexcept
+			bool ktkRenderGraphStorageOutput::Empty(void) const noexcept
 			{
 				return this->m_output_buffers.empty() &&
 					this->m_output_images.empty();
@@ -447,27 +447,27 @@ namespace Kotek
 
 			namespace helper
 			{
-				ktk::string translateRenderGraphBuilderTypeToString(
-					e_kotek_render_graph_builder_type_t type) noexcept
+				ktk::string TranslateRenderGraphBuilderTypeToString(
+					eRenderGraphBuilderType type) noexcept
 				{
 					switch (type)
 					{
-					case e_kotek_render_graph_builder_type_t::
+					case eRenderGraphBuilderType::
 						kRenderBuilderFor_Forward_Only:
 					{
 						return "render_graph_builder_type_forward_only";
 					}
-					case e_kotek_render_graph_builder_type_t::
+					case eRenderGraphBuilderType::
 						kRenderBuilderFor_Forward_With_Outputs:
 					{
 						return "render_graph_builder_type_forward_with_outputs";
 					}
-					case e_kotek_render_graph_builder_type_t::
+					case eRenderGraphBuilderType::
 						kRenderBuilderFor_Deferred:
 					{
 						return "render_graph_builder_type_deferred";
 					}
-					case e_kotek_render_graph_builder_type_t::
+					case eRenderGraphBuilderType::
 						kRenderBuilderFor_Undefined:
 					{
 						return "render_graph_builder_type_undefined (not "
@@ -477,6 +477,7 @@ namespace Kotek
 					{
 						KOTEK_ASSERT(
 							false, "can't translate this type: {}", type);
+
 						return "render_graph_builder_type_INVALID";
 					}
 					}
@@ -511,9 +512,9 @@ namespace Kotek
 				}
 			} // namespace helper
 
-			kotek_render_graph_texture::kotek_render_graph_texture(
-				const kotek_render_texture& data) :
-				kotek_render_texture(data)
+			ktkRenderGraphTexture::ktkRenderGraphTexture(
+				const ktkRenderTexture& data) :
+				ktkRenderTexture(data)
 			{
 			}
 

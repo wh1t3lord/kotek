@@ -67,7 +67,7 @@ namespace Kotek
 
 				kotek_render_upload_heap* getUploadHeap(void) noexcept;
 
-				kotek_render_texture_manager* getTextureManager(void) noexcept;
+				ktkRenderTextureManager* GetTextureManager(void) noexcept;
 
 				kotek_render_resource_view_heap* GetCreatorHeap(void) noexcept;
 
@@ -160,7 +160,7 @@ namespace Kotek
 				kotek_render_upload_heap m_upload_heap;
 
 				kotek_render_shader_manager m_manager_shader;
-				kotek_render_texture_manager m_manager_texture;
+				ktkRenderTextureManager m_manager_texture;
 			};
 		} // namespace vk
 	}     // namespace Render
