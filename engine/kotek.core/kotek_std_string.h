@@ -429,7 +429,7 @@ namespace Kotek
 			}
 
 #pragma region UTILITY
-			void appendPath(const ktk::string&
+			void append_path(const ktk::string&
 					your_folder_or_file_name_with_or_without_format) noexcept;
 #pragma endregion
 

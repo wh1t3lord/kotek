@@ -14,7 +14,7 @@ namespace Kotek
 {
 	namespace Render
 	{
-		bool initializeModule_Render(Core::ktkMainManager& main_manager);
-		bool shutdownModule_Render(Core::ktkMainManager& main_manager);
+		bool InitializeModule_Render(Core::ktkMainManager& main_manager);
+		bool ShutdownModule_Render(Core::ktkMainManager& main_manager);
 	} // namespace Render
 } // namespace Kotek

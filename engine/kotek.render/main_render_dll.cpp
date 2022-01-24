@@ -16,11 +16,11 @@ namespace Kotek
 {
 	namespace Render
 	{
-		bool initializeModule_Render(Core::ktkMainManager& main_manager)
+		bool InitializeModule_Render(Core::ktkMainManager& main_manager)
 		{
 			// TODO: сделать выбор рендера
 
-			bool status = initializeModule_Render_VK(main_manager);
+			bool status = InitializeModule_Render_VK(main_manager);
 
 			KOTEK_ASSERT(
 				status, "can't initialize module render Vulkan. See log");
@@ -30,9 +30,9 @@ namespace Kotek
 			return true;
 		}
 
-		bool shutdownModule_Render(Core::ktkMainManager& main_manager)
+		bool ShutdownModule_Render(Core::ktkMainManager& main_manager)
 		{
-			bool status = shutdownModule_Render_VK(main_manager);
+			bool status = ShutdownModule_Render_VK(main_manager);
 
 			return status;
 		}

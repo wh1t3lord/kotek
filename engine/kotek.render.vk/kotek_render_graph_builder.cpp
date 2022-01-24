@@ -18,7 +18,7 @@ namespace Kotek
 						kRenderBuilderFor_Undefined),
 				m_p_manager_render_resource(
 					static_cast<ktkRenderResourceManager*>(
-						main_manager.getRenderResourceManager())),
+						main_manager.GetRenderResourceManager())),
 				m_p_device(static_cast<ktkRenderDevice*>(
 					main_manager.getRenderDevice())),
 				m_p_profiler(main_manager.GetGameManager()->GetProfiler()),
@@ -171,7 +171,7 @@ namespace Kotek
 						eRenderGraphBuilderType::
 							kRenderBuilderFor_Forward_Only)
 					{
-						KOTEK_ASSERT(output_data.empty(),
+						KOTEK_ASSERT(output_data.Empty(),
 							"you can't create any outputs from render pass "
 							"(e.g. render targets "
 							"or attachments in frame buffer) because you have: "

@@ -861,7 +861,7 @@ namespace Kotek
 
 			class ktkRenderGraphRenderPass
 			{
-				friend class ktkRenderGraph_builder;
+				friend class ktkRenderGraphBuilder;
 
 			public:
 				ktkRenderGraphRenderPass(void) :

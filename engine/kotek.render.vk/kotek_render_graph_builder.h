@@ -68,7 +68,7 @@ namespace Kotek
 					void) const noexcept;
 
 				eRenderGraphBuilderPipelineRenderingType
-				getRenderGraphPipelineRenderingType(void) const noexcept;
+				GetRenderGraphPipelineRenderingType(void) const noexcept;
 
 			private:
 				void Shutdown(void);

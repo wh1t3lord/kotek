@@ -5,11 +5,11 @@ int main(int argc, char** argv)
 {
 	Kotek::Core::ktkMainManager main_manager(argc, argv);
 
-	Kotek::Engine::initializeEngine(main_manager);
+	Kotek::Engine::InitializeEngine(main_manager);
 
-	Kotek::Engine::executeEngine(main_manager);
+	Kotek::Engine::ExecuteEngine(main_manager);
 
-	Kotek::Engine::shutdownEngine(main_manager);
+	Kotek::Engine::ShutdownEngine(main_manager);
 
 	return 0;
 }

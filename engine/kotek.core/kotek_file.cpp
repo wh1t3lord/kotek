@@ -166,7 +166,7 @@ namespace Kotek
 			KOTEK_ASSERT(this->m_file_name.empty() == false,
 				"can't save file without a name!");
 
-			full_path_with_file_and_its_format.appendPath(this->m_file_name);
+			full_path_with_file_and_its_format.append_path(this->m_file_name);
 
 			return this->Save(p_file_system, path,
 				full_path_with_file_and_its_format, true);

@@ -217,7 +217,7 @@ namespace Kotek
 			auto path_to_system_json =
 				this->GetFolderByEnum(folder_index_t::kFolderIndex_Root);
 
-			path_to_system_json.appendPath(kConfigFileNameSystemInfo);
+			path_to_system_json.append_path(kConfigFileNameSystemInfo);
 
 			if (this->IsValidPath(path_to_system_json) == false)
 			{

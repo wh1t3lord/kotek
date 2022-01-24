@@ -69,7 +69,7 @@ namespace Kotek
 				this->createStaticAllocators(p_render_device);
 
 				this->m_manager_shader.initialize();
-				this->m_manager_texture.initialize();
+				this->m_manager_texture.Initialize();
 
 				KOTEK_MESSAGE("resource manager is initialized");
 			}
@@ -84,7 +84,7 @@ namespace Kotek
 				this->destroySwapchainRTVs(p_render_device);
 
 				this->m_manager_shader.shutdown();
-				this->m_manager_texture.shutdown();
+				this->m_manager_texture.Shutdown();
 
 				KOTEK_MESSAGE("resource manager is shutdown");
 			}
@@ -109,8 +109,8 @@ namespace Kotek
 				return &this->m_upload_heap;
 			}
 
-			kotek_render_texture_manager*
-			ktkRenderResourceManager::getTextureManager(void) noexcept
+			ktkRenderTextureManager*
+			ktkRenderResourceManager::GetTextureManager(void) noexcept
 			{
 				return &this->m_manager_texture;
 			}
@@ -222,7 +222,7 @@ namespace Kotek
 			void ktkRenderResourceManager::uploadAllResourcesToGPU(
 				void) noexcept
 			{
-				this->m_manager_texture.uploadAll();
+				this->m_manager_texture.UploadAll();
 			}
 
 			VkImage ktkRenderResourceManager::GetSwapchainImage(

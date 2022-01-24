@@ -26,12 +26,12 @@ namespace Kotek
 		}
 #endif
 
-		bool initializeModule_Render_VK(Core::ktkMainManager& main_manager)
+		bool InitializeModule_Render_VK(Core::ktkMainManager& main_manager)
 		{
 			KOTEK_CPU_PROFILE();
 
 			main_manager.SetFeatureStatus(
-				Core::eEngineFeature::kEngineRender_Vulkan);
+				Core::eEngineFeature::kEngine_Render_Renderer_Vulkan);
 
 			auto p_render_manager_device =
 				std::make_shared<vk::ktkRenderDevice>();
@@ -44,7 +44,7 @@ namespace Kotek
 			auto p_render_manager_render_resource =
 				std::make_shared<vk::ktkRenderResourceManager>(
 					p_render_manager_device.get(), &main_manager);
-			main_manager.setRenderResourceManager(
+			main_manager.SetRenderResourceManager(
 				p_render_manager_render_resource);
 
 			// TODO: load from user settings
@@ -67,13 +67,13 @@ namespace Kotek
 			return true;
 		}
 
-		bool shutdownModule_Render_VK(Core::ktkMainManager& main_manager)
+		bool ShutdownModule_Render_VK(Core::ktkMainManager& main_manager)
 		{
 			main_manager.getRenderDevice()->GPUFlush();
 
 			main_manager.getRenderSwapchainManager()->Shutdown(
 				main_manager.getRenderDevice());
-			main_manager.getRenderResourceManager()->shutdown(
+			main_manager.GetRenderResourceManager()->shutdown(
 				main_manager.getRenderDevice());
 			main_manager.GetGameManager()->GetRenderer()->Shutdown();
 			main_manager.getRenderDevice()->Shutdown();

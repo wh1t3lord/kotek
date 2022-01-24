@@ -63,8 +63,19 @@ namespace Kotek
 			this->m_p_game_manager = p_game_manager;
 		}
 
-		ktkIRenderDevice* ktkMainManager::getRenderDevice(
+		ktkIResourceManager* ktkMainManager::GetResourceManager(
 			void) const noexcept
+		{
+			return this->m_p_resource_manager;
+		}
+
+		void ktkMainManager::SetResourceManager(
+			ktkIResourceManager* p_manager) noexcept
+		{
+			this->m_p_resource_manager = p_manager;
+		}
+
+		ktkIRenderDevice* ktkMainManager::getRenderDevice(void) const noexcept
 		{
 			return this->m_manager_render_device.get();
 		}
@@ -75,13 +86,13 @@ namespace Kotek
 			this->m_manager_render_device = pointer;
 		}
 
-		ktkIRenderResourceManager*
-		ktkMainManager::getRenderResourceManager(void) const noexcept
+		ktkIRenderResourceManager* ktkMainManager::GetRenderResourceManager(
+			void) const noexcept
 		{
 			return this->m_manager_render_resource.get();
 		}
 
-		void ktkMainManager::setRenderResourceManager(
+		void ktkMainManager::SetRenderResourceManager(
 			ktk::shared_ptr<ktkIRenderResourceManager> pointer) noexcept
 		{
 			this->m_manager_render_resource = pointer;
@@ -99,8 +110,7 @@ namespace Kotek
 			this->m_manager_swapchain = pointer;
 		}
 
-		bool ktkMainManager::IsFeatureEnabled(
-			eEngineFeature id) const noexcept
+		bool ktkMainManager::IsFeatureEnabled(eEngineFeature id) const noexcept
 		{
 			if (this->m_engine_flags.find(id) == this->m_engine_flags.end())
 			{
@@ -129,31 +139,6 @@ namespace Kotek
 			return this->m_argv;
 		}
 
-		void ktkMainManager::LoadDynamicLibraryUserGame(
-			const ktk::string& library_name) noexcept
-		{
-			this->m_dynamic_library_user_game.SetLibraryName(library_name);
-			this->m_dynamic_library_user_game.Load();
-		}
-
-		void ktkMainManager::UnLoadDynamicLibraryUserGame() noexcept
-		{
-			this->m_dynamic_library_user_game.UnLoad();
-		}
-
-#ifdef KOTEK_PLATFORM_WINDOWS
-		FARPROC ktkMainManager::GetUserCallbackFromUserGameLibrary(
-			const ktk::string& function_name) noexcept
-		{
-			KOTEK_ASSERT(function_name.empty() == false,
-				"you can't pass an empty function name");
-
-			return this->m_dynamic_library_user_game.GetUserCallback(
-				function_name);
-		}
-#elif KOTEK_PLATFORM_LINUX
-#endif
-
 		bool ktkMainManager::IsContainsConsoleCommandLineArgument(
 			const ktk::string& your_argument) const noexcept
 		{
@@ -163,6 +148,83 @@ namespace Kotek
 						   return argument == your_argument;
 					   }) != this->m_parsed_command_line_arguments.end();
 		}
+
+		bool ktkMainManager::LoadUserGameLibrary(
+			const ktk::string& library_name) noexcept
+		{
+			this->m_user_dll.load(library_name.get_as_legacy().c_str());
+
+			return true;
+		}
+
+		void ktkMainManager::UnLoadUserGameLibrary(void) noexcept 
+		{
+			this->m_user_dll.unload();
+		}
+
+		const ktk::dll::shared_library& ktkMainManager::GetUserLibrary(
+			void) const noexcept
+		{
+			return this->m_user_dll;
+		}
+
+#pragma region Loading Request implementation
+		ktkLoadingRequest& ktkLoadingRequest::SetLoadingPolicy(
+			eResourceLoadingPolicy policy) noexcept
+		{
+			this->m_policy_loading = policy;
+			return *this;
+		}
+
+		eResourceLoadingPolicy ktkLoadingRequest::GetLoadingPolicy(
+			void) const noexcept
+		{
+			return this->m_policy_loading;
+		}
+
+		ktkLoadingRequest& ktkLoadingRequest::SetCachingPolicy(
+			eResourceCachingPolicy policy) noexcept
+		{
+			this->m_policy_caching = policy;
+			return *this;
+		}
+
+		eResourceCachingPolicy ktkLoadingRequest::GetCachingPolicy(
+			void) const noexcept
+		{
+			return this->m_policy_caching;
+		}
+
+		ktkLoadingRequest& ktkLoadingRequest::SetResourceType(
+			eResourceLoadingType type) noexcept
+		{
+			this->m_resource_type = type;
+			return *this;
+		}
+
+		eResourceLoadingType ktkLoadingRequest::GetResourceType() const noexcept
+		{
+			return this->m_resource_type;
+		}
+
+		ktkLoadingRequest& ktkLoadingRequest::SetResourcePath(
+			const ktk::string& path) noexcept
+		{
+			KOTEK_ASSERT(
+				path.empty() == false, "you can't set an empty path here");
+
+			this->m_resource_path = path;
+
+			return *this;
+		}
+
+		const ktk::string& ktkLoadingRequest::GetResourcePath(
+			void) const noexcept
+		{
+			return this->m_resource_path;
+		}
+
+#pragma endregion
 
 	} // namespace Core
 } // namespace Kotek

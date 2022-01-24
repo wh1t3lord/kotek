@@ -43,7 +43,7 @@ namespace Kotek
 		{
 			return ktk::hash<ktk::string>()(*this);
 		}
-		void string::appendPath(const ktk::string&
+		void string::append_path(const ktk::string&
 				your_folder_or_file_name_with_or_without_format) noexcept
 		{
 			if (your_folder_or_file_name_with_or_without_format.empty())

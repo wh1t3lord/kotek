@@ -14,7 +14,7 @@ endif()
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(Boost COMPONENTS json container unit_test_framework REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(Boost COMPONENTS json container unit_test_framework filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(fmt REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(Vulkan REQUIRED)
 find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
@@ -134,7 +134,8 @@ add_library(${PROJECT_NAME} STATIC
 	"kotek_profiler.h"
 	"kotek_profiler.cpp"
 	"kotek_dynamic_library.h"
-	"kotek_dynamic_library.cpp"
+	"kotek_resource_manager.h"
+	"kotek_resource_manager.cpp"
 	"kotek_std_string.h"
 	${to_include_tests}
 	${to_include_cpu_profiler}
