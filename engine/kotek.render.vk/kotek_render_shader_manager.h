@@ -123,18 +123,26 @@ namespace Kotek
 			namespace helper
 			{
 				bool isRTXShaderByType(shader_type_t type) noexcept;
+
 				bool isBufferByDescriptorType(VkDescriptorType type) noexcept;
+
 				ktk::string translateShaderTypeToString(
 					shader_type_t type) noexcept;
+
 				ktk::string translateShaderTypeToStringFormat(
 					shader_type_t type) noexcept;
+
 				ktk::string translateDescriptorTypeToString(
 					VkDescriptorType type) noexcept;
+
 				void printDescriptorSet() noexcept;
+				
 				void printBindingInfo(
 					const descriptor_set_info_t& info) noexcept;
+				
 				shader_type_t GetShaderTypeByShaderStageFlagBits(
 					VkShaderStageFlagBits bits) noexcept;
+
 				VkShaderStageFlagBits GetShaderStageFlagBitsByShaderType(
 					shader_type_t type) noexcept;
 

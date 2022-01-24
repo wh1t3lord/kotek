@@ -5,6 +5,7 @@
 #include "kotek_render_device_properties.h"
 #include "kotek_render_helper_device.h"
 #include "kotek_render_instance_properties.h"
+#include "vk_enum_string_helper.h"
 
 namespace Kotek
 {

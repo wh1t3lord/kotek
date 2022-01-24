@@ -1024,43 +1024,8 @@ namespace Kotek
 			{
 				auto p_get_name_of_device_type =
 					[](VkPhysicalDeviceType id) -> ktk::string
-				{
-					switch (id)
-					{
-					case VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_CPU:
-					{
-						return "VK_PHYSICAL_DEVICE_TYPE_CPU";
-					}
-					case VkPhysicalDeviceType::
-						VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU:
-					{
-						return "VK_PHYSICAL_DEVICE_TYPE_DISCRETE_GPU";
-					}
-					case VkPhysicalDeviceType::
-						VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU:
-					{
-						return "VK_PHYSICAL_DEVICE_TYPE_INTEGRATED_GPU";
-					}
-					case VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_MAX_ENUM:
-					{
-						return "VK_OUT_OF_ENUM "
-							   "(VK_PHYSICAL_DEVICE_TYPE_MAX_ENUM)";
-					}
-					case VkPhysicalDeviceType::VK_PHYSICAL_DEVICE_TYPE_OTHER:
-					{
-						return "VK_PHYSICAL_DEVICE_TYPE_OTHER";
-					}
-					case VkPhysicalDeviceType::
-						VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU:
-					{
-						return "VK_PHYSICAL_DEVICE_TYPE_VIRTUAL_GPU";
-					}
-					default:
-					{
-						return "VK_KEK_CANT_PARSE_TYPE_UNKNOWN "
-							   "(switch->default)";
-					}
-					}
+				{ 
+					return string_VkPhysicalDeviceType(id);
 				};
 
 				KOTEK_MESSAGE("VIDEO CARD INFO");
@@ -1083,104 +1048,17 @@ namespace Kotek
 				ktk::string TranslateVkColorSpaceToString(
 					VkColorSpaceKHR color_space) noexcept
 				{
-					switch (color_space)
-					{
-					case VkColorSpaceKHR::VK_COLORSPACE_SRGB_NONLINEAR_KHR:
-					{
-						return "VK_COLORSPACE_SRGB_NONLINEAR_KHR";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_PASS_THROUGH_EXT:
-					{
-						return "VK_COLOR_SPACE_PASS_THROUGH_EXT";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_MAX_ENUM_KHR:
-					{
-						return "VK_COLOR_SPACE_MAX_ENUM_KHR";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_HDR10_ST2084_EXT:
-					{
-						return "VK_COLOR_SPACE_HDR10_ST2084_EXT";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_HDR10_HLG_EXT:
-					{
-						return "VK_COLOR_SPACE_HDR10_HLG_EXT";
-					}
-					case VkColorSpaceKHR::
-						VK_COLOR_SPACE_EXTENDED_SRGB_NONLINEAR_EXT:
-					{
-						return "VK_COLOR_SPACE_EXTENDED_SRGB_NONLINEAR_EXT";
-					}
-					case VkColorSpaceKHR::
-						VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT:
-					{
-						return "VK_COLOR_SPACE_EXTENDED_SRGB_LINEAR_EXT";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_DOLBYVISION_EXT:
-					{
-						return "VK_COLOR_SPACE_DOLBYVISION_EXT";
-					}
-					case VkColorSpaceKHR::
-						VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT:
-					{
-						return "VK_COLOR_SPACE_DISPLAY_P3_NONLINEAR_EXT";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_DISPLAY_P3_LINEAR_EXT:
-					{
-						return "VK_COLOR_SPACE_DISPLAY_P3_LINEAR_EXT";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_DISPLAY_NATIVE_AMD:
-					{
-						return "VK_COLOR_SPACE_DISPLAY_NATIVE_AMD";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_DCI_P3_NONLINEAR_EXT:
-					{
-						return "VK_COLOR_SPACE_DCI_P3_NONLINEAR_EXT";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_BT709_NONLINEAR_EXT:
-					{
-						return "VK_COLOR_SPACE_BT709_NONLINEAR_EXT";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_BT709_LINEAR_EXT:
-					{
-						return "VK_COLOR_SPACE_BT709_LINEAR_EXT";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_BT2020_LINEAR_EXT:
-					{
-						return "VK_COLOR_SPACE_BT2020_LINEAR_EXT";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_ADOBERGB_NONLINEAR_EXT:
-					{
-						return "VK_COLOR_SPACE_ADOBERGB_NONLINEAR_EXT";
-					}
-					case VkColorSpaceKHR::VK_COLOR_SPACE_ADOBERGB_LINEAR_EXT:
-					{
-						return "VK_COLOR_SPACE_ADOBERGB_LINEAR_EXT";
-					}
-					default:
-					{
-						KOTEK_ASSERT(false,
-							"engine can't detect your color space enum field: "
-							"{}",
-							color_space);
-						return "VK_COLOR_SPACE_CANT_DEFINED";
-					}
-					}
-				}
-				ktk::string TranslateVkFormatToString(VkFormat format) noexcept
-				{ // TODO: continue next time, but finish this function
-					return "VK_FORMAT_DOESNT_IMPLEMENTED";
+					return string_VkColorSpaceKHR(color_space);
 				}
 
-				// TODO: continue this
+				ktk::string TranslateVkFormatToString(VkFormat format) noexcept
+				{ 
+					return string_VkFormat(format);
+				}
+
 				ktk::string TranslateVkResultToString(VkResult result) noexcept
 				{
-					switch (result)
-					{
-					default:
-					{
-						return "VK_CANT_TRANSLATE_RESULT_CODE";
-					}
-					}
+					return string_VkResult(result);
 				}
 			} // namespace helper
 
