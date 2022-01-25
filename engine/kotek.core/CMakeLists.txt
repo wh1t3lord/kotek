@@ -136,6 +136,7 @@ add_library(${PROJECT_NAME} STATIC
 	"kotek_dynamic_library.h"
 	"kotek_resource_manager.h"
 	"kotek_resource_manager.cpp"
+	"kotek_interface_resource_loader_manager.h"
 	"kotek_std_string.h"
 	${to_include_tests}
 	${to_include_cpu_profiler}

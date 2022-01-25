@@ -45,6 +45,12 @@ namespace Kotek
 			class A = mi_stl_allocator<std::pair<const K, T>>>
 		using unordered_map = boost::unordered::unordered_map<K, T, H, P, A>;
 
+		template <class Key, class Hash = boost::hash<Key>,
+			class Predicate = std::equal_to<Key>,
+			class Allocator = mi_stl_allocator<Key>>
+		using unordered_set =
+			boost::unordered_set<Key, Hash, Predicate, Allocator>;
+
 		template <typename T>
 		using unique_ptr = std::unique_ptr<T>;
 
