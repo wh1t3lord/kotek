@@ -55,6 +55,8 @@ namespace Kotek
 	} // namespace ktk
 
 	constexpr ktk::entity_t kInvalidEntityID = 0;
+	constexpr ktk::entity_t kActorEntityID = 1;
+
 	constexpr int _kDefaultWindowSizeWidth = 640;
 	constexpr int _kDefaultWindowSizeHeight = 480;
 } // namespace Kotek

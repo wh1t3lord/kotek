@@ -15,6 +15,7 @@ namespace Kotek
 			virtual void* Get(ktk::entity_t id) noexcept = 0;
 			virtual bool Remove(ktk::entity_t id) noexcept = 0;
 			virtual ktk::string GetDebugName(void) const noexcept = 0;
+			virtual ktk::string GetComponentName(void) const noexcept = 0;
 		};
 
 		template <typename ComponentType, std::size_t array_size>
@@ -35,6 +36,7 @@ namespace Kotek
 
 			~ktkComponentAllocator(void) {}
 
+			// TODO: it's better to remove because you have GetComponentName
 			ktk::string GetDebugName(void) const noexcept override
 			{
 				return ktk::cast::to_string(typeid(ComponentType).name());
@@ -73,9 +75,6 @@ namespace Kotek
 				if (this->m_storage_entity_indicies.find(id) ==
 					this->m_storage_entity_indicies.end())
 				{
-					KOTEK_ASSERT(false,
-						"your component doesn't exist in storage: {}", id);
-
 					return false;
 				}
 
@@ -95,7 +94,6 @@ namespace Kotek
 				if (this->m_storage_entity_indicies.find(id) ==
 					this->m_storage_entity_indicies.end())
 				{
-					KOTEK_ASSERT(false, "can't find your component: {}", id);
 					return nullptr;
 				}
 
@@ -110,6 +108,11 @@ namespace Kotek
 			ktk::size_t GetHashedValueOfComponentType(void) const noexcept
 			{
 				return this->m_hashed_type;
+			}
+
+			ktk::string GetComponentName(void) const noexcept override
+			{
+				return ComponentType::GetComponentName();
 			}
 
 		private:
