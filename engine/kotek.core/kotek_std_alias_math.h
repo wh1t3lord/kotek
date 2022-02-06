@@ -26,6 +26,7 @@ namespace Kotek
 			constexpr long double kEpsilon_LongDouble =
 				std::numeric_limits<long double>::epsilon();
 
+			// @ minimal positive
 			constexpr float kMin_Float = std::numeric_limits<float>::min();
 			constexpr double kMin_Double = std::numeric_limits<double>::min();
 			constexpr long double kMin_LongDouble =

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "../kotek.core/kotek_std.h"
+#include "kotek_render_imgui.h"
 
 namespace Kotek
 {

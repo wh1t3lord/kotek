@@ -6,6 +6,14 @@ namespace Kotek
 {
 	namespace Core
 	{
+		class ktkMainManager;
+	}
+} // namespace Kotek
+
+namespace Kotek
+{
+	namespace Core
+	{
 		class ktkIComponentAllocator
 		{
 		public:
@@ -16,6 +24,8 @@ namespace Kotek
 			virtual bool Remove(ktk::entity_t id) noexcept = 0;
 			virtual ktk::string GetDebugName(void) const noexcept = 0;
 			virtual ktk::string GetComponentName(void) const noexcept = 0;
+			virtual void DrawImGui(Kotek::Core::ktkMainManager& main_manager,
+				Kotek::ktk::entity_t entity_id) noexcept = 0;
 		};
 
 		template <typename ComponentType, std::size_t array_size>
@@ -113,6 +123,17 @@ namespace Kotek
 			ktk::string GetComponentName(void) const noexcept override
 			{
 				return ComponentType::GetComponentName();
+			}
+
+			void DrawImGui(Kotek::Core::ktkMainManager& main_manager,
+				Kotek::ktk::entity_t entity_id) noexcept override
+			{
+				ComponentType* p_component = static_cast<ComponentType*>(this->Get(entity_id));
+
+				if (p_component) 
+				{
+					p_component->DrawImGui(main_manager);
+				}
 			}
 
 		private:

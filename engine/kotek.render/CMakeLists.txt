@@ -28,6 +28,8 @@ endif()
  
 add_library(${PROJECT_NAME} STATIC
 	"kotek_render.h"
+    "kotek_render_imgui.h"
+    "kotek_render_imgui.cpp"
 	"main_render_dll.cpp"
 )
 
