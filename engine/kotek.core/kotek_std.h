@@ -10,6 +10,7 @@
 #include "kotek_std_alias_format.h"
 #include "kotek_std_alias_io.h"
 #include "kotek_std_alias_math.h"
+#include "kotek_std_alias_multithreading.h"
 #include "kotek_std_alias_numerics.h"
 #include "kotek_std_alias_string.h"
 #include "kotek_std_alias_ui.h"

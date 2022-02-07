@@ -204,22 +204,6 @@ namespace Kotek
 			}
 
 #ifdef KOTEK_USE_UNICODE
-			bool operator==(const string_unicode& data) const
-			{
-				return this->m_data == data;
-			}
-#endif
-
-			bool operator==(const string_legacy& data) const
-			{
-#ifdef KOTEK_USE_UNICODE
-				return this->m_data == ktk::cast::to_string(data);
-#else
-				return this->m_data == data;
-#endif
-			}
-
-#ifdef KOTEK_USE_UNICODE
 			bool operator==(const tchar* p_data)
 			{
 				return this->m_data == p_data;

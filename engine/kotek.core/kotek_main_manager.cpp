@@ -6,7 +6,7 @@ namespace Kotek
 	namespace Core
 	{
 		ktkMainManager::ktkMainManager(int argc, char** argv) :
-			m_parsed_command_line_arguments(argv, argv + argc)
+			m_parsed_command_line_arguments(argv, argv + argc), m_is_running(true)
 		{
 			this->initialize(argc, argv);
 		}
@@ -166,6 +166,16 @@ namespace Kotek
 			void) const noexcept
 		{
 			return this->m_user_dll;
+		}
+
+		bool ktkMainManager::IsApplicationWorking(void) const noexcept
+		{
+			return this->m_is_running;
+		}
+
+		void ktkMainManager::SetApplicationWorking(bool status) noexcept 
+		{
+			this->m_is_running = status;
 		}
 
 	} // namespace Core

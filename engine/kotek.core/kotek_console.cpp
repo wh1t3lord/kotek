@@ -42,19 +42,23 @@ namespace Kotek
 				return;
 			}
 
-			this->m_buffer[id] = {data, this->m_storage.at(id)};
+			this->m_buffer.push({data, this->m_storage.at(id)});
 		}
 
 		void ktkConsole::Flush(void)
 		{
-			for (const auto& it : this->m_buffer)
+			while (this->m_buffer.empty() == false)
 			{
-				bool status = it.second.second(it.second.first);
+				auto& pair = this->m_buffer.front();
+				auto& argument = pair.first;
+				auto& callback = pair.second;
+
+				bool status = callback(argument);
 
 				KOTEK_ASSERT(status, "invalid calling for console command");
-			}
 
-			this->m_buffer.clear();
+				this->m_buffer.pop();
+			}
 		}
 
 		void ktkConsole::Shutdown(void) {}

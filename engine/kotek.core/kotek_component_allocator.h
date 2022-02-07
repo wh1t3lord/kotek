@@ -34,7 +34,7 @@ namespace Kotek
 		public:
 			ktkComponentAllocator(void) :
 				m_hashed_type(typeid(ComponentType).hash_code()),
-				m_current_index(0)
+				m_current_index{}
 			{
 				KOTEK_ASSERT(array_size > 0,
 					"you must create allocator with array_size > 0! {}",
@@ -128,12 +128,23 @@ namespace Kotek
 			void DrawImGui(Kotek::Core::ktkMainManager& main_manager,
 				Kotek::ktk::entity_t entity_id) noexcept override
 			{
-				ComponentType* p_component = static_cast<ComponentType*>(this->Get(entity_id));
+				ComponentType* p_component =
+					static_cast<ComponentType*>(this->Get(entity_id));
 
-				if (p_component) 
+				if (p_component)
 				{
 					p_component->DrawImGui(main_manager);
 				}
+			}
+
+			ktk::size_t GetCurrentSize(void) const noexcept
+			{
+				return this->m_current_index;
+			}
+
+			const ktk::vector<ComponentType>& GetComponents(void) const noexcept
+			{
+				return this->m_storage;
 			}
 
 		private:

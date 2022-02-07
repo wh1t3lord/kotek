@@ -82,7 +82,13 @@ namespace Kotek
 			
 			const ktk::dll::shared_library& GetUserLibrary(void) const noexcept;
 
+			// @ Uses in while so true application is working if false it doesn't
+			bool IsApplicationWorking(void) const noexcept;
+
+			void SetApplicationWorking(bool status) noexcept;
+
 		private:
+			ktk::mt::atomic<bool> m_is_running;
 			int m_argc;
 			kotek_i_renderer* m_p_manager_renderer;
 			ktkIGameManager* m_p_game_manager;

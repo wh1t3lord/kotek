@@ -16,6 +16,7 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(Boost COMPONENTS json container unit_test_framework filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(fmt REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/assimp/${CMAKE_BUILD_TYPE}")
 find_package(Vulkan REQUIRED)
 find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(mimalloc 1.7 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
@@ -107,6 +108,7 @@ add_library(${PROJECT_NAME} STATIC
     "kotek_std_alias_containers.h"
     "kotek_std_alias_casting.h"
     "kotek_std_alias_char_model.h"
+	"kotek_std_alias_multithreading.h"
     "kotek_std_preprocessors.h"
     "kotek_std_alias_io.h"
     "kotek_std_constants.h"
@@ -145,6 +147,7 @@ add_library(${PROJECT_NAME} STATIC
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
 target_include_directories(${PROJECT_NAME} PRIVATE ${Vulkan_INCLUDE_DIR})
+target_include_directories(${PROJECT_NAME} PUBLIC ${ASSIMP_INCLUDE_DIRS})
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
     target_link_libraries(${PROJECT_NAME} glm::glm)
@@ -160,3 +163,4 @@ target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} fmt::fmt-header-only)
 target_link_libraries(${PROJECT_NAME} glfw)
 target_link_libraries(${PROJECT_NAME} mimalloc-static)
+target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIBRARIES}) 

@@ -259,6 +259,32 @@ namespace Kotek
 
 			p_test("hello", KOTEK_TEXT("kek"));
 		}
+
+		BOOST_AUTO_TEST_CASE(string_casting_to_bool) 
+		{
+			Kotek::ktk::string test = "No";
+
+			BOOST_REQUIRE(Kotek::ktk::cast::to_bool(test) == false);
+			test = "NO";
+
+			BOOST_REQUIRE(Kotek::ktk::cast::to_bool(test) == false);
+
+			test = "no";
+
+			BOOST_REQUIRE(Kotek::ktk::cast::to_bool(test) == false);
+
+			test = "nO";
+
+			BOOST_REQUIRE(Kotek::ktk::cast::to_bool(test) == false);
+
+			test = "0";
+
+			BOOST_REQUIRE(Kotek::ktk::cast::to_bool(test) == false);
+
+			test = "1";
+
+			BOOST_REQUIRE(Kotek::ktk::cast::to_bool(test) == true);
+		}
 		#endif
 	#endif
 #endif

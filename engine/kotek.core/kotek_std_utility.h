@@ -1,7 +1,7 @@
 #pragma once
 
-#include <memory>
 #include "kotek_std_alias_math.h"
+#include <memory>
 
 namespace Kotek
 {

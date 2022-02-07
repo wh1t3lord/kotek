@@ -51,8 +51,8 @@ namespace Kotek
 				ktk::console_command_args_t data = {}) noexcept;
 
 		private:
-			ktk::unordered_map<ktkConsoleCommandIndex,
-				ktk::pair<ktk::vector<ktk::string>, ktk::console_command_t>>
+			// TODO: make thread safe queue
+			ktk::queue<ktk::pair<ktk::vector<ktk::string>, ktk::console_command_t>>
 				m_buffer;
 			ktk::unordered_map<ktkConsoleCommandIndex, ktk::console_command_t>
 				m_storage;

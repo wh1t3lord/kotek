@@ -61,7 +61,7 @@ namespace Kotek
 				ktk::uint32_t m_memory_total_size;
 				char* m_p_data;
 				VkBuffer m_p_buffer;
-#ifdef kotek_USE_GPU_ALLOCATOR
+#ifdef KOTEK_USE_GPU_ALLOCATOR
 #else
 				VkDeviceMemory m_p_memory;
 #endif

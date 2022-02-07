@@ -151,6 +151,8 @@ namespace Kotek
 			virtual int GetWindowHeight(void) const noexcept = 0;
 			virtual ktkConsole* GetConsole(void) const noexcept = 0;
 
+			// @ returns USER render resource manager it's not kotek
+			virtual void* GetRenderResourceManager(void) const noexcept = 0;
 			virtual void* CreateSurface(void* p_instance, const void* p_callbacks) = 0;
 		};
 

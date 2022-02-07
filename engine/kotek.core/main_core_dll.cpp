@@ -13,6 +13,8 @@ namespace Kotek
 	{
 		bool RegisterCommands(ktkMainManager& main_manager) noexcept
 		{
+
+
 			return true;
 		}
 

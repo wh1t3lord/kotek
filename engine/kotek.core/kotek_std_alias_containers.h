@@ -13,8 +13,10 @@
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
 #include <cassert>
+#include <deque>
 #include <fstream>
 #include <functional>
+#include <queue>
 #include <variant>
 
 #ifdef KOTEK_PLATFORM_WINDOWS
@@ -51,14 +53,14 @@ namespace Kotek
 		using unordered_set =
 			boost::unordered_set<Key, Hash, Predicate, Allocator>;
 
+		template <typename Type, typename Allocator = mi_stl_allocator<Type>>
+		using deque = std::deque<Type, Allocator>;
+
 		template <typename T>
 		using unique_ptr = std::unique_ptr<T>;
 
 		template <typename T>
 		using shared_ptr = std::shared_ptr<T>;
-
-		template <typename T>
-		using atomic = std::atomic<T>;
 
 		template <class T>
 		using function = std::function<T>;
@@ -73,6 +75,9 @@ namespace Kotek
 		template <typename T>
 		using comptr_t = Microsoft::WRL::ComPtr<T>;
 #endif
+
+		template <typename Type>
+		using queue = std::queue<Type, deque<Type>>;
 
 		namespace json = boost::json;
 	} // namespace ktk

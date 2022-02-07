@@ -1,4 +1,5 @@
 #include "kotek_std_alias_casting.h"
+#include "kotek_std_string.h"
 
 namespace Kotek
 {
@@ -50,6 +51,19 @@ namespace Kotek
 				string_unicode result(source.begin(), source.end());
 
 				return result;
+			}
+
+			bool to_bool(
+				const string& your_logical_string_written_in_text) noexcept
+			{
+				const auto& casted =
+					your_logical_string_written_in_text.get_as_legacy();
+
+				if (boost::iequals(casted, "no") ||
+					boost::iequals(casted, "false") || casted == "0")
+					return false;
+
+				return true;
 			}
 
 		} // namespace cast
