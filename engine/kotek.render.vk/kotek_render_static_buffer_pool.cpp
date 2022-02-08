@@ -283,6 +283,11 @@ namespace Kotek
 			void kotek_render_static_buffer_pool::uploadData(
 				VkCommandBuffer p_command) noexcept
 			{
+				KOTEK_ASSERT(this->m_is_use_video_memory,
+					"you can use this method only when you want to upload with "
+					"stanging buffer, otherwise it's only CPU read/write, or "
+					"CPU read/write with GPU read-only");
+
 				KOTEK_ASSERT(p_command, "can't be invalid.");
 
 				VkBufferCopy region;

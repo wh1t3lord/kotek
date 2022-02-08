@@ -52,6 +52,8 @@ add_library(${PROJECT_NAME} STATIC
     "kotek_render_resource_manager.cpp"
     "kotek_render_static_buffer_pool.h"
     "kotek_render_static_buffer_pool.cpp"
+    "kotek_render_static_buffer_pool_with_linear_allocator.h"
+    "kotek_render_static_buffer_pool_with_linear_allocator.cpp"
     "kotek_render_resource_view_heap.h"
     "kotek_render_resource_view_heap.cpp"
     "kotek_render_dynamic_buffer_ring.cpp"

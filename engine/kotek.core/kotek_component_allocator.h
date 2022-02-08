@@ -40,6 +40,7 @@ namespace Kotek
 					"you must create allocator with array_size > 0! {}",
 					this->GetDebugName().get_as_is());
 
+				// TODO: Use deffered initialization for that case 
 				this->m_storage.resize(array_size);
 				this->m_storage_entity_indicies.reserve(array_size);
 			}
