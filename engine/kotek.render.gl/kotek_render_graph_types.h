@@ -61,13 +61,6 @@ namespace Kotek
 				kTextureType_Cubemap_Array,
 				kTextureType_Unknown = -1
 			};
-
-			class ktkRenderGraphNode
-			{
-			public:
-				ktkRenderGraphNode(void);
-				~ktkRenderGraphNode(void);
-			};
 		} // namespace gl
 	}     // namespace Render
 } // namespace Kotek

@@ -19,7 +19,7 @@ namespace Kotek
 		namespace vk
 		{
 			constexpr const char* kBackBufferName =
-				"KOTEK_BACKBUFFER_SYSTEM_NAME";
+				"KOTEK_BACKBUFFER_VK_NAME";
 
 			// TODO: add aliases for human readable design, because we need to
 			// read types and understand what we place there and what that key

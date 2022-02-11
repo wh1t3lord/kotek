@@ -45,8 +45,18 @@ add_library(${PROJECT_NAME} STATIC
     "kotek_render_graph.cpp"
     "kotek_render_graph_types.h"
     "kotek_render_graph_types.cpp"
+    "kotek_render_graph_types_input.h"
+    "kotek_render_graph_types_input.cpp"
+    "kotek_render_graph_types_output.cpp"
+    "kotek_render_graph_types_output.h"
+    "kotek_render_graph_render_pass.h"
+    "kotek_render_graph_render_pass.cpp"
+    "kotek_render_graph_node.h"
+    "kotek_render_graph_node.cpp"
     "kotek_render_graph_builder.h"
     "kotek_render_graph_builder.cpp"
+    "kotek_render_graph_resource_manager.h"
+    "kotek_render_graph_resource_manager.cpp"
     "main_render_gl_dll.cpp"
 )
 
