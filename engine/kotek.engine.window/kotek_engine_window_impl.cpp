@@ -1,20 +1,25 @@
 #include "kotek_engine_window_impl.h"
+#include "../kotek.core/kotek_main_manager.h"
 
 namespace Kotek
 {
 	namespace Engine
 	{
-		ktkWindow::ktkWindow(void) : m_p_window(nullptr) { this->Initialize(); }
-
-		ktkWindow::ktkWindow(const ktk::string& title_name) :
-			m_p_window(nullptr), m_title_name(title_name)
+		ktkWindow::ktkWindow(Core::eEngineFeature current_render) :
+			m_p_window(nullptr)
 		{
-			this->Initialize();
+			this->Initialize(current_render);
 		}
 
-		ktkWindow::~ktkWindow(void)
+		ktkWindow::ktkWindow(const ktk::string& title_name,
+			Core::eEngineFeature current_render) :
+			m_p_window(nullptr),
+			m_title_name(title_name)
 		{
+			this->Initialize(current_render);
 		}
+
+		ktkWindow::~ktkWindow(void) {}
 
 		void ktkWindow::CloseWindow(void) noexcept
 		{
@@ -83,7 +88,7 @@ namespace Kotek
 			return this->m_p_window;
 		}
 
-		void ktkWindow::Initialize(void)
+		void ktkWindow::Initialize(Core::eEngineFeature current_render)
 		{
 			if (!glfwInit())
 			{
@@ -91,7 +96,16 @@ namespace Kotek
 				return;
 			}
 
-			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+			if (current_render != Core::eEngineFeature::kEngine_Render_Renderer_OpenGL)
+			{
+				glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+			}
+			else
+			{
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+				glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+			}
 
 			this->ObtainInformationAboutDisplay();
 

@@ -81,6 +81,10 @@ else()
 	set(to_include_gpu_profiler "")
 endif()
 
+# TODO: think about including the last version of OpenGL and respect to gdal4 folder
+set(to_include_gdal "glad3/glad.h"
+					"glad3/glad.c")
+
 
 
 message("[Engine]: files to attach (KOTEK_TESTS): ${to_include_tests}")
@@ -143,6 +147,7 @@ add_library(${PROJECT_NAME} STATIC
 	${to_include_tests}
 	${to_include_cpu_profiler}
 	${to_include_gpu_profiler}
+	${to_include_gdal}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")

@@ -3,8 +3,8 @@
 #include "../kotek.core/kotek_std.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
-#include "imgui_impl_vulkan.h"
 #include "imgui_impl_opengl3.h"
+#include "imgui_impl_vulkan.h"
 #include "kotek_engine_keycodes.h"
 #include "vk_mem_alloc.h"
 
@@ -22,6 +22,12 @@ namespace Kotek
 {
 	// sui = sdkui
 	namespace sui = ImGui;
+
+	namespace Core
+	{
+		enum class eEngineFeature;
+	} // namespace Core
+
 } // namespace Kotek
 
 namespace Kotek
@@ -31,8 +37,8 @@ namespace Kotek
 		class ktkWindow
 		{
 		public:
-			ktkWindow(void);
-			ktkWindow(const ktk::string& title_name);
+			ktkWindow(Core::eEngineFeature current_render);
+			ktkWindow(const ktk::string& title_name, Core::eEngineFeature current_render);
 			~ktkWindow(void);
 
 			/// <summary>
@@ -56,7 +62,7 @@ namespace Kotek
 			void Shutdown(void);
 
 		private:
-			void Initialize(void);
+			void Initialize(Core::eEngineFeature current_render);
 
 			void ObtainInformationAboutDisplay(void);
 

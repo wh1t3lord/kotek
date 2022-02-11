@@ -15,11 +15,16 @@ namespace Kotek
 
 	namespace Core
 	{
-		constexpr const ktk::tchar* kConsoleCommandArg_Editor = KOTEK_TEXT("--editor");
+		constexpr const ktk::tchar* kConsoleCommandArg_Editor =
+			KOTEK_TEXT("--editor");
 		constexpr const ktk::tchar* kConsoleCommandArg_Width =
 			KOTEK_TEXT("--width");
 		constexpr const ktk::tchar* kConsoleCommandArg_Height =
 			KOTEK_TEXT("--height");
+		constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL =
+			KOTEK_TEXT("--render_gl");
+		constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan =
+			KOTEK_TEXT("--render_vk");
 
 		enum class ktkConsoleCommandIndex : ktk::enum_base_t
 		{
@@ -52,7 +57,8 @@ namespace Kotek
 
 		private:
 			// TODO: make thread safe queue
-			ktk::queue<ktk::pair<ktk::vector<ktk::string>, ktk::console_command_t>>
+			ktk::queue<
+				ktk::pair<ktk::vector<ktk::string>, ktk::console_command_t>>
 				m_buffer;
 			ktk::unordered_map<ktkConsoleCommandIndex, ktk::console_command_t>
 				m_storage;

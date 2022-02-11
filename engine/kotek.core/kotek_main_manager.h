@@ -6,8 +6,8 @@
 #include "kotek_filesystem.h"
 #include "kotek_input.h"
 #include "kotek_profiler.h"
-#include "kotek_std.h"
 #include "kotek_resource_manager.h"
+#include "kotek_std.h"
 
 namespace Kotek
 {
@@ -25,8 +25,21 @@ namespace Kotek
 			kEngine_Render_Renderer_DirectX_11,
 			kEngine_Render_Renderer_DirectX_12,
 			kEngine_Render_Renderer_OpenGL,
-			kEngine_Render_Renderer_Software
+			kEngine_Render_Renderer_Software,
+
+			kEngine_Feature_Unknown = -1
 		};
+
+		constexpr const ktk::tchar* kRenderName_OpenGL = KOTEK_TEXT("OpenGL");
+		constexpr const ktk::tchar* kRenderName_Vulkan = KOTEK_TEXT("Vulkan");
+		constexpr const ktk::tchar* kRenderName_DirectX12 =
+			KOTEK_TEXT("DirectX12");
+		constexpr const ktk::tchar* kRenderName_DirectX11 =
+			KOTEK_TEXT("DirectX11");
+		constexpr const ktk::tchar* kRenderName_DirectX9 =
+			KOTEK_TEXT("DirectX9");
+		constexpr const ktk::tchar* kRenderName_Software =
+			KOTEK_TEXT("Software");
 
 		class ktkMainManager
 		{
@@ -71,6 +84,9 @@ namespace Kotek
 			void SetFeatureStatus(
 				eEngineFeature id, bool status = true) noexcept;
 
+			ktk::string GetRenderName(void) const noexcept;
+			eEngineFeature GetRenderFeature(void) const noexcept;
+
 			int getARGC(void) const noexcept;
 			char** getARGV(void) const noexcept;
 
@@ -79,13 +95,17 @@ namespace Kotek
 
 			bool LoadUserGameLibrary(const ktk::string& library_name) noexcept;
 			void UnLoadUserGameLibrary(void) noexcept;
-			
+
 			const ktk::dll::shared_library& GetUserLibrary(void) const noexcept;
 
-			// @ Uses in while so true application is working if false it doesn't
+			// @ Uses in while so true application is working if false it
+			// doesn't
 			bool IsApplicationWorking(void) const noexcept;
 
 			void SetApplicationWorking(bool status) noexcept;
+
+		private:
+			bool IsFeatureRender(eEngineFeature feature) const noexcept;
 
 		private:
 			ktk::mt::atomic<bool> m_is_running;

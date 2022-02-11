@@ -109,6 +109,7 @@ if (WIN32)
 endif()
 
 add_subdirectory("engine/kotek.render.vk")
+add_subdirectory("engine/kotek.render.gl")
 add_subdirectory("engine/kotek")
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT kotek)

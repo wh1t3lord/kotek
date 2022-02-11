@@ -25,6 +25,9 @@
 
 #include "../kotek.engine.window/kotek_engine_window_impl.h"
 
+// TODO: think about choosing glad through cmake argument like OpenGL=3 or OpenGL=4
+#include "glad3/glad.h"
+
 #pragma region GLFW
 
 #include <GLFW/glfw3.h>
