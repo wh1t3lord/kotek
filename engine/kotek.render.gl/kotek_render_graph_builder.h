@@ -10,6 +10,8 @@ namespace Kotek
 		{
 			class ktkRenderGraph;
 			class ktkRenderResourceManager;
+			class ktkRenderGraphResourceManager;
+			class ktkRenderGraphRenderPass;
 		}
 	} // namespace Render
 
