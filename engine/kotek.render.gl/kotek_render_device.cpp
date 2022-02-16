@@ -1,4 +1,5 @@
 #include "kotek_render_device.h"
+#include "../kotek.core/kotek_main_manager.h"
 
 namespace Kotek
 {
@@ -6,12 +7,20 @@ namespace Kotek
 	{
 		namespace gl
 		{
-			ktkRenderDevice::ktkRenderDevice(void) {}
+			ktkRenderDevice::ktkRenderDevice(void) : m_width{}, m_height{} {}
 
 			ktkRenderDevice::~ktkRenderDevice(void) {}
 
 			void ktkRenderDevice::Initialize(Core::ktkMainManager& main_manager)
 			{
+				main_manager.GetGameManager()->CreateSurface(
+					static_cast<Core::ktkMainManager*>(&main_manager), nullptr,
+					nullptr);
+
+/*
+				glfwMakeContextCurrent(static_cast<GLFWwindow*>(
+					main_manager.GetGameManager()->GetWindowHandle()));
+
 				if (!gladLoadGLLoader(
 						reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
 				{
@@ -19,7 +28,7 @@ namespace Kotek
 						"failed to gladLoadGLLoader. Can't initialize OpenGL "
 						"for this system");
 					return;
-				}
+				}*/
 			}
 
 			void ktkRenderDevice::Shutdown(void) {}

@@ -96,7 +96,8 @@ namespace Kotek
 				return;
 			}
 
-			if (current_render != Core::eEngineFeature::kEngine_Render_Renderer_OpenGL)
+			if (current_render !=
+				Core::eEngineFeature::kEngine_Render_Renderer_OpenGL)
 			{
 				glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 			}
@@ -117,6 +118,28 @@ namespace Kotek
 				glfwTerminate();
 				KOTEK_ASSERT(false, "can't create GLFW window");
 				return;
+			}
+
+			if (current_render ==
+				Core::eEngineFeature::kEngine_Render_Renderer_OpenGL)
+			{
+				glfwMakeContextCurrent(this->m_p_window);
+
+				const char* p_description;
+
+				if (glfwGetError(&p_description) != GLFW_NO_ERROR)
+				{
+					KOTEK_MESSAGE_STRING(ktk::string(p_description));
+				}
+
+				if (!gladLoadGLLoader(
+						reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
+				{
+					KOTEK_ASSERT(false,
+						"failed to gladLoadGLLoader. Can't initialize OpenGL "
+						"for this system");
+					return;
+				}
 			}
 		}
 

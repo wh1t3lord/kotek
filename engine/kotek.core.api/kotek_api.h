@@ -1,8 +1,7 @@
 #pragma once
 
-#include "kotek_sdk_ui_element.h"
 #include "kotek_api_resource_manager.h"
-
+#include "kotek_sdk_ui_element.h"
 
 namespace Kotek
 {
@@ -40,8 +39,8 @@ namespace Kotek
 			virtual void Shutdown(void) = 0;
 			virtual void Resize(ktkIRenderSwapchain* p_raw_swapchain,
 				kotek_i_renderer* p_raw_renderer,
-				ktkIRenderResourceManager* p_raw_resource_manager,
-				int width, int height) = 0;
+				ktkIRenderResourceManager* p_raw_resource_manager, int width,
+				int height) = 0;
 
 			virtual int GetWidth(void) const noexcept = 0;
 			virtual int GetHeight(void) const noexcept = 0;
@@ -55,8 +54,8 @@ namespace Kotek
 
 			virtual void Initialize(ktkIRenderDevice* p_render_device) = 0;
 			virtual void Shutdown(ktkIRenderDevice* p_render_device) = 0;
-			virtual void Resize(ktkIRenderDevice* p_render_device,
-				int width, int height) = 0;
+			virtual void Resize(
+				ktkIRenderDevice* p_render_device, int width, int height) = 0;
 		};
 
 		class ktkIRenderResourceManager
@@ -81,8 +80,7 @@ namespace Kotek
 			virtual void initialize(ktkMainManager& main_manager) noexcept = 0;
 
 			// TODO: change signature on void
-			virtual void shutdown(
-				ktkIRenderDevice* p_raw_device) noexcept = 0;
+			virtual void shutdown(ktkIRenderDevice* p_raw_device) noexcept = 0;
 		};
 
 		class ktkIRenderGraph
@@ -137,13 +135,11 @@ namespace Kotek
 
 			virtual void Initialize(
 				Kotek::Core::ktkMainManager* p_main_manager) = 0;
-			
+
 			virtual void Shutdown(
 				Kotek::Core::ktkMainManager* p_main_manager) = 0;
 
-			
-			virtual kotek_i_renderer* GetRenderer(
-				void) const noexcept = 0;
+			virtual kotek_i_renderer* GetRenderer(void) const noexcept = 0;
 
 			virtual void* GetWindowHandle(void) const noexcept = 0;
 			virtual ktkProfiler* GetProfiler(void) const noexcept = 0;
@@ -153,7 +149,8 @@ namespace Kotek
 
 			// @ returns USER render resource manager it's not kotek
 			virtual void* GetRenderResourceManager(void) const noexcept = 0;
-			virtual void* CreateSurface(void* p_instance, const void* p_callbacks) = 0;
+			virtual void* CreateSurface(ktkMainManager* p_main_manager,
+				void* p_instance, const void* p_callbacks) = 0;
 		};
 
 		bool initializeModule_Core_API(void);

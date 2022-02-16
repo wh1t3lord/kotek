@@ -11,18 +11,16 @@ namespace Kotek
 {
 	namespace Render
 	{
-		void registerCommands(Core::ktkMainManager& main_manager)
-		{
-		}
+		void registerCommands(Core::ktkMainManager& main_manager) {}
 
 #ifdef KOTEK_DEBUG
 		// TODO: write separated test-applications for that kind of library
 		void registerAllTests()
 		{
-/*
-			registerTests_ShaderManager_ForModule_Render_VK();
-			registerTests_Swapchain_ForModule_Render_VK();
-			registerTests_Device_ForModule_Render_VK();*/
+			/*
+			            registerTests_ShaderManager_ForModule_Render_VK();
+			            registerTests_Swapchain_ForModule_Render_VK();
+			            registerTests_Device_ForModule_Render_VK();*/
 		}
 #endif
 
@@ -47,11 +45,15 @@ namespace Kotek
 			main_manager.SetRenderResourceManager(
 				p_render_manager_render_resource);
 
-			// TODO: load from user settings
-			p_render_manager_device->SetWidth(main_manager.GetGameManager()->GetWindowWidth());
-			p_render_manager_device->SetHeight(main_manager.GetGameManager()->GetWindowHeight());
+
 
 			p_render_manager_device->Initialize(main_manager);
+
+			// TODO: load from user settings
+			p_render_manager_device->SetWidth(
+				main_manager.GetGameManager()->GetWindowWidth());
+			p_render_manager_device->SetHeight(
+				main_manager.GetGameManager()->GetWindowHeight());
 
 			p_render_manager_swapchain->Initialize(
 				p_render_manager_device.get());

@@ -19,16 +19,18 @@ namespace Kotek
 			auto p_render_resource_manager =
 				std::make_shared<gl::ktkRenderResourceManager>();
 
-			p_render_device->SetHeight(
-				main_manager.GetGameManager()->GetWindowHeight());
-			p_render_device->SetWidth(
-				main_manager.GetGameManager()->GetWindowWidth());
-
 			main_manager.setRenderDevice(p_render_device);
 			main_manager.setRenderSwapchainManager(p_render_swapchain);
 			main_manager.SetRenderResourceManager(p_render_resource_manager);
 
 			p_render_device->Initialize(main_manager);
+
+			// TODO: load from user settings
+			p_render_device->SetWidth(
+				main_manager.GetGameManager()->GetWindowWidth());
+			p_render_device->SetHeight(
+				main_manager.GetGameManager()->GetWindowHeight());
+
 			p_render_swapchain->Initialize(p_render_device.get());
 			p_render_resource_manager->initialize(
 				p_render_device.get(), p_render_swapchain.get());

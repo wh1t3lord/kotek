@@ -980,6 +980,7 @@ namespace Kotek
 			{
 				this->m_p_surface = static_cast<VkSurfaceKHR>(
 					main_manager.GetGameManager()->CreateSurface(
+						static_cast<Core::ktkMainManager*>(&main_manager),
 						this->m_p_instance, nullptr));
 			}
 
@@ -1011,7 +1012,8 @@ namespace Kotek
 				for (const auto& format : formats)
 				{
 					KOTEK_MESSAGE("Surface format: {}",
-						helper::TranslateVkFormatToString(format.format).get_as_is());
+						helper::TranslateVkFormatToString(format.format)
+							.get_as_is());
 					KOTEK_MESSAGE("Surface color space: {}",
 						helper::TranslateVkColorSpaceToString(format.colorSpace)
 							.get_as_is());
@@ -1024,9 +1026,7 @@ namespace Kotek
 			{
 				auto p_get_name_of_device_type =
 					[](VkPhysicalDeviceType id) -> ktk::string
-				{ 
-					return string_VkPhysicalDeviceType(id);
-				};
+				{ return string_VkPhysicalDeviceType(id); };
 
 				KOTEK_MESSAGE("VIDEO CARD INFO");
 
@@ -1052,7 +1052,7 @@ namespace Kotek
 				}
 
 				ktk::string TranslateVkFormatToString(VkFormat format) noexcept
-				{ 
+				{
 					return string_VkFormat(format);
 				}
 
