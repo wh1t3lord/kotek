@@ -41,21 +41,6 @@
 					   fmt::format(KOTEK_TEXT(text), ##__VA_ARGS__).c_str()) \
 				<< std::endl;                                                \
 		}
-
-	#define KOTEK_MESSAGE_ERROR(text, ...)                                   \
-		{                                                                    \
-			std::wcout                                                       \
-				<< "[" << __FILE__ << "]"                                    \
-				<< "[" << __FUNCTION__ << "]"                                \
-				<< "[" << __LINE__ << "]"                                    \
-				<< "["                                                       \
-				<< "ERROR"                                                   \
-				<< "]"                                                       \
-				<< " "                                                       \
-				<< Kotek::ktk::cast::to_wchar_string(                        \
-					   fmt::format(KOTEK_TEXT(text), ##__VA_ARGS__).c_str()) \
-				<< std::endl;                                                \
-		}
 #endif
 
 #define KOTEK_MESSAGE_LEGACY(text, ...)                              \
@@ -80,6 +65,32 @@
 				  << std::endl;                                      \
 	}
 
+#define KOTEK_ASSERT(statement, text, ...)      \
+	{                                           \
+		bool _xstatus = statement;              \
+		if (_xstatus == false)                  \
+		{                                       \
+			KOTEK_MESSAGE(text, ##__VA_ARGS__); \
+			assert(_xstatus);                   \
+		}                                       \
+	}
+
+#define KOTEK_MESSAGE_ERROR(text, ...)                                   \
+	{                                                                    \
+		std::wcout                                                       \
+			<< "[" << __FILE__ << "]"                                    \
+			<< "[" << __FUNCTION__ << "]"                                \
+			<< "[" << __LINE__ << "]"                                    \
+			<< "["                                                       \
+			<< "ERROR"                                                   \
+			<< "]"                                                       \
+			<< " "                                                       \
+			<< Kotek::ktk::cast::to_wchar_string(                        \
+				   fmt::format(KOTEK_TEXT(text), ##__VA_ARGS__).c_str()) \
+			<< std::endl;                                                \
+		KOTEK_ASSERT(false, "");                                         \
+	}
+
 #define KOTEK_MESSAGE_ERROR_LEGACY(text, ...)                        \
 	{                                                                \
 		std::cout << "[" << __FILE__ << "]"                          \
@@ -91,28 +102,19 @@
 				  << "]"                                             \
 				  << " " << fmt::format(text, ##__VA_ARGS__).c_str() \
 				  << std::endl;                                      \
-	}
-
-#define KOTEK_ASSERT(statement, text, ...)      \
-	{                                           \
-		bool _xstatus = statement;              \
-		if (_xstatus == false)                  \
-		{                                       \
-			KOTEK_MESSAGE(text, ##__VA_ARGS__); \
-			assert(_xstatus);                   \
-		}                                       \
+		KOTEK_ASSERT(false, "");                                     \
 	}
 
 #ifdef KOTEK_DEBUG
 	#define VMA_DEBUG_LOG
 #endif
 
-#define KOTEK_COMPONENT(YourClass)                                  \
-public:                                                             \
+#define KOTEK_COMPONENT(YourClass)                                   \
+public:                                                              \
 	static const Kotek::ktk::string& GetComponentName(void) noexcept \
-	{                                                               \
-		return m_component_name;                              \
-	}                                                               \
-                                                                    \
-private:                                                            \
+	{                                                                \
+		return m_component_name;                                     \
+	}                                                                \
+                                                                     \
+private:                                                             \
 	inline static Kotek::ktk::string m_component_name = #YourClass;

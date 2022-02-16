@@ -129,7 +129,7 @@ namespace Kotek
 
 				if (glfwGetError(&p_description) != GLFW_NO_ERROR)
 				{
-					KOTEK_MESSAGE_STRING(ktk::string(p_description));
+					KOTEK_MESSAGE_ERROR_LEGACY(p_description);
 				}
 
 				if (!gladLoadGLLoader(
