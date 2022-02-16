@@ -18,6 +18,7 @@
 #include <functional>
 #include <queue>
 #include <variant>
+#include <filesystem>
 
 #ifdef KOTEK_PLATFORM_WINDOWS
 	#include <wrl.h>
@@ -78,6 +79,8 @@ namespace Kotek
 
 		template <typename Type>
 		using queue = std::queue<Type, deque<Type>>;
+
+		using path = std::filesystem::path;
 
 		namespace json = boost::json;
 	} // namespace ktk

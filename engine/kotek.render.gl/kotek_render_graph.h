@@ -15,6 +15,8 @@ namespace Kotek
 				ktkRenderGraph(void);
 				~ktkRenderGraph(void);
 
+				void Initialize(void) override;
+				void Shutdown(void) override;
 			};
 		} // namespace gl
 	}     // namespace Render

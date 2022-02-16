@@ -29,6 +29,9 @@ namespace Kotek
 					eRenderGraphBuilderPipelineRenderingType
 						type_videocard_pipeline);
 				void Shutdown(void);
+
+			private:
+
 			};
 		} // namespace gl
 	}     // namespace Render

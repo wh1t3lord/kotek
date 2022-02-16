@@ -57,6 +57,8 @@ add_library(${PROJECT_NAME} STATIC
     "kotek_render_graph_builder.cpp"
     "kotek_render_graph_resource_manager.h"
     "kotek_render_graph_resource_manager.cpp"
+    "kotek_render_shader_manager.h"
+    "kotek_render_shader_manager.cpp"
     "main_render_gl_dll.cpp"
 )
 
