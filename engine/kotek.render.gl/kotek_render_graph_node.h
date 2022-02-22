@@ -30,6 +30,7 @@ namespace Kotek
 
 				const shader_module_t* GetProgram(
 					const ktk::string& program_name) const noexcept;
+
 				const ktk::string& GetRenderPassName(void) const noexcept;
 
 			private:
