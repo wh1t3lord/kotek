@@ -18,9 +18,7 @@ namespace Kotek
 					nullptr);
 			}
 
-			void ktkRenderDevice::Shutdown(void) 
-			{ 
-			}
+			void ktkRenderDevice::Shutdown(void) {}
 
 			void ktkRenderDevice::Resize(
 				Core::ktkIRenderSwapchain* p_raw_swapchain,
@@ -28,7 +26,11 @@ namespace Kotek
 				Core::ktkIRenderResourceManager* p_raw_resource_manager,
 				int width, int height)
 			{
+				this->m_width = width;
+				this->m_height = height;
+
 				p_raw_swapchain->Resize(this, width, height);
+				p_raw_renderer->Resize();
 			}
 
 			int ktkRenderDevice::GetWidth(void) const noexcept

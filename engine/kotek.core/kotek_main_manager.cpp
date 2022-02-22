@@ -221,6 +221,20 @@ namespace Kotek
 			return eEngineFeature::kEngine_Feature_Unknown;
 		}
 
+		bool ktkMainManager::IsCurrentRenderLegacy(void) const noexcept
+		{
+			return !this->IsCurrentRenderModern();
+		}
+
+		bool ktkMainManager::IsCurrentRenderModern(void) const noexcept
+		{
+			auto render_type = this->GetRenderFeature();
+
+			return (render_type ==
+					   eEngineFeature::kEngine_Render_Renderer_DirectX_12) ||
+				(render_type == eEngineFeature::kEngine_Render_Renderer_Vulkan);
+		}
+
 		int ktkMainManager::getARGC(void) const noexcept
 		{
 			return this->m_argc;

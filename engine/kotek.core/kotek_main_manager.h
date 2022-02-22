@@ -87,6 +87,15 @@ namespace Kotek
 			ktk::string GetRenderName(void) const noexcept;
 			eEngineFeature GetRenderFeature(void) const noexcept;
 
+			bool IsCurrentRenderLegacy(void) const noexcept;
+
+			/// <summary>
+			/// means Vulkan or DirectX 12
+			/// </summary>
+			/// <param name=""></param>
+			/// <returns></returns>
+			bool IsCurrentRenderModern(void) const noexcept;
+
 			int getARGC(void) const noexcept;
 			char** getARGV(void) const noexcept;
 

@@ -22,6 +22,7 @@ namespace Kotek
 			void ktkRenderSwapchain::Resize(
 				Core::ktkIRenderDevice* p_render_device, int width, int height)
 			{
+				glViewport(0, 0, width, height);
 			}
 
 		} // namespace gl
