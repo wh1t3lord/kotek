@@ -16,19 +16,6 @@ namespace Kotek
 				main_manager.GetGameManager()->CreateSurface(
 					static_cast<Core::ktkMainManager*>(&main_manager), nullptr,
 					nullptr);
-
-/*
-				glfwMakeContextCurrent(static_cast<GLFWwindow*>(
-					main_manager.GetGameManager()->GetWindowHandle()));
-
-				if (!gladLoadGLLoader(
-						reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
-				{
-					KOTEK_ASSERT(false,
-						"failed to gladLoadGLLoader. Can't initialize OpenGL "
-						"for this system");
-					return;
-				}*/
 			}
 
 			void ktkRenderDevice::Shutdown(void) {}
@@ -39,6 +26,7 @@ namespace Kotek
 				Core::ktkIRenderResourceManager* p_raw_resource_manager,
 				int width, int height)
 			{
+				p_raw_swapchain->Resize(this, width, height);
 			}
 
 			int ktkRenderDevice::GetWidth(void) const noexcept
