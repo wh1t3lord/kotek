@@ -18,7 +18,9 @@ namespace Kotek
 					nullptr);
 			}
 
-			void ktkRenderDevice::Shutdown(void) {}
+			void ktkRenderDevice::Shutdown(void) 
+			{ 
+			}
 
 			void ktkRenderDevice::Resize(
 				Core::ktkIRenderSwapchain* p_raw_swapchain,
