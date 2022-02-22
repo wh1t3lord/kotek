@@ -19,13 +19,17 @@ namespace Kotek
 			void ktkRenderGraphBuilder::Initialize(
 				ktkRenderGraphResourceManager* p_resource_manager,
 				const ktk::string& backbuffer_name,
-				const eRenderGraphBuilderType& render_graph_type_id =
-					eRenderGraphBuilderType::kRenderBuilderFor_Forward_Only,
+				const eRenderGraphBuilderType& render_graph_type_id,
 				const eRenderGraphBuilderPipelineRenderingType&
-					rendering_pipeline_type =
-						eRenderGraphBuilderPipelineRenderingType::
-							kRenderBuilderBasedOnPipeline_Orthodox)
+					rendering_pipeline_type)
 			{
+				KOTEK_ASSERT(p_resource_manager,
+					"you can't pass an invalid pointer of resource manager");
+
+				KOTEK_ASSERT(backbuffer_name.empty() == false,
+					"you can't pass an empty string for backbuffer name");
+
+				this->m_backbuffer_name = backbuffer_name;
 			}
 
 			ktkRenderGraph ktkRenderGraphBuilder::Compile(void)
