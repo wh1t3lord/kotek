@@ -30,6 +30,7 @@ namespace Kotek
 				{
 					KOTEK_ASSERT(false, "can't find program by name: [{}]",
 						program_name.get_as_is());
+					return nullptr;
 				}
 
 				return this->m_programs.at(program_name);
