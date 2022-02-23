@@ -68,6 +68,7 @@ namespace Kotek
 			void setRenderDevice(
 				ktk::shared_ptr<ktkIRenderDevice> pointer) noexcept;
 
+			// @ returns user's resource manager
 			ktkIRenderResourceManager* GetRenderResourceManager(
 				void) const noexcept;
 

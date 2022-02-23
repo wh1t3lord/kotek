@@ -33,14 +33,7 @@ message("${CMAKE_CURRENT_SOURCE_DIR}")
 message("OpenGL Headers: " + OpenGL::OpenGL)
 message("OpenGL libraries: " + OpenGL::OpenGL)
 
-add_library(${PROJECT_NAME} STATIC
-	"kotek_render_gl.h"
-    "kotek_render_device.h"
-    "kotek_render_device.cpp"
-    "kotek_render_swapchain.h"
-    "kotek_render_swapchain.cpp"
-    "kotek_render_resource_manager.h"
-    "kotek_render_resource_manager.cpp"
+set(to_include_render_graph_files
     "kotek_render_graph.h"
     "kotek_render_graph.cpp"
     "kotek_render_graph_types.h"
@@ -56,11 +49,33 @@ add_library(${PROJECT_NAME} STATIC
     "kotek_render_graph_builder.h"
     "kotek_render_graph_builder.cpp"
     "kotek_render_graph_resource_manager.h"
-    "kotek_render_graph_resource_manager.cpp"
+    "kotek_render_graph_resource_manager.cpp")
+
+set(to_include_managers_files
     "kotek_render_shader_manager.h"
-    "kotek_render_shader_manager.cpp"
-    "main_render_gl_dll.cpp"
+    "kotek_render_shader_manager.cpp")
+
+set(to_include_core_files
+    "kotek_render_device.h"
+    "kotek_render_device.cpp"
+    "kotek_render_swapchain.h"
+    "kotek_render_swapchain.cpp")
+
+set(to_include_module_files
+	"kotek_render_gl.h"
+    "main_render_gl_dll.cpp")
+
+add_library(${PROJECT_NAME} STATIC
+    ${to_include_render_graph_files}
+    ${to_include_managers_files}
+    ${to_include_core_files}
+    ${to_include_module_files}
 )
+
+source_group("Render Graph" FILES ${to_include_render_graph_files})
+source_group("Managers" FILES ${to_include_managers_files})
+source_group("Core" FILES ${to_include_core_files})
+source_group("Module" FILES ${to_include_module_files})
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
 target_include_directories(${PROJECT_NAME} PRIVATE OpenGL::OpenGL)

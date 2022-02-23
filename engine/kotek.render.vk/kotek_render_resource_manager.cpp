@@ -34,8 +34,7 @@ namespace Kotek
 #pragma endregion
 
 			ktkRenderResourceManager::ktkRenderResourceManager(
-				ktkRenderDevice* p_device,
-				Core::ktkMainManager* p_manager) :
+				ktkRenderDevice* p_device, Core::ktkMainManager* p_manager) :
 				m_swapchain_image_count(0),
 				m_p_render_pass_swapchain(nullptr), m_p_device(p_device),
 				m_manager_texture(p_device, &this->m_upload_heap),
@@ -89,7 +88,15 @@ namespace Kotek
 				KOTEK_MESSAGE("resource manager is shutdown");
 			}
 
-			void ktkRenderResourceManager::resize(
+			void ktkRenderResourceManager::Resize(
+				Core::ktkIRenderDevice* p_raw_device,
+				Core::ktkIRenderSwapchain* p_raw_swapchain)
+			{
+				this->Resize(static_cast<ktkRenderDevice*>(p_raw_device),
+					static_cast<ktkRenderSwapchain*>(p_raw_swapchain));
+			}
+
+			void ktkRenderResourceManager::Resize(
 				ktkRenderDevice* p_render_device,
 				ktkRenderSwapchain* p_render_swapchain)
 			{
@@ -400,14 +407,16 @@ namespace Kotek
 					this->m_swapchain_image_count);
 
 				ktk::uint32_t index = 1;
-				for (auto p_image : this->m_swapchain_images) 
+				for (auto p_image : this->m_swapchain_images)
 				{
-					ktk::string formatted = ktk::format("Swapchain Image #{}", index);
+					ktk::string formatted =
+						ktk::format("Swapchain Image #{}", index);
 
 					this->m_p_device->GetHelper()
 						.getDebug()
 						.setDebugNameToResource(this->m_p_device->GetDevice(),
-							VkObjectType::VK_OBJECT_TYPE_IMAGE, p_image, formatted.get_as_legacy().c_str());
+							VkObjectType::VK_OBJECT_TYPE_IMAGE, p_image,
+							formatted.get_as_legacy().c_str());
 
 					++index;
 				}

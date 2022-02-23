@@ -36,13 +36,14 @@ namespace Kotek
 
 			// TODO: delete functions about creation resources for swapchain,
 			// because render graph resource manager have already implemented it
-			// TODO: пересмотреть дизайн и перенести в юзер реализацию, нет стандарта для ресурс манагера в рендере
+			// TODO: пересмотреть дизайн и перенести в юзер реализацию, нет
+			// стандарта для ресурс манагера в рендере
 			class ktkRenderResourceManager
 				: public Core::ktkIRenderResourceManager
 			{
 			public:
-				ktkRenderResourceManager(ktkRenderDevice* p_device,
-					Core::ktkMainManager* p_manager);
+				ktkRenderResourceManager(
+					ktkRenderDevice* p_device, Core::ktkMainManager* p_manager);
 				ktkRenderResourceManager(void) = delete;
 				~ktkRenderResourceManager(void);
 
@@ -57,11 +58,10 @@ namespace Kotek
 				void initialize(Core::ktkIRenderDevice* p_raw_device,
 					Core::ktkIRenderSwapchain* p_raw_swapchain) override;
 
-				void shutdown(
-					Core::ktkIRenderDevice* p_raw_device) override;
+				void shutdown(Core::ktkIRenderDevice* p_raw_device) override;
 
-				void resize(ktkRenderDevice* p_render_device,
-					ktkRenderSwapchain* p_render_swapchain);
+				void Resize(Core::ktkIRenderDevice* p_raw_device,
+					Core::ktkIRenderSwapchain* p_raw_swapchain) override;
 
 				kotek_render_dynamic_buffer_ring* GetDynamicBufferRing(
 					void) noexcept;
@@ -128,13 +128,11 @@ namespace Kotek
 
 				void createDSV(void);
 
-				void createSwapchainRenderPass(
-					ktkRenderDevice* p_render_device,
+				void createSwapchainRenderPass(ktkRenderDevice* p_render_device,
 					ktkRenderSwapchain* p_render_swapchain);
 				void createSwapchainImages(ktkRenderDevice* p_render_device,
 					ktkRenderSwapchain* p_render_swapchain);
-				void createSwapchainImagesView(
-					ktkRenderDevice* p_render_device,
+				void createSwapchainImagesView(ktkRenderDevice* p_render_device,
 					ktkRenderSwapchain* p_render_swapchain);
 				void createSwapchainFrameBuffers(
 					ktkRenderDevice* p_render_device);
@@ -145,6 +143,9 @@ namespace Kotek
 					ktkRenderDevice* p_render_device);
 				void destroySwapchainFrameBuffers(
 					ktkRenderDevice* p_render_device);
+
+				void Resize(ktkRenderDevice* p_render_device,
+					ktkRenderSwapchain* p_render_swapchain);
 
 			private:
 				ktk::uint32_t m_swapchain_image_count;

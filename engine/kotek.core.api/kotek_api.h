@@ -74,6 +74,9 @@ namespace Kotek
 
 			// TODO: change signature on void
 			virtual void shutdown(ktkIRenderDevice* p_raw_device) = 0;
+
+			virtual void Resize(ktkIRenderDevice* p_raw_device,
+				ktkIRenderSwapchain* p_raw_swapchain) = 0;
 		};
 
 		class kotek_i_render_imgui
