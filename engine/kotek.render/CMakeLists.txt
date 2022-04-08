@@ -27,10 +27,10 @@ elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
 endif()
  
 add_library(${PROJECT_NAME} STATIC
-	"kotek_render.h"
-    "kotek_render_imgui.h"
-    "kotek_render_imgui.cpp"
-	"main_render_dll.cpp"
+	"include/kotek_render.h"
+    "include/kotek_render_imgui.h"
+    "src/kotek_render_imgui.cpp"
+	"src/main_render_dll.cpp"
 )
 
  

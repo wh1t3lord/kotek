@@ -27,10 +27,10 @@ message("DETECTING LIBRARIES for ${PROJECT_NAME}")
  
 
 add_library(${PROJECT_NAME} STATIC
-	"kotek_render_model.h"
-	"kotek_model.h"
-	"kotek_model.cpp"
-	"main_render_model_dll.cpp"
+	"include/kotek_render_model.h"
+	"include/kotek_model.h"
+	"src/kotek_model.cpp"
+	"src/main_render_model_dll.cpp"
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")

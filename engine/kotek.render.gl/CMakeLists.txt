@@ -34,49 +34,49 @@ message("OpenGL Headers: " + OpenGL::OpenGL)
 message("OpenGL libraries: " + OpenGL::OpenGL)
 
 set(to_include_render_graph_files
-    "kotek_render_graph.h"
-    "kotek_render_graph.cpp"
-    "kotek_render_graph_types.h"
-    "kotek_render_graph_types.cpp"
-    "kotek_render_graph_types_input.h"
-    "kotek_render_graph_types_input.cpp"
-    "kotek_render_graph_types_output.cpp"
-    "kotek_render_graph_types_output.h"
-    "kotek_render_graph_render_pass.h"
-    "kotek_render_graph_render_pass.cpp"
-    "kotek_render_graph_node.h"
-    "kotek_render_graph_node.cpp"
-    "kotek_render_graph_builder.h"
-    "kotek_render_graph_builder.cpp"
-    "kotek_render_graph_resource_manager.h"
-    "kotek_render_graph_resource_manager.cpp")
+    "include/kotek_render_graph.h"
+    "src/kotek_render_graph.cpp"
+    "include/kotek_render_graph_types.h"
+    "src/kotek_render_graph_types.cpp"
+    "include/kotek_render_graph_types_input.h"
+    "src/kotek_render_graph_types_input.cpp"
+    "src/kotek_render_graph_types_output.cpp"
+    "include/kotek_render_graph_types_output.h"
+    "include/kotek_render_graph_render_pass.h"
+    "src/kotek_render_graph_render_pass.cpp"
+    "include/kotek_render_graph_node.h"
+    "src/kotek_render_graph_node.cpp"
+    "include/kotek_render_graph_builder.h"
+    "src/kotek_render_graph_builder.cpp"
+    "include/kotek_render_graph_resource_manager.h"
+    "src/kotek_render_graph_resource_manager.cpp")
 
 set(to_include_managers_files
-    "kotek_render_shader_manager.h"
-    "kotek_render_shader_manager.cpp")
+    "include/kotek_render_shader_manager.h"
+    "src/kotek_render_shader_manager.cpp")
 
 set(to_include_core_files
-    "kotek_render_device.h"
-    "kotek_render_device.cpp"
-    "kotek_render_swapchain.h"
-    "kotek_render_swapchain.cpp"
-    "kotek_spirv.h"
-    "kotek_spirv_reflect.c"
-    "kotek_spirv_reflect.h")
+    "include/kotek_render_device.h"
+    "src/kotek_render_device.cpp"
+    "include/kotek_render_swapchain.h"
+    "src/kotek_render_swapchain.cpp"
+    "include/kotek_spirv.h"
+    "src/kotek_spirv_reflect.c"
+    "include/kotek_spirv_reflect.h")
 
 set(to_include_module_files
-	"kotek_render_gl.h"
-    "main_render_gl_dll.cpp")
+	"include/kotek_render_gl.h"
+    "src/main_render_gl_dll.cpp")
 
 set(to_include_memory_management_files
-    "kotek_render_static_buffer_pool.h"
-    "kotek_render_static_buffer_pool.cpp"
-    "kotek_render_static_buffer_pool_with_linear_allocator.h"
-    "kotek_render_static_buffer_pool_with_linear_allocator.cpp"
-    "kotek_render_allocator_ring.h"
-    "kotek_render_allocator_ring_with_tabs.h"
-    "kotek_render_allocator_ring_with_tabs.cpp"
-    "kotek_render_allocator_ring.cpp")
+    "include/kotek_render_static_buffer_pool.h"
+    "src/kotek_render_static_buffer_pool.cpp"
+    "include/kotek_render_static_buffer_pool_with_linear_allocator.h"
+    "src/kotek_render_static_buffer_pool_with_linear_allocator.cpp"
+    "include/kotek_render_allocator_ring.h"
+    "include/kotek_render_allocator_ring_with_tabs.h"
+    "src/kotek_render_allocator_ring_with_tabs.cpp"
+    "src/kotek_render_allocator_ring.cpp")
 
 add_library(${PROJECT_NAME} STATIC
     ${to_include_render_graph_files}

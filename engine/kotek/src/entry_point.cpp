@@ -1,4 +1,4 @@
-#include <kotek.core/kotek_main_manager.h>
+#include <kotek.core/include/kotek_main_manager.h>
 #include <kotek.game/kotek_engine.h>
 
 int main(int argc, char** argv)

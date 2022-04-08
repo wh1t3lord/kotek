@@ -26,47 +26,47 @@ message("DETECTING LIBRARIES for ${PROJECT_NAME}")
 
 if (WIN32)
     set(to_include 	
-    "imgui_impl_dx12.cpp"
-	"imgui_impl_dx12.h"
-	"imgui_impl_dx9.h"
-	"imgui_impl_dx9.cpp"
-	"imgui_impl_win32.h"
-	"imgui_impl_win32.cpp"
-    "imgui_impl_vulkan.cpp"
-	"imgui_impl_vulkan.h")
+    "src/imgui_impl_dx12.cpp"
+	"include/imgui_impl_dx12.h"
+	"include/imgui_impl_dx9.h"
+	"src/imgui_impl_dx9.cpp"
+	"include/imgui_impl_win32.h"
+	"src/imgui_impl_win32.cpp"
+    "src/imgui_impl_vulkan.cpp"
+	"include/imgui_impl_vulkan.h")
 elseif(UNIX)
     set(to_include
-    "imgui_impl_vulkan.cpp"
-	"imgui_impl_vulkan.h") 
+    "src/imgui_impl_vulkan.cpp"
+	"include/imgui_impl_vulkan.h") 
 endif()
 
 message("[Engine]: files to attach: ${to_include}")
 
 add_library(${PROJECT_NAME} STATIC
-	    "kotek_engine_window.h"
-		"kotek_engine_keycodes.h"
-		"vk_mem_alloc.h"
-		"vk_mem_alloc.cpp"
-		"imconfig.h"
-		"imgui.cpp"
-		"imgui.h"
-		"imgui_demo.cpp"
-		"imgui_draw.cpp"
-		"imgui_internal.h"
-		"imgui_tables.cpp"
-		"imgui_widgets.cpp"
-		"imstb_rectpack.h"
-		"imstb_textedit.h"
-		"imstb_truetype.h"
-		"imgui_impl_glfw.h"
-		"imgui_impl_glfw.cpp"
-		"imgui_impl_opengl3.h"
-		"imgui_impl_opengl3.cpp"
-		"imgui_impl_opengl3_loader.h"
+	    "include/kotek_engine_window.h"
+		"include/kotek_engine_keycodes.h"
+		"include/vk_mem_alloc.h"
+		"src/vk_mem_alloc.cpp"
+		"include/imconfig.h"
+		"src/imgui.cpp"
+		"include/imgui.h"
+		"src/imgui_demo.cpp"
+		"src/imgui_draw.cpp"
+		"include/imgui_internal.h"
+		"src/imgui_tables.cpp"
+		"src/imgui_widgets.cpp"
+		"include/imstb_rectpack.h"
+		"include/imstb_textedit.h"
+		"include/imstb_truetype.h"
+		"include/imgui_impl_glfw.h"
+		"src/imgui_impl_glfw.cpp"
+		"include/imgui_impl_opengl3.h"
+		"src/imgui_impl_opengl3.cpp"
+		"include/imgui_impl_opengl3_loader.h"
 		${to_include}
-	    "kotek_engine_window_impl.h"
-	    "kotek_engine_window_impl.cpp"
-	    "main_engine_window_dll.cpp"
+	    "include/kotek_engine_window_impl.h"
+	    "src/kotek_engine_window_impl.cpp"
+	    "src/main_engine_window_dll.cpp"
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${Vulkan_INCLUDE_DIR})

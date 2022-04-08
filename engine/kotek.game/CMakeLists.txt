@@ -30,11 +30,11 @@ else()
 endif()
 
 add_library(${PROJECT_NAME} STATIC
-	"kotek_engine.h"
-	"kotek_game.h"
-	"kotek_update.cpp"
-	"kotek_callbacks.h"
-	"main_game_dll.cpp"
+	"include/kotek_engine.h"
+	"include/kotek_game.h"
+	"src/kotek_update.cpp"
+	"include/kotek_callbacks.h"
+	"src/main_game_dll.cpp"
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")

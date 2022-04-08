@@ -18,8 +18,8 @@ find_package(mimalloc 1.7 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${
 find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 add_library(${PROJECT_NAME} STATIC 
-	"main_core_memory_dll.cpp"
-	"kotek_core_memory.h"
+	"src/main_core_memory_dll.cpp"
+	"include/kotek_core_memory.h"
 )
 
 target_link_libraries(${PROJECT_NAME} mimalloc-static)

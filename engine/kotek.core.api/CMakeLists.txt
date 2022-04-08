@@ -21,9 +21,9 @@ elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
 endif()
 
 add_library(${PROJECT_NAME} STATIC 
-	"main_api_dll.cpp"
-	"kotek_api.h"
-	"kotek_sdk_ui_element.h"
+	"src/main_api_dll.cpp"
+	"include/kotek_api.h"
+	"include/kotek_sdk_ui_element.h"
 )
 
 if (UNIX)
