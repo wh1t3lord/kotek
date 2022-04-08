@@ -59,23 +59,38 @@ set(to_include_core_files
     "kotek_render_device.h"
     "kotek_render_device.cpp"
     "kotek_render_swapchain.h"
-    "kotek_render_swapchain.cpp")
+    "kotek_render_swapchain.cpp"
+    "kotek_spirv.h"
+    "kotek_spirv_reflect.c"
+    "kotek_spirv_reflect.h")
 
 set(to_include_module_files
 	"kotek_render_gl.h"
     "main_render_gl_dll.cpp")
+
+set(to_include_memory_management_files
+    "kotek_render_static_buffer_pool.h"
+    "kotek_render_static_buffer_pool.cpp"
+    "kotek_render_static_buffer_pool_with_linear_allocator.h"
+    "kotek_render_static_buffer_pool_with_linear_allocator.cpp"
+    "kotek_render_allocator_ring.h"
+    "kotek_render_allocator_ring_with_tabs.h"
+    "kotek_render_allocator_ring_with_tabs.cpp"
+    "kotek_render_allocator_ring.cpp")
 
 add_library(${PROJECT_NAME} STATIC
     ${to_include_render_graph_files}
     ${to_include_managers_files}
     ${to_include_core_files}
     ${to_include_module_files}
+    ${to_include_memory_management_files}
 )
 
 source_group("Render Graph" FILES ${to_include_render_graph_files})
 source_group("Managers" FILES ${to_include_managers_files})
 source_group("Core" FILES ${to_include_core_files})
 source_group("Module" FILES ${to_include_module_files})
+source_group("Memory management" FILES ${to_include_memory_management_files})
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
 target_include_directories(${PROJECT_NAME} PRIVATE OpenGL::OpenGL)
