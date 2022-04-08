@@ -32,7 +32,7 @@ elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
 endif()
 
 add_executable(${PROJECT_NAME} 
-    "entry_point.cpp"
+    "src/entry_point.cpp"
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")

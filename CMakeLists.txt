@@ -95,6 +95,8 @@ endif()
 
 message("[Engine]: math library is '${KOTEK_MATH_LIBRARY}'")
 
+include_directories("engine")
+
 add_subdirectory("engine/kotek.core")
 add_subdirectory("engine/kotek.core.api")
 add_subdirectory("engine/kotek.core.memory")
