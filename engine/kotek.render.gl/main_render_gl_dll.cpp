@@ -1,7 +1,7 @@
 #include "../kotek.core/kotek_main_manager.h"
 #include "kotek_render_device.h"
 #include "kotek_render_gl.h"
-#include "kotek_render_resource_manager.h"
+//#include "kotek_render_resource_manager.h"
 #include "kotek_render_swapchain.h"
 
 namespace Kotek
