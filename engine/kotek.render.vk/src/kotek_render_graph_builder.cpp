@@ -1,10 +1,10 @@
-#include "kotek_render_graph_builder.h"
-#include "../kotek.core/kotek_main_manager.h"
-#include "kotek_render_device.h"
-#include "kotek_render_graph.h"
-#include "kotek_render_graph_data_types.h"
-#include "kotek_render_graph_resource_manager.h"
-#include "kotek_render_resource_manager.h"
+#include "../include/kotek_render_graph_builder.h"
+#include <kotek.core/include/kotek_main_manager.h>
+#include "../include/kotek_render_device.h"
+#include "../include/kotek_render_graph.h"
+#include "../include/kotek_render_graph_data_types.h"
+#include "../include/kotek_render_graph_resource_manager.h"
+#include "../include/kotek_render_resource_manager.h"
 
 namespace Kotek
 {

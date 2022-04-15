@@ -1,5 +1,5 @@
-#include "kotek_render_allocator_ring.h"
-#include "kotek_render_allocator_ring_with_tabs.h"
+#include "../include/kotek_render_allocator_ring.h"
+#include "../include/kotek_render_allocator_ring_with_tabs.h"
 
 namespace Kotek
 {

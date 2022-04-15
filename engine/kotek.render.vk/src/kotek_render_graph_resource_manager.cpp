@@ -1,7 +1,7 @@
-#include "kotek_render_graph_resource_manager.h"
-#include "../kotek.core/kotek_main_manager.h"
-#include "kotek_render_device.h"
-#include "kotek_spirv_reflect.h"
+#include "../include/kotek_render_graph_resource_manager.h"
+#include <kotek.core/include/kotek_main_manager.h>
+#include "../include/kotek_render_device.h"
+#include "../include/kotek_spirv_reflect.h"
 
 namespace Kotek
 {

@@ -1,8 +1,8 @@
-#include "kotek_std_string.h"
-#include "kotek_std_alias_containers.h"
-#include "kotek_std_alias_format.h"
-#include "kotek_std_constants.h"
-#include "kotek_std_dependent_preprocessors.h"
+#include "../include/kotek_std_string.h"
+#include "../include/kotek_std_alias_containers.h"
+#include "../include/kotek_std_alias_format.h"
+#include "../include/kotek_std_constants.h"
+#include "../include/kotek_std_dependent_preprocessors.h"
 
 namespace Kotek
 {

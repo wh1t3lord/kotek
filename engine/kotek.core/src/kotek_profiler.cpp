@@ -1,4 +1,4 @@
-#include "kotek_profiler.h"
+#include "../include/kotek_profiler.h"
 
 #ifdef KOTEK_USE_CPU_PROFILER
 

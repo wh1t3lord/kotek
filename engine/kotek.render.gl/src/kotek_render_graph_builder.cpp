@@ -1,5 +1,5 @@
-#include "kotek_render_graph_builder.h"
-#include "kotek_render_graph.h"
+#include "../include/kotek_render_graph_builder.h"
+#include "../include/kotek_render_graph.h"
 
 namespace Kotek
 {

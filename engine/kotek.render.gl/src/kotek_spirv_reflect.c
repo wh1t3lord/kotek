@@ -14,7 +14,7 @@
  limitations under the License.
 */
 
-#include "kotek_spirv_reflect.h"
+#include "../include/kotek_spirv_reflect.h"
 #include <assert.h>
 #include <stdbool.h>
 #include <string.h>

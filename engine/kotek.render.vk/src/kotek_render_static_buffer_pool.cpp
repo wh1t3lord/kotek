@@ -1,6 +1,6 @@
-#include "kotek_render_static_buffer_pool.h"
-#include "kotek_render_device.h"
-#include "kotek_render_resource_manager.h"
+#include "../include/kotek_render_static_buffer_pool.h"
+#include "../include/kotek_render_device.h"
+#include "../include/kotek_render_resource_manager.h"
 
 namespace Kotek
 {

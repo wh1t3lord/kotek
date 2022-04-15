@@ -1,5 +1,5 @@
-#include "kotek_render_resource_view_heap.h"
-#include "kotek_render_device.h"
+#include "../include/kotek_render_resource_view_heap.h"
+#include "../include/kotek_render_device.h"
 
 namespace Kotek
 {

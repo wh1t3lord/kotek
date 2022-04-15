@@ -1,7 +1,7 @@
-#include "kotek_render_device.h"
-#include "kotek_render_instance_properties.h"
-#include "kotek_render_resource_manager.h"
-#include "kotek_render_swapchain.h"
+#include "../include/kotek_render_device.h"
+#include "../include/kotek_render_instance_properties.h"
+#include "../include/kotek_render_resource_manager.h"
+#include "../include/kotek_render_swapchain.h"
 
 #ifdef KOTEK_PLATFORM_LINUX
 	#include <vulkan/vulkan_xcb.h>
@@ -9,7 +9,7 @@
 	#include <vulkan/vulkan_win32.h>
 #endif
 
-#include "../kotek.core/kotek_main_manager.h"
+#include <kotek.core/include/kotek_main_manager.h>
 
 namespace Kotek
 {

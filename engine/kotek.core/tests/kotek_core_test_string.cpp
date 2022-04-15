@@ -1,5 +1,5 @@
-﻿#include "../kotek_main_manager.h"
-#include "../kotek_std.h"
+﻿#include "../include/kotek_main_manager.h"
+#include "../include/kotek_std.h"
 #include <boost/test/unit_test.hpp>
 
 namespace Kotek

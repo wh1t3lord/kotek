@@ -1,11 +1,11 @@
 #include <kotek.core/include/kotek_main_manager.h>
 #include <kotek.core/include/kotek_std.h>
-#include "kotek_render_device.h"
-#include "kotek_render_graph.h"
-#include "kotek_render_imgui_manager.h"
-#include "kotek_render_resource_manager.h"
-#include "kotek_render_swapchain.h"
-#include "kotek_render_vk.h"
+#include "../include/kotek_render_device.h"
+#include "../include/kotek_render_graph.h"
+#include "../include/kotek_render_imgui_manager.h"
+#include "../include/kotek_render_resource_manager.h"
+#include "../include/kotek_render_swapchain.h"
+#include "../include/kotek_render_vk.h"
 
 namespace Kotek
 {

@@ -1,6 +1,6 @@
-#include "kotek_render_upload_heap.h"
-#include "kotek_render_device.h"
-#include "kotek_render_resource_manager.h"
+#include "../include/kotek_render_upload_heap.h"
+#include "../include/kotek_render_device.h"
+#include "../include/kotek_render_resource_manager.h"
 
 namespace Kotek
 {

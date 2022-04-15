@@ -1,5 +1,5 @@
-#include "kotek_file.h"
-#include "kotek_main_manager.h"
+#include "../include/kotek_file.h"
+#include "../include/kotek_main_manager.h"
 
 namespace Kotek
 {

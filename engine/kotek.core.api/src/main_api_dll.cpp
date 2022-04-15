@@ -1,4 +1,4 @@
-#include "kotek_api.h"
+#include "../include/kotek_api.h"
 
 namespace Kotek
 {

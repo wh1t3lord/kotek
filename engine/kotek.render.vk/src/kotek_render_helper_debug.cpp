@@ -1,5 +1,5 @@
-#include "kotek_render_helper_debug.h"
-#include "kotek_render_helper_device.h"
+#include "../include/kotek_render_helper_debug.h"
+#include "../include/kotek_render_helper_device.h"
 
 namespace Kotek
 {

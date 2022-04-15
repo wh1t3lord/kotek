@@ -1,4 +1,4 @@
-#include "../kotek_std.h"
+#include "../include/kotek_std.h"
 #include <boost/test/unit_test.hpp>
 
 namespace Kotek

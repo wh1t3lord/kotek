@@ -1,10 +1,10 @@
 #include <kotek.core/include/kotek_core.h>
 #include <kotek.core/include/kotek_main_manager.h>
 #include <kotek.core/include/kotek_std.h>
-#include "../kotek.render/kotek_render.h"
-#include "kotek_callbacks.h"
-#include "kotek_engine.h"
-#include "kotek_game.h"
+#include <kotek.render/include/kotek_render.h>
+#include "../include/kotek_callbacks.h"
+#include "../include/kotek_engine.h"
+#include "../include/kotek_game.h"
 
 #ifdef KOTEK_DEBUG
 	#define BOOST_TEST_MODULE kotek_engine_test_module

@@ -1,8 +1,8 @@
-#include "kotek_render_graph_render_pass.h"
-#include "../kotek.core/kotek_filesystem.h"
-#include "kotek_render_graph_resource_manager.h"
-#include "kotek_render_graph_types_input.h"
-#include "kotek_render_graph_types_output.h"
+#include "../include/kotek_render_graph_render_pass.h"
+#include <kotek.core/include/kotek_filesystem.h>
+#include "../include/kotek_render_graph_resource_manager.h"
+#include "../include/kotek_render_graph_types_input.h"
+#include "../include/kotek_render_graph_types_output.h"
 
 namespace Kotek
 {

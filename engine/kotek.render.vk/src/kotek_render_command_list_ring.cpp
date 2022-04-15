@@ -1,5 +1,5 @@
-#include "kotek_render_command_list_ring.h"
-#include "kotek_render_device.h"
+#include "../include/kotek_render_command_list_ring.h"
+#include "../include/kotek_render_device.h"
 
 namespace Kotek
 {

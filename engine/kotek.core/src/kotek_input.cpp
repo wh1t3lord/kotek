@@ -1,5 +1,5 @@
-#include "kotek_input.h"
-#include "kotek_std.h"
+#include "../include/kotek_input.h"
+#include "../include/kotek_std.h"
 
 namespace Kotek
 {

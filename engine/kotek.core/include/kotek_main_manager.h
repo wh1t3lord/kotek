@@ -1,6 +1,6 @@
 #pragma once
 
-#include <kotek.core.api/kotek_api.h>
+#include <kotek.core.api/include/kotek_api.h>
 #include "kotek_console.h"
 #include "kotek_dynamic_library.h"
 #include "kotek_filesystem.h"

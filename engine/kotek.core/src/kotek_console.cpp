@@ -1,4 +1,4 @@
-#include "kotek_console.h"
+#include "../include/kotek_console.h"
 
 namespace Kotek
 {

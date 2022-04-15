@@ -1,4 +1,4 @@
-#include "kotek_render_instance_properties.h"
+#include "../include/kotek_render_instance_properties.h"
 
 namespace Kotek
 {

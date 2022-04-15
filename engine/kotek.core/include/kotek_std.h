@@ -1,7 +1,7 @@
 #pragma once
 
-#include <kotek.core.api/kotek_api.h>
-#include <kotek.core.api/kotek_sdk_ui_element.h>
+#include <kotek.core.api/include/kotek_api.h>
+#include <kotek.core.api/include/kotek_sdk_ui_element.h>
 
 #include "kotek_std_preprocessors.h"
 

@@ -1,9 +1,9 @@
 #include <kotek.core/include/kotek_std.h>
-#include "kotek_render.h"
+#include "../include/kotek_render.h"
 
 #include <kotek.core/include/kotek_main_manager.h>
-#include <kotek.render.gl/kotek_render_gl.h>
-#include <kotek.render.vk/kotek_render_vk.h>
+#include <kotek.render.gl/include/kotek_render_gl.h>
+#include <kotek.render.vk/include/kotek_render_vk.h>
 
 namespace Kotek
 {

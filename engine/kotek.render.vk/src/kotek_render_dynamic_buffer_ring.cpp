@@ -1,5 +1,5 @@
-#include "kotek_render_dynamic_buffer_ring.h"
-#include "kotek_render_device.h"
+#include "../include/kotek_render_dynamic_buffer_ring.h"
+#include "../include/kotek_render_device.h"
 
 namespace Kotek
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "../kotek.core.api/kotek_api.h"
+#include <kotek.core.api/include/kotek_api.h>
 #include <kotek.core/include/kotek_std.h>
 
 // Resource management structures

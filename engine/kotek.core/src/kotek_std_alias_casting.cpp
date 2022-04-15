@@ -1,5 +1,5 @@
-#include "kotek_std_alias_casting.h"
-#include "kotek_std_string.h"
+#include "../include/kotek_std_alias_casting.h"
+#include "../include/kotek_std_string.h"
 
 namespace Kotek
 {

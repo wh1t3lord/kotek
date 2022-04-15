@@ -1,7 +1,7 @@
-#include "kotek_render_graph.h"
-#include "../kotek.core/kotek_profiler.h"
-#include "kotek_render_resource_manager.h"
-#include "kotek_render_texture_manager.h"
+#include "../include/kotek_render_graph.h"
+#include <kotek.core/include/kotek_profiler.h>
+#include "../include/kotek_render_resource_manager.h"
+#include "../include/kotek_render_texture_manager.h"
 
 namespace Kotek
 {

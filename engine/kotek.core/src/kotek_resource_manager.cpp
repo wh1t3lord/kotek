@@ -1,4 +1,4 @@
-#include "kotek_resource_manager.h"
+#include "../include/kotek_resource_manager.h"
 
 namespace Kotek
 {

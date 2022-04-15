@@ -1,7 +1,8 @@
-﻿#include "../kotek.core.memory/kotek_core_memory.h"
-#include "../kotek.engine.window/kotek_engine_window.h"
-#include "kotek_core.h"
-#include "kotek_main_manager.h"
+﻿#include <kotek.core.memory/include/kotek_core_memory.h>
+#include <kotek.engine.window/include/kotek_engine_window.h>
+
+#include "../include/kotek_core.h"
+#include "../include/kotek_main_manager.h"
 
 #ifdef KOTEK_PLATFORM_WINDOWS
 	#include <mimalloc-new-delete.h>

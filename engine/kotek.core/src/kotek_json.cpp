@@ -1,4 +1,4 @@
-#include "kotek_json.h"
+#include "../include/kotek_json.h"
 
 namespace Kotek
 {
