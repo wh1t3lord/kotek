@@ -18,8 +18,8 @@ find_package(Boost COMPONENTS json container unit_test_framework filesystem REQU
 find_package(fmt REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/assimp/${CMAKE_BUILD_TYPE}")
 find_package(Vulkan REQUIRED)
-find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(mimalloc 1.7 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
+find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(mimalloc REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
     find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
