@@ -397,7 +397,7 @@ namespace Kotek
 					{
 #ifdef KOTEK_DEBUG
 						KOTEK_MESSAGE("detected: Vertex [{}]",
-							shader_type_t::kShaderType_Vertex);
+							static_cast<ktk::enum_base_t>(shader_type_t::kShaderType_Vertex));
 #endif
 
 						return shader_type_t::kShaderType_Vertex;
@@ -407,7 +407,7 @@ namespace Kotek
 					{
 #ifdef KOTEK_DEBUG
 						KOTEK_MESSAGE("detected: Pixel [{}]",
-							shader_type_t::kShaderType_Pixel);
+							static_cast<ktk::enum_base_t>(shader_type_t::kShaderType_Pixel));
 #endif
 
 						return shader_type_t::kShaderType_Pixel;
@@ -417,7 +417,7 @@ namespace Kotek
 					{
 #ifdef KOTEK_DEBUG
 						KOTEK_MESSAGE("detected: Compute [{}]",
-							shader_type_t::kShaderType_Compute);
+							static_cast<ktk::enum_base_t>(shader_type_t::kShaderType_Compute));
 #endif
 
 						return shader_type_t::kShaderType_Compute;
@@ -634,7 +634,7 @@ namespace Kotek
 						KOTEK_ASSERT(false,
 							"can't be you passed invalid shader_type_t {} "
 							"(can't parse)",
-							type);
+							static_cast<ktk::enum_base_t>(type));
 
 						return "shader_type_INVALID_ENUM_CANT_PARSE";
 					}
