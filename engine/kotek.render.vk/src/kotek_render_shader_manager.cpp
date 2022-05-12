@@ -159,7 +159,7 @@ namespace Kotek
 
 				if (code_as_string.empty())
 				{
-					KOTEK_MESSAGE_WARNING("");
+					KOTEK_MESSAGE_WARNING("you can't have an empty code string for loadShaderAsString");
 					return result;
 				}
 
@@ -557,7 +557,7 @@ namespace Kotek
 						KOTEK_ASSERT(false,
 							"can't be you passed invalid shader_type_t {} "
 							"(can't parse)",
-							type);
+							static_cast<ktk::enum_base_t>(type));
 
 						return "shader_type_INVALID_ENUM_CANT_PARSE";
 					}

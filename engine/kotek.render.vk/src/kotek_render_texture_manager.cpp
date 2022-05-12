@@ -476,7 +476,7 @@ namespace Kotek
 					default:
 					{
 						KOTEK_ASSERT(
-							false, "can't translate this type: {}", type);
+							false, "can't translate this type: {}", static_cast<ktk::enum_base_t>(type));
 
 						return "render_graph_builder_type_INVALID";
 					}
