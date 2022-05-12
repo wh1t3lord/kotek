@@ -44,7 +44,7 @@ namespace Kotek
 
 			if (this->m_storage_paths.find(id) == this->m_storage_paths.end())
 			{
-				KOTEK_MESSAGE("can't find path by id[{}]", id);
+				KOTEK_MESSAGE("can't find path by id[{}]", static_cast<ktk::enum_base_t>(id));
 			}
 
 			return this->m_storage_paths.at(id);
@@ -112,7 +112,7 @@ namespace Kotek
 			if (this->m_storage_paths.find(id) != this->m_storage_paths.end())
 			{
 				KOTEK_MESSAGE(
-					"this path {} is existed in storage, can't add", id);
+					"this path {} is existed in storage, can't add", static_cast<ktk::enum_base_t>(id));
 				return false;
 			}
 

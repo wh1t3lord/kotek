@@ -20,7 +20,7 @@ namespace Kotek
 			{
 				KOTEK_MESSAGE(
 					"you can't add command[{}] which is existed in storage",
-					id);
+					static_cast<ktk::enum_base_t>(id));
 				return;
 			}
 
@@ -38,7 +38,8 @@ namespace Kotek
 		{
 			if (this->m_storage.find(id) == this->m_storage.end())
 			{
-				KOTEK_MESSAGE("can't find command by id: [{}]", id);
+				KOTEK_MESSAGE("can't find command by id: [{}]",
+					static_cast<ktk::enum_base_t>(id));
 				return;
 			}
 
@@ -68,7 +69,8 @@ namespace Kotek
 		{
 			if (this->m_storage.find(id) == this->m_storage.end())
 			{
-				KOTEK_MESSAGE("can't find command by id [{}]", id);
+				KOTEK_MESSAGE("can't find command by id [{}]",
+					static_cast<ktk::enum_base_t>(id));
 				return;
 			}
 

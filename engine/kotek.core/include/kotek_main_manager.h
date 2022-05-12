@@ -20,13 +20,15 @@ namespace Kotek
 			kEngine_Window_FullScreen,
 			kEngine_Render_Feature_MSAA,
 			kEngine_Render_Feature_VSYNC,
-			kEngine_Render_Renderer_Vulkan,
+			kEngine_Render_Renderer_DirectX_7,
+			kEngine_Render_Renderer_DirectX_8,
 			kEngine_Render_Renderer_DirectX_9,
+			kEngine_Render_Renderer_DirectX_10,
 			kEngine_Render_Renderer_DirectX_11,
 			kEngine_Render_Renderer_DirectX_12,
 			kEngine_Render_Renderer_OpenGL,
+			kEngine_Render_Renderer_Vulkan,
 			kEngine_Render_Renderer_Software,
-
 			kEngine_Feature_Unknown = -1
 		};
 
