@@ -89,7 +89,7 @@ namespace Kotek
 				return result;
 			}
 
-			ktk::ifstream file(path_to_file.get_as_legacy());
+			ktk::ifstream file(path_to_file.get_as_legacy().c_str());
 
 			if (file.good())
 			{

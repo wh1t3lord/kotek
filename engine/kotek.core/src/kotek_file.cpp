@@ -40,7 +40,7 @@ namespace Kotek
 			KOTEK_MESSAGE("reading file: {}", path.get_as_is());
 
 #ifdef KOTEK_PLATFORM_WINDOWS
-			ktk::ifstream _file(path.get_as_is());
+			ktk::ifstream _file(path.get_as_is().c_str());
 #elif defined(KOTEK_PLATFORM_LINUX)
 			ktk::ifstream _file(path.get_as_legacy());
 #endif
@@ -131,7 +131,7 @@ namespace Kotek
 			}
 
 #ifdef KOTEK_PLATFORM_WINDOWS
-			ktk::ofstream output_file(full_path_to_file.get_as_legacy());
+			ktk::ofstream output_file(full_path_to_file.get_as_legacy().c_str());
 #elif defined(KOTEK_PLATFORM_LINUX)
 			KOTEK_ASSERT(false, "not implemented");
 			ktk::string_legacy temp_path_output =

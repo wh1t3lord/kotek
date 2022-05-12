@@ -17,5 +17,11 @@ namespace Kotek
 			return ktk::string(data.begin(), data.end());
 		}
 
+		template <typename... Args>
+		void print(fmt::format_string<Args...> fmt, Args&&... args)
+		{
+			fmt::print(fmt, args...);
+		}
+
 	} // namespace ktk
 } // namespace Kotek
