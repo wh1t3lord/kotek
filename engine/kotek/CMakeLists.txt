@@ -12,7 +12,7 @@ include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
 link_directories("../../${KOTEK_DEPS_FOLDER}/vld/lib/Win64/")
 endif()
  
-link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/lib/")
+link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/lib/")
 link_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)

@@ -13,12 +13,12 @@ endif()
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/lib/")
+link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/lib/")
 link_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
 
 find_package(Vulkan REQUIRED)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
