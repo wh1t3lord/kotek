@@ -72,11 +72,10 @@ namespace Kotek
 				"to load it!!!");
 
 			auto executable_path = ktk::dll::program_location().parent_path();
-			ktk::string resulted_path = executable_path.string();
-			
-			resulted_path.append_path(field_library_name);
 
-			main_manager.LoadUserGameLibrary(resulted_path);
+			executable_path /= field_library_name.get_as_is().c_str();
+
+			main_manager.LoadUserGameLibrary(executable_path.string());
 			const auto& user_dll = main_manager.GetUserLibrary();
 
 			
