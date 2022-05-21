@@ -1,10 +1,10 @@
+#include "../include/kotek_callbacks.h"
+#include "../include/kotek_engine.h"
+#include "../include/kotek_game.h"
 #include <kotek.core/include/kotek_core.h>
 #include <kotek.core/include/kotek_main_manager.h>
 #include <kotek.core/include/kotek_std.h>
 #include <kotek.render/include/kotek_render.h>
-#include "../include/kotek_callbacks.h"
-#include "../include/kotek_engine.h"
-#include "../include/kotek_game.h"
 
 #ifdef KOTEK_DEBUG
 	#define BOOST_TEST_MODULE kotek_engine_test_module
@@ -62,7 +62,9 @@ namespace Kotek
 			const auto& field_library_name =
 				file.GetString(Core::kSysInfoFieldName_UserLibraryNameWindows);
 #elif KOTEK_PLATFORM_LINUX
-			KOTEK_ASSERT(false, "we don't test such feature, but it supposes to support on Linux platform too");
+			KOTEK_ASSERT(false,
+				"we don't test such feature, but it supposes to support on "
+			    "Linux platform too");
 #endif
 			const auto& field_initialize_render_callback_name = file.GetString(
 				Core::kSysInfoFieldName_InitializeCallback_Render);
@@ -78,19 +80,22 @@ namespace Kotek
 			main_manager.LoadUserGameLibrary(executable_path.string());
 			const auto& user_dll = main_manager.GetUserLibrary();
 
-			
 			p_user_callback_initialize_game_library =
-				user_dll.get<ktkUserCallbackInitialize>(field_initialize_callback_name.get_as_legacy().c_str());
+				user_dll.get<ktkUserCallbackInitialize>(
+					field_initialize_callback_name.get_as_legacy().c_str());
 
 			p_user_callback_shutdown_game_library =
 				user_dll.get<ktkUserCallbackShutdown>(
 					field_shutdown_callback_name.get_as_legacy().c_str());
 
 			p_user_callback_update_game_library =
-				user_dll.get<ktkUserCallbackUpdate>(field_update_callback_name.get_as_legacy().c_str());
+				user_dll.get<ktkUserCallbackUpdate>(
+					field_update_callback_name.get_as_legacy().c_str());
 
 			p_user_callback_initialize_render_from_game_library =
-				user_dll.get<ktkUserCallbackInitializeRender>(field_initialize_render_callback_name.get_as_legacy().c_str());
+				user_dll.get<ktkUserCallbackInitializeRender>(
+					field_initialize_render_callback_name.get_as_legacy()
+						.c_str());
 
 			KOTEK_ASSERT(p_user_callback_initialize_game_library != nullptr,
 				"can't obtain function from game user library {}: {}",
@@ -241,7 +246,7 @@ namespace Kotek
 		bool InitializeEngine(Core::ktkMainManager& main_manager)
 		{
 			PrintCompiler();
-			
+
 			Core::InitializeModule_Core(main_manager);
 
 			// TODO: restore when you implement ImGui

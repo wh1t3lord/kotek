@@ -53,7 +53,9 @@ set(to_include_render_graph_files
 
 set(to_include_managers_files
     "include/kotek_render_shader_manager.h"
-    "src/kotek_render_shader_manager.cpp")
+    "src/kotek_render_shader_manager.cpp"
+    "include/kotek_render_resource_manager.h"
+    "src/kotek_render_resource_manager.cpp")
 
 set(to_include_core_files
     "include/kotek_render_device.h"

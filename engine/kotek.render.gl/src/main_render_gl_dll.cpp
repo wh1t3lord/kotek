@@ -1,7 +1,8 @@
-#include <kotek.core/include/kotek_main_manager.h>
 #include "../include/kotek_render_device.h"
 #include "../include/kotek_render_gl.h"
+#include "../include/kotek_render_resource_manager.h"
 #include "../include/kotek_render_swapchain.h"
+#include <kotek.core/include/kotek_main_manager.h>
 
 namespace Kotek
 {
@@ -15,9 +16,13 @@ namespace Kotek
 			auto p_render_device = std::make_shared<gl::ktkRenderDevice>();
 			auto p_render_swapchain =
 				std::make_shared<gl::ktkRenderSwapchain>();
+			auto p_render_resource_manager =
+				std::make_shared<gl::ktkRenderResourceManager>(
+					p_render_device.get(), &main_manager);
 
 			main_manager.setRenderDevice(p_render_device);
 			main_manager.setRenderSwapchainManager(p_render_swapchain);
+			main_manager.SetRenderResourceManager(p_render_resource_manager);
 
 			p_render_device->Initialize(main_manager);
 
@@ -28,6 +33,8 @@ namespace Kotek
 				main_manager.GetGameManager()->GetWindowHeight());
 
 			p_render_swapchain->Initialize(p_render_device.get());
+			p_render_resource_manager->initialize(
+				p_render_device.get(), p_render_swapchain.get());
 
 			KOTEK_MESSAGE("render module is initialized");
 
