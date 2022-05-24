@@ -17,12 +17,6 @@ find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/assimp/${CMAKE_BUILD_TYPE}")
 find_package(Vulkan REQUIRED)
 
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    find_package(directxmath REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-endif()
-
 message("DETECTING LIBRARIES for ${PROJECT_NAME}")
  
 
@@ -36,12 +30,6 @@ add_library(${PROJECT_NAME} STATIC
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
 target_include_directories(${PROJECT_NAME} PRIVATE ${Vulkan_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PUBLIC ${ASSIMP_INCLUDE_DIRS})
-
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    target_link_libraries(${PROJECT_NAME} glm::glm)
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    target_link_libraries(${PROJECT_NAME} Microsoft::DirectXMath)
-endif()
 
 target_link_libraries(${PROJECT_NAME} kotek.core)
 target_link_libraries(${PROJECT_NAME} TBB::tbb)

@@ -7,7 +7,6 @@
 #include <boost/container/map.hpp>
 #include <boost/container/set.hpp>
 #include <boost/container/vector.hpp>
-#include <boost/container_hash/extensions.hpp>
 #include <boost/json.hpp>
 #include <boost/regex.hpp>
 #include <boost/unordered_map.hpp>
@@ -29,9 +28,6 @@ namespace Kotek
 	namespace ktk
 	{
 		using any = std::any;
-
-		template <typename T>
-		using hash = boost::hash<T>;
 
 		template <class K, class V>
 		using pair = std::pair<K, V>;

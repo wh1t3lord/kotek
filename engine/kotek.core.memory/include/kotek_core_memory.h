@@ -1,5 +1,7 @@
 #pragma once
 
+#include "kotek_std_memory.h"
+
 namespace Kotek
 {
 	namespace Core

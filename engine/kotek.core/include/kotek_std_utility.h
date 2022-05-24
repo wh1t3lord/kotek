@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kotek_std_alias_math.h"
+#include <kotek.core.math/include/kotek_std_alias_math.h>
 #include <memory>
 
 namespace Kotek

@@ -5,33 +5,12 @@ project(kotek.core VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
-
-if (WIN32)
-include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
-endif()
-
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(Boost COMPONENTS json container unit_test_framework filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(fmt REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+find_package(Boost COMPONENTS json unit_test_framework filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/assimp/${CMAKE_BUILD_TYPE}")
 find_package(Vulkan REQUIRED)
 find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(mimalloc REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
-
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    find_package(directxmath REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-endif()
-
-if(TBB_FOUND)
-	message("[Package][+]: TBB")
-else()
-	message("[Package][-]: TBB")
-endif()
 
 if(Boost_FOUND)
 	message("[Package][+]: BOOST")
@@ -39,19 +18,10 @@ else()
 	message("[Package][-]: BOOST")
 endif()
 
-if(fmt_FOUND)
-	message("[Package][+]: FMT")
-else()
-	message("[Package][-]: FMT")
-endif()
-
-
 if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON")
 	message("[Engine]: adding tests for runtime in project ${PROJECT_NAME}")
 	set(to_include_tests 
-		"tests/kotek_core_test_filesystem.cpp"
-		"tests/kotek_core_test_string.cpp"
-		"tests/kotek_core_test_math.cpp")
+		"tests/kotek_core_test_filesystem.cpp")
 elseif("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "OFF")
 	# TODO: add support for own projects for unit testing
 	message("[Engine]: creating test projects for project ${PROJECT_NAME}")
@@ -95,35 +65,13 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_dll.cpp"
 	"include/kotek_core.h"
 	"include/kotek_std.h"
-    "include/kotek_std_alias_numerics.h"
     "include/kotek_std_utility.h"
 	"src/kotek_std_utility.cpp"
-    "include/kotek_std_alias_math.h"
-	"include/kotek_std_math_vector1f.h"
-	"include/kotek_std_math_vector2f.h"
-	"include/kotek_std_math_vector3f.h"
-	"include/kotek_std_math_vector4f.h"
-	"include/kotek_std_math_quaternionf.h"
-	"include/kotek_std_math_matrix_2x2_f.h"
-	"include/kotek_std_math_matrix_3x3_f.h"
-	"include/kotek_std_math_matrix_4x4_f.h"
-	"include/kotek_std_math.h"
     "include/kotek_std_alias_ui.h"
     "include/kotek_std_alias_containers.h"
-    "include/kotek_std_alias_casting.h"
-    "include/kotek_std_alias_char_model.h"
 	"include/kotek_std_alias_multithreading.h"
-    "include/kotek_std_preprocessors.h"
     "include/kotek_std_alias_io.h"
-    "include/kotek_std_constants.h"
-    "include/kotek_std_memory.h"
-    "include/kotek_std_alias_format.h"
     "include/kotek_std_os.h"
-    "include/kotek_std_dependent_preprocessors.h"
-    "include/kotek_std_alias_string.h"
-	"src/kotek_std_memory.cpp"
-	"src/kotek_std_alias_casting.cpp"
-	"src/kotek_std_string.cpp"
 	"include/kotek_filesystem.h"
 	"src/kotek_filesystem.cpp"
 	"src/kotek_main_manager.cpp"
@@ -143,7 +91,6 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_resource_manager.h"
 	"src/kotek_resource_manager.cpp"
 	"include/kotek_interface_resource_loader_manager.h"
-	"include/kotek_std_string.h"
 	${to_include_tests}
 	${to_include_cpu_profiler}
 	${to_include_gpu_profiler}
@@ -154,18 +101,21 @@ target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../includ
 target_include_directories(${PROJECT_NAME} PRIVATE ${Vulkan_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PUBLIC ${ASSIMP_INCLUDE_DIRS})
 
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    target_link_libraries(${PROJECT_NAME} glm::glm)
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    target_link_libraries(${PROJECT_NAME} Microsoft::DirectXMath)
-endif()
-
 target_link_libraries(${PROJECT_NAME} kotek.core.api)
+target_link_libraries(${PROJECT_NAME} kotek.core.casting)
+target_link_libraries(${PROJECT_NAME} kotek.core.casting.string)
+target_link_libraries(${PROJECT_NAME} kotek.core.containers)
+target_link_libraries(${PROJECT_NAME} kotek.core.containers.string)
+target_link_libraries(${PROJECT_NAME} kotek.core.containers.hash)
 target_link_libraries(${PROJECT_NAME} kotek.core.memory)
+target_link_libraries(${PROJECT_NAME} kotek.core.math)
+target_link_libraries(${PROJECT_NAME} kotek.core.defines)
+target_link_libraries(${PROJECT_NAME} kotek.core.defines.dependent)
+target_link_libraries(${PROJECT_NAME} kotek.core.types.char)
+target_link_libraries(${PROJECT_NAME} kotek.core.types.numerics)
+target_link_libraries(${PROJECT_NAME} kotek.core.types.string)
+target_link_libraries(${PROJECT_NAME} kotek.core.format)
 target_link_libraries(${PROJECT_NAME} kotek.engine.window)
-target_link_libraries(${PROJECT_NAME} TBB::tbb)
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} fmt::fmt-header-only)
 target_link_libraries(${PROJECT_NAME} glfw)
-target_link_libraries(${PROJECT_NAME} mimalloc-static)
-target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIBRARIES}) 
+target_link_libraries(${PROJECT_NAME} ${ASSIMP_LIBRARIES})

@@ -20,17 +20,6 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 find_package(Boost COMPONENTS unit_test_framework REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
-find_package(mimalloc REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
-
-find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-
-
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    find_package(directxmath REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-endif()
-
 add_executable(${PROJECT_NAME} 
     "src/entry_point.cpp"
 )
@@ -68,16 +57,8 @@ endif()
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
 
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    target_link_libraries(${PROJECT_NAME} glm::glm)
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    target_link_libraries(${PROJECT_NAME} Microsoft::DirectXMath)
-endif()
-
 target_link_libraries(${PROJECT_NAME} kotek.game)
 target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
 target_link_libraries(${PROJECT_NAME} ktx)
-target_link_libraries(${PROJECT_NAME} TBB::tbb)
 target_link_libraries(${PROJECT_NAME} glfw)
-target_link_libraries(${PROJECT_NAME} mimalloc-static)
 

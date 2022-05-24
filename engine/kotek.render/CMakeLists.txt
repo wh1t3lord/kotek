@@ -19,12 +19,6 @@ find_package(Vulkan REQUIRED)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    find_package(directxmath REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-endif()
  
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render.h"
@@ -37,12 +31,6 @@ add_library(${PROJECT_NAME} STATIC
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
 target_include_directories(${PROJECT_NAME} PRIVATE ${Vulkan_INCLUDE_DIR})
 target_include_directories(${PROJECT_NAME} PRIVATE OpenGL::OpenGL)
-
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    target_link_libraries(${PROJECT_NAME} glm::glm)
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    target_link_libraries(${PROJECT_NAME} Microsoft::DirectXMath)
-endif()
 
 target_link_libraries(${PROJECT_NAME} kotek.core)
 target_link_libraries(${PROJECT_NAME} kotek.render.model)

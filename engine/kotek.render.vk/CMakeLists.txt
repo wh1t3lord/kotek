@@ -21,12 +21,6 @@ find_package(Boost COMPONENTS unit_test_framework REQUIRED PATHS "../../${KOTEK_
 find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    find_package(directxmath REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-endif()
-
 message("DETECTING LIBRARIES for ${PROJECT_NAME}")
 
 message("${CMAKE_CURRENT_SOURCE_DIR}")
@@ -94,12 +88,6 @@ add_library(${PROJECT_NAME} STATIC
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
 target_include_directories(${PROJECT_NAME} PRIVATE Vulkan::Headers)
-
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    target_link_libraries(${PROJECT_NAME} glm::glm)
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    target_link_libraries(${PROJECT_NAME} Microsoft::DirectXMath)
-endif()
 
 target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
 target_link_libraries(${PROJECT_NAME} kotek.core)
