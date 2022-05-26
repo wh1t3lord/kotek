@@ -17,9 +17,6 @@ link_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-find_package(Boost COMPONENTS unit_test_framework REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-
 add_executable(${PROJECT_NAME} 
     "src/entry_point.cpp"
 )
@@ -27,9 +24,9 @@ add_executable(${PROJECT_NAME}
 set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
 
 if (KOTEK_SDK)
-if (WIN32)
-set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_ENVIRONMENT "PATH=%PATH%;$(ProjectDir)../../../${KOTEK_DEPS_FOLDER}/wxWidgets/lib/vc_x64_dll/;${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-endif()
+    if (WIN32)
+        set_target_properties(${PROJECT_NAME} PROPERTIES VS_DEBUGGER_ENVIRONMENT "PATH=%PATH%;$(ProjectDir)../../../${KOTEK_DEPS_FOLDER}/wxWidgets/lib/vc_x64_dll/;${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+    endif()
 endif()
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -55,10 +52,4 @@ else()
     endforeach()
 endif()
 
-target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
-
-target_link_libraries(${PROJECT_NAME} kotek.game)
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} ktx)
-target_link_libraries(${PROJECT_NAME} glfw)
-
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.game)

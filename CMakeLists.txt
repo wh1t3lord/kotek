@@ -129,6 +129,13 @@ add_subdirectory("engine/kotek.core.containers.unordered_map")
 add_subdirectory("engine/kotek.core.containers.unordered_set")
 add_subdirectory("engine/kotek.core.containers.variant")
 add_subdirectory("engine/kotek.core.containers.vector")
+add_subdirectory("engine/kotek.core.containers.multithreading")
+add_subdirectory("engine/kotek.core.containers.multithreading.tbb")
+add_subdirectory("engine/kotek.core.containers.multithreading.atomic")
+add_subdirectory("engine/kotek.core.containers.multithreading.mutex")
+add_subdirectory("engine/kotek.core.containers.multithreading.shared_mutex")
+add_subdirectory("engine/kotek.core.containers.multithreading.thread")
+add_subdirectory("engine/kotek.core.containers.multithreading.semaphore")
 add_subdirectory("engine/kotek.core.format")
 add_subdirectory("engine/kotek.core.memory")
 add_subdirectory("engine/kotek.core.memory.gpu")
@@ -142,9 +149,9 @@ add_subdirectory("engine/kotek.core.types.numerics")
 add_subdirectory("engine/kotek.core.types.string")
 add_subdirectory("engine/kotek.core.window")
 add_subdirectory("engine/kotek.core.window.glfw")
+
 add_subdirectory("engine/kotek.game")
-add_subdirectory("engine/kotek.render")
-add_subdirectory("engine/kotek.render.model")
+
 add_subdirectory("engine/kotek.ui")
 add_subdirectory("engine/kotek.ui.imgui")
 
@@ -153,8 +160,16 @@ if (WIN32)
 #add_subdirectory("engine/kotek.render.dx12")
 endif()
 
+add_subdirectory("engine/kotek.render")
+
+add_subdirectory("engine/kotek.render.model")
+
 add_subdirectory("engine/kotek.render.vk")
+
 add_subdirectory("engine/kotek.render.gl")
-add_subdirectory("engine/kotek")
+add_subdirectory("engine/kotek.render.gl.glad3")
+add_subdirectory("engine/kotek.render.gl.glad4.6")
+
+add_subdirectory("engine/kotek_exe")
 
 set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT kotek)
