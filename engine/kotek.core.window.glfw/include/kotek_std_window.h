@@ -1,18 +1,6 @@
 #pragma once
 
-#include <kotek.core/include/kotek_std.h>
-
-#include "imgui.h"
-#include "imgui_impl_glfw.h"
-#include "imgui_impl_opengl3.h"
-#include "imgui_impl_vulkan.h"
-#include "kotek_engine_keycodes.h"
-#include "vk_mem_alloc.h"
-
 #ifdef KOTEK_PLATFORM_WINDOWS
-	#include "imgui_impl_dx12.h"
-	#include "imgui_impl_dx9.h"
-	#include "imgui_impl_win32.h"
 	#include <ShellScalingApi.h>
 	#include <dwmapi.h>
 	#include <windows.h>
@@ -21,9 +9,6 @@
 
 namespace Kotek
 {
-	// sui = sdkui
-	namespace sui = ImGui;
-
 	namespace Core
 	{
 		enum class eEngineFeature;
@@ -33,7 +18,7 @@ namespace Kotek
 
 namespace Kotek
 {
-	namespace Engine
+	namespace Core
 	{
 		class ktkWindow
 		{

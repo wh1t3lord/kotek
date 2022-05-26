@@ -1,9 +1,9 @@
-#include "../include/kotek_engine_window_impl.h"
+#include "../include/kotek_std_window.h"
 #include <kotek.core/include/kotek_main_manager.h>
 
 namespace Kotek
 {
-	namespace Engine
+	namespace Core
 	{
 		ktkWindow::ktkWindow(Core::eEngineFeature current_render) :
 			m_p_window(nullptr)

@@ -11,7 +11,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message("DETECTING LIBRARIES for ${PROJECT_NAME}")
 
 find_package(mimalloc REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
-find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_memory.h"
@@ -21,8 +20,7 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 if(WIN32)
-target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/vld/include/")
+	target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/vld/include/")
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc-static)
-target_link_libraries(${PROJECT_NAME} PUBLIC TBB::tbb)
