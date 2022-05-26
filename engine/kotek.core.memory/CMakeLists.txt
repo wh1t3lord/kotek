@@ -24,3 +24,4 @@ if(WIN32)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc-static)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.vld)

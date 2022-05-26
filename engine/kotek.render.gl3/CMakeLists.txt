@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19.3)
 
-project(kotek.render.gl VERSION 1 LANGUAGES CXX)
+project(kotek.render.gl3 VERSION 1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -17,13 +17,9 @@ link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/lib/")
 link_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
-find_package(Boost COMPONENTS unit_test_framework REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 message("DETECTING LIBRARIES for ${PROJECT_NAME}")
 
-message("${CMAKE_CURRENT_SOURCE_DIR}")
 message("OpenGL Headers: " + OpenGL::OpenGL)
 message("OpenGL libraries: " + OpenGL::OpenGL)
 
@@ -88,14 +84,6 @@ source_group("Core" FILES ${to_include_core_files})
 source_group("Module" FILES ${to_include_module_files})
 source_group("Memory management" FILES ${to_include_memory_management_files})
 
-target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
-target_include_directories(${PROJECT_NAME} PRIVATE OpenGL::OpenGL)
-
-target_link_libraries(${PROJECT_NAME} OpenGL::GL)
-target_link_libraries(${PROJECT_NAME} kotek.core)
-target_link_libraries(${PROJECT_NAME} kotek.render.model)
-target_link_libraries(${PROJECT_NAME} shaderc_combined)
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} glfw)
-target_link_libraries(${PROJECT_NAME} ktx)
-target_link_libraries(${PROJECT_NAME} TBB::tbb)
+target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::GL)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
