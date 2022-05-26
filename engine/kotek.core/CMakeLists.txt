@@ -31,35 +31,7 @@ else()
 	set(to_include_tests "")
 endif()
 
-if ("${KOTEK_CPU_PROFILER}" STREQUAL "ON")
-	message("[Engine]: adding files of CPU profiler in project ${PROJECT_NAME}")
-	set(to_include_cpu_profiler
-		"tracy/Tracy.hpp"
-		"tracy/TracyClient.cpp")
-
-	if ("${KOTEK_GPU_PROFILER}" STREQUAL "ON")
-		message("[Engine]: adding files of GPU profiler in project ${PROJECT_NAME}")
-		set(to_include_gpu_profiler 
-			"tracy/TracyD3D11.hpp"
-			"tracy/TracyD3D12.hpp"
-			"tracy/TracyOpenGL.hpp"
-			"tracy/TracyVulkan.hpp")
-	endif()
-
-else()
-	set(to_include_cpu_profiler "")
-	set(to_include_gpu_profiler "")
-endif()
-
-# TODO: think about including the last version of OpenGL and respect to gdal4 folder
-set(to_include_glad "glad3/glad.h"
-					"glad3/glad.c")
-
-
-
 message("[Engine]: files to attach (KOTEK_TESTS): ${to_include_tests}")
-message("[Engine]: files to attach (KOTEK_CPU_PROFILER): ${to_include_cpu_profiler}")
-message("[Engine]: files to attach (KOTEK_GPU_PROFILER): ${to_include_gpu_profiler}")
 
 add_library(${PROJECT_NAME} STATIC 
 	"src/main_core_dll.cpp"
@@ -80,9 +52,6 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_resource_manager.cpp"
 	"include/kotek_interface_resource_loader_manager.h"
 	${to_include_tests}
-	${to_include_cpu_profiler}
-	${to_include_gpu_profiler}
-	${to_include_glad}
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
@@ -101,6 +70,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.string)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.format)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window)
-target_link_libraries(${PROJECT_NAME} PUBLIC ${Boost_LIBRARIES})
+target_link_libraries(${PROJECT_NAME} PUBLIC Boost::headers Boost::json Boost::unit_test_framework Boost::filesystem)
 target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
 target_link_libraries(${PROJECT_NAME} PUBLIC ${ASSIMP_LIBRARIES})
