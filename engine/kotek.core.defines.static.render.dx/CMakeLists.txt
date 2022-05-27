@@ -20,7 +20,7 @@ message("[Engine]: DirectX is '${KOTEK_DIRECTX}'")
 
 if ("${KOTEK_DIRECTX}" STREQUAL "ON")
 
-	file(WRITE ./include/kotek_std_preprocessors.h "#pragma once
+	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 
 	#ifdef KOTEK_DIRECTX
 		#define KOTEK_USE_DIRECTX
@@ -30,7 +30,7 @@ if ("${KOTEK_DIRECTX}" STREQUAL "ON")
 
 else()
 
-	file(WRITE ./include/kotek_std_preprocessors.h "#pragma once")
+	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
 
 endif()
 

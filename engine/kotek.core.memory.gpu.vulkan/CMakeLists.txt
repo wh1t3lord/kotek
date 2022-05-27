@@ -10,4 +10,4 @@ add_library(${PROJECT_NAME} STATIC
 	"include/vk_mem_alloc.h"
 	"src/main_core_memory_gpu_vulkan_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.vk)

@@ -20,7 +20,7 @@ endif()
 
 message("[Engine]: Vulkan is '${KOTEK_VULKAN}'")
 
-file(WRITE ./include/kotek_std_preprocessors.h "#pragma once
+file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 
 #ifdef KOTEK_OPENGL
 	#define KOTEK_USE_OPENGL

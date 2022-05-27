@@ -15,7 +15,7 @@ endif()
 
 message("[Engine]: Vulkan is '${KOTEK_VULKAN}'")
 
-file(WRITE ./include/kotek_std_preprocessors.h "#pragma once
+file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 
 #ifdef KOTEK_VULKAN
 	#define KOTEK_USE_VULKAN
@@ -27,4 +27,4 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_defines_static_render_vk.h"
 	"src/main_core_defines_static_render_vk_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

@@ -10,5 +10,3 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_console.cpp"
 	"include/kotek_core_console.h"
 	"src/main_core_console_dll.cpp")
-
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)

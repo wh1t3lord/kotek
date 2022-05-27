@@ -10,3 +10,4 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_defines_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent)
