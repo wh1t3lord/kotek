@@ -9,7 +9,6 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_constants.h"
 	"src/main_core_constants_dll.cpp")
 
-
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.math)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.string)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.ecs)
