@@ -1,39 +1,37 @@
 #include "../include/kotek_core_memory.h"
-#include <iostream>
-#include <mimalloc.h>
 
 namespace Kotek
 {
 	namespace Core
 	{
-		bool InitializeModule_Core_Memory(void)
+		bool InitializeModule_Core_Memory(ktkMainManager* p_manager)
 		{
-			std::cout << "[" << __FILE__ << "]"
-					  << "[" << __FUNCTION__ << "]"
-					  << "[" << __LINE__ << "]"
-					  << " "
-					  << "initialized!" << std::endl;
-
-			std::cout << "[" << __FILE__ << "]"
-					  << "[" << __FUNCTION__ << "]"
-					  << "[" << __LINE__ << "]"
-					  << " "
-					  << "mimalloc version: " << mi_version() << std::endl;
+			InitializeModule_Core_Memory_CPU(p_manager);
+			InitializeModule_Core_Memory_GPU(p_manager);
 
 			return true;
 		}
-
-		bool SerializeModule_Core_Memory(void) { return true; }
-
-		bool DeserializeModule_Core_Memory(void) { return true; }
-
-		bool ShutdownModule_Core_Memory(void)
+		
+		bool ShutdownModule_Core_Memory(ktkMainManager* p_manager)
 		{
-			std::cout << "[" << __FILE__ << "]"
-					  << "[" << __FUNCTION__ << "]"
-					  << "[" << __LINE__ << "]"
-					  << " "
-					  << "shutdown" << std::endl;
+			ShutdownModule_Core_Memory_CPU(p_manager);
+			ShutdownModule_Core_Memory_GPU(p_manager);
+
+			return true;
+		}
+		
+		bool SerializeModule_Core_Memory(ktkMainManager* p_manager)
+		{
+			SerializeModule_Core_Memory_CPU(p_manager);
+			SerializeModule_Core_Memory_GPU(p_manager);
+
+			return true;
+		}
+		
+		bool DeserializeModule_Core_Memory(ktkMainManager* p_manager)
+		{
+			SerializeModule_Core_Memory_CPU(p_manager);
+			SerializeModule_Core_Memory_GPU(p_manager);
 
 			return true;
 		}

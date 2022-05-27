@@ -1,0 +1,22 @@
+#pragma once
+
+#include "kotek_std_memory.h"
+
+namespace Kotek
+{
+	namespace Core
+	{
+		class ktkMainManager;
+	}
+}
+
+namespace Kotek
+{
+	namespace Core
+	{
+		bool InitializeModule_Core_Memory_VLD(ktkMainManager* p_manager);
+		bool ShutdownModule_Core_Memory_VLD(ktkMainManager* p_manager);
+		bool SerializeModule_Core_Memory_VLD(ktkMainManager* p_manager);
+		bool DeserializeModule_Core_Memory_VLD(ktkMainManager* p_manager);
+	} // namespace Core
+} // namespace Kotek

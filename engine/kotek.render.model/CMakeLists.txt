@@ -9,8 +9,6 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render_model.h"
-	"include/kotek_model.h"
-	"src/kotek_model.cpp"
 	"src/main_render_model_dll.cpp"
 )
 

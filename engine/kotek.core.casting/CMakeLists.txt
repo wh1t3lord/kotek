@@ -8,8 +8,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Boost COMPONENTS headers REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 add_library(${PROJECT_NAME} STATIC
-	"include/kotek_std_alias_casting.h"
 	"include/kotek_core_casting.h"
 	"src/main_core_casting_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Boost::headers)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.string)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.lexical)

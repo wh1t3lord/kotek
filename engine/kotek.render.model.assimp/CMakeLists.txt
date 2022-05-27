@@ -15,6 +15,8 @@ find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/assimp/${CMAKE_BU
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render_model_assimp.h"
+	"include/kotek_model.h"
+	"src/kotek_model.cpp"
 	"src/main_render_model_assimp_dll.cpp"
 )
 

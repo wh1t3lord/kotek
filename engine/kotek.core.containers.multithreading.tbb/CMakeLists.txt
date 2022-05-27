@@ -12,4 +12,4 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_containers_multithreading_tbb_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
-target_link_libraries(${PROJECT_NAME} TBB::tbb)
+target_link_libraries(${PROJECT_NAME} PUBLIC TBB::tbb)

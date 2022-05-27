@@ -10,6 +10,6 @@ add_library(${PROJECT_NAME} STATIC
 	"include/glad/glad.h"
 	"include/KHR/khrplatform.h"
 	"src/glad.c"
-	"src/main_render_gl_glad4.6.cpp")
+	"src/main_render_gl_glad4.6_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)

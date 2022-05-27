@@ -6,8 +6,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC
-	"include/kotek_text_file.h"
-	"src/kotek_text_file.cpp"
+	"include/kotek_file_text.h"
+	"src/kotek_file_text.cpp"
 	"include/kotek_core_filesystem_file_text.h"
 	"src/main_core_filesystem_file_text_dll.cpp")
 

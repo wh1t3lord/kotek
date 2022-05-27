@@ -18,11 +18,6 @@ link_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 
-message("DETECTING LIBRARIES for ${PROJECT_NAME}")
-
-message("OpenGL Headers: " + OpenGL::OpenGL)
-message("OpenGL libraries: " + OpenGL::OpenGL)
-
 set(to_include_render_graph_files
     "include/kotek_render_graph.h"
     "src/kotek_render_graph.cpp"
@@ -87,3 +82,4 @@ source_group("Memory management" FILES ${to_include_memory_management_files})
 target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::GL)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad3)
