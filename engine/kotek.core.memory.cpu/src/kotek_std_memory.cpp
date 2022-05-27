@@ -1,4 +1,9 @@
 #include "../include/kotek_std_memory.h"
+#include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
+
+#ifdef KOTEK_PLATFORM_WINDOWS
+	#include <mimalloc-new-delete.h>
+#endif
 
 namespace Kotek
 {

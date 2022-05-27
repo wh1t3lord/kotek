@@ -1,21 +1,12 @@
-﻿#include <kotek.core.memory/include/kotek_core_memory.h>
-#include <kotek.engine.window/include/kotek_engine_window.h>
-
-#include "../include/kotek_core.h"
+﻿#include "../include/kotek_core.h"
 #include "../include/kotek_main_manager.h"
-
-#ifdef KOTEK_PLATFORM_WINDOWS
-	#include <mimalloc-new-delete.h>
-#endif
 
 namespace Kotek
 {
 	namespace Core
 	{
-		bool RegisterCommands(ktkMainManager& main_manager) noexcept
+		bool RegisterCommands(ktkMainManager* p_manager) noexcept
 		{
-
-
 			return true;
 		}
 
@@ -28,24 +19,29 @@ namespace Kotek
 #endif
 		}
 
-		bool InitializeModule_Core(ktkMainManager& main_manager)
+		bool InitializeModule_Core(ktkMainManager* p_manager)
 		{
-			InitializeModule_Core_Memory();
-			initializeModule_Core_API();
-			RegisterCommands(main_manager);
+			InitializeModule_Core_Memory(p_manager);
+			InitializeModule_Core_API(p_manager);
+			InitializeModule_Core_Math(p_manager);
+			InitializeModule_Core_Casting(p_manager);
+
+			RegisterCommands(p_manager);
 			RegisterAllTests();
 
 			return true;
 		}
 
-		bool SerializeModule_Core(void) { return true; }
+		bool SerializeModule_Core(ktkMainManager* p_manager) { return true; }
 
-		bool DeserializeModule_Core(void) { return true; }
+		bool DeserializeModule_Core(ktkMainManager* p_manager) { return true; }
 
-		bool ShutdownModule_Core(void)
+		bool ShutdownModule_Core(ktkMainManager* p_manager)
 		{
-			shutdownModule_Core_API();
-			ShutdownModule_Core_Memory();
+			ShutdownModule_Core_Math(p_manager);
+			ShutdownModule_Core_API(p_manager);
+			ShutdownModule_Core_Memory(p_manager);
+			ShutdownModule_Core_Casting(p_manager);
 
 			return true;
 		}

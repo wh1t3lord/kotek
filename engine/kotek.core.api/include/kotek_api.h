@@ -162,9 +162,9 @@ namespace Kotek
 				void* p_instance, const void* p_callbacks) = 0;
 		};
 
-		bool initializeModule_Core_API(void);
-		bool serializeModule_Core_API(void);
-		bool deserializeModule_Core_API(void);
-		bool shutdownModule_Core_API(void);
+		bool InitializeModule_Core_API(ktkMainManager*);
+		bool ShutdownModule_Core_API(ktkMainManager*);
+		bool SerializeModule_Core_API(ktkMainManager*);
+		bool DeserializeModule_Core_API(ktkMainManager*);
 	} // namespace Core
 } // namespace Kotek

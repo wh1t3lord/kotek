@@ -4,17 +4,23 @@ namespace Kotek
 {
 	namespace Core
 	{
-		bool initializeModule_Core_API()
+		bool InitializeModule_Core_API(ktkMainManager* p_manager)
 		{
 			// not used really
 
 			return true;
 		}
 
-		bool serializeModule_Core_API(void) { return true; }
+		bool SerializeModule_Core_API(ktkMainManager* p_manager)
+		{
+			return true;
+		}
 
-		bool deserializeModule_Core_API(void) { return true; }
+		bool DeserializeModule_Core_API(ktkMainManager* p_manager)
+		{
+			return true;
+		}
 
-		bool shutdownModule_Core_API(void) { return true; }
+		bool ShutdownModule_Core_API(ktkMainManager* p_manager) { return true; }
 	} // namespace Core
 } // namespace Kotek
