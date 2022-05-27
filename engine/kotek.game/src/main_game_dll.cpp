@@ -233,11 +233,11 @@ namespace Kotek
 			KOTEK_MESSAGE(
 				"Compiled with: Visual Studio 2019 version 16.10, 16.11");
 	#elif (_MSC_VER == 1930)
-			KOTEK_MESSAGE("Visual Studio 2022 RTW (17.0)");
+			KOTEK_MESSAGE("Compiled with: Visual Studio 2022 RTW (17.0)");
 	#elif (_MSC_VER == 1931)
-			KOTEK_MESSAGE("Visual Studio 2022 version 17.1");
+			KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.1");
 	#elif (_MSC_VER == 1932)
-			KOTEK_MESSAGE("Visual Studio 2022 version 17.2");
+			KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.2");
 	#endif
 
 #endif
