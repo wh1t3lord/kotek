@@ -1,6 +1,5 @@
 #pragma once
 
-#include <kotek.core.constants.math/include/kotek_core_constants_math.h>
 #include "kotek_std_constants.h"
 
 namespace Kotek

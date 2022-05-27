@@ -1,7 +1,7 @@
 #pragma once
 
-#include <kotek.core.types.char/include/kotek_core_types_char.h>
 #include <kotek.core.types.numerics/include/kotek_core_types_numerics.h>
+
 #include <limits>
 
 #undef max
@@ -11,12 +11,6 @@ namespace Kotek
 {
 	namespace ktk
 	{
-#ifdef KOTEK_PLATFORM_WINDOWS
-		constexpr tchar kPathSeparator = KOTEK_TEXT('\\');
-#else
-		constexpr tchar kPathSeparator = KOTEK_TEXT('/');
-#endif
-
 		constexpr ktk::uint64_t kMax_UINT64 =
 			std::numeric_limits<ktk::uint64_t>::max();
 		constexpr ktk::uint32_t kMax_UINT32 =
@@ -53,10 +47,4 @@ namespace Kotek
 		constexpr ktk::int8_t kMin_INT8 =
 			std::numeric_limits<ktk::int8_t>::min();
 	} // namespace ktk
-
-	constexpr ktk::entity_t kInvalidEntityID = 0;
-	constexpr ktk::entity_t kActorEntityID = 1;
-
-	constexpr int _kDefaultWindowSizeWidth = 640;
-	constexpr int _kDefaultWindowSizeHeight = 480;
 } // namespace Kotek

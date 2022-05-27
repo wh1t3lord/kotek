@@ -1,7 +1,5 @@
 #pragma once
 
-#include <kotek.core.defines/include/kotek_core_defines.h>
-
 namespace Kotek
 {
 	namespace ktk

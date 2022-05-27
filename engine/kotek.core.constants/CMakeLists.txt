@@ -6,10 +6,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC
-	"include/kotek_std_constants.h"
 	"include/kotek_core_constants.h"
 	"src/main_core_constants_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.numerics)
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.math)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.string)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.ecs)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.window)
