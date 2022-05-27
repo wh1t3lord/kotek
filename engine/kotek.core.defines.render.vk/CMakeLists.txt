@@ -5,6 +5,16 @@ project(kotek.core.defines.render.vk VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if ("${KOTEK_VULKAN}" STREQUAL "")
+	set(KOTEK_VULKAN "ON")
+endif()
+
+if ("${KOTEK_VULKAN}" STREQUAL "ON")
+	add_definitions(-DKOTEK_VULKAN)
+endif()
+
+message("[Engine]: Vulkan is '${KOTEK_VULKAN}'")
+
 file(WRITE ./include/kotek_std_preprocessors.h "#pragma once
 
 #ifdef KOTEK_VULKAN

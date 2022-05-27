@@ -95,16 +95,6 @@ endif()
 
 message("[Engine]: math library is '${KOTEK_MATH_LIBRARY}'")
 
-if ("${KOTEK_VULKAN}" STREQUAL "")
-	set(KOTEK_VULKAN "ON")
-endif()
-
-if ("${KOTEK_VULKAN}" STREQUAL "ON")
-	add_definitions(-DKOTEK_VULKAN)
-endif()
-
-message("[Engine]: Vulkan is '${KOTEK_VULKAN}'")
-
 include_directories("engine")
 
 add_subdirectory("engine/kotek.core")
