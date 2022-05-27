@@ -31,7 +31,7 @@ file(WRITE ./include/kotek_std_preprocessors.h "#pragma once
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
-	"include/kotek_core_defines_render_gl.h"
-	"src/main_core_defines_render_gl_dll.cpp")
+	"include/kotek_core_defines_static_render_gl.h"
+	"src/main_core_defines_static_render_gl_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static)

@@ -43,3 +43,4 @@ CMakeFiles/
 # exclude doxygen output
 doc/doxygen/html/*
 user_data/
+engine/**/kotek_std_preprocessors.h

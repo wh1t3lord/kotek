@@ -9,6 +9,6 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_defines_render.h"
 	"src/main_core_defines_render_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.render.dx)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.render.gl)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.render.vk)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.dx)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.vk)

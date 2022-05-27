@@ -1,7 +1,0 @@
-#pragma once
-
-#ifdef KOTEK_OPENGL
-	#define KOTEK_USE_OPENGL
-	#define KOTEK_USE_OPENGL_MODERN_VERSION 3
-	#define KOTEK_USE_OPENGL_LEGACY_VERSION 3
-#endif

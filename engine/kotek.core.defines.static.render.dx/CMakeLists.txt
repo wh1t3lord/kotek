@@ -35,8 +35,8 @@ else()
 endif()
 
 add_library(${PROJECT_NAME} STATIC
-	"include/kotek_core_defines_render_dx.h"
+	"include/kotek_core_defines_static_render_dx.h"
 	"include/kotek_std_preprocessors.h"
-	"src/main_core_defines_render_dx_dll.cpp")
+	"src/main_core_defines_static_render_dx_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static)
