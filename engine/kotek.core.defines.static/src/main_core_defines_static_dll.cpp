@@ -14,6 +14,7 @@ namespace Kotek
 			InitializeModule_Core_Defines_Static_SDK(p_manager);
 			InitializeModule_Core_Defines_Static_String(p_manager);
 			InitializeModule_Core_Defines_Static_Tests(p_manager);
+			InitializeModule_Core_Defines_Static_Render(p_manager);
 
 			return true;
 		}
@@ -28,6 +29,7 @@ namespace Kotek
 			ShutdownModule_Core_Defines_Static_SDK(p_manager);
 			ShutdownModule_Core_Defines_Static_String(p_manager);
 			ShutdownModule_Core_Defines_Static_Tests(p_manager);
+			ShutdownModule_Core_Defines_Static_Render(p_manager);
 
 			return true;
 		}
@@ -42,6 +44,7 @@ namespace Kotek
 			SerializeModule_Core_Defines_Static_SDK(p_manager);
 			SerializeModule_Core_Defines_Static_String(p_manager);
 			SerializeModule_Core_Defines_Static_Tests(p_manager);
+			SerializeModule_Core_Defines_Static_Render(p_manager);
 
 			return true;
 		}
@@ -56,6 +59,7 @@ namespace Kotek
 			DeserializeModule_Core_Defines_Static_SDK(p_manager);
 			DeserializeModule_Core_Defines_Static_String(p_manager);
 			DeserializeModule_Core_Defines_Static_Tests(p_manager);
+			DeserializeModule_Core_Defines_Static_Render(p_manager);
 
 			return true;
 		}

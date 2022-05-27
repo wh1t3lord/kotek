@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19.3)
 
-project(kotek.core.defines.render.vk VERSION 1 LANGUAGES CXX)
+project(kotek.core.defines.static.render.vk VERSION 1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -19,6 +19,10 @@ file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 
 #ifdef KOTEK_VULKAN
 	#define KOTEK_USE_VULKAN
+
+	#ifdef KOTEK_DEBUG
+		#define VMA_DEBUG_LOG
+	#endif
 #endif
 ")
 

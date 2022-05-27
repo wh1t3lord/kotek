@@ -8,6 +8,7 @@
 #include <kotek.core.defines.static.sdk/include/kotek_core_defines_static_sdk.h>
 #include <kotek.core.defines.static.string/include/kotek_core_defines_static_string.h>
 #include <kotek.core.defines.static.tests/include/kotek_core_defines_static_tests.h>
+#include <kotek.core.defines.static.render/include/kotek_core_defines_render.h>
 
 namespace Kotek
 {
