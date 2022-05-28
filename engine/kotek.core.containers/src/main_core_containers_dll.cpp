@@ -24,6 +24,9 @@ namespace Kotek
 			InitializeModule_Core_Containers_String(p_manager);
 			InitializeModule_Core_Containers_Unique_Ptr(p_manager);
 			InitializeModule_Core_Containers_Unordered_Map(p_manager);
+			InitializeModule_Core_Containers_Unordered_Set(p_manager);
+			InitializeModule_Core_Containers_Variant(p_manager);
+			InitializeModule_Core_Containers_Vector(p_manager);
 
 			return true;
 		}
@@ -48,6 +51,9 @@ namespace Kotek
 			SerializeModule_Core_Containers_String(p_manager);
 			SerializeModule_Core_Containers_Unique_Ptr(p_manager);
 			SerializeModule_Core_Containers_Unordered_Map(p_manager);
+			SerializeModule_Core_Containers_Unordered_Set(p_manager);
+			SerializeModule_Core_Containers_Variant(p_manager);
+			SerializeModule_Core_Containers_Vector(p_manager);
 
 			return true; 
 		}
@@ -72,6 +78,9 @@ namespace Kotek
 			DeserializeModule_Core_Containers_String(p_manager);
 			DeserializeModule_Core_Containers_Unique_Ptr(p_manager);
 			DeserializeModule_Core_Containers_Unordered_Map(p_manager);
+			DeserializeModule_Core_Containers_Unordered_Set(p_manager);
+			DeserializeModule_Core_Containers_Variant(p_manager);
+			DeserializeModule_Core_Containers_Vector(p_manager);
 
 			return true;
 		}
@@ -96,6 +105,9 @@ namespace Kotek
 			ShutdownModule_Core_Containers_String(p_manager);
 			ShutdownModule_Core_Containers_Unique_Ptr(p_manager);
 			ShutdownModule_Core_Containers_Unordered_Map(p_manager);
+			ShutdownModule_Core_Containers_Unordered_Set(p_manager);
+			ShutdownModule_Core_Containers_Variant(p_manager);
+			ShutdownModule_Core_Containers_Vector(p_manager);
 
 			return true; 
 		}

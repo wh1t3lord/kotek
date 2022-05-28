@@ -12,6 +12,8 @@ namespace Kotek
 	{
 #ifdef KOTEK_USE_BOOST_LIBRARY
 		namespace json = boost::json;
+#else
+	#error TODO add support for nlohmann json
 #endif
 	} // namespace ktk
 } // namespace Kotek

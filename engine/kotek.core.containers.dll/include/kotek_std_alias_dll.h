@@ -12,6 +12,8 @@ namespace Kotek
 	{
 #ifdef KOTEK_USE_BOOST_LIBRARY
 		namespace dll = boost::dll;
+#else
+	#error add replacement for boost::dll
 #endif
 	} // namespace ktk
 } // namespace Kotek
