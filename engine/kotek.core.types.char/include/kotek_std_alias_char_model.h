@@ -1,5 +1,8 @@
 #pragma once
 
+#include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
+#include <kotek.core.defines.static.string/include/kotek_core_defines_static_string.h>
+
 namespace Kotek
 {
 	namespace ktk

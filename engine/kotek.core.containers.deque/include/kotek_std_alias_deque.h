@@ -13,7 +13,7 @@ namespace Kotek
 	{
 #ifdef KOTEK_USE_BOOST_LIBRARY
 		template <typename Type, typename Allocator = mi_stl_allocator<Type>>
-		using deque = boost::deque<Type, Allocator>;
+		using deque = boost::container::deque<Type, Allocator>;
 #else
 		template <typename Type, typename Allocator = mi_stl_allocator<Type>>
 		using deque = std::deque<Type, Allocator>;
