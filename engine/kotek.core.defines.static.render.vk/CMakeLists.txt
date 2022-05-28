@@ -10,7 +10,7 @@ if ("${KOTEK_VULKAN}" STREQUAL "")
 endif()
 
 if ("${KOTEK_VULKAN}" STREQUAL "ON")
-	add_definitions(-DKOTEK_VULKAN)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_VULKAN)
 endif()
 
 message("[Engine]: Vulkan is '${KOTEK_VULKAN}'")
@@ -32,3 +32,5 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_defines_static_render_vk_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})

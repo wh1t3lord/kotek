@@ -15,11 +15,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_std_string.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Boost::headers)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.dependent)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.char)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.string)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.lexical)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.string)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.hash)

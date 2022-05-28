@@ -9,5 +9,3 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_thread.h"
 	"include/kotek_core_containers_multithreading_thread.h"
 	"src/main_core_containers_multithreading_thread_dll.cpp")
-
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)

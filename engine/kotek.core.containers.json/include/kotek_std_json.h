@@ -1,6 +1,8 @@
 #pragma once
 
-#include "kotek_std.h"
+#include "kotek_std_alias_json.h"
+#include <kotek.core.containers.string/include/kotek_core_containers_string.h>
+#include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 
 namespace Kotek
 {

@@ -14,12 +14,12 @@ if ("${KOTEK_MATH_LIBRARY}" STREQUAL "")
 endif()
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-	add_definitions(-DKOTEK_MATH_LIBRARY_GLM)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_MATH_LIBRARY_GLM)
 	set(glm_DIR "../../${KOTEK_DEPS_FOLDER}/glm/cmake/glm/")
 elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-	add_definitions(-DKOTEK_MATH_LIBRARY_DXM)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_MATH_LIBRARY_DXM)
 elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "EIGEN")
-	add_definitions(-DKOTEK_MATH_LIBRARY_EIGEN)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_MATH_LIBRARY_EIGEN)
 endif()
 
 message("[Engine]: math library is '${KOTEK_MATH_LIBRARY}'")
@@ -43,3 +43,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
 	"include/kotek_core_defines_static_math.h"
 	"src/main_core_defines_static_math_dll.cpp")
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})

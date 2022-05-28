@@ -4,6 +4,8 @@
 #include <kotek.core.memory/include/kotek_core_memory.h>
 #include <kotek.core.casting/include/kotek_core_casting.h>
 #include <kotek.core.console/include/kotek_core_console.h>
+#include <kotek.core.constants/include/kotek_core_constants.h>
+#include <kotek.core.containers/include/kotek_core_containers.h>
 
 namespace Kotek
 {

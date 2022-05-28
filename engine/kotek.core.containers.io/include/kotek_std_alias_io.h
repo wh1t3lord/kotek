@@ -1,7 +1,7 @@
 #pragma once
 
 #include <kotek.core.types.char/include/kotek_core_types_char.h>
-#include <iostream>
+#include <fstream>
 
 namespace Kotek
 {

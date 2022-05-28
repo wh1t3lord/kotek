@@ -10,7 +10,7 @@ if ("${KOTEK_DIRECTX}" STREQUAL "")
 endif()
 
 if ("${KOTEK_DIRECTX}" STREQUAL "ON")
-	add_definitions(-DKOTEK_DIRECTX)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_DIRECTX)
 
 	# if you set 12 it means we will add all directx versions or those who is equal or lower to "x" value
 	set(KOTEK_DIRECTX_VERSION 12)
@@ -40,3 +40,5 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_defines_static_render_dx_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static)
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})

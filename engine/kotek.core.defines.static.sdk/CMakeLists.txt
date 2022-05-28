@@ -10,7 +10,7 @@ if ("${KOTEK_SDK}" STREQUAL "")
 endif()
 
 if ("${KOTEK_SDK}" STREQUAL "ON")
-	add_definitions(-DKOTEK_SDK)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_SDK)
 endif()
 
 if ("${KOTEK_SDK}" STREQUAL "ON")
@@ -28,3 +28,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
 	"include/kotek_core_defines_static_sdk.h"
 	"src/main_core_defines_static_sdk_dll.cpp")
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})

@@ -11,7 +11,7 @@ endif()
 
 message("[Engine]: TESTS is '${KOTEK_TESTS}'")
 if ("${KOTEK_TESTS}" STREQUAL "ON")
-	add_definitions(-DKOTEK_TESTS)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_TESTS)
 elseif("${KOTEK_TESTS}" STREQUAL "OFF")
 	set(KOTEK_TESTS_RUNTIME "OFF")
 endif()
@@ -24,7 +24,7 @@ message("[Engine]: TESTS use in runtime is '${KOTEK_TESTS_RUNTIME}'")
 
 if ("${KOTEK_TESTS}" STREQUAL "ON")
 	if ("${KOTEK_TESTS_RUNTIME}" STREQUAL "ON")
-		add_definitions(-DKOTEK_TESTS_RUNTIME)
+		list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_TESTS_RUNTIME)
 	endif()
 endif()
 
@@ -47,3 +47,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
 	"include/kotek_core_defines_static_tests.h"
 	"src/main_core_defines_static_tests_dll.cpp")
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})

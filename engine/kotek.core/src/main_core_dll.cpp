@@ -25,6 +25,7 @@ namespace Kotek
 			InitializeModule_Core_API(p_manager);
 			InitializeModule_Core_Math(p_manager);
 			InitializeModule_Core_Casting(p_manager);
+			InitializeModule_Core_Constants(p_manager);
 
 			RegisterCommands(p_manager);
 			RegisterAllTests();
@@ -42,6 +43,7 @@ namespace Kotek
 			ShutdownModule_Core_API(p_manager);
 			ShutdownModule_Core_Memory(p_manager);
 			ShutdownModule_Core_Casting(p_manager);
+			ShutdownModule_Core_Constants(p_manager);
 
 			return true;
 		}

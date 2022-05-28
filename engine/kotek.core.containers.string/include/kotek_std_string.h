@@ -1,8 +1,9 @@
 #pragma once
 
-#include <kotek.core.casting.string/include/kotek_core_casting_string.h>
-#include <kotek.core.casting/include/kotek_core_casting.h>
 #include <kotek.core.types.string/include/kotek_core_types_string.h>
+#include <kotek.core.casting.string/include/kotek_core_casting_string.h>
+#include <kotek.core.casting.lexical/include/kotek_core_casting_lexical.h>
+#include <kotek.core.defines.static.string/include/kotek_core_defines_static_string.h>
 
 // TODO: use ICU library for converting things warning STL4017
 #include <codecvt>

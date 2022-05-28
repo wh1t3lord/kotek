@@ -13,4 +13,5 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_containers_array_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Boost::headers Boost::container)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)

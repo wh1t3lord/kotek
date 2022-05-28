@@ -8,8 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 add_library(${PROJECT_NAME} STATIC
+	"include/kotek_tbb.h"
 	"include/kotek_core_containers_multithreading_tbb.h"
 	"src/main_core_containers_multithreading_tbb_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
 target_link_libraries(${PROJECT_NAME} PUBLIC TBB::tbb)

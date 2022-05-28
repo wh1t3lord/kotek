@@ -1,7 +1,8 @@
 #pragma once
 
+#include <kotek.core.defines.static.string/include/kotek_core_defines_static_string.h>
 #include <kotek.core.types.char/include/kotek_core_types_char.h>
-#include <kotek.core.memory/include/kotek_core_memory.h>
+#include <kotek.core.memory.cpu/include/kotek_core_memory_cpu.h>
 #include <string>
 
 namespace Kotek

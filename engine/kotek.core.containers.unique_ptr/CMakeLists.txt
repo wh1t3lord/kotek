@@ -8,6 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Boost COMPONENTS headers container REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 add_library(${PROJECT_NAME} STATIC
+	"include/kotek_std_alias_unique_ptr.h"
 	"include/kotek_core_containers_unique_ptr.h"
 	"src/main_core_containers_unique_ptr_dll.cpp")
 

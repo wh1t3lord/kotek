@@ -15,10 +15,10 @@ endif()
 
 message("[Engine]: CPU Profiler is '${KOTEK_CPU_PROFILER}'")
 if ("${KOTEK_CPU_PROFILER}" STREQUAL "ON")
-	add_definitions(-DKOTEK_CPU_PROFILER)
-	add_definitions(-DTRACY_ENABLE)
-	add_definitions(-DTRACY_DELAYED_INIT)
-	add_definitions(-DTRACY_MANUAL_LIFETIME)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_CPU_PROFILER)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DTRACY_ENABLE)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DTRACY_DELAYED_INIT)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DTRACY_MANUAL_LIFETIME)
 endif()
 
 if ("${KOTEK_GPU_PROFILER}" STREQUAL "")
@@ -31,7 +31,7 @@ endif()
 
 message("[Engine]: GPU Profiler is '${KOTEK_GPU_PROFILER}'")
 if ("${KOTEK_GPU_PROFILER}" STREQUAL "ON")
-	add_definitions(-DKOTEK_GPU_PROFILER)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_GPU_PROFILER)
 endif()
 
 if ("${KOTEK_CPU_PROFILER}" STREQUAL "ON")
@@ -60,3 +60,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
 	"include/kotek_core_defines_static_profilers.h"
 	"src/main_core_defines_static_profilers_dll.cpp")
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})

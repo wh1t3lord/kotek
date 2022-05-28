@@ -12,7 +12,7 @@ endif()
 message("[Engine]: UNICODE is '${KOTEK_UNICODE}'")
 
 if("${KOTEK_UNICODE}" STREQUAL "ON")
-	add_definitions(-DUNICODE -D_UNICODE -DKOTEK_UNICODE)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DUNICODE -D_UNICODE -DKOTEK_UNICODE)
 endif()
 
 if ("${KOTEK_UNICODE}" STREQUAL "ON")
@@ -30,3 +30,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
 	"include/kotek_core_defines_static_string.h"
 	"src/main_core_defines_static_string_dll.cpp")
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})

@@ -9,9 +9,8 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_containers.h"
 	"src/main_core_containers_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.any)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.array)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.hash)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.deque)

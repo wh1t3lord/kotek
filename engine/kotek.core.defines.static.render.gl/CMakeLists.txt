@@ -10,7 +10,7 @@ if ("${KOTEK_OPENGL}" STREQUAL "")
 endif()
 
 if ("${KOTEK_OPENGL}" STREQUAL "ON")
-	add_definitions(-DKOTEK_OPENGL)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_OPENGL)
 
 	# TODO: think about supporting modern version and split two things, like if we specify for legacy version 3 it means will be added all project until modern
 	# So if legacy = 1 it means from 1 version will be add to modern
@@ -35,3 +35,5 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_defines_static_render_gl_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static)
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
