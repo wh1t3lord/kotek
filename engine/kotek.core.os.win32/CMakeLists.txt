@@ -9,12 +9,21 @@ if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "GLFW")
 	find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 endif()
 
+if ("${KOTEK_VULKAN}" STREQUAL "ON")
+	find_package(Vulkan REQUIRED)
+endif()
+
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_os.h"
 	"include/kotek_core_os_win32.h"
 	"src/main_core_os_win32_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.win32)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)
+
+if ("${KOTEK_VULKAN}" STREQUAL "ON")
+	target_link_libraries(${PROJECT_NAME} PUBLIC Vulkan::Vulkan)
+endif()
 
 if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "GLFW")
 	target_link_libraries(${PROJECT_NAME} PUBLIC glfw)

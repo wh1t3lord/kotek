@@ -7,25 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 include_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/include/")
 
-if (WIN32)
-include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
-endif()
-
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/lib/")
 link_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
-
-find_package(Vulkan REQUIRED)
-find_package(Boost COMPONENTS unit_test_framework REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-
-message("DETECTING LIBRARIES for ${PROJECT_NAME}")
-
-message("${CMAKE_CURRENT_SOURCE_DIR}")
-message("Vulkan Headers: " + Vulkan::Headers)
-message("Vulkan libraries: " + Vulkan::Vulkan)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render_vk.h"
@@ -86,14 +71,7 @@ add_library(${PROJECT_NAME} STATIC
     "src/main_render_vk_dll.cpp"
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
-target_include_directories(${PROJECT_NAME} PRIVATE Vulkan::Headers)
-
-target_link_libraries(${PROJECT_NAME} Vulkan::Vulkan)
 target_link_libraries(${PROJECT_NAME} kotek.core)
 target_link_libraries(${PROJECT_NAME} kotek.render.model)
 target_link_libraries(${PROJECT_NAME} shaderc_combined)
-target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES})
-target_link_libraries(${PROJECT_NAME} glfw)
 target_link_libraries(${PROJECT_NAME} ktx)
-target_link_libraries(${PROJECT_NAME} TBB::tbb)

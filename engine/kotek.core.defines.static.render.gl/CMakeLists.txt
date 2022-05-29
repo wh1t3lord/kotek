@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_OPENGL}" STREQUAL "")
-	set(KOTEK_OPENGL "ON")
+	set(KOTEK_OPENGL "ON" CACHE INTERNAL "")
 endif()
 
 if ("${KOTEK_OPENGL}" STREQUAL "ON")
@@ -33,7 +33,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
 	"include/kotek_core_defines_static_render_gl.h"
 	"src/main_core_defines_static_render_gl_dll.cpp")
-
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static)
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})

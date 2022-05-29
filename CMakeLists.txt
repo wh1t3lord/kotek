@@ -98,6 +98,7 @@ add_subdirectory("engine/kotek.core.os.win32")
 add_subdirectory("engine/kotek.core.os.linux")
 add_subdirectory("engine/kotek.core.window")
 add_subdirectory("engine/kotek.core.window.glfw")
+add_subdirectory("engine/kotek.core.log")
 
 add_subdirectory("engine/kotek.game")
 

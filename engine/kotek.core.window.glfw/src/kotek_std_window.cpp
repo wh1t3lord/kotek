@@ -120,27 +120,29 @@ namespace Kotek
 				return;
 			}
 
-			if (current_render ==
-				Core::eEngineFeature::kEngine_Render_Renderer_OpenGL)
+			/* TODO: move to render module otherwise it is a bad design, window
+			can't know about render at all!!! if (current_render ==
+			    Core::eEngineFeature::kEngine_Render_Renderer_OpenGL)
 			{
-				glfwMakeContextCurrent(this->m_p_window);
+			    glfwMakeContextCurrent(this->m_p_window);
 
-				const char* p_description;
+			    const char* p_description;
 
-				if (glfwGetError(&p_description) != GLFW_NO_ERROR)
-				{
-					KOTEK_MESSAGE_ERROR_LEGACY(p_description);
-				}
+			    if (glfwGetError(&p_description) != GLFW_NO_ERROR)
+			    {
+			        KOTEK_MESSAGE_ERROR_LEGACY(p_description);
+			    }
 
-				if (!gladLoadGLLoader(
-						reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
-				{
-					KOTEK_ASSERT(false,
-						"failed to gladLoadGLLoader. Can't initialize OpenGL "
-						"for this system");
-					return;
-				}
+			    if (!gladLoadGLLoader(
+			            reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
+			    {
+			        KOTEK_ASSERT(false,
+			            "failed to gladLoadGLLoader. Can't initialize OpenGL "
+			            "for this system");
+			        return;
+			    }
 			}
+			*/
 		}
 
 		void ktkWindow::Shutdown(void)
@@ -171,5 +173,5 @@ namespace Kotek
 			this->m_screen_size_width = mode->width;
 		}
 
-	} // namespace Engine
+	} // namespace Core
 } // namespace Kotek

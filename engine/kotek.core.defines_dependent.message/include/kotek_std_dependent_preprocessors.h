@@ -1,6 +1,8 @@
 #pragma once
 
-#include <iostream>
+#include <kotek.core.log/include/kotek_core_log.h>
+#include <kotek.core.defines.static.string/include/kotek_core_defines_static_string.h>
+#include <kotek.core.format/include/kotek_core_format.h>
 
 #ifdef KOTEK_USE_UNICODE
 

@@ -3,6 +3,8 @@
 #include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
 #include <kotek.core.os/include/kotek_core_os.h>
+#include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
+#include <kotek.core.defines_dependent.message/include/kotek_core_defines_dependent_message.h>
 
 namespace Kotek
 {

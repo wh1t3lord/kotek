@@ -1,5 +1,8 @@
 #pragma once
 
+// TODO: when std:: will implement header <format> for Linux you need to remove
+// FMT library from that project
+
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
 #include <fmt/format.h>
 #include <fmt/xchar.h>
