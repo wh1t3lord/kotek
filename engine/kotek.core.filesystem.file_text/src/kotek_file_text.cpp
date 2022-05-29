@@ -1,4 +1,4 @@
-#include "../include/kotek_file.h"
+#include "../include/kotek_file_text.h"
 #include "../include/kotek_main_manager.h"
 
 namespace Kotek

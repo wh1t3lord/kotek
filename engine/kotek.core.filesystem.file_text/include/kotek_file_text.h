@@ -1,7 +1,6 @@
 #pragma once
 
-#include "kotek_json.h"
-#include "kotek_std.h"
+#include <kotek.core.containers.json/include/kotek_core_containers_json.h>
 
 namespace Kotek
 {
@@ -17,6 +16,8 @@ namespace Kotek
 	{
 		constexpr const char* kFormatFile = ".json";
 
+		// TODO: think about save and load operations, because it manages
+		// resource manager and its loader and saver managers
 		class ktkFile
 		{
 		public:
