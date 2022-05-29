@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kotek.core.defines.static.render.vk/include/kotek_core_defines_static_render_vk.h>
+#include <kotek.core.os/include/kotek_core_os.h>
 #include "vk_mem_alloc.h"
 
 namespace Kotek

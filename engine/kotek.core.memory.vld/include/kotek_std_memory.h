@@ -1,6 +1,7 @@
 #pragma once
 
-#include <kotek.core.defines/include/kotek_core_defines.h>
+#include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
+#include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 
 #ifdef KOTEK_PLATFORM_WINDOWS
 	#ifdef KOTEK_DEBUG

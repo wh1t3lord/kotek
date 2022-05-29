@@ -12,6 +12,5 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_memory_dll.cpp"
 )
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.vld)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.gpu)

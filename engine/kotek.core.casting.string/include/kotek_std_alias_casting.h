@@ -1,6 +1,6 @@
 #pragma once
 
-#include <kotek.core.defines/include/kotek_core_defines.h>
+#include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
 #include <kotek.core.types.string/include/kotek_core_types_string.h>
 
 namespace Kotek

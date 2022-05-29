@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 message("DETECTING LIBRARIES for ${PROJECT_NAME}")
 
 add_library(${PROJECT_NAME} STATIC
+	"include/kotek_std_memory.h"
 	"include/kotek_core_memory_vld.h" 
 	"src/main_core_memory_vld_dll.cpp"
 )

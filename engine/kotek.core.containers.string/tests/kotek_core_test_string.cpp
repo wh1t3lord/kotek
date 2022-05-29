@@ -1,6 +1,5 @@
 ﻿#include "../include/kotek_core_containers_string.h"
 #include <kotek.core.defines.static.tests/include/kotek_core_defines_static_tests.h>
-#include <kotek.core.defines_dependent.message/include/kotek_core_defines_dependent_message.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 #include <boost/test/unit_test.hpp>
 
@@ -11,7 +10,6 @@ namespace Kotek
 		void RegisterTests_String_ForModule_Core()
 		{
 #ifdef KOTEK_USE_TESTS
-			KOTEK_MESSAGE("registered!");
 #endif
 		}
 

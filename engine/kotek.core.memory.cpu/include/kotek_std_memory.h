@@ -1,15 +1,9 @@
 #pragma once
 
 #include <kotek.core.types.numerics/include/kotek_core_types_numerics.h>
-#include <kotek.core.defines/include/kotek_core_defines.h>
+#include <kotek.core.memory.vld/include/kotek_core_memory_vld.h>
 #include <cstring>
 #include <mimalloc.h>
-
-#ifdef KOTEK_PLATFORM_WINDOWS
-	#ifdef KOTEK_DEBUG
-		#include <vld.h>
-	#endif
-#endif
 
 namespace Kotek
 {
