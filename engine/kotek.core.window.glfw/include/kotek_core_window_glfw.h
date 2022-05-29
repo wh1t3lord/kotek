@@ -1,12 +1,22 @@
 #pragma once
 
+#include "kotek_std_window.h"
+
 namespace Kotek
 {
-	namespace Engine
+	namespace Core
 	{
-		bool InitializeModule_Engine_Window(void);
-		bool SerializeModule_Engine_Window(void);
-		bool DeserializeModule_Engine_Window(void);
-		bool ShutdownModule_Engine_Window(void);
-	} // namespace Engine
+		class ktkMainManager;
+	}
+} // namespace Kotek
+
+namespace Kotek
+{
+	namespace Core
+	{
+		bool InitializeModule_Core_Window_GLFW(ktkMainManager* p_manager);
+		bool SerializeModule_Core_Window_GLFW(ktkMainManager* p_manager);
+		bool DeserializeModule_Core_Window_GLFW(ktkMainManager* p_manager);
+		bool ShutdownModule_Core_Window_GLFW(ktkMainManager* p_manager);
+	} // namespace Core
 } // namespace Kotek

@@ -1,11 +1,8 @@
 #pragma once
 
-#ifdef KOTEK_PLATFORM_WINDOWS
-	#include <ShellScalingApi.h>
-	#include <dwmapi.h>
-	#include <windows.h>
-#elif KOTEK_PLATFORM_LINUX
-#endif
+#include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
+#include <kotek.core.containers.string/include/kotek_core_containers_string.h>
+#include <kotek.core.os/include/kotek_core_os.h>
 
 namespace Kotek
 {

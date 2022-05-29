@@ -1,5 +1,7 @@
 #pragma once
 
+#include <iostream>
+
 #ifdef KOTEK_USE_UNICODE
 
 	#define KOTEK_MESSAGE_STRING(variable, ...)                    \

@@ -26,7 +26,8 @@ namespace Kotek
 			kEngine_Render_Renderer_DirectX_10,
 			kEngine_Render_Renderer_DirectX_11,
 			kEngine_Render_Renderer_DirectX_12,
-			kEngine_Render_Renderer_OpenGL,
+			kEngine_Render_Renderer_OpenGL3_3,
+			kEngine_Render_Renderer_OpenGL4_6,
 			kEngine_Render_Renderer_Vulkan,
 			kEngine_Render_Renderer_Software,
 			kEngine_Feature_Unknown = -1

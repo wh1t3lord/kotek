@@ -1,6 +1,6 @@
 #include "../include/kotek_std_string.h"
 #include <kotek.core.constants/include/kotek_core_constants.h>
-#include <kotek.core.defines.dependent/include/kotek_core_defines_dependent.h>
+#include <kotek.core.defines_dependent.message/include/kotek_core_defines_dependent_message.h>
 #include <kotek.core.containers.hash/include/kotek_core_containers_hash.h>
 
 namespace Kotek

@@ -1,3 +1,26 @@
 #pragma once
 
-#include "kotek_std_dependent_preprocessors.h"
+#include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
+#include <kotek.core.defines_dependent.ecs/include/kotek_core_defines_dependent_ecs.h>
+#include <kotek.core.defines_dependent.message/include/kotek_core_defines_dependent_message.h>
+#include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
+
+namespace Kotek
+{
+	namespace Core
+	{
+		class ktkMainManager;
+	}
+} // namespace Kotek
+
+namespace Kotek
+{
+	namespace Core
+	{
+		bool InitializeModule_Core_Defines_Dependent(ktkMainManager* p_manager);
+		bool ShutdownModule_Core_Defines_Dependent(ktkMainManager* p_manager);
+		bool SerializeModule_Core_Defines_Dependent(ktkMainManager* p_manager);
+		bool DeserializeModule_Core_Defines_Dependent(
+			ktkMainManager* p_manager);
+	} // namespace Core
+} // namespace Kotek

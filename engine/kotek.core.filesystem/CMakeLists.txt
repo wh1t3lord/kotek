@@ -6,9 +6,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC
+	"include/kotek_filesystem.h"
+	"src/kotek_filesystem.cpp"
 	"include/kotek_core_filesystem.h"
 	"src/main_core_filesystem_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.filesystem.file_text)

@@ -31,6 +31,6 @@ add_library(${PROJECT_NAME} STATIC
 	${to_include_gpu_profiler}
 	"src/main_core_profilers_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.profilers)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.profilers.cpu)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.profilers.gpu)
