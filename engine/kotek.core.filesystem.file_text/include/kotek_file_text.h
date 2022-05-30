@@ -28,6 +28,7 @@ namespace Kotek
 			ktkFile& operator=(const ktkFile& instance);
 			~ktkFile(void);
 
+			/* TODO: implement separated loader and saver classes 
 			bool Load(
 				Core::ktkMainManager& main_manager, const ktk::string& path);
 
@@ -52,6 +53,7 @@ namespace Kotek
 
 			bool Save(
 				Core::ktkFileSystem* p_file_system, const ktk::string& path);
+			*/
 
 			template <typename ReturnType = ktkJson>
 			ReturnType Get(const ktk::string& key_name) const noexcept

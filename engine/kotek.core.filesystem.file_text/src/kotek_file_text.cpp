@@ -1,5 +1,4 @@
 #include "../include/kotek_file_text.h"
-#include "../include/kotek_main_manager.h"
 
 namespace Kotek
 {
@@ -22,6 +21,7 @@ namespace Kotek
 
 		ktkFile::~ktkFile(void) {}
 
+		/* TODO: implement separated loader and saver classes
 		bool ktkFile::Load(
 			Core::ktkMainManager& main_manager, const ktk::string& path)
 		{
@@ -171,6 +171,7 @@ namespace Kotek
 			return this->Save(p_file_system, path,
 				full_path_with_file_and_its_format, true);
 		}
+		*/
 
 		ktk::string ktkFile::GetString(
 			const ktk::string& key_name) const noexcept
