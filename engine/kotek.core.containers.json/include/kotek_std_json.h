@@ -1,8 +1,11 @@
 #pragma once
 
 #include "kotek_std_alias_json.h"
+#include <kotek.core.containers.any/include/kotek_core_containers_any.h>
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
+#include <kotek.core.defines_dependent.message/include/kotek_core_defines_dependent_message.h>
+#include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 
 namespace Kotek
 {
@@ -98,7 +101,8 @@ namespace Kotek
 			ktk::string GetString(const ktk::string& key_name) const noexcept;
 
 			/// <summary>
-			/// If you want to obtain string you must use GetString method instead
+			/// If you want to obtain string you must use GetString method
+			/// instead
 			/// </summary>
 			/// <typeparam name="ReturnType">templated parameter</typeparam>
 			/// <param name="key_name">json key</param>
