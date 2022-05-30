@@ -101,6 +101,9 @@ add_subdirectory("engine/kotek.core.log")
 add_subdirectory("engine/kotek.core.console")
 add_subdirectory("engine/kotek.core.engine_config")
 add_subdirectory("engine/kotek.core.main_manager")
+add_subdirectory("engine/kotek.core.ecs")
+add_subdirectory("engine/kotek.core.input")
+add_subdirectory("engine/kotek.core.utility")
 
 add_subdirectory("engine/kotek.game")
 

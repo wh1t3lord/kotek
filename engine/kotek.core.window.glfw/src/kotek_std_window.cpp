@@ -1,5 +1,5 @@
 #include "../include/kotek_std_window.h"
-#include <kotek.core/include/kotek_main_manager.h>
+#include <kotek.core.api/include/kotek_api.h>
 
 namespace Kotek
 {
@@ -96,15 +96,28 @@ namespace Kotek
 				return;
 			}
 
-			if (current_render !=
-				Core::eEngineFeature::kEngine_Render_Renderer_OpenGL)
+			if (current_render <
+					Core::eEngineFeature::kEngine_Render_Renderer_OpenGL3_3 ||
+				current_render >
+					Core::eEngineFeature::kEngine_Render_Renderer_OpenGL4_6)
 			{
 				glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 			}
 			else
 			{
-				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+				if (current_render ==
+					Core::eEngineFeature::kEngine_Render_Renderer_OpenGL3_3)
+				{
+					glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+					glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+				}
+				else if (current_render ==
+					Core::eEngineFeature::kEngine_Render_Renderer_OpenGL4_6)
+				{
+					glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+					glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+				}
+
 				glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 			}
 

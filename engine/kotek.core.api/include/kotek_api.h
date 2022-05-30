@@ -115,15 +115,6 @@ namespace Kotek
 			virtual ktk::string GetName(void) const noexcept = 0;
 		};
 
-		class ktkIConsole
-		{
-		public:
-			virtual ~ktkIConsole(void) {}
-
-			virtual void Initialize(void) = 0;
-			virtual void Shutdown(void) = 0;
-		};
-
 		class ktkIFileSystem
 		{
 		public:
@@ -140,6 +131,21 @@ namespace Kotek
 
 			virtual void Initialize(void) = 0;
 			virtual void Shutdown(void) = 0;
+
+			virtual void SetMouseX(float value) noexcept = 0;
+			virtual float GetMouseX(void) const noexcept = 0;
+
+			virtual void SetMouseY(float value) noexcept = 0;
+			virtual float GetMouseY(void) const noexcept = 0;
+
+			virtual void SetMouseLastX(float value) noexcept = 0;
+			virtual float GetMouseLastX(void) const noexcept = 0;
+
+			virtual void SetMouseLastY(float value) noexcept = 0;
+			virtual float GetMouseLastY(void) const noexcept = 0;
+
+			virtual void SetMouseSensitivity(float value) noexcept = 0;
+			virtual float GetMouseSensitivity(void) const noexcept = 0;
 		};
 
 		class ktkIGameManager

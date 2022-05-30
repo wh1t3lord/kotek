@@ -27,8 +27,6 @@ message("[Engine]: files to attach (KOTEK_TESTS): ${to_include_tests}")
 add_library(${PROJECT_NAME} STATIC 
 	"src/main_core_dll.cpp"
 	"include/kotek_core.h"
-	"include/kotek_input.h"
-	"src/kotek_input.cpp"
 	${to_include_tests}
 )
 
@@ -49,3 +47,5 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.log)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.ecs)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.input)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.utility)

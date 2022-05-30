@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kotek.core.containers.json/include/kotek_core_containers_json.h>
+#include <kotek.core.containers.io/include/kotek_core_containers_io.h>
 
 namespace Kotek
 {
