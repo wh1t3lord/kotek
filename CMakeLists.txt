@@ -99,6 +99,7 @@ add_subdirectory("engine/kotek.core.window")
 add_subdirectory("engine/kotek.core.window.glfw")
 add_subdirectory("engine/kotek.core.log")
 add_subdirectory("engine/kotek.core.console")
+add_subdirectory("engine/kotek.core.engine_config")
 
 add_subdirectory("engine/kotek.game")
 

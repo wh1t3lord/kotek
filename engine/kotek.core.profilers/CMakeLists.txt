@@ -27,6 +27,8 @@ endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_profilers.h"
+	"include/kotek_profiler.h"
+	"src/kotek_profiler.cpp"
 	${to_include_cpu_profiler}
 	${to_include_gpu_profiler}
 	"src/main_core_profilers_dll.cpp")

@@ -16,3 +16,8 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_api.h"
 	"include/kotek_sdk_ui_element.h"
 )
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.shared_ptr)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.any)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)

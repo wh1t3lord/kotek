@@ -1,6 +1,8 @@
 #pragma once
 
-#include "kotek_std.h"
+#include <kotek.core.defines.static.profilers/include/kotek_core_defines_static_profilers.h>
+#include <kotek.core.api/include/kotek_api.h>
+
 #include <chrono>
 
 #ifdef KOTEK_USE_CPU_PROFILER
@@ -16,7 +18,7 @@ namespace Kotek
 {
 	namespace Core
 	{
-		class ktkProfiler
+		class ktkProfiler : public ktkIProfiler
 		{
 		public:
 			ktkProfiler(void);
@@ -28,10 +30,8 @@ namespace Kotek
 			/// </summary>
 			/// <param name="your_test_name"></param>
 			/// <param name="path_where_to_save"></param>
-			void Initialize(const ktk::string& your_test_name,
-				const ktk::string& path_where_to_save);
-
-			void Shutdown(void);
+			void Initialize(void) override;
+			void Shutdown(void) override;
 		};
 	} // namespace Core
 } // namespace Kotek

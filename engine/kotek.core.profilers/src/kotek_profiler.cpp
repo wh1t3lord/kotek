@@ -17,8 +17,7 @@ namespace Kotek
 #endif
 		}
 
-		void ktkProfiler::Initialize(const ktk::string& your_test_name,
-			const ktk::string& path_where_to_save)
+		void ktkProfiler::Initialize(void)
 		{
 #ifdef KOTEK_USE_CPU_PROFILER
 			tracy::StartupProfiler();
