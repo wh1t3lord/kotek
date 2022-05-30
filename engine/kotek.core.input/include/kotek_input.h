@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kotek.core.api/include/kotek_api.h>
+#include <kotek.core.constants.window/include/kotek_core_constants_window.h>
 
 namespace Kotek
 {

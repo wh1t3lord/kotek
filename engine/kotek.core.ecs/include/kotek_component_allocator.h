@@ -1,6 +1,9 @@
 #pragma once
 
 #include <kotek.core.api/include/kotek_api.h>
+#include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
+#include <kotek.core.containers.unordered_map/include/kotek_core_containers_unordered_map.h>
+#include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 
 namespace Kotek
 {
@@ -18,7 +21,7 @@ namespace Kotek
 					"you must create allocator with array_size > 0! {}",
 					this->GetDebugName().get_as_is());
 
-				// TODO: Use deffered initialization for that case 
+				// TODO: Use deffered initialization for that case
 				this->m_storage.resize(array_size);
 				this->m_storage_entity_indicies.reserve(array_size);
 			}

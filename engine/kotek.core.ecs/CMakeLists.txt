@@ -11,3 +11,6 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_ecs_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
