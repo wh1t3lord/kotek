@@ -1,6 +1,4 @@
-﻿#include "../include/kotek_file.h"
-#include "../include/kotek_main_manager.h"
-#include "../include/kotek_std.h"
+﻿#include "../include/kotek_core.h"
 #include <boost/test/unit_test.hpp>
 
 namespace Kotek
@@ -55,7 +53,8 @@ namespace Kotek
 			instance.Write("char16_t", u"いくつか");
 			instance.Write("char32_t", U"いくつか");
 		#endif
-			instance.Save(&fs, path);
+			// TODO: implement saver!!!!
+			//instance.Save(&fs, path);
 
 			bool status = fs.IsValidPath(path);
 
