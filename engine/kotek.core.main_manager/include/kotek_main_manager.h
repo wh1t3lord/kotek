@@ -10,8 +10,6 @@ namespace Kotek
 		{
 		public:
 			ktkMainManager(void);
-			ktkMainManager(void) = delete;
-
 			~ktkMainManager(void);
 
 			ktkIProfiler* GetProfiler(void) const noexcept;

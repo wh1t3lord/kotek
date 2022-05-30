@@ -9,4 +9,4 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_profilers_gpu.h"
 	"src/main_core_profilers_gpu_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.profilers)

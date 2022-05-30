@@ -12,4 +12,4 @@ add_library(${PROJECT_NAME} STATIC
 	"src/glad.c"
 	"src/main_render_gl_glad4.6_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)

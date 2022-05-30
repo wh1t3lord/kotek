@@ -9,5 +9,4 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_ui.h"
 	"src/main_ui_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.imgui)
