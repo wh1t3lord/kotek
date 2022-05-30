@@ -364,7 +364,20 @@ namespace Kotek
 				const ktk::string& your_argument) const noexcept = 0;
 			virtual bool IsApplicationWorking(void) const noexcept = 0;
 			virtual void SetApplicationWorking(bool status) noexcept = 0;
+		};
 
+		class ktkIComponentAllocator
+		{
+		public:
+			virtual ~ktkIComponentAllocator() {}
+
+			virtual bool Create(ktk::entity_t id) noexcept = 0;
+			virtual void* Get(ktk::entity_t id) noexcept = 0;
+			virtual bool Remove(ktk::entity_t id) noexcept = 0;
+			virtual ktk::string GetDebugName(void) const noexcept = 0;
+			virtual ktk::string GetComponentName(void) const noexcept = 0;
+			virtual void DrawImGui(Kotek::Core::ktkMainManager* main_manager,
+				Kotek::ktk::entity_t entity_id) noexcept = 0;
 		};
 
 		bool InitializeModule_Core_API(ktkMainManager*);

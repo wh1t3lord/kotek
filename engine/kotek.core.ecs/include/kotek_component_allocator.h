@@ -1,33 +1,11 @@
 #pragma once
 
-#include "kotek_std.h"
+#include <kotek.core.api/include/kotek_api.h>
 
 namespace Kotek
 {
 	namespace Core
 	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
-
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkIComponentAllocator
-		{
-		public:
-			virtual ~ktkIComponentAllocator() {}
-
-			virtual bool Create(ktk::entity_t id) noexcept = 0;
-			virtual void* Get(ktk::entity_t id) noexcept = 0;
-			virtual bool Remove(ktk::entity_t id) noexcept = 0;
-			virtual ktk::string GetDebugName(void) const noexcept = 0;
-			virtual ktk::string GetComponentName(void) const noexcept = 0;
-			virtual void DrawImGui(Kotek::Core::ktkMainManager& main_manager,
-				Kotek::ktk::entity_t entity_id) noexcept = 0;
-		};
-
 		template <typename ComponentType, std::size_t array_size>
 		class ktkComponentAllocator : public ktkIComponentAllocator
 		{

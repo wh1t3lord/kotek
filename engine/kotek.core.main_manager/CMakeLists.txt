@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_main_manager.h"
 	"src/kotek_main_manager.cpp"
-	"include/kotek_core_casting.h"
-	"src/main_core_casting_dll.cpp")
+	"include/kotek_core_main_manager.h"
+	"src/main_core_main_manager_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.engine_config)
