@@ -1,12 +1,14 @@
 #pragma once
 
+#include <kotek.core.api/include/kotek_api.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 #include <kotek.core.containers.unordered_map/include/kotek_core_containers_unordered_map.h>
 #include <kotek.core.containers.queue/include/kotek_core_containers_queue.h>
+#include <kotek.core.containers.pair/include/kotek_core_containers_pair.h>
 #include <kotek.core.containers.function/include/kotek_core_containers_function.h>
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
-#include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
-#include <kotek.core.api/include/kotek_api.h>
+#include <kotek.core.defines_dependent.message/include/kotek_core_defines_dependent_message.h>
+#include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 
 namespace Kotek
 {

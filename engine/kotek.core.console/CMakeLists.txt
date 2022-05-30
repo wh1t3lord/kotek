@@ -10,3 +10,13 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_console.cpp"
 	"include/kotek_core_console.h"
 	"src/main_core_console_dll.cpp")
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.queue)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.pair)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.function)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.message)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
