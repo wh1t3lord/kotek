@@ -152,9 +152,19 @@ namespace Kotek
 			return this->m_argc;
 		}
 
+		void ktkEngineConfig::SetARGC(int count_of_arguments) noexcept 
+		{
+			this->m_argc = count_of_arguments;
+		}
+
 		char** ktkEngineConfig::GetARGV(void) const noexcept
 		{
 			return this->m_argv;
+		}
+
+		void ktkEngineConfig::SetARGV(char** p_char) noexcept
+		{
+			this->m_argv = p_char;
 		}
 
 		bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(

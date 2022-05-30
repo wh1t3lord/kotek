@@ -28,7 +28,10 @@ namespace Kotek
 			bool IsCurrentRenderLegacy(void) const noexcept override;
 			bool IsCurrentRenderModern(void) const noexcept override;
 			int GetARGC(void) const noexcept override;
+			void SetARGC(int) noexcept override;
+
 			char** GetARGV(void) const noexcept override;
+			void SetARGV(char** p_char) noexcept override;
 			bool IsContainsConsoleCommandLineArgument(
 				const ktk::string& your_argument) const noexcept override;
 			bool IsApplicationWorking(void) const noexcept override;

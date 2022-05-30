@@ -358,6 +358,8 @@ namespace Kotek
 			virtual bool IsCurrentRenderModern(void) const noexcept = 0;
 			virtual int GetARGC(void) const noexcept = 0;
 			virtual char** GetARGV(void) const noexcept = 0;
+			virtual void SetARGC(int) noexcept = 0;
+			virtual void SetARGV(char**) noexcept = 0;
 			virtual bool IsContainsConsoleCommandLineArgument(
 				const ktk::string& your_argument) const noexcept = 0;
 			virtual bool IsApplicationWorking(void) const noexcept = 0;

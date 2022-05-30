@@ -4,44 +4,16 @@ namespace Kotek
 {
 	namespace Core
 	{
-		ktkMainManager::ktkMainManager(int argc, char** argv) :
+		ktkMainManager::ktkMainManager() :
 			m_p_manager_config{}, m_p_manager_renderer{}, m_p_game_manager{},
 			m_p_resource_manager{}, m_p_manager_filesystem{},
 			m_p_manager_input{}, m_p_manager_render_device{},
 			m_p_manager_render_resource{}, m_p_manager_render_graph{},
 			m_p_manager_swapchain{}, m_p_manager_profiler{}
 		{
-			this->initialize(argc, argv);
 		}
 
-		ktkMainManager::~ktkMainManager(void) { this->shutdown(); }
-
-		void ktkMainManager::initialize(int argc, char** argv)
-		{
-			/*
-			this->m_argc = argc;
-			this->m_argv = argv;
-
-			this->m_manager_filesystem = std::make_shared<ktkFileSystem>();
-			this->m_manager_input = std::make_shared<ktkInput>();
-			this->m_manager_profiler = std::make_shared<ktkProfiler>();
-
-			this->m_manager_filesystem->Initialize();
-			this->m_manager_input->Initialize();
-
-			this->m_manager_profiler->Initialize(KOTEK_TEXT("kotek-engine"),
-			    this->GetFileSystem()->GetFolderByEnum(
-			        folder_index_t::kFolderIndex_UserData));
-			*/
-		}
-
-		void ktkMainManager::shutdown(void)
-		{
-			/*
-			this->m_manager_filesystem->Shutdown();
-			this->m_manager_input->Shutdown();
-			*/
-		}
+		ktkMainManager::~ktkMainManager(void) { }
 
 		ktkIProfiler* ktkMainManager::GetProfiler(void) const noexcept
 		{
@@ -113,6 +85,15 @@ namespace Kotek
 			ktkIRenderSwapchain* pointer) noexcept
 		{
 			this->m_p_manager_swapchain = pointer;
+		}
+
+		void ktkMainManager::Initialize(int argc, char** argv) 
+		{ 
+			if (this->m_p_manager_config) 
+			{
+				this->m_p_manager_config->SetARGC(argc);
+				this->m_p_manager_config->SetARGV(argv);
+			}
 		}
 
 	} // namespace Core

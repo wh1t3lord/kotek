@@ -14,9 +14,6 @@ namespace Kotek
 
 			~ktkMainManager(void);
 
-			void initialize(int argc, char** argv);
-			void shutdown(void);
-
 			ktkIProfiler* GetProfiler(void) const noexcept;
 
 			ktkIFileSystem* GetFileSystem(void) const noexcept;
@@ -43,6 +40,9 @@ namespace Kotek
 
 			void setRenderSwapchainManager(
 				ktkIRenderSwapchain* pointer) noexcept;
+
+		private:
+			void Initialize(int argc, char** argv);
 
 		private:
 			ktkIEngineConfig* m_p_manager_config;
