@@ -1,5 +1,4 @@
 #include "../include/kotek_filesystem.h"
-#include "../include/kotek_file.h"
 
 namespace Kotek
 {
@@ -117,7 +116,7 @@ namespace Kotek
 			}
 
 			ktk::string result(path);
-			result += ktk::kPathSeparator;
+			result += ktk::filesystem::path::preferred_separator;
 			result += folder_name;
 
 			this->m_storage_paths[id] = result;
@@ -129,7 +128,7 @@ namespace Kotek
 			this->m_storage_paths[folder_index_t::kFolderIndex_Gamedata] =
 				this->m_storage_paths.at(folder_index_t::kFolderIndex_Root);
 			this->m_storage_paths[folder_index_t::kFolderIndex_Gamedata] +=
-				ktk::kPathSeparator;
+				ktk::filesystem::path::preferred_separator;
 			this->m_storage_paths[folder_index_t::kFolderIndex_Gamedata] +=
 				KOTEK_TEXT("gamedata");
 
@@ -238,8 +237,9 @@ namespace Kotek
 				sys_info.Write(
 					kSysInfoFieldName_UserLibraryNameMacOS, "game.so");
 
-				sys_info.Save(this,
-					this->GetFolderByEnum(folder_index_t::kFolderIndex_Root));
+				// TODO: implement saver!!!
+//				sys_info.Save(this,
+	//				this->GetFolderByEnum(folder_index_t::kFolderIndex_Root));
 			}
 		}
 	} // namespace Core
