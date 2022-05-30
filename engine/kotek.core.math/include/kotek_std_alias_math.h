@@ -1,5 +1,11 @@
 #pragma once
 
+#include <kotek.core.defines.static.math/include/kotek_core_defines_static_math.h>
+#include <kotek.core.types.numerics/include/kotek_core_types_numerics.h>
+#include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
+
+#include <cmath>
+
 #ifdef KOTEK_USE_MATH_LIBRARY_GLM
 	#include <glm/glm.hpp>
 	#include <glm/gtx/quaternion.hpp>

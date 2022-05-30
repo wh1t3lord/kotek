@@ -10,4 +10,4 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_defines_dependent_assert.h"
 	"src/main_core_defines_dependent_assert_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.text)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.message)

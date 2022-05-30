@@ -11,6 +11,8 @@ elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
     find_package(directxmath REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 endif()
 
+message("[Engine]: math library is '${KOTEK_MATH_LIBRARY}'")
+
 add_library(${PROJECT_NAME} STATIC 
 	"include/kotek_std_alias_math.h"
 	"include/kotek_std_math_vector1f.h"
@@ -37,4 +39,6 @@ elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
     target_link_libraries(${PROJECT_NAME} Microsoft::DirectXMath)
 endif()
 
-target_link_libraries(${PROJECT_NAME} kotek.core.defines)
+target_link_libraries(${PROJECT_NAME} kotek.core.defines.static.math)
+target_link_libraries(${PROJECT_NAME} kotek.core.defines_dependent.assert)
+target_link_libraries(${PROJECT_NAME} kotek.core.types.numerics)
