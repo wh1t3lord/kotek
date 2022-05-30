@@ -9,7 +9,7 @@ namespace Kotek
 		class ktkMainManager
 		{
 		public:
-			ktkMainManager(int argc, char** argv);
+			ktkMainManager(void);
 			ktkMainManager(void) = delete;
 
 			~ktkMainManager(void);

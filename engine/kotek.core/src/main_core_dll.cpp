@@ -1,5 +1,4 @@
 ﻿#include "../include/kotek_core.h"
-#include "../include/kotek_main_manager.h"
 
 namespace Kotek
 {
@@ -35,6 +34,7 @@ namespace Kotek
 			InitializeModule_Core_Profilers(p_manager);
 			InitializeModule_Core_OS(p_manager);
 			InitializeModule_Core_Window(p_manager);
+			InitializeModule_Core_Main_Manager();
 
 			RegisterCommands(p_manager);
 			RegisterAllTests();
@@ -62,6 +62,7 @@ namespace Kotek
 			ShutdownModule_Core_OS(p_manager);
 			ShutdownModule_Core_Window(p_manager);
 			ShutdownModule_Core_Log(p_manager);
+			ShutdownModule_Core_Main_Manager();
 
 			return true;
 		}

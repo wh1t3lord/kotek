@@ -13,6 +13,7 @@
 #include <kotek.core.os/include/kotek_core_os.h>
 #include <kotek.core.window/include/kotek_core_window.h>
 #include <kotek.core.log/include/kotek_core_log.h>
+#include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 
 namespace Kotek
 {

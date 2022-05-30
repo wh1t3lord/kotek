@@ -31,17 +31,9 @@ add_library(${PROJECT_NAME} STATIC
     "include/kotek_std_utility.h"
 	"src/kotek_std_utility.cpp"
     "include/kotek_std_alias_ui.h"
-    "include/kotek_std_alias_containers.h"
-	"include/kotek_std_alias_multithreading.h"
-    "include/kotek_std_os.h"
-	"src/kotek_main_manager.cpp"
-	"include/kotek_main_manager.h"
     "include/kotek_component_allocator.h"
 	"include/kotek_input.h"
 	"src/kotek_input.cpp"
-	"include/kotek_resource_manager.h"
-	"src/kotek_resource_manager.cpp"
-	"include/kotek_interface_resource_loader_manager.h"
 	${to_include_tests}
 )
 
@@ -60,3 +52,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.log)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
