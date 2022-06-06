@@ -1,6 +1,5 @@
 #pragma once
 
-#include <kotek.core/include/kotek_std.h>
 #include "kotek_render_graph_types.h"
 
 namespace Kotek

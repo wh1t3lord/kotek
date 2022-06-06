@@ -79,6 +79,8 @@ source_group("Core" FILES ${to_include_core_files})
 source_group("Module" FILES ${to_include_module_files})
 source_group("Memory management" FILES ${to_include_memory_management_files})
 
+target_precompile_headers(${PROJECT_NAME} PRIVATE <kotek.core/include/kotek_core.h>)
+
 target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::GL)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
