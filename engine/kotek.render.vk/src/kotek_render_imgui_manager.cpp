@@ -1,9 +1,6 @@
 #include "../include/kotek_render_imgui_manager.h"
 #include "../include/kotek_render_device.h"
 #include "../include/kotek_render_resource_manager.h"
-#include <kotek.ui.imgui/include/imgui.h>
-#include <kotek.ui.imgui/include/imgui_impl_glfw.h>
-#include <kotek.ui.imgui/include/imgui_impl_vulkan.h>
 
 namespace Kotek
 {

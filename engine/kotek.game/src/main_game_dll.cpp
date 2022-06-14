@@ -75,9 +75,9 @@ namespace Kotek
 			executable_path /= field_library_name.get_as_is().c_str();
 
 			// TODO: implement loader for dlls it is a resource!!!
-			main_manager.LoadUserGameLibrary(executable_path.string());
-			const auto& user_dll = main_manager.GetUserLibrary();
-
+		//	main_manager.LoadUserGameLibrary(executable_path.string());
+		//	const auto& user_dll = main_manager.GetUserLibrary();
+			ktk::dll::shared_library user_dll;
 			p_user_callback_initialize_game_library =
 				user_dll.get<ktkUserCallbackInitialize>(
 					field_initialize_callback_name.get_as_legacy().c_str());
@@ -127,8 +127,8 @@ namespace Kotek
 			if (p_user_callback_shutdown_game_library)
 				p_user_callback_shutdown_game_library(&main_manager);
 
-			// unload with resource manager
-			main_manager.UnLoadUserGameLibrary();
+			// TODO: unload with resource manager
+		//	main_manager.UnLoadUserGameLibrary();
 
 			return true;
 		}
@@ -147,7 +147,7 @@ namespace Kotek
 				"you didn't initialize input manager field in "
 				"main manager");
 
-			if (main_manager.IsContainsConsoleCommandLineArgument(
+			if (main_manager.Get_EngineConfig()->IsContainsConsoleCommandLineArgument(
 					Core::kConsoleCommandArg_Editor) == false)
 			{
 				KOTEK_ASSERT(main_manager.getRenderDevice(),
@@ -246,7 +246,7 @@ namespace Kotek
 		{
 			PrintCompiler();
 
-			Core::InitializeModule_Core(main_manager);
+			Core::InitializeModule_Core(&main_manager);
 
 			// TODO: restore when you implement ImGui
 			Game::registerCommands(main_manager);
@@ -290,7 +290,7 @@ namespace Kotek
 		{
 			main_manager.GetProfiler()->Shutdown();
 
-			Core::ShutdownModule_Core();
+			Core::ShutdownModule_Core(&main_manager);
 			Render::ShutdownModule_Render(main_manager);
 			Game::ShutdownModule_Game(main_manager);
 
