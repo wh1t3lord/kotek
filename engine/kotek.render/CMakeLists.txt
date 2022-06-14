@@ -13,8 +13,6 @@ link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/lib/")
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render.h"
-    "include/kotek_render_imgui.h"
-    "src/kotek_render_imgui.cpp"
 	"src/main_render_dll.cpp"
 )
 
@@ -28,5 +26,5 @@ if (WIN32)
 #target_link_libraries(${PROJECT_NAME} kotek.render.dx12)
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl3)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.vk)

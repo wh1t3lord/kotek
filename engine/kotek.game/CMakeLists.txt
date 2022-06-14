@@ -5,23 +5,7 @@ project(kotek.game VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if (WIN32)
-include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
-endif()
-
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
-
- 
-find_package(glfw3 3.3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/") 
-
-message("DETECTING LIBRARIES for ${PROJECT_NAME}")
-
-if(glfw3_FOUND)
-	message("+ GLFW is found")
-else()
-	message("- GLFW is not found")
-endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_engine.h"
@@ -31,9 +15,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_game_dll.cpp"
 )
 
-target_include_directories(${PROJECT_NAME} PRIVATE "${glfw3_DIR}/../../../include")
+target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
-target_link_libraries(${PROJECT_NAME} kotek.core)
-target_link_libraries(${PROJECT_NAME} kotek.render)
-target_link_libraries(${PROJECT_NAME} glfw)
-target_link_libraries(${PROJECT_NAME} TBB::tbb)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render)

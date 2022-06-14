@@ -9,21 +9,6 @@ namespace Kotek
 {
 	namespace Core
 	{
-		// TODO: add helper namespace for translating this enum
-		enum class folder_index_t : int
-		{
-			kFolderIndex_Root,
-			kFolderIndex_Gamedata,
-			kFolderIndex_Configs,
-			kFolderIndex_Scripts,
-			kFolderIndex_Textures,
-			kFolderIndex_Shaders,
-			kFolderIndex_Models,
-			kFolderIndex_Sound,
-			kFolderIndex_UserTests,
-			kFolderIndex_UserData
-		};
-
 		constexpr const char* kConfigFileNameSystemInfo = "sys_info.json";
 		constexpr const char* kSysInfoFieldName_InitializeCallback =
 			"UserCallbackForGameLibrary_Initialize";
@@ -63,7 +48,7 @@ namespace Kotek
 			* For Win32 returns without slash
 			*/
 			const ktk::string& GetFolderByEnum(
-				folder_index_t id) const noexcept;
+				folder_index_t id) const noexcept override;
 
 			bool IsValidPath(const ktk::string& path) const noexcept override;
 

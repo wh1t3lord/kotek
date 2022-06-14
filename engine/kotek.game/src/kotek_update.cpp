@@ -1,5 +1,3 @@
-#include <kotek.core/include/kotek_main_manager.h>
-
 /* TODO: delete
 #include "kotek_callbacks.h"
 #include "kotek_factory.h"

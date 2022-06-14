@@ -115,6 +115,21 @@ namespace Kotek
 			virtual ktk::string GetName(void) const noexcept = 0;
 		};
 
+		// TODO: add helper namespace for translating this enum
+		enum class folder_index_t : int
+		{
+			kFolderIndex_Root,
+			kFolderIndex_Gamedata,
+			kFolderIndex_Configs,
+			kFolderIndex_Scripts,
+			kFolderIndex_Textures,
+			kFolderIndex_Shaders,
+			kFolderIndex_Models,
+			kFolderIndex_Sound,
+			kFolderIndex_UserTests,
+			kFolderIndex_UserData
+		};
+
 		class ktkIFileSystem
 		{
 		public:
@@ -129,6 +144,9 @@ namespace Kotek
 			// a temporary virtual function delete it
 			virtual ktk::string ReadFile(
 				const ktk::string& path_to_file) const noexcept = 0;
+
+			virtual const ktk::string& GetFolderByEnum(
+				folder_index_t id) const noexcept = 0;
 		};
 
 		class ktkIInput

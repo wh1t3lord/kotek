@@ -1,8 +1,6 @@
-#include <kotek.core/include/kotek_std.h>
 #include "../include/kotek_render.h"
 
-#include <kotek.core/include/kotek_main_manager.h>
-#include <kotek.render.gl/include/kotek_render_gl.h>
+#include <kotek.render.gl3/include/kotek_render_gl.h>
 #include <kotek.render.vk/include/kotek_render_vk.h>
 
 namespace Kotek
@@ -14,13 +12,15 @@ namespace Kotek
 			// TODO: сделать выбор рендера
 
 			bool status{};
-			if (main_manager.IsContainsConsoleCommandLineArgument(
-					Core::kConsoleCommandArg_Render_OpenGL))
+			if (main_manager.Get_EngineConfig()
+					->IsContainsConsoleCommandLineArgument(
+						Core::kConsoleCommandArg_Render_OpenGL))
 			{
 				status = InitializeModule_Render_GL(main_manager);
 			}
-			else if (main_manager.IsContainsConsoleCommandLineArgument(
-						 Core::kConsoleCommandArg_Render_Vulkan))
+			else if (main_manager.Get_EngineConfig()
+						 ->IsContainsConsoleCommandLineArgument(
+							 Core::kConsoleCommandArg_Render_Vulkan))
 			{
 				status = InitializeModule_Render_VK(main_manager);
 			}
@@ -33,10 +33,10 @@ namespace Kotek
 			}
 
 			KOTEK_ASSERT(status, "can't initialize module render {}. See log",
-				main_manager.GetRenderName().get_as_is());
+				main_manager.Get_EngineConfig()->GetRenderName().get_as_is());
 
 			KOTEK_MESSAGE("render module {} is initialized",
-				main_manager.GetRenderName().get_as_is());
+				main_manager.Get_EngineConfig()->GetRenderName().get_as_is());
 
 			return true;
 		}
@@ -45,13 +45,15 @@ namespace Kotek
 		{
 			bool status{};
 
-			if (main_manager.IsContainsConsoleCommandLineArgument(
-					Core::kConsoleCommandArg_Render_OpenGL))
+			if (main_manager.Get_EngineConfig()
+					->IsContainsConsoleCommandLineArgument(
+						Core::kConsoleCommandArg_Render_OpenGL))
 			{
 				status = ShutdownModule_Render_GL(main_manager);
 			}
-			else if (main_manager.IsContainsConsoleCommandLineArgument(
-						 Core::kConsoleCommandArg_Render_Vulkan))
+			else if (main_manager.Get_EngineConfig()
+						 ->IsContainsConsoleCommandLineArgument(
+							 Core::kConsoleCommandArg_Render_Vulkan))
 			{
 				status = ShutdownModule_Render_VK(main_manager);
 			}
@@ -61,7 +63,7 @@ namespace Kotek
 			}
 
 			KOTEK_ASSERT(status, "failed to shutdown render {} module",
-				main_manager.GetRenderName().get_as_is());
+				main_manager.Get_EngineConfig()->GetRenderName().get_as_is());
 
 			return status;
 		}
