@@ -1,6 +1,5 @@
 #pragma once
 
-#include <kotek.core/include/kotek_std.h>
 #include "kotek_render_graph_data_types.h"
 #include "kotek_render_shader_manager.h"
 

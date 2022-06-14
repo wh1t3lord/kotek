@@ -1,7 +1,5 @@
 #pragma once
 
-#include <kotek.core.api/include/kotek_api.h>
-#include <kotek.core/include/kotek_std.h>
 #include "kotek_render_device_properties.h"
 #include "kotek_render_helper_device.h"
 #include "kotek_render_instance_properties.h"

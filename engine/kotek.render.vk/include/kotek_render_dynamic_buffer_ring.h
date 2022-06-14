@@ -1,6 +1,5 @@
 #pragma once
 
-#include <kotek.core/include/kotek_std.h>
 #include "kotek_render_allocator_ring_with_tabs.h"
 
 namespace Kotek

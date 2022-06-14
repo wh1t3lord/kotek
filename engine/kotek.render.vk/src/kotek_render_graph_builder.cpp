@@ -1,5 +1,4 @@
 #include "../include/kotek_render_graph_builder.h"
-#include <kotek.core/include/kotek_main_manager.h>
 #include "../include/kotek_render_device.h"
 #include "../include/kotek_render_graph.h"
 #include "../include/kotek_render_graph_data_types.h"

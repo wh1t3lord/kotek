@@ -1,6 +1,4 @@
 #ifdef KOTEK_DEBUG
-
-	#include <kotek.core/include/kotek_main_manager.h>
 	#include "../include/kotek_render_device.h"
 	#include "../include/kotek_render_shader_manager.h"
 	#include <boost/test/unit_test.hpp>

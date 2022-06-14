@@ -73,7 +73,7 @@ add_library(${PROJECT_NAME} STATIC
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
-target_link_libraries(${PROJECT_NAME} kotek.core)
-target_link_libraries(${PROJECT_NAME} kotek.render.model)
-target_link_libraries(${PROJECT_NAME} shaderc_combined)
-target_link_libraries(${PROJECT_NAME} ktx)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
+target_link_libraries(${PROJECT_NAME} PUBLIC shaderc_combined)
+target_link_libraries(${PROJECT_NAME} PUBLIC ktx)

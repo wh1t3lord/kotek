@@ -1,5 +1,3 @@
-#include <kotek.core/include/kotek_main_manager.h>
-#include <kotek.core/include/kotek_std.h>
 #include "../include/kotek_render_device.h"
 #include "../include/kotek_render_graph.h"
 #include "../include/kotek_render_imgui_manager.h"

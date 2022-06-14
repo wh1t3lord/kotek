@@ -1,6 +1,5 @@
 #pragma once
 
-#include <kotek.core/include/kotek_std.h>
 #include "kotek_render_helper_debug.h"
 
 namespace Kotek

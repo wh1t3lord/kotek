@@ -1,8 +1,5 @@
 #pragma once
 
-#include <kotek.core.api/include/kotek_api.h>
-#include <kotek.core/include/kotek_std.h>
-
 // Resource management structures
 #include "kotek_render_command_list_ring.h"
 #include "kotek_render_dynamic_buffer_ring.h"

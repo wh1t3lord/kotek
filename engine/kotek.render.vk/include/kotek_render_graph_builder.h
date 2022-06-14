@@ -1,7 +1,5 @@
 #pragma once
 
-#include <kotek.core/include/kotek_profiler.h>
-#include <kotek.core/include/kotek_std.h>
 #include "kotek_render_texture_manager.h"
 
 namespace Kotek

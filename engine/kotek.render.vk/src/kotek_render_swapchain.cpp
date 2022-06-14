@@ -1,5 +1,4 @@
 #include "../include/kotek_render_swapchain.h"
-#include <kotek.core/include/kotek_main_manager.h>
 #include "../include/kotek_render_device.h"
 #include "../include/kotek_render_resource_manager.h"
 

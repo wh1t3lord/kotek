@@ -3,14 +3,6 @@
 #include "../include/kotek_render_resource_manager.h"
 #include "../include/kotek_render_swapchain.h"
 
-#ifdef KOTEK_PLATFORM_LINUX
-	#include <vulkan/vulkan_xcb.h>
-#elif defined(KOTEK_PLATFORM_WINDOWS)
-	#include <vulkan/vulkan_win32.h>
-#endif
-
-#include <kotek.core/include/kotek_main_manager.h>
-
 namespace Kotek
 {
 	namespace Render
