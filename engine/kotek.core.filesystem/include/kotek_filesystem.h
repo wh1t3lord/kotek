@@ -69,6 +69,7 @@ namespace Kotek
 
 			bool CreateDirectory(const ktk::string& path) const noexcept;
 
+			// TODO: think about multithreading and probably it is better to move to resource manager loader/saver
 			/*!
 			 * \brief readFile reads to ktk::string all content of file
 			 * \param path_to_file your valid path to file, you should use file
@@ -81,7 +82,7 @@ namespace Kotek
 			 * \return ktk::string
 			 */
 			ktk::string ReadFile(
-				const ktk::string& path_to_file) const noexcept;
+				const ktk::string& path_to_file) const noexcept override;
 
 		private:
 			bool AddGamedataFolderToStorage(const ktk::string& path,

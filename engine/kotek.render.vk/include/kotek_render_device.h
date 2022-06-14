@@ -182,9 +182,6 @@ namespace Kotek
 				VkQueue m_p_queue_compute;
 
 				VkDebugReportCallbackEXT m_debug_report_callback_instance;
-
-				Core::ktkProfiler* m_p_profiler;
-
 				kotek_render_helper_device m_helper;
 			};
 		} // namespace vk

@@ -24,12 +24,6 @@ namespace Kotek
 			ktkProfiler(void);
 			~ktkProfiler(void);
 
-			/// <summary>
-			/// You need to pass two arguments and the first argument you must
-			/// pass without format
-			/// </summary>
-			/// <param name="your_test_name"></param>
-			/// <param name="path_where_to_save"></param>
 			void Initialize(void) override;
 			void Shutdown(void) override;
 		};

@@ -42,3 +42,5 @@ add_library(${PROJECT_NAME} STATIC
 	"src/imgui_impl_opengl3.cpp"
 	${to_include}
 	"src/main_ui_imgui_dll.cpp")
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)

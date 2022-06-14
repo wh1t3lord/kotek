@@ -871,7 +871,7 @@ namespace Kotek
 
 				virtual void OnSetupInput(ktkRenderGraphStorageInput& storage,
 					ktkRenderDevice* p_device,
-					Core::ktkFileSystem* p_file_system)
+					Core::ktkIFileSystem* p_file_system)
 				{
 				}
 

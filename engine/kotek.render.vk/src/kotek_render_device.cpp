@@ -54,8 +54,6 @@ namespace Kotek
 
 			void ktkRenderDevice::Initialize(Core::ktkMainManager& main_manager)
 			{
-				this->m_p_profiler = main_manager.GetProfiler();
-
 				KOTEK_CPU_PROFILE();
 
 				this->InitializeInstance();

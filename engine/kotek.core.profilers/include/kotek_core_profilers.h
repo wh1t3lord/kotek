@@ -2,6 +2,7 @@
 
 #include <kotek.core.profilers.cpu/include/kotek_core_profilers_cpu.h>
 #include <kotek.core.profilers.gpu/include/kotek_core_profilers_gpu.h>
+#include "kotek_profiler.h"
 
 namespace Kotek
 {

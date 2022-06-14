@@ -492,7 +492,7 @@ namespace Kotek
 					const ktk::string& path_to_file) noexcept;
 
 			private:
-				Core::ktkFileSystem* m_p_filesystem;
+				Core::ktkIFileSystem* m_p_filesystem;
 				Core::ktkMainManager* m_p_main_manager;
 				ktkRenderDevice* m_p_render_device;
 			};

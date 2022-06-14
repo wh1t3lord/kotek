@@ -124,6 +124,11 @@ namespace Kotek
 			virtual void Shutdown(void) = 0;
 			virtual bool IsValidPath(
 				const ktk::string& path) const noexcept = 0;
+
+			// TODO: check todo in implementation class ktkFileSystem and it is
+			// a temporary virtual function delete it
+			virtual ktk::string ReadFile(
+				const ktk::string& path_to_file) const noexcept = 0;
 		};
 
 		class ktkIInput

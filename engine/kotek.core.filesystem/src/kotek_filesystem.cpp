@@ -77,6 +77,7 @@ namespace Kotek
 
 			return ktk::filesystem::create_directory(path.get_as_is());
 		}
+
 		ktk::string ktkFileSystem::ReadFile(
 			const ktk::string& path_to_file) const noexcept
 		{

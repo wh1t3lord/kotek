@@ -1,6 +1,9 @@
 #include "../include/kotek_render_imgui_manager.h"
 #include "../include/kotek_render_device.h"
 #include "../include/kotek_render_resource_manager.h"
+#include <kotek.ui.imgui/include/imgui.h>
+#include <kotek.ui.imgui/include/imgui_impl_glfw.h>
+#include <kotek.ui.imgui/include/imgui_impl_vulkan.h>
 
 namespace Kotek
 {
@@ -32,9 +35,9 @@ namespace Kotek
 				Core::ktkMainManager& main_manager) noexcept
 			{
 				IMGUI_CHECKVERSION();
-				sui::CreateContext();
+				ImGui::CreateContext();
 
-				auto& io = sui::GetIO();
+				auto& io = ImGui::GetIO();
 
 				io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 				io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
@@ -43,7 +46,7 @@ namespace Kotek
 
 				if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 				{
-					ImGuiStyle& style = sui::GetStyle();
+					ImGuiStyle& style = ImGui::GetStyle();
 
 					style.WindowRounding = 0.0f;
 					style.Colors[ImGuiCol_WindowBg].w = 1.0f;
@@ -93,9 +96,9 @@ namespace Kotek
 				KOTEK_ASSERT(this->m_p_pipeline,
 					"you must create pipeline before call the draw method!");
 
-				sui::Render();
+				ImGui::Render();
 
-				auto* p_draw_data = sui::GetDrawData();
+				auto* p_draw_data = ImGui::GetDrawData();
 
 				char* p_verts = nullptr;
 				char* p_indecies = nullptr;
@@ -374,7 +377,7 @@ namespace Kotek
 				ktk::uint8_t* p_data = nullptr;
 				int width, height;
 
-				sui::GetIO().Fonts->GetTexDataAsRGBA32(
+				ImGui::GetIO().Fonts->GetTexDataAsRGBA32(
 					&p_data, &width, &height);
 
 				VkImageCreateInfo info = {};
@@ -507,7 +510,7 @@ namespace Kotek
 				int width, height;
 				ktk::uint8_t* p_data;
 
-				sui::GetIO().Fonts->GetTexDataAsRGBA32(
+				ImGui::GetIO().Fonts->GetTexDataAsRGBA32(
 					&p_data, &width, &height);
 
 				region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -546,13 +549,13 @@ namespace Kotek
 				ktkRenderResourceManager*
 					p_render_resource_manager) noexcept
 			{
-				sui::GetIO().Fonts->SetTexID(
+				ImGui::GetIO().Fonts->SetTexID(
 					static_cast<ImTextureID>(this->m_p_image));
 
 				ktk::uint8_t* p_data;
 				int width, height;
 
-				sui::GetIO().Fonts->GetTexDataAsRGBA32(
+				ImGui::GetIO().Fonts->GetTexDataAsRGBA32(
 					&p_data, &width, &height);
 
 				kotek_render_upload_heap* p_heap =
