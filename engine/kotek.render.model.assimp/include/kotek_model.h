@@ -1,5 +1,7 @@
 #pragma once
 
+#include <assimp/BaseImporter.h>
+
 namespace Kotek
 {
 	namespace Render

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <kotek.render.model.assimp/include/kotek_render_model_assimp.h>
+
 namespace Kotek
 {
 	namespace Render

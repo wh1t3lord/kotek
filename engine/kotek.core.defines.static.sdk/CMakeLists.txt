@@ -5,15 +5,6 @@ project(kotek.core.defines.static.sdk VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if ("${KOTEK_SDK}" STREQUAL "")
-	set(KOTEK_SDK "ON")
-endif()
-
-if ("${KOTEK_SDK}" STREQUAL "ON")
-	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_SDK)
-endif()
-
-if ("${KOTEK_SDK}" STREQUAL "ON")
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 
 	#ifdef KOTEK_SDK
@@ -34,13 +25,8 @@ if ("${KOTEK_SDK}" STREQUAL "ON")
 		#include <wx/aui/aui.h>
 	#endif
 	")
-else()
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
-endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
 	"include/kotek_core_defines_static_sdk.h"
 	"src/main_core_defines_static_sdk_dll.cpp")
-
-target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})

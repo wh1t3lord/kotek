@@ -1,5 +1,7 @@
 #pragma once
 
+#include "kotek_model.h"
+
 namespace Kotek
 {
 	namespace Render
