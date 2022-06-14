@@ -11,3 +11,4 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_defines_dependent_text_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.string)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
