@@ -19,6 +19,20 @@ if ("${KOTEK_SDK}" STREQUAL "ON")
 	#ifdef KOTEK_SDK
 		#define KOTEK_USE_SDK
 	#endif
+
+	#ifdef KOTEK_USE_SDK
+		#define WXUSINGDLL
+		#define wxUSE_LISTCTRL 1
+
+		#include <wx/wxprec.h>
+
+		#ifndef WX_PRECOMP
+			#include <wx/wx.h>
+		#endif
+
+		#include <wx/listctrl.h>
+		#include <wx/aui/aui.h>
+	#endif
 	")
 else()
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
