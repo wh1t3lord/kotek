@@ -213,3 +213,7 @@ With this command you can enable or to not use tests like they integrated in pro
 | OFF | Engine creates separated projects for testing |
 
 DEFAULT VALUE: If flag is not specified the cmake will use -DKOTEK_TESTS_RUNTIME=ON. So by default cmake generating solution with runtime tests.
+
+# Working with dependencies
+
+- never use .c or any formats that defines C language, only those formats that defines CXX (C++) language. It is important, because cmake will generate PCH files for both languages and thus you can't compile the solution.
