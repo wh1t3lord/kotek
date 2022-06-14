@@ -65,11 +65,13 @@ add_library(${PROJECT_NAME} STATIC
     "include/kotek_render_helper_stats.h"
     "src/kotek_render_helper_stats.cpp"
     "include/kotek_spirv.h"
-    "src/kotek_spirv_reflect.c"
+    "src/kotek_spirv_reflect.cpp"
     "include/kotek_spirv_reflect.h"
     "include/vk_enum_string_helper.h"
     "src/main_render_vk_dll.cpp"
 )
+
+target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 target_link_libraries(${PROJECT_NAME} kotek.core)
 target_link_libraries(${PROJECT_NAME} kotek.render.model)

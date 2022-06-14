@@ -1,5 +1,4 @@
 #include "../include/kotek_model.h"
-#include <kotek.core/include/kotek_main_manager.h>
 
 namespace Kotek
 {
@@ -24,7 +23,10 @@ namespace Kotek
 				return false;
 			}
 
-			bool status = this->m_file.Load(main_manager, path);
+			// TODO: write loader for this stuff, file can't call from itself loader and saver
+	//		bool status = this->m_file.Load(main_manager, path);
+			bool status = false;
+			KOTEK_ASSERT(false, "not implemented!");
 
 			if (status == false)
 			{

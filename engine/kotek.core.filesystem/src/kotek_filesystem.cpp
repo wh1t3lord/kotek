@@ -48,6 +48,7 @@ namespace Kotek
 
 			return this->m_storage_paths.at(id);
 		}
+
 		bool ktkFileSystem::IsValidPath(const ktk::string& path) const noexcept
 		{
 			if (path.empty())

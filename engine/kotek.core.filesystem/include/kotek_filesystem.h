@@ -65,7 +65,7 @@ namespace Kotek
 			const ktk::string& GetFolderByEnum(
 				folder_index_t id) const noexcept;
 
-			bool IsValidPath(const ktk::string& path) const noexcept;
+			bool IsValidPath(const ktk::string& path) const noexcept override;
 
 			bool CreateDirectory(const ktk::string& path) const noexcept;
 

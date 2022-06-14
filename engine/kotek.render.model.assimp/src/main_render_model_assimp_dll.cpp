@@ -1,4 +1,4 @@
-#include "../include/kotek_render_model.h"
+#include "../include/kotek_render_model_assimp.h"
 
 namespace Kotek
 {

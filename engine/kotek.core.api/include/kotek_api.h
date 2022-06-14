@@ -122,6 +122,8 @@ namespace Kotek
 
 			virtual void Initialize(void) = 0;
 			virtual void Shutdown(void) = 0;
+			virtual bool IsValidPath(
+				const ktk::string& path) const noexcept = 0;
 		};
 
 		class ktkIInput

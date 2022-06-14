@@ -12,4 +12,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_render_model_dll.cpp"
 )
 
+target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model.assimp)
