@@ -6,6 +6,9 @@ namespace Kotek
 {
 	namespace ktk
 	{
-		using thread = std::thread;
+		namespace mt
+		{
+			using thread = std::thread;
+		}
 	}
 } // namespace Kotek

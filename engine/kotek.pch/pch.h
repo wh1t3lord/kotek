@@ -25,6 +25,8 @@
 			#include <kotek.ui.imgui/include/imgui_impl_dx9.h>
 		#endif
 	#endif
+
+	#include <kotek.ui.imgui/include/imgui_impl_win32.h>
 #endif
 
 #ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
