@@ -87,6 +87,11 @@ namespace Kotek
 			this->m_p_manager_swapchain = pointer;
 		}
 
+		ktkIEngineConfig* ktkMainManager::Get_EngineConfig(void) const noexcept
+		{
+			return this->m_p_manager_config;
+		}
+
 		void ktkMainManager::Initialize(int argc, char** argv) 
 		{ 
 			if (this->m_p_manager_config) 
