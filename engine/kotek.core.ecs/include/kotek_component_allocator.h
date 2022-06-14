@@ -107,7 +107,7 @@ namespace Kotek
 				return ComponentType::GetComponentName();
 			}
 
-			void DrawImGui(Kotek::Core::ktkMainManager& main_manager,
+			void DrawImGui(Kotek::Core::ktkMainManager* main_manager,
 				Kotek::ktk::entity_t entity_id) noexcept override
 			{
 				ComponentType* p_component =
