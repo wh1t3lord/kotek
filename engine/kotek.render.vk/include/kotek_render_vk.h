@@ -4,8 +4,8 @@ namespace Kotek
 {
 	namespace Render
 	{
-		bool InitializeModule_Render_VK(Core::ktkMainManager& main_manager);
-		bool ShutdownModule_Render_VK(Core::ktkMainManager& main_manager);
+		bool InitializeModule_Render_VK(Core::ktkMainManager* main_manager);
+		bool ShutdownModule_Render_VK(Core::ktkMainManager* main_manager);
 
 #ifdef KOTEK_DEBUG
 

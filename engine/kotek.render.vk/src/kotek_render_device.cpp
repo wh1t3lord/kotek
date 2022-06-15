@@ -52,7 +52,7 @@ namespace Kotek
 
 			ktkRenderDevice::~ktkRenderDevice() {}
 
-			void ktkRenderDevice::Initialize(Core::ktkMainManager& main_manager)
+			void ktkRenderDevice::Initialize(Core::ktkMainManager* main_manager)
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -399,7 +399,7 @@ namespace Kotek
 			}
 
 			void ktkRenderDevice::InitializeDevice(
-				Core::ktkMainManager& main_manager) noexcept
+				Core::ktkMainManager* main_manager) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -966,11 +966,11 @@ namespace Kotek
 			}
 
 			void ktkRenderDevice::CreateSurface(
-				Core::ktkMainManager& main_manager) noexcept
+				Core::ktkMainManager* main_manager) noexcept
 			{
 				this->m_p_surface = static_cast<VkSurfaceKHR>(
-					main_manager.GetGameManager()->CreateSurface(
-						static_cast<Core::ktkMainManager*>(&main_manager),
+					main_manager->GetGameManager()->CreateSurface(
+						main_manager,
 						this->m_p_instance, nullptr));
 			}
 

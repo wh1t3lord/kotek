@@ -28,15 +28,15 @@ namespace Kotek
 {
 	namespace Game
 	{
-		bool registerCommands(Core::ktkMainManager& main_manager) noexcept
+		bool registerCommands(Core::ktkMainManager* p_main_manager) noexcept
 		{
 			return true;
 		}
 
-		bool InitializeModule_Game(Core::ktkMainManager& main_manager)
+		bool InitializeModule_Game(Core::ktkMainManager* p_main_manager)
 		{
 			auto path_to_system_json =
-				main_manager.GetFileSystem()->GetFolderByEnum(
+				p_main_manager->GetFileSystem()->GetFolderByEnum(
 					Core::folder_index_t::kFolderIndex_Root);
 
 			path_to_system_json.append_path("sys_info.json");
@@ -44,7 +44,7 @@ namespace Kotek
 			Core::ktkFile file;
 
 			// TODO: implement loader (thus resource manager too)!!
-//			KOTEK_ASSERT(file.Load(main_manager, path_to_system_json),
+//			KOTEK_ASSERT(file.Load(p_main_manager, path_to_system_json),
 		//		"you must load file successfully! Can't load sys_info.json");
 			KOTEK_ASSERT(false, "not implemented");
 
@@ -75,8 +75,8 @@ namespace Kotek
 			executable_path /= field_library_name.get_as_is().c_str();
 
 			// TODO: implement loader for dlls it is a resource!!!
-		//	main_manager.LoadUserGameLibrary(executable_path.string());
-		//	const auto& user_dll = main_manager.GetUserLibrary();
+		//	p_main_manager.LoadUserGameLibrary(executable_path.string());
+		//	const auto& user_dll = p_main_manager.GetUserLibrary();
 			ktk::dll::shared_library user_dll;
 			p_user_callback_initialize_game_library =
 				user_dll.get<ktkUserCallbackInitialize>(
@@ -117,18 +117,18 @@ namespace Kotek
 				field_update_callback_name.get_as_is());
 
 			if (p_user_callback_initialize_game_library)
-				p_user_callback_initialize_game_library(&main_manager);
+				p_user_callback_initialize_game_library(p_main_manager);
 
 			return true;
 		}
 
-		bool ShutdownModule_Game(Core::ktkMainManager& main_manager)
+		bool ShutdownModule_Game(Core::ktkMainManager* p_main_manager)
 		{
 			if (p_user_callback_shutdown_game_library)
-				p_user_callback_shutdown_game_library(&main_manager);
+				p_user_callback_shutdown_game_library(p_main_manager);
 
 			// TODO: unload with resource manager
-		//	main_manager.UnLoadUserGameLibrary();
+		//	p_main_manager.UnLoadUserGameLibrary();
 
 			return true;
 		}
@@ -136,32 +136,32 @@ namespace Kotek
 
 	namespace Engine
 	{
-		void ValidateMainManager(Core::ktkMainManager& main_manager) noexcept
+		void ValidateMainManager(Core::ktkMainManager* p_main_manager) noexcept
 		{
 			// TODO: keep in updated form
 
-			KOTEK_ASSERT(main_manager.GetFileSystem(),
+			KOTEK_ASSERT(p_main_manager->GetFileSystem(),
 				"you didn't initialize filesystem manager field in main "
 				"manager");
-			KOTEK_ASSERT(main_manager.GetInput(),
+			KOTEK_ASSERT(p_main_manager->GetInput(),
 				"you didn't initialize input manager field in "
 				"main manager");
 
-			if (main_manager.Get_EngineConfig()->IsContainsConsoleCommandLineArgument(
+			if (p_main_manager->Get_EngineConfig()->IsContainsConsoleCommandLineArgument(
 					Core::kConsoleCommandArg_Editor) == false)
 			{
-				KOTEK_ASSERT(main_manager.getRenderDevice(),
+				KOTEK_ASSERT(p_main_manager->getRenderDevice(),
 					"you didn't initialize render device manager field in main "
 					"manager");
-				KOTEK_ASSERT(main_manager.GetRenderResourceManager(),
+				KOTEK_ASSERT(p_main_manager->GetRenderResourceManager(),
 					"you didn't initialize render resource manager in main "
 					"manager");
-				KOTEK_ASSERT(main_manager.getRenderSwapchainManager(),
+				KOTEK_ASSERT(p_main_manager->getRenderSwapchainManager(),
 					"you didn't initialize render swapchain manager in main "
 					"manager");
 			}
 
-			KOTEK_ASSERT(main_manager.GetGameManager(),
+			KOTEK_ASSERT(p_main_manager->GetGameManager(),
 				"you didn't initialize game manager in your game library or "
 				"you forgot to pass game manager to main manager");
 		}
@@ -242,24 +242,24 @@ namespace Kotek
 #endif
 		}
 
-		bool InitializeEngine(Core::ktkMainManager& main_manager)
+		bool InitializeEngine(Core::ktkMainManager* p_main_manager)
 		{
 			PrintCompiler();
 
-			Core::InitializeModule_Core(&main_manager);
+			Core::InitializeModule_Core(p_main_manager);
 
 			// TODO: restore when you implement ImGui
-			Game::registerCommands(main_manager);
+			Game::registerCommands(p_main_manager);
 
-			Game::InitializeModule_Game(main_manager);
+			Game::InitializeModule_Game(p_main_manager);
 
-			Render::InitializeModule_Render(main_manager);
+			Render::InitializeModule_Render(p_main_manager);
 
 			if (p_user_callback_initialize_render_from_game_library)
 				p_user_callback_initialize_render_from_game_library(
-					&main_manager);
+					p_main_manager);
 
-			Engine::ValidateMainManager(main_manager);
+			Engine::ValidateMainManager(p_main_manager);
 
 #ifdef KOTEK_DEBUG
 	#ifdef KOTEK_USE_TESTS_RUNTIME
@@ -279,20 +279,20 @@ namespace Kotek
 			return true;
 		}
 
-		bool ExecuteEngine(Core::ktkMainManager& main_manager)
+		bool ExecuteEngine(Core::ktkMainManager* p_main_manager)
 		{
-			p_user_callback_update_game_library(&main_manager);
+			p_user_callback_update_game_library(p_main_manager);
 
 			return true;
 		}
 
-		bool ShutdownEngine(Core::ktkMainManager& main_manager)
+		bool ShutdownEngine(Core::ktkMainManager* p_main_manager)
 		{
-			main_manager.GetProfiler()->Shutdown();
+			p_main_manager->GetProfiler()->Shutdown();
 
-			Core::ShutdownModule_Core(&main_manager);
-			Render::ShutdownModule_Render(main_manager);
-			Game::ShutdownModule_Game(main_manager);
+			Core::ShutdownModule_Core(p_main_manager);
+			Render::ShutdownModule_Render(p_main_manager);
+			Game::ShutdownModule_Game(p_main_manager);
 
 			return true;
 		}

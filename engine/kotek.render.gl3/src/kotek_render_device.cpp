@@ -10,11 +10,11 @@ namespace Kotek
 
 			ktkRenderDevice::~ktkRenderDevice(void) {}
 
-			void ktkRenderDevice::Initialize(Core::ktkMainManager& main_manager)
+			void ktkRenderDevice::Initialize(
+				Core::ktkMainManager* p_main_manager)
 			{
-				main_manager.GetGameManager()->CreateSurface(
-					static_cast<Core::ktkMainManager*>(&main_manager), nullptr,
-					nullptr);
+				p_main_manager->GetGameManager()->CreateSurface(
+					p_main_manager, nullptr, nullptr);
 			}
 
 			void ktkRenderDevice::Shutdown(void) {}

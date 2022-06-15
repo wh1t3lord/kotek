@@ -78,10 +78,8 @@ namespace Kotek
 {
 	namespace Game
 	{
-		bool ExecuteModule_Game(Core::ktkMainManager& main_manager, float dt)
+		bool ExecuteModule_Game(Core::ktkMainManager* main_manager, float dt)
 		{
- 
-
 			return true;
 		}
 

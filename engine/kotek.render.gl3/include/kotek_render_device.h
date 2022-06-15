@@ -20,7 +20,7 @@ namespace Kotek
 				ktkRenderDevice(void);
 				~ktkRenderDevice(void);
 
-				void Initialize(Core::ktkMainManager& main_manager) override;
+				void Initialize(Core::ktkMainManager* main_manager) override;
 				void Shutdown(void) override;
 				void Resize(Core::ktkIRenderSwapchain* p_raw_swapchain,
 					Core::kotek_i_renderer* p_raw_renderer,

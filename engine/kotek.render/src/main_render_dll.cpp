@@ -7,18 +7,18 @@ namespace Kotek
 {
 	namespace Render
 	{
-		bool InitializeModule_Render(Core::ktkMainManager& main_manager)
+		bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		{
 			// TODO: сделать выбор рендера
 
 			bool status{};
-			if (main_manager.Get_EngineConfig()
+			if (main_manager->Get_EngineConfig()
 					->IsContainsConsoleCommandLineArgument(
 						Core::kConsoleCommandArg_Render_OpenGL))
 			{
 				status = InitializeModule_Render_GL(main_manager);
 			}
-			else if (main_manager.Get_EngineConfig()
+			else if (main_manager->Get_EngineConfig()
 						 ->IsContainsConsoleCommandLineArgument(
 							 Core::kConsoleCommandArg_Render_Vulkan))
 			{
@@ -33,25 +33,25 @@ namespace Kotek
 			}
 
 			KOTEK_ASSERT(status, "can't initialize module render {}. See log",
-				main_manager.Get_EngineConfig()->GetRenderName().get_as_is());
+				main_manager->Get_EngineConfig()->GetRenderName().get_as_is());
 
 			KOTEK_MESSAGE("render module {} is initialized",
-				main_manager.Get_EngineConfig()->GetRenderName().get_as_is());
+				main_manager->Get_EngineConfig()->GetRenderName().get_as_is());
 
 			return true;
 		}
 
-		bool ShutdownModule_Render(Core::ktkMainManager& main_manager)
+		bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 		{
 			bool status{};
 
-			if (main_manager.Get_EngineConfig()
+			if (main_manager->Get_EngineConfig()
 					->IsContainsConsoleCommandLineArgument(
 						Core::kConsoleCommandArg_Render_OpenGL))
 			{
 				status = ShutdownModule_Render_GL(main_manager);
 			}
-			else if (main_manager.Get_EngineConfig()
+			else if (main_manager->Get_EngineConfig()
 						 ->IsContainsConsoleCommandLineArgument(
 							 Core::kConsoleCommandArg_Render_Vulkan))
 			{
@@ -63,7 +63,7 @@ namespace Kotek
 			}
 
 			KOTEK_ASSERT(status, "failed to shutdown render {} module",
-				main_manager.Get_EngineConfig()->GetRenderName().get_as_is());
+				main_manager->Get_EngineConfig()->GetRenderName().get_as_is());
 
 			return status;
 		}

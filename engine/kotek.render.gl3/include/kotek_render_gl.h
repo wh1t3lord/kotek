@@ -12,7 +12,7 @@ namespace Kotek
 {
 	namespace Render
 	{
-		bool InitializeModule_Render_GL(Core::ktkMainManager& main_manager);
-		bool ShutdownModule_Render_GL(Core::ktkMainManager& main_manager);
+		bool InitializeModule_Render_GL(Core::ktkMainManager* main_manager);
+		bool ShutdownModule_Render_GL(Core::ktkMainManager* main_manager);
 	} // namespace Render
 } // namespace Kotek

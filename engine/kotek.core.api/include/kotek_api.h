@@ -45,7 +45,7 @@ namespace Kotek
 		public:
 			virtual ~ktkIRenderDevice(void) {}
 
-			virtual void Initialize(Core::ktkMainManager& main_manager) = 0;
+			virtual void Initialize(Core::ktkMainManager* main_manager) = 0;
 			virtual void Shutdown(void) = 0;
 			virtual void Resize(ktkIRenderSwapchain* p_raw_swapchain,
 				kotek_i_renderer* p_raw_renderer,

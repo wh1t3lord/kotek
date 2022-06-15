@@ -33,7 +33,7 @@ namespace Kotek
 				ktkRenderDevice(void);
 				~ktkRenderDevice(void);
 
-				void Initialize(Core::ktkMainManager& main_manager) override;
+				void Initialize(Core::ktkMainManager* main_manager) override;
 				void Shutdown(void) override;
 				void Resize(Core::ktkIRenderSwapchain* p_raw_swapchain,
 					Core::kotek_i_renderer* p_raw_renderer,
@@ -93,7 +93,7 @@ namespace Kotek
 
 				// This initialized both and physical and non physical just all
 				void InitializeDevice(
-					Core::ktkMainManager& main_manager) noexcept;
+					Core::ktkMainManager* main_manager) noexcept;
 
 				void InitializeIndeciesOfQueueFamilies(
 					ktk::uint32_t queue_count,
@@ -127,7 +127,7 @@ namespace Kotek
 				bool CheckExtensionFP16(
 					ktkRenderDeviceProperties* p_prop) noexcept;
 
-				void CreateSurface(Core::ktkMainManager& main_manager) noexcept;
+				void CreateSurface(Core::ktkMainManager* main_manager) noexcept;
 
 				ktk::uint32_t GetApiVersion(void) const noexcept;
 
