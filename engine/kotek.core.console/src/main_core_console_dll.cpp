@@ -6,6 +6,7 @@ namespace Kotek
 	{
 		bool InitializeModule_Core_Console(ktkMainManager* p_manager)
 		{
+		 
 			return true;
 		}
 

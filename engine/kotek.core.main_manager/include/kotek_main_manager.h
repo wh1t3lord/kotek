@@ -15,6 +15,8 @@ namespace Kotek
 			ktkIProfiler* GetProfiler(void) const noexcept;
 
 			ktkIFileSystem* GetFileSystem(void) const noexcept;
+			void Set_FileSystem(ktkIFileSystem* p_instance) noexcept;
+
 			ktkIInput* GetInput(void) const noexcept;
 
 			ktkIGameManager* GetGameManager(void) const noexcept;
