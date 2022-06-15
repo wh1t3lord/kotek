@@ -25,6 +25,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_math_matrix_4x4_f.h"
 	"include/kotek_std_math.h"
 	"include/kotek_core_math.h"
+	"tests/kotek_core_test_math.cpp"
 	"src/main_core_math_dll.cpp")
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
