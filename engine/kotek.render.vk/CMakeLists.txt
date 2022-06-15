@@ -5,12 +5,7 @@ project(kotek.render.vk VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/include/")
-
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
-
-link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/lib/")
-link_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render_vk.h"
@@ -72,6 +67,10 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
+
+target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/include/")
+target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
+target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/lib/")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)

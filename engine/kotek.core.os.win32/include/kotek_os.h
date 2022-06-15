@@ -8,17 +8,6 @@
 	#include <dwmapi.h>
 	#include <windows.h>
 
-	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
-		#include <GLFW/glfw3.h>
-
-		#define GLFW_EXPOSE_NATIVE_WIN32
-		#include <GLFW/glfw3native.h>
-	#endif
-
-	#ifdef KOTEK_USE_OPENGL
-		// glad uses only in private form, like you initialize in appropriate kotek.render.glx.x version
-	#endif
-
 	#ifdef KOTEK_USE_VULKAN
 		#define VK_USE_PLATFORM_WIN32_KHR
 		#include <vulkan/vulkan.h>
@@ -48,5 +37,16 @@
 		#if (KOTEK_USE_DIRECTX_VERSION > 8)
 			#include <d3d9.h>
 		#endif
+	#endif
+
+	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
+		#include <GLFW/glfw3.h>
+
+		#define GLFW_EXPOSE_NATIVE_WIN32
+		#include <GLFW/glfw3native.h>
+	#endif
+
+	#ifdef KOTEK_USE_OPENGL
+		// glad uses only in private form, like you initialize in appropriate kotek.render.glx.x version
 	#endif
 #endif
