@@ -18,4 +18,5 @@ add_library(${PROJECT_NAME} STATIC
 
 if(WIN32)
 	target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/vld/include/")
+	target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/vld/lib/Win64/")
 endif()
