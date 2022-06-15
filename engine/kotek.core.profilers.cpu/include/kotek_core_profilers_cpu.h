@@ -1,5 +1,7 @@
 #pragma once
 
+#include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
+
 namespace Kotek
 {
 	namespace Core

@@ -12,6 +12,7 @@ namespace Kotek
 			ktkMainManager(void);
 			~ktkMainManager(void);
 
+			void Set_Profiler(ktkIProfiler* p_instance) noexcept;
 			ktkIProfiler* GetProfiler(void) const noexcept;
 
 			ktkIFileSystem* GetFileSystem(void) const noexcept;

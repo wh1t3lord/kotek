@@ -13,11 +13,6 @@
 					   .get_as_is();                                         \
 		}
 
-	#define KOTEK_MESSAGE_S(text)                        \
-		{                                                \
-			BOOST_LOG_TRIVIAL(info) << KOTEK_TEXT(text); \
-		}
-
 	#define KOTEK_MESSAGE(text, ...)                                     \
 		{                                                                \
 			BOOST_LOG_TRIVIAL(info)                                      \

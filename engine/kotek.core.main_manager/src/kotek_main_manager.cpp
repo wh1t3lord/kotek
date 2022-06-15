@@ -15,6 +15,11 @@ namespace Kotek
 
 		ktkMainManager::~ktkMainManager(void) { }
 
+		void ktkMainManager::Set_Profiler(ktkIProfiler* p_instance) noexcept 
+		{
+			this->m_p_manager_profiler = p_instance;
+		}
+
 		ktkIProfiler* ktkMainManager::GetProfiler(void) const noexcept
 		{
 			return this->m_p_manager_profiler;
