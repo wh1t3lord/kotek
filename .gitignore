@@ -15,6 +15,7 @@ CMakeCache.txt
 cmake_install.cmake
 install_manifest.txt
 bin*/
+kotek-engine-deps-win32-*/
 !deps/**
 !deps/vld/bin/**
 !deps/TBB/bin/**

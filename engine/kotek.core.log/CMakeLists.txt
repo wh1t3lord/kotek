@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 	find_package(Boost COMPONENTS log REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+	message("[${PROJECT_NAME}] deps folder: ${KOTEK_DEPS_FOLDER}")
 endif()
 
 add_library(${PROJECT_NAME} STATIC

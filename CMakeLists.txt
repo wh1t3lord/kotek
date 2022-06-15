@@ -8,7 +8,9 @@ set(KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS ./include/kotek_std_preprocessor
 message("[Engine]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}'")
 
 if (WIN32)
-	set(KOTEK_DEPS_FOLDER "kotek-engine-deps-win32")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
+		set(KOTEK_DEPS_FOLDER "kotek-engine-deps-win32")
+	endif()
 
 	message("[Engine]: current deps folder: '${KOTEK_DEPS_FOLDER}'")
 endif()
