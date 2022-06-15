@@ -35,6 +35,11 @@ namespace Kotek
 			this->m_p_manager_filesystem = p_instance;
 		}
 
+		void ktkMainManager::Set_Input(ktkIInput* p_instance) noexcept
+		{
+			this->m_p_manager_input = p_instance;
+		}
+
 		ktkIInput* ktkMainManager::GetInput(void) const noexcept
 		{
 			return this->m_p_manager_input;
