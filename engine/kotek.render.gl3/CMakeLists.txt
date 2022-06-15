@@ -5,18 +5,10 @@ project(kotek.render.gl3 VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/include/")
-
-if (WIN32)
-include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
-endif()
-
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/lib/")
-link_directories("../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
-
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
+find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
 
 set(to_include_render_graph_files
     "include/kotek_render_graph.h"
@@ -81,7 +73,11 @@ source_group("Memory management" FILES ${to_include_memory_management_files})
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
+target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/include/")
+target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
+
 target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::GL)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad3)
+target_link_libraries(${PROJECT_NAME} PUBLIC KTX::ktx)
