@@ -239,9 +239,6 @@ namespace Kotek
 			virtual ktk::any Load_Video(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
 
-			virtual void Initialize(void) = 0;
-			virtual void Shutdown(void) = 0;
-
 		protected:
 			virtual eResourceLoadingType DetectResourceTypeByFileFormat(
 				const ktk::filesystem::path& path) noexcept = 0;
