@@ -20,13 +20,13 @@ namespace Kotek
 			void ktkRenderShaderManager::Shutdown(void) {}
 
 			shader_module_t ktkRenderShaderManager::LoadShader(
-				const ktk::path& path, shader_type_t type) noexcept
+				const ktk::filesystem::path& path, shader_type_t type) noexcept
 			{
 				return shader_module_t();
 			}
 
 			shader_module_t ktkRenderShaderManager::LoadShader(
-				const ktk::path& path) noexcept
+				const ktk::filesystem::path& path) noexcept
 			{
 				return shader_module_t();
 			}

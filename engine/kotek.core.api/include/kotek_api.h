@@ -6,7 +6,7 @@
 #include <kotek.core.containers.shared_ptr/include/kotek_core_containers_shared_ptr.h>
 #include <kotek.core.containers.any/include/kotek_core_containers_any.h>
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
-#include <kotek.core.containers.filesystem.path/include/kotek_core_containers_filesystem_path.h>
+#include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 
 namespace Kotek
@@ -240,7 +240,7 @@ namespace Kotek
 
 		protected:
 			virtual eResourceLoadingType DetectResourceTypeByFileFormat(
-				const ktk::string& path) noexcept = 0;
+				const ktk::filesystem::path& path) noexcept = 0;
 		};
 
 		enum class eResourceLoadingPolicy : ktk::enum_base_t

@@ -94,8 +94,8 @@ namespace Kotek
 				void Shutdown(void);
 
 				shader_module_t LoadShader(
-					const ktk::path& path, shader_type_t type) noexcept;
-				shader_module_t LoadShader(const ktk::path& path) noexcept;
+					const ktk::filesystem::path& path, shader_type_t type) noexcept;
+				shader_module_t LoadShader(const ktk::filesystem::path& path) noexcept;
 				shader_module_t LoadShaderAsString(
 					const ktk::string& code_as_string,
 					shader_type_t type) noexcept;
