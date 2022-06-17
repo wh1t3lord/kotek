@@ -1,5 +1,6 @@
 #include "../include/kotek_core_resource_manager.h"
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 
 namespace Kotek
 {
