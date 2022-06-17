@@ -29,6 +29,17 @@ namespace Kotek
 			return this->m_p_manager_resource_loader;
 		}
 
+		void ktkResourceManager::Set_MainManager(
+			ktkMainManager* p_instance) noexcept
+		{
+			this->m_p_manager_main = p_instance;
+		}
+
+		ktkMainManager* ktkResourceManager::Get_MainManager(void) const noexcept
+		{
+			return this->m_p_manager_main;
+		}
+
 		ktk::any ktkResourceManager::Load_Resource(
 			const ktkLoadingRequest& request)
 		{

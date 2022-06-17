@@ -345,21 +345,25 @@ namespace Kotek
 			virtual void Shutdown(void) = 0;
 
 			template <typename ResourceType>
-			ResourceType Load(
-				const ktkLoadingRequest& request) noexcept
+			ResourceType Load(const ktkLoadingRequest& request) noexcept
 			{
-				return any_cast<ResourceType>(
-					this->Load_Resource(request));
+				return any_cast<ResourceType>(this->Load_Resource(request));
 			}
 
-			virtual void Set_ResourceLoader(ktkIResourceLoader* p_instance) noexcept = 0;
+			virtual void Set_ResourceLoader(
+				ktkIResourceLoader* p_instance) noexcept = 0;
 			virtual ktkIResourceLoader* Get_ResourceLoader(
 				void) const noexcept = 0;
+
+			virtual void Set_MainManager(
+				ktkMainManager* p_instance) noexcept = 0;
+			virtual ktkMainManager* Get_MainManager(void) const noexcept = 0;
 
 			// TODO: implement saving
 
 		protected:
-			virtual ktk::any Load_Resource(const ktkLoadingRequest& request) = 0;
+			virtual ktk::any Load_Resource(
+				const ktkLoadingRequest& request) = 0;
 		};
 
 		class ktkIConsole
