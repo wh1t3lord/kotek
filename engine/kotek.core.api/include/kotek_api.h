@@ -204,8 +204,9 @@ namespace Kotek
 			kModel,
 			kSound,
 			kVideo,
+			kDLL,
 			kAutoDetect,
-			kUnknown = kAutoDetect
+			kUnknown = -1
 		};
 
 		class ktkIResourceLoader
