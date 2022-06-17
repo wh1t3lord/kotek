@@ -1,14 +1,9 @@
 #pragma once
 
-#include <filesystem>
-
 namespace Kotek
 {
 	namespace ktk
 	{
-		namespace filesystem
-		{
-			using path = std::filesystem::path;
-		}
+		namespace filesystem = std::filesystem;
 	} // namespace ktk
 } // namespace Kotek
