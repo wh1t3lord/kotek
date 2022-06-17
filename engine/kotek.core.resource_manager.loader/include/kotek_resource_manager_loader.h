@@ -35,9 +35,6 @@ namespace Kotek
 			ktk::any Load_Video(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept override;
 
-			void Initialize(void) override;
-			void Shutdown(void) override;
-
 		protected:
 			eResourceLoadingType DetectResourceTypeByFileFormat(
 				const ktk::filesystem::path& path) noexcept override;
