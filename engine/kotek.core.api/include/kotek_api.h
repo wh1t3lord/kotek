@@ -341,12 +341,14 @@ namespace Kotek
 			virtual ~ktkIResourceManager(void) {}
 
 			template <typename ResourceType>
-			ktk::shared_ptr<ResourceType> Load(
+			ResourceType Load(
 				const ktkLoadingRequest& request) noexcept
 			{
-				return any_cast<ktk::shared_ptr<ResourceType>>(
+				return any_cast<ResourceType>(
 					this->Load_Resource(request));
 			}
+
+			// TODO: implement saving
 
 		protected:
 			virtual ktk::any Load_Resource(const ktkLoadingRequest& request) = 0;

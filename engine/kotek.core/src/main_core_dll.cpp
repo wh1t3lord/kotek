@@ -38,6 +38,7 @@ namespace Kotek
 			InitializeModule_Core_Utility(p_manager);
 			InitializeModule_Core_ECS(p_manager);
 			InitializeModule_Core_Input(p_manager);
+			InitializeModule_Core_Resource_Manager(p_manager);
 
 			RegisterCommands(p_manager);
 			RegisterAllTests();
@@ -68,6 +69,7 @@ namespace Kotek
 			ShutdownModule_Core_ECS(p_manager);
 			ShutdownModule_Core_Input(p_manager);
 			ShutdownModule_Core_Utility(p_manager);
+			ShutdownModule_Core_Resource_Manager(p_manager);
 
 			ShutdownModule_Core_Main_Manager();
 

@@ -32,6 +32,10 @@ namespace Kotek
 			void setRenderDevice(ktkIRenderDevice* pointer) noexcept;
 
 			// @ returns user's resource manager
+			// TODO: delete resource manager from here it is a private thing,
+			// because wit hall resource handling must be called from one
+			// instance and it is GetResourceManager, GetResourceManager could
+			// be initialized as user implementated interface or our
 			ktkIRenderResourceManager* GetRenderResourceManager(
 				void) const noexcept;
 

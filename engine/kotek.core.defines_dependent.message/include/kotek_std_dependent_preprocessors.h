@@ -13,6 +13,12 @@
 					   .get_as_is();                                         \
 		}
 
+// TODO: add feature that message can do log in file, but we can pass argument
+// like KOTEK_MESSAGE_WITH_LOG=ON or OFF if ON means KOTEK_MESSAGE will write in
+// text file if not ON it means message just write in our console.
+
+// TODO: create KOTEK_LOG to separate operation into writing in console or text
+// file
 	#define KOTEK_MESSAGE(text, ...)                                     \
 		{                                                                \
 			BOOST_LOG_TRIVIAL(info)                                      \

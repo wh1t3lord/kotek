@@ -14,7 +14,7 @@ namespace Kotek
 			bool status{};
 			if (main_manager->Get_EngineConfig()
 					->IsContainsConsoleCommandLineArgument(
-						Core::kConsoleCommandArg_Render_OpenGL))
+						Core::kConsoleCommandArg_Render_OpenGL3_3))
 			{
 				status = InitializeModule_Render_GL(main_manager);
 			}
@@ -47,7 +47,7 @@ namespace Kotek
 
 			if (main_manager->Get_EngineConfig()
 					->IsContainsConsoleCommandLineArgument(
-						Core::kConsoleCommandArg_Render_OpenGL))
+						Core::kConsoleCommandArg_Render_OpenGL3_3))
 			{
 				status = ShutdownModule_Render_GL(main_manager);
 			}

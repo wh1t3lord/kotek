@@ -14,6 +14,7 @@
 #include <kotek.core.window/include/kotek_core_window.h>
 #include <kotek.core.log/include/kotek_core_log.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.resource_manager/include/kotek_core_resource_manager.h>
 #include <kotek.core.input/include/kotek_core_input.h>
 #include <kotek.core.utility/include/kotek_core_utility.h>
 #include <kotek.core.ecs/include/kotek_core_ecs.h>

@@ -7,8 +7,8 @@ namespace Kotek
 	{
 		bool InitializeModule_Core_Memory_CPU(ktkMainManager* p_manager)
 		{
-			// TODO: add printing mimalloc version to log mi_version();
-
+			// TODO: think how to resolve the thing with logging, because I need
+			// to write the mimalloc version here
 			return true;
 		}
 
