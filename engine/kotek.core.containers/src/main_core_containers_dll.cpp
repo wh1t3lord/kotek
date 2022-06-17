@@ -10,7 +10,7 @@ namespace Kotek
 			InitializeModule_Core_Containers_Array(p_manager);
 			InitializeModule_Core_Containers_Deque(p_manager);
 			InitializeModule_Core_Containers_DLL(p_manager);
-			InitializeModule_Core_Containers_FileSystem_Path(p_manager);
+			InitializeModule_Core_Containers_FileSystem(p_manager);
 			InitializeModule_Core_Containers_Function(p_manager);
 			InitializeModule_Core_Containers_Hash(p_manager);
 			InitializeModule_Core_Containers_IO(p_manager);

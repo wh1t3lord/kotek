@@ -4,7 +4,7 @@
 #include <kotek.core.containers.array/include/kotek_core_containers_array.h>
 #include <kotek.core.containers.deque/include/kotek_core_containers_deque.h>
 #include <kotek.core.containers.dll/include/kotek_core_containers_dll.h>
-#include <kotek.core.containers.filesystem.path/include/kotek_core_containers_filesystem_path.h>
+#include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 #include <kotek.core.containers.function/include/kotek_core_containers_function.h>
 #include <kotek.core.containers.hash/include/kotek_core_containers_hash.h>
 #include <kotek.core.containers.io/include/kotek_core_containers_io.h>

@@ -6,6 +6,7 @@
 #include <kotek.core.containers.shared_ptr/include/kotek_core_containers_shared_ptr.h>
 #include <kotek.core.containers.any/include/kotek_core_containers_any.h>
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
+#include <kotek.core.containers.filesystem.path/include/kotek_core_containers_filesystem_path.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 
 namespace Kotek
@@ -212,21 +213,26 @@ namespace Kotek
 		public:
 			virtual ~ktkIResourceLoader(void) {}
 
-			virtual ktk::any LoadText(const ktk::string& path) noexcept = 0;
-			virtual ktk::any LoadTexture(const ktk::string& path) noexcept = 0;
-			virtual ktk::any LoadModel(const ktk::string& path) noexcept = 0;
-			virtual ktk::any LoadSound(const ktk::string& path) noexcept = 0;
-			virtual ktk::any LoadVideo(const ktk::string& path) noexcept = 0;
+			virtual ktk::any Load_Text(
+				const ktk::filesystem::path& path) noexcept = 0;
+			virtual ktk::any Load_Texture(
+				const ktk::filesystem::path& path) noexcept = 0;
+			virtual ktk::any Load_Model(
+				const ktk::filesystem::path& path) noexcept = 0;
+			virtual ktk::any Load_Sound(
+				const ktk::filesystem::path& path) noexcept = 0;
+			virtual ktk::any Load_Video(
+				const ktk::filesystem::path& path) noexcept = 0;
 
-			virtual ktk::any LoadText(const ktk::string& path,
+			virtual ktk::any Load_Text(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
-			virtual ktk::any LoadTexture(const ktk::string& path,
+			virtual ktk::any Load_Texture(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
-			virtual ktk::any LoadModel(const ktk::string& path,
+			virtual ktk::any Load_Model(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
-			virtual ktk::any LoadSound(const ktk::string& path,
+			virtual ktk::any Load_Sound(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
-			virtual ktk::any LoadVideo(const ktk::string& path,
+			virtual ktk::any Load_Video(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
 
 			virtual void Initialize(void) = 0;
@@ -258,7 +264,7 @@ namespace Kotek
 			ktkLoadingRequest(eResourceLoadingPolicy type_loading,
 				eResourceCachingPolicy type_policy_caching,
 				eResourceLoadingType type_of_loading_resource,
-				const ktk::string& resource_path) :
+				const ktk::filesystem::path& resource_path) :
 				m_policy_loading{type_loading},
 				m_policy_caching{type_policy_caching},
 				m_resource_type{type_of_loading_resource}, m_resource_path{
@@ -275,27 +281,58 @@ namespace Kotek
 
 			~ktkLoadingRequest() = default;
 
-			ktkLoadingRequest& SetLoadingPolicy(
-				eResourceLoadingPolicy policy) noexcept;
-			eResourceLoadingPolicy GetLoadingPolicy(void) const noexcept;
+			virtual ktkLoadingRequest& Set_LoadingPolicy(
+				eResourceLoadingPolicy policy) noexcept
+			{
+				this->m_policy_loading = policy;
+			}
 
-			ktkLoadingRequest& SetCachingPolicy(
-				eResourceCachingPolicy policy) noexcept;
-			eResourceCachingPolicy GetCachingPolicy(void) const noexcept;
+			virtual eResourceLoadingPolicy Get_LoadingPolicy(
+				void) const noexcept
+			{
+				return this->m_policy_loading;
+			}
 
-			ktkLoadingRequest& SetResourceType(
-				eResourceLoadingType type) noexcept;
-			eResourceLoadingType GetResourceType() const noexcept;
+			virtual ktkLoadingRequest& Set_CachingPolicy(
+				eResourceCachingPolicy policy) noexcept
+			{
+				this->m_policy_caching = policy;
+			}
 
-			ktkLoadingRequest& SetResourcePath(
-				const ktk::string& path) noexcept;
-			const ktk::string& GetResourcePath(void) const noexcept;
+			virtual eResourceCachingPolicy Get_CachingPolicy(
+				void) const noexcept
+			{
+				return this->m_policy_caching;
+			}
+
+			virtual ktkLoadingRequest& Set_ResourceType(
+				eResourceLoadingType type) noexcept
+			{
+				this->m_resource_type = type;
+			}
+
+			virtual eResourceLoadingType Get_ResourceType() const noexcept
+			{
+				return this->m_resource_type;
+			}
+
+			virtual ktkLoadingRequest& Set_ResourcePath(
+				const ktk::filesystem::path& path) noexcept
+			{
+				this->m_resource_path = path;
+			}
+
+			virtual const ktk::filesystem::path& Get_ResourcePath(
+				void) const noexcept
+			{
+				return this->m_resource_path;
+			}
 
 		private:
 			eResourceLoadingPolicy m_policy_loading;
 			eResourceCachingPolicy m_policy_caching;
 			eResourceLoadingType m_resource_type;
-			ktk::string m_resource_path;
+			ktk::filesystem::path m_resource_path;
 		};
 
 		class ktkIResourceManager
@@ -308,11 +345,11 @@ namespace Kotek
 				const ktkLoadingRequest& request) noexcept
 			{
 				return any_cast<ktk::shared_ptr<ResourceType>>(
-					this->LoadResource(request));
+					this->Load_Resource(request));
 			}
 
 		protected:
-			virtual ktk::any LoadResource(const ktkLoadingRequest& request) = 0;
+			virtual ktk::any Load_Resource(const ktkLoadingRequest& request) = 0;
 		};
 
 		class ktkIConsole

@@ -3,7 +3,7 @@
 #include <kotek.core.api/include/kotek_api.h>
 #include <kotek.core.containers.unordered_map/include/kotek_core_containers_unordered_map.h>
 #include <kotek.core.filesystem.file_text/include/kotek_core_filesystem_file_text.h>
-#include <kotek.core.containers.filesystem.path/include/kotek_core_containers_filesystem_path.h>
+#include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 
 namespace Kotek
 {
