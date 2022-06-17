@@ -213,6 +213,9 @@ namespace Kotek
 		public:
 			virtual ~ktkIResourceLoader(void) {}
 
+			virtual void Initialize(void) = 0;
+			virtual void Shutdown(void) = 0;
+
 			virtual ktk::any Load_Text(
 				const ktk::filesystem::path& path) noexcept = 0;
 			virtual ktk::any Load_Texture(
@@ -340,6 +343,9 @@ namespace Kotek
 		public:
 			virtual ~ktkIResourceManager(void) {}
 
+			virtual void Initialize(void) = 0;
+			virtual void Shutdown(void) = 0;
+
 			template <typename ResourceType>
 			ResourceType Load(
 				const ktkLoadingRequest& request) noexcept
@@ -347,6 +353,10 @@ namespace Kotek
 				return any_cast<ResourceType>(
 					this->Load_Resource(request));
 			}
+
+			virtual void Set_ResourceLoader(ktkIResourceLoader* p_instance) noexcept = 0;
+			virtual ktkIResourceLoader* Get_ResourceLoader(
+				void) const noexcept = 0;
 
 			// TODO: implement saving
 

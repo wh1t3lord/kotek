@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kotek.core.api/include/kotek_api.h>
+#include "kotek_resource_manager_loader.h"
 
 namespace Kotek
 {
