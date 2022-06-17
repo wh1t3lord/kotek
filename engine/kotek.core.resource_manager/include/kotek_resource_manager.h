@@ -1,12 +1,6 @@
 #pragma once
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+#include <kotek.core.api/include/kotek_api.h>
 
 namespace Kotek
 {
