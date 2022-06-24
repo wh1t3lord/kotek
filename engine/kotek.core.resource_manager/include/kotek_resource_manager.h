@@ -28,6 +28,9 @@ namespace Kotek
 
 			ktkMainManager* Get_MainManager(void) const noexcept override;
 
+
+			void Update_WorkerQueue(void) noexcept override;
+
 		protected:
 			ktk::any Load_Resource(const ktkLoadingRequest& request) override;
 

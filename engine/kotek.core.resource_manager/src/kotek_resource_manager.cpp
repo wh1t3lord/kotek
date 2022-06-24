@@ -40,6 +40,8 @@ namespace Kotek
 			return this->m_p_manager_main;
 		}
 
+		void ktkResourceManager::Update_WorkerQueue(void) noexcept {}
+
 		ktk::any ktkResourceManager::Load_Resource(
 			const ktkLoadingRequest& request)
 		{

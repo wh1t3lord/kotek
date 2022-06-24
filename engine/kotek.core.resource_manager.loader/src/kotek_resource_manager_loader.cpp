@@ -49,6 +49,12 @@ namespace Kotek
 			return ktk::any();
 		}
 
+		ktk::any ktkResourceLoaderManager::Load_CPlusPlusLibrary(
+			const ktk::filesystem::path& path) noexcept
+		{
+			return ktk::any();
+		}
+
 		ktk::any ktkResourceLoaderManager::Load_Text(
 			const ktk::filesystem::path& path,
 			ktk::any object_from_construct) noexcept

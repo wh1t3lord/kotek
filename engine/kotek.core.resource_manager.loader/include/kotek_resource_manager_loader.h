@@ -25,6 +25,8 @@ namespace Kotek
 				const ktk::filesystem::path& path) noexcept override;
 			ktk::any Load_Video(
 				const ktk::filesystem::path& path) noexcept override;
+			ktk::any Load_CPlusPlusLibrary(
+				const ktk::filesystem::path& path) noexcept override;
 
 			ktk::any Load_Text(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept override;

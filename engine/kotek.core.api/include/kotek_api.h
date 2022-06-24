@@ -217,27 +217,42 @@ namespace Kotek
 			virtual void Initialize(void) = 0;
 			virtual void Shutdown(void) = 0;
 
+#pragma region Load only by path
 			virtual ktk::any Load_Text(
 				const ktk::filesystem::path& path) noexcept = 0;
+
 			virtual ktk::any Load_Texture(
 				const ktk::filesystem::path& path) noexcept = 0;
+
 			virtual ktk::any Load_Model(
 				const ktk::filesystem::path& path) noexcept = 0;
+
 			virtual ktk::any Load_Sound(
 				const ktk::filesystem::path& path) noexcept = 0;
+
 			virtual ktk::any Load_Video(
 				const ktk::filesystem::path& path) noexcept = 0;
 
+			virtual ktk::any Load_CPlusPlusLibrary(
+				const ktk::filesystem::path& path) noexcept = 0;
+#pragma endregion
+
+#pragma region Load path& object_from_construct
 			virtual ktk::any Load_Text(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
+
 			virtual ktk::any Load_Texture(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
+
 			virtual ktk::any Load_Model(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
+
 			virtual ktk::any Load_Sound(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
+
 			virtual ktk::any Load_Video(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
+#pragma endregion
 
 		protected:
 			virtual eResourceLoadingType DetectResourceTypeByFileFormat(
@@ -255,6 +270,7 @@ namespace Kotek
 			// Returns constructed object
 			kCache,
 
+			// TODO: think about it and do we need really implement this?
 			// Using temporary instances that resource manager has
 			kWithoutCache
 		};
@@ -359,11 +375,19 @@ namespace Kotek
 				ktkMainManager* p_instance) noexcept = 0;
 			virtual ktkMainManager* Get_MainManager(void) const noexcept = 0;
 
+			virtual void Update_WorkerQueue(void) noexcept = 0;
+
 			// TODO: implement saving
 
 		protected:
 			virtual ktk::any Load_Resource(
 				const ktkLoadingRequest& request) = 0;
+		};
+
+		class ktkIResourceCacherManager
+		{
+		public:
+			virtual ~ktkIResourceCacherManager(void) {}
 		};
 
 		class ktkIConsole
