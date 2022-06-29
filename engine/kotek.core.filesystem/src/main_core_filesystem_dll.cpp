@@ -9,7 +9,10 @@ namespace Kotek
 		{
 			InitializeModule_Core_FileSystem_File_Text(p_manager);
 
-			p_manager->Set_FileSystem(new ktkFileSystem());
+			ktkFileSystem* p_instance = new ktkFileSystem();
+			p_instance->Initialize();
+
+			p_manager->Set_FileSystem(p_instance);
 
 			return true;
 		}
@@ -39,6 +42,7 @@ namespace Kotek
 				"you must get the valid pointer of ktkFileSystem otherwise "
 			    "something is wrong!!!");
 
+			p_instance->Shutdown();
 			delete p_instance;
 
 			p_manager->Set_FileSystem(nullptr);
