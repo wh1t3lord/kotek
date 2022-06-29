@@ -100,8 +100,8 @@ namespace Kotek
 
 				if (code) 
 				{
-					KOTEK_MESSAGE(
-						"can't parse file status: [{}]", code.message());
+					KOTEK_MESSAGE("can't parse file status: [{}]",
+						ktk::string(code.message()).get_as_is());
 				}
 				else
 				{

@@ -39,16 +39,14 @@ namespace Kotek
 				p_main_manager->GetFileSystem()->GetFolderByEnum(
 					Core::folder_index_t::kFolderIndex_Root);
 
-			path_to_system_json.append_path("sys_info.json");
+			path_to_system_json /= "sys_info.json";
 
 			Core::ktkFile file;
 
 			Core::ktkResourceLoaderManager local_loader;
 
-			// TODO: implement loader (thus resource manager too)!!
-//			KOTEK_ASSERT(file.Load(p_main_manager, path_to_system_json),
-		//		"you must load file successfully! Can't load sys_info.json");
-			KOTEK_ASSERT(false, "not implemented");
+ 
+			KOTEK_ASSERT(local_loader.Load_Text(path_to_system_json, &file), "can't load text: {}", path_to_system_json.c_str());
 
 			const auto& field_initialize_callback_name =
 				file.GetString(Core::kSysInfoFieldName_InitializeCallback);

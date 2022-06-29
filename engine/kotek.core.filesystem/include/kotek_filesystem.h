@@ -47,13 +47,13 @@ namespace Kotek
 			/*
 			* For Win32 returns without slash
 			*/
-			const ktk::string& GetFolderByEnum(
+			const ktk::filesystem::path& GetFolderByEnum(
 				folder_index_t id) const noexcept override;
 
 			bool IsValidPath(
 				const ktk::filesystem::path& path) const noexcept override;
 
-			bool CreateDirectory(const ktk::string& path) const noexcept;
+			bool CreateDirectory(const ktk::filesystem::path& path) const noexcept;
 
 			// TODO: think about multithreading and probably it is better to move to resource manager loader/saver
 			/*!
@@ -68,10 +68,10 @@ namespace Kotek
 			 * \return ktk::string
 			 */
 			ktk::string ReadFile(
-				const ktk::string& path_to_file) const noexcept override;
+				const ktk::filesystem::path& path_to_file) const noexcept override;
 
 		private:
-			bool AddGamedataFolderToStorage(const ktk::string& path,
+			bool AddGamedataFolderToStorage(const ktk::filesystem::path& path,
 				folder_index_t id, const ktk::string& folder_name) noexcept;
 
 			void ValidateFolders(void) noexcept;
@@ -79,7 +79,7 @@ namespace Kotek
 			void CreateConfigFiles(void) noexcept;
 
 		private:
-			ktk::unordered_map<folder_index_t, ktk::string> m_storage_paths;
+			ktk::unordered_map<folder_index_t, ktk::filesystem::path> m_storage_paths;
 		};
 	} // namespace Core
 } // namespace Kotek

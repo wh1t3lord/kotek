@@ -144,9 +144,9 @@ namespace Kotek
 			// TODO: check todo in implementation class ktkFileSystem and it is
 			// a temporary virtual function delete it
 			virtual ktk::string ReadFile(
-				const ktk::string& path_to_file) const noexcept = 0;
+				const ktk::filesystem::path& path_to_file) const noexcept = 0;
 
-			virtual const ktk::string& GetFolderByEnum(
+			virtual const ktk::filesystem::path& GetFolderByEnum(
 				folder_index_t id) const noexcept = 0;
 		};
 
@@ -257,6 +257,8 @@ namespace Kotek
 		protected:
 			virtual eResourceLoadingType DetectResourceTypeByFileFormat(
 				const ktk::filesystem::path& path) noexcept = 0;
+
+			ktkIFileSystem* m_p_manager_filesystem;
 		};
 
 		enum class eResourceLoadingPolicy : ktk::enum_base_t

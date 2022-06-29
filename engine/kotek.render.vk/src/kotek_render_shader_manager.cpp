@@ -40,7 +40,7 @@ namespace Kotek
 					return result;
 				}
 
-				if (this->m_p_filesystem->IsValidPath(path) == false)
+				if (this->m_p_filesystem->IsValidPath(path.get_as_is()) == false)
 				{
 					KOTEK_ASSERT(false, "you passed an invalid path: [{}]",
 						path.get_as_is());
@@ -128,7 +128,7 @@ namespace Kotek
 					return result;
 				}
 
-				if (this->m_p_filesystem->IsValidPath(path) == false)
+				if (this->m_p_filesystem->IsValidPath(path.get_as_is()) == false)
 				{
 					KOTEK_MESSAGE_WARNING(
 						"you passed an invalid path: [{}]", path.get_as_is());
@@ -242,7 +242,7 @@ namespace Kotek
 
 				ktk::vector<ktk::uint32_t> result;
 
-				if (this->m_p_filesystem->IsValidPath(path_to_file) == false)
+				if (this->m_p_filesystem->IsValidPath(path_to_file.get_as_is()) == false)
 				{
 					KOTEK_MESSAGE_WARNING(
 						"invalid path for compiling shader to SPIRV: [{}]",
@@ -267,7 +267,7 @@ namespace Kotek
 					shaderc_optimization_level_size);
 #endif
 
-				ktk::string temp = this->m_p_filesystem->ReadFile(path_to_file);
+				ktk::string temp = this->m_p_filesystem->ReadFile(path_to_file.get_as_is());
 
 				if (temp.empty() == true)
 				{
@@ -369,7 +369,7 @@ namespace Kotek
 					return shader_type_t::kShaderType_Unknown;
 				}
 
-				if (this->m_p_filesystem->IsValidPath(path_to_file) == false)
+				if (this->m_p_filesystem->IsValidPath(path_to_file.get_as_is()) == false)
 				{
 					KOTEK_MESSAGE_WARNING(
 						"invalid path to file, can't analyze this path: [{}]",

@@ -36,7 +36,7 @@ namespace Kotek
 
 			ktkFile instance("pretty");
 
-			ktk::string path =
+			auto path =
 				fs.GetFolderByEnum(folder_index_t::kFolderIndex_UserTests);
 
 			ktk::string test(KOTEK_TEXT("いくつか"));

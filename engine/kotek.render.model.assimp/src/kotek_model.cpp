@@ -17,12 +17,6 @@ namespace Kotek
 				return false;
 			}
 
-			if (main_manager.GetFileSystem()->IsValidPath(path) == false)
-			{
-				KOTEK_MESSAGE("you passed an invalid path!");
-				return false;
-			}
-
 			// TODO: write loader for this stuff, file can't call from itself loader and saver
 	//		bool status = this->m_file.Load(main_manager, path);
 			bool status = false;

@@ -45,9 +45,6 @@ namespace Kotek
 		protected:
 			eResourceLoadingType DetectResourceTypeByFileFormat(
 				const ktk::filesystem::path& path) noexcept override;
-
-		private:
-			ktkIFileSystem* m_p_manager_filesystem;
 		};
 	} // namespace Core
 } // namespace Kotek

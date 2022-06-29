@@ -10,18 +10,12 @@ namespace Kotek
 
 		void ktkFileSystem::Initialize(void)
 		{
-#ifdef KOTEK_PLATFORM_WINDOWS
 			this->m_storage_paths[folder_index_t::kFolderIndex_Root] =
-				ktk::filesystem::current_path().c_str();
-#elif defined(KOTEK_PLATFORM_LINUX)
-			// TODO: remove cast, but we have different implementations Windows
-			// and Linux
-			this->m_storage_paths[folder_index_t::kFolderIndex_Root] =
-				ktk::cast::to_string(ktk::filesystem::current_path().c_str());
-#endif
+				ktk::filesystem::current_path();
+
 			KOTEK_MESSAGE("root path: {}",
 				this->m_storage_paths.at(folder_index_t::kFolderIndex_Root)
-					.get_as_is());
+					.c_str());
 
 			KOTEK_ASSERT(this->IsValidPath(this->m_storage_paths.at(
 							 folder_index_t::kFolderIndex_Root)),
@@ -35,7 +29,7 @@ namespace Kotek
 
 		void ktkFileSystem::Shutdown(void) {}
 
-		const ktk::string& ktkFileSystem::GetFolderByEnum(
+		const ktk::filesystem::path& ktkFileSystem::GetFolderByEnum(
 			folder_index_t id) const noexcept
 		{
 			KOTEK_ASSERT(this->m_storage_paths.empty() == false,
@@ -62,7 +56,7 @@ namespace Kotek
 		}
 
 		bool ktkFileSystem::CreateDirectory(
-			const ktk::string& path) const noexcept
+			const ktk::filesystem::path& path) const noexcept
 		{
 			if (path.empty())
 			{
@@ -76,22 +70,22 @@ namespace Kotek
 				return false;
 			}
 
-			return ktk::filesystem::create_directory(path.get_as_is());
+			return ktk::filesystem::create_directory(path);
 		}
 
 		ktk::string ktkFileSystem::ReadFile(
-			const ktk::string& path_to_file) const noexcept
+			const ktk::filesystem::path& path_to_file) const noexcept
 		{
 			ktk::string result;
 
 			if (this->IsValidPath(path_to_file) == false)
 			{
 				KOTEK_MESSAGE_WARNING("can't load file by following path: [{}]",
-					path_to_file.get_as_is());
+					path_to_file.c_str());
 				return result;
 			}
 
-			ktk::ifstream file(path_to_file.get_as_legacy().c_str());
+			ktk::ifstream file(path_to_file.c_str());
 
 			if (file.good())
 			{
@@ -101,14 +95,14 @@ namespace Kotek
 			else
 			{
 				KOTEK_MESSAGE("something is wrong while reading file: [{}]",
-					path_to_file.get_as_is());
+					path_to_file.c_str());
 				return result;
 			}
 
 			return result;
 		}
 
-		bool ktkFileSystem::AddGamedataFolderToStorage(const ktk::string& path,
+		bool ktkFileSystem::AddGamedataFolderToStorage(const ktk::filesystem::path& path,
 			folder_index_t id, const ktk::string& folder_name) noexcept
 		{
 			if (this->m_storage_paths.find(id) != this->m_storage_paths.end())
@@ -118,9 +112,8 @@ namespace Kotek
 				return false;
 			}
 
-			ktk::string result(path);
-			result += ktk::filesystem::path::preferred_separator;
-			result += folder_name;
+			ktk::filesystem::path result(path);
+			result / folder_name.get_as_is();
 
 			this->m_storage_paths[id] = result;
 
@@ -219,7 +212,7 @@ namespace Kotek
 			auto path_to_system_json =
 				this->GetFolderByEnum(folder_index_t::kFolderIndex_Root);
 
-			path_to_system_json.append_path(kConfigFileNameSystemInfo);
+			path_to_system_json / kConfigFileNameSystemInfo;
 
 			if (this->IsValidPath(path_to_system_json) == false)
 			{
