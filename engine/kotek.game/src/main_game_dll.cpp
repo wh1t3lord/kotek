@@ -43,6 +43,8 @@ namespace Kotek
 
 			Core::ktkFile file;
 
+			Core::ktkResourceLoaderManager local_loader;
+
 			// TODO: implement loader (thus resource manager too)!!
 //			KOTEK_ASSERT(file.Load(p_main_manager, path_to_system_json),
 		//		"you must load file successfully! Can't load sys_info.json");

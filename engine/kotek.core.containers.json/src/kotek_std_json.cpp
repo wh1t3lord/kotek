@@ -5,7 +5,11 @@ namespace Kotek
 	namespace Core
 	{
 		ktkJson::ktkJson(void) {}
+
+#ifdef KOTEK_USE_BOOST_LIBRARY
 		ktkJson::ktkJson(const ktk::json::object& text) : m_json(text) {}
+#endif
+
 		ktkJson::ktkJson(const ktkJson& instance) : m_json(instance.m_json) {}
 
 		ktkJson& ktkJson::operator=(const ktkJson& instance)

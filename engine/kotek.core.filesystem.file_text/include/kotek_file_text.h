@@ -132,7 +132,10 @@ namespace Kotek
 			const ktk::string& GetFileName(void) const noexcept;
 			void SetFileName(const ktk::string& file_name) noexcept;
 
+			void Set_Json(const ktkJson& data) noexcept;
+
 		private:
+			// TODO: move to saver!!!
 			void PrettyWrite(ktk::ofstream& file, const ktk::json::value& json,
 				std::string* indent = nullptr) noexcept;
 

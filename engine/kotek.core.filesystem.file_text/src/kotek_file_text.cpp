@@ -208,6 +208,11 @@ namespace Kotek
 			this->m_file_name += kFormatFile;
 		}
 
+		void ktkFile::Set_Json(const ktkJson& data) noexcept 
+		{
+			this->m_json = data;
+		}
+
 		void ktkFile::PrettyWrite(ktk::ofstream& os, const ktk::json::value& jv,
 			std::string* indent) noexcept
 		{

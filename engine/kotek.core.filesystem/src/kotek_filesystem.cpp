@@ -49,7 +49,8 @@ namespace Kotek
 			return this->m_storage_paths.at(id);
 		}
 
-		bool ktkFileSystem::IsValidPath(const ktk::string& path) const noexcept
+		bool ktkFileSystem::IsValidPath(
+			const ktk::filesystem::path& path) const noexcept
 		{
 			if (path.empty())
 			{
@@ -57,7 +58,7 @@ namespace Kotek
 				return false;
 			}
 
-			return ktk::filesystem::exists(path.get_as_is());
+			return ktk::filesystem::exists(path);
 		}
 
 		bool ktkFileSystem::CreateDirectory(

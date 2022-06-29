@@ -139,7 +139,7 @@ namespace Kotek
 			virtual void Initialize(void) = 0;
 			virtual void Shutdown(void) = 0;
 			virtual bool IsValidPath(
-				const ktk::string& path) const noexcept = 0;
+				const ktk::filesystem::path& path) const noexcept = 0;
 
 			// TODO: check todo in implementation class ktkFileSystem and it is
 			// a temporary virtual function delete it
@@ -214,7 +214,7 @@ namespace Kotek
 		public:
 			virtual ~ktkIResourceLoader(void) {}
 
-			virtual void Initialize(void) = 0;
+			virtual void Initialize(ktkIFileSystem*) = 0;
 			virtual void Shutdown(void) = 0;
 
 #pragma region Load only by path
@@ -238,19 +238,19 @@ namespace Kotek
 #pragma endregion
 
 #pragma region Load path& object_from_construct
-			virtual ktk::any Load_Text(const ktk::filesystem::path& path,
+			virtual bool Load_Text(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
 
-			virtual ktk::any Load_Texture(const ktk::filesystem::path& path,
+			virtual bool Load_Texture(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
 
-			virtual ktk::any Load_Model(const ktk::filesystem::path& path,
+			virtual bool Load_Model(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
 
-			virtual ktk::any Load_Sound(const ktk::filesystem::path& path,
+			virtual bool Load_Sound(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
 
-			virtual ktk::any Load_Video(const ktk::filesystem::path& path,
+			virtual bool Load_Video(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
 #pragma endregion
 
