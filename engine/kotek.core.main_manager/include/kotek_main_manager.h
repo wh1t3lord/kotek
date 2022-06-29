@@ -47,6 +47,7 @@ namespace Kotek
 			void setRenderSwapchainManager(
 				ktkIRenderSwapchain* pointer) noexcept;
 
+			void Set_EngineConfig(ktkIEngineConfig* pointer) noexcept;
 			ktkIEngineConfig* Get_EngineConfig(void) const noexcept;
 
 		private:

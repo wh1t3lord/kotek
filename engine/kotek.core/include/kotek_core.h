@@ -18,6 +18,7 @@
 #include <kotek.core.input/include/kotek_core_input.h>
 #include <kotek.core.utility/include/kotek_core_utility.h>
 #include <kotek.core.ecs/include/kotek_core_ecs.h>
+#include <kotek.core.engine_config/include/kotek_core_engine_config.h>
 
 namespace Kotek
 {
