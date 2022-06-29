@@ -47,7 +47,8 @@ namespace Kotek
 
 			local_loader.Initialize(p_main_manager->GetFileSystem());
 
-			KOTEK_ASSERT(local_loader.Load_Text(path_to_system_json, &file), "can't load text: {}", path_to_system_json.c_str());
+			KOTEK_ASSERT(local_loader.Load_Text(path_to_system_json, &file),
+				"can't load text: {}", path_to_system_json.c_str());
 
 			const auto& field_initialize_callback_name =
 				file.GetString(Core::kSysInfoFieldName_InitializeCallback);
@@ -62,7 +63,7 @@ namespace Kotek
 #elif KOTEK_PLATFORM_LINUX
 			KOTEK_ASSERT(false,
 				"we don't test such feature, but it supposes to support on "
-			    "Linux platform too");
+				"Linux platform too");
 #endif
 			const auto& field_initialize_render_callback_name = file.GetString(
 				Core::kSysInfoFieldName_InitializeCallback_Render);
@@ -71,28 +72,28 @@ namespace Kotek
 				"you can't have an invalid name of library, because you need "
 				"to load it!!!");
 
-			auto executable_path = ktk::dll::program_location().parent_path();
+			auto path_to_user_dll = ktk::dll::program_location().parent_path();
 
-			executable_path /= field_library_name.get_as_is().c_str();
+			path_to_user_dll /= field_library_name.get_as_is().c_str();
 
-			// TODO: implement loader for dlls it is a resource!!!
-		//	p_main_manager.LoadUserGameLibrary(executable_path.string());
-		//	const auto& user_dll = p_main_manager.GetUserLibrary();
-			ktk::dll::shared_library user_dll;
+			p_main_manager->Get_EngineConfig()->Set_UserLibrary(
+				path_to_user_dll.c_str());
+			auto* p_user_dll = static_cast<ktk::dll::shared_library*>(p_main_manager->Get_EngineConfig()->Get_UserLibrary());
+
 			p_user_callback_initialize_game_library =
-				user_dll.get<ktkUserCallbackInitialize>(
+				p_user_dll->get<ktkUserCallbackInitialize>(
 					field_initialize_callback_name.get_as_legacy().c_str());
 
 			p_user_callback_shutdown_game_library =
-				user_dll.get<ktkUserCallbackShutdown>(
+				p_user_dll->get<ktkUserCallbackShutdown>(
 					field_shutdown_callback_name.get_as_legacy().c_str());
 
 			p_user_callback_update_game_library =
-				user_dll.get<ktkUserCallbackUpdate>(
+				p_user_dll->get<ktkUserCallbackUpdate>(
 					field_update_callback_name.get_as_legacy().c_str());
 
 			p_user_callback_initialize_render_from_game_library =
-				user_dll.get<ktkUserCallbackInitializeRender>(
+				p_user_dll->get<ktkUserCallbackInitializeRender>(
 					field_initialize_render_callback_name.get_as_legacy()
 						.c_str());
 
@@ -129,7 +130,7 @@ namespace Kotek
 				p_user_callback_shutdown_game_library(p_main_manager);
 
 			// TODO: unload with resource manager
-		//	p_main_manager.UnLoadUserGameLibrary();
+			//	p_main_manager.UnLoadUserGameLibrary();
 
 			return true;
 		}
@@ -148,8 +149,9 @@ namespace Kotek
 				"you didn't initialize input manager field in "
 				"main manager");
 
-			if (p_main_manager->Get_EngineConfig()->IsContainsConsoleCommandLineArgument(
-					Core::kConsoleCommandArg_Editor) == false)
+			if (p_main_manager->Get_EngineConfig()
+					->IsContainsConsoleCommandLineArgument(
+						Core::kConsoleCommandArg_Editor) == false)
 			{
 				KOTEK_ASSERT(p_main_manager->getRenderDevice(),
 					"you didn't initialize render device manager field in main "

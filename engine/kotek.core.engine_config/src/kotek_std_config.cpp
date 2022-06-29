@@ -187,6 +187,17 @@ namespace Kotek
 			this->m_is_running = status;
 		}
 
+		void ktkEngineConfig::Set_UserLibrary(
+			const ktk::filesystem::path& path_to_library) noexcept
+		{
+			this->m_user_dll = ktk::dll::shared_library(path_to_library.c_str());
+		}
+
+		void* ktkEngineConfig::Get_UserLibrary(void) noexcept
+		{
+			return &this->m_user_dll;
+		}
+
 		bool ktkEngineConfig::IsFeatureRender(
 			eEngineFeature feature) const noexcept
 		{

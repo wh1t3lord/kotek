@@ -4,6 +4,7 @@
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 #include <kotek.core.containers.unordered_map/include/kotek_core_containers_unordered_map.h>
 #include <kotek.core.containers.multithreading.atomic/include/kotek_core_containers_multithreading_atomic.h>
+#include <kotek.core.containers.dll/include/kotek_core_containers_dll.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 
@@ -37,6 +38,10 @@ namespace Kotek
 			bool IsApplicationWorking(void) const noexcept override;
 			void SetApplicationWorking(bool status) noexcept override;
 
+			void Set_UserLibrary(
+				const ktk::filesystem::path& path_to_library) noexcept override;
+			void* Get_UserLibrary(void) noexcept override;
+
 		private:
 			bool IsFeatureRender(eEngineFeature feature) const noexcept;
 
@@ -46,6 +51,7 @@ namespace Kotek
 			ktk::vector<ktk::string> m_parsed_command_line_arguments;
 			ktk::unordered_map<eEngineFeature, bool> m_engine_flags;
 			ktk::mt::atomic<bool> m_is_running;
+			ktk::dll::shared_library m_user_dll;
 		};
 	} // namespace Core
 } // namespace Kotek

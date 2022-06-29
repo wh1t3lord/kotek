@@ -472,6 +472,9 @@ namespace Kotek
 				const ktk::string& your_argument) const noexcept = 0;
 			virtual bool IsApplicationWorking(void) const noexcept = 0;
 			virtual void SetApplicationWorking(bool status) noexcept = 0;
+			virtual void Set_UserLibrary(
+				const ktk::filesystem::path& path_to_library) noexcept = 0;
+			virtual void* Get_UserLibrary(void) noexcept = 0;
 		};
 
 		class ktkIComponentAllocator
