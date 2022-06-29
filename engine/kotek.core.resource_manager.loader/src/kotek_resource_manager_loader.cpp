@@ -4,7 +4,9 @@ namespace Kotek
 {
 	namespace Core
 	{
-		ktkResourceLoaderManager::ktkResourceLoaderManager(void) {}
+		ktkResourceLoaderManager::ktkResourceLoaderManager(void)
+		{
+		}
 
 		ktkResourceLoaderManager::~ktkResourceLoaderManager(void) {}
 

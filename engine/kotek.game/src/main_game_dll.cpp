@@ -45,7 +45,8 @@ namespace Kotek
 
 			Core::ktkResourceLoaderManager local_loader;
 
- 
+			local_loader.Initialize(p_main_manager->GetFileSystem());
+
 			KOTEK_ASSERT(local_loader.Load_Text(path_to_system_json, &file), "can't load text: {}", path_to_system_json.c_str());
 
 			const auto& field_initialize_callback_name =
