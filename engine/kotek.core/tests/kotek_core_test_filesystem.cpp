@@ -53,10 +53,10 @@ namespace Kotek
 			instance.Write("char16_t", u"いくつか");
 			instance.Write("char32_t", U"いくつか");
 		#endif
-			// TODO: implement saver!!!!
-			//instance.Save(&fs, path);
 
-			bool status = fs.IsValidPath(path);
+			ktkResourceSaverManager saver_instance;
+
+			bool status = saver_instance.Save_Text_Formatted(path, &instance);
 
 			BOOST_REQUIRE(status);
 

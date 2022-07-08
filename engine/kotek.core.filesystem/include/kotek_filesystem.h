@@ -48,7 +48,7 @@ namespace Kotek
 			* For Win32 returns without slash
 			*/
 			const ktk::filesystem::path& GetFolderByEnum(
-				folder_index_t id) const noexcept override;
+				eFolderIndex id) const noexcept override;
 
 			bool IsValidPath(
 				const ktk::filesystem::path& path) const noexcept override;
@@ -72,14 +72,14 @@ namespace Kotek
 
 		private:
 			bool AddGamedataFolderToStorage(const ktk::filesystem::path& path,
-				folder_index_t id, const ktk::string& folder_name) noexcept;
+				eFolderIndex id, const ktk::string& folder_name) noexcept;
 
 			void ValidateFolders(void) noexcept;
 
 			void CreateConfigFiles(void) noexcept;
 
 		private:
-			ktk::unordered_map<folder_index_t, ktk::filesystem::path> m_storage_paths;
+			ktk::unordered_map<eFolderIndex, ktk::filesystem::path> m_storage_paths;
 		};
 	} // namespace Core
 } // namespace Kotek

@@ -51,21 +51,21 @@ namespace Kotek
 				"can't load text: {}", path_to_system_json.c_str());
 
 			const auto& field_initialize_callback_name =
-				file.GetString(Core::kSysInfoFieldName_InitializeCallback);
+				file.Get_String(Core::kSysInfoFieldName_InitializeCallback);
 			const auto& field_shutdown_callback_name =
-				file.GetString(Core::kSysInfoFieldName_ShutdownCallback);
+				file.Get_String(Core::kSysInfoFieldName_ShutdownCallback);
 			const auto& field_update_callback_name =
-				file.GetString(Core::kSysInfoFieldName_UpdateCallback);
+				file.Get_String(Core::kSysInfoFieldName_UpdateCallback);
 
 #ifdef KOTEK_PLATFORM_WINDOWS
 			const auto& field_library_name =
-				file.GetString(Core::kSysInfoFieldName_UserLibraryNameWindows);
+				file.Get_String(Core::kSysInfoFieldName_UserLibraryNameWindows);
 #elif KOTEK_PLATFORM_LINUX
 			KOTEK_ASSERT(false,
 				"we don't test such feature, but it supposes to support on "
 				"Linux platform too");
 #endif
-			const auto& field_initialize_render_callback_name = file.GetString(
+			const auto& field_initialize_render_callback_name = file.Get_String(
 				Core::kSysInfoFieldName_InitializeCallback_Render);
 
 			KOTEK_ASSERT(field_library_name.empty() == false,

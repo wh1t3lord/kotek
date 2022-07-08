@@ -125,7 +125,7 @@ namespace Kotek
 
 
 			p_casted_file->Set_Json(json);
-			p_casted_file->SetFileName(path.filename().string());
+			p_casted_file->Set_FileName(path.filename().string());
 
 			return true;
 		}

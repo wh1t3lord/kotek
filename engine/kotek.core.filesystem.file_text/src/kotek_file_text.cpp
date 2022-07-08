@@ -10,7 +10,7 @@ namespace Kotek
 
 		ktkFile::ktkFile(const ktk::string& file_name) : m_file_name(file_name)
 		{
-			this->m_file_name += kFormatFile;
+			this->m_file_name += kFormatFile_Text;
 		}
 
 		ktkFile& ktkFile::operator=(const ktkFile& instance)
@@ -173,13 +173,13 @@ namespace Kotek
 		}
 		*/
 
-		ktk::string ktkFile::GetString(
+		ktk::string ktkFile::Get_String(
 			const ktk::string& key_name) const noexcept
 		{
 			return this->m_json.GetString(key_name);
 		}
 
-		const ktk::json::object& ktkFile::GetJson(void) const noexcept
+		const ktk::json::object& ktkFile::Get_Json(void) const noexcept
 		{
 			return this->m_json.GetObject();
 		}
@@ -197,15 +197,15 @@ namespace Kotek
 			return json.find(field_name.get_as_legacy()) != json.end();
 		}
 
-		const ktk::string& ktkFile::GetFileName(void) const noexcept
+		const ktk::string& ktkFile::Get_FileName(void) const noexcept
 		{
 			return this->m_file_name;
 		}
 
-		void ktkFile::SetFileName(const ktk::string& file_name) noexcept
+		void ktkFile::Set_FileName(const ktk::string& file_name) noexcept
 		{
 			this->m_file_name = file_name;
-			this->m_file_name += kFormatFile;
+			this->m_file_name += kFormatFile_Text;
 		}
 
 		void ktkFile::Set_Json(const ktkJson& data) noexcept 
@@ -213,93 +213,9 @@ namespace Kotek
 			this->m_json = data;
 		}
 
-		void ktkFile::PrettyWrite(ktk::ofstream& os, const ktk::json::value& jv,
-			std::string* indent) noexcept
+		ktk::string ktkFile::Get_FileAsSerializedString(void) const noexcept
 		{
-			std::string indent_;
-			if (!indent)
-				indent = &indent_;
-			switch (jv.kind())
-			{
-			case ktk::json::kind::object:
-			{
-				os << "{\n";
-				indent->append(4, ' ');
-				auto const& obj = jv.get_object();
-				if (!obj.empty())
-				{
-					auto it = obj.begin();
-					for (;;)
-					{
-						os << indent->c_str()
-						   << ktk::json::serialize(it->key()).c_str() << " : ";
-						this->PrettyWrite(os, it->value(), indent);
-						if (++it == obj.end())
-							break;
-						os << ",\n";
-					}
-				}
-				os << "\n";
-				indent->resize(indent->size() - 4);
-				os << indent->c_str() << "}";
-				break;
-			}
-
-			case ktk::json::kind::array:
-			{
-				os << "[\n";
-				indent->append(4, ' ');
-				auto const& arr = jv.get_array();
-				if (!arr.empty())
-				{
-					auto it = arr.begin();
-					for (;;)
-					{
-						os << indent->c_str();
-						this->PrettyWrite(os, *it, indent);
-						if (++it == arr.end())
-							break;
-						os << ",\n";
-					}
-				}
-				os << "\n";
-				indent->resize(indent->size() - 4);
-				os << indent->c_str() << "]";
-				break;
-			}
-
-			case ktk::json::kind::string:
-			{
-				os << ktk::json::serialize(jv.get_string()).c_str();
-				break;
-			}
-
-			case ktk::json::kind::uint64:
-				os << jv.get_uint64();
-				break;
-
-			case ktk::json::kind::int64:
-				os << jv.get_int64();
-				break;
-
-			case ktk::json::kind::double_:
-				os << jv.get_double();
-				break;
-
-			case ktk::json::kind::bool_:
-				if (jv.get_bool())
-					os << "true";
-				else
-					os << "false";
-				break;
-
-			case ktk::json::kind::null:
-				os << "null";
-				break;
-			}
-
-			if (indent->empty())
-				os << "\n";
+			return this->m_json.Serialize();
 		}
 
 	} // namespace Core

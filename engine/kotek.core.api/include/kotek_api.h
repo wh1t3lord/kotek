@@ -117,7 +117,7 @@ namespace Kotek
 		};
 
 		// TODO: add helper namespace for translating this enum
-		enum class folder_index_t : int
+		enum class eFolderIndex : int
 		{
 			kFolderIndex_Root,
 			kFolderIndex_Gamedata,
@@ -258,6 +258,65 @@ namespace Kotek
 			virtual eResourceLoadingType DetectResourceTypeByFileFormat(
 				const ktk::filesystem::path& path) noexcept = 0;
 
+			ktkIFileSystem* m_p_manager_filesystem;
+		};
+
+		class ktkIResourceSaver
+		{
+		public:
+			/**
+			 * Just a virtual destructor in order to being called from child destructors
+			 * 
+			 */
+			virtual ~ktkIResourceSaver(void) {}
+
+			virtual void Initialize(ktkIFileSystem*) = 0;
+			virtual void Shutdown(void) = 0;
+
+			/**
+			 * Interface (pure virtual) method for saving text file without
+			 * formatting @see
+			 * Kotek::Core::ktkIResourceSaver#Save_Text_Formatted
+			 *
+			 * \param path supposed to be a path where to save the file with
+			 * file name and format of it. \param data user dependent. Default
+			 * implementation is based on ktkFile class. @see ktkFile. \return
+			 * simplified status of executing. true means success otherwise
+			 * something went wrong. User dependent.
+			 */
+			virtual bool Save_Text(
+				const ktk::filesystem::path& path, ktk::any data) noexcept = 0;
+
+			/**
+			 * Interface (pure virtual) method for saving text file with
+			 * formatting that applied in user implementation. @see
+			 * Kotek::Core::ktkIResourceSaver#Save_Text it is not formatting
+			 * method for saving.
+			 *
+			 * \param path supposed a path where to save the file with file name
+			 * and format of it. \param data user dependent. Default
+			 * implementation is @see ktkFile class. \return simplified status
+			 * of executing. True means success otherwise something went wrong.
+			 * User dependent.
+			 *
+			 *
+			 * Example if you want to save your file on stack. Otherwise
+			 * you will get from your resource manager (or from default
+			 * implementation) your ktkFile* and you need to pass to that
+			 * method) ktkFile text_file_instance;
+			 *
+			 * @code
+			 * text_file_instance.Write("my_new_field", "string_data");
+			 *
+			 * Kotek::Core::ktkIResourceSaver*
+			 * p_valid_interface_instance->Save_Text_Formatted("C:/YourFolder/filename.json",
+			 * &text_file_instance);
+			 * @endcode
+			 */
+			virtual bool Save_Text_Formatted(
+				const ktk::filesystem::path& path, ktk::any data) noexcept = 0;
+
+		protected:
 			ktkIFileSystem* m_p_manager_filesystem;
 		};
 
