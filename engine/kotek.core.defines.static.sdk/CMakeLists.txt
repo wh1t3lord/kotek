@@ -5,6 +5,8 @@ project(kotek.core.defines.static.sdk VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# TODO: add wxWidgets, Qt and other SDK for including
+if ("${KOTEK_SDK}" STREQUAL "ON")
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 
 	#ifdef KOTEK_SDK
@@ -25,6 +27,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 		#include <wx/aui/aui.h>
 	#endif
 	")
+else()
+	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
+endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"

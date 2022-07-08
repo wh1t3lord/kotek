@@ -78,7 +78,7 @@ WINDOWS Platform:
 | Flag | Release | Debug |
 | ----------- | ----------- | ----------- |
 | -DKOTEK_UNICODE | ON |  ON |
-| -DKOTEK_SDK | ON |  ON |
+| -DKOTEK_SDK | OFF |  OFF |
 | -DKOTEK_CPU_PROFILER | ON |  OFF |
 | -DKOTEK_GPU_PROFILER | ON |  OFF |
 | -DKOTEK_MATH_LIBRARY | DXM | DXM |
