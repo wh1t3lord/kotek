@@ -291,8 +291,6 @@ namespace Kotek
 
 		bool ShutdownEngine(Core::ktkMainManager* p_main_manager)
 		{
-			p_main_manager->GetProfiler()->Shutdown();
-
 			Render::ShutdownModule_Render(p_main_manager);
 			Game::ShutdownModule_Game(p_main_manager);
 			Core::ShutdownModule_Core(p_main_manager);

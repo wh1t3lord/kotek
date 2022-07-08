@@ -470,6 +470,24 @@ namespace Kotek
 
 			virtual void Initialize(void) = 0;
 			virtual void Shutdown(void) = 0;
+
+			virtual void FrameMark(void) = 0;
+		};
+
+		class ktkIProfilerCPU
+		{
+		public:
+			virtual ~ktkIProfilerCPU(void) {}
+			virtual void Initialize(void) = 0;
+			virtual void Shutdown(void) = 0;
+		};
+
+		class ktkIProfilerGPU
+		{
+		public:
+			virtual ~ktkIProfilerGPU(void) {}
+			virtual void Initialize(void) = 0;
+			virtual void Shutdown(void) = 0;
 		};
 
 		enum class eEngineFeature : ktk::enum_base_t

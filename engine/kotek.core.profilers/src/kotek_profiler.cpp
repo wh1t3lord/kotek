@@ -10,12 +10,7 @@ namespace Kotek
 	{
 		ktkProfiler::ktkProfiler(void) {}
 
-		ktkProfiler::~ktkProfiler(void)
-		{
-#ifdef KOTEK_USE_CPU_PROFILER
-
-#endif
-		}
+		ktkProfiler::~ktkProfiler(void) {}
 
 		void ktkProfiler::Initialize(void)
 		{
@@ -28,6 +23,13 @@ namespace Kotek
 		{
 #ifdef KOTEK_CPU_PROFILER
 			tracy::ShutdownProfiler();
+#endif
+		}
+
+		void ktkProfiler::FrameMark(void)
+		{
+#ifdef KOTEK_CPU_PROFILER
+			FrameMark;
 #endif
 		}
 

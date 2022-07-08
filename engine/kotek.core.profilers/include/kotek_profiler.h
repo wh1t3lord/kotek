@@ -26,6 +26,8 @@ namespace Kotek
 
 			void Initialize(void) override;
 			void Shutdown(void) override;
+
+			void FrameMark(void) override;
 		};
 	} // namespace Core
 } // namespace Kotek
