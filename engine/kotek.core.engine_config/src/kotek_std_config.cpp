@@ -4,7 +4,10 @@ namespace Kotek
 {
 	namespace Core
 	{
-		ktkEngineConfig::ktkEngineConfig(void) : m_argc{}, m_argv{} {}
+		ktkEngineConfig::ktkEngineConfig(void) :
+			m_argc{}, m_argv{}, m_is_running{true}
+		{
+		}
 
 		ktkEngineConfig::~ktkEngineConfig(void) {}
 
