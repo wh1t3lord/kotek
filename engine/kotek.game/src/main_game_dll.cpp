@@ -37,7 +37,7 @@ namespace Kotek
 		{
 			auto path_to_system_json =
 				p_main_manager->GetFileSystem()->GetFolderByEnum(
-					Core::folder_index_t::kFolderIndex_Root);
+					Core::eFolderIndex::kFolderIndex_Root);
 
 			path_to_system_json /= "sys_info.json";
 

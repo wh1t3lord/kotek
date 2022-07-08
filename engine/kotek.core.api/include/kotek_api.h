@@ -264,9 +264,12 @@ namespace Kotek
 		class ktkIResourceSaver
 		{
 		public:
+			ktkIResourceSaver(void) : m_p_manager_filesystem{} {}
+
 			/**
-			 * Just a virtual destructor in order to being called from child destructors
-			 * 
+			 * Just a virtual destructor in order to being called from child
+			 * destructors
+			 *
 			 */
 			virtual ~ktkIResourceSaver(void) {}
 

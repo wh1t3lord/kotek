@@ -4,7 +4,9 @@ namespace Kotek
 {
 	namespace Core
 	{
-		ktkResourceSaverManager::ktkResourceSaverManager(void) {}
+		ktkResourceSaverManager::ktkResourceSaverManager(void) :
+			ktkIResourceSaver()
+		{}
 
 		ktkResourceSaverManager::~ktkResourceSaverManager(void) {}
 

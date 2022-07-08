@@ -30,14 +30,14 @@ namespace Kotek
 
 		BOOST_AUTO_TEST_CASE(file_create_pretty_output)
 		{
-			ktkFileSystem fs;
+			ktkFileSystem filesystem;
 
-			fs.Initialize();
+			filesystem.Initialize();
 
 			ktkFile instance("pretty");
 
 			auto path =
-				fs.GetFolderByEnum(eFolderIndex::kFolderIndex_UserTests);
+				filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_UserTests);
 
 			ktk::string test(KOTEK_TEXT("いくつか"));
 
@@ -55,12 +55,13 @@ namespace Kotek
 		#endif
 
 			ktkResourceSaverManager saver_instance;
+			saver_instance.Initialize(&filesystem);
 
 			bool status = saver_instance.Save_Text_Formatted(path, &instance);
 
 			BOOST_REQUIRE(status);
 
-			fs.Shutdown();
+			filesystem.Shutdown();
 		}
 	#endif
 #endif
