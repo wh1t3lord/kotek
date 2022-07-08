@@ -21,7 +21,7 @@ namespace Kotek
 			instance.Initialize();
 
 			bool status = instance.IsValidPath(instance.GetFolderByEnum(
-				folder_index_t::kFolderIndex_UserTests));
+				eFolderIndex::kFolderIndex_UserTests));
 
 			BOOST_REQUIRE(status);
 
@@ -37,7 +37,7 @@ namespace Kotek
 			ktkFile instance("pretty");
 
 			auto path =
-				fs.GetFolderByEnum(folder_index_t::kFolderIndex_UserTests);
+				fs.GetFolderByEnum(eFolderIndex::kFolderIndex_UserTests);
 
 			ktk::string test(KOTEK_TEXT("いくつか"));
 
