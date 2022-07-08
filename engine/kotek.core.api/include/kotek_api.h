@@ -147,7 +147,7 @@ namespace Kotek
 				const ktk::filesystem::path& path_to_file) const noexcept = 0;
 
 			virtual const ktk::filesystem::path& GetFolderByEnum(
-				folder_index_t id) const noexcept = 0;
+				eFolderIndex id) const noexcept = 0;
 		};
 
 		class ktkIInput
