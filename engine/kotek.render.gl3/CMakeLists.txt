@@ -40,8 +40,8 @@ set(to_include_core_files
     "include/kotek_render_swapchain.h"
     "src/kotek_render_swapchain.cpp"
     "include/kotek_spirv.h"
-    "src/kotek_spirv_reflect.cpp"
-    "include/kotek_spirv_reflect.h")
+    "src/spirv_reflect.cpp"
+    "include/spirv_reflect.h")
 
 set(to_include_module_files
 	"include/kotek_render_gl.h"

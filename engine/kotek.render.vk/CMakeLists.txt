@@ -62,8 +62,8 @@ add_library(${PROJECT_NAME} STATIC
     "include/kotek_render_helper_stats.h"
     "src/kotek_render_helper_stats.cpp"
     "include/kotek_spirv.h"
-    "src/kotek_spirv_reflect.cpp"
-    "include/kotek_spirv_reflect.h"
+    "src/spirv_reflect.cpp"
+    "include/spirv_reflect.h"
     "include/vk_enum_string_helper.h"
     "src/main_render_vk_dll.cpp"
 )

@@ -510,25 +510,6 @@ namespace Kotek
 			kEngine_Feature_Unknown = -1
 		};
 
-		constexpr const ktk::tchar* kRenderName_OpenGL = KOTEK_TEXT("OpenGL");
-		constexpr const ktk::tchar* kRenderName_Vulkan = KOTEK_TEXT("Vulkan");
-
-		constexpr const ktk::tchar* kRenderName_DirectX12 =
-			KOTEK_TEXT("DirectX12");
-		constexpr const ktk::tchar* kRenderName_DirectX11 =
-			KOTEK_TEXT("DirectX11");
-		constexpr const ktk::tchar* kRenderName_DirectX10 =
-			KOTEK_TEXT("DirectX10");
-		constexpr const ktk::tchar* kRenderName_DirectX9 =
-			KOTEK_TEXT("DirectX9");
-		constexpr const ktk::tchar* kRenderName_DirectX8 =
-			KOTEK_TEXT("DirectX8");
-		constexpr const ktk::tchar* kRenderName_DirectX7 =
-			KOTEK_TEXT("DirectX7");
-
-		constexpr const ktk::tchar* kRenderName_Software =
-			KOTEK_TEXT("Software");
-
 		class ktkIEngineConfig
 		{
 		public:

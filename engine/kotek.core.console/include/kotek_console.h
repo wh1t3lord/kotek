@@ -23,31 +23,6 @@ namespace Kotek
 
 	namespace Core
 	{
-		constexpr const ktk::tchar* kConsoleCommandArg_Editor =
-			KOTEK_TEXT("--editor");
-		constexpr const ktk::tchar* kConsoleCommandArg_Width =
-			KOTEK_TEXT("--width");
-		constexpr const ktk::tchar* kConsoleCommandArg_Height =
-			KOTEK_TEXT("--height");
-
-		constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL3_3 =
-			KOTEK_TEXT("--render_gl3_3");
-		constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL4_6 =
-			KOTEK_TEXT("--render_gl4_6");
-		constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan =
-			KOTEK_TEXT("--render_vk");
-
-		constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX7 =
-			KOTEK_TEXT("--render_dx_7");
-		constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX8 =
-			KOTEK_TEXT("--render_dx_8");
-		constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX9 =
-			KOTEK_TEXT("--render_dx_9");
-		constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX11 =
-			KOTEK_TEXT("--render_dx_11");
-		constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX12 =
-			KOTEK_TEXT("--render_dx_12");
-
 		enum class ktkConsoleCommandIndex : ktk::enum_base_t
 		{
 			// (int width, int height)
