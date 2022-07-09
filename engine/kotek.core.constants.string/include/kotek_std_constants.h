@@ -5,7 +5,7 @@
 #include <kotek.core.types.char/include/kotek_core_types_char.h>
 
 /**
- * 
+ *
  */
 namespace Kotek
 {
@@ -179,14 +179,15 @@ namespace Kotek
 		KOTEK_TEXT("--render_vk");
 
 	/**
-	 * Constant expresses that we specify what renderer the engine will use. If you passed this argument engine will force run with DirectX 7 renderer.
-	 * 
+	 * Constant expresses that we specify what renderer the engine will use. If
+	 * you passed this argument engine will force run with DirectX 7 renderer.
+	 *
 	 * Syntax: --render_dx_7
-	 * 
+	 *
 	 * @attention if the engine doesn't support the chosen renderer or engine
 	 * wasn't compiled with a such sources it means the flag doesn't have any
 	 * power.
-	 * 
+	 *
 	 * @code
 	 * "--render_dx_7"
 	 * @endcode
@@ -194,19 +195,88 @@ namespace Kotek
 	constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX7 =
 		KOTEK_TEXT("--render_dx_7");
 
-
+	/**
+	 * Constant expresses that we specify what renderer the engine will use. If
+	 * you passed this argument engine will force run with DirectX 8 renderer.
+	 *
+	 * Syntax: --render_dx_8
+	 *
+	 * @attention if the engine doesn't support the chosen renderer or engine
+	 * wasn't compiled with a such sources it means the flag doesn't have any
+	 * power.
+	 *
+	 * @code
+	 * "--render_dx_8"
+	 * @endcode
+	 */
 	constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX8 =
 		KOTEK_TEXT("--render_dx_8");
 
-
+	/**
+	 * Constant expresses that we specify what renderer the engine will use. If
+	 * you passed this argument engine will force run with DirectX 9 renderer.
+	 *
+	 * Syntax: --render_dx_9
+	 *
+	 * @attention if the engine doesn't support the chosen renderer or engine
+	 * wasn't compiled with a such sources it means the flag doesn't have any
+	 * power.
+	 *
+	 * @code
+	 * "--render_dx_9"
+	 * @endcode
+	 */
 	constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX9 =
 		KOTEK_TEXT("--render_dx_9");
 
+	/**
+	 * Constant expresses that we specify what renderer the engine will use. If
+	 * you passed this argument engine will force run with DirectX 10 renderer.
+	 *
+	 * Syntax: --render_dx_10
+	 *
+	 * @attention if the engine doesn't support the chosen renderer or engine
+	 * wasn't compiled with a such sources it means the flag doesn't have any
+	 * power.
+	 *
+	 * @code
+	 * "--render_dx_10"
+	 * @endcode
+	 */
+	constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX10 =
+		KOTEK_TEXT("--render_dx_10");
 
+	/**
+	 * Constant expresses that we specify what renderer the engine will use. If
+	 * you passed this argument engine will force run with DirectX 11 renderer.
+	 *
+	 * Syntax: --render_dx_11
+	 *
+	 * @attention if the engine doesn't support the chosen renderer or engine
+	 * wasn't compiled with a such sources it means the flag doesn't have any
+	 * power.
+	 *
+	 * @code
+	 * "--render_dx_11"
+	 * @endcode
+	 */
 	constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX11 =
 		KOTEK_TEXT("--render_dx_11");
 
-
+	/**
+	 * Constant expresses that we specify what renderer the engine will use. If
+	 * you passed this argument engine will force run with DirectX 12 renderer.
+	 *
+	 * Syntax: --render_dx_12
+	 *
+	 * @attention if the engine doesn't support the chosen renderer or engine
+	 * wasn't compiled with a such sources it means the flag doesn't have any
+	 * power.
+	 *
+	 * @code
+	 * "--render_dx_12"
+	 * @endcode
+	 */
 	constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX12 =
 		KOTEK_TEXT("--render_dx_12");
 } // namespace Kotek
