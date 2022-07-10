@@ -5,7 +5,7 @@
 #include <kotek.core.types.char/include/kotek_core_types_char.h>
 
 /**
- *
+ * This section stands for all string constants that could be used by engine
  */
 namespace Kotek
 {
@@ -77,6 +77,15 @@ namespace Kotek
 	 * Constant expresses in string that it is Vulkan
 	 */
 	constexpr const ktk::tchar* kRenderer_Vulkan_Name = KOTEK_TEXT("Vulkan");
+
+	/**
+	 * Constant expresses in string that it is Software renderer
+	 */
+	constexpr const ktk::tchar* kRenderer_Software_Name =
+		KOTEK_TEXT("Software");
+
+	constexpr const ktk::tchar* kRenderer_Unknown_Name =
+		KOTEK_TEXT("RENDERER_UNKNOWN");
 
 	/**
 	 * Constant expresses in string that it is a flag used in application

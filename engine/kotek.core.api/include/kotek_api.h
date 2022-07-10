@@ -495,18 +495,32 @@ namespace Kotek
 			kEngine_Window_Windowed,
 			kEngine_Window_Borderless,
 			kEngine_Window_FullScreen,
+
 			kEngine_Render_Feature_MSAA,
 			kEngine_Render_Feature_VSYNC,
+
+			// don't use, internal usage only
+			kEngine_Render_Renderer_DirectX,
+
 			kEngine_Render_Renderer_DirectX_7,
 			kEngine_Render_Renderer_DirectX_8,
 			kEngine_Render_Renderer_DirectX_9,
 			kEngine_Render_Renderer_DirectX_10,
 			kEngine_Render_Renderer_DirectX_11,
 			kEngine_Render_Renderer_DirectX_12,
+
+			// don't use, internal usage only
+			kEngine_Render_Renderer_OpenGL,
+			
+			kEngine_Render_Renderer_OpenGL1_0,
+			kEngine_Render_Renderer_OpenGL2_0,
 			kEngine_Render_Renderer_OpenGL3_3,
 			kEngine_Render_Renderer_OpenGL4_6,
+			
 			kEngine_Render_Renderer_Vulkan,
+			
 			kEngine_Render_Renderer_Software,
+
 			kEngine_Feature_Unknown = -1
 		};
 

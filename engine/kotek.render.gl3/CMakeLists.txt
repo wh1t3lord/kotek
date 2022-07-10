@@ -39,7 +39,6 @@ set(to_include_core_files
     "src/kotek_render_device.cpp"
     "include/kotek_render_swapchain.h"
     "src/kotek_render_swapchain.cpp"
-    "include/kotek_spirv.h"
     "src/spirv_reflect.cpp"
     "include/spirv_reflect.h")
 

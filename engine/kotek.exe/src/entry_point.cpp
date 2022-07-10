@@ -3,9 +3,9 @@
 
 /**
  * @mainpage Kotek
- * 
+ *
  * @section doxygen_main_page Table of contents
- * 
+ *
  * - @ref doxygen_user_guide
  *  - @ref doxygen_user_guide_getting_started
  *	 - @ref doxygen_user_guide_whydoyouneedit
@@ -30,7 +30,8 @@
  *    - @ref doxygen_user_guide_examples_window_renderer_render_graph_rtx
  *   - @ref doxygen_user_guide_examples_window_and_sdk
  *   - @ref doxygen_user_guide_examples_window_and_sdk_and_imgui
- *   - @ref doxygen_user_guide_examples_window_and_sdk_and_imgui_and_dedicated_server
+ *   - @ref
+ *doxygen_user_guide_examples_window_and_sdk_and_imgui_and_dedicated_server
  *   - @ref doxygen_user_guide_examples_window_no_renderer_but_sound
  *   - @ref doxygen_user_guide_examples_window_ancient_renderers
  *    - @ref doxygen_user_guide_examples_window_ancient_renderers_directx
@@ -59,17 +60,28 @@
  *  - @ref doxygen_philosophy_of_development
  *  - @ref doxygen_standartization
  * - @ref doxygen_information_for_developers
- *  - @ref doxygen_information_for_developers_general_information 
+ *  - @ref doxygen_information_for_developers_general_information
  *  - @ref doxygen_information_for_developers_codestyle
  */
 
-
 /**
  * Entry point of the application of computer OSes.
- * 
- * \param argc is the number of arguments being passed into your program from the command line.
- * \param argv is the array of arguments.
- * \return status code. OS dependent.
+ *
+ * \param argc is the number of arguments being passed into your program from
+ * the command line. \param argv is the array of arguments. \return status code.
+ * OS dependent.
+ *
+ * @code
+ * // the main function stands for initialization, update and shutdown the
+ * system
+ *
+ * // the general usage is to create Kotek::Core::ktkMainManager instance on
+ * stack and call the following functions in specified order:
+ *
+ * Kotek::Engine::Initialize_Engine(&main_manager);
+ * Kotek::Engine::Execute_Engine(&main_manager);
+ * Kotek::Engine::Shutdown_Engine(&main_manager);
+ * @endcode
  */
 int main(int argc, char** argv)
 {

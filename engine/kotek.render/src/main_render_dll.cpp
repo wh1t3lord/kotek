@@ -14,13 +14,13 @@ namespace Kotek
 			bool status{};
 			if (main_manager->Get_EngineConfig()
 					->IsContainsConsoleCommandLineArgument(
-						Core::kConsoleCommandArg_Render_OpenGL3_3))
+						kConsoleCommandArg_Render_OpenGL3_3))
 			{
 				status = InitializeModule_Render_GL(main_manager);
 			}
 			else if (main_manager->Get_EngineConfig()
 						 ->IsContainsConsoleCommandLineArgument(
-							 Core::kConsoleCommandArg_Render_Vulkan))
+							 kConsoleCommandArg_Render_Vulkan))
 			{
 				status = InitializeModule_Render_VK(main_manager);
 			}
@@ -47,13 +47,13 @@ namespace Kotek
 
 			if (main_manager->Get_EngineConfig()
 					->IsContainsConsoleCommandLineArgument(
-						Core::kConsoleCommandArg_Render_OpenGL3_3))
+						kConsoleCommandArg_Render_OpenGL3_3))
 			{
 				status = ShutdownModule_Render_GL(main_manager);
 			}
 			else if (main_manager->Get_EngineConfig()
 						 ->IsContainsConsoleCommandLineArgument(
-							 Core::kConsoleCommandArg_Render_Vulkan))
+							 kConsoleCommandArg_Render_Vulkan))
 			{
 				status = ShutdownModule_Render_VK(main_manager);
 			}

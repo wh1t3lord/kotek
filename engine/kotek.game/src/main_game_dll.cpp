@@ -151,7 +151,7 @@ namespace Kotek
 
 			if (p_main_manager->Get_EngineConfig()
 					->IsContainsConsoleCommandLineArgument(
-						Core::kConsoleCommandArg_Editor) == false)
+						kConsoleCommandArg_Editor) == false)
 			{
 				KOTEK_ASSERT(p_main_manager->getRenderDevice(),
 					"you didn't initialize render device manager field in main "

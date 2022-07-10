@@ -1,6 +1,6 @@
 #include "../include/kotek_render_graph_resource_manager.h"
 #include "../include/kotek_render_device.h"
-#include "../include/kotek_spirv_reflect.h"
+#include "../include/spirv_reflect.h"
 
 namespace Kotek
 {

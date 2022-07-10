@@ -7,6 +7,7 @@
 #include <kotek.core.containers.dll/include/kotek_core_containers_dll.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
+#include <kotek.core.constants.string/include/kotek_core_constants_string.h>
 
 namespace Kotek
 {

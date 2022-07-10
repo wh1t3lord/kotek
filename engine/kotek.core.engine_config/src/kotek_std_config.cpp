@@ -52,88 +52,142 @@ namespace Kotek
 
 		ktk::string ktkEngineConfig::GetRenderName(void) const noexcept
 		{
+			auto for_validation_purpose = this->GetRenderFeature();
+
+#ifdef KOTEK_DEBUG
+			KOTEK_MESSAGE("current renderer id: {}", static_cast<ktk::enum_base_t>(for_validation_purpose));
+#endif
+
 			if (this->IsFeatureEnabled(
 					eEngineFeature::kEngine_Render_Renderer_OpenGL3_3))
 			{
-				return kRenderName_OpenGL;
+				return kRenderer_OpenGL3_3_Name;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_OpenGL4_6))
 			{
-				return kRenderName_OpenGL;
+				return kRenderer_OpenGL4_6_Name;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_Vulkan))
 			{
-				return kRenderName_Vulkan;
+				return kRenderer_Vulkan_Name;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_DirectX_12))
 			{
-				return kRenderName_DirectX12;
+				return kRenderer_DirectX_12_Name;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_DirectX_11))
 			{
-				return kRenderName_DirectX11;
+				return kRenderer_DirectX_11_Name;
+			}
+			else if (this->IsFeatureEnabled(
+						 eEngineFeature::kEngine_Render_Renderer_DirectX_10))
+			{
+				return kRenderer_DirectX_10_Name;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_DirectX_9))
 			{
-				return kRenderName_DirectX9;
+				return kRenderer_DirectX_9_Name;
+			}
+			else if (this->IsFeatureEnabled(
+						 eEngineFeature::kEngine_Render_Renderer_DirectX_8))
+			{
+				return kRenderer_DirectX_8_Name;
+			}
+			else if (this->IsFeatureEnabled(
+						 eEngineFeature::kEngine_Render_Renderer_DirectX_7))
+			{
+				return kRenderer_DirectX_7_Name;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_Software))
 			{
-				return kRenderName_Software;
+				return kRenderer_Software_Name;
 			}
 
 			KOTEK_ASSERT(false, "can't obtain render name");
 
-			return ktk::string("RENDER_NAME_UNDEFINED");
+			return kRenderer_Unknown_Name;
 		}
 
 		eEngineFeature ktkEngineConfig::GetRenderFeature(void) const noexcept
 		{
+			eEngineFeature result = eEngineFeature::kEngine_Feature_Unknown;
+
+			int validation_count = 0;
+
 			if (this->IsFeatureEnabled(
 					eEngineFeature::kEngine_Render_Renderer_OpenGL3_3))
 			{
-				return eEngineFeature::kEngine_Render_Renderer_OpenGL3_3;
+				++validation_count;
+				result = eEngineFeature::kEngine_Render_Renderer_OpenGL3_3;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_OpenGL4_6))
 			{
-				return eEngineFeature::kEngine_Render_Renderer_OpenGL4_6;
+				++validation_count;
+				result = eEngineFeature::kEngine_Render_Renderer_OpenGL4_6;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_Vulkan))
 			{
-				return eEngineFeature::kEngine_Render_Renderer_Vulkan;
+				++validation_count;
+				result = eEngineFeature::kEngine_Render_Renderer_Vulkan;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_DirectX_12))
 			{
-				return eEngineFeature::kEngine_Render_Renderer_DirectX_12;
+				++validation_count;
+				result = eEngineFeature::kEngine_Render_Renderer_DirectX_12;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_DirectX_11))
 			{
-				return eEngineFeature::kEngine_Render_Renderer_DirectX_11;
+				++validation_count;
+				result = eEngineFeature::kEngine_Render_Renderer_DirectX_11;
+			}
+			else if (this->IsFeatureEnabled(
+						 eEngineFeature::kEngine_Render_Renderer_DirectX_10))
+			{
+				++validation_count;
+				result = eEngineFeature::kEngine_Render_Renderer_DirectX_10;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_DirectX_9))
 			{
-				return eEngineFeature::kEngine_Render_Renderer_DirectX_9;
+				++validation_count;
+				result = eEngineFeature::kEngine_Render_Renderer_DirectX_9;
+			}
+			else if (this->IsFeatureEnabled(
+						 eEngineFeature::kEngine_Render_Renderer_DirectX_8))
+			{
+				++validation_count;
+				result = eEngineFeature::kEngine_Render_Renderer_DirectX_8;
+			}
+			else if (this->IsFeatureEnabled(
+						 eEngineFeature::kEngine_Render_Renderer_DirectX_7))
+			{
+				++validation_count;
+				result = eEngineFeature::kEngine_Render_Renderer_DirectX_7;
 			}
 			else if (this->IsFeatureEnabled(
 						 eEngineFeature::kEngine_Render_Renderer_Software))
 			{
-				return eEngineFeature::kEngine_Render_Renderer_Software;
+				++validation_count;
+				result = eEngineFeature::kEngine_Render_Renderer_Software;
 			}
 
-			KOTEK_ASSERT(false, "can't return undefined renderer...");
+			KOTEK_ASSERT(validation_count > 0,
+				"you must have some initialized renderer!");
 
-			return eEngineFeature::kEngine_Feature_Unknown;
+			KOTEK_ASSERT(validation_count == 1,
+				"You can't have more than one initialized renderer.");
+
+			return result;
 		}
 
 		bool ktkEngineConfig::IsCurrentRenderLegacy(void) const noexcept
@@ -155,7 +209,7 @@ namespace Kotek
 			return this->m_argc;
 		}
 
-		void ktkEngineConfig::SetARGC(int count_of_arguments) noexcept 
+		void ktkEngineConfig::SetARGC(int count_of_arguments) noexcept
 		{
 			this->m_argc = count_of_arguments;
 		}
@@ -193,7 +247,8 @@ namespace Kotek
 		void ktkEngineConfig::Set_UserLibrary(
 			const ktk::filesystem::path& path_to_library) noexcept
 		{
-			this->m_user_dll = ktk::dll::shared_library(path_to_library.c_str());
+			this->m_user_dll =
+				ktk::dll::shared_library(path_to_library.c_str());
 		}
 
 		void* ktkEngineConfig::Get_UserLibrary(void) noexcept
@@ -204,19 +259,9 @@ namespace Kotek
 		bool ktkEngineConfig::IsFeatureRender(
 			eEngineFeature feature) const noexcept
 		{
-			return (feature ==
-					   eEngineFeature::kEngine_Render_Renderer_Software) ||
-				(feature ==
-					eEngineFeature::kEngine_Render_Renderer_OpenGL3_3) ||
-				(feature ==
-					eEngineFeature::kEngine_Render_Renderer_OpenGL4_6) ||
-				(feature ==
-					eEngineFeature::kEngine_Render_Renderer_DirectX_9) ||
-				(feature ==
-					eEngineFeature::kEngine_Render_Renderer_DirectX_11) ||
-				(feature ==
-					eEngineFeature::kEngine_Render_Renderer_DirectX_12) ||
-				(feature == eEngineFeature::kEngine_Render_Renderer_Vulkan);
+			return (feature >
+					   eEngineFeature::kEngine_Render_Renderer_DirectX) &&
+				(feature <= eEngineFeature::kEngine_Render_Renderer_Software);
 		}
 	} // namespace Core
 } // namespace Kotek
