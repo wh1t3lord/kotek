@@ -100,8 +100,8 @@ namespace Kotek
 	 *
 	 * Syntax: --editor
 	 *
-	 * @attention if engine was built without SDK the flag doesn't have any
-	 * power.
+	 * @attention if engine was built without KOTEK_USE_SDK the flag doesn't
+	 * have any power.
 	 *
 	 * @code
 	 * "--editor"
@@ -109,6 +109,29 @@ namespace Kotek
 	 */
 	constexpr const ktk::tchar* kConsoleCommandArg_Editor =
 		KOTEK_TEXT("--editor");
+
+	/**
+	 * Constant expresses in string that it is a flag used in application
+	 * command argument list. Meaning is we use SDK. There's a difference
+	 * between SDK and SDK ImGui. If we say just SDK it means we use static
+	 * application based on OS buttons and UI and etc, but if we say SDK ImGui
+	 * its UI rendering based on concept of immediate GUI. In our case we use
+	 * ImGui library for implementing a such UI.
+	 *
+	 * It doesn't require to pass anything like logical true or false
+	 * (yes/no;on/off) (using whitespace). So it forces to use SDK.
+	 *
+	 * Syntax: --editor_imgui
+	 *
+	 * @attention if engine was built without KOTEK_USE_SDK_IMGUI the flag
+	 * doesn't have any power.
+	 *
+	 * @code
+	 * "--editor_imgui"
+	 * @endcode
+	 */
+	constexpr const ktk::tchar* kConsoleCommandArg_Editor_ImGui =
+		KOTEK_TEXT("--editor_imgui");
 
 	/**
 	 * Constant expresses that we specify width for our executable.
