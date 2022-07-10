@@ -1,6 +1,6 @@
 #include "../include/kotek_render.h"
 
-#include <kotek.render.gl3/include/kotek_render_gl.h>
+#include <kotek.render.gl3.3/include/kotek_render_gl.h>
 #include <kotek.render.vk/include/kotek_render_vk.h>
 
 namespace Kotek
@@ -16,7 +16,7 @@ namespace Kotek
 					->IsContainsConsoleCommandLineArgument(
 						kConsoleCommandArg_Render_OpenGL3_3))
 			{
-				status = InitializeModule_Render_GL(main_manager);
+				status = InitializeModule_Render_GL3_3(main_manager);
 			}
 			else if (main_manager->Get_EngineConfig()
 						 ->IsContainsConsoleCommandLineArgument(
@@ -29,7 +29,7 @@ namespace Kotek
 				KOTEK_MESSAGE("trying to initialize default render OpenGL, "
 							  "because you don't specify any or coudn't define "
 							  "from serialized user data");
-				status = InitializeModule_Render_GL(main_manager);
+				status = InitializeModule_Render_GL3_3(main_manager);
 			}
 
 			KOTEK_ASSERT(status, "can't initialize module render {}. See log",
@@ -49,7 +49,7 @@ namespace Kotek
 					->IsContainsConsoleCommandLineArgument(
 						kConsoleCommandArg_Render_OpenGL3_3))
 			{
-				status = ShutdownModule_Render_GL(main_manager);
+				status = ShutdownModule_Render_GL3_3(main_manager);
 			}
 			else if (main_manager->Get_EngineConfig()
 						 ->IsContainsConsoleCommandLineArgument(
@@ -59,7 +59,7 @@ namespace Kotek
 			}
 			else
 			{
-				status = ShutdownModule_Render_GL(main_manager);
+				status = ShutdownModule_Render_GL3_3(main_manager);
 			}
 
 			KOTEK_ASSERT(status, "failed to shutdown render {} module",

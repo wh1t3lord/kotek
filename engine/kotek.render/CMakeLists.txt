@@ -26,5 +26,5 @@ if (WIN32)
 #target_link_libraries(${PROJECT_NAME} kotek.render.dx12)
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl3)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl3.3)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.vk)
