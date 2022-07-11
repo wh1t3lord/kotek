@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kotek_render_graph_types.h"
+#include "kotek_render_graph_simplified_types.h"
 
 namespace Kotek
 {
@@ -8,11 +8,11 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			class ktkRenderGraph : public Core::ktkIRenderGraph
+			class ktkRenderGraphSimplified : public Core::ktkIRenderGraph
 			{
 			public:
-				ktkRenderGraph(void);
-				~ktkRenderGraph(void);
+				ktkRenderGraphSimplified(void);
+				~ktkRenderGraphSimplified(void);
 
 				void Initialize(void) override;
 				void Shutdown(void) override;

@@ -1,5 +1,5 @@
-#include "../include/kotek_render_graph_builder.h"
-#include "../include/kotek_render_graph.h"
+#include "../include/kotek_render_graph_simplified_builder.h"
+#include "../include/kotek_render_graph_simplified.h"
 
 namespace Kotek
 {
@@ -7,17 +7,20 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			ktkRenderGraphBuilder::ktkRenderGraphBuilder(
+			ktkRenderGraphSimplifiedBuilder::ktkRenderGraphSimplifiedBuilder(
 				Core::ktkMainManager& main_manager) :
 				m_render_graph_type{},
 				m_rendering_pipeline_type{}
 			{
 			}
 
-			ktkRenderGraphBuilder::~ktkRenderGraphBuilder(void) {}
+			ktkRenderGraphSimplifiedBuilder::~ktkRenderGraphSimplifiedBuilder(
+				void)
+			{
+			}
 
-			void ktkRenderGraphBuilder::Initialize(
-				ktkRenderGraphResourceManager* p_resource_manager,
+			void ktkRenderGraphSimplifiedBuilder::Initialize(
+				ktkRenderGraphSimplifiedResourceManager* p_resource_manager,
 				const ktk::string& backbuffer_name,
 				const eRenderGraphBuilderType& render_graph_type_id,
 				const eRenderGraphBuilderPipelineRenderingType&
@@ -30,36 +33,40 @@ namespace Kotek
 					"you can't pass an empty string for backbuffer name");
 
 				this->m_backbuffer_name = backbuffer_name;
+				this->m_render_graph_type = render_graph_type_id;
+				this->m_rendering_pipeline_type = rendering_pipeline_type;
 			}
 
-			ktkRenderGraph ktkRenderGraphBuilder::Compile(void)
+			ktkRenderGraphSimplified ktkRenderGraphSimplifiedBuilder::Compile(
+				void)
 			{
-				return ktkRenderGraph();
+				return ktkRenderGraphSimplified();
 			}
 
-			bool ktkRenderGraphBuilder::RegisterRenderPass(
+			bool ktkRenderGraphSimplifiedBuilder::RegisterRenderPass(
 				const ktk::string& render_pass_name,
-				ktkRenderGraphRenderPass* p_pass) noexcept
+				ktkRenderGraphSimplifiedRenderPass* p_pass) noexcept
 			{
 				return true;
 			}
 
-			const ktk::string& ktkRenderGraphBuilder::GetBackBufferName(
+			const ktk::string&
+			ktkRenderGraphSimplifiedBuilder::GetBackBufferName(
 				void) const noexcept
 			{
 				return this->m_backbuffer_name;
 			}
 
 			eRenderGraphBuilderType
-			ktkRenderGraphBuilder::GetRenderGraphBuilderType(
+			ktkRenderGraphSimplifiedBuilder::GetRenderGraphBuilderType(
 				void) const noexcept
 			{
 				return this->m_render_graph_type;
 			}
 
 			eRenderGraphBuilderPipelineRenderingType
-			ktkRenderGraphBuilder::GetRenderGraphPipelineRenderingType(
-				void) const noexcept
+			ktkRenderGraphSimplifiedBuilder::
+				GetRenderGraphPipelineRenderingType(void) const noexcept
 			{
 				return this->m_rendering_pipeline_type;
 			}

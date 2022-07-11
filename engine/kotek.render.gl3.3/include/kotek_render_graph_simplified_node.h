@@ -17,14 +17,15 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			class ktkRenderGraphNode
+			class ktkRenderGraphSimplifiedNode
 			{
 			public:
-				ktkRenderGraphNode(const ktk::string& render_pass_name,
+				ktkRenderGraphSimplifiedNode(
+					const ktk::string& render_pass_name,
 					const ktk::unordered_map<ktk::string, shader_module_t*>&
 						programs);
-				ktkRenderGraphNode(void);
-				~ktkRenderGraphNode(void);
+				ktkRenderGraphSimplifiedNode(void);
+				~ktkRenderGraphSimplifiedNode(void);
 
 				const shader_module_t* GetProgram(
 					const ktk::string& program_name) const noexcept;

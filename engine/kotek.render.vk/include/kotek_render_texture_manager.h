@@ -247,6 +247,8 @@ namespace Kotek
 				}
 
 			private:
+				// TODO: remove enum eTextureType and use native texture type
+				// from Vulkan.
 				eTextureType m_type_texture;
 				CreateInfo m_info_create;
 			};
@@ -701,14 +703,12 @@ namespace Kotek
 					this->m_info = info;
 				}
 
-				eResourceSynchronizationStatus GetStatus(
-					void) const noexcept
+				eResourceSynchronizationStatus GetStatus(void) const noexcept
 				{
 					return this->m_status;
 				}
 
-				void SetStatus(
-					eResourceSynchronizationStatus value) noexcept
+				void SetStatus(eResourceSynchronizationStatus value) noexcept
 				{
 					this->m_status = value;
 				}

@@ -1,4 +1,4 @@
-#include "../include/kotek_render_graph_node.h"
+#include "../include/kotek_render_graph_simplified_node.h"
 
 namespace Kotek
 {
@@ -6,17 +6,17 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			ktkRenderGraphNode::ktkRenderGraphNode(
+			ktkRenderGraphSimplifiedNode::ktkRenderGraphSimplifiedNode(
 				const ktk::string& render_pass_name,
 				const ktk::unordered_map<ktk::string, shader_module_t*>&
 					programs)
 			{
 			}
 
-			ktkRenderGraphNode::ktkRenderGraphNode(void) {}
-			ktkRenderGraphNode::~ktkRenderGraphNode(void) {}
+			ktkRenderGraphSimplifiedNode::ktkRenderGraphSimplifiedNode(void) {}
+			ktkRenderGraphSimplifiedNode::~ktkRenderGraphSimplifiedNode(void) {}
 
-			const shader_module_t* ktkRenderGraphNode::GetProgram(
+			const shader_module_t* ktkRenderGraphSimplifiedNode::GetProgram(
 				const ktk::string& program_name) const noexcept
 			{
 				if (program_name.empty()) 
@@ -36,7 +36,7 @@ namespace Kotek
 				return this->m_programs.at(program_name);
 			}
 
-			const ktk::string& ktkRenderGraphNode::GetRenderPassName(
+			const ktk::string& ktkRenderGraphSimplifiedNode::GetRenderPassName(
 				void) const noexcept 
 			{
 				return this->m_render_pass_name;

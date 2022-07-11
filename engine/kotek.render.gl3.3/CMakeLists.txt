@@ -10,23 +10,23 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
 
-set(to_include_render_graph_files
-    "include/kotek_render_graph.h"
-    "src/kotek_render_graph.cpp"
-    "include/kotek_render_graph_types.h"
-    "src/kotek_render_graph_types.cpp"
-    "include/kotek_render_graph_types_input.h"
-    "src/kotek_render_graph_types_input.cpp"
-    "src/kotek_render_graph_types_output.cpp"
-    "include/kotek_render_graph_types_output.h"
-    "include/kotek_render_graph_render_pass.h"
-    "src/kotek_render_graph_render_pass.cpp"
-    "include/kotek_render_graph_node.h"
-    "src/kotek_render_graph_node.cpp"
-    "include/kotek_render_graph_builder.h"
-    "src/kotek_render_graph_builder.cpp"
-    "include/kotek_render_graph_resource_manager.h"
-    "src/kotek_render_graph_resource_manager.cpp")
+set(to_include_render_graph_simplified_files
+    "include/kotek_render_graph_simplified.h"
+    "src/kotek_render_graph_simplified.cpp"
+    "include/kotek_render_graph_simplified_types.h"
+    "src/kotek_render_graph_simplified_types.cpp"
+    "include/kotek_render_graph_simplified_types_input.h"
+    "src/kotek_render_graph_simplified_types_input.cpp"
+    "src/kotek_render_graph_simplified_types_output.cpp"
+    "include/kotek_render_graph_simplified_types_output.h"
+    "include/kotek_render_graph_simplified_render_pass.h"
+    "src/kotek_render_graph_simplified_render_pass.cpp"
+    "include/kotek_render_graph_simplified_node.h"
+    "src/kotek_render_graph_simplified_node.cpp"
+    "include/kotek_render_graph_simplified_builder.h"
+    "src/kotek_render_graph_simplified_builder.cpp"
+    "include/kotek_render_graph_simplified_resource_manager.h"
+    "src/kotek_render_graph_simplified_resource_manager.cpp")
 
 set(to_include_managers_files
     "include/kotek_render_shader_manager.h"
@@ -57,14 +57,14 @@ set(to_include_memory_management_files
     "src/kotek_render_allocator_ring.cpp")
 
 add_library(${PROJECT_NAME} STATIC
-    ${to_include_render_graph_files}
+    ${to_include_render_graph_simplified_files}
     ${to_include_managers_files}
     ${to_include_core_files}
     ${to_include_module_files}
     ${to_include_memory_management_files}
 )
 
-source_group("Render Graph" FILES ${to_include_render_graph_files})
+source_group("Render Graph/Simplified" FILES ${to_include_render_graph_simplified_files})
 source_group("Managers" FILES ${to_include_managers_files})
 source_group("Core" FILES ${to_include_core_files})
 source_group("Module" FILES ${to_include_module_files})

@@ -1,7 +1,7 @@
-#include "../include/kotek_render_graph_render_pass.h"
-#include "../include/kotek_render_graph_resource_manager.h"
-#include "../include/kotek_render_graph_types_input.h"
-#include "../include/kotek_render_graph_types_output.h"
+#include "../include/kotek_render_graph_simplified_render_pass.h"
+#include "../include/kotek_render_graph_simplified_resource_manager.h"
+#include "../include/kotek_render_graph_simplified_types_input.h"
+#include "../include/kotek_render_graph_simplified_types_output.h"
 
 namespace Kotek
 {
@@ -9,32 +9,34 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			ktkRenderGraphRenderPass::ktkRenderGraphRenderPass(void) :
-				m_p_manager_resource_graph{}, m_p_manager_resource{}
+			ktkRenderGraphSimplifiedRenderPass::
+				ktkRenderGraphSimplifiedRenderPass(void) :
+				m_p_manager_resource_graph{},
+				m_p_manager_resource{}
 			{
 			}
 
-			void ktkRenderGraphRenderPass::OnSetupInput(
+			void ktkRenderGraphSimplifiedRenderPass::OnSetupInput(
 				ktkRenderGraphStorageInput& storage, ktkRenderDevice* p_device,
 				Core::ktkFileSystem* p_file_system)
 			{
 			}
 
-			void ktkRenderGraphRenderPass::OnSetupOutput(
+			void ktkRenderGraphSimplifiedRenderPass::OnSetupOutput(
 				ktkRenderGraphStorageOutput& storage, ktkRenderDevice* p_device)
 			{
 			}
 
-			void ktkRenderGraphRenderPass::OnCreatedResources(void) {}
+			void ktkRenderGraphSimplifiedRenderPass::OnCreatedResources(void) {}
 
-			void ktkRenderGraphRenderPass::OnUpdate() {}
+			void ktkRenderGraphSimplifiedRenderPass::OnUpdate() {}
 
-			void ktkRenderGraphRenderPass::OnRender(
-				const ktkRenderGraphNode& node)
+			void ktkRenderGraphSimplifiedRenderPass::OnRender(
+				const ktkRenderGraphSimplifiedNode& node)
 			{
 			}
 
-			void ktkRenderGraphRenderPass::SetName(
+			void ktkRenderGraphSimplifiedRenderPass::SetName(
 				const ktk::string& name) noexcept
 			{
 				KOTEK_ASSERT(name.empty() == false,
@@ -45,13 +47,13 @@ namespace Kotek
 				this->m_name = name;
 			}
 
-			const ktk::string& ktkRenderGraphRenderPass::GetName(
+			const ktk::string& ktkRenderGraphSimplifiedRenderPass::GetName(
 				void) const noexcept
 			{
 				return this->m_name;
 			}
 
-			void ktkRenderGraphRenderPass::Initialize(
+			void ktkRenderGraphSimplifiedRenderPass::Initialize(
 				ktkRenderResourceManager* p_manager_resource,
 				ktkRenderGraphResourceManager*
 					p_manager_resource_graph) noexcept

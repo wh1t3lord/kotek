@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kotek_render_graph_types.h"
+#include "kotek_render_graph_simplified_types.h"
 
 namespace Kotek
 {
@@ -18,12 +18,12 @@ namespace Kotek
 		{
 			constexpr const char* kBackBufferName = "KOTEK_BACKBUFFER_GL_NAME";
 
-			class ktkRenderGraphResourceManager
+			class ktkRenderGraphSimplifiedResourceManager
 			{
 			public:
-				ktkRenderGraphResourceManager(
+				ktkRenderGraphSimplifiedResourceManager(
 					Core::ktkMainManager& main_manager);
-				~ktkRenderGraphResourceManager(void);
+				~ktkRenderGraphSimplifiedResourceManager(void);
 
 				void Initialize(eRenderGraphBuilderType type_of_framebuffer,
 					eRenderGraphBuilderPipelineRenderingType

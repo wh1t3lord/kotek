@@ -11,8 +11,8 @@ namespace Kotek
 			class ktkRenderGraphResourceManager;
 			class ktkRenderGraphStorageOutput;
 			class ktkRenderGraphStorageInput;
-			class ktkRenderGraphBuilder;
-			class ktkRenderGraphNode;
+			class ktkRenderGraphSimplifiedBuilder;
+			class ktkRenderGraphSimplifiedNode;
 		} // namespace gl3_3
 	}     // namespace Render
 
@@ -28,13 +28,13 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			class ktkRenderGraphRenderPass
+			class ktkRenderGraphSimplifiedRenderPass
 			{
-				friend class ktkRenderGraphBuilder;
+				friend class ktkRenderGraphSimplifiedBuilder;
 
 			public:
-				ktkRenderGraphRenderPass(void);
-				virtual ~ktkRenderGraphRenderPass(void) = default;
+				ktkRenderGraphSimplifiedRenderPass(void);
+				virtual ~ktkRenderGraphSimplifiedRenderPass(void) = default;
 
 				virtual void OnSetupInput(ktkRenderGraphStorageInput& storage,
 					ktkRenderDevice* p_device,
@@ -45,7 +45,7 @@ namespace Kotek
 
 				virtual void OnCreatedResources(void);
 				virtual void OnUpdate();
-				virtual void OnRender(const ktkRenderGraphNode& node);
+				virtual void OnRender(const ktkRenderGraphSimplifiedNode& node);
 
 				/// <summary>
 				/// Don't set it by your own hands, because this method is

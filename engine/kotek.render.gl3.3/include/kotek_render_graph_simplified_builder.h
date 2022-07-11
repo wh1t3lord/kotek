@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kotek_render_graph_types.h"
+#include "kotek_render_graph_simplified_types.h"
 
 namespace Kotek
 {
@@ -8,10 +8,10 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			class ktkRenderGraph;
+			class ktkRenderGraphSimplified;
 			class ktkRenderResourceManager;
-			class ktkRenderGraphResourceManager;
-			class ktkRenderGraphRenderPass;
+			class ktkRenderGraphSimplifiedResourceManager;
+			class ktkRenderGraphSimplifiedRenderPass;
 		}
 	} // namespace Render
 
@@ -27,23 +27,24 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			class ktkRenderGraphBuilder
+			class ktkRenderGraphSimplifiedBuilder
 			{
 			public:
-				ktkRenderGraphBuilder(Core::ktkMainManager& main_manager);
-				ktkRenderGraphBuilder(void) = delete;
-				~ktkRenderGraphBuilder(void);
+				ktkRenderGraphSimplifiedBuilder(
+					Core::ktkMainManager& main_manager);
+				ktkRenderGraphSimplifiedBuilder(void) = delete;
+				~ktkRenderGraphSimplifiedBuilder(void);
 
-				ktkRenderGraphBuilder(const ktkRenderGraphBuilder&) = delete;
-				ktkRenderGraphBuilder& operator=(
-					const ktkRenderGraphBuilder&) = delete;
+				ktkRenderGraphSimplifiedBuilder(const ktkRenderGraphSimplifiedBuilder&) = delete;
+				ktkRenderGraphSimplifiedBuilder& operator=(
+					const ktkRenderGraphSimplifiedBuilder&) = delete;
 
-				ktkRenderGraphBuilder(ktkRenderGraphBuilder&&) = delete;
-				ktkRenderGraphBuilder& operator=(
-					ktkRenderGraphBuilder&&) = delete;
+				ktkRenderGraphSimplifiedBuilder(ktkRenderGraphSimplifiedBuilder&&) = delete;
+				ktkRenderGraphSimplifiedBuilder& operator=(
+					ktkRenderGraphSimplifiedBuilder&&) = delete;
 
 				void Initialize(
-					ktkRenderGraphResourceManager* p_resource_manager,
+					ktkRenderGraphSimplifiedResourceManager* p_resource_manager,
 					const ktk::string& backbuffer_name,
 					const eRenderGraphBuilderType& render_graph_type_id =
 						eRenderGraphBuilderType::kRenderBuilderFor_Forward_Only,
@@ -52,10 +53,10 @@ namespace Kotek
 							eRenderGraphBuilderPipelineRenderingType::
 								kRenderBuilderBasedOnPipeline_Orthodox);
 
-				ktkRenderGraph Compile(void);
+				ktkRenderGraphSimplified Compile(void);
 
 				bool RegisterRenderPass(const ktk::string& render_pass_name,
-					ktkRenderGraphRenderPass* p_pass) noexcept;
+					ktkRenderGraphSimplifiedRenderPass* p_pass) noexcept;
 
 				const ktk::string& GetBackBufferName(void) const noexcept;
 

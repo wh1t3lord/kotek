@@ -1,4 +1,4 @@
-#include "../include/kotek_render_graph_types.h"
+#include "../include/kotek_render_graph_simplified_types.h"
 
 namespace Kotek
 {
