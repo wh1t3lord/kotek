@@ -17,13 +17,13 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphSimplifiedRenderPass::OnSetupInput(
-				ktkRenderGraphStorageInput& storage, ktkRenderDevice* p_device,
+				gl::ktkRenderGraphStorageInput& storage, ktkRenderDevice* p_device,
 				Core::ktkFileSystem* p_file_system)
 			{
 			}
 
 			void ktkRenderGraphSimplifiedRenderPass::OnSetupOutput(
-				ktkRenderGraphStorageOutput& storage, ktkRenderDevice* p_device)
+				gl::ktkRenderGraphStorageOutput& storage, ktkRenderDevice* p_device)
 			{
 			}
 
@@ -32,7 +32,7 @@ namespace Kotek
 			void ktkRenderGraphSimplifiedRenderPass::OnUpdate() {}
 
 			void ktkRenderGraphSimplifiedRenderPass::OnRender(
-				const ktkRenderGraphSimplifiedNode& node)
+				const gl::ktkRenderGraphSimplifiedNode& node)
 			{
 			}
 

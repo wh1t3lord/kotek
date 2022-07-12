@@ -9,11 +9,15 @@ namespace Kotek
 			class ktkRenderDevice;
 			class ktkRenderResourceManager;
 			class ktkRenderGraphResourceManager;
+		} // namespace gl3_3
+
+		namespace gl
+		{
 			class ktkRenderGraphStorageOutput;
 			class ktkRenderGraphStorageInput;
 			class ktkRenderGraphSimplifiedBuilder;
 			class ktkRenderGraphSimplifiedNode;
-		} // namespace gl3_3
+		} // namespace gl
 	}     // namespace Render
 
 	namespace Core
@@ -36,16 +40,19 @@ namespace Kotek
 				ktkRenderGraphSimplifiedRenderPass(void);
 				virtual ~ktkRenderGraphSimplifiedRenderPass(void) = default;
 
-				virtual void OnSetupInput(ktkRenderGraphStorageInput& storage,
+				virtual void OnSetupInput(
+					gl::ktkRenderGraphStorageInput& storage,
 					ktkRenderDevice* p_device,
 					Core::ktkFileSystem* p_file_system);
 
-				virtual void OnSetupOutput(ktkRenderGraphStorageOutput& storage,
+				virtual void OnSetupOutput(
+					gl::ktkRenderGraphStorageOutput& storage,
 					ktkRenderDevice* p_device);
 
 				virtual void OnCreatedResources(void);
 				virtual void OnUpdate();
-				virtual void OnRender(const ktkRenderGraphSimplifiedNode& node);
+				virtual void OnRender(
+					const gl::ktkRenderGraphSimplifiedNode& node);
 
 				/// <summary>
 				/// Don't set it by your own hands, because this method is
@@ -72,6 +79,6 @@ namespace Kotek
 			private:
 				ktk::string m_name;
 			};
-		}
-	} // namespace Render
+		} // namespace gl3_3
+	}     // namespace Render
 } // namespace Kotek

@@ -39,76 +39,64 @@ namespace Kotek
 				kToInputOnly
 			};
 
-			class ktkRenderTextureInfo
+			enum class eShaderLoadingDataType : ktk::enum_base_t
+			{
+				kShaderLoadingDataType_FilePathString,
+				kShaderLoadingDataType_SourceCode_TextString,
+				kShaderLoadingDataType_ByteArrayFile,
+				kShaderLoadingDataType_ByteArrayCompiledSPIRV,
+				kShaderLoadingDataType_NotInitialized = -1
+			};
+
+			enum class eShaderType : ktk::enum_base_t
+			{
+				kShaderType_Vertex,
+				// @ fragment
+				kShaderType_Pixel,
+				kShaderType_Geometry,
+				kShaderType_Compute,
+				kShaderType_Mesh,
+				kShaderType_Task,
+				kShaderType_TessellationControl,
+				kShaderType_TessellationEvaluation,
+				kShaderType_RTX_Generation,
+				kShaderType_RTX_Intersection,
+				kShaderType_RTX_AnyHit,
+				kShaderType_RTX_ClosesHit,
+				kShaderType_RTX_Miss,
+				kShaderType_RTX_Callable,
+
+				kShaderType_Unknown = -1
+			};
+
+			class ktkRenderGraphTextureInfo
 			{
 			public:
-				ktkRenderTextureInfo(void) :
-					m_target{}, m_level{}, m_internalformat{}, m_width{},
-					m_height{}, m_depth{}, m_border{}, m_format{}
-				{
-				}
+				ktkRenderGraphTextureInfo(void);
+				~ktkRenderGraphTextureInfo(void);
 
-				~ktkRenderTextureInfo(void) {}
+				GLenum Get_Target(void) const noexcept;
+				void Set_Target(GLenum value) noexcept;
 
-				GLenum Get_Target(void) const noexcept
-				{
-					return this->m_target;
-				}
+				GLint Get_Level(void) const noexcept;
+				void Set_Level(GLint value) noexcept;
 
-				void Set_Target(GLenum value) noexcept
-				{
-					this->m_target = value;
-				}
+				GLint Get_InternalFormat(void) const noexcept;
 
-				GLint Get_Level(void) const noexcept { return this->m_level; }
+				GLsizei Get_Width(void) const noexcept;
+				void Set_Width(GLsizei value) noexcept;
 
-				void Set_Level(GLint value) noexcept { this->m_level = value; }
+				GLsizei Get_Height(void) const noexcept;
+				void Set_Height(GLsizei value) noexcept;
 
-				GLint Get_InternalFormat(void) const noexcept
-				{
-					return this->m_internalformat;
-				}
+				GLsizei Get_Depth(void) const noexcept;
+				void Set_Depth(GLsizei value) noexcept;
 
-				GLsizei Get_Width(void) const noexcept { return this->m_width; }
+				GLint Get_Border(void) const noexcept;
+				void Set_Border(GLint value) noexcept;
 
-				void Set_Width(GLsizei value) noexcept
-				{
-					this->m_width = value;
-				}
-
-				GLsizei Get_Height(void) const noexcept
-				{
-					return this->m_height;
-				}
-
-				void Set_Height(GLsizei value) noexcept
-				{
-					this->m_height = value;
-				}
-
-				GLsizei Get_Depth(void) const noexcept { return this->m_depth; }
-
-				void Set_Depth(GLsizei value) noexcept
-				{
-					this->m_depth = value;
-				}
-
-				GLint Get_Border(void) const noexcept { return this->m_border; }
-
-				void Set_Border(GLint value) noexcept
-				{
-					this->m_border = value;
-				}
-
-				GLenum Get_Format(void) const noexcept
-				{
-					return this->m_format;
-				}
-
-				void Set_Format(GLenum value) noexcept
-				{
-					this->m_format = value;
-				}
+				GLenum Get_Format(void) const noexcept;
+				void Set_Format(GLenum value) noexcept;
 
 			private:
 				GLenum m_target;
@@ -121,13 +109,40 @@ namespace Kotek
 				GLenum m_format;
 			};
 
-			class ktkRenderBufferInfo
+			class ktkRenderGraphBufferInfo
 			{
 			public:
-				ktkRenderBufferInfo(void) {}
-				~ktkRenderBufferInfo(void) {}
+				ktkRenderGraphBufferInfo(void);
+				~ktkRenderGraphBufferInfo(void);
 
 			private:
+			};
+
+			class ktkRenderGraphShaderTextInfo
+			{
+			public:
+				explicit ktkRenderGraphShaderTextInfo(
+					eShaderLoadingDataType type_loading_data,
+					const ktk::string& path_to_file_or_source_code_string);
+
+				explicit ktkRenderGraphShaderTextInfo(
+					eShaderLoadingDataType type_loading_data, void* p_data);
+
+				ktkRenderGraphShaderTextInfo(void);
+
+				~ktkRenderGraphShaderTextInfo(void);
+
+				eShaderLoadingDataType Get_Type(void) const noexcept;
+				void Set_Type(eShaderLoadingDataType type) noexcept;
+
+				const ktk::variant<void*, ktk::string>& Get_Data(
+					void) const noexcept;
+				void Set_Data(
+					const ktk::variant<void*, ktk::string>& data) noexcept;
+
+			private:
+				eShaderLoadingDataType m_type;
+				ktk::variant<void*, ktk::string> m_data;
 			};
 		} // namespace gl
 	}     // namespace Render

@@ -8,6 +8,12 @@ namespace Kotek
 	{
 		class ktkMainManager;
 	}
+
+	namespace gl3_3
+	{
+		class ktkRenderDevice;
+		class ktkRenderResourceManager;
+	} // namespace gl3_3
 } // namespace Kotek
 
 namespace Kotek
@@ -25,13 +31,14 @@ namespace Kotek
 					Core::ktkMainManager& main_manager);
 				~ktkRenderGraphSimplifiedResourceManager(void);
 
-				void Initialize(eRenderGraphBuilderType type_of_framebuffer,
-					eRenderGraphBuilderPipelineRenderingType
+				void Initialize(gl::eRenderGraphBuilderType type_of_framebuffer,
+					gl::eRenderGraphBuilderPipelineRenderingType
 						type_videocard_pipeline);
 				void Shutdown(void);
 
 			private:
-
+				ktkRenderDevice* m_p_render_device;
+				ktkRenderResourceManager* m_p_render_resource_manager;
 			};
 		} // namespace gl3_3
 	}     // namespace Render
