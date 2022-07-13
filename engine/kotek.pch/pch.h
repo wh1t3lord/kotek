@@ -2,6 +2,9 @@
 
 #include <kotek.core/include/kotek_core.h>
 
+// TODO: add support for shared files from any project (except the Core of
+// course) like kotek.render.shared
+
 #pragma region UI
 
 #pragma region ImGui
