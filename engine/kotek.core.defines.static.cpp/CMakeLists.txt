@@ -25,6 +25,26 @@ else()
 	set(KOTEK_STD_LIBRARY_NAME "Standard library")
 endif()
 
+if ("${KOTEK_HIDE_CPP_DISABLE_ALL_WARNINGS_PREPROCESSOR}" STREQUAL "ON")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_HIDE_DISABLE_WARNINGS_PREPROCESSOR)
+endif()
+
+if ("${KOTEK_HIDE_CPP_KEYWORD_PREPROCESSOR}" STREQUAL "ON")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_HIDE_CPP_KEYWORD_PREPROCESSOR)
+endif()
+
+if ("${KOTEK_CPP_KEYWORD_NOEXCEPT}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_NOEXCEPT "noexcept")
+endif()
+
+if ("${KOTEK_CPP_KEYWORD_INLINE}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_INLINE "inline")
+endif()
+
+if ("${KOTEK_CPP_KEYWORD_CONSTEXPR}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_CONSTEXPR "constexpr")
+endif()
+
 message("[Engine]: standard library is ${KOTEK_STD_LIBRARY_NAME}")
 
 if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
@@ -63,6 +83,47 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 		#endif
 
 		#define KOTEK_USE_STD_LIBRARY_NAME ${KOTEK_STD_LIBRARY_NAME}
+	")
+
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
+	#ifndef KOTEK_HIDE_CPP_DISABLE_ALL_WARNINGS_PREPROCESSOR
+		#ifdef _WIN32
+			#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH #pragma warning(push, 0)
+		#elif __clang__
+			#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH #pragma clang diagnostic push \
+			#pragma clang diagnostic ignored \"-Wall\" \
+			#pragma clang diagnostic ignored \"-Wextra\"
+		#elif __GNUC__
+			#error Not implemented for GCC
+		#else
+			#error Unknown compiler send the issue to authors!
+		#endif
+
+		#ifdef _WIN32
+			#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP #pragma warning(pop)
+		#elif __clang__
+			#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP #pragma clang diagnostic pop
+		#elif __GNUC__
+			#error Not implemented for GCC
+		#else
+			#error Unknown compiler send the issue to authors!
+		#endif
+	#else
+		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH
+		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP
+	#endif
+	")
+
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
+	#ifndef KOTEK_HIDE_CPP_KEYWORD_PREPROCESSOR
+		#define KOTEK_CPP_KEYWORD_CONSTEXPR ${KOTEK_CPP_KEYWORD_CONSTEXPR}
+		#define KOTEK_CPP_KEYWORD_INLINE ${KOTEK_CPP_KEYWORD_INLINE}
+		#define KOTEK_CPP_KEYWORD_NOEXCEPT ${KOTEK_CPP_KEYWORD_NOEXCEPT} 
+	#else
+		#define KOTEK_CPP_KEYWORD_CONSTEXPR
+		#define KOTEK_CPP_KEYWORD_INLINE
+		#define KOTEK_CPP_KEYWORD_NOEXCEPT
+	#endif
 	")
 else()
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")

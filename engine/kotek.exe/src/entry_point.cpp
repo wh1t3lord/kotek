@@ -51,10 +51,13 @@
  *  - @ref doxygen_standards_about_ui_frameworks
  *  - @ref doxygen_standards_about_engine_side
  *  - @ref doxygen_standards_about_user_side
+ *   - @ref doxygen_standards_about_user_dll
+ *   - @ref doxygen_standards_about_user_callback_functions
  *  - @ref doxygen_standards_about_scripting
  *  - @ref doxygen_standards_about_plugins
  *  - @ref doxygen_standards_about_dependencies
  *  - @ref doxygen_standards_about_project_creation
+ *  - @ref doxygen_standards_about_cmake_project_flags
  * - @ref doxygen_just_for_reading
  *  - @ref doxygen_ideas_for_implementation
  *  - @ref doxygen_philosophy_of_development
