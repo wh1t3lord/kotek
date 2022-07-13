@@ -6,8 +6,16 @@
 
 #pragma region ImGui
 #include <kotek.ui.imgui/include/imgui.h>
-#include <kotek.ui.imgui/include/imgui_impl_opengl3.h>
-#include <kotek.ui.imgui/include/imgui_impl_vulkan.h>
+
+#ifdef KOTEK_USE_OPENGL
+	#if (KOTEK_USE_OPENGL_MODERN_VERSION > 2)
+		#include <kotek.ui.imgui/include/imgui_impl_opengl3.h>
+	#endif
+#endif
+
+#ifdef KOTEK_USE_VULKAN
+	#include <kotek.ui.imgui/include/imgui_impl_vulkan.h>
+#endif
 
 #ifdef KOTEK_PLATFORM_WINDOWS
 	#ifdef KOTEK_USE_DIRECTX
@@ -29,9 +37,11 @@
 	#include <kotek.ui.imgui/include/imgui_impl_win32.h>
 #endif
 
+// TODO: add for SDL
 #ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
 	#include <kotek.ui.imgui/include/imgui_impl_glfw.h>
 #else
+	#error Native inputs didn't implement so possibly only through users with pull requests
 // TODO: imgui doesn't have any native support for linux and other system, be
 // careful here
 #endif
