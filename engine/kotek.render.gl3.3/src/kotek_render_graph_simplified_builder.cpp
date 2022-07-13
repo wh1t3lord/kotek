@@ -22,8 +22,8 @@ namespace Kotek
 			void ktkRenderGraphSimplifiedBuilder::Initialize(
 				ktkRenderGraphSimplifiedResourceManager* p_resource_manager,
 				const ktk::string& backbuffer_name,
-				const eRenderGraphBuilderType& render_graph_type_id,
-				const eRenderGraphBuilderPipelineRenderingType&
+				const gl::eRenderGraphBuilderType& render_graph_type_id,
+				const gl::eRenderGraphBuilderPipelineRenderingType&
 					rendering_pipeline_type)
 			{
 				KOTEK_ASSERT(p_resource_manager,
@@ -57,14 +57,14 @@ namespace Kotek
 				return this->m_backbuffer_name;
 			}
 
-			eRenderGraphBuilderType
+			gl::eRenderGraphBuilderType
 			ktkRenderGraphSimplifiedBuilder::GetRenderGraphBuilderType(
 				void) const noexcept
 			{
 				return this->m_render_graph_type;
 			}
 
-			eRenderGraphBuilderPipelineRenderingType
+			gl::eRenderGraphBuilderPipelineRenderingType
 			ktkRenderGraphSimplifiedBuilder::
 				GetRenderGraphPipelineRenderingType(void) const noexcept
 			{

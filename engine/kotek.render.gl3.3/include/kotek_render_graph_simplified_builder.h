@@ -12,8 +12,8 @@ namespace Kotek
 			class ktkRenderResourceManager;
 			class ktkRenderGraphSimplifiedResourceManager;
 			class ktkRenderGraphSimplifiedRenderPass;
-		}
-	} // namespace Render
+		} // namespace gl3_3
+	}     // namespace Render
 
 	namespace Core
 	{
@@ -35,22 +35,25 @@ namespace Kotek
 				ktkRenderGraphSimplifiedBuilder(void) = delete;
 				~ktkRenderGraphSimplifiedBuilder(void);
 
-				ktkRenderGraphSimplifiedBuilder(const ktkRenderGraphSimplifiedBuilder&) = delete;
+				ktkRenderGraphSimplifiedBuilder(
+					const ktkRenderGraphSimplifiedBuilder&) = delete;
 				ktkRenderGraphSimplifiedBuilder& operator=(
 					const ktkRenderGraphSimplifiedBuilder&) = delete;
 
-				ktkRenderGraphSimplifiedBuilder(ktkRenderGraphSimplifiedBuilder&&) = delete;
+				ktkRenderGraphSimplifiedBuilder(
+					ktkRenderGraphSimplifiedBuilder&&) = delete;
 				ktkRenderGraphSimplifiedBuilder& operator=(
 					ktkRenderGraphSimplifiedBuilder&&) = delete;
 
 				void Initialize(
 					ktkRenderGraphSimplifiedResourceManager* p_resource_manager,
 					const ktk::string& backbuffer_name,
-					const eRenderGraphBuilderType& render_graph_type_id =
-						eRenderGraphBuilderType::kRenderBuilderFor_Forward_Only,
-					const eRenderGraphBuilderPipelineRenderingType&
+					const gl::eRenderGraphBuilderType& render_graph_type_id =
+						gl::eRenderGraphBuilderType::
+							kRenderBuilderFor_Forward_Only,
+					const gl::eRenderGraphBuilderPipelineRenderingType&
 						rendering_pipeline_type =
-							eRenderGraphBuilderPipelineRenderingType::
+							gl::eRenderGraphBuilderPipelineRenderingType::
 								kRenderBuilderBasedOnPipeline_Orthodox);
 
 				ktkRenderGraphSimplified Compile(void);
@@ -60,15 +63,15 @@ namespace Kotek
 
 				const ktk::string& GetBackBufferName(void) const noexcept;
 
-				eRenderGraphBuilderType GetRenderGraphBuilderType(
+				gl::eRenderGraphBuilderType GetRenderGraphBuilderType(
 					void) const noexcept;
 
-				eRenderGraphBuilderPipelineRenderingType
+				gl::eRenderGraphBuilderPipelineRenderingType
 				GetRenderGraphPipelineRenderingType(void) const noexcept;
 
 			private:
-				eRenderGraphBuilderType m_render_graph_type;
-				eRenderGraphBuilderPipelineRenderingType
+				gl::eRenderGraphBuilderType m_render_graph_type;
+				gl::eRenderGraphBuilderPipelineRenderingType
 					m_rendering_pipeline_type;
 				ktk::string m_backbuffer_name;
 			};

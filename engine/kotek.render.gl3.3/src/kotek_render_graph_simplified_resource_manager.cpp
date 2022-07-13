@@ -18,12 +18,12 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphSimplifiedResourceManager::Initialize(
-				eRenderGraphBuilderType type_of_framebuffer,
-				eRenderGraphBuilderPipelineRenderingType
+				gl::eRenderGraphBuilderType type_of_framebuffer,
+				gl::eRenderGraphBuilderPipelineRenderingType
 					type_videocard_pipeline)
 			{
 				if (type_of_framebuffer ==
-					eRenderGraphBuilderType::kRenderBuilderFor_Forward_Only)
+					gl::eRenderGraphBuilderType::kRenderBuilderFor_Forward_Only)
 				{
 				}
 				else

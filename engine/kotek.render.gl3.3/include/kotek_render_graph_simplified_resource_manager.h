@@ -9,11 +9,14 @@ namespace Kotek
 		class ktkMainManager;
 	}
 
-	namespace gl3_3
+	namespace Render
 	{
-		class ktkRenderDevice;
-		class ktkRenderResourceManager;
-	} // namespace gl3_3
+		namespace gl3_3
+		{
+			class ktkRenderDevice;
+			class ktkRenderResourceManager;
+		} // namespace gl3_3
+	}     // namespace Render
 } // namespace Kotek
 
 namespace Kotek
