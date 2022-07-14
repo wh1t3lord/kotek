@@ -11,6 +11,8 @@ namespace Kotek
 		{
 			// TODO: сделать выбор рендера
 
+			InitializeModule_Render_Shared();
+
 			bool status{};
 			if (main_manager->Get_EngineConfig()
 					->IsContainsConsoleCommandLineArgument(

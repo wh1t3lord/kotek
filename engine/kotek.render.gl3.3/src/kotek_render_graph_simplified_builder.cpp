@@ -43,7 +43,7 @@ namespace Kotek
 				return ktkRenderGraphSimplified();
 			}
 
-			bool ktkRenderGraphSimplifiedBuilder::RegisterRenderPass(
+			bool ktkRenderGraphSimplifiedBuilder::Register_RenderPass(
 				const ktk::string& render_pass_name,
 				ktkRenderGraphSimplifiedRenderPass* p_pass) noexcept
 			{
@@ -51,14 +51,14 @@ namespace Kotek
 			}
 
 			const ktk::string&
-			ktkRenderGraphSimplifiedBuilder::GetBackBufferName(
+			ktkRenderGraphSimplifiedBuilder::Get_BackBufferName(
 				void) const noexcept
 			{
 				return this->m_backbuffer_name;
 			}
 
 			gl::eRenderGraphBuilderType
-			ktkRenderGraphSimplifiedBuilder::GetRenderGraphBuilderType(
+			ktkRenderGraphSimplifiedBuilder::Get_RenderGraphBuilderType(
 				void) const noexcept
 			{
 				return this->m_render_graph_type;
@@ -66,7 +66,7 @@ namespace Kotek
 
 			gl::eRenderGraphBuilderPipelineRenderingType
 			ktkRenderGraphSimplifiedBuilder::
-				GetRenderGraphPipelineRenderingType(void) const noexcept
+				Get_RenderGraphPipelineRenderingType(void) const noexcept
 			{
 				return this->m_rendering_pipeline_type;
 			}

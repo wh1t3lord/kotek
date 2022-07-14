@@ -134,11 +134,14 @@ endif()
 
 add_subdirectory("engine/kotek.render")
 
+add_subdirectory("engine/kotek.render.shared")
+add_subdirectory("engine/kotek.render.shared.vk")
+add_subdirectory("engine/kotek.render.shared.gl")
+add_subdirectory("engine/kotek.render.shared.dx")
 add_subdirectory("engine/kotek.render.model")
 add_subdirectory("engine/kotek.render.model.assimp")
 
 add_subdirectory("engine/kotek.render.vk")
-
 add_subdirectory("engine/kotek.render.gl3.3")
 add_subdirectory("engine/kotek.render.gl.glad3.3")
 add_subdirectory("engine/kotek.render.gl.glad4.6")

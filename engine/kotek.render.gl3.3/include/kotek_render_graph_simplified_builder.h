@@ -1,7 +1,5 @@
 #pragma once
 
-#include "kotek_render_graph_simplified_types.h"
-
 namespace Kotek
 {
 	namespace Render
@@ -58,16 +56,16 @@ namespace Kotek
 
 				ktkRenderGraphSimplified Compile(void);
 
-				bool RegisterRenderPass(const ktk::string& render_pass_name,
+				bool Register_RenderPass(const ktk::string& render_pass_name,
 					ktkRenderGraphSimplifiedRenderPass* p_pass) noexcept;
 
-				const ktk::string& GetBackBufferName(void) const noexcept;
+				const ktk::string& Get_BackBufferName(void) const noexcept;
 
-				gl::eRenderGraphBuilderType GetRenderGraphBuilderType(
+				gl::eRenderGraphBuilderType Get_RenderGraphBuilderType(
 					void) const noexcept;
 
 				gl::eRenderGraphBuilderPipelineRenderingType
-				GetRenderGraphPipelineRenderingType(void) const noexcept;
+				Get_RenderGraphPipelineRenderingType(void) const noexcept;
 
 			private:
 				gl::eRenderGraphBuilderType m_render_graph_type;

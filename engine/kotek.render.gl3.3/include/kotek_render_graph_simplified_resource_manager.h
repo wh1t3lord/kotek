@@ -1,7 +1,5 @@
 #pragma once
 
-#include "kotek_render_graph_simplified_types.h"
-
 namespace Kotek
 {
 	namespace Core

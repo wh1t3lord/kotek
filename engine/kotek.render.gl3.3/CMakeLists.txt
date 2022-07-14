@@ -13,12 +13,6 @@ find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TY
 set(to_include_render_graph_simplified_files
     "include/kotek_render_graph_simplified.h"
     "src/kotek_render_graph_simplified.cpp"
-    "include/kotek_render_graph_simplified_types.h"
-    "src/kotek_render_graph_simplified_types.cpp"
-    "include/kotek_render_graph_simplified_types_input.h"
-    "src/kotek_render_graph_simplified_types_input.cpp"
-    "src/kotek_render_graph_simplified_types_output.cpp"
-    "include/kotek_render_graph_simplified_types_output.h"
     "include/kotek_render_graph_simplified_render_pass.h"
     "src/kotek_render_graph_simplified_render_pass.cpp"
     "include/kotek_render_graph_simplified_node.h"
