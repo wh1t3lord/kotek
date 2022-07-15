@@ -116,6 +116,7 @@ namespace Kotek
 				~ktkRenderGraphBufferInfo(void);
 
 			private:
+
 			};
 
 			class ktkRenderGraphShaderTextInfo

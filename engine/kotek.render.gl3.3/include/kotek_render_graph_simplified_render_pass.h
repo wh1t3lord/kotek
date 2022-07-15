@@ -41,12 +41,12 @@ namespace Kotek
 				virtual ~ktkRenderGraphSimplifiedRenderPass(void) = default;
 
 				virtual void OnSetupInput(
-					gl::ktkRenderGraphStorageInput& storage,
+					gl::ktkRenderGraphSimplifiedStorageInput& storage,
 					ktkRenderDevice* p_device,
 					Core::ktkFileSystem* p_file_system);
 
 				virtual void OnSetupOutput(
-					gl::ktkRenderGraphStorageOutput& storage,
+					gl::ktkRenderGraphSimplifiedStorageOutput& storage,
 					ktkRenderDevice* p_device);
 
 				virtual void OnCreatedResources(void);
