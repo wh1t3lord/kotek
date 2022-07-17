@@ -3,6 +3,10 @@
 #include "kotek_render_graph_simplified_types.h"
 #include "kotek_render_graph_simplified_types_input.h"
 #include "kotek_render_graph_simplified_types_output.h"
+#include "kotek_render_graph_simplified_render_pass.h"
+#include "kotek_render_graph_simplified_builder.h"
+#include "kotek_render_graph_simplified.h"
+
 
 namespace Kotek
 {
