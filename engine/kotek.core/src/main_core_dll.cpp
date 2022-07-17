@@ -21,6 +21,7 @@ namespace Kotek
 		bool InitializeModule_Core(ktkMainManager* p_manager)
 		{
 			InitializeModule_Core_Main_Manager();
+			InitializeModule_Core_Enum(p_manager);
 			InitializeModule_Core_API(p_manager);
 			InitializeModule_Core_Memory(p_manager);
 			InitializeModule_Core_Log(p_manager);
@@ -53,6 +54,7 @@ namespace Kotek
 
 		bool ShutdownModule_Core(ktkMainManager* p_manager)
 		{
+			ShutdownModule_Core_Enum(p_manager);
 			ShutdownModule_Core_Math(p_manager);
 			ShutdownModule_Core_API(p_manager);
 			ShutdownModule_Core_Memory(p_manager);

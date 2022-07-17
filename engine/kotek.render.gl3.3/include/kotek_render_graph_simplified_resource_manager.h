@@ -14,6 +14,12 @@ namespace Kotek
 			class ktkRenderDevice;
 			class ktkRenderResourceManager;
 		} // namespace gl3_3
+
+		namespace gl
+		{
+			enum class eRenderGraphBuilderType;
+			enum class eRenderGraphBuilderPipelineRenderingType;
+		} // namespace gl
 	}     // namespace Render
 } // namespace Kotek
 
@@ -23,9 +29,10 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			constexpr const char* kBackBufferName = "KOTEK_BACKBUFFER_GL_NAME";
+			constexpr const char* kRenderGraphBackBufferName = "KOTEK_BACKBUFFER_GL3_3_NAME";
 
 			class ktkRenderGraphSimplifiedResourceManager
+				: public Core::ktkIRenderGraphResourceManager
 			{
 			public:
 				ktkRenderGraphSimplifiedResourceManager(

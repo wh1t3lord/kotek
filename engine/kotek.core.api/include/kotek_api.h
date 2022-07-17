@@ -2,6 +2,7 @@
 
 #include "kotek_api_resource_manager.h"
 #include "kotek_sdk_ui_element.h"
+#include <kotek.core.enum/include/kotek_core_enum.h>
 #include <kotek.core.types.numerics/include/kotek_core_types_numerics.h>
 #include <kotek.core.containers.shared_ptr/include/kotek_core_containers_shared_ptr.h>
 #include <kotek.core.containers.any/include/kotek_core_containers_any.h>
@@ -85,6 +86,15 @@ namespace Kotek
 				ktkIRenderSwapchain* p_raw_swapchain) = 0;
 		};
 
+		class ktkIRenderGraphResourceManager
+		{
+		public:
+			virtual ~ktkIRenderGraphResourceManager(void) {}
+
+ 
+			virtual void Shutdown(void) = 0;
+		};
+
 		class kotek_i_render_imgui
 		{
 		public:
@@ -114,21 +124,6 @@ namespace Kotek
 			virtual void Shutdown(void) = 0;
 			virtual void Resize(void) = 0;
 			virtual ktk::string GetName(void) const noexcept = 0;
-		};
-
-		// TODO: add helper namespace for translating this enum
-		enum class eFolderIndex : int
-		{
-			kFolderIndex_Root,
-			kFolderIndex_Gamedata,
-			kFolderIndex_Configs,
-			kFolderIndex_Scripts,
-			kFolderIndex_Textures,
-			kFolderIndex_Shaders,
-			kFolderIndex_Models,
-			kFolderIndex_Sound,
-			kFolderIndex_UserTests,
-			kFolderIndex_UserData
 		};
 
 		class ktkIFileSystem
@@ -195,18 +190,6 @@ namespace Kotek
 			virtual void* GetRenderResourceManager(void) const noexcept = 0;
 			virtual void* CreateSurface(ktkMainManager* p_main_manager,
 				void* p_instance, const void* p_callbacks) = 0;
-		};
-
-		enum class eResourceLoadingType : ktk::enum_base_t
-		{
-			kText,
-			kTexture,
-			kModel,
-			kSound,
-			kVideo,
-			kDLL,
-			kAutoDetect,
-			kUnknown = -1
 		};
 
 		class ktkIResourceLoader
@@ -321,22 +304,6 @@ namespace Kotek
 
 		protected:
 			ktkIFileSystem* m_p_manager_filesystem;
-		};
-
-		enum class eResourceLoadingPolicy : ktk::enum_base_t
-		{
-			kAsync,
-			kSync
-		};
-
-		enum class eResourceCachingPolicy : ktk::enum_base_t
-		{
-			// Returns constructed object
-			kCache,
-
-			// TODO: think about it and do we need really implement this?
-			// Using temporary instances that resource manager has
-			kWithoutCache
 		};
 
 		class ktkLoadingRequest
@@ -488,40 +455,6 @@ namespace Kotek
 			virtual ~ktkIProfilerGPU(void) {}
 			virtual void Initialize(void) = 0;
 			virtual void Shutdown(void) = 0;
-		};
-
-		enum class eEngineFeature : ktk::enum_base_t
-		{
-			kEngine_Window_Windowed,
-			kEngine_Window_Borderless,
-			kEngine_Window_FullScreen,
-
-			kEngine_Render_Feature_MSAA,
-			kEngine_Render_Feature_VSYNC,
-
-			// don't use, internal usage only
-			kEngine_Render_Renderer_DirectX,
-
-			kEngine_Render_Renderer_DirectX_7,
-			kEngine_Render_Renderer_DirectX_8,
-			kEngine_Render_Renderer_DirectX_9,
-			kEngine_Render_Renderer_DirectX_10,
-			kEngine_Render_Renderer_DirectX_11,
-			kEngine_Render_Renderer_DirectX_12,
-
-			// don't use, internal usage only
-			kEngine_Render_Renderer_OpenGL,
-			
-			kEngine_Render_Renderer_OpenGL1_0,
-			kEngine_Render_Renderer_OpenGL2_0,
-			kEngine_Render_Renderer_OpenGL3_3,
-			kEngine_Render_Renderer_OpenGL4_6,
-			
-			kEngine_Render_Renderer_Vulkan,
-			
-			kEngine_Render_Renderer_Software,
-
-			kEngine_Feature_Unknown = -1
 		};
 
 		class ktkIEngineConfig

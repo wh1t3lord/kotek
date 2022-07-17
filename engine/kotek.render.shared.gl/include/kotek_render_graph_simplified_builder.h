@@ -2,15 +2,22 @@
 
 namespace Kotek
 {
+	namespace Core
+	{
+		class ktkIRenderResourceManager;
+		class ktkIRenderGraphResourceManager;
+	} // namespace Core
+
 	namespace Render
 	{
-		namespace gl3_3
+		namespace gl
 		{
 			class ktkRenderGraphSimplified;
-			class ktkRenderResourceManager;
-			class ktkRenderGraphSimplifiedResourceManager;
 			class ktkRenderGraphSimplifiedRenderPass;
-		} // namespace gl3_3
+
+			enum class eRenderGraphBuilderType;
+			enum class eRenderGraphBuilderPipelineRenderingType;
+		} // namespace gl
 	}     // namespace Render
 
 	namespace Core
@@ -23,7 +30,7 @@ namespace Kotek
 {
 	namespace Render
 	{
-		namespace gl3_3
+		namespace gl
 		{
 			class ktkRenderGraphSimplifiedBuilder
 			{
@@ -44,15 +51,11 @@ namespace Kotek
 					ktkRenderGraphSimplifiedBuilder&&) = delete;
 
 				void Initialize(
-					ktkRenderGraphSimplifiedResourceManager* p_resource_manager,
+					Core::ktkIRenderGraphResourceManager* p_resource_manager,
 					const ktk::string& backbuffer_name,
-					const gl::eRenderGraphBuilderType& render_graph_type_id =
-						gl::eRenderGraphBuilderType::
-							kRenderBuilderFor_Forward_Only,
-					const gl::eRenderGraphBuilderPipelineRenderingType&
-						rendering_pipeline_type =
-							gl::eRenderGraphBuilderPipelineRenderingType::
-								kRenderBuilderBasedOnPipeline_Orthodox);
+					const eRenderGraphBuilderType& render_graph_type_id,
+					const eRenderGraphBuilderPipelineRenderingType&
+						rendering_pipeline_type);
 
 				ktkRenderGraphSimplified Compile(void);
 
@@ -61,18 +64,18 @@ namespace Kotek
 
 				const ktk::string& Get_BackBufferName(void) const noexcept;
 
-				gl::eRenderGraphBuilderType Get_RenderGraphBuilderType(
+				eRenderGraphBuilderType Get_RenderGraphBuilderType(
 					void) const noexcept;
 
-				gl::eRenderGraphBuilderPipelineRenderingType
+				eRenderGraphBuilderPipelineRenderingType
 				Get_RenderGraphPipelineRenderingType(void) const noexcept;
 
 			private:
-				gl::eRenderGraphBuilderType m_render_graph_type;
-				gl::eRenderGraphBuilderPipelineRenderingType
+				eRenderGraphBuilderType m_render_graph_type;
+				eRenderGraphBuilderPipelineRenderingType
 					m_rendering_pipeline_type;
 				ktk::string m_backbuffer_name;
 			};
-		} // namespace gl3_3
+		} // namespace gl
 	}     // namespace Render
 } // namespace Kotek

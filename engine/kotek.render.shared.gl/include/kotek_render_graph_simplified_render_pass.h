@@ -2,15 +2,15 @@
 
 namespace Kotek
 {
+	namespace Core
+	{
+		class ktkIRenderDevice;
+		class ktkIRenderResourceManager;
+		class ktkIRenderGraphResourceManager;
+	} // namespace Core
+
 	namespace Render
 	{
-		namespace gl3_3
-		{
-			class ktkRenderDevice;
-			class ktkRenderResourceManager;
-			class ktkRenderGraphResourceManager;
-		} // namespace gl3_3
-
 		namespace gl
 		{
 			class ktkRenderGraphStorageOutput;
@@ -30,7 +30,7 @@ namespace Kotek
 {
 	namespace Render
 	{
-		namespace gl3_3
+		namespace gl
 		{
 			class ktkRenderGraphSimplifiedRenderPass
 			{
@@ -42,12 +42,12 @@ namespace Kotek
 
 				virtual void OnSetupInput(
 					gl::ktkRenderGraphSimplifiedStorageInput& storage,
-					ktkRenderDevice* p_device,
+					Core::ktkIRenderDevice* p_device,
 					Core::ktkFileSystem* p_file_system);
 
 				virtual void OnSetupOutput(
 					gl::ktkRenderGraphSimplifiedStorageOutput& storage,
-					ktkRenderDevice* p_device);
+					Core::ktkIRenderDevice* p_device);
 
 				virtual void OnCreatedResources(void);
 				virtual void OnUpdate();
@@ -68,17 +68,19 @@ namespace Kotek
 				const ktk::string& GetName(void) const noexcept;
 
 			private:
-				void Initialize(ktkRenderResourceManager* p_manager_resource,
-					ktkRenderGraphResourceManager*
+				void Initialize(
+					Core::ktkIRenderResourceManager* p_manager_resource,
+					Core::ktkIRenderGraphResourceManager*
 						p_manager_resource_graph) noexcept;
 
 			protected:
-				ktkRenderResourceManager* m_p_manager_resource;
-				ktkRenderGraphResourceManager* m_p_manager_resource_graph;
+				Core::ktkIRenderResourceManager* m_p_manager_resource;
+				Core::ktkIRenderGraphResourceManager*
+					m_p_manager_resource_graph;
 
 			private:
 				ktk::string m_name;
 			};
-		} // namespace gl3_3
+		} // namespace gl
 	}     // namespace Render
 } // namespace Kotek

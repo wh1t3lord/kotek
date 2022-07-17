@@ -31,6 +31,7 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC Boost::headers Boost::json Boost::unit_test_framework Boost::filesystem)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers)

@@ -11,14 +11,8 @@ find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
 
 set(to_include_render_graph_simplified_files
-    "include/kotek_render_graph_simplified.h"
-    "src/kotek_render_graph_simplified.cpp"
-    "include/kotek_render_graph_simplified_render_pass.h"
-    "src/kotek_render_graph_simplified_render_pass.cpp"
     "include/kotek_render_graph_simplified_node.h"
     "src/kotek_render_graph_simplified_node.cpp"
-    "include/kotek_render_graph_simplified_builder.h"
-    "src/kotek_render_graph_simplified_builder.cpp"
     "include/kotek_render_graph_simplified_resource_manager.h"
     "src/kotek_render_graph_simplified_resource_manager.cpp")
 

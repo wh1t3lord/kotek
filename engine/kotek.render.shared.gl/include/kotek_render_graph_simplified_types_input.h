@@ -31,7 +31,7 @@ namespace Kotek
 
 			private:
 				ktk::unordered_map<ktk::string,
-					ktk::unordered_map<gl::eShaderType,
+					ktk::unordered_map<eShaderType,
 						gl::ktkRenderGraphShaderTextInfo>>
 					m_input_shaders;
 

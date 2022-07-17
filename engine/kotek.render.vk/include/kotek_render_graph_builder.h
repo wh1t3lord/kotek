@@ -45,6 +45,8 @@ namespace Kotek
 				ktkRenderGraphBuilder& operator=(
 					ktkRenderGraphBuilder&&) = delete;
 
+				// TODO: delete default arguments see gl implementation and
+				// initialize method
 				void Initialize(
 					ktkRenderGraphResourceManager* p_resource_manager,
 					const ktk::string& backbuffer_name,

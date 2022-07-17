@@ -43,4 +43,6 @@ add_library(${PROJECT_NAME} STATIC
 	${to_include}
 	"src/main_ui_imgui_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)

@@ -1,5 +1,4 @@
 #include "../include/kotek_render_graph_simplified_render_pass.h"
-#include "../include/kotek_render_graph_simplified_resource_manager.h"
 #include "../include/kotek_render_graph_simplified_types_input.h"
 #include "../include/kotek_render_graph_simplified_types_output.h"
 
@@ -7,7 +6,7 @@ namespace Kotek
 {
 	namespace Render
 	{
-		namespace gl3_3
+		namespace gl
 		{
 			ktkRenderGraphSimplifiedRenderPass::
 				ktkRenderGraphSimplifiedRenderPass(void) :
@@ -17,13 +16,15 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphSimplifiedRenderPass::OnSetupInput(
-				gl::ktkRenderGraphStorageInput& storage, ktkRenderDevice* p_device,
+				gl::ktkRenderGraphSimplifiedStorageInput& storage,
+				Core::ktkIRenderDevice* p_device,
 				Core::ktkFileSystem* p_file_system)
 			{
 			}
 
 			void ktkRenderGraphSimplifiedRenderPass::OnSetupOutput(
-				gl::ktkRenderGraphStorageOutput& storage, ktkRenderDevice* p_device)
+				gl::ktkRenderGraphSimplifiedStorageOutput& storage,
+				Core::ktkIRenderDevice* p_device)
 			{
 			}
 
@@ -54,8 +55,8 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphSimplifiedRenderPass::Initialize(
-				ktkRenderResourceManager* p_manager_resource,
-				ktkRenderGraphResourceManager*
+				Core::ktkIRenderResourceManager* p_manager_resource,
+				Core::ktkIRenderGraphResourceManager*
 					p_manager_resource_graph) noexcept
 			{
 				KOTEK_ASSERT(p_manager_resource,
@@ -67,6 +68,6 @@ namespace Kotek
 				this->m_p_manager_resource = p_manager_resource;
 				this->m_p_manager_resource_graph = p_manager_resource_graph;
 			}
-		} // namespace gl3_3
+		} // namespace gl
 	}     // namespace Render
 } // namespace Kotek

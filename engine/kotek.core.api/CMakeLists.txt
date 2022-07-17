@@ -5,10 +5,6 @@ project(kotek.core.api VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if (WIN32)
-include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
-endif()
-
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 add_library(${PROJECT_NAME} STATIC 
@@ -17,6 +13,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_sdk_ui_element.h"
 )
 
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.shared_ptr)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.any)

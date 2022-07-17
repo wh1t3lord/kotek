@@ -4,13 +4,13 @@ namespace Kotek
 {
 	namespace Render
 	{
-		namespace gl3_3
+		namespace gl
 		{
 			ktkRenderGraphSimplified::ktkRenderGraphSimplified(void) {}
 			ktkRenderGraphSimplified::~ktkRenderGraphSimplified(void) {}
 
 			void ktkRenderGraphSimplified::Initialize(void) {}
 			void ktkRenderGraphSimplified::Shutdown(void) {}
-		}
-	} // namespace Render
+		} // namespace gl
+	}     // namespace Render
 } // namespace Kotek

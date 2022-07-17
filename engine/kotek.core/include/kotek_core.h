@@ -1,5 +1,6 @@
 #pragma once
 
+#include <kotek.core.enum/include/kotek_core_enum.h>
 #include <kotek.core.defines/include/kotek_core_defines.h>
 #include <kotek.core.math/include/kotek_core_math.h>
 #include <kotek.core.memory/include/kotek_core_memory.h>

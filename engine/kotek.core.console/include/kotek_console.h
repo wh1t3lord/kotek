@@ -23,17 +23,6 @@ namespace Kotek
 
 	namespace Core
 	{
-		enum class ktkConsoleCommandIndex : ktk::enum_base_t
-		{
-			// (int width, int height)
-			kConsoleCommand_Resize,
-
-			kConsoleCommand_App_Close,
-			kConsoleCommand_App_Hide,
-			kConsoleCommand_App_Show,
-			kConsoleCommand_Render_UploadAllResourcesToGPU
-		};
-
 		class ktkConsole : public ktkIConsole
 		{
 		public:
