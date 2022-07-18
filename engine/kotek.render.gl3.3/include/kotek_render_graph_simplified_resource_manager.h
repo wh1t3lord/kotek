@@ -14,12 +14,6 @@ namespace Kotek
 			class ktkRenderDevice;
 			class ktkRenderResourceManager;
 		} // namespace gl3_3
-
-		namespace gl
-		{
-			enum class eRenderGraphBuilderType;
-			enum class eRenderGraphBuilderPipelineRenderingType;
-		} // namespace gl
 	}     // namespace Render
 } // namespace Kotek
 

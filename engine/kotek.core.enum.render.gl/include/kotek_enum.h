@@ -50,6 +50,9 @@ namespace Kotek
 				kShaderLoadingDataType_NotInitialized = -1
 			};
 
+			// TODO: replace all old shader_type_t enums and use one global for
+			// every API but from appropriate shared like you can't use
+			// eShaderType from gl in vk
 			enum class eShaderType : ktk::enum_base_t
 			{
 				kShaderType_Vertex,

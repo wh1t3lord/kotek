@@ -16,6 +16,7 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
+			// TODO: remove not supported shaders like RTX...
 			enum class shader_type_t : ktk::enum_base_t
 			{
 				kShaderType_Vertex,
@@ -37,6 +38,9 @@ namespace Kotek
 				kShaderType_Unknown = -1
 			};
 
+			// TODO: remove it and use from shared version, just create logical
+			// if for detecting unsupported flags, like in really old gls you
+			// can't use RTX or even juts in gl
 			enum class shader_loading_data_type_t : ktk::enum_base_t
 			{
 				kShaderLoadingDataType_FilePathString,
@@ -93,9 +97,10 @@ namespace Kotek
 				void Initialize(void);
 				void Shutdown(void);
 
+				shader_module_t LoadShader(const ktk::filesystem::path& path,
+					shader_type_t type) noexcept;
 				shader_module_t LoadShader(
-					const ktk::filesystem::path& path, shader_type_t type) noexcept;
-				shader_module_t LoadShader(const ktk::filesystem::path& path) noexcept;
+					const ktk::filesystem::path& path) noexcept;
 				shader_module_t LoadShaderAsString(
 					const ktk::string& code_as_string,
 					shader_type_t type) noexcept;
