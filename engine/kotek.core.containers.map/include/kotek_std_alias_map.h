@@ -5,8 +5,9 @@
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 	#include <boost/container/map.hpp>
-#else
+#elif defined(KOTEK_USE_STD_LIBRARY)
 	#include <map>
+#else
 #endif
 
 namespace Kotek
@@ -17,10 +18,11 @@ namespace Kotek
 		template <class K, class V, class P = std::less<K>,
 			typename allocator = mi_stl_allocator<std::pair<const K, V>>>
 		using map = boost::container::map<K, V, P, allocator>;
-#else
+#elif defined(KOTEK_USE_STD_LIBRARY)
 		template <class K, class V, class P = std::less<K>,
 			typename allocator = mi_stl_allocator<std::pair<const K, V>>>
 		using map = std::map<K, V, P, allocator>;
+#else
 #endif
 	} // namespace ktk
 } // namespace Kotek

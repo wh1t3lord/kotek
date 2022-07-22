@@ -1,12 +1,18 @@
 #pragma once
 
+#include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 #include <kotek.core.types.char/include/kotek_core_types_char.h>
-#include <fstream>
+
+#ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
+	#include <fstream>
+#else
+#endif
 
 namespace Kotek
 {
 	namespace ktk
 	{
+#ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 		using ofstream = std::basic_ofstream<tchar, std::char_traits<tchar>>;
 		using ofstream_legacy =
 			std::basic_ofstream<char, std::char_traits<char>>;
@@ -24,5 +30,7 @@ namespace Kotek
 			std::ostreambuf_iterator<tchar, std::char_traits<tchar>>;
 		using ostreambuf_iterator_legacy =
 			std::ostreambuf_iterator<char, std::char_traits<char>>;
+#else
+#endif
 	} // namespace ktk
 } // namespace Kotek

@@ -10,4 +10,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_containers_io.h"
 	"src/main_core_containers_io_dll.cpp")
 
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.char)

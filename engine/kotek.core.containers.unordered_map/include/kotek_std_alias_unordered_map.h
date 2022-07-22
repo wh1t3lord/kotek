@@ -5,8 +5,9 @@
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 	#include <boost/unordered_map.hpp>
-#else
+#elif defined(KOTEK_USE_STD_LIBRARY)
 	#include <unordered_map>
+#else
 #endif
 
 namespace Kotek
@@ -18,11 +19,12 @@ namespace Kotek
 			class P = std::equal_to<K>,
 			class A = mi_stl_allocator<std::pair<const K, T>>>
 		using unordered_map = boost::unordered::unordered_map<K, T, H, P, A>;
-#else
+#elif defined(KOTEK_USE_STD_LIBRARY)
 		template <class K, class T, class H = std::hash<K>,
 			class P = std::equal_to<K>,
 			class A = mi_stl_allocator<std::pair<const K, T>>>
 		using unordered_map = std::unordered_map<K, T, H, P, A>;
+#else
 #endif
 	} // namespace ktk
 } // namespace Kotek

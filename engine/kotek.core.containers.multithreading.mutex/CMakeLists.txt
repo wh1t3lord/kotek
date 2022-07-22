@@ -9,3 +9,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_mutex.h"
 	"include/kotek_core_containers_multithreading_mutex.h"
 	"src/main_core_containers_multithreading_mutex_dll.cpp")
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

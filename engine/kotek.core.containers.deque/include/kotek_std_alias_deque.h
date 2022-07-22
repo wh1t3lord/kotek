@@ -5,6 +5,9 @@
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 	#include <boost/container/deque.hpp>
+#elif defined(KOTEK_USE_STD_LIBRARY)
+	#include <deque>
+#else
 #endif
 
 namespace Kotek
@@ -14,9 +17,10 @@ namespace Kotek
 #ifdef KOTEK_USE_BOOST_LIBRARY
 		template <typename Type, typename Allocator = mi_stl_allocator<Type>>
 		using deque = boost::container::deque<Type, Allocator>;
-#else
+#elif defined(KOTEK_USE_STD_LIBRARY)
 		template <typename Type, typename Allocator = mi_stl_allocator<Type>>
 		using deque = std::deque<Type, Allocator>;
+#else
 #endif
 	} // namespace ktk
 } // namespace Kotek

@@ -9,3 +9,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_unique_ptr.h"
 	"include/kotek_core_containers_unique_ptr.h"
 	"src/main_core_containers_unique_ptr_dll.cpp")
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

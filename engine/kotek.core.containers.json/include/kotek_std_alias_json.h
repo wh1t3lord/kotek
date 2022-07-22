@@ -4,6 +4,9 @@
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 	#include <boost/json.hpp>
+#elif defined(KOTEK_USE_STD_LIBRARY)
+	#error add replacement for boost
+#else
 #endif
 
 namespace Kotek
@@ -12,8 +15,9 @@ namespace Kotek
 	{
 #ifdef KOTEK_USE_BOOST_LIBRARY
 		namespace json = boost::json;
-#else
+#elif defined(KOTEK_USE_STD_LIBRARY)
 	#error TODO add support for nlohmann json
+#else
 #endif
 	} // namespace ktk
 } // namespace Kotek

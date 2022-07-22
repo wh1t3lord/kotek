@@ -6,8 +6,9 @@
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 	#include <boost/unordered_set.hpp>
-#else
+#elif defined(KOTEK_USE_STD_LIBRARY)
 	#include <unordered_set>
+#else
 #endif
 
 namespace Kotek
@@ -20,12 +21,13 @@ namespace Kotek
 			class Allocator = mi_stl_allocator<Key>>
 		using unordered_set =
 			boost::unordered_set<Key, Hash, Predicate, Allocator>;
-#else
+#elif defined(KOTEK_USE_STD_LIBRARY)
 		template <class Key, class Hash = hash<Key>,
 			class Predicate = std::equal_to<Key>,
 			class Allocator = mi_stl_allocator<Key>>
 		using unordered_set =
 			std::unordered_set<Key, Hash, Predicate, Allocator>;
+#else
 #endif
 	} // namespace ktk
 } // namespace Kotek

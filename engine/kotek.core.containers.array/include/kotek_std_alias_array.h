@@ -5,8 +5,9 @@
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 #include <boost/array.hpp>
+#elif defined(KOTEK_USE_STD_LIBRARY)
+	#include <array>
 #else
-#include <array>
 #endif
 
 namespace Kotek
@@ -16,9 +17,10 @@ namespace Kotek
 #ifdef KOTEK_USE_BOOST_LIBRARY
 		template <class T, ktk::size_t N>
 		using array = boost::array<T, N>;
-#else
+#elif defined(KOTEK_USE_STD_LIBRARY)
 		template <class T, ktk::size_t N>
 		using array = std::array<T, N>;
+#else
 #endif
 	} // namespace ktk
 } // namespace Kotek
