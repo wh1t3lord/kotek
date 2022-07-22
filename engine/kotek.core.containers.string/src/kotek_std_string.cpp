@@ -7,13 +7,15 @@ namespace Kotek
 {
 	namespace ktk
 	{
+#ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
+
 		std::size_t hash_value(const string& instance)
 		{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			hash<string_unicode> hasher;
-#else
+	#else
 			hash<string_legacy> hasher;
-#endif
+	#endif
 
 			return hasher(instance.get_as_is());
 		}
@@ -42,6 +44,7 @@ namespace Kotek
 		{
 			return ktk::hash<ktk::string>()(*this);
 		}
+
 		void string::append_path(const ktk::string&
 				your_folder_or_file_name_with_or_without_format) noexcept
 		{
@@ -61,6 +64,7 @@ namespace Kotek
 			this->m_data +=
 				your_folder_or_file_name_with_or_without_format.get_as_is();
 		}
-
+#else
+#endif
 	} // namespace ktk
 } // namespace Kotek

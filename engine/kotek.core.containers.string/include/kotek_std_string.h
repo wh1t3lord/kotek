@@ -12,6 +12,7 @@ namespace Kotek
 {
 	namespace ktk
 	{
+#ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 		// TODO: remove warning warning C4244: 'argument': conversion from
 		// 'const wchar_t' to 'const _Elem', possible loss of data
 		class string
@@ -20,14 +21,14 @@ namespace Kotek
 			string(void) = default;
 			~string(void) = default;
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			template <typename T,
 				std::enable_if_t<std::is_arithmetic<T>::value, bool> = true>
 			string(T number) :
 				m_data(ktk::cast::to_string(std::to_string(number).c_str()))
 			{
 			}
-#else
+	#else
 			template <typename T,
 				std::enable_if_t<std::is_arithmetic<T>::value, bool> = true>
 			string(T number) :
@@ -35,9 +36,9 @@ namespace Kotek
 					ktk::cast::to_legacy_string(std::to_string(number).c_str()))
 			{
 			}
-#endif
+	#endif
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			string(
 				string_unicode::iterator begin, string_unicode::iterator end) :
 				m_data(begin, end)
@@ -49,7 +50,7 @@ namespace Kotek
 				m_data(cbegin, cend)
 			{
 			}
-#endif
+	#endif
 
 			string(string_legacy::iterator begin, string_legacy::iterator end) :
 				m_data(begin, end)
@@ -66,29 +67,29 @@ namespace Kotek
 			{
 				if (p_data != nullptr)
 				{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 					this->m_data = ktk::cast::to_string(p_data);
-#else
+	#else
 					this->m_data = p_data;
-#endif
+	#endif
 				}
 			}
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			string(const ktk::string_legacy& data) :
 				m_data(ktk::cast::to_string(data))
 			{
 			}
-#else
+	#else
 			string(const ktk::string_legacy& data) : m_data(data) {}
-#endif
+	#endif
 
 			string(const std::string& data) :
 				m_data(ktk::cast::to_string(data.c_str()))
 			{
 			}
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			string(const uchar* p_data)
 			{
 				if (p_data != nullptr)
@@ -102,35 +103,35 @@ namespace Kotek
 			string(const std::wstring& data) : m_data(data.begin(), data.end())
 			{
 			}
-#endif
+	#endif
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			string& operator=(const string_unicode& data)
 			{
 				this->m_data = data;
 
 				return *this;
 			}
-#endif
+	#endif
 
 			string& operator=(const string_legacy& data)
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				this->m_data = ktk::cast::to_string(data);
-#else
+	#else
 				this->m_data = data;
-#endif
+	#endif
 
 				return *this;
 			}
 
 			string& operator=(const char* p_data)
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				this->m_data = ktk::cast::to_string(p_data);
-#else
+	#else
 				this->m_data = p_data;
-#endif
+	#endif
 
 				return *this;
 			}
@@ -139,17 +140,17 @@ namespace Kotek
 				std::enable_if_t<std::is_arithmetic<Type>::value, bool> = true>
 			string& operator=(Type number)
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				this->m_data =
 					ktk::cast::to_string(std::to_string(number).c_str());
-#else
+	#else
 				this->m_data = std::to_string(number).c_str();
-#endif
+	#endif
 
 				return *this;
 			}
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			string& operator=(const tchar* p_data)
 			{
 				this->m_data = p_data;
@@ -198,30 +199,30 @@ namespace Kotek
 				return *this;
 			}
 
-#endif
+	#endif
 
 			bool operator==(const string& data) const
 			{
 				return this->get_as_is() == data.get_as_is();
 			}
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			bool operator==(const tchar* p_data)
 			{
 				return this->m_data == p_data;
 			}
-#endif
+	#endif
 
 			bool operator==(const char* p_data)
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				return this->m_data == ktk::cast::to_string(p_data);
-#else
+	#else
 				return this->m_data == p_data;
-#endif
+	#endif
 			}
 
-#pragma region += operators
+	#pragma region += operators
 			string& operator+=(const string& data)
 			{
 				this->m_data += data.get_as_is();
@@ -231,16 +232,16 @@ namespace Kotek
 
 			string& operator+=(const char symbol)
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				this->m_data += ktk::cast::to_string(string_legacy(1, symbol));
-#else
+	#else
 				this->m_data += symbol;
-#endif
+	#endif
 
 				return *this;
 			}
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			string& operator+=(const tchar symbol)
 			{
 				this->m_data += symbol;
@@ -254,35 +255,35 @@ namespace Kotek
 
 				return *this;
 			}
-#endif
+	#endif
 
 			string& operator+=(const string_legacy& data)
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				this->m_data += ktk::cast::to_string(data);
-#else
+	#else
 				this->m_data += data;
-#endif
+	#endif
 
 				return *this;
 			}
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			string& operator+=(const tchar* p_data)
 			{
 				this->m_data += p_data;
 
 				return *this;
 			}
-#endif
+	#endif
 
 			string& operator+=(const char* p_data)
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				this->m_data += ktk::cast::to_string(p_data);
-#else
+	#else
 				this->m_data += p_data;
-#endif
+	#endif
 
 				return *this;
 			}
@@ -291,47 +292,47 @@ namespace Kotek
 				std::enable_if_t<std::is_arithmetic<Type>::value, bool> = true>
 			string& operator+=(Type number)
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				this->m_data +=
 					ktk::cast::to_string(std::to_string(number).c_str());
-#else
+	#else
 				this->m_data += std::to_string(number).c_str();
-#endif
+	#endif
 
 				return *this;
 			}
-#pragma endregion
+	#pragma endregion
 
 			string_legacy get_as_legacy() const noexcept
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				return ktk::cast::to_legacy_string(this->m_data);
-#else
+	#else
 				return this->m_data;
-#endif
+	#endif
 			}
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			const string_unicode& get_as_is() const noexcept
 			{
 				return this->m_data;
 			}
 
 			string_unicode& get_as_is() noexcept { return this->m_data; }
-#else
+	#else
 			const string_legacy& get_as_is() const noexcept
 			{
 				return this->m_data;
 			}
 
 			string_legacy& get_as_is() noexcept { return this->m_data; }
-#endif
+	#endif
 
 			ktk::size_t get_hash(void) const noexcept;
 
 			bool empty(void) const noexcept { return this->m_data.empty(); }
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			string_unicode::iterator begin(void) noexcept
 			{
 				return this->m_data.begin();
@@ -351,7 +352,7 @@ namespace Kotek
 			{
 				return this->m_data.cend();
 			}
-#else
+	#else
 			string_legacy::iterator begin(void) noexcept
 			{
 				return this->m_data.begin();
@@ -372,7 +373,7 @@ namespace Kotek
 				return this->m_data.cend();
 			}
 
-#endif
+	#endif
 
 			template <class _Iter>
 			void assign(_Iter begin, _Iter end)
@@ -380,31 +381,31 @@ namespace Kotek
 				this->m_data.assign(begin, end);
 			}
 
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			operator std::wstring() const
 			{
 				return std::wstring(this->m_data.begin(), this->m_data.end());
 			}
 
 			operator string_unicode() const { return this->m_data; }
-#endif
+	#endif
 
 			operator std::string() const
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				return std::string(this->m_data.begin(), this->m_data.end());
-#else
+	#else
 				return this->m_data;
-#endif
+	#endif
 			}
 
 			operator string_legacy() const
 			{
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 				return ktk::cast::to_legacy_string(this->m_data);
-#else
+	#else
 				return this->m_data;
-#endif
+	#endif
 			}
 
 			template <typename Type,
@@ -414,25 +415,25 @@ namespace Kotek
 				return ktk::lexical_cast<Type>(this->m_data);
 			}
 
-#pragma region UTILITY
+	#pragma region UTILITY
 			void append_path(const ktk::string&
 					your_folder_or_file_name_with_or_without_format) noexcept;
-#pragma endregion
+	#pragma endregion
 
 		public:
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			static constexpr auto npos = string_unicode::npos;
 
-#else
+	#else
 			static constexpr auto npos = string_legacy::npos;
-#endif
+	#endif
 
 		private:
-#ifdef KOTEK_USE_UNICODE
+	#ifdef KOTEK_USE_UNICODE
 			string_unicode m_data;
-#else
+	#else
 			string_legacy m_data;
-#endif
+	#endif
 		};
 
 		std::size_t hash_value(const string& instance);
@@ -441,5 +442,7 @@ namespace Kotek
 		// modify existed string apply operator += not just +
 		ktk::string operator+(const ktk::string& data_left,
 			const ktk::string& data_right) noexcept;
+#else
+#endif
 	} // namespace ktk
 } // namespace Kotek
