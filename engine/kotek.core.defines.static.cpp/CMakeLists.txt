@@ -83,6 +83,10 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 		#endif
 
 		#define KOTEK_USE_STD_LIBRARY_NAME ${KOTEK_STD_LIBRARY_NAME}
+
+		#if defined(KOTEK_USE_BOOST_LIBRARY) || defined(KOTEK_USE_STD_LIBRARY)
+			#define KOTEK_USE_NOT_CUSTOM_LIBRARY
+		#endif
 	")
 
 	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
@@ -90,10 +94,7 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 	#ifdef _WIN32
 		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH _Pragma(\"warning(push,0)\")
 	#elif __clang__
-		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH           \
-			_Pragma(\"clang diagnostic push\")                  \
-				_Pragma(\"clang diagnostic ignored \"-Wall\"\") \
-					_Pragma(\"clang diagnostic ignored \"-Wextra\"\")
+		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH _Pragma(\"clang diagnostic push\") _Pragma(\"clang diagnostic ignored \"-Wall\"\") _Pragma(\"clang diagnostic ignored \"-Wextra\"\")
 	#elif __GNUC__
 		#error Not implemented for GCC
 	#else
@@ -103,8 +104,7 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 	#ifdef _WIN32
 		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP _Pragma(\"warning(pop)\")
 	#elif __clang__
-		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP \
-			_Pragma(\"clang diagnostic pop\")
+		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP _Pragma(\"clang diagnostic pop\")
 	#elif __GNUC__
 		#error Not implemented for GCC
 	#else
