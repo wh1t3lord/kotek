@@ -302,7 +302,7 @@ namespace Kotek
 
 				VmaAllocatorCreateInfo info = {};
 
-				info.vulkanApiVersion = VK_API_VERSION_1_0;
+				info.vulkanApiVersion = KOTEK_USE_VULKAN_VERSION;
 				info.device = p_device;
 				info.instance = p_instance;
 				info.physicalDevice = p_physical_device;
@@ -323,7 +323,7 @@ namespace Kotek
 			{
 				KOTEK_CPU_PROFILE();
 
-				constexpr ktk::uint32_t required_version = VK_API_VERSION_1_1;
+				constexpr ktk::uint32_t required_version = KOTEK_USE_VULKAN_VERSION;
 
 				const ktk::uint32_t user_version = this->GetApiVersion();
 
@@ -343,7 +343,7 @@ namespace Kotek
 				info.pNext = nullptr;
 				info.pApplicationName = "Kotek Engine Application";
 				info.applicationVersion = 1;
-				info.pEngineName = "Kotek Engine";
+				info.pEngineName = "Kotek Framework";
 				info.engineVersion = 1;
 				info.apiVersion = required_version;
 
