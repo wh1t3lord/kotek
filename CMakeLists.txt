@@ -8,7 +8,7 @@ set(KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS ./include/kotek_std_preprocessor
 message("[Engine]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}'")
 
 if (WIN32)
-	if (${CMAKE_SYSTEM_VERSION} EQUAL 10.0)
+	if (NOT ${CMAKE_SYSTEM_VERSION} EQUAL 10.0.22000)
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
 			message("[Engine]: you can't use kotek-engine-deps-win32 because you are on Windows 10")
 			set(KOTEK_DEPS_FOLDER "kotek-engine-deps-win32-vs19")
