@@ -6,13 +6,12 @@ resources:
 
 jobs:
 - job: Windows_VS19_DefaultArguments_Debug
-  workspace:
-    clean: all
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32-vs19\\VulkanSDK\\"
   pool:
     vmImage: windows-2019
-
+    workspace:
+      clean: all
   steps:
   - script: "git config --global --add filter.lfs.required true"
   - script: 'git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"'
@@ -41,13 +40,12 @@ jobs:
       configuration: 'Debug'
 
 - job: Windows_VS19_DefaultArguments_Release
-  workspace:
-    clean: all
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32-vs19\\VulkanSDK\\"
   pool:
     vmImage: windows-2019
-
+    workspace:
+      clean: all
   steps:
   - script: "git config --global --add filter.lfs.required true"
   - script: 'git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"'
@@ -76,13 +74,12 @@ jobs:
       configuration: 'Release'
 
 - job: Windows_VS19_GLM_Debug
-  workspace:
-    clean: all
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32-vs19\\VulkanSDK\\"
   pool:
     vmImage: windows-2019
-
+    workspace:
+      clean: all
   steps:
   - script: "git config --global --add filter.lfs.required true"
   - script: 'git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"'
@@ -111,12 +108,12 @@ jobs:
       configuration: 'Debug'
 
 - job: Windows_VS22_DefaultArguments_Debug
-  workspace:
-    clean: all
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
   pool:
     vmImage: windows-2022
+    workspace:
+      clean: all
   steps:
   - script: "git config --global --add filter.lfs.required true"
   - script: 'git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"'
