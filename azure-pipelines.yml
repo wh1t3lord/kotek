@@ -5,6 +5,10 @@ resources:
       submodules: true
 
 jobs:
+- job: Cleaning
+  workspace:
+    clean: all
+
 - job: Windows_VS19_DefaultArguments_Debug
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32-vs19\\VulkanSDK\\"
