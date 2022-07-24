@@ -10,7 +10,7 @@ message("[Engine]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_
 if (WIN32)
 	if (NOT ${CMAKE_SYSTEM_VERSION} EQUAL 10.0.22000)
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
-			message("[Engine]: you can't use kotek-engine-deps-win32 because you are on Windows 10")
+			message("[Engine]: you can't use kotek-engine-deps-win32 because you are on Windows ${CMAKE_SYSTEM_VERSION}")
 			set(KOTEK_DEPS_FOLDER "kotek-engine-deps-win32-vs19")
 		endif()
 	else()
