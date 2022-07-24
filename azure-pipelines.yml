@@ -5,9 +5,9 @@ resources:
       submodules: true
 
 jobs:
-- job: Windows_MSVC_DefaultArguments_Debug
+- job: Windows_VS19_DefaultArguments_Debug
   variables:
-    VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
+    VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32-vs19\\VulkanSDK\\"
   pool:
     vmImage: windows-2019
 
@@ -19,6 +19,9 @@ jobs:
   - checkout: self
     lfs: true
     submodules: true
+    displayName: Make checkout
+  - script: 'git clone https://gitlab.com/wh1t3lord/kotek-engine-deps-win32-vs19.git'
+    displayName: Cloning appropriate dependency folder for Visual Studio 2019
   - script: mkdir build
     displayName: Make build directory
 
@@ -35,9 +38,9 @@ jobs:
       platform: 'x64'
       configuration: 'Debug'
 
-- job: Windows_MSVC_DefaultArguments_Release
+- job: Windows_VS19_DefaultArguments_Release
   variables:
-    VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
+    VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32-vs19\\VulkanSDK\\"
   pool:
     vmImage: windows-2019
 
@@ -49,6 +52,9 @@ jobs:
   - checkout: self
     lfs: true
     submodules: true
+    displayName: Make checkout
+  - script: 'git clone https://gitlab.com/wh1t3lord/kotek-engine-deps-win32-vs19.git'
+    displayName: Cloning appropriate dependency folder for Visual Studio 2019
   - script: mkdir build
     displayName: Make build directory
 
@@ -65,9 +71,9 @@ jobs:
       platform: 'x64'
       configuration: 'Release'
 
-- job: Windows_MSVC_GLM_Debug
+- job: Windows_VS19_GLM_Debug
   variables:
-    VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
+    VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32-vs19\\VulkanSDK\\"
   pool:
     vmImage: windows-2019
 
@@ -79,6 +85,9 @@ jobs:
   - checkout: self
     lfs: true
     submodules: true
+    displayName: Make checkout
+  - script: 'git clone https://gitlab.com/wh1t3lord/kotek-engine-deps-win32-vs19.git'
+    displayName: Cloning appropriate dependency folder for Visual Studio 2019
   - script: mkdir build
     displayName: Make build directory
 
@@ -88,6 +97,32 @@ jobs:
       cmakeArgs: '-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM ../'
 
 
+  - task: VSBuild@1
+    displayName: 'Build solution kotek.engine.sln'
+    inputs:
+      solution: 'build/kotek.engine.sln'
+      platform: 'x64'
+      configuration: 'Debug'
+
+- job: Windows_VS22_DefaultArguments_Debug
+  variables:
+    VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
+  pool:
+    vmImage: windows-2022
+  steps:
+  - script: "git config --global --add filter.lfs.required true"
+  - script: 'git config --global --add filter.lfs.smudge "git-lfs smudge -- %f"'
+  - script: 'git config --global --add filter.lfs.process "git-lfs filter-process"'
+  - script: 'git config --global --add filter.lfs.clean "git-lfs clean -- %f"'
+  - checkout: self
+    lfs: true
+    submodules: true
+  - script: mkdir build
+    displayName: Make build directory
+  - task: CMake@1
+    displayName: 'Generate Solution Files'
+    inputs:
+      cmakeArgs: '-DCMAKE_BUILD_TYPE=Debug ../'
   - task: VSBuild@1
     displayName: 'Build solution kotek.engine.sln'
     inputs:
