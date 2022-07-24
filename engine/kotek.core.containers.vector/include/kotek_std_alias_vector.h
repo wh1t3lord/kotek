@@ -16,10 +16,10 @@ namespace Kotek
 	{
 #ifdef KOTEK_USE_BOOST_LIBRARY
 		template <typename Type>
-		using vector = boost::container::vector<Type, mi_stl_allocator<Type>>;
+		using vector = boost::container::vector<Type, KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
 		template <typename Type>
-		using vector = std::vector<Type, mi_stl_allocator<Type>>;
+		using vector = std::vector<Type, KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>;
 #else
 #endif
 	} // namespace ktk

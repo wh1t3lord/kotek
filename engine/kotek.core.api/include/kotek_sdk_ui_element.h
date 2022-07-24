@@ -37,7 +37,7 @@ namespace Kotek
 
 			virtual void initialize(void) = 0;
 			virtual void shutdown(void) = 0;
-			virtual void draw(ktkMainManager& main_manager) = 0;
+			virtual void Draw(ktkMainManager* p_main_manager) = 0;
 		};
 	} // namespace Core
 } // namespace Kotek

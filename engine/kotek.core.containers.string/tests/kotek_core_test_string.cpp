@@ -203,7 +203,7 @@ namespace Kotek
 			ktk::string instance = "hello_";
 
 			BOOST_REQUIRE(((instance + ktk::string("world")) +
-							ktk::string("kek")) == "hello_worldkek");
+							  ktk::string("kek")) == "hello_worldkek");
 		}
 
 		BOOST_AUTO_TEST_CASE(string_const_ref_global_operator_plus)
@@ -254,8 +254,8 @@ namespace Kotek
 			p_test("hello", KOTEK_TEXT("kek"));
 		}
 
-		/* TODO: move this test case to test of kotek.core.casting.string project
-		BOOST_AUTO_TEST_CASE(string_casting_to_bool) 
+		/* TODO: move this test case to test of kotek.core.casting.string
+		project BOOST_AUTO_TEST_CASE(string_casting_to_bool)
 		{
 			Kotek::ktk::string test = "No";
 

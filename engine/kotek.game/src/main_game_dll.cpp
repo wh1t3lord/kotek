@@ -78,7 +78,8 @@ namespace Kotek
 
 			p_main_manager->Get_EngineConfig()->Set_UserLibrary(
 				path_to_user_dll.c_str());
-			auto* p_user_dll = static_cast<ktk::dll::shared_library*>(p_main_manager->Get_EngineConfig()->Get_UserLibrary());
+			auto* p_user_dll = static_cast<ktk::dll::shared_library*>(
+				p_main_manager->Get_EngineConfig()->Get_UserLibrary());
 
 			p_user_callback_initialize_game_library =
 				p_user_dll->get<ktkUserCallbackInitialize>(

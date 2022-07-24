@@ -20,3 +20,5 @@ if(WIN32)
 	target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/vld/include/")
 	target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/vld/lib/Win64/")
 endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
