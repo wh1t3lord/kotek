@@ -5,11 +5,9 @@ resources:
       submodules: true
 
 jobs:
-- job: Cleaning
+- job: Windows_VS19_DefaultArguments_Debug
   workspace:
     clean: all
-
-- job: Windows_VS19_DefaultArguments_Debug
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32-vs19\\VulkanSDK\\"
   pool:
@@ -43,6 +41,8 @@ jobs:
       configuration: 'Debug'
 
 - job: Windows_VS19_DefaultArguments_Release
+  workspace:
+    clean: all
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32-vs19\\VulkanSDK\\"
   pool:
@@ -76,6 +76,8 @@ jobs:
       configuration: 'Release'
 
 - job: Windows_VS19_GLM_Debug
+  workspace:
+    clean: all
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32-vs19\\VulkanSDK\\"
   pool:
@@ -109,6 +111,8 @@ jobs:
       configuration: 'Debug'
 
 - job: Windows_VS22_DefaultArguments_Debug
+  workspace:
+    clean: all
   variables:
     VULKAN_SDK: "$(Build.SourcesDirectory)\\kotek-engine-deps-win32\\VulkanSDK\\"
   pool:
