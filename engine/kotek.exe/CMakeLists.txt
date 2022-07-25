@@ -29,9 +29,11 @@ if (KOTEK_SDK)
     endif()
 endif()
 
-if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
-     "${PROJECT_SOURCE_DIR}../../../${KOTEK_DEPS_FOLDER}/vld/bin/Win64/" $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+if ("${KOTEK_MEMORY_LEAK_DETECTION}" STREQUAL "ON")
+    if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_directory
+         "${PROJECT_SOURCE_DIR}../../../${KOTEK_DEPS_FOLDER}/vld/bin/Win64/" $<TARGET_FILE_DIR:${PROJECT_NAME}>)
+    endif()
 endif()
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")

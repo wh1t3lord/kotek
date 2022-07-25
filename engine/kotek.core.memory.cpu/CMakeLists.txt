@@ -17,5 +17,12 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc-static)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.vld)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+
+if ("${KOTEK_MEMORY_LEAK_DETECTION}" STREQUAL "ON")
+	if ("${KOTEK_CPP_MEMORY_LEAK_LIBRARY}" STREQUAL "VLD")
+		target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.vld)
+	endif()
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)

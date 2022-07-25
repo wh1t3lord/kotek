@@ -15,10 +15,10 @@ namespace Kotek
 	namespace ktk
 	{
 #ifdef KOTEK_USE_BOOST_LIBRARY
-		template <typename Type, typename Allocator = mi_stl_allocator<Type>>
+		template <typename Type, typename Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>
 		using deque = boost::container::deque<Type, Allocator>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
-		template <typename Type, typename Allocator = mi_stl_allocator<Type>>
+		template <typename Type, typename Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>
 		using deque = std::deque<Type, Allocator>;
 #else
 #endif

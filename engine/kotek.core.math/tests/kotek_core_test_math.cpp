@@ -3,7 +3,6 @@
 #include <kotek.core.defines.static.tests/include/kotek_core_defines_static_tests.h>
 #include <kotek.core.utility/include/kotek_core_utility.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
-
 #include <boost/test/unit_test.hpp>
 
 namespace Kotek

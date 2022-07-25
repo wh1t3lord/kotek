@@ -1,6 +1,5 @@
 #pragma once
 
-#include <kotek.core.memory.vld/include/kotek_core_memory_vld.h>
 #include "kotek_std_memory.h"
 
 namespace Kotek

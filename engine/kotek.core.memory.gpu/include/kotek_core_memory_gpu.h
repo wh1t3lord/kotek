@@ -1,6 +1,11 @@
 #pragma once
 
-#include <kotek.core.memory.vld/include/kotek_core_memory_vld.h>
+#include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
+
+#ifdef KOTEK_USE_MEMORY_LEAK_DETECTION_VLD
+	#include <kotek.core.memory.vld/include/kotek_core_memory_vld.h>
+#endif
+
 #include <kotek.core.memory.gpu.vulkan/include/kotek_core_memory_gpu_vulkan.h>
 
 namespace Kotek

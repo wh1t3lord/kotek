@@ -15,15 +15,19 @@ namespace Kotek
 	namespace ktk
 	{
 #ifdef KOTEK_USE_BOOST_LIBRARY
-		template <class K, class T, class H = boost::hash<K>,
-			class P = std::equal_to<K>,
-			class A = mi_stl_allocator<std::pair<const K, T>>>
-		using unordered_map = boost::unordered::unordered_map<K, T, H, P, A>;
+		template <class Key, class Type, class Hash = boost::hash<Key>,
+			class Predicate = std::equal_to<Key>,
+			class Allocator =
+				KOTEK_USE_MEMORY_ALLOCATOR_CLASS<std::pair<const Key, Type>>>
+		using unordered_map = boost::unordered::unordered_map<Key, Type, Hash,
+			Predicate, Allocator>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
-		template <class K, class T, class H = std::hash<K>,
-			class P = std::equal_to<K>,
-			class A = mi_stl_allocator<std::pair<const K, T>>>
-		using unordered_map = std::unordered_map<K, T, H, P, A>;
+		template <class Key, class Type, class Hash = std::hash<Key>,
+			class Predicate = std::equal_to<Key>,
+			class Allocator =
+				KOTEK_USE_MEMORY_ALLOCATOR_CLASS<std::pair<const Key, Type>>>
+		using unordered_map =
+			std::unordered_map<Key, Type, Hash, Predicate, Allocator>;
 #else
 #endif
 	} // namespace ktk

@@ -162,7 +162,7 @@ namespace Kotek
 			{
 				std::wstring_convert<
 					std::codecvt<char32_t, char, std::mbstate_t>, char32_t,
-					mi_stl_allocator<char32_t>, mi_stl_allocator<char>>
+					KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char32_t>, KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char>>
 					converter;
 
 				auto bytes = converter.to_bytes(p_data);
@@ -175,7 +175,7 @@ namespace Kotek
 			{
 				std::wstring_convert<
 					std::codecvt<char16_t, char, std::mbstate_t>, char16_t,
-					mi_stl_allocator<char16_t>, mi_stl_allocator<char>>
+					KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char16_t>, KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char>>
 					converter;
 
 				auto bytes = converter.to_bytes(p_data);
@@ -189,7 +189,7 @@ namespace Kotek
 			{
 				std::wstring_convert<
 					std::codecvt<char8_t, char, std::mbstate_t>, char8_t,
-					mi_stl_allocator<char8_t>, mi_stl_allocator<char>>
+					KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char8_t>, KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char>>
 					converter;
 
 				auto bytes = converter.to_bytes(p_data);

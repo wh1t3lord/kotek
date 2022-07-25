@@ -9,5 +9,11 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_memory_gpu.h"
 	"src/main_core_memory_gpu_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.vld)
+if ("${KOTEK_MEMORY_LEAK_DETECTION}" STREQUAL "ON")
+	if ("${KOTEK_CPP_MEMORY_LEAK_LIBRARY}" STREQUAL "VLD")
+		target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.vld)
+	endif()
+endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.gpu.vulkan)

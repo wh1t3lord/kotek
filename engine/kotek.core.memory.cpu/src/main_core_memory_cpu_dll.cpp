@@ -1,5 +1,4 @@
 #include "../include/kotek_core_memory_cpu.h"
-#include <mimalloc.h>
 
 namespace Kotek
 {

@@ -5,6 +5,8 @@
 
 #ifdef KOTEK_PLATFORM_WINDOWS
 	#ifdef KOTEK_DEBUG
-		#include <vld.h>
+		#ifdef KOTEK_USE_MEMORY_LEAK_DETECTION_VLD
+			#include <vld.h>
+		#endif
 	#endif
 #endif
