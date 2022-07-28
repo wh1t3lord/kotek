@@ -1,12 +1,10 @@
 #include "../include/kotek_render_graph_simplified_render_pass.h"
-#include "../include/kotek_render_graph_simplified_types_input.h"
-#include "../include/kotek_render_graph_simplified_types_output.h"
 
 namespace Kotek
 {
 	namespace Render
 	{
-		namespace gl
+		namespace gl3_3
 		{
 			ktkRenderGraphSimplifiedRenderPass::
 				ktkRenderGraphSimplifiedRenderPass(void) :
@@ -33,7 +31,7 @@ namespace Kotek
 			void ktkRenderGraphSimplifiedRenderPass::OnUpdate() {}
 
 			void ktkRenderGraphSimplifiedRenderPass::OnRender(
-				const gl::ktkRenderGraphSimplifiedNode& node)
+				const ktkRenderGraphSimplifiedNode& node)
 			{
 			}
 
