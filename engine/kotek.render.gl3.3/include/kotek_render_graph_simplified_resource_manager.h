@@ -35,7 +35,7 @@ namespace Kotek
 
 				void Initialize(gl::eRenderGraphBuilderType type_of_framebuffer,
 					gl::eRenderGraphBuilderPipelineRenderingType
-						type_videocard_pipeline);
+						type_videocard_pipeline) override;
 				void Shutdown(void);
 
 			private:

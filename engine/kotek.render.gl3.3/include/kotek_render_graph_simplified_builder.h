@@ -15,6 +15,8 @@ namespace Kotek
 			class ktkRenderGraphSimplified;
 			class ktkRenderGraphSimplifiedNode;
 			class ktkRenderGraphSimplifiedRenderPass;
+			class ktkRenderGraphSimplifiedResourceManager;
+			class ktkRenderResourceManager;
 		} // namespace gl3_3
 
 		namespace gl
@@ -76,16 +78,32 @@ namespace Kotek
 				Get_RenderGraphPipelineRenderingType(void) const noexcept;
 
 			private:
-				void Compile_Inputs(void) noexcept;
-				void Compile_Outputs(void) noexcept;
+				ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphSimplifiedStorageInput>
+				Compile_Inputs(void) noexcept;
+				ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphSimplifiedStorageOutput>
+				Compile_Outputs(void) noexcept;
 
-				ktk::vector<ktkRenderGraphSimplifiedNode> Analyze(void);
+				ktk::vector<ktkRenderGraphSimplifiedNode> Analyze(
+					const ktk::unordered_map<ktk::string,
+						gl::ktkRenderGraphSimplifiedStorageInput>&
+						storage_inputs,
+					const ktk::unordered_map<ktk::string,
+						gl::ktkRenderGraphSimplifiedStorageOutput>&
+						storage_outputs);
 
 			private:
 				gl::eRenderGraphBuilderType m_render_graph_type;
 				gl::eRenderGraphBuilderPipelineRenderingType
 					m_rendering_pipeline_type;
-				Kotek::Core::ktkMainManager* m_p_main_manager;
+				Core::ktkMainManager* m_p_main_manager;
+				ktkRenderResourceManager* m_p_render_resource_manager;
+				ktkRenderGraphSimplifiedResourceManager*
+					m_p_render_graph_simplified_resource_manager;
+				ktk::vector<ktkRenderGraphSimplifiedRenderPass*> m_passes;
+				ktk::vector<ktkRenderGraphSimplifiedRenderPass*>
+					m_failed_passes_for_adding;
 				ktk::string m_backbuffer_name;
 			};
 		} // namespace gl3_3

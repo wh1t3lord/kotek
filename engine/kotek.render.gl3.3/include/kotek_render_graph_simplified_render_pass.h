@@ -68,9 +68,9 @@ namespace Kotek
 				/// value and that means for human being it's hard to understand
 				/// what is written in hash instead of reading rational
 				/// string</param> <returns>nothing</returns>
-				void SetName(const ktk::string& name) noexcept;
+				void Set_Name(const ktk::string& name) noexcept;
 
-				const ktk::string& GetName(void) const noexcept;
+				const ktk::string& Get_Name(void) const noexcept;
 
 			private:
 				void Initialize(

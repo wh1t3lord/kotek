@@ -91,7 +91,10 @@ namespace Kotek
 		public:
 			virtual ~ktkIRenderGraphResourceManager(void) {}
 
- 
+			virtual void Initialize(
+				Kotek::Render::gl::eRenderGraphBuilderType type_of_framebuffer,
+				Kotek ::Render::gl::eRenderGraphBuilderPipelineRenderingType
+					type_videocard_pipeline) = 0;
 			virtual void Shutdown(void) = 0;
 		};
 

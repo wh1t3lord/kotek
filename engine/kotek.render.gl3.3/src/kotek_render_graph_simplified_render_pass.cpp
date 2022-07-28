@@ -35,7 +35,7 @@ namespace Kotek
 			{
 			}
 
-			void ktkRenderGraphSimplifiedRenderPass::SetName(
+			void ktkRenderGraphSimplifiedRenderPass::Set_Name(
 				const ktk::string& name) noexcept
 			{
 				KOTEK_ASSERT(name.empty() == false,
@@ -46,7 +46,7 @@ namespace Kotek
 				this->m_name = name;
 			}
 
-			const ktk::string& ktkRenderGraphSimplifiedRenderPass::GetName(
+			const ktk::string& ktkRenderGraphSimplifiedRenderPass::Get_Name(
 				void) const noexcept
 			{
 				return this->m_name;

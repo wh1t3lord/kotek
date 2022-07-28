@@ -1,6 +1,7 @@
 #pragma once
 
 #include "kotek_enum.h"
+#include "kotek_translation.h"
 
 namespace Kotek
 {

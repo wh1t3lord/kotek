@@ -70,6 +70,13 @@ namespace Kotek
 			{
 				return this->m_is_use_backbuffer_by_default;
 			}
+
+			bool ktkRenderGraphSimplifiedStorageOutput::Empty(
+				void) const noexcept
+			{
+				return this->m_output_buffers.empty() &&
+					this->m_output_textures.empty();
+			}
 		} // namespace gl
-	} // namespace Render
+	}     // namespace Render
 } // namespace Kotek

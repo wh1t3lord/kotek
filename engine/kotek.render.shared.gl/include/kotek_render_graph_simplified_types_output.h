@@ -29,6 +29,8 @@ namespace Kotek
 				void Set_UseBackBuffer(bool status) noexcept;
 				bool Is_UseBackBuffer(void) const noexcept;
 
+				bool Empty(void) const noexcept;
+
 			private:
 				bool m_is_use_backbuffer_by_default;
 				ktk::unordered_map<ktk::string, gl::ktkRenderGraphTextureInfo>
