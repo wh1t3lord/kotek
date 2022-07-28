@@ -30,7 +30,7 @@ namespace Kotek
 			{
 			public:
 				ktkRenderGraphSimplifiedResourceManager(
-					Core::ktkMainManager& main_manager);
+					Core::ktkMainManager* p_main_manager);
 				~ktkRenderGraphSimplifiedResourceManager(void);
 
 				void Initialize(gl::eRenderGraphBuilderType type_of_framebuffer,

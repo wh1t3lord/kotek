@@ -8,7 +8,7 @@ namespace Kotek
 		{
 			ktkRenderGraphSimplifiedResourceManager::
 				ktkRenderGraphSimplifiedResourceManager(
-					Core::ktkMainManager& main_manager)
+					Core::ktkMainManager* p_main_manager)
 			{
 			}
 
