@@ -563,7 +563,7 @@ namespace Kotek
 				auto storage_inputs = this->CompileInputs();
 				auto storage_outputs = this->CompileOutputs();
 
-				const auto& nodes =
+				const ktk::vector<ktkRenderGraphNode>& nodes =
 					this->Analyze(storage_inputs, storage_outputs);
 
 				this->m_p_manager_render_resource->uploadAllResourcesToGPU();

@@ -1,17 +1,18 @@
 #include "../include/kotek_render_graph_simplified_builder.h"
 #include "../include/kotek_render_graph_simplified.h"
 #include "../include/kotek_render_graph_simplified_render_pass.h"
+#include "../include/kotek_render_graph_simplified_node.h"
 
 namespace Kotek
 {
 	namespace Render
 	{
-		namespace gl
+		namespace gl3_3
 		{
 			ktkRenderGraphSimplifiedBuilder::ktkRenderGraphSimplifiedBuilder(
-				Core::ktkMainManager& main_manager) :
+				Core::ktkMainManager* p_main_manager) :
 				m_render_graph_type{},
-				m_rendering_pipeline_type{}
+				m_rendering_pipeline_type{}, m_p_main_manager{p_main_manager}
 			{
 			}
 
@@ -38,15 +39,15 @@ namespace Kotek
 				this->m_rendering_pipeline_type = rendering_pipeline_type;
 			}
 
-			gl::ktkRenderGraphSimplified
-			ktkRenderGraphSimplifiedBuilder::Compile(void)
+			ktkRenderGraphSimplified ktkRenderGraphSimplifiedBuilder::Compile(
+				void)
 			{
-				return gl::ktkRenderGraphSimplified();
+				return ktkRenderGraphSimplified();
 			}
 
 			bool ktkRenderGraphSimplifiedBuilder::Register_RenderPass(
 				const ktk::string& render_pass_name,
-				gl::ktkRenderGraphSimplifiedRenderPass* p_pass) noexcept
+				ktkRenderGraphSimplifiedRenderPass* p_pass) noexcept
 			{
 				return true;
 			}
@@ -71,6 +72,20 @@ namespace Kotek
 			{
 				return this->m_rendering_pipeline_type;
 			}
-		} // namespace gl
+
+			void ktkRenderGraphSimplifiedBuilder::Compile_Inputs(void) noexcept
+			{
+			}
+
+			void ktkRenderGraphSimplifiedBuilder::Compile_Outputs(void) noexcept
+			{
+			}
+
+			ktk::vector<ktkRenderGraphSimplifiedNode>
+			ktkRenderGraphSimplifiedBuilder::Analyze(void)
+			{
+				return ktk::vector<ktkRenderGraphSimplifiedNode>();
+			}
+		} // namespace gl3_3
 	}     // namespace Render
 } // namespace Kotek

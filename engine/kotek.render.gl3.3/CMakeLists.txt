@@ -14,7 +14,13 @@ set(to_include_render_graph_simplified_files
     "include/kotek_render_graph_simplified_node.h"
     "src/kotek_render_graph_simplified_node.cpp"
     "include/kotek_render_graph_simplified_resource_manager.h"
-    "src/kotek_render_graph_simplified_resource_manager.cpp")
+    "src/kotek_render_graph_simplified_resource_manager.cpp"
+	"include/kotek_render_graph_simplified.h"
+    "src/kotek_render_graph_simplified.cpp"
+    "include/kotek_render_graph_simplified_render_pass.h"
+    "src/kotek_render_graph_simplified_render_pass.cpp"
+    "include/kotek_render_graph_simplified_builder.h"
+    "src/kotek_render_graph_simplified_builder.cpp")
 
 set(to_include_managers_files
     "include/kotek_render_shader_manager.h"

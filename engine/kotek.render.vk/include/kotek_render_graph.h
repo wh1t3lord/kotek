@@ -45,8 +45,9 @@ namespace Kotek
 				ktkRenderGraph(void);
 				~ktkRenderGraph(void);
 
-				void Initialize(void);
-				void Shutdown(void);
+				void Initialize(void) override;
+				void Shutdown(void) override;
+
 				void UpdateAll(void);
 				void RenderAll(void);
 

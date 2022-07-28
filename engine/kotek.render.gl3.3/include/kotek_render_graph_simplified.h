@@ -12,7 +12,7 @@ namespace Kotek
 {
 	namespace Render
 	{
-		namespace gl
+		namespace gl3_3
 		{
 			class ktkRenderGraphSimplified : public Core::ktkIRenderGraph
 			{
@@ -22,6 +22,9 @@ namespace Kotek
 
 				void Initialize(void) override;
 				void Shutdown(void) override;
+
+				void Update_All(void);
+				void Render_All(void);
 			};
 		} // namespace gl
 	}     // namespace Render

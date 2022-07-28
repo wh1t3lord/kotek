@@ -14,13 +14,7 @@ set(to_include_render_graph_simplified_files
 	"include/kotek_render_graph_simplified_types_output.h"
 	"src/kotek_render_graph_simplified_types.cpp"
 	"src/kotek_render_graph_simplified_types_input.cpp"
-	"src/kotek_render_graph_simplified_types_output.cpp"
-	"include/kotek_render_graph_simplified.h"
-    "src/kotek_render_graph_simplified.cpp"
-    "include/kotek_render_graph_simplified_render_pass.h"
-    "src/kotek_render_graph_simplified_render_pass.cpp"
-    "include/kotek_render_graph_simplified_builder.h"
-    "src/kotek_render_graph_simplified_builder.cpp")
+	"src/kotek_render_graph_simplified_types_output.cpp")
 
 add_library(${PROJECT_NAME} STATIC
 	${to_include_render_graph_simplified_files}
