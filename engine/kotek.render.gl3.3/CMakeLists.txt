@@ -25,6 +25,8 @@ set(to_include_render_graph_simplified_files
 set(to_include_managers_files
     "include/kotek_render_shader_manager.h"
     "src/kotek_render_shader_manager.cpp"
+    "include/kotek_render_texture_manager.h"
+    "src/kotek_render_texture_manager.cpp"
     "include/kotek_render_resource_manager.h"
     "src/kotek_render_resource_manager.cpp")
 

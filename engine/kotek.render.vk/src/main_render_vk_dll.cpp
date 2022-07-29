@@ -57,6 +57,9 @@ namespace Kotek
 			p_render_manager_render_resource->initialize(
 				p_render_manager_device, p_render_manager_swapchain);
 
+			p_main_manager->GetResourceManager()->Set_RenderResourceManager(
+				p_render_manager_render_resource);
+
 			KOTEK_MESSAGE("render module is initialized");
 
 			registerCommands(p_main_manager);

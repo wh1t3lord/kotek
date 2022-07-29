@@ -8,8 +8,8 @@ namespace Kotek
 		{
 			enum class eShaderLoadingDataType;
 			enum class eShaderType;
-		}
-	} // namespace Render
+		} // namespace gl
+	}     // namespace Render
 } // namespace Kotek
 
 namespace Kotek
@@ -92,6 +92,74 @@ namespace Kotek
 			private:
 				eShaderLoadingDataType m_type;
 				ktk::variant<void*, ktk::string> m_data;
+			};
+
+			template <typename CreateInfoType>
+			class ktkRenderGraphResourceInfo
+			{
+			public:
+				ktkRenderGraphResourceInfo(const ktk::string& render_pass_name,
+					const ktk::string& resource_name,
+					const CreateInfoType& info) :
+					m_info{info},
+					m_render_pass_name{render_pass_name}, m_resource_name{
+															  resource_name}
+				{
+				}
+
+				ktkRenderGraphResourceInfo(void) :
+					m_is_created_from_output{}, m_info{}
+				{
+				}
+
+				~ktkRenderGraphResourceInfo(void) {}
+
+				bool Is_CreatedFromOutput(void) const noexcept
+				{
+					return this->m_is_created_from_output;
+				}
+
+				void Set_CreatedFromOutput(bool status) noexcept
+				{
+					this->m_is_created_from_output = status;
+				}
+
+				void Set_Info(const CreateInfoType& info) noexcept
+				{
+					this->m_info = info;
+				}
+
+				const CreateInfoType& Get_Info(void) const noexcept
+				{
+					return this->m_info;
+				}
+
+				const ktk::string& Get_ResourceName(void) const noexcept
+				{
+					return this->m_resource_name;
+				}
+
+				void Set_ResourceName(const ktk::string& resource_name) noexcept
+				{
+					this->m_resource_name = resource_name;
+				}
+
+				const ktk::string& Get_RenderPassName(void) const noexcept
+				{
+					return this->m_render_pass_name;
+				}
+
+				void Set_RenderPassName(
+					const ktk::string& render_pass_name) noexcept
+				{
+					this->m_render_pass_name = render_pass_name;
+				}
+
+			private:
+				bool m_is_created_from_output;
+				CreateInfoType m_info;
+				ktk::string m_render_pass_name;
+				ktk::string m_resource_name;
 			};
 		} // namespace gl
 	}     // namespace Render

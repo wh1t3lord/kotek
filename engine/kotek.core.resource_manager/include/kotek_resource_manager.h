@@ -19,7 +19,13 @@ namespace Kotek
 			void Set_ResourceLoader(
 				ktkIResourceLoader* p_instance) noexcept override;
 
+			void Set_RenderResourceManager(
+				ktkIRenderResourceManager* p_instance) noexcept override;
+
 			ktkIResourceLoader* Get_ResourceLoader(
+				void) const noexcept override;
+
+			ktkIRenderResourceManager* Get_RenderResourceManager(
 				void) const noexcept override;
 
 			// TODO: does we really need to have this method for storing main
@@ -28,7 +34,6 @@ namespace Kotek
 
 			ktkMainManager* Get_MainManager(void) const noexcept override;
 
-
 			void Update_WorkerQueue(void) noexcept override;
 
 		protected:
@@ -36,6 +41,7 @@ namespace Kotek
 
 		private:
 			ktkIResourceLoader* m_p_manager_resource_loader;
+			ktkIRenderResourceManager* m_p_manager_render_resource;
 			ktkMainManager* m_p_manager_main;
 		};
 	} // namespace Core

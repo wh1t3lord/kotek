@@ -402,7 +402,14 @@ namespace Kotek
 
 			virtual void Set_ResourceLoader(
 				ktkIResourceLoader* p_instance) noexcept = 0;
+
 			virtual ktkIResourceLoader* Get_ResourceLoader(
+				void) const noexcept = 0;
+
+			virtual void Set_RenderResourceManager(
+				ktkIRenderResourceManager* p_instance) noexcept = 0;
+
+			virtual ktkIRenderResourceManager* Get_RenderResourceManager(
 				void) const noexcept = 0;
 
 			virtual void Set_MainManager(

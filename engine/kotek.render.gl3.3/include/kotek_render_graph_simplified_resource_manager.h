@@ -5,14 +5,14 @@ namespace Kotek
 	namespace Core
 	{
 		class ktkMainManager;
-	}
+		class ktkResourceManager;
+	} // namespace Core
 
 	namespace Render
 	{
 		namespace gl3_3
 		{
 			class ktkRenderDevice;
-			class ktkRenderResourceManager;
 		} // namespace gl3_3
 	}     // namespace Render
 } // namespace Kotek
@@ -23,8 +23,13 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			constexpr const char* kRenderGraphBackBufferName = "KOTEK_BACKBUFFER_GL3_3_NAME";
+			constexpr const char* kRenderGraphBackBufferName =
+				"KOTEK_BACKBUFFER_GL3_3_NAME";
 
+			// TODO: рендер граф использует рендер ресурс манагер, но он не
+			// имеет никакой логики по созданию ресурсов, создание ресурсов
+			// лежит в рендер ресурс манагере!!!
+			// TODO: исправить этот класс для Vulkan
 			class ktkRenderGraphSimplifiedResourceManager
 				: public Core::ktkIRenderGraphResourceManager
 			{
@@ -40,7 +45,7 @@ namespace Kotek
 
 			private:
 				ktkRenderDevice* m_p_render_device;
-				ktkRenderResourceManager* m_p_render_resource_manager;
+				Core::ktkResourceManager* m_p_manager_resource;
 			};
 		} // namespace gl3_3
 	}     // namespace Render
