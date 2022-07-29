@@ -14,8 +14,9 @@ namespace Kotek
 
 			ktkRenderTextureManager::~ktkRenderTextureManager(void) {}
 
-			void Initialize(void) {}
-			void Shutdown(void) {}
+			void ktkRenderTextureManager::Initialize(void) {}
+
+			void ktkRenderTextureManager::Shutdown(void) {}
 		} // namespace gl3_3
 	}     // namespace Render
 } // namespace Kotek
