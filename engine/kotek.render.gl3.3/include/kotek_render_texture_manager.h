@@ -15,6 +15,11 @@ namespace Kotek
 				void Initialize(void);
 				void Shutdown(void);
 
+				bool Create_Texture(const ktk::string& texture_name,
+					const gl::ktkRenderGraphTextureInfo& info_create) noexcept;
+
+				void Destroy_Texture(const ktk::string& texture_name) noexcept;
+
 			private:
 				Core::ktkMainManager* m_p_main_manager;
 			};

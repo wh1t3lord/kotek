@@ -17,6 +17,23 @@ namespace Kotek
 			void ktkRenderTextureManager::Initialize(void) {}
 
 			void ktkRenderTextureManager::Shutdown(void) {}
+
+			bool ktkRenderTextureManager::Create_Texture(
+				const ktk::string& texture_name,
+				const gl::ktkRenderGraphTextureInfo& info_create) noexcept
+			{
+				KOTEK_ASSERT(texture_name.empty() == false,
+					"you can't pass an empty texture name");
+
+				return false;
+			}
+
+			void ktkRenderTextureManager::Destroy_Texture(
+				const ktk::string& texture_name) noexcept
+			{
+				KOTEK_ASSERT(texture_name.empty() == false,
+					"you can't pass an empty texture name");
+			}
 		} // namespace gl3_3
 	}     // namespace Render
 } // namespace Kotek
