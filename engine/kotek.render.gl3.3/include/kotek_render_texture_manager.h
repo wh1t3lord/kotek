@@ -2,14 +2,6 @@
 
 namespace Kotek
 {
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
-
-namespace Kotek
-{
 	namespace Render
 	{
 		namespace gl3_3
