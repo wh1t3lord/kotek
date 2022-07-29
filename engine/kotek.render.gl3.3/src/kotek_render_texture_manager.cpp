@@ -6,12 +6,13 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			ktkRenderTextureManager(Core::ktkMainManager* p_main_manager) :
+			ktkRenderTextureManager::ktkRenderTextureManager(
+				Core::ktkMainManager* p_main_manager) :
 				m_p_main_manager{p_main_manager}
 			{
 			}
 
-			~ktkRenderTextureManager(void) {}
+			ktkRenderTextureManager::~ktkRenderTextureManager(void) {}
 
 			void Initialize(void) {}
 			void Shutdown(void) {}
