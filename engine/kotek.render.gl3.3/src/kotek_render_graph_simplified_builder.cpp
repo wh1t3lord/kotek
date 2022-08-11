@@ -174,26 +174,26 @@ namespace Kotek
 				return result;
 			}
 
-			ktk::vector<ktkRenderGraphSimplifiedNode>
-			ktkRenderGraphSimplifiedBuilder::Analyze(
-				const ktk::unordered_map<ktk::string,
-					gl::ktkRenderGraphSimplifiedStorageInput>& storage_inputs,
-				const ktk::unordered_map<ktk::string,
-					gl::ktkRenderGraphSimplifiedStorageOutput>& storage_outputs)
+			void ktkRenderGraphSimplifiedBuilder::
+				Compile_BuffersAndImagesForCreation(
+					const ktk::unordered_map<ktk::string,
+						gl::ktkRenderGraphSimplifiedStorageInput>&
+						storage_inputs,
+					const ktk::unordered_map<ktk::string,
+						gl::ktkRenderGraphSimplifiedStorageOutput>&
+						storage_outputs,
+					ktk::unordered_map<ktk::string,
+						gl::ktkRenderGraphResourceInfo<
+							gl::ktkRenderGraphTextureInfo>>& images_to_create,
+					ktk::unordered_map<ktk::string,
+						gl::ktkRenderGraphResourceInfo<
+							gl::ktkRenderGraphBufferInfo>>&
+						buffers_to_create) noexcept
 			{
-				bool is_current_output_has_inputs_image = false;
-				bool is_current_output_has_inputs_buffer = false;
-				bool is_current_output_has_inputs = false;
-
-				ktk::unordered_map<ktk::string,
-					gl::ktkRenderGraphResourceInfo<
-						gl::ktkRenderGraphTextureInfo>>
-					image_to_create;
-
-				ktk::unordered_map<ktk::string,
-					gl::ktkRenderGraphResourceInfo<
-						gl::ktkRenderGraphBufferInfo>>
-					buffer_to_create;
+				KOTEK_ASSERT(images_to_create.empty(),
+					"you can't pass a not empty storage here!");
+				KOTEK_ASSERT(buffers_to_create.empty(),
+					"you can't pass a not empty storage here!");
 
 				for (const auto& p_pass : this->m_passes)
 				{
@@ -230,25 +230,25 @@ namespace Kotek
 					for (const auto& [texture_name, info_create] :
 						storage_output.Get_Images())
 					{
-						KOTEK_ASSERT(image_to_create.find(texture_name) ==
-								image_to_create.end(),
+						KOTEK_ASSERT(images_to_create.find(texture_name) ==
+								images_to_create.end(),
 							"you want ot create a texture which is already "
 							"added: {}",
 							texture_name.get_as_is());
 
-						image_to_create[texture_name] = {
+						images_to_create[texture_name] = {
 							render_pass_name, texture_name, info_create};
 					}
 
 					for (const auto& [buffer_name, info_create] :
 						storage_output.Get_Buffers())
 					{
-						KOTEK_ASSERT(buffer_to_create.find(buffer_name) ==
-								buffer_to_create.end(),
+						KOTEK_ASSERT(buffers_to_create.find(buffer_name) ==
+								buffers_to_create.end(),
 							"you want to create a buffer which is already "
 							"added");
 
-						buffer_to_create[buffer_name] = {
+						buffers_to_create[buffer_name] = {
 							render_pass_name, buffer_name, info_create};
 					}
 
@@ -260,10 +260,10 @@ namespace Kotek
 								storage_inputs.at(render_pass_name)
 									.Get_Images())
 							{
-								if (image_to_create.find(texture_name) ==
-									image_to_create.end())
+								if (images_to_create.find(texture_name) ==
+									images_to_create.end())
 								{
-									image_to_create[texture_name] = {
+									images_to_create[texture_name] = {
 										render_pass_name, texture_name,
 										info_create};
 
@@ -273,7 +273,7 @@ namespace Kotek
 								else
 								{
 									if (render_pass_name !=
-										image_to_create.at(texture_name)
+										images_to_create.at(texture_name)
 											.Get_RenderPassName())
 									{
 										// TODO: I guess we don't need
@@ -297,10 +297,10 @@ namespace Kotek
 								storage_inputs.at(render_pass_name)
 									.Get_Buffers())
 							{
-								if (buffer_to_create.find(buffer_name) ==
-									buffer_to_create.end())
+								if (buffers_to_create.find(buffer_name) ==
+									buffers_to_create.end())
 								{
-									buffer_to_create[buffer_name] = {
+									buffers_to_create[buffer_name] = {
 										render_pass_name, buffer_name,
 										info_create};
 
@@ -310,7 +310,7 @@ namespace Kotek
 								else
 								{
 									if (render_pass_name !=
-										buffer_to_create.at(buffer_name)
+										buffers_to_create.at(buffer_name)
 											.Get_RenderPassName())
 									{
 										// TODO: I guess we don't need
@@ -329,6 +329,31 @@ namespace Kotek
 						}
 					}
 				}
+			}
+
+			ktk::vector<ktkRenderGraphSimplifiedNode>
+			ktkRenderGraphSimplifiedBuilder::Analyze(
+				const ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphSimplifiedStorageInput>& storage_inputs,
+				const ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphSimplifiedStorageOutput>& storage_outputs)
+			{
+				bool is_current_output_has_inputs_image = false;
+				bool is_current_output_has_inputs_buffer = false;
+				bool is_current_output_has_inputs = false;
+
+				ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphResourceInfo<
+						gl::ktkRenderGraphTextureInfo>>
+					images_to_create;
+
+				ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphResourceInfo<
+						gl::ktkRenderGraphBufferInfo>>
+					buffers_to_create;
+
+				this->Compile_BuffersAndImagesForCreation(storage_inputs,
+					storage_outputs, images_to_create, buffers_to_create);
 
 				return ktk::vector<ktkRenderGraphSimplifiedNode>();
 			}

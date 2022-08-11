@@ -26,7 +26,7 @@ namespace Kotek
 		void ktkResourceManager::Set_RenderResourceManager(
 			ktkIRenderResourceManager* p_instance) noexcept
 		{
-			KOTEK_ASSERT(this->m_p_manager_render_resource,
+			KOTEK_ASSERT(!this->m_p_manager_render_resource,
 				"you can't initialize this twice! Some Renderer didn't set "
 				"this to nullptr");
 

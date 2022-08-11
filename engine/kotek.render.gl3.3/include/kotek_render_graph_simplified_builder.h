@@ -85,6 +85,21 @@ namespace Kotek
 					gl::ktkRenderGraphSimplifiedStorageOutput>
 				Compile_Outputs(void) noexcept;
 
+				void Compile_BuffersAndImagesForCreation(
+					const ktk::unordered_map<ktk::string,
+						gl::ktkRenderGraphSimplifiedStorageInput>&
+						storage_inputs,
+					const ktk::unordered_map<ktk::string,
+						gl::ktkRenderGraphSimplifiedStorageOutput>&
+						storage_outputs,
+					ktk::unordered_map<ktk::string,
+						gl::ktkRenderGraphResourceInfo<
+							gl::ktkRenderGraphTextureInfo>>& images_to_create,
+					ktk::unordered_map<ktk::string,
+						gl::ktkRenderGraphResourceInfo<
+							gl::ktkRenderGraphBufferInfo>>&
+						buffers_to_create) noexcept;
+
 				ktk::vector<ktkRenderGraphSimplifiedNode> Analyze(
 					const ktk::unordered_map<ktk::string,
 						gl::ktkRenderGraphSimplifiedStorageInput>&
