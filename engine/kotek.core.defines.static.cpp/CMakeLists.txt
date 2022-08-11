@@ -5,10 +5,6 @@ project(kotek.core.defines.static.cpp VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if(CMAKE_BUILD_TYPE STREQUAL "Debug")
-	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_DEBUG)
-endif()
-
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "")
 	set(KOTEK_STD_LIBRARY "BOOST" CACHE INTERNAL "")
 endif()
@@ -156,6 +152,17 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 	#ifdef KOTEK_MEMORY_LEAK_DETECTION
 		#define KOTEK_USE_MEMORY_LEAK_DETECTION
 		#define KOTEK_USE_MEMORY_LEAK_DETECTION_${KOTEK_CPP_MEMORY_LEAK_LIBRARY}
+	#endif
+	")
+
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
+	#ifndef NDEBUG
+		#define KOTEK_DEBUG
+
+		// for use in terms of all, we should provide for every preprocessor and 
+		// the _USE_ form even if it doesn't required 
+		// or if it will not be used in practice
+		#define KOTEK_USE_DEBUG
 	#endif
 	")
 else()

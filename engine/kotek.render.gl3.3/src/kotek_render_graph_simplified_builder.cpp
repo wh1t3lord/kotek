@@ -355,7 +355,9 @@ namespace Kotek
 				this->Compile_BuffersAndImagesForCreation(storage_inputs,
 					storage_outputs, images_to_create, buffers_to_create);
 
-				return ktk::vector<ktkRenderGraphSimplifiedNode>();
+				ktk::vector<ktkRenderGraphSimplifiedNode> result;
+
+				return result;
 			}
 		} // namespace gl3_3
 	}     // namespace Render
