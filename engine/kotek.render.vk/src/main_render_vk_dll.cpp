@@ -75,7 +75,19 @@ namespace Kotek
 				p_main_manager->getRenderDevice());
 			p_main_manager->GetRenderResourceManager()->shutdown(
 				p_main_manager->getRenderDevice());
-			p_main_manager->GetGameManager()->GetRenderer()->Shutdown();
+
+			Core::ktkIGameManager* p_game_manager =
+				p_main_manager->GetGameManager();
+			if (p_game_manager)
+			{
+				auto* p_renderer = p_game_manager->GetRenderer();
+
+				if (p_renderer)
+				{
+					p_renderer->Shutdown();
+				}
+			}
+
 			p_main_manager->getRenderDevice()->Shutdown();
 
 			vk::ktkRenderDevice* p_render_device =
