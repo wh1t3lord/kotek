@@ -195,6 +195,10 @@ namespace Kotek
 				KOTEK_ASSERT(buffers_to_create.empty(),
 					"you can't pass a not empty storage here!");
 
+				bool is_current_output_has_inputs_image = false;
+				bool is_current_output_has_inputs_buffer = false;
+				bool is_current_output_has_inputs = false;
+
 				for (const auto& p_pass : this->m_passes)
 				{
 					const ktk::string& render_pass_name = p_pass->Get_Name();
@@ -338,10 +342,6 @@ namespace Kotek
 				const ktk::unordered_map<ktk::string,
 					gl::ktkRenderGraphSimplifiedStorageOutput>& storage_outputs)
 			{
-				bool is_current_output_has_inputs_image = false;
-				bool is_current_output_has_inputs_buffer = false;
-				bool is_current_output_has_inputs = false;
-
 				ktk::unordered_map<ktk::string,
 					gl::ktkRenderGraphResourceInfo<
 						gl::ktkRenderGraphTextureInfo>>
