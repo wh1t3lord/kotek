@@ -43,4 +43,6 @@ add_library(${PROJECT_NAME} STATIC
 	${to_include}
 	"src/main_ui_imgui_dll.cpp")
 
+target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)

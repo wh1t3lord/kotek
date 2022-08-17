@@ -12,6 +12,11 @@ KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH
 	#if (KOTEK_USE_OPENGL_MODERN_VERSION > 2)
 		#include "imgui_impl_opengl3.h"
 	#endif
+
+	#if (KOTEK_USE_OPENGL_MODERN_VERSION > 3)
+
+	#endif
+
 #endif
 
 #ifdef KOTEK_USE_VULKAN

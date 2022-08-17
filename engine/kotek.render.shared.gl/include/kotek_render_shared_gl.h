@@ -4,6 +4,13 @@
 #include "kotek_render_graph_simplified_types_input.h"
 #include "kotek_render_graph_simplified_types_output.h"
 
+#if (KOTEK_USE_OPENGL_MODERN_VERSION > 2)
+#include <kotek.render.gl.glad3.3/include/glad/glad.h>
+#endif
+
+#if (KOTEK_USE_OPENGL_MODERN_VERSION > 3)
+#include <kotek.render.gl.glad4.6/include/glad/glad.h>
+#endif
 
 namespace Kotek
 {
