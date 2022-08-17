@@ -46,3 +46,4 @@ add_library(${PROJECT_NAME} STATIC
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
