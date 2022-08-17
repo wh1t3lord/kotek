@@ -153,13 +153,14 @@ namespace Kotek
 
 				KOTEK_ASSERT(p_device, "you must initialize device (VkDevice)");
 
-				auto status = vkAcquireNextImageKHR(p_device, this->m_p_swapchain,
-					ktk::kMax_UINT64,
+				auto status = vkAcquireNextImageKHR(p_device,
+					this->m_p_swapchain, ktk::kMax_UINT64,
 					this->m_semaphores_image_available.at(
 						this->m_semaphore_index),
 					nullptr, &this->m_image_index);
 
-				KOTEK_ASSERT(status == VK_SUCCESS, "failed to vkAcquireNextImageKHR");
+				KOTEK_ASSERT(
+					status == VK_SUCCESS, "failed to vkAcquireNextImageKHR");
 
 				this->m_semaphore_index_previous = this->m_semaphore_index;
 				++this->m_semaphore_index;
@@ -182,9 +183,12 @@ namespace Kotek
 			}
 
 			void ktkRenderSwapchain::Present(
-				Core::ktkMainManager& main_manager,
-				ktkRenderDevice* p_render_device) noexcept
+				Core::ktkMainManager* p_main_manager,
+				Core::ktkIRenderDevice* p_render_device)
 			{
+				ktkRenderDevice* p_casted_render_device =
+					static_cast<ktkRenderDevice*>(p_render_device);
+
 				VkPresentInfoKHR info = {};
 
 				info.sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR;
@@ -197,7 +201,8 @@ namespace Kotek
 				info.pImageIndices = &this->m_image_index;
 				info.pResults = nullptr;
 
-				VkQueue p_queue_present = p_render_device->GetQueue_Present();
+				VkQueue p_queue_present =
+					p_casted_render_device->GetQueue_Present();
 
 				KOTEK_ASSERT(p_queue_present,
 					"you must initialize device (VkQueue=Present)");
@@ -208,10 +213,12 @@ namespace Kotek
 				{
 					if (status == VK_ERROR_OUT_OF_DATE_KHR)
 					{
-						int height = main_manager.GetGameManager()->GetWindowHeight();
-						int width = main_manager.GetGameManager()->GetWindowWidth();
+						int height =
+							p_main_manager->GetGameManager()->GetWindowHeight();
+						int width =
+							p_main_manager->GetGameManager()->GetWindowWidth();
 
-						main_manager.GetGameManager()->GetConsole()->Execute(
+						p_main_manager->GetGameManager()->GetConsole()->Execute(
 							Core::ktkConsoleCommandIndex::
 								kConsoleCommand_Resize,
 							{ktk::string(width), ktk::string(height)});
@@ -224,8 +231,7 @@ namespace Kotek
 				}
 			}
 
-			VkSwapchainKHR ktkRenderSwapchain::GetSwapchain(
-				void) const noexcept
+			VkSwapchainKHR ktkRenderSwapchain::GetSwapchain(void) const noexcept
 			{
 				return this->m_p_swapchain;
 			}
@@ -242,8 +248,7 @@ namespace Kotek
 				this->m_swapchain_format.colorSpace = color_space;
 			}
 
-			VkFormat ktkRenderSwapchain::GetSwapchainFormat(
-				void) const noexcept
+			VkFormat ktkRenderSwapchain::GetSwapchainFormat(void) const noexcept
 			{
 				return this->m_swapchain_format.format;
 			}
@@ -300,9 +305,8 @@ namespace Kotek
 				return this->m_image_index;
 			}
 
-			void ktkRenderSwapchain::Create(
-				ktkRenderDevice* p_render_device, int width,
-				int height) noexcept
+			void ktkRenderSwapchain::Create(ktkRenderDevice* p_render_device,
+				int width, int height) noexcept
 			{
 #ifdef KOTEK_DEBUG
 				KOTEK_MESSAGE(

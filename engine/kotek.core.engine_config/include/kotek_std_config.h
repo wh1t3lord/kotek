@@ -212,6 +212,8 @@ namespace Kotek
 			 */
 			bool IsFeatureRender(eEngineFeature feature) const noexcept;
 
+			void Parse_CommandLine(void) noexcept;
+
 		private:
 			int m_argc;
 			char** m_argv;

@@ -64,7 +64,7 @@ namespace Kotek
 				const ktk::vector<ktkRenderGraphSimplifiedNode>& nodes =
 					this->Analyze(storage_inputs, storage_outputs);
 
-				return ktkRenderGraphSimplified();
+				return ktkRenderGraphSimplified(this->m_passes, nodes);
 			}
 
 			bool ktkRenderGraphSimplifiedBuilder::Register_RenderPass(
@@ -355,7 +355,22 @@ namespace Kotek
 				this->Compile_BuffersAndImagesForCreation(storage_inputs,
 					storage_outputs, images_to_create, buffers_to_create);
 
+				for (const auto& p_render_pass : this->m_passes)
+				{
+					p_render_pass->OnCreatedResources();
+				}
+
 				ktk::vector<ktkRenderGraphSimplifiedNode> result;
+
+				for (const auto* p_render_pass : this->m_passes)
+				{
+					const ktk::string& render_pass_name =
+						p_render_pass->Get_Name();
+
+					ktk::unordered_map<ktk::string, shader_module_t*> shaders;
+
+					result.push_back({render_pass_name, shaders});
+				}
 
 				return result;
 			}

@@ -6,6 +6,15 @@ namespace Kotek
 	{
 		class ktkIRenderGraph;
 	}
+
+	namespace Render
+	{
+		namespace gl3_3
+		{
+			class ktkRenderGraphSimplifiedRenderPass;
+			class ktkRenderGraphSimplifiedNode;
+		} // namespace gl3_3
+	}     // namespace Render
 } // namespace Kotek
 
 namespace Kotek
@@ -17,6 +26,11 @@ namespace Kotek
 			class ktkRenderGraphSimplified : public Core::ktkIRenderGraph
 			{
 			public:
+				ktkRenderGraphSimplified(
+					const ktk::vector<ktkRenderGraphSimplifiedRenderPass*>&
+						passes,
+					const ktk::vector<ktkRenderGraphSimplifiedNode>& nodes);
+
 				ktkRenderGraphSimplified(void);
 				~ktkRenderGraphSimplified(void);
 
@@ -25,7 +39,11 @@ namespace Kotek
 
 				void Update_All(void);
 				void Render_All(void);
+
+			private:
+				ktk::vector<ktkRenderGraphSimplifiedRenderPass*> m_passes;
+				ktk::vector<ktkRenderGraphSimplifiedNode> m_nodes;
 			};
-		} // namespace gl
+		} // namespace gl3_3
 	}     // namespace Render
 } // namespace Kotek

@@ -65,9 +65,14 @@ namespace Kotek
 			virtual ~ktkIRenderSwapchain(void) {}
 
 			virtual void Initialize(ktkIRenderDevice* p_render_device) = 0;
+			
 			virtual void Shutdown(ktkIRenderDevice* p_render_device) = 0;
+		
 			virtual void Resize(
 				ktkIRenderDevice* p_render_device, int width, int height) = 0;
+
+			virtual void Present(ktkMainManager* p_main_manager,
+				ktkIRenderDevice* p_render_device) = 0;
 		};
 
 		class ktkIRenderResourceManager

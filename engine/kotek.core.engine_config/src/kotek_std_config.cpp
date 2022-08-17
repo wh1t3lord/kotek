@@ -5,7 +5,7 @@ namespace Kotek
 	namespace Core
 	{
 		ktkEngineConfig::ktkEngineConfig(void) :
-			m_argc{}, m_argv{}, m_is_running{true}
+			m_argc{-1}, m_argv{}, m_is_running{true}
 		{
 		}
 
@@ -222,6 +222,7 @@ namespace Kotek
 		void ktkEngineConfig::SetARGV(char** p_char) noexcept
 		{
 			this->m_argv = p_char;
+			this->Parse_CommandLine();
 		}
 
 		bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(
@@ -262,6 +263,15 @@ namespace Kotek
 			return (feature >
 					   eEngineFeature::kEngine_Render_Renderer_DirectX) &&
 				(feature <= eEngineFeature::kEngine_Render_Renderer_Software);
+		}
+
+		void ktkEngineConfig::Parse_CommandLine(void) noexcept 
+		{
+			KOTEK_ASSERT(this->m_argc != -1,
+				"you must set argc before calling set argv method!");
+
+			this->m_parsed_command_line_arguments = ktk::vector<ktk::string>(
+				this->m_argv + 1, this->m_argv + this->m_argc);
 		}
 	} // namespace Core
 } // namespace Kotek

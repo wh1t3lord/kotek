@@ -30,15 +30,14 @@ namespace Kotek
 
 				void Initialize(
 					Core::ktkIRenderDevice* p_render_device) override;
-				void Shutdown(
-					Core::ktkIRenderDevice* p_render_device) override;
-				void Resize(Core::ktkIRenderDevice* p_render_device,
-					int width, int height) override;
+				void Shutdown(Core::ktkIRenderDevice* p_render_device) override;
+				void Resize(Core::ktkIRenderDevice* p_render_device, int width,
+					int height) override;
 
-				ktk::uint32_t Wait(
-					ktkRenderDevice* p_render_device) noexcept;
-				void Present(Core::ktkMainManager& main_manager,
-					ktkRenderDevice* p_render_device) noexcept;
+				ktk::uint32_t Wait(ktkRenderDevice* p_render_device) noexcept;
+
+				void Present(Core::ktkMainManager* p_main_manager,
+					Core::ktkIRenderDevice* p_render_device) override;
 
 				VkSwapchainKHR GetSwapchain(void) const noexcept;
 

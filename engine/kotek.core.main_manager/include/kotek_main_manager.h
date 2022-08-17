@@ -9,6 +9,7 @@ namespace Kotek
 		class ktkMainManager
 		{
 		public:
+			ktkMainManager(int argc, char** argv);
 			ktkMainManager(void);
 			~ktkMainManager(void);
 
@@ -50,10 +51,12 @@ namespace Kotek
 			void Set_EngineConfig(ktkIEngineConfig* pointer) noexcept;
 			ktkIEngineConfig* Get_EngineConfig(void) const noexcept;
 
+			void Initialize(void);
+			void Shutdown(void);
+		
 		private:
-			void Initialize(int argc, char** argv);
-
-		private:
+			int m_argc;
+			char** m_argv;
 			ktkIEngineConfig* m_p_manager_config;
 			kotek_i_renderer* m_p_manager_renderer;
 			ktkIGameManager* m_p_game_manager;

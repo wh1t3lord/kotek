@@ -4,18 +4,29 @@ namespace Kotek
 {
 	namespace Core
 	{
-		ktkMainManager::ktkMainManager() :
-			m_p_manager_config{}, m_p_manager_renderer{}, m_p_game_manager{},
-			m_p_resource_manager{}, m_p_manager_filesystem{},
-			m_p_manager_input{}, m_p_manager_render_device{},
-			m_p_manager_render_resource{}, m_p_manager_render_graph{},
-			m_p_manager_swapchain{}, m_p_manager_profiler{}
+		ktkMainManager::ktkMainManager(int argc, char** argv) :
+			m_argc{argc}, m_argv{argv}, m_p_manager_config{},
+			m_p_manager_renderer{}, m_p_game_manager{}, m_p_resource_manager{},
+			m_p_manager_filesystem{}, m_p_manager_input{},
+			m_p_manager_render_device{}, m_p_manager_render_resource{},
+			m_p_manager_render_graph{}, m_p_manager_swapchain{},
+			m_p_manager_profiler{}
 		{
 		}
 
-		ktkMainManager::~ktkMainManager(void) { }
+		ktkMainManager::ktkMainManager() :
+			m_argc{}, m_argv{}, m_p_manager_config{}, m_p_manager_renderer{},
+			m_p_game_manager{}, m_p_resource_manager{},
+			m_p_manager_filesystem{}, m_p_manager_input{},
+			m_p_manager_render_device{}, m_p_manager_render_resource{},
+			m_p_manager_render_graph{}, m_p_manager_swapchain{},
+			m_p_manager_profiler{}
+		{
+		}
 
-		void ktkMainManager::Set_Profiler(ktkIProfiler* p_instance) noexcept 
+		ktkMainManager::~ktkMainManager(void) {}
+
+		void ktkMainManager::Set_Profiler(ktkIProfiler* p_instance) noexcept
 		{
 			this->m_p_manager_profiler = p_instance;
 		}
@@ -113,14 +124,16 @@ namespace Kotek
 			return this->m_p_manager_config;
 		}
 
-		void ktkMainManager::Initialize(int argc, char** argv) 
-		{ 
-			if (this->m_p_manager_config) 
+		void ktkMainManager::Initialize(void)
+		{
+			if (this->m_p_manager_config)
 			{
-				this->m_p_manager_config->SetARGC(argc);
-				this->m_p_manager_config->SetARGV(argv);
+				this->m_p_manager_config->SetARGC(this->m_argc);
+				this->m_p_manager_config->SetARGV(this->m_argv);
 			}
 		}
+
+		void ktkMainManager::Shutdown(void) {}
 
 	} // namespace Core
 } // namespace Kotek

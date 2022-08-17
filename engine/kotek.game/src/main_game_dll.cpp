@@ -241,6 +241,8 @@ namespace Kotek
 			KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.1");
 	#elif (_MSC_VER == 1932)
 			KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.2");
+	#elif (_MSC_VER == 1933)
+			KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.3");
 	#endif
 
 #endif
