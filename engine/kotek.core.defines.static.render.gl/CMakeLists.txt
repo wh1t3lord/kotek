@@ -18,8 +18,6 @@ if ("${KOTEK_OPENGL}" STREQUAL "ON")
 	set(KOTEK_OPENGL_LEGACY_VERSION "3")
 endif()
 
-message("[Engine]: Vulkan is '${KOTEK_VULKAN}'")
-
 file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 
 #ifdef KOTEK_OPENGL
