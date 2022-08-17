@@ -10,7 +10,7 @@ if ("${KOTEK_OPENGL}" STREQUAL "")
 endif()
 
 if ("${KOTEK_OPENGL}" STREQUAL "ON")
-	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_OPENGL)
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_OPENGL -DIMGUI_IMPL_OPENGL_LOADER_CUSTOM)
 
 	# TODO: think about supporting modern version and split two things, like if we specify for legacy version 3 it means will be added all project until modern
 	# So if legacy = 1 it means from 1 version will be add to modern
@@ -26,7 +26,6 @@ file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 	#define KOTEK_USE_OPENGL
 	#define KOTEK_USE_OPENGL_MODERN_VERSION ${KOTEK_OPENGL_MODERN_VERSION}
 	#define KOTEK_USE_OPENGL_LEGACY_VERSION ${KOTEK_OPENGL_LEGACY_VERSION}
-	#define IMGUI_IMPL_OPENGL_LOADER_CUSTOM
 #endif
 ")
 
