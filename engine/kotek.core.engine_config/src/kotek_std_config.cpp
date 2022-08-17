@@ -271,7 +271,7 @@ namespace Kotek
 				"you must set argc before calling set argv method!");
 
 			this->m_parsed_command_line_arguments = ktk::vector<ktk::string>(
-				this->m_argv + 1, this->m_argv + this->m_argc);
+				this->m_argv, this->m_argv + this->m_argc);
 		}
 	} // namespace Core
 } // namespace Kotek
