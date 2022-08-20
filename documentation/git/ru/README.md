@@ -20,8 +20,8 @@
 6. Переходите в созданный каталог
 > cd build
 
-7. Обращаетесь к CMake и генерируете решение. Очень важно, что вы должны указать тип сборки (Debug, Release, MinSizeRel, RelWithDebInfo). Предположим, что вы хотите сгенерировать решение для Debug сборки, тогда:
-> cmake -DCMAKE_BUILD_TYPE=Debug ..
+7. Обращаетесь к CMake и генерируете решение. Очень важно, что вы должны указать тип сборки (Debug, Release, MinSizeRel, RelWithDebInfo). Предположим, что вы хотите сгенерировать решение для Debug сборки и при этом название папки где хранятся зависимости называется kotek-engine-deps-win32-vs19-full, тогда:
+> cmake -DCMAKE_BUILD_TYPE=Debug -DKOTEK_DEPS_FOLDER="kotek-engine-deps-win32-vs19-full" ..
 
 8. Теперь вы должны иметь сгенерированное решение. На этом все!
 
