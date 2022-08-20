@@ -30,8 +30,8 @@ CMakeFiles/
 *.cache
 # exclude doxygen output
 doc/doxygen/html/*
+documentation/*
 !documentation/Doxyfile
-documentation/**
-
+!documentation/git/
 user_data/
 engine/**/kotek_std_preprocessors.h
