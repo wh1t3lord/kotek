@@ -7,23 +7,10 @@ set(KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS ./include/kotek_std_preprocessor
 
 message("[Engine]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}'")
 
-if (WIN32)
-	if (${MSVC_VERSION} LESS 1930)
-		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
-			message("[Engine]: you can't use kotek-engine-deps-win32 because you are on Windows ${CMAKE_SYSTEM_VERSION}")
-			set(KOTEK_DEPS_FOLDER "kotek-engine-deps-win32-vs19")
-		endif()
-	else()
-		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
-			set(KOTEK_DEPS_FOLDER "kotek-engine-deps-win32")
-		endif()
-	endif()
-
-	if (EXISTS "${PROJECT_SOURCE_DIR}/${KOTEK_DEPS_FOLDER}")
-		message("[Engine] deps folder: ${KOTEK_DEPS_FOLDER}")
-	else()
-		message(FATAL_ERROR "[Engine]: can't obtain dependency folder ${KOTEK_DEPS_FOLDER}. You must download the folder from repository gitlab.com/wh1t3lord/${KOTEK_DEPS_FOLDER} and place it in kotek folder in your root catalogue. Otherwise you can use vcpkg and specify folder where is your packages are located.")
-	endif()	
+if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
+	message(FATAL_ERROR "you have to specify your folder where dependencies are stored")
+else()
+	message("[Engine]: your dependency folder is '${KOTEK_DEPS_FOLDER}'")
 endif()
 
 include_directories("engine")
