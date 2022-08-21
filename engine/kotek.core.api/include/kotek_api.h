@@ -527,6 +527,21 @@ namespace Kotek
 			virtual bool Is_NeedToClose(void) = 0;
 		};
 
+		class ktkIWindowManager
+		{
+		public:
+			virtual ~ktkIWindowManager(void) {}
+
+			virtual void Initialize(ktkIWindow* p_active_window) = 0;
+			virtual void Shutdown(void) = 0;
+
+			virtual void ActiveWindow_PollEvents(void) = 0;
+			virtual void* ActiveWindow_GetHandle(void) const noexcept = 0;
+			virtual int ActiveWindow_GetHeight(void) const noexcept = 0;
+			virtual int ActiveWindow_GetWidth(void) const noexcept = 0;
+			virtual bool ActiveWindow_ShouldToClose(void) = 0;
+		};
+
 		bool InitializeModule_Core_API(ktkMainManager*);
 		bool ShutdownModule_Core_API(ktkMainManager*);
 		bool SerializeModule_Core_API(ktkMainManager*);

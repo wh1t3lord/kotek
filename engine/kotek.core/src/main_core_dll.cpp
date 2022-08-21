@@ -34,7 +34,7 @@ namespace Kotek
 			InitializeModule_Core_Format(p_manager);
 			InitializeModule_Core_Profilers(p_manager);
 			InitializeModule_Core_OS(p_manager);
-			InitializeModule_Core_Window(p_manager);
+			InitializeModule_Core_Window_Manager(p_manager);
 			InitializeModule_Core_Utility(p_manager);
 			InitializeModule_Core_ECS(p_manager);
 			InitializeModule_Core_Input(p_manager);
@@ -67,7 +67,7 @@ namespace Kotek
 			ShutdownModule_Core_Format(p_manager);
 			ShutdownModule_Core_Profilers(p_manager);
 			ShutdownModule_Core_OS(p_manager);
-			ShutdownModule_Core_Window(p_manager);
+			ShutdownModule_Core_Window_Manager(p_manager);
 			ShutdownModule_Core_Log(p_manager);
 			ShutdownModule_Core_ECS(p_manager);
 			ShutdownModule_Core_Input(p_manager);

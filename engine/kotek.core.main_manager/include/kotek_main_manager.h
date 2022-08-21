@@ -51,11 +51,8 @@ namespace Kotek
 			void Set_EngineConfig(ktkIEngineConfig* pointer) noexcept;
 			ktkIEngineConfig* Get_EngineConfig(void) const noexcept;
 
-			ktkIWindow* Get_Window(void) const noexcept;
-			void Set_Window(ktkIWindow* p_window) noexcept;
-
-			void WindowManager_PollEvents();
-			bool WindowManager_NeedToCloseTheActiveWindow();
+			ktkIWindowManager* Get_WindowManager(void) const noexcept;
+			void Set_WindowManager(ktkIWindowManager* p_window_manager) noexcept;
 
 			void Initialize(void);
 			void Shutdown(void);
@@ -74,7 +71,7 @@ namespace Kotek
 			ktkIRenderGraph* m_p_manager_render_graph;
 			ktkIRenderSwapchain* m_p_manager_swapchain;
 			ktkIProfiler* m_p_manager_profiler;
-			ktkIWindow* m_p_window;
+			ktkIWindowManager* m_p_manager_window;
 		};
 	} // namespace Core
 } // namespace Kotek

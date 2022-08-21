@@ -10,7 +10,7 @@ namespace Kotek
 			m_p_manager_filesystem{}, m_p_manager_input{},
 			m_p_manager_render_device{}, m_p_manager_render_resource{},
 			m_p_manager_render_graph{}, m_p_manager_swapchain{},
-			m_p_manager_profiler{}
+			m_p_manager_profiler{}, m_p_manager_window{}
 		{
 		}
 
@@ -20,7 +20,7 @@ namespace Kotek
 			m_p_manager_filesystem{}, m_p_manager_input{},
 			m_p_manager_render_device{}, m_p_manager_render_resource{},
 			m_p_manager_render_graph{}, m_p_manager_swapchain{},
-			m_p_manager_profiler{}
+			m_p_manager_profiler{}, m_p_manager_window{}
 		{
 		}
 
@@ -124,24 +124,16 @@ namespace Kotek
 			return this->m_p_manager_config;
 		}
 
-		ktkIWindow* ktkMainManager::Get_Window(void) const noexcept
+		ktkIWindowManager* ktkMainManager::Get_WindowManager(
+			void) const noexcept
 		{
-			return this->m_p_window;
+			return this->m_p_manager_window;
 		}
 
-		void ktkMainManager::Set_Window(ktkIWindow* p_window) noexcept 
+		void ktkMainManager::Set_WindowManager(
+			ktkIWindowManager* p_window_manager) noexcept
 		{
-			this->m_p_window = p_window;
-		}
-
-		void ktkMainManager::WindowManager_PollEvents()
-		{
-			this->m_p_window->PollEvents();
-		}
-
-		bool ktkMainManager::WindowManager_NeedToCloseTheActiveWindow()
-		{
-			return this->m_p_window->Is_NeedToClose();
+			this->m_p_manager_window = p_window_manager;
 		}
 
 		void ktkMainManager::Initialize(void)

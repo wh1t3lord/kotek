@@ -9,5 +9,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_window_manager.h"
 	"src/main_core_window_manager_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PRIVATE kotek.ui.imgui)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)

@@ -12,7 +12,7 @@
 #include <kotek.core.format/include/kotek_core_format.h>
 #include <kotek.core.profilers/include/kotek_core_profilers.h>
 #include <kotek.core.os/include/kotek_core_os.h>
-#include <kotek.core.window/include/kotek_core_window.h>
+#include <kotek.core.window_manager/include/kotek_core_window_manager.h>
 #include <kotek.core.log/include/kotek_core_log.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.resource_manager/include/kotek_core_resource_manager.h>
