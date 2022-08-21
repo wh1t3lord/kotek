@@ -47,5 +47,15 @@ namespace Kotek
 		{
 			return this->m_p_active_window->Is_NeedToClose();
 		}
+
+		void ktkWindowManager::ActiveWindow_MakeContextCurrent(void) noexcept
+		{
+			this->m_p_active_window->MakeContextCurrent();
+		}
+
+		ktkIWindow* ktkWindowManager::Get_ActiveWindow(void) const noexcept
+		{
+			return this->m_p_active_window;
+		}
 	} // namespace Core
 } // namespace Kotek

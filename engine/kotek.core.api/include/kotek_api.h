@@ -525,6 +525,7 @@ namespace Kotek
 			virtual void Shutdown(void) = 0;
 			virtual void PollEvents(void) = 0;
 			virtual bool Is_NeedToClose(void) = 0;
+			virtual void MakeContextCurrent(void) noexcept = 0;
 		};
 
 		class ktkIWindowManager
@@ -540,6 +541,8 @@ namespace Kotek
 			virtual int ActiveWindow_GetHeight(void) const noexcept = 0;
 			virtual int ActiveWindow_GetWidth(void) const noexcept = 0;
 			virtual bool ActiveWindow_ShouldToClose(void) = 0;
+			virtual void ActiveWindow_MakeContextCurrent(void) noexcept = 0;
+			virtual ktkIWindow* Get_ActiveWindow(void) const noexcept = 0;
 		};
 
 		bool InitializeModule_Core_API(ktkMainManager*);

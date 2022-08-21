@@ -47,7 +47,7 @@ namespace Kotek
 			void Initialize(Core::eEngineFeature current_render) override;
 			void Shutdown(void) override;
 
-			void MakeContextCurrent(void) noexcept;
+			void MakeContextCurrent(void) noexcept override;
 			void PollEvents(void) override;
 			bool Is_NeedToClose(void) override;
 

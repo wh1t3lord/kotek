@@ -13,9 +13,8 @@ namespace Kotek
 			void ktkRenderDevice::Initialize(
 				Core::ktkMainManager* p_main_manager)
 			{
-				Core::ktkWindow* p_window = dynamic_cast<Core::ktkWindow*>(p_main_manager->Get_Window());
-
-				p_window->MakeContextCurrent();
+				p_main_manager->Get_WindowManager()
+					->ActiveWindow_MakeContextCurrent();
 
 				KOTEK_ASSERT(gladLoadGLLoader(reinterpret_cast<GLADloadproc>(
 								 glfwGetProcAddress)),

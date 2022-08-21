@@ -21,6 +21,9 @@ namespace Kotek
 			int ActiveWindow_GetWidth(void) const noexcept override;
 			bool ActiveWindow_ShouldToClose(void) override;
 
+			void ActiveWindow_MakeContextCurrent(void) noexcept override;
+			ktkIWindow* Get_ActiveWindow(void) const noexcept override;
+
 		private:
 			ktkIWindow* m_p_active_window;
 		};
