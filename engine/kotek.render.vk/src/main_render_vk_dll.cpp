@@ -36,13 +36,17 @@ namespace Kotek
 
 			vk::ktkRenderSwapchain* p_render_manager_swapchain =
 				new vk::ktkRenderSwapchain();
-			p_main_manager->setRenderSwapchainManager(p_render_manager_swapchain);
+			p_main_manager->setRenderSwapchainManager(
+				p_render_manager_swapchain);
 
 			vk::ktkRenderResourceManager* p_render_manager_render_resource =
 				new vk::ktkRenderResourceManager(
 					p_render_manager_device, p_main_manager);
 			p_main_manager->SetRenderResourceManager(
 				p_render_manager_render_resource);
+
+			p_main_manager->Get_Window()->Initialize(
+				p_main_manager->Get_EngineConfig()->GetRenderFeature());
 
 			p_render_manager_device->Initialize(p_main_manager);
 

@@ -13,8 +13,13 @@ namespace Kotek
 			void ktkRenderDevice::Initialize(
 				Core::ktkMainManager* p_main_manager)
 			{
-				p_main_manager->GetGameManager()->CreateSurface(
-					p_main_manager, nullptr, nullptr);
+				Core::ktkWindow* p_window = dynamic_cast<Core::ktkWindow*>(p_main_manager->Get_Window());
+
+				p_window->MakeContextCurrent();
+
+				KOTEK_ASSERT(gladLoadGLLoader(reinterpret_cast<GLADloadproc>(
+								 glfwGetProcAddress)),
+					"failed to gladLoadGLLoader");
 			}
 
 			void ktkRenderDevice::Shutdown(void) {}

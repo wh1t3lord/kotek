@@ -23,14 +23,16 @@ namespace Kotek
 			p_main_manager->setRenderDevice(p_render_device);
 			p_main_manager->setRenderSwapchainManager(p_render_swapchain);
 			p_main_manager->SetRenderResourceManager(p_render_resource_manager);
+			p_main_manager->Get_Window()->Initialize(
+				p_main_manager->Get_EngineConfig()->GetRenderFeature());
 
 			p_render_device->Initialize(p_main_manager);
 
 			// TODO: load from user settings
 			p_render_device->SetWidth(
-				p_main_manager->GetGameManager()->GetWindowWidth());
+				p_main_manager->Get_Window()->GetWidth());
 			p_render_device->SetHeight(
-				p_main_manager->GetGameManager()->GetWindowHeight());
+				p_main_manager->Get_Window()->GetHeight());
 
 			p_render_swapchain->Initialize(p_render_device);
 			p_render_resource_manager->initialize(

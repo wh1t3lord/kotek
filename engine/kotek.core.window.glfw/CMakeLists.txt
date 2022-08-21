@@ -11,6 +11,8 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_std_window.cpp"
 	"src/main_core_window_glfw_dll.cpp")
 
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)

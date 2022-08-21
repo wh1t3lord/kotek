@@ -65,9 +65,9 @@ namespace Kotek
 			virtual ~ktkIRenderSwapchain(void) {}
 
 			virtual void Initialize(ktkIRenderDevice* p_render_device) = 0;
-			
+
 			virtual void Shutdown(ktkIRenderDevice* p_render_device) = 0;
-		
+
 			virtual void Resize(
 				ktkIRenderDevice* p_render_device, int width, int height) = 0;
 
@@ -183,7 +183,6 @@ namespace Kotek
 			virtual ~ktkIGameManager(void) {}
 
 			virtual void Initialize(ktkMainManager* p_main_manager) = 0;
-
 			virtual void Shutdown(ktkMainManager* p_main_manager) = 0;
 
 			virtual kotek_i_renderer* GetRenderer(void) const noexcept = 0;
@@ -512,6 +511,20 @@ namespace Kotek
 			virtual ktk::string GetComponentName(void) const noexcept = 0;
 			virtual void DrawImGui(Kotek::Core::ktkMainManager* main_manager,
 				Kotek::ktk::entity_t entity_id) noexcept = 0;
+		};
+
+		class ktkIWindow
+		{
+		public:
+			virtual ~ktkIWindow(void) {}
+
+			virtual int GetWidth(void) const noexcept = 0;
+			virtual int GetHeight(void) const noexcept = 0;
+			virtual void* GetHandle(void) const noexcept = 0;
+			virtual void Initialize(Core::eEngineFeature current_render) = 0;
+			virtual void Shutdown(void) = 0;
+			virtual void PollEvents(void) = 0;
+			virtual bool Is_NeedToClose(void) = 0;
 		};
 
 		bool InitializeModule_Core_API(ktkMainManager*);

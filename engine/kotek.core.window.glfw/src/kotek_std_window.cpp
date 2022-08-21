@@ -5,18 +5,11 @@ namespace Kotek
 {
 	namespace Core
 	{
-		ktkWindow::ktkWindow(Core::eEngineFeature current_render) :
-			m_p_window(nullptr)
-		{
-			this->Initialize(current_render);
-		}
+		ktkWindow::ktkWindow(void) : m_p_window{nullptr} {}
 
-		ktkWindow::ktkWindow(const ktk::string& title_name,
-			Core::eEngineFeature current_render) :
-			m_p_window(nullptr),
-			m_title_name(title_name)
+		ktkWindow::ktkWindow(const ktk::string& title_name) :
+			m_p_window{nullptr}, m_title_name{title_name}
 		{
-			this->Initialize(current_render);
 		}
 
 		ktkWindow::~ktkWindow(void) {}
@@ -83,7 +76,7 @@ namespace Kotek
 			glfwSetWindowUserPointer(this->m_p_window, p_manager);
 		}
 
-		GLFWwindow* ktkWindow::GetHandle(void) const noexcept
+		void* ktkWindow::GetHandle(void) const noexcept
 		{
 			return this->m_p_window;
 		}
@@ -132,37 +125,52 @@ namespace Kotek
 				KOTEK_ASSERT(false, "can't create GLFW window");
 				return;
 			}
-
-			/* TODO: move to render module otherwise it is a bad design, window
-			can't know about render at all!!! if (current_render ==
-			    Core::eEngineFeature::kEngine_Render_Renderer_OpenGL)
-			{
-			    glfwMakeContextCurrent(this->m_p_window);
-
-			    const char* p_description;
-
-			    if (glfwGetError(&p_description) != GLFW_NO_ERROR)
-			    {
-			        KOTEK_MESSAGE_ERROR_LEGACY(p_description);
-			    }
-
-			    if (!gladLoadGLLoader(
-			            reinterpret_cast<GLADloadproc>(glfwGetProcAddress)))
-			    {
-			        KOTEK_ASSERT(false,
-			            "failed to gladLoadGLLoader. Can't initialize OpenGL "
-			            "for this system");
-			        return;
-			    }
-			}
-			*/
 		}
 
 		void ktkWindow::Shutdown(void)
 		{
-			this->CloseWindow();
-			glfwDestroyWindow(this->m_p_window);
-			glfwTerminate();
+			if (this->m_p_window)
+			{
+				this->CloseWindow();
+				glfwDestroyWindow(this->m_p_window);
+				glfwTerminate();
+				this->m_p_window = nullptr;
+			}
+		}
+
+		void ktkWindow::MakeContextCurrent(void) noexcept
+		{
+			if (this->m_p_window)
+			{
+				glfwMakeContextCurrent(this->m_p_window);
+
+#ifdef KOTEK_DEBUG
+				const char* description_error{};
+				if (glfwGetError(&description_error))
+				{
+					KOTEK_MESSAGE(
+						"{}", ktk::string(description_error).get_as_is());
+				}
+#endif
+			}
+		}
+
+		void ktkWindow::PollEvents(void)
+		{
+			glfwPollEvents();
+
+#ifdef KOTEK_DEBUG
+			const char* description_error{};
+			if (glfwGetError(&description_error))
+			{
+				KOTEK_MESSAGE("{}", ktk::string(description_error).get_as_is());
+			}
+#endif
+		}
+
+		bool ktkWindow::Is_NeedToClose(void)
+		{
+			return glfwWindowShouldClose(this->m_p_window);
 		}
 
 		void ktkWindow::ObtainInformationAboutDisplay(void)

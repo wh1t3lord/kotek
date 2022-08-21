@@ -119,9 +119,11 @@ namespace Kotek
 				field_library_name.get_as_is(),
 				field_update_callback_name.get_as_is());
 
-			if (p_user_callback_initialize_game_library)
+			if (p_user_callback_initialize_game_library) 
+			{
 				p_user_callback_initialize_game_library(p_main_manager);
-
+				KOTEK_ASSERT(p_main_manager->GetGameManager(), "you must set game manager to main manager!!!!");
+			}
 			return true;
 		}
 

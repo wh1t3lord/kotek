@@ -5,6 +5,7 @@
 #include <kotek.core.os/include/kotek_core_os.h>
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 #include <kotek.core.defines_dependent.message/include/kotek_core_defines_dependent_message.h>
+#include <kotek.core.api/include/kotek_api.h>
 
 namespace Kotek
 {
@@ -19,11 +20,11 @@ namespace Kotek
 {
 	namespace Core
 	{
-		class ktkWindow
+		class ktkWindow : public ktkIWindow
 		{
 		public:
-			ktkWindow(Core::eEngineFeature current_render);
-			ktkWindow(const ktk::string& title_name, Core::eEngineFeature current_render);
+			ktkWindow(void);
+			ktkWindow(const ktk::string& title_name);
 			~ktkWindow(void);
 
 			/// <summary>
@@ -36,19 +37,21 @@ namespace Kotek
 			void ShowWindow(void) noexcept;
 			void HideWindow(void) noexcept;
 
-			int GetWidth(void) const noexcept;
-			int GetHeight(void) const noexcept;
-
 			void RegisterUserMainManager(
 				Core::ktkMainManager* p_manager) noexcept;
 
-			GLFWwindow* GetHandle(void) const noexcept;
+			int GetWidth(void) const noexcept override;
+			int GetHeight(void) const noexcept override;
+			void* GetHandle(void) const noexcept override;
 
-			void Shutdown(void);
+			void Initialize(Core::eEngineFeature current_render) override;
+			void Shutdown(void) override;
+
+			void MakeContextCurrent(void) noexcept;
+			void PollEvents(void) override;
+			bool Is_NeedToClose(void) override;
 
 		private:
-			void Initialize(Core::eEngineFeature current_render);
-
 			void ObtainInformationAboutDisplay(void);
 
 		private:

@@ -124,6 +124,26 @@ namespace Kotek
 			return this->m_p_manager_config;
 		}
 
+		ktkIWindow* ktkMainManager::Get_Window(void) const noexcept
+		{
+			return this->m_p_window;
+		}
+
+		void ktkMainManager::Set_Window(ktkIWindow* p_window) noexcept 
+		{
+			this->m_p_window = p_window;
+		}
+
+		void ktkMainManager::WindowManager_PollEvents()
+		{
+			this->m_p_window->PollEvents();
+		}
+
+		bool ktkMainManager::WindowManager_NeedToCloseTheActiveWindow()
+		{
+			return this->m_p_window->Is_NeedToClose();
+		}
+
 		void ktkMainManager::Initialize(void)
 		{
 			if (this->m_p_manager_config)
