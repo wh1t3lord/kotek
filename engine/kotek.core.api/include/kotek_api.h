@@ -545,6 +545,28 @@ namespace Kotek
 			virtual ktkIWindow* Get_ActiveWindow(void) const noexcept = 0;
 		};
 
+		/// \~russian @brief данный класс создан чтобы пользователь и
+		/// разработчик могли определять текущий wrapper для imgui библиотеки.
+		/// Их всего две это ImGui и Nuklear. Сделано это с одной целью, чтобы
+		/// пользователь мог иметь возможность создания окна в exe, но
+		/// определять логику оконной библиотеки в dll.
+		class ktkIImguiWrapper
+		{
+		public:
+			virtual ~ktkIImguiWrapper(void) {}
+
+			///
+			/// \~russian @brief Данный метод вызывает взависимости от imgui
+			/// библиотеки функции отвечающие за оконную обработку для imgui
+			/// библиотеки. Это сделано специально, потому что при модели
+			/// разработки когда окно инициализируется в exe а в dll реализуется
+			/// логика вызовов для окна, то функции напрямую вызывать нельзя
+			/// т.к. они будут относится к пространству dll а не exe где было
+			/// определено (создано) окно.
+			/// @param void, ничего метод не принимает в качестве аргумента.
+			virtual void ImGui_GLFW_NewFrame(void) = 0;
+		};
+
 		bool InitializeModule_Core_API(ktkMainManager*);
 		bool ShutdownModule_Core_API(ktkMainManager*);
 		bool SerializeModule_Core_API(ktkMainManager*);
