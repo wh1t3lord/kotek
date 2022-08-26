@@ -10,7 +10,8 @@ namespace Kotek
 			m_p_manager_filesystem{}, m_p_manager_input{},
 			m_p_manager_render_device{}, m_p_manager_render_resource{},
 			m_p_manager_render_graph{}, m_p_manager_swapchain{},
-			m_p_manager_profiler{}, m_p_manager_window{}
+			m_p_manager_profiler{}, m_p_manager_window{},
+			m_p_manager_imgui_wrapper{}
 		{
 		}
 
@@ -20,7 +21,8 @@ namespace Kotek
 			m_p_manager_filesystem{}, m_p_manager_input{},
 			m_p_manager_render_device{}, m_p_manager_render_resource{},
 			m_p_manager_render_graph{}, m_p_manager_swapchain{},
-			m_p_manager_profiler{}, m_p_manager_window{}
+			m_p_manager_profiler{}, m_p_manager_window{},
+			m_p_manager_imgui_wrapper{}
 		{
 		}
 
@@ -134,6 +136,17 @@ namespace Kotek
 			ktkIWindowManager* p_window_manager) noexcept
 		{
 			this->m_p_manager_window = p_window_manager;
+		}
+
+		ktkIImguiWrapper* ktkMainManager::Get_ImguiWrapper(void) const noexcept
+		{
+			return this->m_p_manager_imgui_wrapper;
+		}
+
+		void ktkMainManager::Set_ImguiWrapper(
+			ktkIImguiWrapper* p_manager) noexcept
+		{
+			this->m_p_manager_imgui_wrapper = p_manager;
 		}
 
 		void ktkMainManager::Initialize(void)

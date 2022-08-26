@@ -564,7 +564,41 @@ namespace Kotek
 			/// т.к. они будут относится к пространству dll а не exe где было
 			/// определено (создано) окно.
 			/// @param void, ничего метод не принимает в качестве аргумента.
-			virtual void ImGui_GLFW_NewFrame(void) = 0;
+			virtual void ImGui_ImplGlfw_NewFrame(void) = 0;
+
+			virtual bool ImGui_ImplOpenGL3_Init(
+				const char* glsl_version = nullptr) = 0;
+			virtual void ImGui_ImplOpenGL3_NewFrame(void) = 0;
+			virtual void ImGui_ImplOpenGL3_Shutdown(void) = 0;
+
+			virtual void ImGui_ImplGlfw_Shutdown(void) = 0;
+			virtual bool ImGui_ImplGlfw_InitForOpenGL(
+				void* window_handle, bool install_callbacks) = 0;
+
+			// ImGui:: namespace
+
+			virtual void* CreateContext(void* shared_font_atlas = nullptr) = 0;
+			virtual void DestroyContext(void* context = nullptr) = 0;
+			virtual void* GetIO(void) = 0;
+			virtual void* GetStyle(void) = 0;
+			virtual void StyleColorsDark(void* style = nullptr) = 0;
+			virtual void NewFrame(void) = 0;
+			virtual void Render(void) = 0;
+
+			virtual bool Begin(
+				const char* name, bool* p_open = nullptr, int flags = 0) = 0;
+			virtual void End(void) = 0;
+			virtual void ShowDemoWindow(bool* p_open = nullptr) = 0;
+			virtual bool Button(
+				const char* label, const ImVec2& size = ImVec2(0, 0));
+			virtual bool BeginTable(const char* str_id, int column,
+				ImGuiTableFlags flags = 0,
+				const ImVec2& outer_size = ImVec2(0.0f, 0.0f),
+				float inner_width = 0.0f) = 0;
+			virtual void EndTable(void) = 0;
+			virtual void TableSetupColumn(const char* label,
+				ImGuiTableColumnFlags flags = 0,
+				float init_width_or_weight = 0.0f, ImGuiID user_id = 0) = 0;
 		};
 
 		bool InitializeModule_Core_API(ktkMainManager*);

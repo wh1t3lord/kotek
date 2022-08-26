@@ -53,3 +53,25 @@ KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH
 #endif
 
 KOTEK_CPP_DISABLE_ALL_WARNINGS_POP
+
+#include "kotek_ui_imgui_wrapper.h"
+
+
+namespace Kotek
+{
+	namespace Core
+	{
+		class ktkMainManager;
+	}
+} // namespace Kotek
+
+namespace Kotek
+{
+	namespace UI
+	{
+		bool InitializeModule_UI_IMGUI(Core::ktkMainManager*);
+		bool ShutdownModule_UI_IMGUI(Core::ktkMainManager*);
+		bool SerializeModule_UI_IMGUI(Core::ktkMainManager*);
+		bool DeserializeModule_UI_IMGUI(Core::ktkMainManager*);
+	} // namespace UI
+} // namespace Kotek

@@ -54,6 +54,9 @@ namespace Kotek
 			ktkIWindowManager* Get_WindowManager(void) const noexcept;
 			void Set_WindowManager(ktkIWindowManager* p_window_manager) noexcept;
 
+			ktkIImguiWrapper* Get_ImguiWrapper(void) const noexcept;
+			void Set_ImguiWrapper(ktkIImguiWrapper* p_manager) noexcept;
+
 			void Initialize(void);
 			void Shutdown(void);
 		
@@ -72,6 +75,7 @@ namespace Kotek
 			ktkIRenderSwapchain* m_p_manager_swapchain;
 			ktkIProfiler* m_p_manager_profiler;
 			ktkIWindowManager* m_p_manager_window;
+			ktkIImguiWrapper* m_p_manager_imgui_wrapper;
 		};
 	} // namespace Core
 } // namespace Kotek

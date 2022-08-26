@@ -24,6 +24,7 @@ endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_ui_imgui.h"
+	"include/kotek_ui_imgui_wrapper.h"
 	"include/imconfig.h"
 	"include/imgui.h"
 	"include/imgui_internal.h"
@@ -33,6 +34,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/imgui_impl_glfw.h"
 	"include/imgui_impl_opengl3.h"
 	"include/imgui_impl_opengl3_loader.h"
+	"src/kotek_ui_imgui_wrapper.cpp"
 	"src/imgui.cpp"
 	"src/imgui_demo.cpp"
 	"src/imgui_draw.cpp"
@@ -43,5 +45,8 @@ add_library(${PROJECT_NAME} STATIC
 	${to_include}
 	"src/main_ui_imgui_dll.cpp")
 
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)

@@ -9,5 +9,5 @@
 // course) like kotek.render.shared
 
 #include <kotek.render.shared/include/kotek_render_shared.h>
-#include <kotek.ui.imgui/include/kotek_ui_imgui.h>
+#include <kotek.ui/include/kotek_ui.h>
  

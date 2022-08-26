@@ -263,6 +263,8 @@ namespace Kotek
 
 			Render::InitializeModule_Render(p_main_manager);
 
+			UI::InitializeModule_UI(p_main_manager);
+
 			if (p_user_callback_initialize_render_from_game_library)
 				p_user_callback_initialize_render_from_game_library(
 					p_main_manager);
@@ -296,6 +298,7 @@ namespace Kotek
 
 		bool ShutdownEngine(Core::ktkMainManager* p_main_manager)
 		{
+			UI::ShutdownModule_UI(p_main_manager);
 			Render::ShutdownModule_Render(p_main_manager);
 			Game::ShutdownModule_Game(p_main_manager);
 			Core::ShutdownModule_Core(p_main_manager);
