@@ -539,7 +539,7 @@ flags);
 		{
 			ImGui::Bullet();
 		}
-		bool          ktkImguiWrapper::BeginCombo(const char* label, const char* preview_value, ImGuiComboFlags flags = 0){}
+		bool          ktkImguiWrapper::BeginCombo(const char* label, const char* preview_value, ImGuiComboFlags flags){}
 		void          ktkImguiWrapper::EndCombo(){} 
 		bool          ktkImguiWrapper::Combo(const char* label, int* current_item, const char* const items[], int items_count, int popup_max_height_in_items = -1){}
 		bool          ktkImguiWrapper::Combo(const char* label, int* current_item, const char* items_separated_by_zeros, int popup_max_height_in_items = -1){}     
@@ -591,23 +591,23 @@ flags);
 		bool          ktkImguiWrapper::ColorButton(const char* desc_id, const ImVec4& col, ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0, 0)){} 
 		void          ktkImguiWrapper::SetColorEditOptions(ImGuiColorEditFlags flags){}                     
 		bool          ktkImguiWrapper::TreeNode(const char* label){}
-		bool          ktkImguiWrapper::TreeNode(const char* str_id, const char* fmt, ...) IM_FMTARGS(2){}   
-		bool          ktkImguiWrapper::TreeNode(const void* ptr_id, const char* fmt, ...) IM_FMTARGS(2){}   
-		bool          ktkImguiWrapper::TreeNodeV(const char* str_id, const char* fmt, va_list args) IM_FMTLIST(2){}
-		bool          ktkImguiWrapper::TreeNodeV(const void* ptr_id, const char* fmt, va_list args) IM_FMTLIST(2){}
+		bool          ktkImguiWrapper::TreeNode(const char* str_id, const char* fmt, ...){}   
+		bool          ktkImguiWrapper::TreeNode(const void* ptr_id, const char* fmt, ...){}   
+		bool          ktkImguiWrapper::TreeNodeV(const char* str_id, const char* fmt, va_list args){}
+		bool          ktkImguiWrapper::TreeNodeV(const void* ptr_id, const char* fmt, va_list args){}
 		bool          ktkImguiWrapper::TreeNodeEx(const char* label, ImGuiTreeNodeFlags flags = 0){}
-		bool          ktkImguiWrapper::TreeNodeEx(const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, ...) IM_FMTARGS(3){}
-		bool          ktkImguiWrapper::TreeNodeEx(const void* ptr_id, ImGuiTreeNodeFlags flags, const char* fmt, ...) IM_FMTARGS(3){}
-		bool          ktkImguiWrapper::TreeNodeExV(const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, va_list args) IM_FMTLIST(3){}
-		bool          ktkImguiWrapper::TreeNodeExV(const void* ptr_id, ImGuiTreeNodeFlags flags, const char* fmt, va_list args) IM_FMTLIST(3){}
+		bool          ktkImguiWrapper::TreeNodeEx(const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, ...){}
+		bool          ktkImguiWrapper::TreeNodeEx(const void* ptr_id, ImGuiTreeNodeFlags flags, const char* fmt, ...){}
+		bool          ktkImguiWrapper::TreeNodeExV(const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, va_list args){}
+		bool          ktkImguiWrapper::TreeNodeExV(const void* ptr_id, ImGuiTreeNodeFlags flags, const char* fmt, va_list args){}
 		void          ktkImguiWrapper::TreePush(const char* str_id){}                                       
-		void          ktkImguiWrapper::TreePush(const void* ptr_id = NULL){}                                
+		void          ktkImguiWrapper::TreePush(const void* ptr_id){}                                
 		void          ktkImguiWrapper::TreePop(){}                                                          
 		float         ktkImguiWrapper::GetTreeNodeToLabelSpacing(){}                                      
-		bool          ktkImguiWrapper::CollapsingHeader(const char* label, ImGuiTreeNodeFlags flags = 0){}  
-		bool          ktkImguiWrapper::CollapsingHeader(const char* label, bool* p_visible, ImGuiTreeNodeFlags flags = 0){} 
-		void          ktkImguiWrapper::SetNextItemOpen(bool is_open, ImGuiCond cond = 0){}                  
-		bool          ktkImguiWrapper::BeginListBox(const char* label, const ImVec2& size = ImVec2(0, 0)){} 
+		bool          ktkImguiWrapper::CollapsingHeader(const char* label, ImGuiTreeNodeFlags flags){}  
+		bool          ktkImguiWrapper::CollapsingHeader(const char* label, bool* p_visible, ImGuiTreeNodeFlags flags){} 
+		void          ktkImguiWrapper::SetNextItemOpen(bool is_open, ImGuiCond cond){}                  
+		bool          ktkImguiWrapper::BeginListBox(const char* label, const ImVec2& size){} 
 		void          ktkImguiWrapper::EndListBox(){}                                                       
 		bool          ktkImguiWrapper::ListBox(const char* label, int* current_item, const char* const items[], int items_count, int height_in_items = -1){}
 		bool          ktkImguiWrapper::ListBox(const char* label, int* current_item, bool (*items_getter)(void* data, int idx, const char** out_text), void* data, int items_count, int height_in_items = -1){}
