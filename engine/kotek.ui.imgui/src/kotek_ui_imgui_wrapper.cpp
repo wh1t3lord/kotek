@@ -81,15 +81,6 @@ namespace Kotek
 		{
 			ImGui::Render();
 		}
-
-		ImGuiContext* ktkImguiWrapper::CreateContext(ImFontAtlas* shared_font_atlas)
-		{
-			return ImGui::CreateContext(shared_font_atlas);
-		}
-		void          ktkImguiWrapper::DestroyContext(ImGuiContext* ctx)
-		{
-			ImGui::DestroyContext(ctx);
-		}
 		ImGuiContext* ktkImguiWrapper::GetCurrentContext()
 		{
 			return ImGui::GetCurrentContext();
@@ -97,15 +88,7 @@ namespace Kotek
 		void          ktkImguiWrapper::SetCurrentContext(ImGuiContext* ctx)
 		{
 			ImGui::SetCurrentContext(ctx);
-		}
-		ImGuiIO&      ktkImguiWrapper::GetIO()
-		{
-			return ImGui::GetIO();
-		}                                 
-		ImGuiStyle&   ktkImguiWrapper::GetStyle()
-		{
-			return ImGui::GetStyle();
-		}                              
+		}                            
 		void          ktkImguiWrapper::NewFrame()
 		{
 			ImGui::NewFrame();
@@ -159,10 +142,6 @@ namespace Kotek
 		{
 			return ImGui::GetVersion();
 		}                              
-		void          ktkImguiWrapper::StyleColorsDark(ImGuiStyle* dst)
-		{
-			ImGui::StyleColorsDark(dst);
-		}   
 		void          ktkImguiWrapper::StyleColorsLight(ImGuiStyle* dst)
 		{
 			ImGui::StyleColorsLight(dst);
@@ -441,7 +420,10 @@ flags);
 		} 
 		void          ktkImguiWrapper::Text(const char* fmt, ...)                                    
 		{
-			ImGui::Text(fmt, ...);
+			va_list args;
+			va_start(args, fmt);
+			ImGui::Text(fmt, args);
+			va_end(args);
 		}
 		void          ktkImguiWrapper::TextV(const char* fmt, va_list args)                          
 		{
@@ -449,7 +431,10 @@ flags);
 		}
 		void          ktkImguiWrapper::TextColored(const ImVec4& col, const char* fmt, ...)          
 		{
-			ImGui::TextColored(col, fmt, ...);
+			va_list args;
+			va_start(args, fmt);
+			ImGui::TextColored(col, fmt, args);
+			va_end(args);
 		}
 		void          ktkImguiWrapper::TextColoredV(const ImVec4& col, const char* fmt, va_list args)
 		{
@@ -457,7 +442,10 @@ flags);
 		}
 		void          ktkImguiWrapper::TextDisabled(const char* fmt, ...)                            
 		{
-			ImGui::TextDisabled(fmt, ...);
+			va_list args;
+			va_start(args, fmt);
+			ImGui::TextDisabled(fmt, args);
+			va_end(args);
 		}
 		void          ktkImguiWrapper::TextDisabledV(const char* fmt, va_list args)                  
 		{
@@ -465,7 +453,10 @@ flags);
 		}
 		void          ktkImguiWrapper::TextWrapped(const char* fmt, ...)                             
 		{
-			ImGui::TextWrapped(fmt, ...);
+			va_list args;
+			va_start(args, fmt);
+			ImGui::TextWrapped(fmt, args);
+			va_end(args);
 		}
 		void          ktkImguiWrapper::TextWrappedV(const char* fmt, va_list args)                   
 		{
@@ -473,7 +464,10 @@ flags);
 		}
 		void          ktkImguiWrapper::LabelText(const char* label, const char* fmt, ...)            
 		{
-			ImGui::LabelText(label, fmt, ...);
+			va_list args;
+			va_start(args, fmt);
+			ImGui::LabelText(label, fmt, args);
+			va_end(fmt);
 		}
 		void          ktkImguiWrapper::LabelTextV(const char* label, const char* fmt, va_list args)  
 		{
@@ -481,7 +475,10 @@ flags);
 		}
 		void          ktkImguiWrapper::BulletText(const char* fmt, ...)                              
 		{
-			ImGui::BulletText(fmt, ...);
+			va_list args;
+			va_start(args, fmt);
+			ImGui::BulletText(fmt, args);
+			va_end(args);
 		}
 		void          ktkImguiWrapper::BulletTextV(const char* fmt, va_list args)                    
 		{
@@ -539,78 +536,314 @@ flags);
 		{
 			ImGui::Bullet();
 		}
-		bool          ktkImguiWrapper::BeginCombo(const char* label, const char* preview_value, ImGuiComboFlags flags){}
-		void          ktkImguiWrapper::EndCombo(){} 
-		bool          ktkImguiWrapper::Combo(const char* label, int* current_item, const char* const items[], int items_count, int popup_max_height_in_items = -1){}
-		bool          ktkImguiWrapper::Combo(const char* label, int* current_item, const char* items_separated_by_zeros, int popup_max_height_in_items = -1){}     
-		bool          ktkImguiWrapper::Combo(const char* label, int* current_item, bool(*items_getter)(void* data, int idx, const char** out_text), void* data, int items_count, int popup_max_height_in_items = -1){}
-		bool          ktkImguiWrapper::DragFloat(const char* label, float* v, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", ImGuiSliderFlags flags = 0){}    
-		bool          ktkImguiWrapper::DragFloat2(const char* label, float v[2], float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::DragFloat3(const char* label, float v[3], float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::DragFloat4(const char* label, float v[4], float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::DragFloatRange2(const char* label, float* v_current_min, float* v_current_max, float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f, const char* format = "%.3f", const char* format_max = NULL, ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::DragInt(const char* label, int* v, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d", ImGuiSliderFlags flags = 0){} 
-		bool          ktkImguiWrapper::DragInt2(const char* label, int v[2], float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::DragInt3(const char* label, int v[3], float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::DragInt4(const char* label, int v[4], float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::DragIntRange2(const char* label, int* v_current_min, int* v_current_max, float v_speed = 1.0f, int v_min = 0, int v_max = 0, const char* format = "%d", const char* format_max = NULL, ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::DragScalar(const char* label, ImGuiDataType data_type, void* p_data, float v_speed = 1.0f, const void* p_min = NULL, const void* p_max = NULL, const char* format = NULL, ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::DragScalarN(const char* label, ImGuiDataType data_type, void* p_data, int components, float v_speed = 1.0f, const void* p_min = NULL, const void* p_max = NULL, const char* format = NULL, ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::SliderFloat(const char* label, float* v, float v_min, float v_max, const char* format = "%.3f", ImGuiSliderFlags flags = 0){}      
-		bool          ktkImguiWrapper::SliderFloat2(const char* label, float v[2], float v_min, float v_max, const char* format = "%.3f", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::SliderFloat3(const char* label, float v[3], float v_min, float v_max, const char* format = "%.3f", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::SliderFloat4(const char* label, float v[4], float v_min, float v_max, const char* format = "%.3f", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::SliderAngle(const char* label, float* v_rad, float v_degrees_min = -360.0f, float v_degrees_max = +360.0f, const char* format = "%.0f deg", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::SliderInt(const char* label, int* v, int v_min, int v_max, const char* format = "%d", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::SliderInt2(const char* label, int v[2], int v_min, int v_max, const char* format = "%d", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::SliderInt3(const char* label, int v[3], int v_min, int v_max, const char* format = "%d", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::SliderInt4(const char* label, int v[4], int v_min, int v_max, const char* format = "%d", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::SliderScalar(const char* label, ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max, const char* format = NULL, ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::SliderScalarN(const char* label, ImGuiDataType data_type, void* p_data, int components, const void* p_min, const void* p_max, const char* format = NULL, ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::VSliderFloat(const char* label, const ImVec2& size, float* v, float v_min, float v_max, const char* format = "%.3f", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::VSliderInt(const char* label, const ImVec2& size, int* v, int v_min, int v_max, const char* format = "%d", ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::VSliderScalar(const char* label, const ImVec2& size, ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max, const char* format = NULL, ImGuiSliderFlags flags = 0){}
-		bool          ktkImguiWrapper::InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = NULL, void* user_data = NULL){}
-		bool          ktkImguiWrapper::InputTextMultiline(const char* label, char* buf, size_t buf_size, const ImVec2& size = ImVec2(0, 0), ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = NULL, void* user_data = NULL){}
-		bool          ktkImguiWrapper::InputTextWithHint(const char* label, const char* hint, char* buf, size_t buf_size, ImGuiInputTextFlags flags = 0, ImGuiInputTextCallback callback = NULL, void* user_data = NULL){}
-		bool          ktkImguiWrapper::InputFloat(const char* label, float* v, float step = 0.0f, float step_fast = 0.0f, const char* format = "%.3f", ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::InputFloat2(const char* label, float v[2], const char* format = "%.3f", ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::InputFloat3(const char* label, float v[3], const char* format = "%.3f", ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::InputFloat4(const char* label, float v[4], const char* format = "%.3f", ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::InputInt(const char* label, int* v, int step = 1, int step_fast = 100, ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::InputInt2(const char* label, int v[2], ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::InputInt3(const char* label, int v[3], ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::InputInt4(const char* label, int v[4], ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::InputDouble(const char* label, double* v, double step = 0.0, double step_fast = 0.0, const char* format = "%.6f", ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::InputScalar(const char* label, ImGuiDataType data_type, void* p_data, const void* p_step = NULL, const void* p_step_fast = NULL, const char* format = NULL, ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::InputScalarN(const char* label, ImGuiDataType data_type, void* p_data, int components, const void* p_step = NULL, const void* p_step_fast = NULL, const char* format = NULL, ImGuiInputTextFlags flags = 0){}
-		bool          ktkImguiWrapper::ColorEdit3(const char* label, float col[3], ImGuiColorEditFlags flags = 0){}
-		bool          ktkImguiWrapper::ColorEdit4(const char* label, float col[4], ImGuiColorEditFlags flags = 0){}
-		bool          ktkImguiWrapper::ColorPicker3(const char* label, float col[3], ImGuiColorEditFlags flags = 0){}
-		bool          ktkImguiWrapper::ColorPicker4(const char* label, float col[4], ImGuiColorEditFlags flags = 0, const float* ref_col = NULL){}
-		bool          ktkImguiWrapper::ColorButton(const char* desc_id, const ImVec4& col, ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0, 0)){} 
-		void          ktkImguiWrapper::SetColorEditOptions(ImGuiColorEditFlags flags){}                     
-		bool          ktkImguiWrapper::TreeNode(const char* label){}
-		bool          ktkImguiWrapper::TreeNode(const char* str_id, const char* fmt, ...){}   
-		bool          ktkImguiWrapper::TreeNode(const void* ptr_id, const char* fmt, ...){}   
-		bool          ktkImguiWrapper::TreeNodeV(const char* str_id, const char* fmt, va_list args){}
-		bool          ktkImguiWrapper::TreeNodeV(const void* ptr_id, const char* fmt, va_list args){}
-		bool          ktkImguiWrapper::TreeNodeEx(const char* label, ImGuiTreeNodeFlags flags = 0){}
-		bool          ktkImguiWrapper::TreeNodeEx(const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, ...){}
-		bool          ktkImguiWrapper::TreeNodeEx(const void* ptr_id, ImGuiTreeNodeFlags flags, const char* fmt, ...){}
-		bool          ktkImguiWrapper::TreeNodeExV(const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, va_list args){}
-		bool          ktkImguiWrapper::TreeNodeExV(const void* ptr_id, ImGuiTreeNodeFlags flags, const char* fmt, va_list args){}
-		void          ktkImguiWrapper::TreePush(const char* str_id){}                                       
-		void          ktkImguiWrapper::TreePush(const void* ptr_id){}                                
-		void          ktkImguiWrapper::TreePop(){}                                                          
-		float         ktkImguiWrapper::GetTreeNodeToLabelSpacing(){}                                      
-		bool          ktkImguiWrapper::CollapsingHeader(const char* label, ImGuiTreeNodeFlags flags){}  
-		bool          ktkImguiWrapper::CollapsingHeader(const char* label, bool* p_visible, ImGuiTreeNodeFlags flags){} 
-		void          ktkImguiWrapper::SetNextItemOpen(bool is_open, ImGuiCond cond){}                  
-		bool          ktkImguiWrapper::BeginListBox(const char* label, const ImVec2& size){} 
-		void          ktkImguiWrapper::EndListBox(){}                                                       
-		bool          ktkImguiWrapper::ListBox(const char* label, int* current_item, const char* const items[], int items_count, int height_in_items = -1){}
-		bool          ktkImguiWrapper::ListBox(const char* label, int* current_item, bool (*items_getter)(void* data, int idx, const char** out_text), void* data, int items_count, int height_in_items = -1){}
+		bool          ktkImguiWrapper::BeginCombo(const char* label, const char* preview_value, ImGuiComboFlags flags)
+		{
+			return ImGui::BeginCombo(label, preview_value, flags);
+		}
+		void          ktkImguiWrapper::EndCombo()
+		{
+			ImGui::EndCombo();
+		} 
+		bool          ktkImguiWrapper::Combo(const char* label, int* current_item, const char* const items[], int items_count, int popup_max_height_in_items)
+		{
+			return ImGui::Combo(label, current_item, items, items_count, popup_max_height_in_items);
+		}
+		bool          ktkImguiWrapper::Combo(const char* label, int* current_item, const char* items_separated_by_zeros, int popup_max_height_in_items)
+		{
+			return ImGui::Combo(label, current_item, items_separated_by_zeros, popup_max_height_in_items);
+		}     
+		bool          ktkImguiWrapper::Combo(const char* label, int* current_item, bool(*items_getter)(void* data, int idx, const char** out_text), void* data, int items_count, int popup_max_height_in_items)
+		{
+			return ImGui::Combo(label, current_item, items_getter, data, items_count, popup_max_height_in_items);
+		}
+		bool          ktkImguiWrapper::DragFloat(const char* label, float* v, float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragFloat(label, v, v_speed, v_min, v_max, format, flags);
+		}    
+		bool          ktkImguiWrapper::DragFloat2(const char* label, float v[2], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragFloat2(label, v, v_speed, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::DragFloat3(const char* label, float v[3], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragFloat3(label, v, v_speed, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::DragFloat4(const char* label, float v[4], float v_speed, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragFloat4(label, v, v_speed, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::DragFloatRange2(const char* label, float* v_current_min, float* v_current_max, float v_speed, float v_min, float v_max, const char* format, const char* format_max, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragFloatRange2(label, v_current_min, v_current_max, v_speed, v_min, v_max, format, format_max, flags);
+		}
+		bool          ktkImguiWrapper::DragInt(const char* label, int* v, float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragInt(label, v, v_speed, v_min, v_max, format, flags);
+		} 
+		bool          ktkImguiWrapper::DragInt2(const char* label, int v[2], float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragInt2(label, v, v_speed, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::DragInt3(const char* label, int v[3], float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragInt3(label, v, v_speed, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::DragInt4(const char* label, int v[4], float v_speed, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragInt4(label, v, v_speed, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::DragIntRange2(const char* label, int* v_current_min, int* v_current_max, float v_speed, int v_min, int v_max, const char* format, const char* format_max, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragIntRange2(label, v_current_min, v_current_max, v_speed, v_min, v_max, format, format_max, flags);
+		}
+		bool          ktkImguiWrapper::DragScalar(const char* label, ImGuiDataType data_type, void* p_data, float v_speed, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragScalar(label, data_type, p_data, v_speed, p_min, p_max, format, flags);
+		}
+		bool          ktkImguiWrapper::DragScalarN(const char* label, ImGuiDataType data_type, void* p_data, int components, float v_speed, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::DragScalarN(label, data_type, p_data, components, v_speed, p_min, p_max, format, flags);
+		}
+		bool          ktkImguiWrapper::SliderFloat(const char* label, float* v, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderFloat(label, v, v_min, v_max, format, flags);
+		}      
+		bool          ktkImguiWrapper::SliderFloat2(const char* label, float v[2], float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderFloat2(label, v, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::SliderFloat3(const char* label, float v[3], float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderFloat3(label, v, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::SliderFloat4(const char* label, float v[4], float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderFloat4(label, v, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::SliderAngle(const char* label, float* v_rad, float v_degrees_min, float v_degrees_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderAngle(label, v_rad, v_degrees_min, v_degrees_max, format, flags);
+		}
+		bool          ktkImguiWrapper::SliderInt(const char* label, int* v, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderInt(label, v, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::SliderInt2(const char* label, int v[2], int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderInt2(label, v, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::SliderInt3(const char* label, int v[3], int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderInt3(label, v, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::SliderInt4(const char* label, int v[4], int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderInt4(label, v, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::SliderScalar(const char* label, ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderScalar(label, data_type, p_data, p_min, p_max, format, flags);
+		}
+		bool          ktkImguiWrapper::SliderScalarN(const char* label, ImGuiDataType data_type, void* p_data, int components, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::SliderScalarN(label, data_type, p_data, components, p_min, p_max, format, flags);
+		}
+		bool          ktkImguiWrapper::VSliderFloat(const char* label, const ImVec2& size, float* v, float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::VSliderFloat(label, size, v, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::VSliderInt(const char* label, const ImVec2& size, int* v, int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::VSliderInt(label, size, v, v_min, v_max, format, flags);
+		}
+		bool          ktkImguiWrapper::VSliderScalar(const char* label, const ImVec2& size, ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max, const char* format, ImGuiSliderFlags flags)
+		{
+			return ImGui::VSliderScalar(label, size, data_type, p_data, p_min, p_max, format, flags);
+		}
+		bool          ktkImguiWrapper::InputText(const char* label, char* buf, size_t buf_size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
+		{
+			return ImGui::InputText(label, buf, buf_size, flags, callback, user_data);
+		}
+		bool          ktkImguiWrapper::InputTextMultiline(const char* label, char* buf, size_t buf_size, const ImVec2& size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
+		{
+			return ImGui::InputTextMultiline(label, buf, buf_size, size, flags, callback, user_data);
+		}
+		bool          ktkImguiWrapper::InputTextWithHint(const char* label, const char* hint, char* buf, size_t buf_size, ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
+		{
+			return ImGui::InputTextWithHint(label, hint, buf, buf_size, flags, callback, user_data);
+		}
+		bool          ktkImguiWrapper::InputFloat(const char* label, float* v, float step, float step_fast, const char* format, ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputFloat(label, v, step, step_fast, format, flags);
+		}
+		bool          ktkImguiWrapper::InputFloat2(const char* label, float v[2], const char* format, ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputFloat2(label, v, format, flags);
+		}
+		bool          ktkImguiWrapper::InputFloat3(const char* label, float v[3], const char* format, ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputFloat3(label, v, format, flags);
+		}
+		bool          ktkImguiWrapper::InputFloat4(const char* label, float v[4], const char* format, ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputFloat4(label, v, format, flags);
+		}
+		bool          ktkImguiWrapper::InputInt(const char* label, int* v, int step, int step_fast, ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputInt(label, v, step, step_fast, flags);
+		}
+		bool          ktkImguiWrapper::InputInt2(const char* label, int v[2], ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputInt(label, v, flags);
+		}
+		bool          ktkImguiWrapper::InputInt3(const char* label, int v[3], ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputInt(label, v, flags);
+		}
+		bool          ktkImguiWrapper::InputInt4(const char* label, int v[4], ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputInt(label, v, flags);
+		}
+		bool          ktkImguiWrapper::InputDouble(const char* label, double* v, double step, double step_fast, const char* format, ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputDouble(label, v, step, step_fast, format, flags);
+		}
+		bool          ktkImguiWrapper::InputScalar(const char* label, ImGuiDataType data_type, void* p_data, const void* p_step, const void* p_step_fast, const char* format, ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputScalar(label, data_type, p_data, p_step, p_step_fast, format, flags);
+		}
+		bool          ktkImguiWrapper::InputScalarN(const char* label, ImGuiDataType data_type, void* p_data, int components, const void* p_step, const void* p_step_fast, const char* format, ImGuiInputTextFlags flags)
+		{
+			return ImGui::InputScalarN(label, data_type, p_data, components, p_step, p_step_fast, format, flags);
+		}
+		bool          ktkImguiWrapper::ColorEdit3(const char* label, float col[3], ImGuiColorEditFlags flags)
+		{
+			return ImGui::ColorEdit3(label, col, flags);
+		}
+		bool          ktkImguiWrapper::ColorEdit4(const char* label, float col[4], ImGuiColorEditFlags flags)
+		{
+			return ImGui::ColorEdit4(label, col, flags);
+		}
+		bool          ktkImguiWrapper::ColorPicker3(const char* label, float col[3], ImGuiColorEditFlags flags)
+		{
+			return ImGui::ColorPicker3(label, col, flags);
+		}
+		bool          ktkImguiWrapper::ColorPicker4(const char* label, float col[4], ImGuiColorEditFlags flags, const float* ref_col)
+		{
+			return ImGui::ColorPicker4(label, col, flags, ref_col);
+		}
+		bool          ktkImguiWrapper::ColorButton(const char* desc_id, const ImVec4& col, ImGuiColorEditFlags flags, ImVec2 size)
+		{
+			return ImGui::ColorButton(desc_id, col, flags, size);
+		} 
+		void          ktkImguiWrapper::SetColorEditOptions(ImGuiColorEditFlags flags)
+		{
+			return ImGui::SetColorEditOptions(flags);
+		}                     
+		bool          ktkImguiWrapper::TreeNode(const char* label)
+		{
+			return ImGui::TreeNode(label);
+		}
+		bool          ktkImguiWrapper::TreeNode(const char* str_id, const char* fmt, ...)
+		{
+			va_list args;
+			va_start(args, fmt);
+			bool status = ImGui::TreeNode(str_id, fmt, args);
+			va_end(args);
+
+			return status;
+		}   
+		bool          ktkImguiWrapper::TreeNode(const void* ptr_id, const char* fmt, ...)
+		{
+			va_list args;
+			va_start(args, fmt);
+			bool status = ImGui::TreeNode(ptr_id, fmt,	args);
+			va_end(args);
+
+			return status;
+		}   
+		bool          ktkImguiWrapper::TreeNodeV(const char* str_id, const char* fmt, va_list args)
+		{
+			return ImGui::TreeNodeV(str_id, fmt, args);
+		}
+		bool          ktkImguiWrapper::TreeNodeV(const void* ptr_id, const char* fmt, va_list args)
+		{
+			return ImGui::TreeNodeV(ptr_id, fmt, args);
+		}
+		bool          ktkImguiWrapper::TreeNodeEx(const char* label, ImGuiTreeNodeFlags flags)
+		{
+			return ImGui::TreeNodeEx(label, flags);
+		}
+		bool          ktkImguiWrapper::TreeNodeEx(const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, ...)
+		{
+			va_list args;
+			va_start(args, fmt);
+			bool status = ImGui::TreeNodeEx(str_id, flags, fmt, args);
+			va_end(args);
+
+			return status;
+		}
+		bool          ktkImguiWrapper::TreeNodeEx(const void* ptr_id, ImGuiTreeNodeFlags flags, const char* fmt, ...)
+		{
+			va_list args;
+			va_start(args, fmt);
+			bool status = ImGui::TreeNodeEx(ptr_id, flags, fmt, args);
+			va_end(args);
+
+			return status;
+		}
+		bool          ktkImguiWrapper::TreeNodeExV(const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, va_list args)
+		{
+			return ImGui::TreeNodeExV(str_id, flags, fmt, args);
+		}
+		bool          ktkImguiWrapper::TreeNodeExV(const void* ptr_id, ImGuiTreeNodeFlags flags, const char* fmt, va_list args)
+		{
+			return ImGui::TreeNodeExV(ptr_id, flags, fmt, args);
+		}
+		void          ktkImguiWrapper::TreePush(const char* str_id)
+		{
+			ImGui::TreePush(str_id);
+		}                                       
+		void          ktkImguiWrapper::TreePush(const void* ptr_id)
+		{
+			ImGui::TreePush(ptr_id);
+		}                                
+		void          ktkImguiWrapper::TreePop()
+		{
+			ImGui::TreePop();
+		}                                                          
+		float         ktkImguiWrapper::GetTreeNodeToLabelSpacing()
+		{
+			return ImGui::GetTreeNodeToLabelSpacing();
+		}                                      
+		bool          ktkImguiWrapper::CollapsingHeader(const char* label, ImGuiTreeNodeFlags flags)
+		{
+			return ImGui::CollapsingHeader(label, flags);
+		}  
+		bool          ktkImguiWrapper::CollapsingHeader(const char* label, bool* p_visible, ImGuiTreeNodeFlags flags)
+		{
+			return ImGui::CollapsingHeader(label, p_visible, flags);
+		} 
+		void          ktkImguiWrapper::SetNextItemOpen(bool is_open, ImGuiCond cond)
+		{
+			ImGui::SetNextItemOpen(is_open, cond);
+		}               
+		bool          ktkImguiWrapper::BeginListBox(const char* label, const ImVec2& size)
+		{
+			return ImGui::BeginListBox(label, size);
+		}
+		void          ktkImguiWrapper::EndListBox()
+		{
+			ImGui::EndListBox();
+		}                                                       
+		bool          ktkImguiWrapper::ListBox(const char* label, int* current_item, const char* const items[], int items_count, int height_in_items)
+		{
+			return ImGui::ListBox(label, current_item, items, items_count, height_in_items);
+		}
+		bool          ktkImguiWrapper::ListBox(const char* label, int* current_item, bool (*items_getter)(void* data, int idx, const char** out_text), void* data, int items_count, int height_in_items)
+		{
+			return ImGui::ListBox(label, current_item, items_getter, data, items_count, height_in_items);
+		}
 		void          ktkImguiWrapper::PlotLines(const char* label, const float* values, int values_count, int values_offset = 0, const char* overlay_text = NULL, float scale_min = FLT_MAX, float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0), int stride = sizeof(float)){}
 		void          ktkImguiWrapper::PlotLines(const char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset = 0, const char* overlay_text = NULL, float scale_min = FLT_MAX, float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0)){}
 		void          ktkImguiWrapper::PlotHistogram(const char* label, const float* values, int values_count, int values_offset = 0, const char* overlay_text = NULL, float scale_min = FLT_MAX, float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0), int stride = sizeof(float)){}

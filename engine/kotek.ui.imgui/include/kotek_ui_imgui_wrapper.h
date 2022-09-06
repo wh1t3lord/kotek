@@ -60,12 +60,12 @@ namespace Kotek
 			bool ImGui_ImplGlfw_InitForOpenGL(
 				void* window_handle, bool install_callbacks);
 
-			ImGuiContext* CreateContext(ImFontAtlas* shared_font_atlas = NULL);
-			void          DestroyContext(ImGuiContext* ctx = NULL); 
+			void*		  CreateContext(void* shared_font_atlas = NULL);
+			void          DestroyContext(void* ctx = NULL); 
 			ImGuiContext* GetCurrentContext();
 			void          SetCurrentContext(ImGuiContext* ctx);
-			ImGuiIO&      GetIO();                                    
-			ImGuiStyle&   GetStyle();                                 
+			void*		  GetIO();                                    
+			void*		  GetStyle();                                 
 			void          NewFrame();                                 
 			void          EndFrame();                                 
 			void          Render();                                   
@@ -80,7 +80,7 @@ namespace Kotek
 			void          ShowFontSelector(const char* label);        
 			void          ShowUserGuide();                           
 			const char*   GetVersion();                              
-			void          StyleColorsDark(ImGuiStyle* dst = NULL);    
+			void          StyleColorsDark(void* dst = NULL);    
 			void          StyleColorsLight(ImGuiStyle* dst = NULL);   
 			void          StyleColorsClassic(ImGuiStyle* dst = NULL); 
 			 
