@@ -859,6 +859,570 @@ flags);
 		void          ktkImguiWrapper::PlotHistogram(const char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset, const char* overlay_text, float scale_min, float scale_max, ImVec2 graph_size)
 		{
 			ImGui::PlotHistogram(label, values_getter, data, values_count, values_offset, overlay_text, scale_min, scale_max, graph_size);
+		}
+		void ktkImguiWrapper::Value(const char* prefix, bool b) 
+		{
+			ImGui::Value(prefix, b);
+		}
+		void ktkImguiWrapper::Value(const char* prefix, int v)
+		 {
+		 	ImGui::Value(prefix, v);
+		 }
+		void ktkImguiWrapper::Value(const char* prefix, unsigned int v) 
+		{
+			ImGui::Value(prefix, v);
+		}
+		void ktkImguiWrapper::Value(
+			const char* prefix, float v, const char* float_format)
+		{
+			ImGui::Value(prefix, v, float_format);
+		}
+		bool ktkImguiWrapper::BeginMenuBar()
+		{
+			return ImGui::BeginMenuBar();
+		}
+		void ktkImguiWrapper::EndMenuBar() 
+		{
+			ImGui::EndMenuBar();
+		}
+		bool ktkImguiWrapper::BeginMainMenuBar()
+		{
+			return ImGui::BeginMainMenuBar();
+		}
+		void ktkImguiWrapper::EndMainMenuBar()
+		{
+			ImGui::EndMainMenuBar();
+		}
+		bool ktkImguiWrapper::BeginMenu(const char* label, bool enabled)
+		{
+			return ImGui::BeginMenu(label, enabled);
+		}
+		void ktkImguiWrapper::EndMenu() 
+		{
+			ImGui::EndMenu();
+		}
+		bool ktkImguiWrapper::MenuItem(const char* label, const char* shortcut,
+			bool selected, bool enabled)
+		{
+			return ImGui::MenuItem(label, shortcut, selected, enabled);
+		}
+		bool ktkImguiWrapper::MenuItem(const char* label, const char* shortcut,
+			bool* p_selected, bool enabled)
+		{
+			return ImGui::MenuItem(label, shortcut, p_selected, enabled);
+		}
+		void ktkImguiWrapper::BeginTooltip() 
+		{
+			ImGui::BeginTooltip();
+		}
+		void ktkImguiWrapper::EndTooltip() 
+		{
+			ImGui::EndTooltip();
+		}
+		bool ktkImguiWrapper::BeginPopup(
+			const char* str_id, ImGuiWindowFlags flags)
+		{
+			return ImGui::BeginPopup(str_id, flags);
+		}
+		bool ktkImguiWrapper::BeginPopupModal(
+			const char* name, bool* p_open, ImGuiWindowFlags flags)
+		{
+			return ImGui::BeginPopupModal(name, p_open, flags);
+		}
+		void ktkImguiWrapper::EndPopup() 
+		{
+			ImGui::EndPopup();
+		}
+		void ktkImguiWrapper::OpenPopup(
+			const char* str_id, ImGuiPopupFlags popup_flags)
+		{
+			ImGui::OpenPopup(str_id, popup_flags);
+		}
+		void ktkImguiWrapper::OpenPopup(ImGuiID id, ImGuiPopupFlags popup_flags)
+		{
+			ImGui::OpenPopup(id, popup_flags);
+		}
+		void ktkImguiWrapper::OpenPopupOnItemClick(
+			const char* str_id, ImGuiPopupFlags popup_flags)
+		{
+		}
+		void ktkImguiWrapper::CloseCurrentPopup() {}
+		bool ktkImguiWrapper::BeginPopupContextItem(
+			const char* str_id, ImGuiPopupFlags popup_flags)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::BeginPopupContextWindow(
+			const char* str_id, ImGuiPopupFlags popup_flags)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::BeginPopupContextVoid(
+			const char* str_id, ImGuiPopupFlags popup_flags)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsPopupOpen(
+			const char* str_id, ImGuiPopupFlags flags)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::BeginTable(const char* str_id, int column,
+			ImGuiTableFlags flags, const ImVec2& outer_size, float inner_width)
+		{
+			return false;
+		}
+		void ktkImguiWrapper::EndTable() {}
+		void ktkImguiWrapper::TableNextRow(
+			ImGuiTableRowFlags row_flags, float min_row_height)
+		{
+		}
+		bool ktkImguiWrapper::TableNextColumn()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::TableSetColumnIndex(int column_n)
+		{
+			return false;
+		}
+		void ktkImguiWrapper::TableSetupColumn(const char* label,
+			ImGuiTableColumnFlags flags, float init_width_or_weight,
+			ImGuiID user_id)
+		{
+		}
+		void ktkImguiWrapper::TableSetupScrollFreeze(int cols, int rows) {}
+		void ktkImguiWrapper::TableHeadersRow() {}
+		void ktkImguiWrapper::TableHeader(const char* label) {}
+		ImGuiTableSortSpecs* ktkImguiWrapper::TableGetSortSpecs()
+		{
+			return nullptr;
+		}
+		int ktkImguiWrapper::TableGetColumnCount()
+		{
+			return 0;
+		}
+		int ktkImguiWrapper::TableGetColumnIndex()
+		{
+			return 0;
+		}
+		int ktkImguiWrapper::TableGetRowIndex()
+		{
+			return 0;
+		}
+		const char* ktkImguiWrapper::TableGetColumnName(int column_n)
+		{
+			return nullptr;
+		}
+		ImGuiTableColumnFlags ktkImguiWrapper::TableGetColumnFlags(int column_n)
+		{
+			return ImGuiTableColumnFlags();
+		}
+		void ktkImguiWrapper::TableSetColumnEnabled(int column_n, bool v) {}
+		void ktkImguiWrapper::TableSetBgColor(
+			ImGuiTableBgTarget target, ImU32 color, int column_n)
+		{
+		}
+		void ktkImguiWrapper::Columns(int count, const char* id, bool border) {}
+		void ktkImguiWrapper::NextColumn() {}
+		int ktkImguiWrapper::GetColumnIndex()
+		{
+			return 0;
+		}
+		float ktkImguiWrapper::GetColumnWidth(int column_index)
+		{
+			return 0.0f;
+		}
+		void ktkImguiWrapper::SetColumnWidth(int column_index, float width) {}
+		float ktkImguiWrapper::GetColumnOffset(int column_index)
+		{
+			return 0.0f;
+		}
+		void ktkImguiWrapper::SetColumnOffset(int column_index, float offset_x)
+		{
+		}
+		int ktkImguiWrapper::GetColumnsCount()
+		{
+			return 0;
+		}
+		bool ktkImguiWrapper::BeginTabBar(
+			const char* str_id, ImGuiTabBarFlags flags)
+		{
+			return false;
+		}
+		void ktkImguiWrapper::EndTabBar() {}
+		bool ktkImguiWrapper::BeginTabItem(
+			const char* label, bool* p_open, ImGuiTabItemFlags flags)
+		{
+			return false;
+		}
+		void ktkImguiWrapper::EndTabItem() {}
+		bool ktkImguiWrapper::TabItemButton(
+			const char* label, ImGuiTabItemFlags flags)
+		{
+			return false;
+		}
+		void ktkImguiWrapper::SetTabItemClosed(
+			const char* tab_or_docked_window_label)
+		{
+		}
+		ImGuiID ktkImguiWrapper::DockSpace(ImGuiID id, const ImVec2& size,
+			ImGuiDockNodeFlags flags, const ImGuiWindowClass* window_class)
+		{
+			return ImGuiID();
+		}
+		ImGuiID ktkImguiWrapper::DockSpaceOverViewport(
+			const ImGuiViewport* viewport, ImGuiDockNodeFlags flags,
+			const ImGuiWindowClass* window_class)
+		{
+			return ImGuiID();
+		}
+		void ktkImguiWrapper::SetNextWindowDockID(
+			ImGuiID dock_id, ImGuiCond cond)
+		{
+		}
+		void ktkImguiWrapper::SetNextWindowClass(
+			const ImGuiWindowClass* window_class)
+		{
+		}
+		ImGuiID ktkImguiWrapper::GetWindowDockID()
+		{
+			return ImGuiID();
+		}
+		bool ktkImguiWrapper::IsWindowDocked()
+		{
+			return false;
+		}
+		void ktkImguiWrapper::LogToTTY(int auto_open_depth) {}
+		void ktkImguiWrapper::LogToFile(
+			int auto_open_depth, const char* filename)
+		{
+		}
+		void ktkImguiWrapper::LogToClipboard(int auto_open_depth) {}
+		void ktkImguiWrapper::LogFinish() {}
+		void ktkImguiWrapper::LogButtons() {}
+		bool ktkImguiWrapper::BeginDragDropSource(ImGuiDragDropFlags flags)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::SetDragDropPayload(
+			const char* type, const void* data, size_t sz, ImGuiCond cond)
+		{
+			return false;
+		}
+		void ktkImguiWrapper::EndDragDropSource() {}
+		bool ktkImguiWrapper::BeginDragDropTarget()
+		{
+			return false;
+		}
+		const ImGuiPayload* ktkImguiWrapper::AcceptDragDropPayload(
+			const char* type, ImGuiDragDropFlags flags)
+		{
+			return nullptr;
+		}
+		void ktkImguiWrapper::EndDragDropTarget() {}
+		const ImGuiPayload* ktkImguiWrapper::GetDragDropPayload()
+		{
+			return nullptr;
+		}
+		void ktkImguiWrapper::BeginDisabled(bool disabled) {}
+		void ktkImguiWrapper::EndDisabled() {}
+		void ktkImguiWrapper::PushClipRect(const ImVec2& clip_rect_min,
+			const ImVec2& clip_rect_max, bool intersect_with_current_clip_rect)
+		{
+		}
+		void ktkImguiWrapper::PopClipRect() {}
+		void ktkImguiWrapper::SetItemDefaultFocus() {}
+		void ktkImguiWrapper::SetKeyboardFocusHere(int offset) {}
+		bool ktkImguiWrapper::IsItemHovered(ImGuiHoveredFlags flags)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsItemActive()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsItemFocused()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsItemClicked(ImGuiMouseButton mouse_button)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsItemVisible()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsItemEdited()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsItemActivated()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsItemDeactivated()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsItemDeactivatedAfterEdit()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsItemToggledOpen()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsAnyItemHovered()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsAnyItemActive()
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsAnyItemFocused()
+		{
+			return false;
+		}
+		ImVec2 ktkImguiWrapper::GetItemRectMin()
+		{
+			return ImVec2();
+		}
+		ImVec2 ktkImguiWrapper::GetItemRectMax()
+		{
+			return ImVec2();
+		}
+		ImVec2 ktkImguiWrapper::GetItemRectSize()
+		{
+			return ImVec2();
+		}
+		void ktkImguiWrapper::SetItemAllowOverlap() {}
+		ImGuiViewport* ktkImguiWrapper::GetMainViewport()
+		{
+			return nullptr;
+		}
+		bool ktkImguiWrapper::IsRectVisible(const ImVec2& size)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsRectVisible(
+			const ImVec2& rect_min, const ImVec2& rect_max)
+		{
+			return false;
+		}
+		double ktkImguiWrapper::GetTime()
+		{
+			return 0.0;
+		}
+		int ktkImguiWrapper::GetFrameCount()
+		{
+			return 0;
+		}
+		ImDrawList* ktkImguiWrapper::GetBackgroundDrawList()
+		{
+			return nullptr;
+		}
+		ImDrawList* ktkImguiWrapper::GetForegroundDrawList()
+		{
+			return nullptr;
+		}
+		ImDrawList* ktkImguiWrapper::GetBackgroundDrawList(
+			ImGuiViewport* viewport)
+		{
+			return nullptr;
+		}
+		ImDrawList* ktkImguiWrapper::GetForegroundDrawList(
+			ImGuiViewport* viewport)
+		{
+			return nullptr;
+		}
+		ImDrawListSharedData* ktkImguiWrapper::GetDrawListSharedData()
+		{
+			return nullptr;
+		}
+		const char* ktkImguiWrapper::GetStyleColorName(ImGuiCol idx)
+		{
+			return nullptr;
+		}
+		void ktkImguiWrapper::SetStateStorage(ImGuiStorage* storage) {}
+		ImGuiStorage* ktkImguiWrapper::GetStateStorage()
+		{
+			return nullptr;
+		}
+		void ktkImguiWrapper::CalcListClipping(int items_count,
+			float items_height, int* out_items_display_start,
+			int* out_items_display_end)
+		{
+		}
+		bool ktkImguiWrapper::BeginChildFrame(
+			ImGuiID id, const ImVec2& size, ImGuiWindowFlags flags)
+		{
+			return false;
+		}
+		void ktkImguiWrapper::EndChildFrame() {}
+		ImVec2 ktkImguiWrapper::CalcTextSize(const char* text,
+			const char* text_end, bool hide_text_after_double_hash,
+			float wrap_width)
+		{
+			return ImVec2();
+		}
+		ImVec4 ktkImguiWrapper::ColorConvertU32ToFloat4(ImU32 in)
+		{
+			return ImVec4();
+		}
+		ImU32 ktkImguiWrapper::ColorConvertFloat4ToU32(const ImVec4& in)
+		{
+			return ImU32();
+		}
+		void ktkImguiWrapper::ColorConvertRGBtoHSV(
+			float r, float g, float b, float& out_h, float& out_s, float& out_v)
+		{
+		}
+		void ktkImguiWrapper::ColorConvertHSVtoRGB(
+			float h, float s, float v, float& out_r, float& out_g, float& out_b)
+		{
+		}
+		int ktkImguiWrapper::GetKeyIndex(ImGuiKey imgui_key)
+		{
+			return 0;
+		}
+		bool ktkImguiWrapper::IsKeyDown(int user_key_index)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsKeyPressed(int user_key_index, bool repeat)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsKeyReleased(int user_key_index)
+		{
+			return false;
+		}
+		int ktkImguiWrapper::GetKeyPressedAmount(
+			int key_index, float repeat_delay, float rate)
+		{
+			return 0;
+		}
+		void ktkImguiWrapper::CaptureKeyboardFromApp(
+			bool want_capture_keyboard_value)
+		{
+		}
+		bool ktkImguiWrapper::IsMouseDown(ImGuiMouseButton button)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsMouseClicked(
+			ImGuiMouseButton button, bool repeat)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsMouseReleased(ImGuiMouseButton button)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsMouseDoubleClicked(ImGuiMouseButton button)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsMouseHoveringRect(
+			const ImVec2& r_min, const ImVec2& r_max, bool clip)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsMousePosValid(const ImVec2* mouse_pos)
+		{
+			return false;
+		}
+		bool ktkImguiWrapper::IsAnyMouseDown()
+		{
+			return false;
+		}
+		ImVec2 ktkImguiWrapper::GetMousePos()
+		{
+			return ImVec2();
+		}
+		ImVec2 ktkImguiWrapper::GetMousePosOnOpeningCurrentPopup()
+		{
+			return ImVec2();
+		}
+		bool ktkImguiWrapper::IsMouseDragging(
+			ImGuiMouseButton button, float lock_threshold)
+		{
+			return false;
+		}
+		ImVec2 ktkImguiWrapper::GetMouseDragDelta(
+			ImGuiMouseButton button, float lock_threshold)
+		{
+			return ImVec2();
+		}
+		void ktkImguiWrapper::ResetMouseDragDelta(ImGuiMouseButton button) {}
+		ImGuiMouseCursor ktkImguiWrapper::GetMouseCursor()
+		{
+			return ImGuiMouseCursor();
+		}
+		void ktkImguiWrapper::SetMouseCursor(ImGuiMouseCursor cursor_type) {}
+		void ktkImguiWrapper::CaptureMouseFromApp(bool want_capture_mouse_value)
+		{
+		}
+		const char* ktkImguiWrapper::GetClipboardText()
+		{
+			return nullptr;
+		}
+		void ktkImguiWrapper::SetClipboardText(const char* text) {}
+		void ktkImguiWrapper::LoadIniSettingsFromDisk(const char* ini_filename)
+		{
+		}
+		void ktkImguiWrapper::LoadIniSettingsFromMemory(
+			const char* ini_data, size_t ini_size)
+		{
+		}
+		void ktkImguiWrapper::SaveIniSettingsToDisk(const char* ini_filename) {}
+		const char* ktkImguiWrapper::SaveIniSettingsToMemory(
+			size_t* out_ini_size)
+		{
+			return nullptr;
+		}
+		bool ktkImguiWrapper::DebugCheckVersionAndDataLayout(
+			const char* version_str, size_t sz_io, size_t sz_style,
+			size_t sz_vec2, size_t sz_vec4, size_t sz_drawvert,
+			size_t sz_drawidx)
+		{
+			return false;
+		}
+		void ktkImguiWrapper::SetAllocatorFunctions(
+			ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func,
+			void* user_data)
+		{
+		}
+		void ktkImguiWrapper::GetAllocatorFunctions(
+			ImGuiMemAllocFunc* p_alloc_func, ImGuiMemFreeFunc* p_free_func,
+			void** p_user_data)
+		{
+		}
+		void* ktkImguiWrapper::MemAlloc(size_t size)
+		{
+			return nullptr;
+		}
+		void ktkImguiWrapper::MemFree(void* ptr) {}
+		ImGuiPlatformIO& ktkImguiWrapper::GetPlatformIO()
+		{
+			// TODO: insert return statement here
+		}
+		void ktkImguiWrapper::UpdatePlatformWindows() {}
+		void ktkImguiWrapper::RenderPlatformWindowsDefault(
+			void* platform_render_arg, void* renderer_render_arg)
+		{
+		}
+		void ktkImguiWrapper::DestroyPlatformWindows() {}
+		ImGuiViewport* ktkImguiWrapper::FindViewportByID(ImGuiID id)
+		{
+			return nullptr;
+		}
+		ImGuiViewport* ktkImguiWrapper::FindViewportByPlatformHandle(
+			void* platform_handle)
+		{
+			return nullptr;
 		}                                                                                          
 	} // namespace UI
 } // namespace Kotek

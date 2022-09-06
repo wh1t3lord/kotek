@@ -260,7 +260,214 @@ namespace Kotek
 			void          PlotLines(const char* label, const float* values, int values_count, int values_offset = 0, const char* overlay_text = NULL, float scale_min = FLT_MAX, float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0), int stride = sizeof(float));
 			void          PlotLines(const char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset = 0, const char* overlay_text = NULL, float scale_min = FLT_MAX, float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0));
 			void          PlotHistogram(const char* label, const float* values, int values_count, int values_offset = 0, const char* overlay_text = NULL, float scale_min = FLT_MAX, float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0), int stride = sizeof(float));
-			void          PlotHistogram(const char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset = 0, const char* overlay_text = NULL, float scale_min = FLT_MAX, float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0));               
+			void          PlotHistogram(const char* label, float(*values_getter)(void* data, int idx), void* data, int values_count, int values_offset = 0, const char* overlay_text = NULL, float scale_min = FLT_MAX, float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0));
+	 void          Value(const char* prefix, bool b);
+     void          Value(const char* prefix, int v);
+     void          Value(const char* prefix, unsigned int v);
+     void          Value(const char* prefix, float v, const char* float_format = NULL);
+
+ 
+     bool          BeginMenuBar();                                                     
+     void          EndMenuBar();                                                       
+     bool          BeginMainMenuBar();                                                 
+     void          EndMainMenuBar();                                                   
+     bool          BeginMenu(const char* label, bool enabled = true);                  
+     void          EndMenu();                                                          
+     bool          MenuItem(const char* label, const char* shortcut = NULL, bool selected = false, bool enabled = true);   
+     bool          MenuItem(const char* label, const char* shortcut, bool* p_selected, bool enabled = true);               
+
+ 
+     void          BeginTooltip();                                                      
+     void          EndTooltip();
+     void          SetTooltip(const char* fmt, ...) IM_FMTARGS(1);                     
+     void          SetTooltipV(const char* fmt, va_list args) IM_FMTLIST(1);
+
+     bool          BeginPopup(const char* str_id, ImGuiWindowFlags flags = 0);                          
+     bool          BeginPopupModal(const char* name, bool* p_open = NULL, ImGuiWindowFlags flags = 0);  
+     void          EndPopup();                                                                          
+
+ 
+     void          OpenPopup(const char* str_id, ImGuiPopupFlags popup_flags = 0);                     
+     void          OpenPopup(ImGuiID id, ImGuiPopupFlags popup_flags = 0);                             
+     void          OpenPopupOnItemClick(const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1);     
+     void          CloseCurrentPopup();                                                                
+ 
+     bool          BeginPopupContextItem(const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1);    
+     bool          BeginPopupContextWindow(const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1); 
+     bool          BeginPopupContextVoid(const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1);   
+
+ 
+     bool          IsPopupOpen(const char* str_id, ImGuiPopupFlags flags = 0);                         
+
+ 
+     bool          BeginTable(const char* str_id, int column, ImGuiTableFlags flags = 0, const ImVec2& outer_size = ImVec2(0.0f, 0.0f), float inner_width = 0.0f);
+     void          EndTable();                                  
+     void          TableNextRow(ImGuiTableRowFlags row_flags = 0, float min_row_height = 0.0f); 
+     bool          TableNextColumn();                          
+     bool          TableSetColumnIndex(int column_n);          
+
+ 
+     void          TableSetupColumn(const char* label, ImGuiTableColumnFlags flags = 0, float init_width_or_weight = 0.0f, ImGuiID user_id = 0);
+     void          TableSetupScrollFreeze(int cols, int rows);  
+     void          TableHeadersRow();                           
+     void          TableHeader(const char* label);              
+
+ 
+     ImGuiTableSortSpecs*  TableGetSortSpecs();                         
+
+ 
+     int                   TableGetColumnCount();                      
+     int                   TableGetColumnIndex();                      
+     int                   TableGetRowIndex();                         
+     const char*           TableGetColumnName(int column_n = -1);      
+     ImGuiTableColumnFlags TableGetColumnFlags(int column_n = -1);     
+     void                  TableSetColumnEnabled(int column_n, bool v); 
+     void                  TableSetBgColor(ImGuiTableBgTarget target, ImU32 color, int column_n = -1);   
+
+  
+     void          Columns(int count = 1, const char* id = NULL, bool border = true);
+     void          NextColumn();                                                       
+     int           GetColumnIndex();                                                   
+     float         GetColumnWidth(int column_index = -1);                              
+     void          SetColumnWidth(int column_index, float width);                      
+     float         GetColumnOffset(int column_index = -1);                              
+     void          SetColumnOffset(int column_index, float offset_x);                  
+     int           GetColumnsCount();
+ 
+     bool          BeginTabBar(const char* str_id, ImGuiTabBarFlags flags = 0);         
+     void          EndTabBar();                                                         
+     bool          BeginTabItem(const char* label, bool* p_open = NULL, ImGuiTabItemFlags flags = 0);  
+     void          EndTabItem();                                                        
+     bool          TabItemButton(const char* label, ImGuiTabItemFlags flags = 0);       
+     void          SetTabItemClosed(const char* tab_or_docked_window_label);            
+
+     ImGuiID       DockSpace(ImGuiID id, const ImVec2& size = ImVec2(0, 0), ImGuiDockNodeFlags flags = 0, const ImGuiWindowClass* window_class = NULL);
+     ImGuiID       DockSpaceOverViewport(const ImGuiViewport* viewport = NULL, ImGuiDockNodeFlags flags = 0, const ImGuiWindowClass* window_class = NULL);
+     void          SetNextWindowDockID(ImGuiID dock_id, ImGuiCond cond = 0);           
+     void          SetNextWindowClass(const ImGuiWindowClass* window_class);           
+     ImGuiID       GetWindowDockID();
+     bool          IsWindowDocked();                                                    
+
+     void          LogToTTY(int auto_open_depth = -1);                                 
+     void          LogToFile(int auto_open_depth = -1, const char* filename = NULL);   
+     void          LogToClipboard(int auto_open_depth = -1);                           
+     void          LogFinish();                                                        
+     void          LogButtons();                                                       
+     void          LogText(const char* fmt, ...) IM_FMTARGS(1);                        
+     void          LogTextV(const char* fmt, va_list args) IM_FMTLIST(1);
+
+ 
+     bool          BeginDragDropSource(ImGuiDragDropFlags flags = 0);                                       
+     bool          SetDragDropPayload(const char* type, const void* data, size_t sz, ImGuiCond cond = 0);    
+     void          EndDragDropSource();                                                                     
+     bool                  BeginDragDropTarget();                                                          
+     const ImGuiPayload*   AcceptDragDropPayload(const char* type, ImGuiDragDropFlags flags = 0);           
+     void                  EndDragDropTarget();                                                             
+     const ImGuiPayload*   GetDragDropPayload();                                                            
+
+ 
+     void          BeginDisabled(bool disabled = true);
+     void          EndDisabled();
+
+ 
+     void          PushClipRect(const ImVec2& clip_rect_min, const ImVec2& clip_rect_max, bool intersect_with_current_clip_rect);
+     void          PopClipRect();
+
+ 
+     void          SetItemDefaultFocus();                                              
+     void          SetKeyboardFocusHere(int offset = 0);                               
+
+ 
+     bool          IsItemHovered(ImGuiHoveredFlags flags = 0);                          
+     bool          IsItemActive();                                                     
+     bool          IsItemFocused();                                                    
+     bool          IsItemClicked(ImGuiMouseButton mouse_button = 0);                   
+     bool          IsItemVisible();                                                    
+     bool          IsItemEdited();                                                     
+     bool          IsItemActivated();                                                  
+     bool          IsItemDeactivated();                                                
+     bool          IsItemDeactivatedAfterEdit();                                       
+     bool          IsItemToggledOpen();                                                 
+     bool          IsAnyItemHovered();                                                  
+     bool          IsAnyItemActive();                                                   
+     bool          IsAnyItemFocused();                                                  
+     ImVec2        GetItemRectMin();                                                    
+     ImVec2        GetItemRectMax();                                                    
+     ImVec2        GetItemRectSize();                                                   
+     void          SetItemAllowOverlap();                                               
+
+     ImGuiViewport* GetMainViewport();                                                 
+ 
+     bool          IsRectVisible(const ImVec2& size);                                 
+     bool          IsRectVisible(const ImVec2& rect_min, const ImVec2& rect_max);     
+     double        GetTime();                                                         
+     int           GetFrameCount();                                                   
+     ImDrawList*   GetBackgroundDrawList();                                            
+     ImDrawList*   GetForegroundDrawList();                                            
+     ImDrawList*   GetBackgroundDrawList(ImGuiViewport* viewport);                    
+     ImDrawList*   GetForegroundDrawList(ImGuiViewport* viewport);                    
+     ImDrawListSharedData* GetDrawListSharedData();                                   
+     const char*   GetStyleColorName(ImGuiCol idx);                                   
+     void          SetStateStorage(ImGuiStorage* storage);                            
+     ImGuiStorage* GetStateStorage();
+     void          CalcListClipping(int items_count, float items_height, int* out_items_display_start, int* out_items_display_end);     
+     bool          BeginChildFrame(ImGuiID id, const ImVec2& size, ImGuiWindowFlags flags = 0);  
+     void          EndChildFrame();                                                    
+
+ 
+     ImVec2        CalcTextSize(const char* text, const char* text_end = NULL, bool hide_text_after_double_hash = false, float wrap_width = -1.0f);
+
+ 
+     ImVec4        ColorConvertU32ToFloat4(ImU32 in);
+     ImU32         ColorConvertFloat4ToU32(const ImVec4& in);
+     void          ColorConvertRGBtoHSV(float r, float g, float b, float& out_h, float& out_s, float& out_v);
+     void          ColorConvertHSVtoRGB(float h, float s, float v, float& out_r, float& out_g, float& out_b);
+
+     int           GetKeyIndex(ImGuiKey imgui_key);                                    
+     bool          IsKeyDown(int user_key_index);                                      
+     bool          IsKeyPressed(int user_key_index, bool repeat = true);               
+     bool          IsKeyReleased(int user_key_index);                                  
+     int           GetKeyPressedAmount(int key_index, float repeat_delay, float rate); 
+     void          CaptureKeyboardFromApp(bool want_capture_keyboard_value = true);    
+
+     bool          IsMouseDown(ImGuiMouseButton button);                                
+     bool          IsMouseClicked(ImGuiMouseButton button, bool repeat = false);        
+     bool          IsMouseReleased(ImGuiMouseButton button);                            
+     bool          IsMouseDoubleClicked(ImGuiMouseButton button);                       
+     bool          IsMouseHoveringRect(const ImVec2& r_min, const ImVec2& r_max, bool clip = true); 
+     bool          IsMousePosValid(const ImVec2* mouse_pos = NULL);                    
+     bool          IsAnyMouseDown();                                                   
+     ImVec2        GetMousePos();                                                      
+     ImVec2        GetMousePosOnOpeningCurrentPopup();                                 
+     bool          IsMouseDragging(ImGuiMouseButton button, float lock_threshold = -1.0f);          
+     ImVec2        GetMouseDragDelta(ImGuiMouseButton button = 0, float lock_threshold = -1.0f);    
+     void          ResetMouseDragDelta(ImGuiMouseButton button = 0);                   
+     ImGuiMouseCursor GetMouseCursor();                                                
+     void          SetMouseCursor(ImGuiMouseCursor cursor_type);                       
+     void          CaptureMouseFromApp(bool want_capture_mouse_value = true);            
+
+     const char*   GetClipboardText();
+     void          SetClipboardText(const char* text);
+
+     void          LoadIniSettingsFromDisk(const char* ini_filename);                   
+     void          LoadIniSettingsFromMemory(const char* ini_data, size_t ini_size=0);  
+     void          SaveIniSettingsToDisk(const char* ini_filename);                     
+     const char*   SaveIniSettingsToMemory(size_t* out_ini_size = NULL);              
+
+ 
+     bool          DebugCheckVersionAndDataLayout(const char* version_str, size_t sz_io, size_t sz_style, size_t sz_vec2, size_t sz_vec4, size_t sz_drawvert, size_t sz_drawidx);  
+
+     void          SetAllocatorFunctions(ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func, void* user_data = NULL);
+     void          GetAllocatorFunctions(ImGuiMemAllocFunc* p_alloc_func, ImGuiMemFreeFunc* p_free_func, void** p_user_data);
+     void*         MemAlloc(size_t size);
+     void          MemFree(void* ptr);
+ 
+     ImGuiPlatformIO&  GetPlatformIO();                                                 
+     void              UpdatePlatformWindows();                                          
+     void              RenderPlatformWindowsDefault(void* platform_render_arg = NULL, void* renderer_render_arg = NULL);  
+     void              DestroyPlatformWindows();                                       
+     ImGuiViewport*    FindViewportByID(ImGuiID id);                                   
+     ImGuiViewport*    FindViewportByPlatformHandle(void* platform_handle);                         
 		};
 	} // namespace UI
 } // namespace Kotek
