@@ -89,17 +89,9 @@ namespace Kotek
 		{
 			ImGui::SetCurrentContext(ctx);
 		}
-		void ktkImguiWrapper::NewFrame()
-		{
-			ImGui::NewFrame();
-		}
 		void ktkImguiWrapper::EndFrame()
 		{
 			ImGui::EndFrame();
-		}
-		void ktkImguiWrapper::Render()
-		{
-			ImGui::Render();
 		}
 		ImDrawData* ktkImguiWrapper::GetDrawData()
 		{
@@ -128,7 +120,7 @@ namespace Kotek
 		}
 		bool ktkImguiWrapper::ShowStyleSelector(const char* label)
 		{
-			ImGui::ShowStyleSelector(label);
+			return ImGui::ShowStyleSelector(label);
 		}
 		void ktkImguiWrapper::ShowFontSelector(const char* label)
 		{
@@ -1694,7 +1686,7 @@ namespace Kotek
 		}
 		ImGuiPlatformIO& ktkImguiWrapper::GetPlatformIO()
 		{
-			ImGui::GetPlatformIO();
+			return ImGui::GetPlatformIO();
 		}
 		void ktkImguiWrapper::UpdatePlatformWindows()
 		{
@@ -1718,6 +1710,29 @@ namespace Kotek
 			void* platform_handle)
 		{
 			return ImGui::FindViewportByPlatformHandle(platform_handle);
+		}
+		void ktkImguiWrapper::SetTooltip(const char* fmt, ...) 
+		{
+			va_list args;
+			va_start(args, fmt);
+			ImGui::SetTooltip(fmt, args);
+			va_end(args);
+		}
+
+		void ktkImguiWrapper::SetTooltipV(const char* fmt, va_list args)
+		{
+			ImGui::SetTooltipV(fmt, args);
+		} 
+		void ktkImguiWrapper::LogText(const char* fmt, ...) 
+		{
+			va_list args;
+			va_start(args, fmt);
+			ImGui::LogText(fmt, args);
+			va_end(args);
+		}
+		void ktkImguiWrapper::LogTextV(const char* fmt, va_list args) 
+		{
+			ImGui::LogTextV(fmt, args);
 		}
 	} // namespace UI
 } // namespace Kotek
