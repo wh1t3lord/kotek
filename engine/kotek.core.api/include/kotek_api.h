@@ -10,6 +10,8 @@
 #include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 
+#include <kotek.ui.imgui/include/imgui.h>
+
 namespace Kotek
 {
 	namespace Core
@@ -636,7 +638,7 @@ namespace Kotek
 			virtual bool BeginChild(const char* str_id,
 				const ImVec2& size = ImVec2(0, 0), bool border = false,
 				ImGuiWindowFlags flags = 0) = 0;
-			virtual bool BeginChild(unsigned int id, const ImVec2& size = ImVec2(0, 0),
+			virtual bool BeginChild(ImGuiID id, const ImVec2& size = ImVec2(0, 0),
 				bool border = false, ImGuiWindowFlags flags = 0) = 0;
 			virtual void EndChild() = 0;
 
@@ -651,7 +653,7 @@ namespace Kotek
 			virtual void SetNextWindowCollapsed(bool collapsed, ImGuiCond cond = 0) = 0;
 			virtual void SetNextWindowFocus() = 0;
 			virtual void SetNextWindowBgAlpha(float alpha) = 0;
-			virtual void SetNextWindowViewport(unsigned int viewport_id) = 0;
+			virtual void SetNextWindowViewport(ImGuiID viewport_id) = 0;
 			virtual void SetWindowPos(const ImVec2& pos, ImGuiCond cond = 0) = 0;
 			virtual void SetWindowSize(const ImVec2& size, ImGuiCond cond = 0) = 0;
 			virtual void SetWindowCollapsed(bool collapsed, ImGuiCond cond = 0) = 0;
@@ -709,9 +711,9 @@ namespace Kotek
 			virtual void PushID(const void* ptr_id) = 0;
 			virtual void PushID(int int_id) = 0;
 			virtual void PopID() = 0;
-			virtual unsigned int GetID(const char* str_id) = 0;
-			virtual unsigned int GetID(const char* str_id_begin, const char* str_id_end) = 0;
-			virtual unsigned int GetID(const void* ptr_id) = 0;
+			virtual ImGuiID GetID(const char* str_id) = 0;
+			virtual ImGuiID GetID(const char* str_id_begin, const char* str_id_end) = 0;
+			virtual ImGuiID GetID(const void* ptr_id) = 0;
 
 			virtual void TextUnformatted(const char* text, const char* text_end = NULL) = 0;
 			virtual void Text(const char* fmt, ...) = 0;
@@ -730,8 +732,8 @@ namespace Kotek
 			virtual bool Button(const char* label, const ImVec2& size = ImVec2(0, 0)) = 0;
 			virtual bool SmallButton(const char* label) = 0;
 			virtual bool InvisibleButton(const char* str_id, const ImVec2& size,
-				int flags = 0) = 0;
-			virtual bool ArrowButton(const char* str_id, int dir) = 0;
+				ImGuiButtonFlags flags = 0) = 0;
+			virtual bool ArrowButton(const char* str_id, ImGuiDir dir) = 0;
 			virtual void Image(ImTextureID user_texture_id, const ImVec2& size,
 				const ImVec2& uv0 = ImVec2(0, 0),
 				const ImVec2& uv1 = ImVec2(1, 1),
@@ -769,133 +771,133 @@ namespace Kotek
 				int popup_max_height_in_items = -1) = 0;
 			virtual bool DragFloat(const char* label, float* v, float v_speed = 1.0f,
 				float v_min = 0.0f, float v_max = 0.0f,
-				const char* format = "%.3f", int flags = 0) = 0;
+				const char* format = "%.3f", ImGuiSliderFlags flags = 0) = 0;
 			virtual bool DragFloat2(const char* label, float v[2], float v_speed = 1.0f,
 				float v_min = 0.0f, float v_max = 0.0f,
-				const char* format = "%.3f", int flags = 0) = 0;
+				const char* format = "%.3f", ImGuiSliderFlags flags = 0) = 0;
 			virtual bool DragFloat3(const char* label, float v[3], float v_speed = 1.0f,
 				float v_min = 0.0f, float v_max = 0.0f,
-				const char* format = "%.3f", int flags = 0) = 0;
+				const char* format = "%.3f", ImGuiSliderFlags flags = 0) = 0;
 			virtual bool DragFloat4(const char* label, float v[4], float v_speed = 1.0f,
 				float v_min = 0.0f, float v_max = 0.0f,
-				const char* format = "%.3f", int flags = 0) = 0;
+				const char* format = "%.3f", ImGuiSliderFlags flags = 0) = 0;
 			virtual bool DragFloatRange2(const char* label, float* v_current_min,
 				float* v_current_max, float v_speed = 1.0f, float v_min = 0.0f,
 				float v_max = 0.0f, const char* format = "%.3f",
-				const char* format_max = NULL, int flags = 0) = 0;
+				const char* format_max = NULL, ImGuiSliderFlags flags = 0) = 0;
 			virtual bool DragInt(const char* label, int* v, float v_speed = 1.0f,
 				int v_min = 0, int v_max = 0, const char* format = "%d",
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool DragInt2(const char* label, int v[2], float v_speed = 1.0f,
 				int v_min = 0, int v_max = 0, const char* format = "%d",
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool DragInt3(const char* label, int v[3], float v_speed = 1.0f,
 				int v_min = 0, int v_max = 0, const char* format = "%d",
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool DragInt4(const char* label, int v[4], float v_speed = 1.0f,
 				int v_min = 0, int v_max = 0, const char* format = "%d",
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool DragIntRange2(const char* label, int* v_current_min,
 				int* v_current_max, float v_speed = 1.0f, int v_min = 0,
 				int v_max = 0, const char* format = "%d",
-				const char* format_max = NULL, int flags = 0) = 0;
-			virtual bool DragScalar(const char* label, int data_type,
+				const char* format_max = NULL, ImGuiSliderFlags flags = 0) = 0;
+			virtual bool DragScalar(const char* label, ImGuiDataType data_type,
 				void* p_data, float v_speed = 1.0f, const void* p_min = NULL,
 				const void* p_max = NULL, const char* format = NULL,
-				int flags = 0) = 0;
-			virtual bool DragScalarN(const char* label, int data_type,
+				ImGuiSliderFlags flags = 0) = 0;
+			virtual bool DragScalarN(const char* label, ImGuiDataType data_type,
 				void* p_data, int components, float v_speed = 1.0f,
 				const void* p_min = NULL, const void* p_max = NULL,
-				const char* format = NULL, int flags = 0) = 0;
+				const char* format = NULL, ImGuiSliderFlags flags = 0) = 0;
 			virtual bool SliderFloat(const char* label, float* v, float v_min,
 				float v_max, const char* format = "%.3f",
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool SliderFloat2(const char* label, float v[2], float v_min,
 				float v_max, const char* format = "%.3f",
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool SliderFloat3(const char* label, float v[3], float v_min,
 				float v_max, const char* format = "%.3f",
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool SliderFloat4(const char* label, float v[4], float v_min,
 				float v_max, const char* format = "%.3f",
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool SliderAngle(const char* label, float* v_rad,
 				float v_degrees_min = -360.0f, float v_degrees_max = +360.0f,
-				const char* format = "%.0f deg", int flags = 0) = 0;
+				const char* format = "%.0f deg", ImGuiSliderFlags flags = 0) = 0;
 			virtual bool SliderInt(const char* label, int* v, int v_min, int v_max,
-				const char* format = "%d", int flags = 0) = 0;
+				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
 			virtual bool SliderInt2(const char* label, int v[2], int v_min, int v_max,
-				const char* format = "%d", int flags = 0) = 0;
+				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
 			virtual bool SliderInt3(const char* label, int v[3], int v_min, int v_max,
-				const char* format = "%d", int flags = 0) = 0;
+				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
 			virtual bool SliderInt4(const char* label, int v[4], int v_min, int v_max,
-				const char* format = "%d", int flags = 0) = 0;
-			virtual bool SliderScalar(const char* label, int data_type,
+				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
+			virtual bool SliderScalar(const char* label, ImGuiDataType data_type,
 				void* p_data, const void* p_min, const void* p_max,
-				const char* format = NULL, int flags = 0) = 0;
-			virtual bool SliderScalarN(const char* label, int data_type,
+				const char* format = NULL, ImGuiSliderFlags flags = 0) = 0;
+			virtual bool SliderScalarN(const char* label, ImGuiDataType data_type,
 				void* p_data, int components, const void* p_min,
 				const void* p_max, const char* format = NULL,
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool VSliderFloat(const char* label, const ImVec2& size, float* v,
 				float v_min, float v_max, const char* format = "%.3f",
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool VSliderInt(const char* label, const ImVec2& size, int* v,
 				int v_min, int v_max, const char* format = "%d",
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool VSliderScalar(const char* label, const ImVec2& size,
-				int data_type, void* p_data, const void* p_min,
+				ImGuiDataType data_type, void* p_data, const void* p_min,
 				const void* p_max, const char* format = NULL,
-				int flags = 0) = 0;
+				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool InputText(const char* label, char* buf, size_t buf_size,
-				int flags = 0,
+				ImGuiInputTextFlags flags = 0,
 				ImGuiInputTextCallback callback = NULL, void* user_data = NULL) = 0;
 			virtual bool InputTextMultiline(const char* label, char* buf,
 				size_t buf_size, const ImVec2& size = ImVec2(0, 0),
-				int flags = 0,
+				ImGuiInputTextFlags flags = 0,
 				ImGuiInputTextCallback callback = NULL, void* user_data = NULL) = 0;
 			virtual bool InputTextWithHint(const char* label, const char* hint,
-				char* buf, size_t buf_size, int flags = 0,
+				char* buf, size_t buf_size, ImGuiInputTextFlags flags = 0,
 				ImGuiInputTextCallback callback = NULL, void* user_data = NULL) = 0;
 			virtual bool InputFloat(const char* label, float* v, float step = 0.0f,
 				float step_fast = 0.0f, const char* format = "%.3f",
-				int flags = 0) = 0;
+				ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputFloat2(const char* label, float v[2],
-				const char* format = "%.3f", int flags = 0) = 0;
+				const char* format = "%.3f", ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputFloat3(const char* label, float v[3],
-				const char* format = "%.3f", int flags = 0) = 0;
+				const char* format = "%.3f", ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputFloat4(const char* label, float v[4],
-				const char* format = "%.3f", int flags = 0) = 0;
+				const char* format = "%.3f", ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputInt(const char* label, int* v, int step = 1,
-				int step_fast = 100, int flags = 0) = 0;
+				int step_fast = 100, ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputInt2(
-				const char* label, int v[2], int flags = 0) = 0;
+				const char* label, int v[2], ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputInt3(
-				const char* label, int v[3], int flags = 0) = 0;
+				const char* label, int v[3], ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputInt4(
-				const char* label, int v[4], int flags = 0) = 0;
+				const char* label, int v[4], ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputDouble(const char* label, double* v, double step = 0.0,
 				double step_fast = 0.0, const char* format = "%.6f",
-				int flags = 0) = 0;
-			virtual bool InputScalar(const char* label, int data_type,
+				ImGuiInputTextFlags flags = 0) = 0;
+			virtual bool InputScalar(const char* label, ImGuiDataType data_type,
 				void* p_data, const void* p_step = NULL,
 				const void* p_step_fast = NULL, const char* format = NULL,
-				int flags = 0) = 0;
-			virtual bool InputScalarN(const char* label, int data_type,
+				ImGuiInputTextFlags flags = 0) = 0;
+			virtual bool InputScalarN(const char* label, ImGuiDataType data_type,
 				void* p_data, int components, const void* p_step = NULL,
 				const void* p_step_fast = NULL, const char* format = NULL,
-				int flags = 0) = 0;
+				ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool ColorEdit3(
-				const char* label, float col[3], int flags = 0) = 0;
+				const char* label, float col[3], ImGuiColorEditFlags flags = 0) = 0;
 			virtual bool ColorEdit4(
-				const char* label, float col[4], int flags = 0) = 0;
+				const char* label, float col[4], ImGuiColorEditFlags flags = 0) = 0;
 			virtual bool ColorPicker3(
-				const char* label, float col[3], int flags = 0) = 0;
+				const char* label, float col[3], ImGuiColorEditFlags flags = 0) = 0;
 			virtual bool ColorPicker4(const char* label, float col[4],
-				int flags = 0, const float* ref_col = NULL) = 0;
+				ImGuiColorEditFlags flags = 0, const float* ref_col = NULL) = 0;
 			virtual bool ColorButton(const char* desc_id, const ImVec4& col,
-				int flags = 0, ImVec2 size = ImVec2(0, 0)) = 0;
-			virtual void SetColorEditOptions(int flags) = 0;
+				ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0, 0)) = 0;
+			virtual void SetColorEditOptions(ImGuiColorEditFlags flags) = 0;
 			virtual bool TreeNode(const char* label) = 0;
 			virtual bool TreeNode(const char* str_id, const char* fmt, ...) = 0;
 			virtual bool TreeNode(const void* ptr_id, const char* fmt, ...) = 0;
@@ -977,7 +979,7 @@ namespace Kotek
 			virtual void EndPopup() = 0;
 
 			virtual void OpenPopup(const char* str_id, ImGuiPopupFlags popup_flags = 0) = 0;
-			virtual void OpenPopup(unsigned int id, ImGuiPopupFlags popup_flags = 0) = 0;
+			virtual void OpenPopup(ImGuiID id, ImGuiPopupFlags popup_flags = 0) = 0;
 			virtual void OpenPopupOnItemClick(
 				const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1) = 0;
 			virtual void CloseCurrentPopup() = 0;
@@ -1003,7 +1005,7 @@ namespace Kotek
 
 			virtual void TableSetupColumn(const char* label,
 				ImGuiTableColumnFlags flags = 0,
-				float init_width_or_weight = 0.0f, unsigned int user_id = 0) = 0;
+				float init_width_or_weight = 0.0f, ImGuiID user_id = 0) = 0;
 			virtual void TableSetupScrollFreeze(int cols, int rows) = 0;
 			virtual void TableHeadersRow() = 0;
 			virtual void TableHeader(const char* label) = 0;
@@ -1037,15 +1039,15 @@ namespace Kotek
 			virtual bool TabItemButton(const char* label, ImGuiTabItemFlags flags = 0) = 0;
 			virtual void SetTabItemClosed(const char* tab_or_docked_window_label) = 0;
 
-			virtual unsigned int DockSpace(unsigned int id, const ImVec2& size = ImVec2(0, 0),
+			virtual ImGuiID DockSpace(ImGuiID id, const ImVec2& size = ImVec2(0, 0),
 				ImGuiDockNodeFlags flags = 0,
 				const ImGuiWindowClass* window_class = NULL) = 0;
-			virtual unsigned int DockSpaceOverViewport(const ImGuiViewport* viewport = NULL,
+			virtual ImGuiID DockSpaceOverViewport(const ImGuiViewport* viewport = NULL,
 				ImGuiDockNodeFlags flags = 0,
 				const ImGuiWindowClass* window_class = NULL) = 0;
-			virtual void SetNextWindowDockID(unsigned int dock_id, ImGuiCond cond = 0) = 0;
+			virtual void SetNextWindowDockID(ImGuiID dock_id, ImGuiCond cond = 0) = 0;
 			virtual void SetNextWindowClass(const ImGuiWindowClass* window_class) = 0;
-			virtual unsigned int GetWindowDockID() = 0;
+			virtual ImGuiID GetWindowDockID() = 0;
 			virtual bool IsWindowDocked() = 0;
 
 			virtual void LogToTTY(int auto_open_depth = -1) = 0;
@@ -1113,7 +1115,7 @@ namespace Kotek
 			virtual void CalcListClipping(int items_count, float items_height,
 				int* out_items_display_start, int* out_items_display_end) = 0;
 			virtual bool BeginChildFrame(
-				unsigned int id, const ImVec2& size, ImGuiWindowFlags flags = 0) = 0;
+				ImGuiID id, const ImVec2& size, ImGuiWindowFlags flags = 0) = 0;
 			virtual void EndChildFrame() = 0;
 
 			virtual ImVec2 CalcTextSize(const char* text, const char* text_end = NULL,
@@ -1180,7 +1182,7 @@ namespace Kotek
 			virtual void RenderPlatformWindowsDefault(void* platform_render_arg = NULL,
 				void* renderer_render_arg = NULL) = 0;
 			virtual void DestroyPlatformWindows() = 0;
-			virtual ImGuiViewport* FindViewportByID(unsigned int id) = 0;
+			virtual ImGuiViewport* FindViewportByID(ImGuiID id) = 0;
 			virtual ImGuiViewport* FindViewportByPlatformHandle(void* platform_handle) = 0;
 		};
 
