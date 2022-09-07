@@ -36,7 +36,12 @@ namespace Kotek
 	}
 } // namespace Kotek
 
+// without namespaces definitions
 struct GLFWwindow;
+struct ImGuiPlatformIO;
+struct ImGuiViewport;
+struct ImVec2;
+struct ImVec4;
 
 namespace Kotek
 {
@@ -555,50 +560,628 @@ namespace Kotek
 		public:
 			virtual ~ktkIImguiWrapper(void) {}
 
-			///
-			/// \~russian @brief Данный метод вызывает взависимости от imgui
-			/// библиотеки функции отвечающие за оконную обработку для imgui
-			/// библиотеки. Это сделано специально, потому что при модели
-			/// разработки когда окно инициализируется в exe а в dll реализуется
-			/// логика вызовов для окна, то функции напрямую вызывать нельзя
-			/// т.к. они будут относится к пространству dll а не exe где было
-			/// определено (создано) окно.
-			/// @param void, ничего метод не принимает в качестве аргумента.
 			virtual void ImGui_ImplGlfw_NewFrame(void) = 0;
 
-			virtual bool ImGui_ImplOpenGL3_Init(
-				const char* glsl_version = nullptr) = 0;
+			virtual bool ImGui_ImplOpenGL3_Init(const char* glsl_version = nullptr) = 0;
 			virtual void ImGui_ImplOpenGL3_NewFrame(void) = 0;
 			virtual void ImGui_ImplOpenGL3_Shutdown(void) = 0;
 
+			/// \~russian @brief Обертка над ImGui_ImplGlfw_Shutdown
+			/// @param void, ничего не принимает в качестве аргументов
+			///
+			/// \~english @brief Wraps ImGui_ImplGlfw_Shutdown function
+			/// @param void, nothing takes as input
 			virtual void ImGui_ImplGlfw_Shutdown(void) = 0;
+
+			/// \~russian @brief Обертка над ImGui_ImplGlfw_InitForOpenGL
+			/// функцией
+			/// @param window_handle указатель на дескриптор окна для GLFW
+			/// библиотеки это GLFWwindow*
+			/// @param install_callbacks см. документацию ImGui о
+			/// ImGui_ImplGlfw_InitForOpenGL
+			///
+			/// \~english @brief Wraps ImGui_ImplGlfw_InitForOpenGL function
+			/// @param window_handle it is GLFWwindow* type
+			/// @param install_callbacks see ImGui's documentation about
+			/// ImGui_ImplGlfw_InitForOpenGL
+			///
+			/// @code
+			///
+			/// // somewhere in user code context that defines ui initialization
+			/// for OpenGL
+			///
+			/// // somehow obtained
+			/// Kotek::Core::ktkMainManager* p_main_manager = ... = 0;
+			///
+			/// Kotek::Core::ktkIImguiWrapper* p_imgui_wrapper =
+			/// p_main_manager->Get_ImguiWrapper() = 0;
+			///
+			/// GLFWwindow* p_handle =
+			/// static_cast<GLFWwindow*>(p_main_manager->GetGameManager()->GetWindowHandle()) = 0;
+			///
+			/// p_imgui_wrapper->ImGui_ImplGlfw_InitForOpenGL(p_handle, true) = 0;
+			///
+			/// @endcode
 			virtual bool ImGui_ImplGlfw_InitForOpenGL(
 				void* window_handle, bool install_callbacks) = 0;
 
-			// ImGui:: namespace
+			virtual void* CreateContext(void* shared_font_atlas = NULL) = 0;
+			virtual void DestroyContext(void* ctx = NULL) = 0;
+			virtual ImGuiContext* GetCurrentContext() = 0;
+			virtual void SetCurrentContext(ImGuiContext* ctx) = 0;
+			virtual void* GetIO() = 0;
+			virtual void* GetStyle() = 0;
+			virtual void NewFrame() = 0;
+			virtual void EndFrame() = 0;
+			virtual void Render() = 0;
+			virtual ImDrawData* GetDrawData() = 0;
 
-			virtual void* CreateContext(void* shared_font_atlas = nullptr) = 0;
-			virtual void DestroyContext(void* context = nullptr) = 0;
-			virtual void* GetIO(void) = 0;
-			virtual void* GetStyle(void) = 0;
-			virtual void StyleColorsDark(void* style = nullptr) = 0;
-			virtual void NewFrame(void) = 0;
-			virtual void Render(void) = 0;
+			virtual void ShowDemoWindow(bool* p_open = NULL) = 0;
+			virtual void ShowMetricsWindow(bool* p_open = NULL) = 0;
+			virtual void ShowStackToolWindow(bool* p_open = NULL) = 0;
+			virtual void ShowAboutWindow(bool* p_open = NULL) = 0;
+			virtual void ShowStyleEditor(ImGuiStyle* ref = NULL) = 0;
+			virtual bool ShowStyleSelector(const char* label) = 0;
+			virtual void ShowFontSelector(const char* label) = 0;
+			virtual void ShowUserGuide() = 0;
+			virtual const char* GetVersion() = 0;
+			virtual void StyleColorsDark(void* dst = NULL) = 0;
+			virtual void StyleColorsLight(ImGuiStyle* dst = NULL) = 0;
+			virtual void StyleColorsClassic(ImGuiStyle* dst = NULL) = 0;
 
-			virtual bool Begin(
-				const char* name, bool* p_open = nullptr, int flags = 0) = 0;
-			virtual void End(void) = 0;
-			virtual void ShowDemoWindow(bool* p_open = nullptr) = 0;
-			virtual bool Button(
-				const char* label, const ImVec2& size = ImVec2(0, 0));
+			virtual bool Begin(const char* name, bool* p_open = NULL,
+				ImGuiWindowFlags flags = 0) = 0;
+			virtual void End() = 0;
+
+			virtual bool BeginChild(const char* str_id,
+				const ImVec2& size = ImVec2(0, 0), bool border = false,
+				ImGuiWindowFlags flags = 0) = 0;
+			virtual bool BeginChild(unsigned int id, const ImVec2& size = ImVec2(0, 0),
+				bool border = false, ImGuiWindowFlags flags = 0) = 0;
+			virtual void EndChild() = 0;
+
+			virtual void SetNextWindowPos(const ImVec2& pos, ImGuiCond cond = 0,
+				const ImVec2& pivot = ImVec2(0, 0)) = 0;
+			virtual void SetNextWindowSize(const ImVec2& size, ImGuiCond cond = 0) = 0;
+			virtual void SetNextWindowSizeConstraints(const ImVec2& size_min,
+				const ImVec2& size_max,
+				ImGuiSizeCallback custom_callback = NULL,
+				void* custom_callback_data = NULL) = 0;
+			virtual void SetNextWindowContentSize(const ImVec2& size) = 0;
+			virtual void SetNextWindowCollapsed(bool collapsed, ImGuiCond cond = 0) = 0;
+			virtual void SetNextWindowFocus() = 0;
+			virtual void SetNextWindowBgAlpha(float alpha) = 0;
+			virtual void SetNextWindowViewport(unsigned int viewport_id) = 0;
+			virtual void SetWindowPos(const ImVec2& pos, ImGuiCond cond = 0) = 0;
+			virtual void SetWindowSize(const ImVec2& size, ImGuiCond cond = 0) = 0;
+			virtual void SetWindowCollapsed(bool collapsed, ImGuiCond cond = 0) = 0;
+			virtual void SetWindowFocus() = 0;
+			virtual void SetWindowFontScale(float scale) = 0;
+			virtual void SetWindowPos(
+				const char* name, const ImVec2& pos, ImGuiCond cond = 0) = 0;
+			virtual void SetWindowSize(
+				const char* name, const ImVec2& size, ImGuiCond cond = 0) = 0;
+			virtual void SetWindowCollapsed(
+				const char* name, bool collapsed, ImGuiCond cond = 0) = 0;
+			virtual void SetWindowFocus(const char* name) = 0;
+
+			virtual float GetScrollX() = 0;
+			virtual float GetScrollY() = 0;
+			virtual void SetScrollX(float scroll_x) = 0;
+			virtual void SetScrollY(float scroll_y) = 0;
+			virtual float GetScrollMaxX() = 0;
+			virtual float GetScrollMaxY() = 0;
+			virtual void SetScrollHereX(float center_x_ratio = 0.5f) = 0;
+			virtual void SetScrollHereY(float center_y_ratio = 0.5f) = 0;
+			virtual void SetScrollFromPosX(float local_x, float center_x_ratio = 0.5f) = 0;
+			virtual void SetScrollFromPosY(float local_y, float center_y_ratio = 0.5f) = 0;
+
+			virtual void PushFont(ImFont* font) = 0;
+			virtual void PopFont() = 0;
+			virtual void PushStyleColor(ImGuiCol idx, ImU32 col) = 0;
+			virtual void PushStyleColor(ImGuiCol idx, const ImVec4& col) = 0;
+			virtual void PopStyleColor(int count = 1) = 0;
+			virtual void PushStyleVar(ImGuiStyleVar idx, float val) = 0;
+			virtual void PushStyleVar(ImGuiStyleVar idx, const ImVec2& val) = 0;
+			virtual void PopStyleVar(int count = 1) = 0;
+			virtual void PushAllowKeyboardFocus(bool allow_keyboard_focus) = 0;
+			virtual void PopAllowKeyboardFocus() = 0;
+			virtual void PushButtonRepeat(bool repeat) = 0;
+			virtual void PopButtonRepeat() = 0;
+
+			virtual void PushItemWidth(float item_width) = 0;
+			virtual void PopItemWidth() = 0;
+			virtual void SetNextItemWidth(float item_width) = 0;
+			virtual float CalcItemWidth() = 0;
+			virtual void PushTextWrapPos(float wrap_local_pos_x = 0.0f) = 0;
+			virtual void PopTextWrapPos() = 0;
+
+			virtual ImFont* GetFont() = 0;
+			virtual float GetFontSize() = 0;
+			virtual ImVec2 GetFontTexUvWhitePixel() = 0;
+			virtual ImU32 GetColorU32(ImGuiCol idx, float alpha_mul = 1.0f) = 0;
+			virtual ImU32 GetColorU32(const ImVec4& col) = 0;
+			virtual ImU32 GetColorU32(ImU32 col) = 0;
+			virtual const ImVec4& GetStyleColorVec4(ImGuiCol idx) = 0;
+
+			virtual void PushID(const char* str_id) = 0;
+			virtual void PushID(const char* str_id_begin, const char* str_id_end) = 0;
+			virtual void PushID(const void* ptr_id) = 0;
+			virtual void PushID(int int_id) = 0;
+			virtual void PopID() = 0;
+			virtual unsigned int GetID(const char* str_id) = 0;
+			virtual unsigned int GetID(const char* str_id_begin, const char* str_id_end) = 0;
+			virtual unsigned int GetID(const void* ptr_id) = 0;
+
+			virtual void TextUnformatted(const char* text, const char* text_end = NULL) = 0;
+			virtual void Text(const char* fmt, ...) = 0;
+			virtual void TextV(const char* fmt, va_list args) = 0;
+			virtual void TextColored(const ImVec4& col, const char* fmt, ...) = 0;
+			virtual void TextColoredV(const ImVec4& col, const char* fmt, va_list args) = 0;
+			virtual void TextDisabled(const char* fmt, ...) = 0;
+			virtual void TextDisabledV(const char* fmt, va_list args) = 0;
+			virtual void TextWrapped(const char* fmt, ...) = 0;
+			virtual void TextWrappedV(const char* fmt, va_list args) = 0;
+			virtual void LabelText(const char* label, const char* fmt, ...) = 0;
+			virtual void LabelTextV(const char* label, const char* fmt, va_list args) = 0;
+			virtual void BulletText(const char* fmt, ...) = 0;
+			virtual void BulletTextV(const char* fmt, va_list args) = 0;
+
+			virtual bool Button(const char* label, const ImVec2& size = ImVec2(0, 0)) = 0;
+			virtual bool SmallButton(const char* label) = 0;
+			virtual bool InvisibleButton(const char* str_id, const ImVec2& size,
+				int flags = 0) = 0;
+			virtual bool ArrowButton(const char* str_id, int dir) = 0;
+			virtual void Image(ImTextureID user_texture_id, const ImVec2& size,
+				const ImVec2& uv0 = ImVec2(0, 0),
+				const ImVec2& uv1 = ImVec2(1, 1),
+				const ImVec4& tint_col = ImVec4(1, 1, 1, 1),
+				const ImVec4& border_col = ImVec4(0, 0, 0, 0)) = 0;
+			virtual bool ImageButton(ImTextureID user_texture_id, const ImVec2& size,
+				const ImVec2& uv0 = ImVec2(0, 0),
+				const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = -1,
+				const ImVec4& bg_col = ImVec4(0, 0, 0, 0),
+				const ImVec4& tint_col = ImVec4(1, 1, 1, 1)) = 0; // <0 frame_
+			virtual bool Checkbox(const char* label, bool* v) = 0;
+			virtual bool CheckboxFlags(const char* label, int* flags, int flags_value) = 0;
+			virtual bool CheckboxFlags(const char* label, unsigned int* flags,
+				unsigned int flags_value) = 0;
+			virtual bool RadioButton(const char* label, bool active) = 0;
+			virtual bool RadioButton(const char* label, int* v, int v_button) = 0;
+			virtual void ProgressBar(float fraction,
+				const ImVec2& size_arg = ImVec2(-FLT_MIN, 0),
+				const char* overlay = NULL) = 0;
+			virtual void Bullet() = 0;
+
+			virtual bool BeginCombo(const char* label, const char* preview_value,
+				ImGuiComboFlags flags = 0) = 0;
+			virtual void EndCombo() = 0;
+			virtual bool Combo(const char* label, int* current_item,
+				const char* const items[], int items_count,
+				int popup_max_height_in_items = -1) = 0;
+			virtual bool Combo(const char* label, int* current_item,
+				const char* items_separated_by_zeros,
+				int popup_max_height_in_items = -1) = 0;
+			virtual bool Combo(const char* label, int* current_item,
+				bool (*items_getter)(
+					void* data, int idx, const char** out_text),
+				void* data, int items_count,
+				int popup_max_height_in_items = -1) = 0;
+			virtual bool DragFloat(const char* label, float* v, float v_speed = 1.0f,
+				float v_min = 0.0f, float v_max = 0.0f,
+				const char* format = "%.3f", int flags = 0) = 0;
+			virtual bool DragFloat2(const char* label, float v[2], float v_speed = 1.0f,
+				float v_min = 0.0f, float v_max = 0.0f,
+				const char* format = "%.3f", int flags = 0) = 0;
+			virtual bool DragFloat3(const char* label, float v[3], float v_speed = 1.0f,
+				float v_min = 0.0f, float v_max = 0.0f,
+				const char* format = "%.3f", int flags = 0) = 0;
+			virtual bool DragFloat4(const char* label, float v[4], float v_speed = 1.0f,
+				float v_min = 0.0f, float v_max = 0.0f,
+				const char* format = "%.3f", int flags = 0) = 0;
+			virtual bool DragFloatRange2(const char* label, float* v_current_min,
+				float* v_current_max, float v_speed = 1.0f, float v_min = 0.0f,
+				float v_max = 0.0f, const char* format = "%.3f",
+				const char* format_max = NULL, int flags = 0) = 0;
+			virtual bool DragInt(const char* label, int* v, float v_speed = 1.0f,
+				int v_min = 0, int v_max = 0, const char* format = "%d",
+				int flags = 0) = 0;
+			virtual bool DragInt2(const char* label, int v[2], float v_speed = 1.0f,
+				int v_min = 0, int v_max = 0, const char* format = "%d",
+				int flags = 0) = 0;
+			virtual bool DragInt3(const char* label, int v[3], float v_speed = 1.0f,
+				int v_min = 0, int v_max = 0, const char* format = "%d",
+				int flags = 0) = 0;
+			virtual bool DragInt4(const char* label, int v[4], float v_speed = 1.0f,
+				int v_min = 0, int v_max = 0, const char* format = "%d",
+				int flags = 0) = 0;
+			virtual bool DragIntRange2(const char* label, int* v_current_min,
+				int* v_current_max, float v_speed = 1.0f, int v_min = 0,
+				int v_max = 0, const char* format = "%d",
+				const char* format_max = NULL, int flags = 0) = 0;
+			virtual bool DragScalar(const char* label, int data_type,
+				void* p_data, float v_speed = 1.0f, const void* p_min = NULL,
+				const void* p_max = NULL, const char* format = NULL,
+				int flags = 0) = 0;
+			virtual bool DragScalarN(const char* label, int data_type,
+				void* p_data, int components, float v_speed = 1.0f,
+				const void* p_min = NULL, const void* p_max = NULL,
+				const char* format = NULL, int flags = 0) = 0;
+			virtual bool SliderFloat(const char* label, float* v, float v_min,
+				float v_max, const char* format = "%.3f",
+				int flags = 0) = 0;
+			virtual bool SliderFloat2(const char* label, float v[2], float v_min,
+				float v_max, const char* format = "%.3f",
+				int flags = 0) = 0;
+			virtual bool SliderFloat3(const char* label, float v[3], float v_min,
+				float v_max, const char* format = "%.3f",
+				int flags = 0) = 0;
+			virtual bool SliderFloat4(const char* label, float v[4], float v_min,
+				float v_max, const char* format = "%.3f",
+				int flags = 0) = 0;
+			virtual bool SliderAngle(const char* label, float* v_rad,
+				float v_degrees_min = -360.0f, float v_degrees_max = +360.0f,
+				const char* format = "%.0f deg", int flags = 0) = 0;
+			virtual bool SliderInt(const char* label, int* v, int v_min, int v_max,
+				const char* format = "%d", int flags = 0) = 0;
+			virtual bool SliderInt2(const char* label, int v[2], int v_min, int v_max,
+				const char* format = "%d", int flags = 0) = 0;
+			virtual bool SliderInt3(const char* label, int v[3], int v_min, int v_max,
+				const char* format = "%d", int flags = 0) = 0;
+			virtual bool SliderInt4(const char* label, int v[4], int v_min, int v_max,
+				const char* format = "%d", int flags = 0) = 0;
+			virtual bool SliderScalar(const char* label, int data_type,
+				void* p_data, const void* p_min, const void* p_max,
+				const char* format = NULL, int flags = 0) = 0;
+			virtual bool SliderScalarN(const char* label, int data_type,
+				void* p_data, int components, const void* p_min,
+				const void* p_max, const char* format = NULL,
+				int flags = 0) = 0;
+			virtual bool VSliderFloat(const char* label, const ImVec2& size, float* v,
+				float v_min, float v_max, const char* format = "%.3f",
+				int flags = 0) = 0;
+			virtual bool VSliderInt(const char* label, const ImVec2& size, int* v,
+				int v_min, int v_max, const char* format = "%d",
+				int flags = 0) = 0;
+			virtual bool VSliderScalar(const char* label, const ImVec2& size,
+				int data_type, void* p_data, const void* p_min,
+				const void* p_max, const char* format = NULL,
+				int flags = 0) = 0;
+			virtual bool InputText(const char* label, char* buf, size_t buf_size,
+				int flags = 0,
+				ImGuiInputTextCallback callback = NULL, void* user_data = NULL) = 0;
+			virtual bool InputTextMultiline(const char* label, char* buf,
+				size_t buf_size, const ImVec2& size = ImVec2(0, 0),
+				int flags = 0,
+				ImGuiInputTextCallback callback = NULL, void* user_data = NULL) = 0;
+			virtual bool InputTextWithHint(const char* label, const char* hint,
+				char* buf, size_t buf_size, int flags = 0,
+				ImGuiInputTextCallback callback = NULL, void* user_data = NULL) = 0;
+			virtual bool InputFloat(const char* label, float* v, float step = 0.0f,
+				float step_fast = 0.0f, const char* format = "%.3f",
+				int flags = 0) = 0;
+			virtual bool InputFloat2(const char* label, float v[2],
+				const char* format = "%.3f", int flags = 0) = 0;
+			virtual bool InputFloat3(const char* label, float v[3],
+				const char* format = "%.3f", int flags = 0) = 0;
+			virtual bool InputFloat4(const char* label, float v[4],
+				const char* format = "%.3f", int flags = 0) = 0;
+			virtual bool InputInt(const char* label, int* v, int step = 1,
+				int step_fast = 100, int flags = 0) = 0;
+			virtual bool InputInt2(
+				const char* label, int v[2], int flags = 0) = 0;
+			virtual bool InputInt3(
+				const char* label, int v[3], int flags = 0) = 0;
+			virtual bool InputInt4(
+				const char* label, int v[4], int flags = 0) = 0;
+			virtual bool InputDouble(const char* label, double* v, double step = 0.0,
+				double step_fast = 0.0, const char* format = "%.6f",
+				int flags = 0) = 0;
+			virtual bool InputScalar(const char* label, int data_type,
+				void* p_data, const void* p_step = NULL,
+				const void* p_step_fast = NULL, const char* format = NULL,
+				int flags = 0) = 0;
+			virtual bool InputScalarN(const char* label, int data_type,
+				void* p_data, int components, const void* p_step = NULL,
+				const void* p_step_fast = NULL, const char* format = NULL,
+				int flags = 0) = 0;
+			virtual bool ColorEdit3(
+				const char* label, float col[3], int flags = 0) = 0;
+			virtual bool ColorEdit4(
+				const char* label, float col[4], int flags = 0) = 0;
+			virtual bool ColorPicker3(
+				const char* label, float col[3], int flags = 0) = 0;
+			virtual bool ColorPicker4(const char* label, float col[4],
+				int flags = 0, const float* ref_col = NULL) = 0;
+			virtual bool ColorButton(const char* desc_id, const ImVec4& col,
+				int flags = 0, ImVec2 size = ImVec2(0, 0)) = 0;
+			virtual void SetColorEditOptions(int flags) = 0;
+			virtual bool TreeNode(const char* label) = 0;
+			virtual bool TreeNode(const char* str_id, const char* fmt, ...) = 0;
+			virtual bool TreeNode(const void* ptr_id, const char* fmt, ...) = 0;
+			virtual bool TreeNodeV(const char* str_id, const char* fmt, va_list args) = 0;
+			virtual bool TreeNodeV(const void* ptr_id, const char* fmt, va_list args) = 0;
+			virtual bool TreeNodeEx(const char* label, ImGuiTreeNodeFlags flags = 0) = 0;
+			virtual bool TreeNodeEx(const char* str_id, ImGuiTreeNodeFlags flags,
+				const char* fmt, ...) = 0;
+			virtual bool TreeNodeEx(const void* ptr_id, ImGuiTreeNodeFlags flags,
+				const char* fmt, ...) = 0;
+			virtual bool TreeNodeExV(const char* str_id, ImGuiTreeNodeFlags flags,
+				const char* fmt, va_list args) = 0;
+			virtual bool TreeNodeExV(const void* ptr_id, ImGuiTreeNodeFlags flags,
+				const char* fmt, va_list args) = 0;
+			virtual void TreePush(const char* str_id) = 0;
+			virtual void TreePush(const void* ptr_id = NULL) = 0;
+			virtual void TreePop() = 0;
+			virtual float GetTreeNodeToLabelSpacing() = 0;
+			virtual bool CollapsingHeader(
+				const char* label, ImGuiTreeNodeFlags flags = 0) = 0;
+			virtual bool CollapsingHeader(const char* label, bool* p_visible,
+				ImGuiTreeNodeFlags flags = 0) = 0;
+			virtual void SetNextItemOpen(bool is_open, ImGuiCond cond = 0) = 0;
+			virtual bool BeginListBox(
+				const char* label, const ImVec2& size = ImVec2(0, 0)) = 0;
+			virtual void EndListBox() = 0;
+			virtual bool ListBox(const char* label, int* current_item,
+				const char* const items[], int items_count,
+				int height_in_items = -1) = 0;
+			virtual bool ListBox(const char* label, int* current_item,
+				bool (*items_getter)(
+					void* data, int idx, const char** out_text),
+				void* data, int items_count, int height_in_items = -1) = 0;
+			virtual void PlotLines(const char* label, const float* values,
+				int values_count, int values_offset = 0,
+				const char* overlay_text = NULL, float scale_min = FLT_MAX,
+				float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0),
+				int stride = sizeof(float)) = 0;
+			virtual void PlotLines(const char* label,
+				float (*values_getter)(void* data, int idx), void* data,
+				int values_count, int values_offset = 0,
+				const char* overlay_text = NULL, float scale_min = FLT_MAX,
+				float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0)) = 0;
+			virtual void PlotHistogram(const char* label, const float* values,
+				int values_count, int values_offset = 0,
+				const char* overlay_text = NULL, float scale_min = FLT_MAX,
+				float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0),
+				int stride = sizeof(float)) = 0;
+			virtual void PlotHistogram(const char* label,
+				float (*values_getter)(void* data, int idx), void* data,
+				int values_count, int values_offset = 0,
+				const char* overlay_text = NULL, float scale_min = FLT_MAX,
+				float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0)) = 0;
+			virtual void Value(const char* prefix, bool b) = 0;
+			virtual void Value(const char* prefix, int v) = 0;
+			virtual void Value(const char* prefix, unsigned int v) = 0;
+			virtual void Value(
+				const char* prefix, float v, const char* float_format = NULL) = 0;
+
+			virtual bool BeginMenuBar() = 0;
+			virtual void EndMenuBar() = 0;
+			virtual bool BeginMainMenuBar() = 0;
+			virtual void EndMainMenuBar() = 0;
+			virtual bool BeginMenu(const char* label, bool enabled = true) = 0;
+			virtual void EndMenu() = 0;
+			virtual bool MenuItem(const char* label, const char* shortcut = NULL,
+				bool selected = false, bool enabled = true) = 0;
+			virtual bool MenuItem(const char* label, const char* shortcut,
+				bool* p_selected, bool enabled = true) = 0;
+
+			virtual void BeginTooltip() = 0;
+			virtual void EndTooltip() = 0;
+			virtual void SetTooltip(const char* fmt, ...) = 0;
+			virtual void SetTooltipV(const char* fmt, va_list args) = 0;
+
+			virtual bool BeginPopup(const char* str_id, ImGuiWindowFlags flags = 0) = 0;
+			virtual bool BeginPopupModal(const char* name, bool* p_open = NULL,
+				ImGuiWindowFlags flags = 0) = 0;
+			virtual void EndPopup() = 0;
+
+			virtual void OpenPopup(const char* str_id, ImGuiPopupFlags popup_flags = 0) = 0;
+			virtual void OpenPopup(unsigned int id, ImGuiPopupFlags popup_flags = 0) = 0;
+			virtual void OpenPopupOnItemClick(
+				const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1) = 0;
+			virtual void CloseCurrentPopup() = 0;
+
+			virtual bool BeginPopupContextItem(
+				const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1) = 0;
+			virtual bool BeginPopupContextWindow(
+				const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1) = 0;
+			virtual bool BeginPopupContextVoid(
+				const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1) = 0;
+
+			virtual bool IsPopupOpen(const char* str_id, ImGuiPopupFlags flags = 0) = 0;
+
 			virtual bool BeginTable(const char* str_id, int column,
 				ImGuiTableFlags flags = 0,
 				const ImVec2& outer_size = ImVec2(0.0f, 0.0f),
 				float inner_width = 0.0f) = 0;
-			virtual void EndTable(void) = 0;
+			virtual void EndTable() = 0;
+			virtual void TableNextRow(
+				ImGuiTableRowFlags row_flags = 0, float min_row_height = 0.0f) = 0;
+			virtual bool TableNextColumn() = 0;
+			virtual bool TableSetColumnIndex(int column_n) = 0;
+
 			virtual void TableSetupColumn(const char* label,
 				ImGuiTableColumnFlags flags = 0,
-				float init_width_or_weight = 0.0f, ImGuiID user_id = 0) = 0;
+				float init_width_or_weight = 0.0f, unsigned int user_id = 0) = 0;
+			virtual void TableSetupScrollFreeze(int cols, int rows) = 0;
+			virtual void TableHeadersRow() = 0;
+			virtual void TableHeader(const char* label) = 0;
+
+			virtual ImGuiTableSortSpecs* TableGetSortSpecs() = 0;
+
+			virtual int TableGetColumnCount() = 0;
+			virtual int TableGetColumnIndex() = 0;
+			virtual int TableGetRowIndex() = 0;
+			virtual const char* TableGetColumnName(int column_n = -1) = 0;
+			virtual ImGuiTableColumnFlags TableGetColumnFlags(int column_n = -1) = 0;
+			virtual void TableSetColumnEnabled(int column_n, bool v) = 0;
+			virtual void TableSetBgColor(
+				ImGuiTableBgTarget target, ImU32 color, int column_n = -1) = 0;
+
+			virtual void Columns(
+				int count = 1, const char* id = NULL, bool border = true) = 0;
+			virtual void NextColumn() = 0;
+			virtual int GetColumnIndex() = 0;
+			virtual float GetColumnWidth(int column_index = -1) = 0;
+			virtual void SetColumnWidth(int column_index, float width) = 0;
+			virtual float GetColumnOffset(int column_index = -1) = 0;
+			virtual void SetColumnOffset(int column_index, float offset_x) = 0;
+			virtual int GetColumnsCount() = 0;
+
+			virtual bool BeginTabBar(const char* str_id, ImGuiTabBarFlags flags = 0) = 0;
+			virtual void EndTabBar() = 0;
+			virtual bool BeginTabItem(const char* label, bool* p_open = NULL,
+				ImGuiTabItemFlags flags = 0) = 0;
+			virtual void EndTabItem() = 0;
+			virtual bool TabItemButton(const char* label, ImGuiTabItemFlags flags = 0) = 0;
+			virtual void SetTabItemClosed(const char* tab_or_docked_window_label) = 0;
+
+			virtual unsigned int DockSpace(unsigned int id, const ImVec2& size = ImVec2(0, 0),
+				ImGuiDockNodeFlags flags = 0,
+				const ImGuiWindowClass* window_class = NULL) = 0;
+			virtual unsigned int DockSpaceOverViewport(const ImGuiViewport* viewport = NULL,
+				ImGuiDockNodeFlags flags = 0,
+				const ImGuiWindowClass* window_class = NULL) = 0;
+			virtual void SetNextWindowDockID(unsigned int dock_id, ImGuiCond cond = 0) = 0;
+			virtual void SetNextWindowClass(const ImGuiWindowClass* window_class) = 0;
+			virtual unsigned int GetWindowDockID() = 0;
+			virtual bool IsWindowDocked() = 0;
+
+			virtual void LogToTTY(int auto_open_depth = -1) = 0;
+			virtual void LogToFile(
+				int auto_open_depth = -1, const char* filename = NULL) = 0;
+			virtual void LogToClipboard(int auto_open_depth = -1) = 0;
+			virtual void LogFinish() = 0;
+			virtual void LogButtons() = 0;
+			virtual void LogText(const char* fmt, ...) = 0;
+			virtual void LogTextV(const char* fmt, va_list args) = 0;
+
+			virtual bool BeginDragDropSource(ImGuiDragDropFlags flags = 0) = 0;
+			virtual bool SetDragDropPayload(const char* type, const void* data,
+				size_t sz, ImGuiCond cond = 0) = 0;
+			virtual void EndDragDropSource() = 0;
+			virtual bool BeginDragDropTarget() = 0;
+			virtual const ImGuiPayload* AcceptDragDropPayload(
+				const char* type, ImGuiDragDropFlags flags = 0) = 0;
+			virtual void EndDragDropTarget() = 0;
+			virtual const ImGuiPayload* GetDragDropPayload() = 0;
+
+			virtual void BeginDisabled(bool disabled = true) = 0;
+			virtual void EndDisabled() = 0;
+
+			virtual void PushClipRect(const ImVec2& clip_rect_min,
+				const ImVec2& clip_rect_max,
+				bool intersect_with_current_clip_rect) = 0;
+			virtual void PopClipRect() = 0;
+
+			virtual void SetItemDefaultFocus() = 0;
+			virtual void SetKeyboardFocusHere(int offset = 0) = 0;
+
+			virtual bool IsItemHovered(ImGuiHoveredFlags flags = 0) = 0;
+			virtual bool IsItemActive() = 0;
+			virtual bool IsItemFocused() = 0;
+			virtual bool IsItemClicked(ImGuiMouseButton mouse_button = 0) = 0;
+			virtual bool IsItemVisible() = 0;
+			virtual bool IsItemEdited() = 0;
+			virtual bool IsItemActivated() = 0;
+			virtual bool IsItemDeactivated() = 0;
+			virtual bool IsItemDeactivatedAfterEdit() = 0;
+			virtual bool IsItemToggledOpen() = 0;
+			virtual bool IsAnyItemHovered() = 0;
+			virtual bool IsAnyItemActive() = 0;
+			virtual bool IsAnyItemFocused() = 0;
+			virtual ImVec2 GetItemRectMin() = 0;
+			virtual ImVec2 GetItemRectMax() = 0;
+			virtual ImVec2 GetItemRectSize() = 0;
+			virtual void SetItemAllowOverlap() = 0;
+
+			virtual ImGuiViewport* GetMainViewport() = 0;
+
+			virtual bool IsRectVisible(const ImVec2& size) = 0;
+			virtual bool IsRectVisible(const ImVec2& rect_min, const ImVec2& rect_max) = 0;
+			virtual double GetTime() = 0;
+			virtual int GetFrameCount() = 0;
+			virtual ImDrawList* GetBackgroundDrawList() = 0;
+			virtual ImDrawList* GetForegroundDrawList() = 0;
+			virtual ImDrawList* GetBackgroundDrawList(ImGuiViewport* viewport) = 0;
+			virtual ImDrawList* GetForegroundDrawList(ImGuiViewport* viewport) = 0;
+			virtual ImDrawListSharedData* GetDrawListSharedData() = 0;
+			virtual const char* GetStyleColorName(ImGuiCol idx) = 0;
+			virtual void SetStateStorage(ImGuiStorage* storage) = 0;
+			virtual ImGuiStorage* GetStateStorage() = 0;
+			virtual void CalcListClipping(int items_count, float items_height,
+				int* out_items_display_start, int* out_items_display_end) = 0;
+			virtual bool BeginChildFrame(
+				unsigned int id, const ImVec2& size, ImGuiWindowFlags flags = 0) = 0;
+			virtual void EndChildFrame() = 0;
+
+			virtual ImVec2 CalcTextSize(const char* text, const char* text_end = NULL,
+				bool hide_text_after_double_hash = false,
+				float wrap_width = -1.0f) = 0;
+
+			virtual ImVec4 ColorConvertU32ToFloat4(ImU32 in) = 0;
+			virtual ImU32 ColorConvertFloat4ToU32(const ImVec4& in) = 0;
+			virtual void ColorConvertRGBtoHSV(float r, float g, float b, float& out_h,
+				float& out_s, float& out_v) = 0;
+			virtual void ColorConvertHSVtoRGB(float h, float s, float v, float& out_r,
+				float& out_g, float& out_b) = 0;
+
+			virtual int GetKeyIndex(ImGuiKey imgui_key) = 0;
+			virtual bool IsKeyDown(int user_key_index) = 0;
+			virtual bool IsKeyPressed(int user_key_index, bool repeat = true) = 0;
+			virtual bool IsKeyReleased(int user_key_index) = 0;
+			virtual int GetKeyPressedAmount(
+				int key_index, float repeat_delay, float rate) = 0;
+			virtual void CaptureKeyboardFromApp(
+				bool want_capture_keyboard_value = true) = 0;
+
+			virtual bool IsMouseDown(ImGuiMouseButton button) = 0;
+			virtual bool IsMouseClicked(ImGuiMouseButton button, bool repeat = false) = 0;
+			virtual bool IsMouseReleased(ImGuiMouseButton button) = 0;
+			virtual bool IsMouseDoubleClicked(ImGuiMouseButton button) = 0;
+			virtual bool IsMouseHoveringRect(
+				const ImVec2& r_min, const ImVec2& r_max, bool clip = true) = 0;
+			virtual bool IsMousePosValid(const ImVec2* mouse_pos = NULL) = 0;
+			virtual bool IsAnyMouseDown() = 0;
+			virtual ImVec2 GetMousePos() = 0;
+			virtual ImVec2 GetMousePosOnOpeningCurrentPopup() = 0;
+			virtual bool IsMouseDragging(
+				ImGuiMouseButton button, float lock_threshold = -1.0f) = 0;
+			virtual ImVec2 GetMouseDragDelta(
+				ImGuiMouseButton button = 0, float lock_threshold = -1.0f) = 0;
+			virtual void ResetMouseDragDelta(ImGuiMouseButton button = 0) = 0;
+			virtual ImGuiMouseCursor GetMouseCursor() = 0;
+			virtual void SetMouseCursor(ImGuiMouseCursor cursor_type) = 0;
+			virtual void CaptureMouseFromApp(bool want_capture_mouse_value = true) = 0;
+
+			virtual const char* GetClipboardText() = 0;
+			virtual void SetClipboardText(const char* text) = 0;
+
+			virtual void LoadIniSettingsFromDisk(const char* ini_filename) = 0;
+			virtual void LoadIniSettingsFromMemory(
+				const char* ini_data, size_t ini_size = 0) = 0;
+			virtual void SaveIniSettingsToDisk(const char* ini_filename) = 0;
+			virtual const char* SaveIniSettingsToMemory(size_t* out_ini_size = NULL) = 0;
+
+			virtual bool DebugCheckVersionAndDataLayout(const char* version_str,
+				size_t sz_io, size_t sz_style, size_t sz_vec2, size_t sz_vec4,
+				size_t sz_drawvert, size_t sz_drawidx) = 0;
+
+			virtual void SetAllocatorFunctions(ImGuiMemAllocFunc alloc_func,
+				ImGuiMemFreeFunc free_func, void* user_data = NULL) = 0;
+			virtual void GetAllocatorFunctions(ImGuiMemAllocFunc* p_alloc_func,
+				ImGuiMemFreeFunc* p_free_func, void** p_user_data) = 0;
+			virtual void* MemAlloc(size_t size) = 0;
+			virtual void MemFree(void* ptr) = 0;
+
+			virtual ImGuiPlatformIO& GetPlatformIO() = 0;
+			virtual void UpdatePlatformWindows() = 0;
+			virtual void RenderPlatformWindowsDefault(void* platform_render_arg = NULL,
+				void* renderer_render_arg = NULL) = 0;
+			virtual void DestroyPlatformWindows() = 0;
+			virtual ImGuiViewport* FindViewportByID(unsigned int id) = 0;
+			virtual ImGuiViewport* FindViewportByPlatformHandle(void* platform_handle) = 0;
 		};
 
 		bool InitializeModule_Core_API(ktkMainManager*);
