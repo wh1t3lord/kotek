@@ -10,7 +10,13 @@
 #include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 
+// TODO: add ifdef for appropriate things
+// if gl3 we need to check if gl3 is enabled 
+// if glfw we need to check if glfw is enabled and etc
 #include <kotek.ui.imgui/include/imgui.h>
+#include <kotek.ui.imgui/include/imgui_impl_glfw.h>
+#include <kotek.ui.imgui/include/imgui_impl_opengl3.h>
+
 
 namespace Kotek
 {
@@ -562,50 +568,30 @@ namespace Kotek
 		public:
 			virtual ~ktkIImguiWrapper(void) {}
 
-			virtual void ImGui_ImplGlfw_NewFrame(void) = 0;
+ 			virtual bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks) = 0;
+			virtual bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks) = 0;
+			virtual bool     ImGui_ImplGlfw_InitForOther(GLFWwindow* window, bool install_callbacks) = 0;
+			virtual void     ImGui_ImplGlfw_Shutdown() = 0;
+			virtual void     ImGui_ImplGlfw_NewFrame() = 0;
+			
+			virtual void     ImGui_ImplGlfw_WindowFocusCallback(GLFWwindow* window, int focused) = 0;
+			virtual void     ImGui_ImplGlfw_CursorEnterCallback(GLFWwindow* window, int entered) = 0;
+			virtual void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) = 0;
+			virtual void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) = 0;
+			virtual void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) = 0;
+			virtual void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c) = 0;
+			virtual void     ImGui_ImplGlfw_MonitorCallback(GLFWmonitor* monitor, int event) = 0;
 
-			virtual bool ImGui_ImplOpenGL3_Init(const char* glsl_version = nullptr) = 0;
-			virtual void ImGui_ImplOpenGL3_NewFrame(void) = 0;
-			virtual void ImGui_ImplOpenGL3_Shutdown(void) = 0;
 
-			/// \~russian @brief Обертка над ImGui_ImplGlfw_Shutdown
-			/// @param void, ничего не принимает в качестве аргументов
-			///
-			/// \~english @brief Wraps ImGui_ImplGlfw_Shutdown function
-			/// @param void, nothing takes as input
-			virtual void ImGui_ImplGlfw_Shutdown(void) = 0;
+			virtual bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL) = 0;
+			virtual void     ImGui_ImplOpenGL3_Shutdown() = 0;
+			virtual void     ImGui_ImplOpenGL3_NewFrame() = 0;
+			virtual void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data) = 0;
 
-			/// \~russian @brief Обертка над ImGui_ImplGlfw_InitForOpenGL
-			/// функцией
-			/// @param window_handle указатель на дескриптор окна для GLFW
-			/// библиотеки это GLFWwindow*
-			/// @param install_callbacks см. документацию ImGui о
-			/// ImGui_ImplGlfw_InitForOpenGL
-			///
-			/// \~english @brief Wraps ImGui_ImplGlfw_InitForOpenGL function
-			/// @param window_handle it is GLFWwindow* type
-			/// @param install_callbacks see ImGui's documentation about
-			/// ImGui_ImplGlfw_InitForOpenGL
-			///
-			/// @code
-			///
-			/// // somewhere in user code context that defines ui initialization
-			/// for OpenGL
-			///
-			/// // somehow obtained
-			/// Kotek::Core::ktkMainManager* p_main_manager = ... = 0;
-			///
-			/// Kotek::Core::ktkIImguiWrapper* p_imgui_wrapper =
-			/// p_main_manager->Get_ImguiWrapper() = 0;
-			///
-			/// GLFWwindow* p_handle =
-			/// static_cast<GLFWwindow*>(p_main_manager->GetGameManager()->GetWindowHandle()) = 0;
-			///
-			/// p_imgui_wrapper->ImGui_ImplGlfw_InitForOpenGL(p_handle, true) = 0;
-			///
-			/// @endcode
-			virtual bool ImGui_ImplGlfw_InitForOpenGL(
-				void* window_handle, bool install_callbacks) = 0;
+			virtual bool     ImGui_ImplOpenGL3_CreateFontsTexture() = 0;
+			virtual void     ImGui_ImplOpenGL3_DestroyFontsTexture() = 0;
+			virtual bool     ImGui_ImplOpenGL3_CreateDeviceObjects() = 0;
+			virtual void     ImGui_ImplOpenGL3_DestroyDeviceObjects() = 0;
 
 			virtual void* CreateContext(void* shared_font_atlas = NULL) = 0;
 			virtual void DestroyContext(void* ctx = NULL) = 0;
@@ -638,25 +624,31 @@ namespace Kotek
 			virtual bool BeginChild(const char* str_id,
 				const ImVec2& size = ImVec2(0, 0), bool border = false,
 				ImGuiWindowFlags flags = 0) = 0;
-			virtual bool BeginChild(ImGuiID id, const ImVec2& size = ImVec2(0, 0),
-				bool border = false, ImGuiWindowFlags flags = 0) = 0;
+			virtual bool BeginChild(ImGuiID id,
+				const ImVec2& size = ImVec2(0, 0), bool border = false,
+				ImGuiWindowFlags flags = 0) = 0;
 			virtual void EndChild() = 0;
 
 			virtual void SetNextWindowPos(const ImVec2& pos, ImGuiCond cond = 0,
 				const ImVec2& pivot = ImVec2(0, 0)) = 0;
-			virtual void SetNextWindowSize(const ImVec2& size, ImGuiCond cond = 0) = 0;
+			virtual void SetNextWindowSize(
+				const ImVec2& size, ImGuiCond cond = 0) = 0;
 			virtual void SetNextWindowSizeConstraints(const ImVec2& size_min,
 				const ImVec2& size_max,
 				ImGuiSizeCallback custom_callback = NULL,
 				void* custom_callback_data = NULL) = 0;
 			virtual void SetNextWindowContentSize(const ImVec2& size) = 0;
-			virtual void SetNextWindowCollapsed(bool collapsed, ImGuiCond cond = 0) = 0;
+			virtual void SetNextWindowCollapsed(
+				bool collapsed, ImGuiCond cond = 0) = 0;
 			virtual void SetNextWindowFocus() = 0;
 			virtual void SetNextWindowBgAlpha(float alpha) = 0;
 			virtual void SetNextWindowViewport(ImGuiID viewport_id) = 0;
-			virtual void SetWindowPos(const ImVec2& pos, ImGuiCond cond = 0) = 0;
-			virtual void SetWindowSize(const ImVec2& size, ImGuiCond cond = 0) = 0;
-			virtual void SetWindowCollapsed(bool collapsed, ImGuiCond cond = 0) = 0;
+			virtual void SetWindowPos(
+				const ImVec2& pos, ImGuiCond cond = 0) = 0;
+			virtual void SetWindowSize(
+				const ImVec2& size, ImGuiCond cond = 0) = 0;
+			virtual void SetWindowCollapsed(
+				bool collapsed, ImGuiCond cond = 0) = 0;
 			virtual void SetWindowFocus() = 0;
 			virtual void SetWindowFontScale(float scale) = 0;
 			virtual void SetWindowPos(
@@ -675,8 +667,10 @@ namespace Kotek
 			virtual float GetScrollMaxY() = 0;
 			virtual void SetScrollHereX(float center_x_ratio = 0.5f) = 0;
 			virtual void SetScrollHereY(float center_y_ratio = 0.5f) = 0;
-			virtual void SetScrollFromPosX(float local_x, float center_x_ratio = 0.5f) = 0;
-			virtual void SetScrollFromPosY(float local_y, float center_y_ratio = 0.5f) = 0;
+			virtual void SetScrollFromPosX(
+				float local_x, float center_x_ratio = 0.5f) = 0;
+			virtual void SetScrollFromPosY(
+				float local_y, float center_y_ratio = 0.5f) = 0;
 
 			virtual void PushFont(ImFont* font) = 0;
 			virtual void PopFont() = 0;
@@ -707,29 +701,36 @@ namespace Kotek
 			virtual const ImVec4& GetStyleColorVec4(ImGuiCol idx) = 0;
 
 			virtual void PushID(const char* str_id) = 0;
-			virtual void PushID(const char* str_id_begin, const char* str_id_end) = 0;
+			virtual void PushID(
+				const char* str_id_begin, const char* str_id_end) = 0;
 			virtual void PushID(const void* ptr_id) = 0;
 			virtual void PushID(int int_id) = 0;
 			virtual void PopID() = 0;
 			virtual ImGuiID GetID(const char* str_id) = 0;
-			virtual ImGuiID GetID(const char* str_id_begin, const char* str_id_end) = 0;
+			virtual ImGuiID GetID(
+				const char* str_id_begin, const char* str_id_end) = 0;
 			virtual ImGuiID GetID(const void* ptr_id) = 0;
 
-			virtual void TextUnformatted(const char* text, const char* text_end = NULL) = 0;
+			virtual void TextUnformatted(
+				const char* text, const char* text_end = NULL) = 0;
 			virtual void Text(const char* fmt, ...) = 0;
 			virtual void TextV(const char* fmt, va_list args) = 0;
-			virtual void TextColored(const ImVec4& col, const char* fmt, ...) = 0;
-			virtual void TextColoredV(const ImVec4& col, const char* fmt, va_list args) = 0;
+			virtual void TextColored(
+				const ImVec4& col, const char* fmt, ...) = 0;
+			virtual void TextColoredV(
+				const ImVec4& col, const char* fmt, va_list args) = 0;
 			virtual void TextDisabled(const char* fmt, ...) = 0;
 			virtual void TextDisabledV(const char* fmt, va_list args) = 0;
 			virtual void TextWrapped(const char* fmt, ...) = 0;
 			virtual void TextWrappedV(const char* fmt, va_list args) = 0;
 			virtual void LabelText(const char* label, const char* fmt, ...) = 0;
-			virtual void LabelTextV(const char* label, const char* fmt, va_list args) = 0;
+			virtual void LabelTextV(
+				const char* label, const char* fmt, va_list args) = 0;
 			virtual void BulletText(const char* fmt, ...) = 0;
 			virtual void BulletTextV(const char* fmt, va_list args) = 0;
 
-			virtual bool Button(const char* label, const ImVec2& size = ImVec2(0, 0)) = 0;
+			virtual bool Button(
+				const char* label, const ImVec2& size = ImVec2(0, 0)) = 0;
 			virtual bool SmallButton(const char* label) = 0;
 			virtual bool InvisibleButton(const char* str_id, const ImVec2& size,
 				ImGuiButtonFlags flags = 0) = 0;
@@ -739,24 +740,26 @@ namespace Kotek
 				const ImVec2& uv1 = ImVec2(1, 1),
 				const ImVec4& tint_col = ImVec4(1, 1, 1, 1),
 				const ImVec4& border_col = ImVec4(0, 0, 0, 0)) = 0;
-			virtual bool ImageButton(ImTextureID user_texture_id, const ImVec2& size,
-				const ImVec2& uv0 = ImVec2(0, 0),
+			virtual bool ImageButton(ImTextureID user_texture_id,
+				const ImVec2& size, const ImVec2& uv0 = ImVec2(0, 0),
 				const ImVec2& uv1 = ImVec2(1, 1), int frame_padding = -1,
 				const ImVec4& bg_col = ImVec4(0, 0, 0, 0),
 				const ImVec4& tint_col = ImVec4(1, 1, 1, 1)) = 0; // <0 frame_
 			virtual bool Checkbox(const char* label, bool* v) = 0;
-			virtual bool CheckboxFlags(const char* label, int* flags, int flags_value) = 0;
+			virtual bool CheckboxFlags(
+				const char* label, int* flags, int flags_value) = 0;
 			virtual bool CheckboxFlags(const char* label, unsigned int* flags,
 				unsigned int flags_value) = 0;
 			virtual bool RadioButton(const char* label, bool active) = 0;
-			virtual bool RadioButton(const char* label, int* v, int v_button) = 0;
+			virtual bool RadioButton(
+				const char* label, int* v, int v_button) = 0;
 			virtual void ProgressBar(float fraction,
 				const ImVec2& size_arg = ImVec2(-FLT_MIN, 0),
 				const char* overlay = NULL) = 0;
 			virtual void Bullet() = 0;
 
-			virtual bool BeginCombo(const char* label, const char* preview_value,
-				ImGuiComboFlags flags = 0) = 0;
+			virtual bool BeginCombo(const char* label,
+				const char* preview_value, ImGuiComboFlags flags = 0) = 0;
 			virtual void EndCombo() = 0;
 			virtual bool Combo(const char* label, int* current_item,
 				const char* const items[], int items_count,
@@ -769,34 +772,35 @@ namespace Kotek
 					void* data, int idx, const char** out_text),
 				void* data, int items_count,
 				int popup_max_height_in_items = -1) = 0;
-			virtual bool DragFloat(const char* label, float* v, float v_speed = 1.0f,
-				float v_min = 0.0f, float v_max = 0.0f,
+			virtual bool DragFloat(const char* label, float* v,
+				float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f,
 				const char* format = "%.3f", ImGuiSliderFlags flags = 0) = 0;
-			virtual bool DragFloat2(const char* label, float v[2], float v_speed = 1.0f,
-				float v_min = 0.0f, float v_max = 0.0f,
+			virtual bool DragFloat2(const char* label, float v[2],
+				float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f,
 				const char* format = "%.3f", ImGuiSliderFlags flags = 0) = 0;
-			virtual bool DragFloat3(const char* label, float v[3], float v_speed = 1.0f,
-				float v_min = 0.0f, float v_max = 0.0f,
+			virtual bool DragFloat3(const char* label, float v[3],
+				float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f,
 				const char* format = "%.3f", ImGuiSliderFlags flags = 0) = 0;
-			virtual bool DragFloat4(const char* label, float v[4], float v_speed = 1.0f,
-				float v_min = 0.0f, float v_max = 0.0f,
+			virtual bool DragFloat4(const char* label, float v[4],
+				float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f,
 				const char* format = "%.3f", ImGuiSliderFlags flags = 0) = 0;
-			virtual bool DragFloatRange2(const char* label, float* v_current_min,
-				float* v_current_max, float v_speed = 1.0f, float v_min = 0.0f,
-				float v_max = 0.0f, const char* format = "%.3f",
-				const char* format_max = NULL, ImGuiSliderFlags flags = 0) = 0;
-			virtual bool DragInt(const char* label, int* v, float v_speed = 1.0f,
-				int v_min = 0, int v_max = 0, const char* format = "%d",
+			virtual bool DragFloatRange2(const char* label,
+				float* v_current_min, float* v_current_max,
+				float v_speed = 1.0f, float v_min = 0.0f, float v_max = 0.0f,
+				const char* format = "%.3f", const char* format_max = NULL,
 				ImGuiSliderFlags flags = 0) = 0;
-			virtual bool DragInt2(const char* label, int v[2], float v_speed = 1.0f,
-				int v_min = 0, int v_max = 0, const char* format = "%d",
-				ImGuiSliderFlags flags = 0) = 0;
-			virtual bool DragInt3(const char* label, int v[3], float v_speed = 1.0f,
-				int v_min = 0, int v_max = 0, const char* format = "%d",
-				ImGuiSliderFlags flags = 0) = 0;
-			virtual bool DragInt4(const char* label, int v[4], float v_speed = 1.0f,
-				int v_min = 0, int v_max = 0, const char* format = "%d",
-				ImGuiSliderFlags flags = 0) = 0;
+			virtual bool DragInt(const char* label, int* v,
+				float v_speed = 1.0f, int v_min = 0, int v_max = 0,
+				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
+			virtual bool DragInt2(const char* label, int v[2],
+				float v_speed = 1.0f, int v_min = 0, int v_max = 0,
+				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
+			virtual bool DragInt3(const char* label, int v[3],
+				float v_speed = 1.0f, int v_min = 0, int v_max = 0,
+				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
+			virtual bool DragInt4(const char* label, int v[4],
+				float v_speed = 1.0f, int v_min = 0, int v_max = 0,
+				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
 			virtual bool DragIntRange2(const char* label, int* v_current_min,
 				int* v_current_max, float v_speed = 1.0f, int v_min = 0,
 				int v_max = 0, const char* format = "%d",
@@ -812,56 +816,65 @@ namespace Kotek
 			virtual bool SliderFloat(const char* label, float* v, float v_min,
 				float v_max, const char* format = "%.3f",
 				ImGuiSliderFlags flags = 0) = 0;
-			virtual bool SliderFloat2(const char* label, float v[2], float v_min,
-				float v_max, const char* format = "%.3f",
+			virtual bool SliderFloat2(const char* label, float v[2],
+				float v_min, float v_max, const char* format = "%.3f",
 				ImGuiSliderFlags flags = 0) = 0;
-			virtual bool SliderFloat3(const char* label, float v[3], float v_min,
-				float v_max, const char* format = "%.3f",
+			virtual bool SliderFloat3(const char* label, float v[3],
+				float v_min, float v_max, const char* format = "%.3f",
 				ImGuiSliderFlags flags = 0) = 0;
-			virtual bool SliderFloat4(const char* label, float v[4], float v_min,
-				float v_max, const char* format = "%.3f",
+			virtual bool SliderFloat4(const char* label, float v[4],
+				float v_min, float v_max, const char* format = "%.3f",
 				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool SliderAngle(const char* label, float* v_rad,
 				float v_degrees_min = -360.0f, float v_degrees_max = +360.0f,
-				const char* format = "%.0f deg", ImGuiSliderFlags flags = 0) = 0;
-			virtual bool SliderInt(const char* label, int* v, int v_min, int v_max,
-				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
-			virtual bool SliderInt2(const char* label, int v[2], int v_min, int v_max,
-				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
-			virtual bool SliderInt3(const char* label, int v[3], int v_min, int v_max,
-				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
-			virtual bool SliderInt4(const char* label, int v[4], int v_min, int v_max,
-				const char* format = "%d", ImGuiSliderFlags flags = 0) = 0;
-			virtual bool SliderScalar(const char* label, ImGuiDataType data_type,
-				void* p_data, const void* p_min, const void* p_max,
-				const char* format = NULL, ImGuiSliderFlags flags = 0) = 0;
-			virtual bool SliderScalarN(const char* label, ImGuiDataType data_type,
-				void* p_data, int components, const void* p_min,
+				const char* format = "%.0f deg",
+				ImGuiSliderFlags flags = 0) = 0;
+			virtual bool SliderInt(const char* label, int* v, int v_min,
+				int v_max, const char* format = "%d",
+				ImGuiSliderFlags flags = 0) = 0;
+			virtual bool SliderInt2(const char* label, int v[2], int v_min,
+				int v_max, const char* format = "%d",
+				ImGuiSliderFlags flags = 0) = 0;
+			virtual bool SliderInt3(const char* label, int v[3], int v_min,
+				int v_max, const char* format = "%d",
+				ImGuiSliderFlags flags = 0) = 0;
+			virtual bool SliderInt4(const char* label, int v[4], int v_min,
+				int v_max, const char* format = "%d",
+				ImGuiSliderFlags flags = 0) = 0;
+			virtual bool SliderScalar(const char* label,
+				ImGuiDataType data_type, void* p_data, const void* p_min,
 				const void* p_max, const char* format = NULL,
 				ImGuiSliderFlags flags = 0) = 0;
-			virtual bool VSliderFloat(const char* label, const ImVec2& size, float* v,
-				float v_min, float v_max, const char* format = "%.3f",
+			virtual bool SliderScalarN(const char* label,
+				ImGuiDataType data_type, void* p_data, int components,
+				const void* p_min, const void* p_max, const char* format = NULL,
 				ImGuiSliderFlags flags = 0) = 0;
-			virtual bool VSliderInt(const char* label, const ImVec2& size, int* v,
-				int v_min, int v_max, const char* format = "%d",
+			virtual bool VSliderFloat(const char* label, const ImVec2& size,
+				float* v, float v_min, float v_max, const char* format = "%.3f",
+				ImGuiSliderFlags flags = 0) = 0;
+			virtual bool VSliderInt(const char* label, const ImVec2& size,
+				int* v, int v_min, int v_max, const char* format = "%d",
 				ImGuiSliderFlags flags = 0) = 0;
 			virtual bool VSliderScalar(const char* label, const ImVec2& size,
 				ImGuiDataType data_type, void* p_data, const void* p_min,
 				const void* p_max, const char* format = NULL,
 				ImGuiSliderFlags flags = 0) = 0;
-			virtual bool InputText(const char* label, char* buf, size_t buf_size,
-				ImGuiInputTextFlags flags = 0,
-				ImGuiInputTextCallback callback = NULL, void* user_data = NULL) = 0;
+			virtual bool InputText(const char* label, char* buf,
+				size_t buf_size, ImGuiInputTextFlags flags = 0,
+				ImGuiInputTextCallback callback = NULL,
+				void* user_data = NULL) = 0;
 			virtual bool InputTextMultiline(const char* label, char* buf,
 				size_t buf_size, const ImVec2& size = ImVec2(0, 0),
 				ImGuiInputTextFlags flags = 0,
-				ImGuiInputTextCallback callback = NULL, void* user_data = NULL) = 0;
+				ImGuiInputTextCallback callback = NULL,
+				void* user_data = NULL) = 0;
 			virtual bool InputTextWithHint(const char* label, const char* hint,
 				char* buf, size_t buf_size, ImGuiInputTextFlags flags = 0,
-				ImGuiInputTextCallback callback = NULL, void* user_data = NULL) = 0;
-			virtual bool InputFloat(const char* label, float* v, float step = 0.0f,
-				float step_fast = 0.0f, const char* format = "%.3f",
-				ImGuiInputTextFlags flags = 0) = 0;
+				ImGuiInputTextCallback callback = NULL,
+				void* user_data = NULL) = 0;
+			virtual bool InputFloat(const char* label, float* v,
+				float step = 0.0f, float step_fast = 0.0f,
+				const char* format = "%.3f", ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputFloat2(const char* label, float v[2],
 				const char* format = "%.3f", ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputFloat3(const char* label, float v[3],
@@ -876,23 +889,23 @@ namespace Kotek
 				const char* label, int v[3], ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputInt4(
 				const char* label, int v[4], ImGuiInputTextFlags flags = 0) = 0;
-			virtual bool InputDouble(const char* label, double* v, double step = 0.0,
-				double step_fast = 0.0, const char* format = "%.6f",
-				ImGuiInputTextFlags flags = 0) = 0;
+			virtual bool InputDouble(const char* label, double* v,
+				double step = 0.0, double step_fast = 0.0,
+				const char* format = "%.6f", ImGuiInputTextFlags flags = 0) = 0;
 			virtual bool InputScalar(const char* label, ImGuiDataType data_type,
 				void* p_data, const void* p_step = NULL,
 				const void* p_step_fast = NULL, const char* format = NULL,
 				ImGuiInputTextFlags flags = 0) = 0;
-			virtual bool InputScalarN(const char* label, ImGuiDataType data_type,
-				void* p_data, int components, const void* p_step = NULL,
-				const void* p_step_fast = NULL, const char* format = NULL,
-				ImGuiInputTextFlags flags = 0) = 0;
-			virtual bool ColorEdit3(
-				const char* label, float col[3], ImGuiColorEditFlags flags = 0) = 0;
-			virtual bool ColorEdit4(
-				const char* label, float col[4], ImGuiColorEditFlags flags = 0) = 0;
-			virtual bool ColorPicker3(
-				const char* label, float col[3], ImGuiColorEditFlags flags = 0) = 0;
+			virtual bool InputScalarN(const char* label,
+				ImGuiDataType data_type, void* p_data, int components,
+				const void* p_step = NULL, const void* p_step_fast = NULL,
+				const char* format = NULL, ImGuiInputTextFlags flags = 0) = 0;
+			virtual bool ColorEdit3(const char* label, float col[3],
+				ImGuiColorEditFlags flags = 0) = 0;
+			virtual bool ColorEdit4(const char* label, float col[4],
+				ImGuiColorEditFlags flags = 0) = 0;
+			virtual bool ColorPicker3(const char* label, float col[3],
+				ImGuiColorEditFlags flags = 0) = 0;
 			virtual bool ColorPicker4(const char* label, float col[4],
 				ImGuiColorEditFlags flags = 0, const float* ref_col = NULL) = 0;
 			virtual bool ColorButton(const char* desc_id, const ImVec4& col,
@@ -901,17 +914,20 @@ namespace Kotek
 			virtual bool TreeNode(const char* label) = 0;
 			virtual bool TreeNode(const char* str_id, const char* fmt, ...) = 0;
 			virtual bool TreeNode(const void* ptr_id, const char* fmt, ...) = 0;
-			virtual bool TreeNodeV(const char* str_id, const char* fmt, va_list args) = 0;
-			virtual bool TreeNodeV(const void* ptr_id, const char* fmt, va_list args) = 0;
-			virtual bool TreeNodeEx(const char* label, ImGuiTreeNodeFlags flags = 0) = 0;
-			virtual bool TreeNodeEx(const char* str_id, ImGuiTreeNodeFlags flags,
-				const char* fmt, ...) = 0;
-			virtual bool TreeNodeEx(const void* ptr_id, ImGuiTreeNodeFlags flags,
-				const char* fmt, ...) = 0;
-			virtual bool TreeNodeExV(const char* str_id, ImGuiTreeNodeFlags flags,
-				const char* fmt, va_list args) = 0;
-			virtual bool TreeNodeExV(const void* ptr_id, ImGuiTreeNodeFlags flags,
-				const char* fmt, va_list args) = 0;
+			virtual bool TreeNodeV(
+				const char* str_id, const char* fmt, va_list args) = 0;
+			virtual bool TreeNodeV(
+				const void* ptr_id, const char* fmt, va_list args) = 0;
+			virtual bool TreeNodeEx(
+				const char* label, ImGuiTreeNodeFlags flags = 0) = 0;
+			virtual bool TreeNodeEx(const char* str_id,
+				ImGuiTreeNodeFlags flags, const char* fmt, ...) = 0;
+			virtual bool TreeNodeEx(const void* ptr_id,
+				ImGuiTreeNodeFlags flags, const char* fmt, ...) = 0;
+			virtual bool TreeNodeExV(const char* str_id,
+				ImGuiTreeNodeFlags flags, const char* fmt, va_list args) = 0;
+			virtual bool TreeNodeExV(const void* ptr_id,
+				ImGuiTreeNodeFlags flags, const char* fmt, va_list args) = 0;
 			virtual void TreePush(const char* str_id) = 0;
 			virtual void TreePush(const void* ptr_id = NULL) = 0;
 			virtual void TreePop() = 0;
@@ -921,6 +937,12 @@ namespace Kotek
 			virtual bool CollapsingHeader(const char* label, bool* p_visible,
 				ImGuiTreeNodeFlags flags = 0) = 0;
 			virtual void SetNextItemOpen(bool is_open, ImGuiCond cond = 0) = 0;
+			virtual bool Selectable(const char* label, bool selected = false,
+				ImGuiSelectableFlags flags = 0,
+				const ImVec2& size = ImVec2(0, 0)) = 0;
+			virtual bool Selectable(const char* label, bool* p_selected,
+				ImGuiSelectableFlags flags = 0,
+				const ImVec2& size = ImVec2(0, 0)) = 0;
 			virtual bool BeginListBox(
 				const char* label, const ImVec2& size = ImVec2(0, 0)) = 0;
 			virtual void EndListBox() = 0;
@@ -940,7 +962,8 @@ namespace Kotek
 				float (*values_getter)(void* data, int idx), void* data,
 				int values_count, int values_offset = 0,
 				const char* overlay_text = NULL, float scale_min = FLT_MAX,
-				float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0)) = 0;
+				float scale_max = FLT_MAX,
+				ImVec2 graph_size = ImVec2(0, 0)) = 0;
 			virtual void PlotHistogram(const char* label, const float* values,
 				int values_count, int values_offset = 0,
 				const char* overlay_text = NULL, float scale_min = FLT_MAX,
@@ -950,12 +973,13 @@ namespace Kotek
 				float (*values_getter)(void* data, int idx), void* data,
 				int values_count, int values_offset = 0,
 				const char* overlay_text = NULL, float scale_min = FLT_MAX,
-				float scale_max = FLT_MAX, ImVec2 graph_size = ImVec2(0, 0)) = 0;
+				float scale_max = FLT_MAX,
+				ImVec2 graph_size = ImVec2(0, 0)) = 0;
 			virtual void Value(const char* prefix, bool b) = 0;
 			virtual void Value(const char* prefix, int v) = 0;
 			virtual void Value(const char* prefix, unsigned int v) = 0;
-			virtual void Value(
-				const char* prefix, float v, const char* float_format = NULL) = 0;
+			virtual void Value(const char* prefix, float v,
+				const char* float_format = NULL) = 0;
 
 			virtual bool BeginMenuBar() = 0;
 			virtual void EndMenuBar() = 0;
@@ -963,8 +987,9 @@ namespace Kotek
 			virtual void EndMainMenuBar() = 0;
 			virtual bool BeginMenu(const char* label, bool enabled = true) = 0;
 			virtual void EndMenu() = 0;
-			virtual bool MenuItem(const char* label, const char* shortcut = NULL,
-				bool selected = false, bool enabled = true) = 0;
+			virtual bool MenuItem(const char* label,
+				const char* shortcut = NULL, bool selected = false,
+				bool enabled = true) = 0;
 			virtual bool MenuItem(const char* label, const char* shortcut,
 				bool* p_selected, bool enabled = true) = 0;
 
@@ -973,13 +998,16 @@ namespace Kotek
 			virtual void SetTooltip(const char* fmt, ...) = 0;
 			virtual void SetTooltipV(const char* fmt, va_list args) = 0;
 
-			virtual bool BeginPopup(const char* str_id, ImGuiWindowFlags flags = 0) = 0;
+			virtual bool BeginPopup(
+				const char* str_id, ImGuiWindowFlags flags = 0) = 0;
 			virtual bool BeginPopupModal(const char* name, bool* p_open = NULL,
 				ImGuiWindowFlags flags = 0) = 0;
 			virtual void EndPopup() = 0;
 
-			virtual void OpenPopup(const char* str_id, ImGuiPopupFlags popup_flags = 0) = 0;
-			virtual void OpenPopup(ImGuiID id, ImGuiPopupFlags popup_flags = 0) = 0;
+			virtual void OpenPopup(
+				const char* str_id, ImGuiPopupFlags popup_flags = 0) = 0;
+			virtual void OpenPopup(
+				ImGuiID id, ImGuiPopupFlags popup_flags = 0) = 0;
 			virtual void OpenPopupOnItemClick(
 				const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1) = 0;
 			virtual void CloseCurrentPopup() = 0;
@@ -991,15 +1019,16 @@ namespace Kotek
 			virtual bool BeginPopupContextVoid(
 				const char* str_id = NULL, ImGuiPopupFlags popup_flags = 1) = 0;
 
-			virtual bool IsPopupOpen(const char* str_id, ImGuiPopupFlags flags = 0) = 0;
+			virtual bool IsPopupOpen(
+				const char* str_id, ImGuiPopupFlags flags = 0) = 0;
 
 			virtual bool BeginTable(const char* str_id, int column,
 				ImGuiTableFlags flags = 0,
 				const ImVec2& outer_size = ImVec2(0.0f, 0.0f),
 				float inner_width = 0.0f) = 0;
 			virtual void EndTable() = 0;
-			virtual void TableNextRow(
-				ImGuiTableRowFlags row_flags = 0, float min_row_height = 0.0f) = 0;
+			virtual void TableNextRow(ImGuiTableRowFlags row_flags = 0,
+				float min_row_height = 0.0f) = 0;
 			virtual bool TableNextColumn() = 0;
 			virtual bool TableSetColumnIndex(int column_n) = 0;
 
@@ -1016,7 +1045,8 @@ namespace Kotek
 			virtual int TableGetColumnIndex() = 0;
 			virtual int TableGetRowIndex() = 0;
 			virtual const char* TableGetColumnName(int column_n = -1) = 0;
-			virtual ImGuiTableColumnFlags TableGetColumnFlags(int column_n = -1) = 0;
+			virtual ImGuiTableColumnFlags TableGetColumnFlags(
+				int column_n = -1) = 0;
 			virtual void TableSetColumnEnabled(int column_n, bool v) = 0;
 			virtual void TableSetBgColor(
 				ImGuiTableBgTarget target, ImU32 color, int column_n = -1) = 0;
@@ -1031,22 +1061,28 @@ namespace Kotek
 			virtual void SetColumnOffset(int column_index, float offset_x) = 0;
 			virtual int GetColumnsCount() = 0;
 
-			virtual bool BeginTabBar(const char* str_id, ImGuiTabBarFlags flags = 0) = 0;
+			virtual bool BeginTabBar(
+				const char* str_id, ImGuiTabBarFlags flags = 0) = 0;
 			virtual void EndTabBar() = 0;
 			virtual bool BeginTabItem(const char* label, bool* p_open = NULL,
 				ImGuiTabItemFlags flags = 0) = 0;
 			virtual void EndTabItem() = 0;
-			virtual bool TabItemButton(const char* label, ImGuiTabItemFlags flags = 0) = 0;
-			virtual void SetTabItemClosed(const char* tab_or_docked_window_label) = 0;
+			virtual bool TabItemButton(
+				const char* label, ImGuiTabItemFlags flags = 0) = 0;
+			virtual void SetTabItemClosed(
+				const char* tab_or_docked_window_label) = 0;
 
-			virtual ImGuiID DockSpace(ImGuiID id, const ImVec2& size = ImVec2(0, 0),
+			virtual ImGuiID DockSpace(ImGuiID id,
+				const ImVec2& size = ImVec2(0, 0), ImGuiDockNodeFlags flags = 0,
+				const ImGuiWindowClass* window_class = NULL) = 0;
+			virtual ImGuiID DockSpaceOverViewport(
+				const ImGuiViewport* viewport = NULL,
 				ImGuiDockNodeFlags flags = 0,
 				const ImGuiWindowClass* window_class = NULL) = 0;
-			virtual ImGuiID DockSpaceOverViewport(const ImGuiViewport* viewport = NULL,
-				ImGuiDockNodeFlags flags = 0,
-				const ImGuiWindowClass* window_class = NULL) = 0;
-			virtual void SetNextWindowDockID(ImGuiID dock_id, ImGuiCond cond = 0) = 0;
-			virtual void SetNextWindowClass(const ImGuiWindowClass* window_class) = 0;
+			virtual void SetNextWindowDockID(
+				ImGuiID dock_id, ImGuiCond cond = 0) = 0;
+			virtual void SetNextWindowClass(
+				const ImGuiWindowClass* window_class) = 0;
 			virtual ImGuiID GetWindowDockID() = 0;
 			virtual bool IsWindowDocked() = 0;
 
@@ -1101,13 +1137,16 @@ namespace Kotek
 			virtual ImGuiViewport* GetMainViewport() = 0;
 
 			virtual bool IsRectVisible(const ImVec2& size) = 0;
-			virtual bool IsRectVisible(const ImVec2& rect_min, const ImVec2& rect_max) = 0;
+			virtual bool IsRectVisible(
+				const ImVec2& rect_min, const ImVec2& rect_max) = 0;
 			virtual double GetTime() = 0;
 			virtual int GetFrameCount() = 0;
 			virtual ImDrawList* GetBackgroundDrawList() = 0;
 			virtual ImDrawList* GetForegroundDrawList() = 0;
-			virtual ImDrawList* GetBackgroundDrawList(ImGuiViewport* viewport) = 0;
-			virtual ImDrawList* GetForegroundDrawList(ImGuiViewport* viewport) = 0;
+			virtual ImDrawList* GetBackgroundDrawList(
+				ImGuiViewport* viewport) = 0;
+			virtual ImDrawList* GetForegroundDrawList(
+				ImGuiViewport* viewport) = 0;
 			virtual ImDrawListSharedData* GetDrawListSharedData() = 0;
 			virtual const char* GetStyleColorName(ImGuiCol idx) = 0;
 			virtual void SetStateStorage(ImGuiStorage* storage) = 0;
@@ -1118,20 +1157,22 @@ namespace Kotek
 				ImGuiID id, const ImVec2& size, ImGuiWindowFlags flags = 0) = 0;
 			virtual void EndChildFrame() = 0;
 
-			virtual ImVec2 CalcTextSize(const char* text, const char* text_end = NULL,
+			virtual ImVec2 CalcTextSize(const char* text,
+				const char* text_end = NULL,
 				bool hide_text_after_double_hash = false,
 				float wrap_width = -1.0f) = 0;
 
 			virtual ImVec4 ColorConvertU32ToFloat4(ImU32 in) = 0;
 			virtual ImU32 ColorConvertFloat4ToU32(const ImVec4& in) = 0;
-			virtual void ColorConvertRGBtoHSV(float r, float g, float b, float& out_h,
-				float& out_s, float& out_v) = 0;
-			virtual void ColorConvertHSVtoRGB(float h, float s, float v, float& out_r,
-				float& out_g, float& out_b) = 0;
+			virtual void ColorConvertRGBtoHSV(float r, float g, float b,
+				float& out_h, float& out_s, float& out_v) = 0;
+			virtual void ColorConvertHSVtoRGB(float h, float s, float v,
+				float& out_r, float& out_g, float& out_b) = 0;
 
 			virtual int GetKeyIndex(ImGuiKey imgui_key) = 0;
 			virtual bool IsKeyDown(int user_key_index) = 0;
-			virtual bool IsKeyPressed(int user_key_index, bool repeat = true) = 0;
+			virtual bool IsKeyPressed(
+				int user_key_index, bool repeat = true) = 0;
 			virtual bool IsKeyReleased(int user_key_index) = 0;
 			virtual int GetKeyPressedAmount(
 				int key_index, float repeat_delay, float rate) = 0;
@@ -1139,7 +1180,8 @@ namespace Kotek
 				bool want_capture_keyboard_value = true) = 0;
 
 			virtual bool IsMouseDown(ImGuiMouseButton button) = 0;
-			virtual bool IsMouseClicked(ImGuiMouseButton button, bool repeat = false) = 0;
+			virtual bool IsMouseClicked(
+				ImGuiMouseButton button, bool repeat = false) = 0;
 			virtual bool IsMouseReleased(ImGuiMouseButton button) = 0;
 			virtual bool IsMouseDoubleClicked(ImGuiMouseButton button) = 0;
 			virtual bool IsMouseHoveringRect(
@@ -1155,7 +1197,8 @@ namespace Kotek
 			virtual void ResetMouseDragDelta(ImGuiMouseButton button = 0) = 0;
 			virtual ImGuiMouseCursor GetMouseCursor() = 0;
 			virtual void SetMouseCursor(ImGuiMouseCursor cursor_type) = 0;
-			virtual void CaptureMouseFromApp(bool want_capture_mouse_value = true) = 0;
+			virtual void CaptureMouseFromApp(
+				bool want_capture_mouse_value = true) = 0;
 
 			virtual const char* GetClipboardText() = 0;
 			virtual void SetClipboardText(const char* text) = 0;
@@ -1164,7 +1207,8 @@ namespace Kotek
 			virtual void LoadIniSettingsFromMemory(
 				const char* ini_data, size_t ini_size = 0) = 0;
 			virtual void SaveIniSettingsToDisk(const char* ini_filename) = 0;
-			virtual const char* SaveIniSettingsToMemory(size_t* out_ini_size = NULL) = 0;
+			virtual const char* SaveIniSettingsToMemory(
+				size_t* out_ini_size = NULL) = 0;
 
 			virtual bool DebugCheckVersionAndDataLayout(const char* version_str,
 				size_t sz_io, size_t sz_style, size_t sz_vec2, size_t sz_vec4,
@@ -1179,11 +1223,13 @@ namespace Kotek
 
 			virtual ImGuiPlatformIO& GetPlatformIO() = 0;
 			virtual void UpdatePlatformWindows() = 0;
-			virtual void RenderPlatformWindowsDefault(void* platform_render_arg = NULL,
+			virtual void RenderPlatformWindowsDefault(
+				void* platform_render_arg = NULL,
 				void* renderer_render_arg = NULL) = 0;
 			virtual void DestroyPlatformWindows() = 0;
 			virtual ImGuiViewport* FindViewportByID(ImGuiID id) = 0;
-			virtual ImGuiViewport* FindViewportByPlatformHandle(void* platform_handle) = 0;
+			virtual ImGuiViewport* FindViewportByPlatformHandle(
+				void* platform_handle) = 0;
 		};
 
 		bool InitializeModule_Core_API(ktkMainManager*);

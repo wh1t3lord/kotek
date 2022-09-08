@@ -11,20 +11,18 @@ namespace Kotek
 			class matrix2x2f
 			{
 			public:
-#pragma region Constructors
-				matrix2x2f(base_decimal_t m00, base_decimal_t m01,
-					base_decimal_t m10, base_decimal_t m11) :
+				matrix2x2f(float m00, float m01,
+					float m10, float m11) :
 					m_base(m00, m01, {}, m10, m11, {}, {}, {}, {})
 				{
 				}
 				matrix2x2f(const base_mat2x2_t& data) : m_base(data) {}
 				matrix2x2f(const matrix2x2f& data) : m_base(data.m_base) {}
 				matrix2x2f(void) : m_base{} {}
-#pragma endregion
+
 
 				~matrix2x2f(void) = default;
 
-#pragma region Assignment operators
 				matrix2x2f& operator=(const matrix2x2f& data)
 				{
 					this->m_base = data.m_base;
@@ -136,7 +134,7 @@ namespace Kotek
 					return this->operator*=(data);
 				}
 
-				matrix2x2f& operator*=(base_decimal_t value) noexcept
+				matrix2x2f& operator*=(float value) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
@@ -198,7 +196,7 @@ namespace Kotek
 					return *this;
 				}
 
-				matrix2x2f& operator/=(base_decimal_t value) noexcept
+				matrix2x2f& operator/=(float value) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
@@ -208,7 +206,7 @@ namespace Kotek
 						reinterpret_cast<const DirectX::XMFLOAT2*>(
 							&this->m_base._21));
 
-					base_decimal_t factor = 1.f / value;
+					float factor = 1.f / value;
 
 					row_original_0 =
 						DirectX::XMVectorScale(row_original_0, factor);
@@ -227,9 +225,7 @@ namespace Kotek
 
 					return *this;
 				}
-#pragma endregion
 
-#pragma region Unary operators
 				matrix2x2f operator+() const noexcept { return *this; }
 
 				matrix2x2f operator-() const noexcept
@@ -260,9 +256,8 @@ namespace Kotek
 
 #endif
 				}
-#pragma endregion
 
-#pragma region Comparison operators
+ 
 				bool operator==(const matrix2x2f& data) const noexcept
 				{
 					DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
@@ -326,9 +321,7 @@ namespace Kotek
 
 					return (is_equal_0 || is_equal_1 || is_equal_2);
 				}
-#pragma endregion
 
-#pragma region Cast operators
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 				operator DirectX::XMMATRIX(void) const noexcept
 				{
@@ -339,7 +332,7 @@ namespace Kotek
 #endif
 #pragma endregion
 
-				base_decimal_t Get_00(void) const noexcept
+				float Get_00(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base._11;
@@ -348,7 +341,7 @@ namespace Kotek
 #endif
 				}
 
-				base_decimal_t Get_01(void) const noexcept
+				float Get_01(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base._12;
@@ -357,7 +350,7 @@ namespace Kotek
 #endif
 				}
 
-				base_decimal_t Get_02(void) const noexcept
+				float Get_02(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base._13;
@@ -366,7 +359,7 @@ namespace Kotek
 #endif
 				}
 
-				base_decimal_t Get_10(void) const noexcept
+				float Get_10(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base._21;
@@ -375,7 +368,7 @@ namespace Kotek
 #endif
 				}
 
-				base_decimal_t Get_11(void) const noexcept
+				float Get_11(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base._22;
@@ -384,7 +377,7 @@ namespace Kotek
 #endif
 				}
 
-				base_decimal_t Get_12(void) const noexcept
+				float Get_12(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base._23;
@@ -393,7 +386,7 @@ namespace Kotek
 #endif
 				}
 
-				base_decimal_t Get_20(void) const noexcept
+				float Get_20(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base._31;
@@ -402,7 +395,7 @@ namespace Kotek
 #endif
 				}
 
-				base_decimal_t Get_21(void) const noexcept
+				float Get_21(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base._32;
@@ -411,7 +404,7 @@ namespace Kotek
 #endif
 				}
 
-				base_decimal_t Get_22(void) const noexcept
+				float Get_22(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base._33;
@@ -420,7 +413,7 @@ namespace Kotek
 #endif
 				}
 
-				matrix2x2f& Set_00(base_decimal_t value) noexcept
+				matrix2x2f& Set_00(float value) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					this->m_base._11 = value;
@@ -429,7 +422,7 @@ namespace Kotek
 					return *this;
 				}
 
-				matrix2x2f& Set_01(base_decimal_t value) noexcept
+				matrix2x2f& Set_01(float value) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					this->m_base._12 = value;
@@ -439,7 +432,7 @@ namespace Kotek
 					return *this;
 				}
 
-				matrix2x2f& Set_10(base_decimal_t value) noexcept
+				matrix2x2f& Set_10(float value) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					this->m_base._21 = value;
@@ -449,7 +442,7 @@ namespace Kotek
 					return *this;
 				}
 
-				matrix2x2f& Set_11(base_decimal_t value) noexcept
+				matrix2x2f& Set_11(float value) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					this->m_base._22 = value;
@@ -475,7 +468,6 @@ namespace Kotek
 				base_mat2x2_t m_base;
 			};
 
-#pragma region Binary operators
 			inline matrix2x2f operator+(
 				const matrix2x2f& left, const matrix2x2f& right) noexcept
 			{
@@ -581,7 +573,7 @@ namespace Kotek
 			}
 
 			inline matrix2x2f operator*(
-				const matrix2x2f& left, base_decimal_t value) noexcept
+				const matrix2x2f& left, float value) noexcept
 			{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 				DirectX::XMFLOAT2 left_row_0 = {left.Get_00(), left.Get_01()};
@@ -610,13 +602,13 @@ namespace Kotek
 			}
 
 			inline matrix2x2f operator*(
-				base_decimal_t value, const matrix2x2f& right) noexcept
+				float value, const matrix2x2f& right) noexcept
 			{
 				return operator*(right, value);
 			}
 
 			inline matrix2x2f operator/(
-				const matrix2x2f& left, base_decimal_t value) noexcept
+				const matrix2x2f& left, float value) noexcept
 			{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 				DirectX::XMFLOAT2 left_row_0 = {left.Get_00(), left.Get_01()};
@@ -627,7 +619,7 @@ namespace Kotek
 				DirectX::XMVECTOR row_original_1 =
 					DirectX::XMLoadFloat2(&left_row_1);
 
-				base_decimal_t factor = 1.f / value;
+				float factor = 1.f / value;
 
 				row_original_0 = DirectX::XMVectorScale(row_original_0, factor);
 				row_original_1 = DirectX::XMVectorScale(row_original_1, factor);
@@ -688,7 +680,6 @@ namespace Kotek
 
 #endif
 			}
-#pragma endregion
 		} // namespace math
 	}     // namespace ktk
 } // namespace Kotek

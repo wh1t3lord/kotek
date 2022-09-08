@@ -11,19 +11,16 @@ namespace Kotek
 			class vector3f
 			{
 			public:
-#pragma region Constructors
-				vector3f(base_decimal_t x, base_decimal_t y, base_decimal_t z) :
+				vector3f(float x, float y, float z) :
 					m_base(x, y, z)
 				{
 				}
 				vector3f(const base_vec3_t& data) : m_base(data) {}
 				vector3f(const vector3f& data) : m_base(data.m_base) {}
-				vector3f(void) : m_base{} {};
-#pragma endregion
+				vector3f(void) : m_base{} {}
 
 				~vector3f(void) = default;
 
-#pragma region Assignment operators
 				vector3f& operator=(const vector3f& data) noexcept
 				{
 					this->m_base = data.m_base;
@@ -116,7 +113,7 @@ namespace Kotek
 					return *this;
 				}
 
-				vector3f& operator*=(base_decimal_t value) noexcept
+				vector3f& operator*=(float value) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					DirectX::XMVECTOR v1 = *this;
@@ -160,12 +157,12 @@ namespace Kotek
 					return *this;
 				}
 
-				vector3f& operator/=(base_decimal_t value) noexcept
+				vector3f& operator/=(float value) noexcept
 				{
 					return this->operator*=(1.f / value);
 				}
 
-				vector3f& operator%=(base_decimal_t value) noexcept
+				vector3f& operator%=(float value) noexcept
 				{
 					this->m_base.x = std::fmod(this->m_base.x, value);
 					this->m_base.y = std::fmod(this->m_base.y, value);
@@ -182,18 +179,14 @@ namespace Kotek
 
 					return *this;
 				}
-#pragma endregion
 
-#pragma region Unary operators
 				vector3f operator+() const noexcept { return *this; }
 				vector3f operator-() const noexcept
 				{
 					return vector3f(
 						-this->m_base.x, -this->m_base.y, -this->m_base.z);
 				}
-#pragma endregion
 
-#pragma region Comparison operators
 				bool operator==(const vector3f& data) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -218,16 +211,13 @@ namespace Kotek
 
 #endif
 				}
-#pragma endregion
 
-#pragma region Cast operators
 				operator DirectX::XMVECTOR() const noexcept
 				{
 					return DirectX::XMLoadFloat3(&this->m_base);
 				}
-#pragma endregion
 
-				base_decimal_t Get_X(void) const noexcept
+				float Get_X(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base.x;
@@ -235,7 +225,7 @@ namespace Kotek
 #endif
 				}
 
-				base_decimal_t Get_Y(void) const noexcept
+				float Get_Y(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base.y;
@@ -243,7 +233,7 @@ namespace Kotek
 #endif
 				}
 
-				base_decimal_t Get_Z(void) const noexcept
+				float Get_Z(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base.z;
@@ -252,19 +242,19 @@ namespace Kotek
 #endif
 				}
 
-				vector3f& Set_X(base_decimal_t value) noexcept
+				vector3f& Set_X(float value) noexcept
 				{
 					this->m_base.x = value;
 					return *this;
 				}
 
-				vector3f& Set_Y(base_decimal_t value) noexcept
+				vector3f& Set_Y(float value) noexcept
 				{
 					this->m_base.y = value;
 					return *this;
 				}
 
-				vector3f& Set_Z(base_decimal_t value) noexcept
+				vector3f& Set_Z(float value) noexcept
 				{
 					this->m_base.z = value;
 					return *this;
@@ -280,7 +270,6 @@ namespace Kotek
 				base_vec3_t m_base;
 			};
 
-#pragma region Binary operators
 			inline vector3f operator+(
 				const vector3f& left, const vector3f& right) noexcept
 			{
@@ -344,7 +333,7 @@ namespace Kotek
 			}
 
 			inline vector3f operator*(
-				const vector3f& left, base_decimal_t right) noexcept
+				const vector3f& left, float right) noexcept
 			{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 				DirectX::XMVECTOR v1 = left;
@@ -364,7 +353,7 @@ namespace Kotek
 			}
 
 			inline vector3f operator*(
-				base_decimal_t left, const vector3f& right) noexcept
+				float left, const vector3f& right) noexcept
 			{
 				return operator*(right, left);
 			}
@@ -391,7 +380,7 @@ namespace Kotek
 			}
 
 			inline vector3f operator/(
-				const vector3f& left, base_decimal_t right) noexcept
+				const vector3f& left, float right) noexcept
 			{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 				DirectX::XMVECTOR v1 = left;
@@ -409,7 +398,6 @@ namespace Kotek
 
 #endif
 			}
-#pragma endregion
 		} // namespace math
 	}     // namespace ktk
 } // namespace Kotek

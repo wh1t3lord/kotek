@@ -11,8 +11,7 @@ namespace Kotek
 			class vector1f
 			{
 			public:
-#pragma region Constructors
-				vector1f(base_decimal_t x) : m_base(x) {}
+				vector1f(float x) : m_base(x) {}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -21,18 +20,16 @@ namespace Kotek
 #endif
 				vector1f(const vector1f& data) : m_base(data.m_base) {}
 				vector1f(void) : m_base{} {}
-#pragma endregion
 
 				~vector1f() = default;
 
-#pragma region Assigment operators
 				vector1f& operator=(const vector1f& data)
 				{
 					this->m_base = data.m_base;
 					return *this;
 				}
 
-				vector1f& operator+=(base_decimal_t value)
+				vector1f& operator+=(float value)
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					auto v1 = DirectX::XMLoadFloat(&this->m_base);
@@ -66,7 +63,7 @@ namespace Kotek
 				}
 #endif
 
-				vector1f& operator-=(base_decimal_t value)
+				vector1f& operator-=(float value)
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					auto casted_original = DirectX::XMLoadFloat(&this->m_base);
@@ -101,7 +98,7 @@ namespace Kotek
 				}
 #endif
 
-				vector1f& operator*=(base_decimal_t value)
+				vector1f& operator*=(float value)
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					auto casted_original = DirectX::XMLoadFloat(&this->m_base);
@@ -140,7 +137,7 @@ namespace Kotek
 				}
 #endif
 
-				vector1f& operator/=(base_decimal_t value)
+				vector1f& operator/=(float value)
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					KOTEK_ASSERT(
@@ -181,7 +178,7 @@ namespace Kotek
 				}
 #endif
 
-				vector1f& operator%=(base_decimal_t value) noexcept
+				vector1f& operator%=(float value) noexcept
 				{
 					this->m_base = std::fmod(this->m_base, value);
 					return *this;
@@ -201,17 +198,13 @@ namespace Kotek
 					return *this;
 				}
 #endif
-#pragma endregion
 
-#pragma region Unary operators
 				vector1f operator+() const noexcept { return *this; }
 				vector1f operator-() const noexcept
 				{
 					return vector1f(-this->m_base);
 				}
-#pragma endregion
 
-#pragma region Comparison operators
 				bool operator==(const vector1f& data) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -235,9 +228,6 @@ namespace Kotek
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 #endif
 				}
-#pragma endregion
-
-#pragma region Cast operators
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 				operator DirectX::XMVECTOR() const noexcept
@@ -247,9 +237,7 @@ namespace Kotek
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 #endif
 
-#pragma endregion
-
-				base_decimal_t Get_X(void) const noexcept
+				float Get_X(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					return this->m_base;
@@ -257,7 +245,7 @@ namespace Kotek
 #endif
 				}
 
-				vector1f& Set_X(base_decimal_t x) noexcept
+				vector1f& Set_X(float x) noexcept
 				{
 					this->m_base = x;
 					return *this;
@@ -282,7 +270,6 @@ namespace Kotek
 				base_vec1_t m_base;
 			};
 
-#pragma region Binary operators
 			inline vector1f operator+(
 				const vector1f& a, const vector1f& b) noexcept
 			{
@@ -344,7 +331,7 @@ namespace Kotek
 			}
 
 			inline vector1f operator*(
-				const vector1f& a, base_decimal_t b) noexcept
+				const vector1f& a, float b) noexcept
 			{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 				DirectX::XMVECTOR v1 = a;
@@ -364,7 +351,7 @@ namespace Kotek
 			}
 
 			inline vector1f operator*(
-				base_decimal_t a, const vector1f& b) noexcept
+				float a, const vector1f& b) noexcept
 			{
 				return operator*(b, a);
 			}
@@ -391,7 +378,7 @@ namespace Kotek
 			}
 
 			inline vector1f operator/(
-				const vector1f& a, base_decimal_t b) noexcept
+				const vector1f& a, float b) noexcept
 			{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 				DirectX::XMVECTOR v1 = a;
@@ -408,8 +395,6 @@ namespace Kotek
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 #endif
 			}
-
-#pragma endregion
 		} // namespace math
 	}     // namespace ktk
 } // namespace Kotek
