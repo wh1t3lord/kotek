@@ -506,14 +506,14 @@ namespace Kotek
 			::ImGui::DestroyContext(static_cast<ImGuiContext*>(context));
 		}
 
-		void* ktkImguiWrapper::GetIO(void)
+		ImGuiIO& ktkImguiWrapper::GetIO(void)
 		{
-			return &::ImGui::GetIO();
+			return ::ImGui::GetIO();
 		}
 
-		void* ktkImguiWrapper::GetStyle(void)
+		ImGuiStyle& ktkImguiWrapper::GetStyle(void)
 		{
-			return &::ImGui::GetStyle();
+			return ::ImGui::GetStyle();
 		}
 
 		void ktkImguiWrapper::StyleColorsDark(void* style)

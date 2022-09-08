@@ -85,8 +85,8 @@ namespace Kotek
 			void DestroyContext(void* ctx = NULL) override;
 			ImGuiContext* GetCurrentContext() override;
 			void SetCurrentContext(ImGuiContext* ctx) override;
-			void* GetIO() override;
-			void* GetStyle() override;
+			ImGuiIO& GetIO() override;
+			ImGuiStyle& GetStyle() override;
 			void NewFrame() override;
 			void EndFrame() override;
 			void Render() override;

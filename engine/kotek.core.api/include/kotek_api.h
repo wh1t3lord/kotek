@@ -597,8 +597,8 @@ namespace Kotek
 			virtual void DestroyContext(void* ctx = NULL) = 0;
 			virtual ImGuiContext* GetCurrentContext() = 0;
 			virtual void SetCurrentContext(ImGuiContext* ctx) = 0;
-			virtual void* GetIO() = 0;
-			virtual void* GetStyle() = 0;
+			virtual ImGuiIO& GetIO() = 0;
+			virtual ImGuiStyle& GetStyle() = 0;
 			virtual void NewFrame() = 0;
 			virtual void EndFrame() = 0;
 			virtual void Render() = 0;
