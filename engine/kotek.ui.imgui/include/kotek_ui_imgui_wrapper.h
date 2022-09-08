@@ -56,30 +56,41 @@ namespace Kotek
 			ktkImguiWrapper(void);
 			~ktkImguiWrapper(void);
 
-			bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks) override;
-			bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks) override;
-			bool     ImGui_ImplGlfw_InitForOther(GLFWwindow* window, bool install_callbacks) override;
-			void     ImGui_ImplGlfw_Shutdown() override;
-			void     ImGui_ImplGlfw_NewFrame() override;
-			
-			void     ImGui_ImplGlfw_WindowFocusCallback(GLFWwindow* window, int focused) override;
-			void     ImGui_ImplGlfw_CursorEnterCallback(GLFWwindow* window, int entered) override;
-			void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) override;
-			void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) override;
-			void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) override;
-			void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c) override;
-			void     ImGui_ImplGlfw_MonitorCallback(GLFWmonitor* monitor, int event) override;
+			bool ImGui_ImplGlfw_InitForOpenGL(
+				GLFWwindow* window, bool install_callbacks) override;
+			bool ImGui_ImplGlfw_InitForVulkan(
+				GLFWwindow* window, bool install_callbacks) override;
+			bool ImGui_ImplGlfw_InitForOther(
+				GLFWwindow* window, bool install_callbacks) override;
+			void ImGui_ImplGlfw_Shutdown() override;
+			void ImGui_ImplGlfw_NewFrame() override;
 
+			void ImGui_ImplGlfw_WindowFocusCallback(
+				GLFWwindow* window, int focused) override;
+			void ImGui_ImplGlfw_CursorEnterCallback(
+				GLFWwindow* window, int entered) override;
+			void ImGui_ImplGlfw_MouseButtonCallback(
+				GLFWwindow* window, int button, int action, int mods) override;
+			void ImGui_ImplGlfw_ScrollCallback(
+				GLFWwindow* window, double xoffset, double yoffset) override;
+			void ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key,
+				int scancode, int action, int mods) override;
+			void ImGui_ImplGlfw_CharCallback(
+				GLFWwindow* window, unsigned int c) override;
+			void ImGui_ImplGlfw_MonitorCallback(
+				GLFWmonitor* monitor, int event) override;
 
-			bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL) override;
-			void     ImGui_ImplOpenGL3_Shutdown() override;
-			void     ImGui_ImplOpenGL3_NewFrame() override;
-			void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data) override;
+			bool ImGui_ImplOpenGL3_Init(
+				const char* glsl_version = NULL) override;
+			void ImGui_ImplOpenGL3_Shutdown() override;
+			void ImGui_ImplOpenGL3_NewFrame() override;
+			void ImGui_ImplOpenGL3_RenderDrawData(
+				ImDrawData* draw_data) override;
 
-			bool     ImGui_ImplOpenGL3_CreateFontsTexture() override;
-			void     ImGui_ImplOpenGL3_DestroyFontsTexture() override;
-			bool     ImGui_ImplOpenGL3_CreateDeviceObjects() override;
-			void     ImGui_ImplOpenGL3_DestroyDeviceObjects() override;
+			bool ImGui_ImplOpenGL3_CreateFontsTexture() override;
+			void ImGui_ImplOpenGL3_DestroyFontsTexture() override;
+			bool ImGui_ImplOpenGL3_CreateDeviceObjects() override;
+			void ImGui_ImplOpenGL3_DestroyDeviceObjects() override;
 
 			void* CreateContext(void* shared_font_atlas = NULL) override;
 			void DestroyContext(void* ctx = NULL) override;
