@@ -14,6 +14,7 @@ namespace Kotek
 			enum class eRenderGraphBuilderType;
 			enum class eRenderGraphBuilderPipelineRenderingType;
 			enum class eShaderLoadingDataType;
+			enum class eShaderType;
 		} // namespace gl
 	}     // namespace Render
 } // namespace Kotek

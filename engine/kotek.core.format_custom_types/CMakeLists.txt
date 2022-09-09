@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_format_custom_types.h"
+	"include/kotek_core_format_custom_types_string.h"
 	"src/main_core_format_custom_types_dll.cpp")
 
 

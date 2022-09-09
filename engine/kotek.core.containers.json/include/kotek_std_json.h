@@ -131,7 +131,8 @@ namespace Kotek
 				if (this->m_json.find(key_name_legacy) == this->m_json.end())
 				{
 					KOTEK_MESSAGE("your file doesn't contain key: {}",
-						key_name.get_as_is());
+						key_name);
+
 					return std::any_cast<ReturnType>(result);
 				}
 

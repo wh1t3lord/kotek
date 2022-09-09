@@ -1,5 +1,7 @@
 #pragma once
 
+#include "kotek_core_format_custom_types_string.h"
+
 namespace Kotek
 {
 	namespace Core
