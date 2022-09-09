@@ -8,7 +8,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 list(APPEND KOTEK_OUTPUT_PRIVATE_FLAGS -DGLAD_GLAPI_EXPORT_BUILD)
 list(APPEND KOTEK_OUTPUT_FLAGS -DGLAD_GLAPI_EXPORT)
 
-add_library(${PROJECT_NAME} STATIC
+add_library(${PROJECT_NAME} SHARED
 	"include/kotek_render_gl_glad3.h"
 	"include/glad/glad.h"
 	"include/KHR/khrplatform.h"
