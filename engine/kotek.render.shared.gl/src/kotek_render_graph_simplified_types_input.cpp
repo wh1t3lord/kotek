@@ -77,8 +77,11 @@ namespace Kotek
 
 				KOTEK_ASSERT(info.Is_DataValid(),
 					"data is not valid check your class please, your type in "
-				    "class is {}",
+					"class is {}",
 					helper::Translate_ShaderLoadingDataType(info.Get_Type()));
+
+				this->m_input_shaders[user_name_for_access_in_the_code]
+									 [shader_type] = info;
 			}
 
 			const ktk::unordered_map<eShaderType,
@@ -87,6 +90,17 @@ namespace Kotek
 				const ktk::string& user_name_for_access_in_the_code)
 				const noexcept
 			{
+				KOTEK_ASSERT(user_name_for_access_in_the_code.empty() == false,
+					"you can't pass an empty string here");
+
+				KOTEK_ASSERT(this->m_input_shaders.find(
+								 user_name_for_access_in_the_code) !=
+						this->m_input_shaders.end(),
+					"can't find the specified shader name in the map: {}",
+					user_name_for_access_in_the_code);
+
+				return this->m_input_shaders.at(
+					user_name_for_access_in_the_code);
 			}
 
 			const ktk::unordered_map<ktk::string,
@@ -95,6 +109,7 @@ namespace Kotek
 			ktkRenderGraphSimplifiedStorageInput::Get_Shaders(
 				void) const noexcept
 			{
+				return this->m_input_shaders;
 			}
 
 		} // namespace gl

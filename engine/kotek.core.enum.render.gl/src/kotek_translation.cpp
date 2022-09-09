@@ -105,6 +105,42 @@ namespace Kotek
 				{
 					switch (type)
 					{
+					case gl::eShaderType::kShaderType_Compute:
+					{
+						return "Compute";
+					}
+					case gl::eShaderType::kShaderType_Fragment:
+					{
+						return "Fragment";
+					}
+					case gl::eShaderType::kShaderType_Geometry:
+					{
+						return "Geometry";
+					}
+					case gl::eShaderType::kShaderType_Mesh:
+					{
+						return "Mesh";
+					}
+					case gl::eShaderType::kShaderType_Task:
+					{
+						return "Task";
+					}
+					case gl::eShaderType::kShaderType_TessellationControl:
+					{
+						return "TessellationControl";
+					}
+					case gl::eShaderType::kShaderType_TessellationEvaluation:
+					{
+						return "TessellationEvaluation";
+					}
+					case gl::eShaderType::kShaderType_Unknown:
+					{
+						return "Unknown";
+					}
+					case gl::eShaderType::kShaderType_Vertex:
+					{
+						return "Vertex";
+					}
 					default:
 					{
 						return "UNDEFINED_ENUM_OF_SHADER_TYPE";

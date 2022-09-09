@@ -56,21 +56,14 @@ namespace Kotek
 			enum class eShaderType : ktk::enum_base_t
 			{
 				kShaderType_Vertex,
-				// @ fragment
-				kShaderType_Pixel,
+				kShaderType_Fragment,
+
 				kShaderType_Geometry,
 				kShaderType_Compute,
 				kShaderType_Mesh,
 				kShaderType_Task,
 				kShaderType_TessellationControl,
 				kShaderType_TessellationEvaluation,
-				kShaderType_RTX_Generation,
-				kShaderType_RTX_Intersection,
-				kShaderType_RTX_AnyHit,
-				kShaderType_RTX_ClosesHit,
-				kShaderType_RTX_Miss,
-				kShaderType_RTX_Callable,
-
 				kShaderType_Unknown = -1
 			};
 		} // namespace gl
