@@ -13,8 +13,9 @@ namespace Kotek
 		{
 			enum class eRenderGraphBuilderType;
 			enum class eRenderGraphBuilderPipelineRenderingType;
-		}
-	} // namespace Render
+			enum class eShaderLoadingDataType;
+		} // namespace gl
+	}     // namespace Render
 } // namespace Kotek
 
 namespace Kotek
@@ -27,9 +28,14 @@ namespace Kotek
 			{
 				ktk::string Translate_RenderGraphBuilderTypeToString(
 					gl::eRenderGraphBuilderType type) noexcept;
+
 				ktk::string Translate_RenderGraphPipelineTypeToString(
 					gl::eRenderGraphBuilderPipelineRenderingType type) noexcept;
-			}
-		} // namespace gl
-	}     // namespace Render
+
+				ktk::string Translate_ShaderLoadingDataType(
+					gl::eShaderLoadingDataType type) noexcept;
+
+			} // namespace helper
+		}     // namespace gl
+	}         // namespace Render
 } // namespace Kotek

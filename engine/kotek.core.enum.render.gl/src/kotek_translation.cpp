@@ -37,7 +37,7 @@ namespace Kotek
 					}
 					default:
 					{
-						return "BUILDER_TYPE_UNKNOWN";
+						return "UNDEFINED_ENUM_OF_RENDER_GRAPH_BUILDER_TYPE";
 					}
 					}
 				}
@@ -59,7 +59,45 @@ namespace Kotek
 					}
 					default:
 					{
-						return "PIPELINE_RENDERING_TYPE_UNKNOWN";
+						return "UNDEFINED_ENUM_OF_RENDER_GRAPH_BUILDER_"
+							   "PIPELINE_RENDERING_TYPE";
+					}
+					}
+				}
+
+				ktk::string Translate_ShaderLoadingDataType(
+					gl::eShaderLoadingDataType type) noexcept
+				{
+					switch (type)
+					{
+					case gl::eShaderLoadingDataType::
+						kShaderLoadingDataType_ByteArrayCompiledSPIRV:
+					{
+						return "ByteArrayCompiledSPIRV";
+					}
+					case gl::eShaderLoadingDataType::
+						kShaderLoadingDataType_ByteArrayFile:
+					{
+						return "ByteArrayFile";
+					}
+					case gl::eShaderLoadingDataType::
+					kShaderLoadingDataType_FilePathString:
+					{
+						return "FilePathString";
+					}
+					case gl::eShaderLoadingDataType::
+					kShaderLoadingDataType_NotInitialized:
+					{
+						return "NotInitialized";
+					}
+					case gl::eShaderLoadingDataType::
+					kShaderLoadingDataType_SourceCode_TextString:
+					{
+						return "TextString_SourceCode";
+					}
+					default:
+					{
+						return "UNDEFINED_ENUM_OF_SHADER_LOADING_DATA_TYPE";
 					}
 					}
 				}

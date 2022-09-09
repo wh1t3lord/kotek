@@ -22,7 +22,9 @@ namespace Kotek
 			}
 
 			ktkRenderGraphShaderTextInfo::ktkRenderGraphShaderTextInfo(void) :
-				m_type{}, m_data{}
+				m_type{eShaderLoadingDataType::
+						kShaderLoadingDataType_NotInitialized},
+				m_data{}
 			{
 			}
 
@@ -50,6 +52,47 @@ namespace Kotek
 				const ktk::variant<void*, ktk::string>& data) noexcept
 			{
 				this->m_data = data;
+			}
+
+			bool ktkRenderGraphShaderTextInfo::Is_DataValid(void) const noexcept
+			{
+				bool result{};
+
+				if (this->m_type ==
+					eShaderLoadingDataType::
+						kShaderLoadingDataType_NotInitialized)
+					return result;
+
+				if (this->m_type ==
+						eShaderLoadingDataType::
+							kShaderLoadingDataType_FilePathString ||
+					this->m_type ==
+						eShaderLoadingDataType::
+							kShaderLoadingDataType_SourceCode_TextString)
+				{
+					if (std::get<ktk::string>(this->m_data).empty() == false)
+					{
+						result = true;
+					}
+				}
+				else if (this->m_type ==
+						eShaderLoadingDataType::
+							kShaderLoadingDataType_ByteArrayFile ||
+					this->m_type ==
+						eShaderLoadingDataType::
+							kShaderLoadingDataType_ByteArrayCompiledSPIRV)
+				{
+					if (std::get<void*>(this->m_data) != nullptr)
+					{
+						result = true;
+					}
+				}
+				else
+				{
+					KOTEK_ASSERT(false, "can't be!!");
+				}
+
+				return result;
 			}
 
 			ktkRenderGraphBufferInfo::ktkRenderGraphBufferInfo(void) {}
@@ -95,7 +138,7 @@ namespace Kotek
 				return this->m_width;
 			}
 
-			void ktkRenderGraphTextureInfo::Set_Width(GLsizei value) noexcept 
+			void ktkRenderGraphTextureInfo::Set_Width(GLsizei value) noexcept
 			{
 				this->m_width = value;
 			}
@@ -115,7 +158,7 @@ namespace Kotek
 				return this->m_depth;
 			}
 
-			void ktkRenderGraphTextureInfo::Set_Depth(GLsizei value) noexcept 
+			void ktkRenderGraphTextureInfo::Set_Depth(GLsizei value) noexcept
 			{
 				this->m_depth = value;
 			}
@@ -124,7 +167,7 @@ namespace Kotek
 			{
 				return this->m_border;
 			}
-			void ktkRenderGraphTextureInfo::Set_Border(GLint value) noexcept 
+			void ktkRenderGraphTextureInfo::Set_Border(GLint value) noexcept
 			{
 				this->m_border = value;
 			}
@@ -134,7 +177,7 @@ namespace Kotek
 				return this->m_format;
 			}
 
-			void ktkRenderGraphTextureInfo::Set_Format(GLenum value) noexcept 
+			void ktkRenderGraphTextureInfo::Set_Format(GLenum value) noexcept
 			{
 				this->m_format = value;
 			}

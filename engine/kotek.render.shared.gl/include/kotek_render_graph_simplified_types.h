@@ -89,6 +89,8 @@ namespace Kotek
 				void Set_Data(
 					const ktk::variant<void*, ktk::string>& data) noexcept;
 
+				bool Is_DataValid(void) const noexcept;
+
 			private:
 				eShaderLoadingDataType m_type;
 				ktk::variant<void*, ktk::string> m_data;

@@ -19,7 +19,8 @@ namespace Kotek
 				void Add_Image(const ktk::string& image_name,
 					const gl::ktkRenderGraphTextureInfo& info_create) noexcept;
 
-				const ktk::unordered_map<ktk::string, gl::ktkRenderGraphTextureInfo>&
+				const ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphTextureInfo>&
 				Get_Images(void) const noexcept;
 
 				void Add_Buffer(const ktk::string& buffer_name,
@@ -28,6 +29,21 @@ namespace Kotek
 				const ktk::unordered_map<ktk::string,
 					gl::ktkRenderGraphBufferInfo>&
 				Get_Buffers(void) const noexcept;
+
+				void Add_Shader(
+					const ktk::string& user_name_for_access_in_the_code,
+					eShaderType shader_type,
+					const gl::ktkRenderGraphShaderTextInfo& info) noexcept;
+
+				const ktk::unordered_map<eShaderType,
+					gl::ktkRenderGraphShaderTextInfo>&
+				Get_Shader(const ktk::string& user_name_for_access_in_the_code)
+					const noexcept;
+
+				const ktk::unordered_map<ktk::string,
+					ktk::unordered_map<eShaderType,
+						gl::ktkRenderGraphShaderTextInfo>>&
+				Get_Shaders(void) const noexcept;
 
 			private:
 				ktk::unordered_map<ktk::string,
