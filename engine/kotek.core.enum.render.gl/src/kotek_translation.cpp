@@ -18,22 +18,22 @@ namespace Kotek
 					case gl::eRenderGraphBuilderType::
 						kRenderBuilderFor_Deferred:
 					{
-						return "deffered";
+						return "Deffered";
 					}
 					case gl::eRenderGraphBuilderType::
 						kRenderBuilderFor_Forward_Only:
 					{
-						return "forward only";
+						return "Forward_Only";
 					}
 					case gl::eRenderGraphBuilderType::
 						kRenderBuilderFor_Forward_With_Outputs:
 					{
-						return "forward with outputs";
+						return "Forward_With_Outputs";
 					}
 					case gl::eRenderGraphBuilderType::
 						kRenderBuilderFor_Undefined:
 					{
-						return "undefined";
+						return "Undefined";
 					}
 					default:
 					{
@@ -50,7 +50,7 @@ namespace Kotek
 					case gl::eRenderGraphBuilderPipelineRenderingType::
 						kRenderBuilderBasedOnPipeline_Orthodox:
 					{
-						return "orthodox";
+						return "Orthodox";
 					}
 					case gl::eRenderGraphBuilderPipelineRenderingType::
 						kRenderBuilderBasedOnPipeline_RTX:
@@ -81,23 +81,33 @@ namespace Kotek
 						return "ByteArrayFile";
 					}
 					case gl::eShaderLoadingDataType::
-					kShaderLoadingDataType_FilePathString:
+						kShaderLoadingDataType_FilePathString:
 					{
 						return "FilePathString";
 					}
 					case gl::eShaderLoadingDataType::
-					kShaderLoadingDataType_NotInitialized:
+						kShaderLoadingDataType_NotInitialized:
 					{
 						return "NotInitialized";
 					}
 					case gl::eShaderLoadingDataType::
-					kShaderLoadingDataType_SourceCode_TextString:
+						kShaderLoadingDataType_SourceCode_TextString:
 					{
 						return "TextString_SourceCode";
 					}
 					default:
 					{
 						return "UNDEFINED_ENUM_OF_SHADER_LOADING_DATA_TYPE";
+					}
+					}
+				}
+				ktk::string Translate_ShaderType(gl::eShaderType type) noexcept
+				{
+					switch (type)
+					{
+					default:
+					{
+						return "UNDEFINED_ENUM_OF_SHADER_TYPE";
 					}
 					}
 				}

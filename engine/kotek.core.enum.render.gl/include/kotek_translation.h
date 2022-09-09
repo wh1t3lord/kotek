@@ -35,6 +35,8 @@ namespace Kotek
 				ktk::string Translate_ShaderLoadingDataType(
 					gl::eShaderLoadingDataType type) noexcept;
 
+				ktk::string Translate_ShaderType(gl::eShaderType type) noexcept;
+
 			} // namespace helper
 		}     // namespace gl
 	}         // namespace Render
