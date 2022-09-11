@@ -10,7 +10,6 @@
 #include <kotek.core.containers/include/kotek_core_containers.h>
 #include <kotek.core.filesystem/include/kotek_core_filesystem.h>
 #include <kotek.core.format/include/kotek_core_format.h>
-#include <kotek.core.format_custom_types/include/kotek_core_format_custom_types.h>
 #include <kotek.core.profilers/include/kotek_core_profilers.h>
 #include <kotek.core.os/include/kotek_core_os.h>
 #include <kotek.core.window_manager/include/kotek_core_window_manager.h>

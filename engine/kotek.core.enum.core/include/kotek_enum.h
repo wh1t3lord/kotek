@@ -18,6 +18,7 @@ namespace Kotek
 			kFolderIndex_Models,
 			kFolderIndex_Sound,
 			kFolderIndex_UserTests,
+			kFolderIndex_UserData_ShaderCache,
 			kFolderIndex_UserData
 		};
 
@@ -542,7 +543,7 @@ namespace Kotek
 			kEngine_Feature_Unknown = -1
 		};
 
-		enum class ktkConsoleCommandIndex : ktk::enum_base_t
+		enum class eConsoleCommandIndex : ktk::enum_base_t
 		{
 			// (int width, int height)
 			kConsoleCommand_Resize,

@@ -4,8 +4,25 @@
 // FMT library from that project
 
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
+#include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 #include <fmt/format.h>
 #include <fmt/xchar.h>
+
+template <>
+struct fmt::formatter<Kotek::ktk::string, Kotek::ktk::tchar>
+{
+	template <typename ParseContext>
+	constexpr inline auto parse(ParseContext& ctx)
+	{
+		return ctx.begin();
+	}
+
+	template <typename FormatContext>
+	inline auto format(Kotek::ktk::string const& str, FormatContext& ctx)
+	{
+		return fmt::format_to(ctx.out(), KOTEK_TEXT("{}"), str.get_as_is());
+	}
+};
 
 namespace Kotek
 {
@@ -16,6 +33,7 @@ namespace Kotek
 		{
 			const auto& data =
 				fmt::format(text.get_as_is(), std::forward<Args>(args)...);
+
 			return ktk::string(data.begin(), data.end());
 		}
 

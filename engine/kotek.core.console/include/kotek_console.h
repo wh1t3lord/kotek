@@ -32,13 +32,13 @@ namespace Kotek
 			void Initialize(void) override;
 			void Shutdown(void) override;
 
-			void RegisterCommand(ktkConsoleCommandIndex id,
+			void RegisterCommand(eConsoleCommandIndex id,
 				const ktk::console_command_t& p_function) noexcept;
-			void PushCommand(ktkConsoleCommandIndex id,
+			void PushCommand(eConsoleCommandIndex id,
 				ktk::console_command_args_t data = {}) noexcept;
 			void Flush(void);
 
-			void Execute(ktkConsoleCommandIndex id,
+			void Execute(eConsoleCommandIndex id,
 				ktk::console_command_args_t data = {}) noexcept;
 
 		private:
@@ -46,7 +46,7 @@ namespace Kotek
 			ktk::queue<
 				ktk::pair<ktk::vector<ktk::string>, ktk::console_command_t>>
 				m_buffer;
-			ktk::unordered_map<ktkConsoleCommandIndex, ktk::console_command_t>
+			ktk::unordered_map<eConsoleCommandIndex, ktk::console_command_t>
 				m_storage;
 		};
 	} // namespace Core

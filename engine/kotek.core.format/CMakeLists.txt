@@ -20,3 +20,4 @@ add_library(${PROJECT_NAME} STATIC
 
 target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt-header-only)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.text)

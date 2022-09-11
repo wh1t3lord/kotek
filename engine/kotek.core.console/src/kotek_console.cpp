@@ -13,7 +13,7 @@ namespace Kotek
 			KOTEK_MESSAGE("console is initialized!");
 		}
 
-		void ktkConsole::RegisterCommand(ktkConsoleCommandIndex id,
+		void ktkConsole::RegisterCommand(eConsoleCommandIndex id,
 			const ktk::console_command_t& p_function) noexcept
 		{
 			if (this->m_storage.find(id) != this->m_storage.end())
@@ -33,7 +33,7 @@ namespace Kotek
 			this->m_storage[id] = p_function;
 		}
 
-		void ktkConsole::PushCommand(ktkConsoleCommandIndex id,
+		void ktkConsole::PushCommand(eConsoleCommandIndex id,
 			ktk::console_command_args_t data) noexcept
 		{
 			if (this->m_storage.find(id) == this->m_storage.end())
@@ -64,7 +64,7 @@ namespace Kotek
 
 		void ktkConsole::Shutdown(void) {}
 
-		void ktkConsole::Execute(ktkConsoleCommandIndex id,
+		void ktkConsole::Execute(eConsoleCommandIndex id,
 			ktk::console_command_args_t data) noexcept
 		{
 			if (this->m_storage.find(id) == this->m_storage.end())

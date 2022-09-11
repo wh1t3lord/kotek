@@ -9,8 +9,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_enum.h"
-	"include/kotek_core_enum_core.h" 
+	"include/kotek_translation.h"
+	"include/kotek_core_enum_core.h"
+	"src/kotek_translation.cpp"
 	"src/main_core_enum_core_dll.cpp"
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)

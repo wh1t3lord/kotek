@@ -20,8 +20,8 @@ namespace Kotek
 			if (this->m_engine_flags.find(id) == this->m_engine_flags.end())
 			{
 				KOTEK_MESSAGE_WARNING(
-					"engine doesn't register feature by id: [{}]",
-					static_cast<ktk::enum_base_t>(id));
+					"engine doesn't register feature by id: [{}] ([{}])",
+					static_cast<ktk::enum_base_t>(id), helper::Translate_EngineFeature(id));
 
 				return false;
 			}
