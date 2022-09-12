@@ -355,6 +355,8 @@ namespace Kotek
 				this->Compile_BuffersAndImagesForCreation(storage_inputs,
 					storage_outputs, images_to_create, buffers_to_create);
 
+				this->Create_Resources(storage_inputs);
+
 				for (const auto& p_render_pass : this->m_passes)
 				{
 					p_render_pass->OnCreatedResources();
@@ -373,6 +375,33 @@ namespace Kotek
 				}
 
 				return result;
+			}
+
+			void ktkRenderGraphSimplifiedBuilder::Create_Resources(
+				const ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphSimplifiedStorageInput>&
+					all_inputs) noexcept
+			{
+				this->Create_BackBuffer();
+				this->Create_Shaders(all_inputs);
+			}
+
+			void ktkRenderGraphSimplifiedBuilder::Create_BackBuffer(
+				void) noexcept
+			{
+				KOTEK_ASSERT(this->m_p_render_graph_simplified_resource_manager,
+					"you must initialize simplified resource manager for "
+				    "render graph");
+			}
+
+			void ktkRenderGraphSimplifiedBuilder::Create_Shaders(
+				const ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphSimplifiedStorageInput>&
+					all_inputs) noexcept
+			{
+				KOTEK_ASSERT(this->m_p_render_graph_simplified_resource_manager,
+					"you must initialize simplified resource manager for "
+				    "render graph");
 			}
 		} // namespace gl3_3
 	}     // namespace Render

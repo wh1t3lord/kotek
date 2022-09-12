@@ -109,6 +109,15 @@ namespace Kotek
 						storage_outputs);
 
 			private:
+				void Create_Resources(const ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphSimplifiedStorageInput>&
+						all_inputs) noexcept;
+				void Create_BackBuffer(void) noexcept;
+				void Create_Shaders(const ktk::unordered_map<ktk::string,
+					gl::ktkRenderGraphSimplifiedStorageInput>&
+						all_inputs) noexcept;
+
+			private:
 				gl::eRenderGraphBuilderType m_render_graph_type;
 				gl::eRenderGraphBuilderPipelineRenderingType
 					m_rendering_pipeline_type;

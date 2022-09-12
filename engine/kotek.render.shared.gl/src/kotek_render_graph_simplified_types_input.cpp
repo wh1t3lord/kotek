@@ -80,6 +80,15 @@ namespace Kotek
 					"class is {}",
 					helper::Translate_ShaderLoadingDataType(info.Get_Type()));
 
+				KOTEK_ASSERT(
+					this->m_input_shaders.at(user_name_for_access_in_the_code)
+							.find(shader_type) ==
+						this->m_input_shaders
+							.at(user_name_for_access_in_the_code)
+							.end(),
+					"found duplicate by shader type: {}",
+					helper::Translate_ShaderType(shader_type));
+
 				this->m_input_shaders[user_name_for_access_in_the_code]
 									 [shader_type] = info;
 			}

@@ -16,28 +16,6 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			// TODO: remove not supported shaders like RTX...
-			enum class shader_type_t : ktk::enum_base_t
-			{
-				kShaderType_Vertex,
-				// @ fragment
-				kShaderType_Pixel,
-				kShaderType_Geometry,
-				kShaderType_Compute,
-				kShaderType_Mesh,
-				kShaderType_Task,
-				kShaderType_TessellationControl,
-				kShaderType_TessellationEvaluation,
-				kShaderType_RTX_Generation,
-				kShaderType_RTX_Intersection,
-				kShaderType_RTX_AnyHit,
-				kShaderType_RTX_ClosesHit,
-				kShaderType_RTX_Miss,
-				kShaderType_RTX_Callable,
-
-				kShaderType_Unknown = -1
-			};
-
 			// TODO: remove it and use from shared version, just create logical
 			// if for detecting unsupported flags, like in really old gls you
 			// can't use RTX or even juts in gl
@@ -73,18 +51,18 @@ namespace Kotek
 				shader_module_t(void);
 				~shader_module_t(void);
 
-				void SetShader(shader_type_t type, GLuint handle_id) noexcept;
+				void SetShader(gl::eShaderType type, GLuint handle_id) noexcept;
 
-				GLuint GetShader(shader_type_t type) const noexcept;
+				GLuint GetShader(gl::eShaderType type) const noexcept;
 
-				const ktk::unordered_map<shader_type_t, GLuint>& GetShaders(
+				const ktk::unordered_map<gl::eShaderType, GLuint>& GetShaders(
 					void) const noexcept;
 
 				void SetProgram(GLuint handle_id) noexcept;
 				GLuint GetProgram(void) const noexcept;
 
 			private:
-				ktk::unordered_map<shader_type_t, GLuint> m_shader_handles;
+				ktk::unordered_map<gl::eShaderType, GLuint> m_shader_handles;
 				GLuint m_program;
 			};
 
@@ -98,12 +76,12 @@ namespace Kotek
 				void Shutdown(void);
 
 				shader_module_t LoadShader(const ktk::filesystem::path& path,
-					shader_type_t type) noexcept;
+					gl::eShaderType type) noexcept;
 				shader_module_t LoadShader(
 					const ktk::filesystem::path& path) noexcept;
 				shader_module_t LoadShaderAsString(
 					const ktk::string& code_as_string,
-					shader_type_t type) noexcept;
+					gl::eShaderType type) noexcept;
 
 				void DestroyShader(const shader_module_t& instance) noexcept;
 

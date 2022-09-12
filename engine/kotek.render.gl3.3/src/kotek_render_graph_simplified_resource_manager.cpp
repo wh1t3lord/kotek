@@ -1,5 +1,6 @@
 #include "../include/kotek_render_graph_simplified_resource_manager.h"
 #include "../include/kotek_render_device.h"
+#include "../include/kotek_render_resource_manager.h"
 
 namespace Kotek
 {
@@ -15,6 +16,28 @@ namespace Kotek
 				m_p_manager_resource{static_cast<Core::ktkResourceManager*>(
 					p_main_manager->GetResourceManager())}
 			{
+				KOTEK_ASSERT(this->m_p_manager_resource,
+					"you must initialize resource manager before using this "
+					"class (ctor). Something is wrong if you didn't make "
+					"overriding the default implementation class of "
+					"ktkIRenderShaderManager");
+
+				this->m_p_render_resource_manager =
+					dynamic_cast<ktkRenderResourceManager*>(
+						this->m_p_manager_resource
+							->Get_RenderResourceManager());
+
+				KOTEK_ASSERT(this->m_p_render_resource_manager,
+					"you must initialize render resource manager, something is "
+					"wrong!");
+
+				KOTEK_ASSERT(
+					this->m_p_render_resource_manager->Get_ManagerShader(),
+					"you must initialize shader manager!");
+
+				KOTEK_ASSERT(
+					this->m_p_render_resource_manager->Get_ManagerTexture(),
+					"you must initialize texture manager");
 			}
 
 			ktkRenderGraphSimplifiedResourceManager::
@@ -43,6 +66,41 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphSimplifiedResourceManager::Shutdown(void) {}
+			void ktkRenderGraphSimplifiedResourceManager::Create_Shaders(
+				const gl::ktkRenderGraphSimplifiedStorageInput&
+					storage_of_render_pass_input)
+			{
+				if (storage_of_render_pass_input.Get_Shaders().empty())
+				{
+					KOTEK_MESSAGE_WARNING(
+						"you can't create a render pass without shaders!");
+					return;
+				}
+
+				this->Create_Shaders(
+					storage_of_render_pass_input.Get_Shaders());
+			}
+
+			void ktkRenderGraphSimplifiedResourceManager::Create_Shaders(
+				const ktk::unordered_map<ktk::string,
+					ktk::unordered_map<gl::eShaderType,
+						gl::ktkRenderGraphShaderTextInfo>>&
+					shaders_for_current_render_pass)
+			{
+				for (const auto& [pipeline_name,
+						 pair_shader_type_info_creation] :
+					shaders_for_current_render_pass)
+				{
+				}
+			}
+
+			shader_module_t
+			ktkRenderGraphSimplifiedResourceManager::Create_Shader(
+				gl::eShaderType shader_type,
+				const gl::ktkRenderGraphShaderTextInfo& info_creation)
+			{
+				return shader_module_t();
+			}
 		} // namespace gl3_3
 	}     // namespace Render
 } // namespace Kotek

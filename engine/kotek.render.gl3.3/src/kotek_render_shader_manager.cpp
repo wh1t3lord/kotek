@@ -20,7 +20,7 @@ namespace Kotek
 			void ktkRenderShaderManager::Shutdown(void) {}
 
 			shader_module_t ktkRenderShaderManager::LoadShader(
-				const ktk::filesystem::path& path, shader_type_t type) noexcept
+				const ktk::filesystem::path& path, gl::eShaderType type) noexcept
 			{
 				return shader_module_t();
 			}
@@ -32,7 +32,7 @@ namespace Kotek
 			}
 
 			shader_module_t ktkRenderShaderManager::LoadShaderAsString(
-				const ktk::string& code_as_string, shader_type_t type) noexcept
+				const ktk::string& code_as_string, gl::eShaderType type) noexcept
 			{
 				return shader_module_t();
 			}
@@ -47,16 +47,16 @@ namespace Kotek
 			shader_module_t::~shader_module_t(void) {}
 
 			void shader_module_t::SetShader(
-				shader_type_t type, GLuint handle_id) noexcept
+				gl::eShaderType type, GLuint handle_id) noexcept
 			{
 			}
 
-			GLuint shader_module_t::GetShader(shader_type_t type) const noexcept
+			GLuint shader_module_t::GetShader(gl::eShaderType type) const noexcept
 			{
 				return GLuint();
 			}
 
-			const ktk::unordered_map<shader_type_t, GLuint>&
+			const ktk::unordered_map<gl::eShaderType, GLuint>&
 			shader_module_t::GetShaders(void) const noexcept
 			{
 				return this->m_shader_handles;
