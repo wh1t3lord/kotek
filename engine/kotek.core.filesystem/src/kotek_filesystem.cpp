@@ -37,7 +37,8 @@ namespace Kotek
 
 			if (this->m_storage_paths.find(id) == this->m_storage_paths.end())
 			{
-				KOTEK_MESSAGE("can't find path by id[{}]", static_cast<ktk::enum_base_t>(id));
+				KOTEK_MESSAGE("can't find path by id[{}]",
+					static_cast<ktk::enum_base_t>(id));
 			}
 
 			return this->m_storage_paths.at(id);
@@ -102,13 +103,14 @@ namespace Kotek
 			return result;
 		}
 
-		bool ktkFileSystem::AddGamedataFolderToStorage(const ktk::filesystem::path& path,
-			eFolderIndex id, const ktk::string& folder_name) noexcept
+		bool ktkFileSystem::AddGamedataFolderToStorage(
+			const ktk::filesystem::path& path, eFolderIndex id,
+			const ktk::string& folder_name) noexcept
 		{
 			if (this->m_storage_paths.find(id) != this->m_storage_paths.end())
 			{
-				KOTEK_MESSAGE(
-					"this path {} is existed in storage, can't add", static_cast<ktk::enum_base_t>(id));
+				KOTEK_MESSAGE("this path {} is existed in storage, can't add",
+					static_cast<ktk::enum_base_t>(id));
 				return false;
 			}
 
@@ -124,10 +126,11 @@ namespace Kotek
 			this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata] =
 				this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root);
 
-			this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata] /=	KOTEK_TEXT("gamedata");
+			this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata] /=
+				KOTEK_TEXT("gamedata");
 
-			bool status = this->IsValidPath(this->m_storage_paths.at(
-				eFolderIndex::kFolderIndex_Gamedata));
+			bool status = this->IsValidPath(
+				this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata));
 
 			if (status == false)
 			{
@@ -177,7 +180,52 @@ namespace Kotek
 			{
 				KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
 								 eFolderIndex::kFolderIndex_Shaders)),
-					"can't create directory");
+					"can't create directory for shaders root folder");
+			}
+
+			status = this->AddGamedataFolderToStorage(
+				this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
+				eFolderIndex::kFolderIndex_Shaders_GLSL, KOTEK_TEXT("glsl"));
+
+			if (status == false)
+			{
+				KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
+								 eFolderIndex::kFolderIndex_Shaders_GLSL)),
+					"can't create directory for glsl shaders");
+			}
+
+			status = this->AddGamedataFolderToStorage(
+				this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
+				eFolderIndex::kFolderIndex_Shaders_HLSL, KOTEK_TEXT("hlsl"));
+
+			if (status == false)
+			{
+				KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
+								 eFolderIndex::kFolderIndex_Shaders_HLSL)),
+					"can't create directory for hlsl shaders");
+			}
+
+			status = this->AddGamedataFolderToStorage(
+				this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
+				eFolderIndex::kFolderindex_Shaders_SPV, KOTEK_TEXT("spv"));
+
+			if (status == false)
+			{
+				KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
+								 eFolderIndex::kFolderindex_Shaders_SPV)),
+					"can't create directory folder for SPIR-V shaders");
+			}
+
+			status = this->AddGamedataFolderToStorage(
+				this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
+				eFolderIndex::kFolderIndex_Shaders_WEBGPU,
+				KOTEK_TEXT("webgpu"));
+
+			if (status == false)
+			{
+				KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
+								 eFolderIndex::kFolderIndex_Shaders_WEBGPU)),
+					"can't create directory folder for WEBGPU shaders");
 			}
 
 			status = this->AddGamedataFolderToStorage(
@@ -188,7 +236,20 @@ namespace Kotek
 			{
 				KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
 								 eFolderIndex::kFolderIndex_UserData)),
-					"can't create directory");
+					"can't create directory for user_data folder");
+			}
+
+			status = this->AddGamedataFolderToStorage(
+				this->m_storage_paths.at(eFolderIndex::kFolderIndex_UserData),
+				eFolderIndex::kFolderIndex_UserData_ShaderCache,
+				KOTEK_TEXT("shader_cache"));
+
+			if (status == false)
+			{
+				KOTEK_ASSERT(
+					this->CreateDirectory(this->m_storage_paths.at(
+						eFolderIndex::kFolderIndex_UserData_ShaderCache)),
+					"can't create directory for shader_cache folder");
 			}
 
 #ifdef KOTEK_DEBUG
@@ -225,15 +286,16 @@ namespace Kotek
 				sys_info.Write(kSysInfoFieldName_InitializeCallback_Render,
 					kUserCallbackName_Initialize_Render);
 
-				sys_info.Write(kSysInfoFieldName_UserLibraryNameWindows, "game.dll");
+				sys_info.Write(
+					kSysInfoFieldName_UserLibraryNameWindows, "game.dll");
 				sys_info.Write(
 					kSysInfoFieldName_UserLibraryNameLinux, "game.so");
 				sys_info.Write(
 					kSysInfoFieldName_UserLibraryNameMacOS, "game.so");
 
 				// TODO: implement saver!!!
-//				sys_info.Save(this,
-	//				this->GetFolderByEnum(eFolderIndex::kFolderIndex_Root));
+				//				sys_info.Save(this,
+				//				this->GetFolderByEnum(eFolderIndex::kFolderIndex_Root));
 			}
 		}
 	} // namespace Core

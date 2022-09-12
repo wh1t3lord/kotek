@@ -56,6 +56,22 @@ namespace Kotek
 				{
 					return "UserData_ShaderCache";
 				}
+				case eFolderIndex::kFolderIndex_Shaders_GLSL:
+				{
+					return "Shaders_GLSL";
+				}
+				case eFolderIndex::kFolderIndex_Shaders_HLSL:
+				{
+					return "Shaders_HLSL";
+				}
+				case eFolderIndex::kFolderindex_Shaders_SPV:
+				{
+					return "Shaders_SPV";
+				}
+				case eFolderIndex::kFolderIndex_Shaders_WEBGPU:
+				{
+					return "Shaders_WEBGPU";
+				}
 				default:
 				{
 					return "UNDEFINED_ENUM_OF_FOLDER_INDEX";
