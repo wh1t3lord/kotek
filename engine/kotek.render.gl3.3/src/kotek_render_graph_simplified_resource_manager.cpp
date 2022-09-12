@@ -88,9 +88,23 @@ namespace Kotek
 					shaders_for_current_render_pass)
 			{
 				for (const auto& [pipeline_name,
-						 pair_shader_type_info_creation] :
+						 map_shader_type_info_creation] :
 					shaders_for_current_render_pass)
 				{
+					KOTEK_ASSERT(this->m_render_passes_and_its_shaders.find(
+									 pipeline_name) ==
+							this->m_render_passes_and_its_shaders.end(),
+						"found duplicate the pipeline name: [{}]",
+						pipeline_name);
+
+					for (const auto& [shader_type, info_shader_creation] :
+						map_shader_type_info_creation)
+					{
+						this->m_render_passes_and_its_shaders[pipeline_name]
+															 [shader_type] =
+							this->Create_Shader(
+								shader_type, info_shader_creation);
+					}
 				}
 			}
 
@@ -99,7 +113,57 @@ namespace Kotek
 				gl::eShaderType shader_type,
 				const gl::ktkRenderGraphShaderTextInfo& info_creation)
 			{
-				return shader_module_t();
+				shader_module_t result;
+
+				ktkRenderShaderManager* p_manager =
+					this->m_p_render_resource_manager->Get_ManagerShader();
+
+				switch (info_creation.Get_Type())
+				{
+				case gl::eShaderLoadingDataType::
+					kShaderLoadingDataType_ByteArrayCompiledSPIRV:
+				{
+					KOTEK_ASSERT(
+						false, "doesn't support for this opengl version");
+					break;
+				}
+				case gl::eShaderLoadingDataType::
+					kShaderLoadingDataType_ByteArrayFile:
+				{
+					// TODO: implement
+					KOTEK_ASSERT(false, "implement");
+					break;
+				}
+				case gl::eShaderLoadingDataType::
+					kShaderLoadingDataType_FilePathString:
+				{
+					result = p_manager->LoadShader(
+						std::get<Kotek::ktk::string>(info_creation.Get_Data())
+							.get_as_is());
+					break;
+				}
+				case gl::eShaderLoadingDataType::
+					kShaderLoadingDataType_NotInitialized:
+				{
+					KOTEK_ASSERT(false, "can't be check your data!");
+					break;
+				}
+				case gl::eShaderLoadingDataType::
+					kShaderLoadingDataType_SourceCode_TextString:
+				{
+					result = p_manager->LoadShaderAsString(
+						std::get<Kotek::ktk::string>(info_creation.Get_Data()),
+						shader_type);
+					break;
+				}
+				default:
+				{
+					KOTEK_ASSERT(false, "unknown state of gl::eShaderType");
+					break;
+				}
+				}
+
+				return result;
 			}
 		} // namespace gl3_3
 	}     // namespace Render
