@@ -16,18 +16,6 @@ namespace Kotek
 	{
 		namespace gl3_3
 		{
-			// TODO: remove it and use from shared version, just create logical
-			// if for detecting unsupported flags, like in really old gls you
-			// can't use RTX or even juts in gl
-			enum class shader_loading_data_type_t : ktk::enum_base_t
-			{
-				kShaderLoadingDataType_FilePathString,
-				kShaderLoadingDataType_SourceCodeTextString,
-				kShaderLoadingDataType_ByteArrayFile,
-				kShaderLoadingDataType_ByteArrayCompiledSPIRV,
-				kShaderLoadingDataType_NotInitialized
-			};
-
 			constexpr const ktk::tchar* _kShaderPrefix_Vertex =
 				KOTEK_TEXT("vert");
 			constexpr const ktk::tchar* _kShaderPrefix_Fragment =
@@ -45,6 +33,7 @@ namespace Kotek
 			constexpr const ktk::tchar* _kShaderPrefix_TessellationControl =
 				KOTEK_TEXT("tesc");
 
+			// TODO: move to shared project
 			class shader_module_t
 			{
 			public:

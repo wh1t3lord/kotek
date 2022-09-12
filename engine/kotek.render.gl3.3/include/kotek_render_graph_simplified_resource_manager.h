@@ -1,5 +1,7 @@
 #pragma once
 
+// TODO: remove that header after removing shader_module_t to
+// kotek.render.shared.gl project
 #include "kotek_render_shader_manager.h"
 
 namespace Kotek
