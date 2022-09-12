@@ -65,7 +65,11 @@ namespace Kotek
 				}
 			}
 
-			void ktkRenderGraphSimplifiedResourceManager::Shutdown(void) {}
+			void ktkRenderGraphSimplifiedResourceManager::Shutdown(void)
+			{
+				this->Destroy_Shaders();
+			}
+
 			void ktkRenderGraphSimplifiedResourceManager::Create_Shaders(
 				const gl::ktkRenderGraphSimplifiedStorageInput&
 					storage_of_render_pass_input)
@@ -164,6 +168,10 @@ namespace Kotek
 				}
 
 				return result;
+			}
+
+			void ktkRenderGraphSimplifiedResourceManager::Destroy_Shaders(void)
+			{
 			}
 		} // namespace gl3_3
 	}     // namespace Render

@@ -59,6 +59,8 @@ namespace Kotek
 				shader_module_t Create_Shader(gl::eShaderType shader_type,
 					const gl::ktkRenderGraphShaderTextInfo& info_creation);
 
+				void Destroy_Shaders(void);
+
 			private:
 				ktkRenderDevice* m_p_render_device;
 				ktkRenderResourceManager* m_p_render_resource_manager;
