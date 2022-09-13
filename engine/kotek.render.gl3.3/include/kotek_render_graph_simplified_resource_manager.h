@@ -1,9 +1,5 @@
 #pragma once
 
-// TODO: remove that header after removing shader_module_t to
-// kotek.render.shared.gl project
-#include "kotek_render_shader_manager.h"
-
 namespace Kotek
 {
 	namespace Core
@@ -58,18 +54,24 @@ namespace Kotek
 						gl::ktkRenderGraphShaderTextInfo>>&
 						shaders_for_current_render_pass);
 
-				shader_module_t Create_Shader(gl::eShaderType shader_type,
+				ktkShaderModule Create_Shader(gl::eShaderType shader_type,
 					const gl::ktkRenderGraphShaderTextInfo& info_creation);
 
 				void Destroy_Shaders(void);
+
+				void Create_Programs(void);
 
 			private:
 				ktkRenderDevice* m_p_render_device;
 				ktkRenderResourceManager* m_p_render_resource_manager;
 				Core::ktkResourceManager* m_p_manager_resource;
+
 				ktk::unordered_map<ktk::string,
-					ktk::unordered_map<gl::eShaderType, shader_module_t>>
+					ktk::unordered_map<gl::eShaderType, ktkShaderModule>>
 					m_render_passes_and_its_shaders;
+
+				ktk::unordered_map<ktk::string, GLuint>
+					m_render_passes_and_its_programs;
 			};
 		} // namespace gl3_3
 	}     // namespace Render

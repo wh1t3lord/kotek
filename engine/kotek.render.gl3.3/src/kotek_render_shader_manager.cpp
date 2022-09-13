@@ -19,56 +19,97 @@ namespace Kotek
 
 			void ktkRenderShaderManager::Shutdown(void) {}
 
-			shader_module_t ktkRenderShaderManager::LoadShader(
-				const ktk::filesystem::path& path, gl::eShaderType type) noexcept
+			ktkShaderModule ktkRenderShaderManager::LoadShader(
+				const ktk::filesystem::path& path,
+				gl::eShaderType type) noexcept
 			{
-				return shader_module_t();
+				return ktkShaderModule();
 			}
 
-			shader_module_t ktkRenderShaderManager::LoadShader(
+			ktkShaderModule ktkRenderShaderManager::LoadShader(
 				const ktk::filesystem::path& path) noexcept
 			{
-				return shader_module_t();
+				return ktkShaderModule();
 			}
 
-			shader_module_t ktkRenderShaderManager::LoadShaderAsString(
-				const ktk::string& code_as_string, gl::eShaderType type) noexcept
+			ktkShaderModule ktkRenderShaderManager::LoadShaderAsString(
+				const ktk::string& code_as_string,
+				gl::eShaderType type) noexcept
 			{
-				return shader_module_t();
+				KOTEK_ASSERT(code_as_string.empty() == false,
+					"you can't pass an empty string here");
+
+				KOTEK_ASSERT(type != gl::eShaderType::kShaderType_Unknown,
+					"you can't pass an unknown shader, you have to determine "
+					"what is the shader's type (Vertex, Fragment and etc)");
+
+				ktkShaderModule result;
+
+				ktk::string_legacy converted = code_as_string.get_as_legacy();
+				const char* p_str = converted.c_str();
+
+				GLuint shader_handle{};
+
+				switch (type)
+				{
+				case gl::eShaderType::kShaderType_Vertex:
+				{
+					shader_handle = glCreateShader(GL_VERTEX_SHADER);
+					break;
+				}
+				case gl::eShaderType::kShaderType_Fragment:
+				{
+					shader_handle = glCreateShader(GL_FRAGMENT_SHADER);
+					break;
+				}
+				default:
+				{
+					KOTEK_ASSERT(false, "other not implemented yet!");
+					break;
+				}
+				}
+
+				glShaderSource(shader_handle, 1, &p_str, nullptr);
+				glCompileShader(shader_handle);
+
+#ifdef KOTEK_DEBUG
+				int success;
+				char buffer[512];
+				glGetShaderiv(shader_handle, GL_COMPILE_STATUS, &success);
+
+				if (success == GL_FALSE)
+				{
+					glGetShaderInfoLog(
+						shader_handle, sizeof(buffer), nullptr, buffer);
+
+					KOTEK_ASSERT(false, "{}", ktk::string(buffer));
+				}
+#endif
+
+				result.Set_Shader(type, shader_handle);
+
+				return result;
 			}
 
 			void ktkRenderShaderManager::DestroyShader(
-				const shader_module_t& instance) noexcept
+				const ktkShaderModule& instance) noexcept
 			{
+				if (instance.Get_ShaderType() !=
+					gl::eShaderType::kShaderType_Unknown)
+				{
+					glDeleteShader(instance.Get_Shader());
+				}
+#ifdef KOTEK_DEBUG
+				else
+				{
+					KOTEK_ASSERT(false,
+						"something is wrong and you got invalid shader module "
+						"otherwise it means that your instance wasn't "
+						"initialized properly, debug your loading procedures "
+						"of shader manager");
+				}
+#endif
 			}
-
-			shader_module_t::shader_module_t(void) : m_program{} {}
-
-			shader_module_t::~shader_module_t(void) {}
-
-			void shader_module_t::SetShader(
-				gl::eShaderType type, GLuint handle_id) noexcept
-			{
-			}
-
-			GLuint shader_module_t::GetShader(gl::eShaderType type) const noexcept
-			{
-				return GLuint();
-			}
-
-			const ktk::unordered_map<gl::eShaderType, GLuint>&
-			shader_module_t::GetShaders(void) const noexcept
-			{
-				return this->m_shader_handles;
-			}
-
-			void shader_module_t::SetProgram(GLuint handle_id) noexcept {}
-
-			GLuint shader_module_t::GetProgram(void) const noexcept
-			{
-				return this->m_program;
-			}
-
 		} // namespace gl3_3
 	}     // namespace Render
 } // namespace Kotek

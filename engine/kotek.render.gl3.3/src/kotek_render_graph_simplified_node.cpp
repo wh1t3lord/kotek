@@ -8,7 +8,7 @@ namespace Kotek
 		{
 			ktkRenderGraphSimplifiedNode::ktkRenderGraphSimplifiedNode(
 				const ktk::string& render_pass_name,
-				const ktk::unordered_map<ktk::string, shader_module_t*>&
+				const ktk::unordered_map<ktk::string, ktkShaderModule*>&
 					programs)
 			{
 			}
@@ -16,7 +16,7 @@ namespace Kotek
 			ktkRenderGraphSimplifiedNode::ktkRenderGraphSimplifiedNode(void) {}
 			ktkRenderGraphSimplifiedNode::~ktkRenderGraphSimplifiedNode(void) {}
 
-			const shader_module_t* ktkRenderGraphSimplifiedNode::GetProgram(
+			const ktkShaderModule* ktkRenderGraphSimplifiedNode::GetProgram(
 				const ktk::string& program_name) const noexcept
 			{
 				if (program_name.empty()) 

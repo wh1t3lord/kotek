@@ -33,28 +33,6 @@ namespace Kotek
 			constexpr const ktk::tchar* _kShaderPrefix_TessellationControl =
 				KOTEK_TEXT("tesc");
 
-			// TODO: move to shared project
-			class shader_module_t
-			{
-			public:
-				shader_module_t(void);
-				~shader_module_t(void);
-
-				void SetShader(gl::eShaderType type, GLuint handle_id) noexcept;
-
-				GLuint GetShader(gl::eShaderType type) const noexcept;
-
-				const ktk::unordered_map<gl::eShaderType, GLuint>& GetShaders(
-					void) const noexcept;
-
-				void SetProgram(GLuint handle_id) noexcept;
-				GLuint GetProgram(void) const noexcept;
-
-			private:
-				ktk::unordered_map<gl::eShaderType, GLuint> m_shader_handles;
-				GLuint m_program;
-			};
-
 			class ktkRenderShaderManager
 			{
 			public:
@@ -64,15 +42,15 @@ namespace Kotek
 				void Initialize(void);
 				void Shutdown(void);
 
-				shader_module_t LoadShader(const ktk::filesystem::path& path,
+				ktkShaderModule LoadShader(const ktk::filesystem::path& path,
 					gl::eShaderType type) noexcept;
-				shader_module_t LoadShader(
+				ktkShaderModule LoadShader(
 					const ktk::filesystem::path& path) noexcept;
-				shader_module_t LoadShaderAsString(
+				ktkShaderModule LoadShaderAsString(
 					const ktk::string& code_as_string,
 					gl::eShaderType type) noexcept;
 
-				void DestroyShader(const shader_module_t& instance) noexcept;
+				void DestroyShader(const ktkShaderModule& instance) noexcept;
 
 			private:
 				Core::ktkMainManager* m_p_main_manager;

@@ -1,6 +1,7 @@
 #include "../include/kotek_render_graph_simplified_resource_manager.h"
 #include "../include/kotek_render_device.h"
 #include "../include/kotek_render_resource_manager.h"
+#include "../include/kotek_render_shader_manager.h"
 
 namespace Kotek
 {
@@ -83,6 +84,7 @@ namespace Kotek
 
 				this->Create_Shaders(
 					storage_of_render_pass_input.Get_Shaders());
+				this->Create_Programs();
 			}
 
 			void ktkRenderGraphSimplifiedResourceManager::Create_Shaders(
@@ -112,12 +114,12 @@ namespace Kotek
 				}
 			}
 
-			shader_module_t
+			ktkShaderModule
 			ktkRenderGraphSimplifiedResourceManager::Create_Shader(
 				gl::eShaderType shader_type,
 				const gl::ktkRenderGraphShaderTextInfo& info_creation)
 			{
-				shader_module_t result;
+				ktkShaderModule result;
 
 				ktkRenderShaderManager* p_manager =
 					this->m_p_render_resource_manager->Get_ManagerShader();
@@ -172,6 +174,46 @@ namespace Kotek
 
 			void ktkRenderGraphSimplifiedResourceManager::Destroy_Shaders(void)
 			{
+				ktkRenderShaderManager* p_manager =
+					this->m_p_render_resource_manager->Get_ManagerShader();
+
+				KOTEK_ASSERT(p_manager,
+					"you can't have an empty shader manager instance here");
+
+				for (const auto& [render_pass_name,
+						 map_shader_type_shader_module] :
+					this->m_render_passes_and_its_shaders)
+				{
+#ifdef KOTEK_DEBUG
+					KOTEK_MESSAGE(
+						"[GL] deleting shader handles for render pass: [{}]",
+						render_pass_name);
+#endif
+
+					for (const auto& [shader_type, shader_module] :
+						map_shader_type_shader_module)
+					{
+#ifdef KOTEK_DEBUG
+						KOTEK_MESSAGE("[GL] deleting shader: [{}]",
+							gl::helper::Translate_ShaderType(shader_type));
+#endif
+
+						p_manager->DestroyShader(shader_module);
+					}
+				}
+			}
+
+			void ktkRenderGraphSimplifiedResourceManager::Create_Programs(void)
+			{
+				for (const auto& [render_pass_name,
+						 map_shader_type_shader_module] :
+					this->m_render_passes_and_its_shaders)
+				{
+					for (const auto& [shader_type, shader_module] :
+						this->m_render_passes_and_its_programs)
+					{
+					}
+				}
 			}
 		} // namespace gl3_3
 	}     // namespace Render
