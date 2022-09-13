@@ -209,9 +209,12 @@ namespace Kotek
 						 map_shader_type_shader_module] :
 					this->m_render_passes_and_its_shaders)
 				{
+					GLuint program{};
+
 					for (const auto& [shader_type, shader_module] :
 						this->m_render_passes_and_its_programs)
 					{
+
 					}
 				}
 			}
