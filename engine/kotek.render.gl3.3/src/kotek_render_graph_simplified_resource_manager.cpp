@@ -87,6 +87,13 @@ namespace Kotek
 				this->Create_Programs();
 			}
 
+			const ktk::unordered_map<ktk::string, GLuint>*
+			ktkRenderGraphSimplifiedResourceManager::Get_Storage_Programs(
+				void) const noexcept
+			{
+				return &this->m_render_passes_and_its_programs;
+			}
+
 			void ktkRenderGraphSimplifiedResourceManager::Create_Shaders(
 				const ktk::unordered_map<ktk::string,
 					ktk::unordered_map<gl::eShaderType,

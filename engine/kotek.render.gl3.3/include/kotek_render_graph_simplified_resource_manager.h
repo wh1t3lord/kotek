@@ -48,6 +48,17 @@ namespace Kotek
 					const gl::ktkRenderGraphSimplifiedStorageInput&
 						storage_of_render_pass_input);
 
+				/// \~english @brief It returns the whole storage of all render
+				/// passes or those names that defines as a key in unordered_map
+				/// m_render_passes_and_its_programs. It uses for building
+				/// Kotek::Render::gl3_3::ktkRenderGraphSimplifiedNode instance.
+				/// @param void, as input it doesn't take anything
+				/// @return const ktk::unordered_map<ktk::string, GLuint>* const
+				/// it means that pointer and the map can't be changed at all.
+				/// It uses only for reading.
+				const ktk::unordered_map<ktk::string, GLuint>*
+				Get_Storage_Programs(void) const noexcept;
+
 			private:
 				void Create_Shaders(const ktk::unordered_map<ktk::string,
 					ktk::unordered_map<gl::eShaderType,

@@ -369,9 +369,9 @@ namespace Kotek
 					const ktk::string& render_pass_name =
 						p_render_pass->Get_Name();
 
-					ktk::unordered_map<ktk::string, ktkShaderModule*> shaders;
-
-					result.push_back({render_pass_name, shaders});
+					result.push_back({render_pass_name,
+						this->m_p_render_graph_simplified_resource_manager
+							->Get_Storage_Programs()});
 				}
 
 				return result;

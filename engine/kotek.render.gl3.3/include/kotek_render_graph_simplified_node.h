@@ -24,7 +24,7 @@ namespace Kotek
 				const ktk::string& Get_RenderPassName(void) const noexcept;
 
 			private:
-				const ktk::unordered_map<ktk::string, GLuint>* const
+				const ktk::unordered_map<ktk::string, GLuint>*
 					m_p_programs;
 
 				ktk::string m_render_pass_name;

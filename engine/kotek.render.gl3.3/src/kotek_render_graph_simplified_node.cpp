@@ -12,9 +12,14 @@ namespace Kotek
 				m_p_programs{programs},
 				m_render_pass_name{render_pass_name}
 			{
+				KOTEK_ASSERT(this->m_p_programs,
+					"you have to initialize this field with valid pointer");
 			}
 
-			ktkRenderGraphSimplifiedNode::ktkRenderGraphSimplifiedNode(void) {}
+			ktkRenderGraphSimplifiedNode::ktkRenderGraphSimplifiedNode(void) :
+				m_p_programs{}
+			{
+			}
 
 			ktkRenderGraphSimplifiedNode::~ktkRenderGraphSimplifiedNode(void) {}
 
