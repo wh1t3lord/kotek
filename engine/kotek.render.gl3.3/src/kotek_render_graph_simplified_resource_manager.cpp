@@ -209,12 +209,39 @@ namespace Kotek
 						 map_shader_type_shader_module] :
 					this->m_render_passes_and_its_shaders)
 				{
-					GLuint program{};
-
-					for (const auto& [shader_type, shader_module] :
-						this->m_render_passes_and_its_programs)
+					if (map_shader_type_shader_module.empty() == false)
 					{
+						auto program = glCreateProgram();
 
+						for (const auto& [shader_type, shader_module] :
+							map_shader_type_shader_module)
+						{
+#ifdef KOTEK_DEBUG
+							KOTEK_MESSAGE("attached shader type to "
+										  "render_pass_name[{}]: [{}]",
+								render_pass_name,
+								gl::helper::Translate_ShaderType(shader_type));
+#endif
+
+							glAttachShader(program, shader_module.Get_Shader());
+						}
+
+						glLinkProgram(program);
+
+#ifdef KOTEK_DEBUG
+						int status{};
+						char buffer[512];
+						glGetProgramiv(program, GL_LINK_STATUS, &status);
+
+						if (status == GL_FALSE)
+						{
+							glGetProgramInfoLog(
+								program, sizeof(buffer), nullptr, buffer);
+
+							KOTEK_ASSERT(false, "failed to link: {}",
+								ktk::string(buffer));
+						}
+#endif
 					}
 				}
 			}

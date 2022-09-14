@@ -8,36 +8,31 @@ namespace Kotek
 		{
 			ktkRenderGraphSimplifiedNode::ktkRenderGraphSimplifiedNode(
 				const ktk::string& render_pass_name,
-				const ktk::unordered_map<ktk::string, ktkShaderModule*>&
-					programs)
+				const ktk::unordered_map<ktk::string, GLuint>* const programs) :
+				m_p_programs{programs},
+				m_render_pass_name{render_pass_name}
 			{
 			}
 
 			ktkRenderGraphSimplifiedNode::ktkRenderGraphSimplifiedNode(void) {}
+
 			ktkRenderGraphSimplifiedNode::~ktkRenderGraphSimplifiedNode(void) {}
 
-			const ktkShaderModule* ktkRenderGraphSimplifiedNode::GetProgram(
+			GLuint ktkRenderGraphSimplifiedNode::Get_Program(
 				const ktk::string& program_name) const noexcept
 			{
-				if (program_name.empty()) 
-				{
-					KOTEK_ASSERT(false, "you can't pass an empty string");
-					return nullptr;
-				}
+				KOTEK_ASSERT(program_name.empty() == false,
+					"you can't pass an empty string");
 
-				if (this->m_programs.find(program_name) ==
-					this->m_programs.end())
-				{
-					KOTEK_ASSERT(false, "can't find program by name: [{}]",
-						program_name.get_as_is());
-					return nullptr;
-				}
+				KOTEK_ASSERT(this->m_p_programs->find(program_name) !=
+						this->m_p_programs->end(),
+					"can't find program by name: [{}]", program_name);
 
-				return this->m_programs.at(program_name);
+				return this->m_p_programs->at(program_name);
 			}
 
-			const ktk::string& ktkRenderGraphSimplifiedNode::GetRenderPassName(
-				void) const noexcept 
+			const ktk::string& ktkRenderGraphSimplifiedNode::Get_RenderPassName(
+				void) const noexcept
 			{
 				return this->m_render_pass_name;
 			}

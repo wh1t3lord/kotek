@@ -11,18 +11,22 @@ namespace Kotek
 			public:
 				ktkRenderGraphSimplifiedNode(
 					const ktk::string& render_pass_name,
-					const ktk::unordered_map<ktk::string, ktkShaderModule*>&
+					const ktk::unordered_map<ktk::string, GLuint>* const
 						programs);
+
 				ktkRenderGraphSimplifiedNode(void);
+
 				~ktkRenderGraphSimplifiedNode(void);
 
-				const ktkShaderModule* GetProgram(
+				GLuint Get_Program(
 					const ktk::string& program_name) const noexcept;
 
-				const ktk::string& GetRenderPassName(void) const noexcept;
+				const ktk::string& Get_RenderPassName(void) const noexcept;
 
 			private:
-				ktk::unordered_map<ktk::string, ktkShaderModule*> m_programs;
+				const ktk::unordered_map<ktk::string, GLuint>* const
+					m_p_programs;
+
 				ktk::string m_render_pass_name;
 			};
 		} // namespace gl3_3
