@@ -42,7 +42,7 @@ namespace Kotek
 		ktkIRenderResourceManager*
 		ktkResourceManager::Get_RenderResourceManager(void) const noexcept
 		{
-			return nullptr;
+			return this->m_p_manager_render_resource;
 		}
 
 		void ktkResourceManager::Set_MainManager(
