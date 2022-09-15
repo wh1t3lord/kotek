@@ -16,7 +16,20 @@ namespace Kotek
 			{
 			}
 
-			ktkRenderResourceManager::~ktkRenderResourceManager(void) {}
+			ktkRenderResourceManager::~ktkRenderResourceManager(void) 
+			{
+				if (this->m_p_render_manager_texture)
+				{
+					delete this->m_p_render_manager_texture;
+					this->m_p_render_manager_texture = nullptr;
+				}
+
+				if (this->m_p_render_manager_shader)
+				{
+					delete this->m_p_render_manager_shader;
+					this->m_p_render_manager_shader = nullptr;
+				}
+			}
 
 			void ktkRenderResourceManager::initialize(
 				Core::ktkIRenderDevice* p_raw_device,
@@ -43,18 +56,10 @@ namespace Kotek
 					p_raw_device, "you can't pass an invalid interface");
 
 				if (this->m_p_render_manager_texture)
-				{
 					this->m_p_render_manager_texture->Shutdown();
-					delete this->m_p_render_manager_texture;
-					this->m_p_render_manager_texture = nullptr;
-				}
 
 				if (this->m_p_render_manager_shader)
-				{
 					this->m_p_render_manager_shader->Shutdown();
-					delete this->m_p_render_manager_shader;
-					this->m_p_render_manager_shader = nullptr;
-				}
 			}
 
 			void ktkRenderResourceManager::Resize(
