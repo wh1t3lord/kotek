@@ -17,6 +17,8 @@ namespace Kotek
 			void ktkShaderModule::Set_Shader(
 				gl::eShaderType type, GLuint handle_id) noexcept
 			{
+				this->m_shader_type = type;
+				this->m_shader_handle = handle_id;
 			}
 
 			GLuint ktkShaderModule::Get_Shader(void) const noexcept

@@ -391,7 +391,7 @@ namespace Kotek
 			{
 				KOTEK_ASSERT(this->m_p_render_graph_simplified_resource_manager,
 					"you must initialize simplified resource manager for "
-				    "render graph");
+					"render graph");
 			}
 
 			void ktkRenderGraphSimplifiedBuilder::Create_Shaders(
@@ -401,7 +401,13 @@ namespace Kotek
 			{
 				KOTEK_ASSERT(this->m_p_render_graph_simplified_resource_manager,
 					"you must initialize simplified resource manager for "
-				    "render graph");
+					"render graph");
+
+				for (const auto& [render_pass_name, storage_input] : all_inputs)
+				{
+					this->m_p_render_graph_simplified_resource_manager
+						->Create_Shaders(storage_input);
+				}
 			}
 		} // namespace gl3_3
 	}     // namespace Render

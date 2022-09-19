@@ -249,6 +249,9 @@ namespace Kotek
 								ktk::string(buffer));
 						}
 #endif
+
+						this->m_render_passes_and_its_programs
+							[render_pass_name] = program;
 					}
 				}
 			}
