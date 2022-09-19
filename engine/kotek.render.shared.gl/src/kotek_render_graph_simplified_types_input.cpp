@@ -66,12 +66,6 @@ namespace Kotek
 				KOTEK_ASSERT(user_name_for_access_in_the_code.empty() == false,
 					"can't add an empty string");
 
-				KOTEK_ASSERT(this->m_input_shaders.find(
-								 user_name_for_access_in_the_code) ==
-						this->m_input_shaders.end(),
-					"found duplicate name in the map: {}",
-					user_name_for_access_in_the_code);
-
 				KOTEK_ASSERT(shader_type != eShaderType::kShaderType_Unknown,
 					"you can't pass an invalid shader type here");
 
@@ -80,14 +74,19 @@ namespace Kotek
 					"class is {}",
 					helper::Translate_ShaderLoadingDataType(info.Get_Type()));
 
-				KOTEK_ASSERT(
-					this->m_input_shaders.at(user_name_for_access_in_the_code)
-							.find(shader_type) ==
-						this->m_input_shaders
-							.at(user_name_for_access_in_the_code)
-							.end(),
-					"found duplicate by shader type: {}",
-					helper::Translate_ShaderType(shader_type));
+				if (this->m_input_shaders.find(
+						user_name_for_access_in_the_code) !=
+					this->m_input_shaders.end())
+				{
+					KOTEK_ASSERT(this->m_input_shaders
+									 .at(user_name_for_access_in_the_code)
+									 .find(shader_type) ==
+							this->m_input_shaders
+								.at(user_name_for_access_in_the_code)
+								.end(),
+						"found duplicate by shader type: {}",
+						helper::Translate_ShaderType(shader_type));
+				}
 
 				this->m_input_shaders[user_name_for_access_in_the_code]
 									 [shader_type] = info;
