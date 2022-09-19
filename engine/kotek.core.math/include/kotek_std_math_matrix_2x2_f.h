@@ -350,15 +350,6 @@ namespace Kotek
 #endif
 				}
 
-				float Get_02(void) const noexcept
-				{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-					return this->m_base._13;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
-#endif
-				}
-
 				float Get_10(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -377,42 +368,6 @@ namespace Kotek
 #endif
 				}
 
-				float Get_12(void) const noexcept
-				{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-					return this->m_base._23;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
-#endif
-				}
-
-				float Get_20(void) const noexcept
-				{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-					return this->m_base._31;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
-#endif
-				}
-
-				float Get_21(void) const noexcept
-				{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-					return this->m_base._32;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
-#endif
-				}
-
-				float Get_22(void) const noexcept
-				{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-					return this->m_base._33;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
-#endif
-				}
-
 				matrix2x2f& Set_00(float value) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -426,26 +381,6 @@ namespace Kotek
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					this->m_base._12 = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
-#endif
-					return *this;
-				}
-
-				matrix2x2f& Set_10(float value) noexcept
-				{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-					this->m_base._21 = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
-#endif
-					return *this;
-				}
-
-				matrix2x2f& Set_11(float value) noexcept
-				{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-					this->m_base._22 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
 #endif
