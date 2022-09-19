@@ -208,6 +208,18 @@ namespace Kotek
 						p_manager->DestroyShader(shader_module);
 					}
 				}
+
+				for (const auto& [render_pass_name, program_handle_id] :
+					this->m_render_passes_and_its_programs)
+				{
+#ifdef KOTEK_DEBUG
+					KOTEK_MESSAGE(
+						"[GL] deleting program handles for render pass: [{}]",
+						render_pass_name);
+#endif
+
+					glDeleteProgram(program_handle_id);
+				}
 			}
 
 			void ktkRenderGraphSimplifiedResourceManager::Create_Programs(void)
