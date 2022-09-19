@@ -11,15 +11,20 @@ namespace Kotek
 			class matrix2x2f
 			{
 			public:
-				matrix2x2f(float m00, float m01,
-					float m10, float m11) :
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				matrix2x2f(float m00, float m01, float m10, float m11) :
 					m_base(m00, m01, {}, m10, m11, {}, {}, {}, {})
 				{
 				}
-				matrix2x2f(const base_mat2x2_t& data) : m_base(data) {}
-				matrix2x2f(const matrix2x2f& data) : m_base(data.m_base) {}
-				matrix2x2f(void) : m_base{} {}
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
+#endif
+
+				matrix2x2f(const base_mat2x2_t& data) : m_base(data) {}
+
+				matrix2x2f(const matrix2x2f& data) : m_base(data.m_base) {}
+
+				matrix2x2f(void) : m_base{} {}
 
 				~matrix2x2f(void) = default;
 
@@ -226,7 +231,10 @@ namespace Kotek
 					return *this;
 				}
 
-				matrix2x2f operator+() const noexcept { return *this; }
+				matrix2x2f operator+() const noexcept
+				{
+					return *this;
+				}
 
 				matrix2x2f operator-() const noexcept
 				{
@@ -257,7 +265,6 @@ namespace Kotek
 #endif
 				}
 
- 
 				bool operator==(const matrix2x2f& data) const noexcept
 				{
 					DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
@@ -323,6 +330,11 @@ namespace Kotek
 				}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
+				/// \~english @brief Cast operator for compatibility with
+				/// DirectX Math library (DXM)
+				/// @param nothing as input for passing
+				/// @return casted DirectX::XMMatrix through
+				/// DirectX::XMLoadFloat3x3
 				operator DirectX::XMMATRIX(void) const noexcept
 				{
 					return DirectX::XMLoadFloat3x3(&this->m_base);
@@ -332,6 +344,9 @@ namespace Kotek
 #endif
 #pragma endregion
 
+				/// \~english @brief First row, first column
+				/// @param  nothing as input for passing
+				/// @return element that stays at first row and first column
 				float Get_00(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -341,6 +356,9 @@ namespace Kotek
 #endif
 				}
 
+				/// \~english @brief First row, second column
+				/// @param nothing as input for passing
+				/// @return element that stays at first row and second column
 				float Get_01(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -350,6 +368,9 @@ namespace Kotek
 #endif
 				}
 
+				/// \~english @brief Second row, first column
+				/// @param  nothing as input for passing
+				/// @return element that stays at second row and first column
 				float Get_10(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -359,6 +380,9 @@ namespace Kotek
 #endif
 				}
 
+				/// \~english @brief Second row, second column
+				/// @param nothing as input for passing
+				/// @return element that stays at second row and second column
 				float Get_11(void) const noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -368,6 +392,9 @@ namespace Kotek
 #endif
 				}
 
+				/// \~english @brief First row, first column
+				/// @param value your float value for passing
+				/// @return *this
 				matrix2x2f& Set_00(float value) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -377,10 +404,39 @@ namespace Kotek
 					return *this;
 				}
 
+				/// \~english @brief First row, second column
+				/// @param value your float value for passing
+				/// @return *this
 				matrix2x2f& Set_01(float value) noexcept
 				{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 					this->m_base._12 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				/// \~english @brief Second row, first column
+				/// @param data, your float value for passing
+				/// @return *this
+				matrix2x2f& Set_10(float value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._21 = value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+					return *this;
+				}
+
+				/// \~english @brief Second row, second column
+				/// @param value, your value for passing
+				/// @return *this
+				matrix2x2f& Set_11(float value) noexcept
+				{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+					this->m_base._22 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
 #endif
@@ -393,7 +449,10 @@ namespace Kotek
 					return *this;
 				}
 
-				base_mat2x2_t& Get_Base(void) noexcept { return this->m_base; }
+				base_mat2x2_t& Get_Base(void) noexcept
+				{
+					return this->m_base;
+				}
 				const base_mat2x2_t& Get_Base(void) const noexcept
 				{
 					return this->m_base;
