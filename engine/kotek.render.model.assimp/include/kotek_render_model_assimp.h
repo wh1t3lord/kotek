@@ -6,7 +6,7 @@ namespace Kotek
 {
 	namespace Render
 	{
-		bool initializeModule_Render_Model(void);
-		bool shutdownModule_Render_Model(void);
+		bool InitializeModule_Render_Model_ASSIMP(void);
+		bool ShutdownModule_Render_Model_ASSIMP(void);
 	} // namespace Render
 } // namespace Kotek

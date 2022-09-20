@@ -4,8 +4,8 @@ namespace Kotek
 {
 	namespace Render
 	{
-		bool initializeModule_Render_Model() { return true; }
+		bool InitializeModule_Render_Model_ASSIMP() { return true; }
 
-		bool shutdownModule_Render_Model() { return true; }
+		bool ShutdownModule_Render_Model_ASSIMP() { return true; }
 	} // namespace Render
 } // namespace Kotek

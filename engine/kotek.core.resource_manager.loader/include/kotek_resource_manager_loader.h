@@ -4,12 +4,13 @@
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 #include <kotek.core.filesystem.file_text/include/kotek_core_filesystem_file_text.h>
+#include <kotek.core.containers.unordered_map/include/kotek_core_containers_unordered_map.h>
 
 namespace Kotek
 {
 	namespace Core
 	{
-		class ktkResourceLoaderManager : public ktkIResourceLoader
+		class ktkResourceLoaderManager : public ktkIResourceLoaderManager
 		{
 		public:
 			ktkResourceLoaderManager(void);
@@ -17,6 +18,18 @@ namespace Kotek
 
 			void Initialize(ktkIFileSystem* p_manager_filesystem) override;
 			void Shutdown(void) override;
+
+			void Set_Loader(eResourceLoadingType resource_type,
+				ktkIResourceLoader* p_loader) override;
+
+			ktkIResourceLoader* Get_Loader(
+				eResourceLoadingType resource_type) const noexcept override;
+
+			void Set_Detector(eResourceLoadingType resource_type,
+				ktkIResourceFormatDetector* p_detector) noexcept override;
+
+			ktkIResourceFormatDetector* Get_Detector(
+				eResourceLoadingType resource_type) const noexcept override;
 
 			ktk::any Load_Text(
 				const ktk::filesystem::path& path) noexcept override;
@@ -45,6 +58,13 @@ namespace Kotek
 		protected:
 			eResourceLoadingType DetectResourceTypeByFileFormat(
 				const ktk::filesystem::path& path) noexcept override;
+
+			ktk::unordered_map<eResourceLoadingType, ktkIResourceLoader*>
+				m_loaders;
+
+			ktk::unordered_map<eResourceLoadingType,
+				ktkIResourceFormatDetector*>
+				m_detectors;
 		};
 	} // namespace Core
 } // namespace Kotek

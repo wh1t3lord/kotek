@@ -11,12 +11,11 @@
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 
 // TODO: add ifdef for appropriate things
-// if gl3 we need to check if gl3 is enabled 
+// if gl3 we need to check if gl3 is enabled
 // if glfw we need to check if glfw is enabled and etc
 #include <kotek.ui.imgui/include/imgui.h>
 #include <kotek.ui.imgui/include/imgui_impl_glfw.h>
 #include <kotek.ui.imgui/include/imgui_impl_opengl3.h>
-
 
 namespace Kotek
 {
@@ -212,15 +211,71 @@ namespace Kotek
 				void* p_instance, const void* p_callbacks) = 0;
 		};
 
+		class ktkIResourceFormatDetector
+		{
+		public:
+			virtual ~ktkIResourceFormatDetector(void) {}
+
+			virtual bool Analyze(
+				const ktk::filesystem::path& path) noexcept = 0;
+
+			virtual const ktk::string& Get_UserDescription(void) const noexcept
+			{
+				return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION");
+			}
+
+			virtual eResourceLoadingType Get_Type() const noexcept
+			{
+				return eResourceLoadingType::kUnknown;
+			}
+		};
+
+		/// \~english @brief This class stands for implementing own loader for
+		/// that case it has only 'Load' method names it means that you specify
+		/// what the implementation does. Does it load text or model or even any
+		/// other type?
 		class ktkIResourceLoader
 		{
 		public:
 			virtual ~ktkIResourceLoader(void) {}
 
+			virtual ktk::any Load(
+				const ktk::filesystem::path& path) noexcept = 0;
+
+			virtual bool Load(const ktk::filesystem::path& path,
+				ktk::any object_from_construct) noexcept = 0;
+
+			virtual const ktk::string& Get_UserDescription() const noexcept
+			{
+				return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION");
+			}
+
+			virtual eResourceLoadingType Get_Type() const noexcept
+			{
+				return eResourceLoadingType::kUnknown;
+			}
+		};
+
+		class ktkIResourceLoaderManager
+		{
+		public:
+			virtual ~ktkIResourceLoaderManager(void) {}
+
 			virtual void Initialize(ktkIFileSystem*) = 0;
 			virtual void Shutdown(void) = 0;
 
-#pragma region Load only by path
+			virtual void Set_Loader(eResourceLoadingType resoruce_type,
+				ktkIResourceLoader* p_loader) = 0;
+
+			virtual ktkIResourceLoader* Get_Loader(
+				eResourceLoadingType resource_type) const noexcept = 0;
+
+			virtual void Set_Detector(eResourceLoadingType resource_type,
+				ktkIResourceFormatDetector* p_detector) noexcept = 0;
+
+			virtual ktkIResourceFormatDetector* Get_Detector(
+				eResourceLoadingType resource_type) const noexcept = 0;
+
 			virtual ktk::any Load_Text(
 				const ktk::filesystem::path& path) noexcept = 0;
 
@@ -238,9 +293,7 @@ namespace Kotek
 
 			virtual ktk::any Load_CPlusPlusLibrary(
 				const ktk::filesystem::path& path) noexcept = 0;
-#pragma endregion
 
-#pragma region Load path& object_from_construct
 			virtual bool Load_Text(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
 
@@ -255,7 +308,6 @@ namespace Kotek
 
 			virtual bool Load_Video(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
-#pragma endregion
 
 		protected:
 			virtual eResourceLoadingType DetectResourceTypeByFileFormat(
@@ -568,30 +620,41 @@ namespace Kotek
 		public:
 			virtual ~ktkIImguiWrapper(void) {}
 
- 			virtual bool     ImGui_ImplGlfw_InitForOpenGL(GLFWwindow* window, bool install_callbacks) = 0;
-			virtual bool     ImGui_ImplGlfw_InitForVulkan(GLFWwindow* window, bool install_callbacks) = 0;
-			virtual bool     ImGui_ImplGlfw_InitForOther(GLFWwindow* window, bool install_callbacks) = 0;
-			virtual void     ImGui_ImplGlfw_Shutdown() = 0;
-			virtual void     ImGui_ImplGlfw_NewFrame() = 0;
-			
-			virtual void     ImGui_ImplGlfw_WindowFocusCallback(GLFWwindow* window, int focused) = 0;
-			virtual void     ImGui_ImplGlfw_CursorEnterCallback(GLFWwindow* window, int entered) = 0;
-			virtual void     ImGui_ImplGlfw_MouseButtonCallback(GLFWwindow* window, int button, int action, int mods) = 0;
-			virtual void     ImGui_ImplGlfw_ScrollCallback(GLFWwindow* window, double xoffset, double yoffset) = 0;
-			virtual void     ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) = 0;
-			virtual void     ImGui_ImplGlfw_CharCallback(GLFWwindow* window, unsigned int c) = 0;
-			virtual void     ImGui_ImplGlfw_MonitorCallback(GLFWmonitor* monitor, int event) = 0;
+			virtual bool ImGui_ImplGlfw_InitForOpenGL(
+				GLFWwindow* window, bool install_callbacks) = 0;
+			virtual bool ImGui_ImplGlfw_InitForVulkan(
+				GLFWwindow* window, bool install_callbacks) = 0;
+			virtual bool ImGui_ImplGlfw_InitForOther(
+				GLFWwindow* window, bool install_callbacks) = 0;
+			virtual void ImGui_ImplGlfw_Shutdown() = 0;
+			virtual void ImGui_ImplGlfw_NewFrame() = 0;
 
+			virtual void ImGui_ImplGlfw_WindowFocusCallback(
+				GLFWwindow* window, int focused) = 0;
+			virtual void ImGui_ImplGlfw_CursorEnterCallback(
+				GLFWwindow* window, int entered) = 0;
+			virtual void ImGui_ImplGlfw_MouseButtonCallback(
+				GLFWwindow* window, int button, int action, int mods) = 0;
+			virtual void ImGui_ImplGlfw_ScrollCallback(
+				GLFWwindow* window, double xoffset, double yoffset) = 0;
+			virtual void ImGui_ImplGlfw_KeyCallback(GLFWwindow* window, int key,
+				int scancode, int action, int mods) = 0;
+			virtual void ImGui_ImplGlfw_CharCallback(
+				GLFWwindow* window, unsigned int c) = 0;
+			virtual void ImGui_ImplGlfw_MonitorCallback(
+				GLFWmonitor* monitor, int event) = 0;
 
-			virtual bool     ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL) = 0;
-			virtual void     ImGui_ImplOpenGL3_Shutdown() = 0;
-			virtual void     ImGui_ImplOpenGL3_NewFrame() = 0;
-			virtual void     ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data) = 0;
+			virtual bool ImGui_ImplOpenGL3_Init(
+				const char* glsl_version = NULL) = 0;
+			virtual void ImGui_ImplOpenGL3_Shutdown() = 0;
+			virtual void ImGui_ImplOpenGL3_NewFrame() = 0;
+			virtual void ImGui_ImplOpenGL3_RenderDrawData(
+				ImDrawData* draw_data) = 0;
 
-			virtual bool     ImGui_ImplOpenGL3_CreateFontsTexture() = 0;
-			virtual void     ImGui_ImplOpenGL3_DestroyFontsTexture() = 0;
-			virtual bool     ImGui_ImplOpenGL3_CreateDeviceObjects() = 0;
-			virtual void     ImGui_ImplOpenGL3_DestroyDeviceObjects() = 0;
+			virtual bool ImGui_ImplOpenGL3_CreateFontsTexture() = 0;
+			virtual void ImGui_ImplOpenGL3_DestroyFontsTexture() = 0;
+			virtual bool ImGui_ImplOpenGL3_CreateDeviceObjects() = 0;
+			virtual void ImGui_ImplOpenGL3_DestroyDeviceObjects() = 0;
 
 			virtual void* CreateContext(void* shared_font_atlas = NULL) = 0;
 			virtual void DestroyContext(void* ctx = NULL) = 0;
