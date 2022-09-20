@@ -1,5 +1,6 @@
 #include "../include/kotek_render.h"
 
+#include <kotek.render.model/include/kotek_render_model.h>
 #include <kotek.render.gl3.3/include/kotek_render_gl.h>
 #include <kotek.render.vk/include/kotek_render_vk.h>
 
