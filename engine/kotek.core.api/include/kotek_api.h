@@ -615,6 +615,15 @@ namespace Kotek
 			virtual ktkIWindow* Get_ActiveWindow(void) const noexcept = 0;
 		};
 
+		class ktkIGameUIManager
+		{
+		public:
+			virtual ~ktkIGameUIManager(void) {}
+
+			virtual void Initialize(void) noexcept = 0;
+			virtual void Shutdown(void) noexcept = 0;
+		};
+
 		/// \~russian @brief данный класс создан чтобы пользователь и
 		/// разработчик могли определять текущий wrapper для imgui библиотеки.
 		/// Их всего две это ImGui и Nuklear. Сделано это с одной целью, чтобы

@@ -126,6 +126,7 @@ add_subdirectory("engine/kotek.game")
 
 add_subdirectory("engine/kotek.ui")
 add_subdirectory("engine/kotek.ui.imgui")
+add_subdirectory("engine/kotek.ui.cef")
 
 if (WIN32)
 	# DEPRECATED: undo comments when you finish vulkan renderer!
