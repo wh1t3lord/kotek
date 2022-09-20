@@ -17,12 +17,12 @@ namespace Kotek
 
 			// TODO: implement for saver too!
 			void Set_ResourceLoader(
-				ktkIResourceLoader* p_instance) noexcept override;
+				ktkIResourceLoaderManager* p_instance) noexcept override;
 
 			void Set_RenderResourceManager(
 				ktkIRenderResourceManager* p_instance) noexcept override;
 
-			ktkIResourceLoader* Get_ResourceLoader(
+			ktkIResourceLoaderManager* Get_ResourceLoader(
 				void) const noexcept override;
 
 			ktkIRenderResourceManager* Get_RenderResourceManager(
@@ -40,7 +40,7 @@ namespace Kotek
 			ktk::any Load_Resource(const ktkLoadingRequest& request) override;
 
 		private:
-			ktkIResourceLoader* m_p_manager_resource_loader;
+			ktkIResourceLoaderManager* m_p_manager_resource_loader;
 			ktkIRenderResourceManager* m_p_manager_render_resource;
 			ktkMainManager* m_p_manager_main;
 		};

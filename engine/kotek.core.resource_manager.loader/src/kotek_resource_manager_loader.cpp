@@ -69,68 +69,15 @@ namespace Kotek
 			return p_result;
 		}
 
-		void ktkResourceLoaderManager::Set_Detector(
-			eResourceLoadingType resource_type,
-			ktkIResourceFormatDetector* p_detector) noexcept
-		{
-			KOTEK_ASSERT(p_detector, "you can't pass an invalid pointer here");
-
-			KOTEK_ASSERT(
-				p_detector->Get_Type() == eResourceLoadingType::kUnknown,
-				"you must override Get_Type method because it uses default "
-				"return type. It is not acceptable because developer must "
-				"strictly specify what its instance contains and for what it "
-				"was created");
-
-			if (this->m_detectors.find(resource_type) !=
-				this->m_detectors.end())
-			{
-				KOTEK_MESSAGE_WARNING(
-					"[Core] replacing format detector for: [{}]",
-					helper::Translate_ResourceLoadingType(resource_type));
-			}
-
-			this->m_detectors[resource_type] = p_detector;
-		}
-
-		ktkIResourceFormatDetector* ktkResourceLoaderManager::Get_Detector(
-			eResourceLoadingType resource_type) const noexcept
-		{
-			KOTEK_ASSERT(resource_type != eResourceLoadingType::kUnknown,
-				"can't search for a such enum type!!!");
-
-			ktkIResourceFormatDetector* p_result{};
-
-			if (this->m_detectors.find(resource_type) !=
-				this->m_detectors.end())
-			{
-				p_result = this->m_detectors.at(resource_type);
-
-				KOTEK_ASSERT(p_result->Get_Type() == resource_type,
-					"you must specify correct type of what you loading: [{}], "
-					"because your loader has [{}]",
-					helper::Translate_ResourceLoadingType(resource_type),
-					helper::Translate_ResourceLoadingType(
-						p_result->Get_Type()));
-
-				if (p_result->Get_Type() != resource_type)
-				{
-					p_result = nullptr;
-				}
-			}
-
-			return p_result;
-		}
-
 		eResourceLoadingType
 		ktkResourceLoaderManager::DetectResourceTypeByFileFormat(
 			const ktk::filesystem::path& path) noexcept
 		{
 			eResourceLoadingType result{eResourceLoadingType::kUnknown};
 
-			for (const auto& [resource_type, p_detector] : this->m_detectors)
+			for (const auto& [resource_type, p_loader] : this->m_loaders)
 			{
-				bool status = p_detector->Analyze(path);
+				bool status = p_loader->DetectTypeByFullPath(path);
 
 				if (status == false)
 				{
@@ -138,19 +85,24 @@ namespace Kotek
 					KOTEK_MESSAGE(
 						"Determing format type of file and it is not: {}",
 						helper::Translate_ResourceLoadingType(
-							p_detector->Get_Type()));
+							p_loader->Get_Type()));
 #endif
 				}
 				else
 				{
-					result = p_detector->Get_Type();
+#ifdef KOTEK_DEBUG
+					KOTEK_MESSAGE("Obtained type by loader: {}",
+						p_loader->Get_UserDescription());
+#endif
+
+					result = p_loader->Get_Type();
 					break;
 				}
 			}
 
 			KOTEK_ASSERT(result != eResourceLoadingType::kUnknown,
 				"you didn't provide any detector for a format file: {}",
-				path.extension());
+				path.extension().c_str());
 
 			return result;
 		}

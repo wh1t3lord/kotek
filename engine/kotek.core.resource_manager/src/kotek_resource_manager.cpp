@@ -18,7 +18,7 @@ namespace Kotek
 		void ktkResourceManager::Shutdown(void) {}
 
 		void ktkResourceManager::Set_ResourceLoader(
-			ktkIResourceLoader* p_instance) noexcept
+			ktkIResourceLoaderManager* p_instance) noexcept
 		{
 			this->m_p_manager_resource_loader = p_instance;
 		}
@@ -33,7 +33,7 @@ namespace Kotek
 			this->m_p_manager_render_resource = p_instance;
 		}
 
-		ktkIResourceLoader* ktkResourceManager::Get_ResourceLoader(
+		ktkIResourceLoaderManager* ktkResourceManager::Get_ResourceLoader(
 			void) const noexcept
 		{
 			return this->m_p_manager_resource_loader;

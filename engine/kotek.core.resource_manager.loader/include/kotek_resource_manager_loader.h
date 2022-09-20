@@ -25,12 +25,6 @@ namespace Kotek
 			ktkIResourceLoader* Get_Loader(
 				eResourceLoadingType resource_type) const noexcept override;
 
-			void Set_Detector(eResourceLoadingType resource_type,
-				ktkIResourceFormatDetector* p_detector) noexcept override;
-
-			ktkIResourceFormatDetector* Get_Detector(
-				eResourceLoadingType resource_type) const noexcept override;
-
 			ktk::any Load_Text(
 				const ktk::filesystem::path& path) noexcept override;
 			ktk::any Load_Texture(
@@ -61,10 +55,6 @@ namespace Kotek
 
 			ktk::unordered_map<eResourceLoadingType, ktkIResourceLoader*>
 				m_loaders;
-
-			ktk::unordered_map<eResourceLoadingType,
-				ktkIResourceFormatDetector*>
-				m_detectors;
 		};
 	} // namespace Core
 } // namespace Kotek

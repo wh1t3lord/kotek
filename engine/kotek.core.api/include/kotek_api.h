@@ -211,23 +211,15 @@ namespace Kotek
 				void* p_instance, const void* p_callbacks) = 0;
 		};
 
-		class ktkIResourceFormatDetector
+		class ktkIResourceFormatAnalyzer
 		{
 		public:
-			virtual ~ktkIResourceFormatDetector(void) {}
+			virtual ~ktkIResourceFormatAnalyzer(void) {}
 
 			virtual bool Analyze(
 				const ktk::filesystem::path& path) noexcept = 0;
 
-			virtual const ktk::string& Get_UserDescription(void) const noexcept
-			{
-				return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION");
-			}
-
-			virtual eResourceLoadingType Get_Type() const noexcept
-			{
-				return eResourceLoadingType::kUnknown;
-			}
+			virtual ktk::string Get_AllFormats(void) const noexcept = 0;
 		};
 
 		/// \~english @brief This class stands for implementing own loader for
@@ -239,11 +231,30 @@ namespace Kotek
 		public:
 			virtual ~ktkIResourceLoader(void) {}
 
+			/// \~english @brief This method creates a new resouce with a
+			/// shared_ptr
+			/// @param path to your file where it is located on system
+			/// @return
 			virtual ktk::any Load(
 				const ktk::filesystem::path& path) noexcept = 0;
 
+			/// \~english @brief This method constucts an object that was passed
+			/// on stack. It means it doesn't create shared_ptr and uses only
+			/// for situations where user wants to pass an instance that was
+			/// allocated temporary
+			/// @param path
+			/// @param object_from_construct
+			/// @return
 			virtual bool Load(const ktk::filesystem::path& path,
 				ktk::any object_from_construct) noexcept = 0;
+
+			virtual bool DetectTypeByFullPath(
+				const ktk::filesystem::path& path) noexcept = 0;
+
+			virtual ktkIResourceFormatAnalyzer*
+			Get_FormatAnalyzer() const noexcept = 0;
+			virtual void Set_FormatAnalyzer(
+				ktkIResourceFormatAnalyzer* p_format_analyzer) noexcept = 0;
 
 			virtual const ktk::string& Get_UserDescription() const noexcept
 			{
@@ -268,12 +279,6 @@ namespace Kotek
 				ktkIResourceLoader* p_loader) = 0;
 
 			virtual ktkIResourceLoader* Get_Loader(
-				eResourceLoadingType resource_type) const noexcept = 0;
-
-			virtual void Set_Detector(eResourceLoadingType resource_type,
-				ktkIResourceFormatDetector* p_detector) noexcept = 0;
-
-			virtual ktkIResourceFormatDetector* Get_Detector(
 				eResourceLoadingType resource_type) const noexcept = 0;
 
 			virtual ktk::any Load_Text(
@@ -470,9 +475,9 @@ namespace Kotek
 			}
 
 			virtual void Set_ResourceLoader(
-				ktkIResourceLoader* p_instance) noexcept = 0;
+				ktkIResourceLoaderManager* p_instance) noexcept = 0;
 
-			virtual ktkIResourceLoader* Get_ResourceLoader(
+			virtual ktkIResourceLoaderManager* Get_ResourceLoader(
 				void) const noexcept = 0;
 
 			virtual void Set_RenderResourceManager(
