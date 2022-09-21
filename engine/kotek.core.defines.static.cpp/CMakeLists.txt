@@ -37,7 +37,12 @@ endif()
 # By default we for to use CEF
 if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_CEF_LIBRARY)
+
+	# For internal (cmake) purposes
 	set(KOTEK_UI_GAME_LIBRARY_NAME "CEF")
+
+	# For C++ code generation
+	set(KOTEK_UI_GAME_LIBRARY_DESCRIPTION_NAME "Chromium Embedded Framework")
 else()
 	# TODO: add support for RmlUi
 endif()
@@ -181,6 +186,18 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 		// or if it will not be used in practice
 		#define KOTEK_USE_DEBUG
 	#endif
+	")
+
+	if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
+		file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
+		#ifdef KOTEK_CEF_LIBRARY
+			#define KOTEK_USE_CEF_LIBRARY
+		#endif
+		")
+	endif()
+
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
+	#define KOTEK_USE_${KOTEK_UI_GAME_LIBRARY_NAME}_LIBRARY_NAME ${KOTEK_UI_GAME_LIBRARY_DESCRIPTION_NAME}
 	")
 else()
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")

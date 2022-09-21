@@ -57,6 +57,9 @@ namespace Kotek
 			ktkIImguiWrapper* Get_ImguiWrapper(void) const noexcept;
 			void Set_ImguiWrapper(ktkIImguiWrapper* p_manager) noexcept;
 
+			ktkIGameUIManager* Get_GameUIEngine(void) const noexcept;
+			void Set_GameUIEngine(ktkIGameUIManager* p_manager) noexcept;
+
 			void Initialize(void);
 			void Shutdown(void);
 		
@@ -76,6 +79,7 @@ namespace Kotek
 			ktkIProfiler* m_p_manager_profiler;
 			ktkIWindowManager* m_p_manager_window;
 			ktkIImguiWrapper* m_p_manager_imgui_wrapper;
+			ktkIGameUIManager* m_p_game_ui_engine;
 		};
 	} // namespace Core
 } // namespace Kotek

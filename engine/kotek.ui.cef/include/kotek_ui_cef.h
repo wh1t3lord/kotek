@@ -1,5 +1,7 @@
 #pragma once
 
+#include "kotek_ui_game_ui_manager.h"
+
 namespace Kotek
 {
 	namespace Core

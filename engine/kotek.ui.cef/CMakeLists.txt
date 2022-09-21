@@ -12,7 +12,9 @@ endif()
 if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
 set(IMPLEMENTATION_FILES_CEF 
 	"include/kotek_ui_game_ui_manager.h"
-	"src/kotek_ui_game_ui_manager.cpp")
+	"src/kotek_ui_game_ui_manager.cpp"
+	"include/kotek_ui_cef_application.h"
+	"src/kotek_ui_cef_application.cpp")
 else()
 set(IMPLEMENTATION_FILES_CEF "")
 endif()
@@ -32,3 +34,7 @@ if (WIN32)
 		message(FATAL_ERROR "can't find dependency folder of pre-compiled CEF (Chromium Embeddeed Framework). Disable this project in order to compile the solution.")
 	endif()
 endif()
+
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
