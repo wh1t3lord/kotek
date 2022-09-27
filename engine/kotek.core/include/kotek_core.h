@@ -21,25 +21,16 @@
 #include <kotek.core.ecs/include/kotek_core_ecs.h>
 #include <kotek.core.engine_config/include/kotek_core_engine_config.h>
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
 
-namespace Kotek
-{
-	namespace Core
-	{
-		bool InitializeModule_Core(ktkMainManager* p_manager);
-		bool SerializeModule_Core(ktkMainManager* p_manager);
-		bool DeserializeModule_Core(ktkMainManager* p_manager);
-		bool ShutdownModule_Core(ktkMainManager* p_manager);
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+bool InitializeModule_Core(ktkMainManager* p_manager);
+bool SerializeModule_Core(ktkMainManager* p_manager);
+bool DeserializeModule_Core(ktkMainManager* p_manager);
+bool ShutdownModule_Core(ktkMainManager* p_manager);
 
-		void RegisterTests_String_ForModule_Core(void);
-		void RegisterTests_Filesystem_ForModule_Core(void);
-		void RegisterTests_Math_ForModule_Core(void);
-	} // namespace Core
-} // namespace Kotek
+void RegisterTests_String_ForModule_Core(void);
+void RegisterTests_Filesystem_ForModule_Core(void);
+void RegisterTests_Math_ForModule_Core(void);
+KOTEK_BEGIN_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
