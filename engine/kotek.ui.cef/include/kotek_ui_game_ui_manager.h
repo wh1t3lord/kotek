@@ -3,9 +3,6 @@
 #include <kotek.core.api/include/kotek_api.h>
 #include "kotek_ui_cef_application.h"
 
-
-
-
 #ifdef KOTEK_USE_CEF_LIBRARY
 namespace Kotek
 {
