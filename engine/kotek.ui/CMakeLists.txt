@@ -10,4 +10,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_ui_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.imgui)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.cef)
+
+if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
+	target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.cef)
+endif()

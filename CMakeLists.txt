@@ -126,7 +126,10 @@ add_subdirectory("engine/kotek.game")
 
 add_subdirectory("engine/kotek.ui")
 add_subdirectory("engine/kotek.ui.imgui")
-add_subdirectory("engine/kotek.ui.cef")
+
+if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
+	add_subdirectory("engine/kotek.ui.cef")
+endif()
 
 if (WIN32)
 	# DEPRECATED: undo comments when you finish vulkan renderer!
