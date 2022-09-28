@@ -325,3 +325,17 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_defines_static_cpp_dll.cpp")
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
+
+if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
+	# TODO: we need to use CEF as package
+	if (WIN32)
+		# There's no package so we need to use our pre-compiled solution
+		if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
+			message("[Engine]: CEF is found!")
+			target_include_directories(${PROJECT_NAME} PUBLIC ${PATH_TO_CEF})
+			target_link_directories(${PROJECT_NAME} PUBLIC ${PATH_TO_CEF_LIB})
+		else()
+			message(FATAL_ERROR "can't find dependency folder of pre-compiled CEF (Chromium Embeddeed Framework). Disable this project in order to compile the solution.")
+		endif()
+	endif()
+endif()
