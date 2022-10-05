@@ -1,7 +1,10 @@
 #pragma once
 
 #include <kotek.ui.imgui/include/kotek_ui_imgui.h>
-#include <kotek.ui.cef/include/kotek_ui_cef.h>
+
+#ifdef KOTEK_USE_CEF_LIBRARY
+	#include <kotek.ui.cef/include/kotek_ui_cef.h>
+#endif
 
 namespace Kotek
 {
