@@ -9,3 +9,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_numerics.h"
 	"include/kotek_core_types_numerics.h"
 	"src/main_core_numerics_dll.cpp")
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

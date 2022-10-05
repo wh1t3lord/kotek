@@ -3,10 +3,10 @@
 #include <cstddef>
 #include <cstdint>
 
-namespace Kotek
-{
-	namespace ktk
-	{
+#include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+	KOTEK_BEGIN_NAMESPACE_KTK
 		using uint64_t = std::uint64_t;
 		using uint32_t = std::uint32_t;
 		using uint16_t = std::uint16_t;
@@ -22,5 +22,5 @@ namespace Kotek
 		using float_t = float;
 		using double_t = double;
 		using long_double_t = long double;
-	} // namespace ktk
-} // namespace Kotek
+	KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK

@@ -13,10 +13,10 @@ endif()
 list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_WINDOW_LIBRARY_${KOTEK_WINDOW_LIBRARY})
 set(KOTEK_WINDOW_LIBRARY_NAME "${KOTEK_WINDOW_LIBRARY}")
 
-message("[Engine]: window library is [${KOTEK_WINDOW_LIBRARY}]")
+message("[${PROJECT_NAME}]: window library is [${KOTEK_WINDOW_LIBRARY}]")
 
 if (WIN32)
-	message("[Engine]: platform 'WIN32'")
+	message("[${PROJECT_NAME}]: platform 'Windows NT'")
 
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 
@@ -46,3 +46,5 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_defines_static_os_win32_dll.cpp")
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

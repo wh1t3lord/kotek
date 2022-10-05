@@ -10,4 +10,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_constants_ecs.h"
 	"src/main_core_constants_ecs_dll.cpp")
 
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)

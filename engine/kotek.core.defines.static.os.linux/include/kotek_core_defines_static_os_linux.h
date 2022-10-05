@@ -1,5 +1,6 @@
 #pragma once
 
+#include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 #include "kotek_std_preprocessors.h"
 
 namespace Kotek
