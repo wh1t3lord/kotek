@@ -29,3 +29,4 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl3.3)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.vk)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.software)
