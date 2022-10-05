@@ -1,19 +1,15 @@
 #pragma once
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+class ktkMainManager;
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
 
-namespace Kotek
-{
-	namespace Render
-	{
-		// TODO: rename to GL3_3
-		bool InitializeModule_Render_GL3_3(Core::ktkMainManager* main_manager);
-		bool ShutdownModule_Render_GL3_3(Core::ktkMainManager* main_manager);
-	} // namespace Render
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_RENDER
+// TODO: rename to GL3_3
+bool InitializeModule_Render_GL3_3(Core::ktkMainManager* main_manager);
+bool ShutdownModule_Render_GL3_3(Core::ktkMainManager* main_manager);
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK

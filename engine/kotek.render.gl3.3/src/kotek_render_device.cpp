@@ -1,63 +1,58 @@
 #include "../include/kotek_render_device.h"
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_RENDER
+namespace gl3_3
 {
-	namespace Render
+	ktkRenderDevice::ktkRenderDevice(void) : m_width{}, m_height{} {}
+
+	ktkRenderDevice::~ktkRenderDevice(void) {}
+
+	void ktkRenderDevice::Initialize(Core::ktkMainManager* p_main_manager)
 	{
-		namespace gl3_3
-		{
-			ktkRenderDevice::ktkRenderDevice(void) : m_width{}, m_height{} {}
+		p_main_manager->Get_WindowManager()->ActiveWindow_MakeContextCurrent();
 
-			ktkRenderDevice::~ktkRenderDevice(void) {}
+		KOTEK_ASSERT(gladLoadGLLoader(
+						 reinterpret_cast<GLADloadproc>(glfwGetProcAddress)),
+			"failed to gladLoadGLLoader");
+	}
 
-			void ktkRenderDevice::Initialize(
-				Core::ktkMainManager* p_main_manager)
-			{
-				p_main_manager->Get_WindowManager()
-					->ActiveWindow_MakeContextCurrent();
+	void ktkRenderDevice::Shutdown(void) {}
 
-				KOTEK_ASSERT(gladLoadGLLoader(reinterpret_cast<GLADloadproc>(
-								 glfwGetProcAddress)),
-					"failed to gladLoadGLLoader");
-			}
+	void ktkRenderDevice::Resize(Core::ktkIRenderSwapchain* p_raw_swapchain,
+		Core::kotek_i_renderer* p_raw_renderer,
+		Core::ktkIRenderResourceManager* p_raw_resource_manager, int width,
+		int height)
+	{
+		this->m_width = width;
+		this->m_height = height;
 
-			void ktkRenderDevice::Shutdown(void) {}
+		p_raw_swapchain->Resize(this, width, height);
+		p_raw_renderer->Resize();
+	}
 
-			void ktkRenderDevice::Resize(
-				Core::ktkIRenderSwapchain* p_raw_swapchain,
-				Core::kotek_i_renderer* p_raw_renderer,
-				Core::ktkIRenderResourceManager* p_raw_resource_manager,
-				int width, int height)
-			{
-				this->m_width = width;
-				this->m_height = height;
+	int ktkRenderDevice::GetWidth(void) const noexcept
+	{
+		return this->m_width;
+	}
 
-				p_raw_swapchain->Resize(this, width, height);
-				p_raw_renderer->Resize();
-			}
+	int ktkRenderDevice::GetHeight(void) const noexcept
+	{
+		return this->m_height;
+	}
 
-			int ktkRenderDevice::GetWidth(void) const noexcept
-			{
-				return this->m_width;
-			}
+	void ktkRenderDevice::GPUFlush() {}
 
-			int ktkRenderDevice::GetHeight(void) const noexcept
-			{
-				return this->m_height;
-			}
+	void ktkRenderDevice::SetWidth(int width) noexcept
+	{
+		this->m_width = width;
+	}
 
-			void ktkRenderDevice::GPUFlush() {}
+	void ktkRenderDevice::SetHeight(int height) noexcept
+	{
+		this->m_height = height;
+	}
 
-			void ktkRenderDevice::SetWidth(int width) noexcept
-			{
-				this->m_width = width;
-			}
-
-			void ktkRenderDevice::SetHeight(int height) noexcept
-			{
-				this->m_height = height;
-			}
-
-		} // namespace gl3_3
-	}     // namespace Render
-} // namespace Kotek
+} // namespace gl3_3
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK

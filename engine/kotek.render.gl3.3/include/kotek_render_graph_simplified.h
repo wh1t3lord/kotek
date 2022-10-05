@@ -1,49 +1,43 @@
 #pragma once
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+class ktkIRenderGraph;
+KOTEK_END_NAMESPACE_CORE
+
+KOTEK_BEGIN_NAMESPACE_RENDER
+namespace gl3_3
 {
-	namespace Core
-	{
-		class ktkIRenderGraph;
-	}
+	class ktkRenderGraphSimplifiedRenderPass;
+	class ktkRenderGraphSimplifiedNode;
+} // namespace gl3_3
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK
 
-	namespace Render
-	{
-		namespace gl3_3
-		{
-			class ktkRenderGraphSimplifiedRenderPass;
-			class ktkRenderGraphSimplifiedNode;
-		} // namespace gl3_3
-	}     // namespace Render
-} // namespace Kotek
-
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_RENDER
+namespace gl3_3
 {
-	namespace Render
+	class ktkRenderGraphSimplified : public Core::ktkIRenderGraph
 	{
-		namespace gl3_3
-		{
-			class ktkRenderGraphSimplified : public Core::ktkIRenderGraph
-			{
-			public:
-				ktkRenderGraphSimplified(
-					const ktk::vector<ktkRenderGraphSimplifiedRenderPass*>&
-						passes,
-					const ktk::vector<ktkRenderGraphSimplifiedNode>& nodes);
+	public:
+		ktkRenderGraphSimplified(
+			const ktk::vector<ktkRenderGraphSimplifiedRenderPass*>& passes,
+			const ktk::vector<ktkRenderGraphSimplifiedNode>& nodes);
 
-				ktkRenderGraphSimplified(void);
-				~ktkRenderGraphSimplified(void);
+		ktkRenderGraphSimplified(void);
+		~ktkRenderGraphSimplified(void);
 
-				void Initialize(void) override;
-				void Shutdown(void) override;
+		void Initialize(void) override;
+		void Shutdown(void) override;
 
-				void Update_All(void);
-				void Render_All(void);
+		void Update_All(void);
+		void Render_All(void);
 
-			private:
-				ktk::vector<ktkRenderGraphSimplifiedRenderPass*> m_passes;
-				ktk::vector<ktkRenderGraphSimplifiedNode> m_nodes;
-			};
-		} // namespace gl3_3
-	}     // namespace Render
-} // namespace Kotek
+	private:
+		ktk::vector<ktkRenderGraphSimplifiedRenderPass*> m_passes;
+		ktk::vector<ktkRenderGraphSimplifiedNode> m_nodes;
+	};
+} // namespace gl3_3
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK
