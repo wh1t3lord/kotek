@@ -7,22 +7,30 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-find_package(Boost COMPONENTS json unit_test_framework filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+		find_package(Boost COMPONENTS json unit_test_framework filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+	endif()
+else()
+	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+		find_package(Boost COMPONENTS json unit_test_framework filesystem REQUIRED)
+	endif()
+endif()
 
 if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON")
-	message("[Engine]: adding tests for runtime in project ${PROJECT_NAME}")
+	message("[${PROJECT_NAME}]: adding tests for runtime in project ${PROJECT_NAME}")
 	set(to_include_tests 
 		"tests/kotek_core_test_filesystem.cpp")
 elseif("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "OFF")
 	# TODO: add support for own projects for unit testing
-	message("[Engine]: creating test projects for project ${PROJECT_NAME}")
+	message("[${PROJECT_NAME}]: creating test projects for project ${PROJECT_NAME}")
 	set(to_include_tests "")
 else()
-	message("[Engine]: tests are disabled for project ${PROJECT_NAME}")
+	message("[${PROJECT_NAME}]: tests are disabled for project ${PROJECT_NAME}")
 	set(to_include_tests "")
 endif()
 
-message("[Engine]: files to attach (KOTEK_TESTS): ${to_include_tests}")
+message("[${PROJECT_NAME}]: files to attach (KOTEK_TESTS): ${to_include_tests}")
 
 add_library(${PROJECT_NAME} STATIC 
 	"src/main_core_dll.cpp"
@@ -30,7 +38,16 @@ add_library(${PROJECT_NAME} STATIC
 	${to_include_tests}
 )
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Boost::headers Boost::json Boost::unit_test_framework Boost::filesystem)
+
+if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+	target_link_libraries(${PROJECT_NAME} PUBLIC 
+		Boost::headers 
+		Boost::json 
+		Boost::unit_test_framework 
+		Boost::filesystem
+	)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting)

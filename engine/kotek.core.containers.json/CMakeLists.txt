@@ -5,8 +5,14 @@ project(kotek.core.containers.json VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
-	find_package(Boost COMPONENTS headers json REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+		find_package(Boost COMPONENTS headers json REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+	endif()
+else()
+	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+		find_package(Boost COMPONENTS headers json REQUIRED)
+	endif()
 endif()
 
 add_library(${PROJECT_NAME} STATIC
@@ -17,7 +23,10 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_containers_json_dll.cpp")
 
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
-	target_link_libraries(${PROJECT_NAME} PUBLIC Boost::headers Boost::json)
+	target_link_libraries(${PROJECT_NAME} PUBLIC 
+		Boost::headers 
+		Boost::json
+	)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

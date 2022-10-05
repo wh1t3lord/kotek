@@ -20,7 +20,7 @@ if (GIT_FOUND)
 	)
 
 	if (kotek_git_status)
-		message("[Engine]: failed to get current commit, status: '${kotek_git_status}'")
+		message("[${PROJECT_NAME}]: failed to get current commit, status: '${kotek_git_status}'")
 	endif()
 
 	execute_process(
@@ -32,7 +32,7 @@ if (GIT_FOUND)
 	)
 
 	if (kotek_git_status)
-		message("[Engine]: failed to get current branch name, status: '${kotek_git_status}'")
+		message("[${PROJECT_NAME}]: failed to get current branch name, status: '${kotek_git_status}'")
 	endif()
 
 	execute_process(
@@ -44,7 +44,7 @@ if (GIT_FOUND)
 	)
 
 	if (kotek_git_status)
-		message("[Engine]: failed to get current commit count, status: '${kotek_git_status}'")
+		message("[${PROJECT_NAME}]: failed to get current commit count, status: '${kotek_git_status}'")
 	endif()
 
 	string(TIMESTAMP KOTEK_WHEN_YOU_GENERATED_SOLUTION "%w %A %B %Y %H:%M:%S")
@@ -59,7 +59,7 @@ if (GIT_FOUND)
 	#endif
 	")
 else()
-	message("[Engine]: ! Warning, can't find Git for generating preprocessors!")
+	message(WARNING "[${PROJECT_NAME}]: can't find Git for generating preprocessors!")
 
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
 endif()

@@ -7,7 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+    find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
+else()
+    find_package(KTX REQUIRED)
+endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render_vk.h"

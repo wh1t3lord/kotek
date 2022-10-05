@@ -7,7 +7,11 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(mimalloc REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	find_package(mimalloc REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
+else()
+	find_package(mimalloc REQUIRED)
+endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_memory.h"

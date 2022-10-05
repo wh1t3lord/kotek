@@ -8,7 +8,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
-find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
+
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+    find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
+else()
+    find_package(KTX REQUIRED)
+endif()
 
 set(to_include_render_graph_simplified_files
     "include/kotek_render_graph_simplified_node.h"

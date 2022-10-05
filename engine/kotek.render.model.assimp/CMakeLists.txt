@@ -11,7 +11,12 @@ endif()
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/assimp/${CMAKE_BUILD_TYPE}")
+
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/assimp/${CMAKE_BUILD_TYPE}")
+else()
+	find_package(assimp REQUIRED)
+endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render_model_assimp.h"

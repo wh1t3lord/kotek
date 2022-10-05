@@ -1,16 +1,30 @@
 cmake_minimum_required(VERSION 3.19.3)
 project(kotek.engine)
 
-message("[Engine]: build type is '${CMAKE_BUILD_TYPE}'")
+# it is our requirement for generating the library e.g. don't just write 'cmake ..'
+if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
+	message(FATAL_ERROR "[${PROJECT_NAME}]: you must specify CMAKE_BUILD_TYPE flag with the following types: Debug, Release, MinSizeRel, RelWithDebInfo. It supposed to be like -DCMAKE_BUILD_TYPE=Debug")
+endif()
 
-set(KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS ./include/kotek_std_preprocessors.h)
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "")
+	set(KOTEK_DEPS_FOLDER_ENABLE "ON" CACHE INTERNAL "")
+	message("[${PROJECT_NAME}]: KOTEK_DEPS_FOLDER is enabled! Now you should specified your dependency folder name (but not its path)")
+endif()
 
-message("[Engine]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}'")
+message("[${PROJECT_NAME}]: build type is '${CMAKE_BUILD_TYPE}'")
 
-if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
-	message(FATAL_ERROR "you have to specify your folder where dependencies are stored")
-else()
-	message("[Engine]: your dependency folder is '${KOTEK_DEPS_FOLDER}'")
+if ("${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}" STREQUAL "")
+	set(KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS ./include/kotek_std_preprocessors.h)
+endif()
+
+message("[${PROJECT_NAME}]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}'")
+
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
+		message(FATAL_ERROR "you have to specify your folder where dependencies are stored")
+	else()
+		message("[${PROJECT_NAME}]: your dependency folder is '${KOTEK_DEPS_FOLDER}'")
+	endif()
 endif()
 
 include_directories("engine")

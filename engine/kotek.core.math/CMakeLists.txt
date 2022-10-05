@@ -5,13 +5,21 @@ project(kotek.core.math VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-    find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-    find_package(directxmath REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
+	    find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+	elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
+	    find_package(directxmath REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+	endif()
+else()
+	if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
+	    find_package(glm REQUIRED)
+	elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
+	    find_package(directxmath REQUIRED)
+	endif()
 endif()
 
-message("[Engine]: math library is '${KOTEK_MATH_LIBRARY}'")
+message("[${PROJECT_NAME}]: math library is '${KOTEK_MATH_LIBRARY}'")
 
 add_library(${PROJECT_NAME} STATIC 
 	"include/kotek_std_alias_math.h"
