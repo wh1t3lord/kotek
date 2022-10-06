@@ -7,19 +7,19 @@
 #else
 #endif
 
-namespace Kotek
-{
-	namespace ktk
-	{
-		namespace mt
-		{
-#ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
-			using mutex = std::mutex;
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
 
-			template <typename Mutex>
-			using lock_guard = std::lock_guard<Mutex>;
+namespace mt
+{
+#ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
+	using mutex = std::mutex;
+
+	template <typename Mutex>
+	using lock_guard = std::lock_guard<Mutex>;
 #else
 #endif
-		} // namespace mt
-	}     // namespace ktk
-} // namespace Kotek
+} // namespace mt
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK

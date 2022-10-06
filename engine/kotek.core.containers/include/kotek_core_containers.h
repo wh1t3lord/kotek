@@ -22,21 +22,17 @@
 #include <kotek.core.containers.variant/include/kotek_core_containers_variant.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+class ktkMainManager;
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
 
-namespace Kotek
-{
-	namespace Core
-	{
-		bool InitializeModule_Core_Containers(ktkMainManager* p_manager);
-		bool SerializeModule_Core_Containers(ktkMainManager* p_manager);
-		bool DeserializeModule_Core_Containers(ktkMainManager* p_manager);
-		bool ShutdownModule_Core_Containers(ktkMainManager* p_manager);
-	}
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+bool InitializeModule_Core_Containers(ktkMainManager* p_manager);
+bool SerializeModule_Core_Containers(ktkMainManager* p_manager);
+bool DeserializeModule_Core_Containers(ktkMainManager* p_manager);
+bool ShutdownModule_Core_Containers(ktkMainManager* p_manager);
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

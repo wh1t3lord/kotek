@@ -8,15 +8,15 @@
 #endif
 
 // TODO: implement some functionality here
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+
+namespace mt
 {
-	namespace ktk
-	{
-		namespace mt
-		{
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 #else
 #endif
-		} // namespace mt
-	}     // namespace ktk
-} // namespace Kotek
+} // namespace mt
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK

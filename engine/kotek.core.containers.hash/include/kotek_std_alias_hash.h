@@ -9,17 +9,17 @@
 #else
 #endif
 
-namespace Kotek
-{
-	namespace ktk
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+
 #ifdef KOTEK_USE_BOOST_LIBRARY
-		template <typename Type>
-		using hash = boost::hash<Type>;
+template <typename Type>
+using hash = boost::hash<Type>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
-		template <typename Type>
-		using hash = std::hash<Type>;
+template <typename Type>
+using hash = std::hash<Type>;
 #else
 #endif
-	} // namespace ktk
-} // namespace Kotek
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK

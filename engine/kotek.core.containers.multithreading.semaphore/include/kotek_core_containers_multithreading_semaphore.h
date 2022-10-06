@@ -2,18 +2,14 @@
 
 #include "kotek_std_alias_semaphore.h"
 
-namespace Kotek
-{
-	namespace Core
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+	KOTEK_BEGIN_NAMESPACE_CORE
 		class ktkMainManager;
-	}
-} // namespace Kotek
+	KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
 
-namespace Kotek
-{
-	namespace Core
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+	KOTEK_BEGIN_NAMESPACE_CORE
 		bool InitializeModule_Core_Containers_MultiThreading_Semaphore(
 			ktkMainManager* p_manager);
 		bool SerializeModule_Core_Containers_MultiThreading_Semaphore(
@@ -22,5 +18,5 @@ namespace Kotek
 			ktkMainManager* p_manager);
 		bool ShutdownModule_Core_Containers_MultiThreading_Semaphore(
 			ktkMainManager* p_manager);
-	} // namespace Core
-} // namespace Kotek
+	KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

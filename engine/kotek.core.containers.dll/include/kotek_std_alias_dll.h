@@ -9,15 +9,15 @@
 #else
 #endif
 
-namespace Kotek
-{
-	namespace ktk
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+
 #ifdef KOTEK_USE_BOOST_LIBRARY
-		namespace dll = boost::dll;
+namespace dll = boost::dll;
 #elif defined(KOTEK_USE_STD_LIBRARY)
 	#error add replacement for boost::dll
 #else
 #endif
-	} // namespace ktk
-} // namespace Kotek
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KTK

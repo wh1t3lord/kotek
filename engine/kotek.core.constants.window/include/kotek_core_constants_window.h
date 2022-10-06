@@ -2,21 +2,17 @@
 
 #include "kotek_std_constants.h"
 
-namespace Kotek
-{
-	namespace Core
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+	KOTEK_BEGIN_NAMESPACE_CORE
 		class ktkMainManager;
-	}
-} // namespace Kotek
+	KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
 
-namespace Kotek
-{
-	namespace Core
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+	KOTEK_BEGIN_NAMESPACE_CORE
 		bool InitializeModule_Core_Constants_Window(ktkMainManager*);
 		bool ShutdownModule_Core_Constants_Window(ktkMainManager*);
 		bool SerializeModule_Core_Constants_Window(ktkMainManager*);
 		bool DeserializeModule_Core_Constants_Window(ktkMainManager*);
-	}
-} // namespace Kotek
+	KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

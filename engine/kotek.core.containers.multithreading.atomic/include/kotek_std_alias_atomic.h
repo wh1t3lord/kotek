@@ -7,17 +7,18 @@
 #else
 #endif
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+
+// TODO: create preprocessor for this namespace
+namespace mt
 {
-	namespace ktk
-	{
-		namespace mt
-		{
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
-			template <typename Type>
-			using atomic = std::atomic<Type>;
+	template <typename Type>
+	using atomic = std::atomic<Type>;
 #else
 #endif
-		} // namespace mt
-	}     // namespace ktk
-} // namespace Kotek
+} // namespace mt
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK

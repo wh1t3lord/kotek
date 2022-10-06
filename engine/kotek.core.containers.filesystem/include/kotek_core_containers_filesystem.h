@@ -3,21 +3,21 @@
 #include <kotek.core.containers.filesystem.path/include/kotek_core_containers_filesystem_path.h>
 #include "kotek_std_alias_filesystem.h"
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
 
-namespace Kotek
-{
-	namespace Core
-	{
-		bool InitializeModule_Core_Containers_FileSystem(ktkMainManager* p_manager);
-		bool SerializeModule_Core_Containers_FileSystem(ktkMainManager* p_manager);
-		bool DeserializeModule_Core_Containers_FileSystem(ktkMainManager* p_manager);
-		bool ShutdownModule_Core_Containers_FileSystem(ktkMainManager* p_manager);
-	} // namespace Core
-} // namespace Kotek
+class ktkMainManager;
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+bool InitializeModule_Core_Containers_FileSystem(ktkMainManager* p_manager);
+bool SerializeModule_Core_Containers_FileSystem(ktkMainManager* p_manager);
+bool DeserializeModule_Core_Containers_FileSystem(ktkMainManager* p_manager);
+bool ShutdownModule_Core_Containers_FileSystem(ktkMainManager* p_manager);
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
