@@ -32,7 +32,7 @@ if (NOT "${KOTEK_MATH_LIBRARY}" STREQUAL "")
 	#elif defined(KOTEK_MATH_LIBRARY_DXM)
 		#define KOTEK_USE_MATH_LIBRARY_DXM
 	#else
-		#error undefined math library. So it doesn't support now by engine
+		#error undefined math library. So it doesn't support by engine now
 	#endif
 	")
 else()
