@@ -10,25 +10,24 @@
 #else
 #endif
 
-namespace Kotek
-{
-	namespace ktk
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
 #ifdef KOTEK_USE_BOOST_LIBRARY
-		template <class Key, class Type, class Hash = boost::hash<Key>,
-			class Predicate = std::equal_to<Key>,
-			class Allocator =
-				KOTEK_USE_MEMORY_ALLOCATOR_CLASS<std::pair<const Key, Type>>>
-		using unordered_map = boost::unordered::unordered_map<Key, Type, Hash,
-			Predicate, Allocator>;
+
+template <class Key, class Type, class Hash = boost::hash<Key>,
+	class Predicate = std::equal_to<Key>,
+	class Allocator =
+		KOTEK_USE_MEMORY_ALLOCATOR_CLASS<std::pair<const Key, Type>>>
+using unordered_map =
+	boost::unordered::unordered_map<Key, Type, Hash, Predicate, Allocator>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
-		template <class Key, class Type, class Hash = std::hash<Key>,
-			class Predicate = std::equal_to<Key>,
-			class Allocator =
-				KOTEK_USE_MEMORY_ALLOCATOR_CLASS<std::pair<const Key, Type>>>
-		using unordered_map =
-			std::unordered_map<Key, Type, Hash, Predicate, Allocator>;
+template <class Key, class Type, class Hash = std::hash<Key>,
+	class Predicate = std::equal_to<Key>,
+	class Allocator =
+		KOTEK_USE_MEMORY_ALLOCATOR_CLASS<std::pair<const Key, Type>>>
+using unordered_map = std::unordered_map<Key, Type, Hash, Predicate, Allocator>;
 #else
 #endif
-	} // namespace ktk
-} // namespace Kotek
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK

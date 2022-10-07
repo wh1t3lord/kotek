@@ -7,14 +7,14 @@
 #else
 #endif
 
-namespace Kotek
-{
-	namespace ktk
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
-		template <typename Type>
-		using queue = std::queue<Type, deque<Type>>;
+template <typename Type>
+using queue = std::queue<Type, deque<Type>>;
 #else
 #endif
-	} // namespace ktk
-} // namespace Kotek
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_BEGIN_NAMESPACE_KOTEK

@@ -11,23 +11,21 @@
 #else
 #endif
 
-namespace Kotek
-{
-	namespace ktk
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+
 #ifdef KOTEK_USE_BOOST_LIBRARY
-		template <class Key, class Hash = hash<Key>,
-			class Predicate = std::equal_to<Key>,
-			class Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Key>>
-		using unordered_set =
-			boost::unordered_set<Key, Hash, Predicate, Allocator>;
+template <class Key, class Hash = hash<Key>,
+	class Predicate = std::equal_to<Key>,
+	class Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Key>>
+using unordered_set = boost::unordered_set<Key, Hash, Predicate, Allocator>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
-		template <class Key, class Hash = hash<Key>,
-			class Predicate = std::equal_to<Key>,
-			class Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Key>>
-		using unordered_set =
-			std::unordered_set<Key, Hash, Predicate, Allocator>;
+template <class Key, class Hash = hash<Key>,
+	class Predicate = std::equal_to<Key>,
+	class Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Key>>
+using unordered_set = std::unordered_set<Key, Hash, Predicate, Allocator>;
 #else
 #endif
-	} // namespace ktk
-} // namespace Kotek
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KTK

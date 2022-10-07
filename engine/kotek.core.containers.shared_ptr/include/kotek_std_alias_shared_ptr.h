@@ -7,14 +7,14 @@
 #else
 #endif
 
-namespace Kotek
-{
-	namespace ktk
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
-		template <typename T>
-		using shared_ptr = std::shared_ptr<T>;
+template <typename T>
+using shared_ptr = std::shared_ptr<T>;
 #else
 #endif
-	} // namespace ktk
-} // namespace Kotek
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK
