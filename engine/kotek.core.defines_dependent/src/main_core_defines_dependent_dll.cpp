@@ -1,9 +1,7 @@
 #include "../include/kotek_core_defines_dependent.h"
 
-namespace Kotek
-{
-	namespace Core
-	{
+KOTEK_BEGIN_NAMESPACE_KOTEK
+	KOTEK_BEGIN_NAMESPACE_CORE
 		bool InitializeModule_Core_Defines_Dependent(ktkMainManager* p_manager)
 		{
 			InitializeModule_Core_Defines_Dependent_Assert(p_manager);
@@ -43,5 +41,5 @@ namespace Kotek
 
 			return true;
 		}
-	} // namespace Core
-} // namespace Kotek
+	KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

@@ -5,22 +5,21 @@
 #include <kotek.core.defines_dependent.message/include/kotek_core_defines_dependent_message.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
 
-namespace Kotek
-{
-	namespace Core
-	{
-		bool InitializeModule_Core_Defines_Dependent(ktkMainManager* p_manager);
-		bool ShutdownModule_Core_Defines_Dependent(ktkMainManager* p_manager);
-		bool SerializeModule_Core_Defines_Dependent(ktkMainManager* p_manager);
-		bool DeserializeModule_Core_Defines_Dependent(
-			ktkMainManager* p_manager);
-	} // namespace Core
-} // namespace Kotek
+class ktkMainManager;
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+bool InitializeModule_Core_Defines_Dependent(ktkMainManager* p_manager);
+bool ShutdownModule_Core_Defines_Dependent(ktkMainManager* p_manager);
+bool SerializeModule_Core_Defines_Dependent(ktkMainManager* p_manager);
+bool DeserializeModule_Core_Defines_Dependent(ktkMainManager* p_manager);
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
