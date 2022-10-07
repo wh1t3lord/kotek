@@ -62,3 +62,4 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_defines_static_profilers_dll.cpp")
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

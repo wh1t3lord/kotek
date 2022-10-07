@@ -17,4 +17,4 @@ using queue = std::queue<Type, deque<Type>>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
-KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_END_NAMESPACE_KOTEK

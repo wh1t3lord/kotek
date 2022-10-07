@@ -35,3 +35,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
 	"include/kotek_core_defines_static_sdk.h"
 	"src/main_core_defines_static_sdk_dll.cpp")
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
