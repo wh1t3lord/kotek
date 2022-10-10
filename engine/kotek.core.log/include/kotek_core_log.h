@@ -2,22 +2,21 @@
 
 #include "kotek_log.h"
 
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+class ktkMainManager;
 
-namespace Kotek
-{
-	namespace Core
-	{
-		bool InitializeModule_Core_Log(ktkMainManager* p_manager);
-		bool SerializeModule_Core_Log(ktkMainManager* p_manager);
-		bool DeserializeModule_Core_Log(ktkMainManager* p_manager);
-		bool ShutdownModule_Core_Log(ktkMainManager* p_manager);
-	} // namespace Core
-} // namespace Kotek
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+bool InitializeModule_Core_Log(ktkMainManager* p_manager);
+bool SerializeModule_Core_Log(ktkMainManager* p_manager);
+bool DeserializeModule_Core_Log(ktkMainManager* p_manager);
+bool ShutdownModule_Core_Log(ktkMainManager* p_manager);
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

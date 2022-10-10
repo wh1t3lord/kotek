@@ -1,53 +1,53 @@
 #include "../include/kotek_core_profilers.h"
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+bool InitializeModule_Core_Profilers(ktkMainManager* p_manager)
 {
-	namespace Core
-	{
-		bool InitializeModule_Core_Profilers(ktkMainManager* p_manager)
-		{
-			InitializeModule_Core_Profilers_CPU(p_manager);
-			InitializeModule_Core_Profilers_GPU(p_manager);
+	InitializeModule_Core_Profilers_CPU(p_manager);
+	InitializeModule_Core_Profilers_GPU(p_manager);
 
-			p_manager->Set_Profiler(new ktkProfiler());
+	p_manager->Set_Profiler(new ktkProfiler());
 
-			return true;
-		}
+	return true;
+}
 
-		bool SerializeModule_Core_Profilers(ktkMainManager* p_manager)
-		{
-			SerializeModule_Core_Profilers_CPU(p_manager);
-			SerializeModule_Core_Profilers_GPU(p_manager);
+bool SerializeModule_Core_Profilers(ktkMainManager* p_manager)
+{
+	SerializeModule_Core_Profilers_CPU(p_manager);
+	SerializeModule_Core_Profilers_GPU(p_manager);
 
-			return true;
-		}
+	return true;
+}
 
-		bool DeserializeModule_Core_Profilers(ktkMainManager* p_manager)
-		{
-			DeserializeModule_Core_Profilers_CPU(p_manager);
-			DeserializeModule_Core_Profilers_GPU(p_manager);
+bool DeserializeModule_Core_Profilers(ktkMainManager* p_manager)
+{
+	DeserializeModule_Core_Profilers_CPU(p_manager);
+	DeserializeModule_Core_Profilers_GPU(p_manager);
 
-			return true;
-		}
+	return true;
+}
 
-		bool ShutdownModule_Core_Profilers(ktkMainManager* p_manager)
-		{
-			ShutdownModule_Core_Profilers_CPU(p_manager);
-			ShutdownModule_Core_Profilers_GPU(p_manager);
-			
-			ktkProfiler* p_instance =
-				dynamic_cast<ktkProfiler*>(p_manager->GetProfiler());
+bool ShutdownModule_Core_Profilers(ktkMainManager* p_manager)
+{
+	ShutdownModule_Core_Profilers_CPU(p_manager);
+	ShutdownModule_Core_Profilers_GPU(p_manager);
 
-			KOTEK_ASSERT(p_instance,
-				"you must get a valid pointer of ktkProfiler otherwise you got "
-			    "different type at all!");
+	ktkProfiler* p_instance =
+		dynamic_cast<ktkProfiler*>(p_manager->GetProfiler());
 
-			delete p_instance;
+	KOTEK_ASSERT(p_instance,
+		"you must get a valid pointer of ktkProfiler otherwise you got "
+		"different type at all!");
 
-			p_manager->Set_Profiler(nullptr);
+	delete p_instance;
 
-			return true;
-		}
-	} // namespace Core
-} // namespace Kotek
+	p_manager->Set_Profiler(nullptr);
+
+	return true;
+}
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

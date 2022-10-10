@@ -4,34 +4,33 @@
 
 #endif
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+ktkProfiler::ktkProfiler(void) {}
+
+ktkProfiler::~ktkProfiler(void) {}
+
+void ktkProfiler::Initialize(void)
 {
-	namespace Core
-	{
-		ktkProfiler::ktkProfiler(void) {}
-
-		ktkProfiler::~ktkProfiler(void) {}
-
-		void ktkProfiler::Initialize(void)
-		{
 #ifdef KOTEK_USE_CPU_PROFILER
-			tracy::StartupProfiler();
+	tracy::StartupProfiler();
 #endif
-		}
+}
 
-		void ktkProfiler::Shutdown(void)
-		{
+void ktkProfiler::Shutdown(void)
+{
 #ifdef KOTEK_CPU_PROFILER
-			tracy::ShutdownProfiler();
+	tracy::ShutdownProfiler();
 #endif
-		}
+}
 
-		void ktkProfiler::FrameMark(void)
-		{
+void ktkProfiler::FrameMark(void)
+{
 #ifdef KOTEK_CPU_PROFILER
-			FrameMark;
+	FrameMark;
 #endif
-		}
+}
 
-	} // namespace Core
-} // namespace Kotek
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

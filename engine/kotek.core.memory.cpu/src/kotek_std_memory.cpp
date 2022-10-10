@@ -5,42 +5,51 @@
 	#include <mimalloc-new-delete.h>
 #endif
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+
+namespace memory
 {
-	namespace ktk
+	void free(void* pointer)
 	{
-		namespace memory
-		{
-			void free(void* pointer) { mi_free(pointer); }
+		mi_free(pointer);
+	}
 
-			void* malloc(ktk::size_t size) { return mi_malloc(size); }
+	void* malloc(ktk::size_t size)
+	{
+		return mi_malloc(size);
+	}
 
-			void* calloc(ktk::size_t count, ktk::size_t size)
-			{
-				return mi_calloc(count, size);
-			}
+	void* calloc(ktk::size_t count, ktk::size_t size)
+	{
+		return mi_calloc(count, size);
+	}
 
-			void* realloc(void* pointer, ktk::size_t newsize)
-			{
-				return mi_realloc(pointer, newsize);
-			}
+	void* realloc(void* pointer, ktk::size_t newsize)
+	{
+		return mi_realloc(pointer, newsize);
+	}
 
-			void* expand(void* pointer, ktk::size_t newsize)
-			{
-				return mi_expand(pointer, newsize);
-			}
+	void* expand(void* pointer, ktk::size_t newsize)
+	{
+		return mi_expand(pointer, newsize);
+	}
 
-			char* strdup(const char* str) { return mi_strdup(str); }
+	char* strdup(const char* str)
+	{
+		return mi_strdup(str);
+	}
 
-			char* strndup(const char* str, size_t n)
-			{
-				return mi_strndup(str, n);
-			}
+	char* strndup(const char* str, size_t n)
+	{
+		return mi_strndup(str, n);
+	}
 
-			void* memcpy(void* p_dest, void* p_src, ktk::size_t count)
-			{
-				return std::memcpy(p_dest, p_src, count);
-			}
-		} // namespace memory
-	}     // namespace ktk
-} // namespace Kotek
+	void* memcpy(void* p_dest, void* p_src, ktk::size_t count)
+	{
+		return std::memcpy(p_dest, p_src, count);
+	}
+} // namespace memory
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK

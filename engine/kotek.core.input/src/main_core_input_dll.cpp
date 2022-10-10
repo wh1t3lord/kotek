@@ -2,40 +2,39 @@
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+bool InitializeModule_Core_Input(ktkMainManager* p_manager)
 {
-	namespace Core
-	{
-		bool InitializeModule_Core_Input(ktkMainManager* p_manager)
-		{
-			p_manager->Set_Input(new ktkInput());
+	p_manager->Set_Input(new ktkInput());
 
-			return true;
-		}
-		bool SerializeModule_Core_Input(ktkMainManager* p_manager) 
-		{
-			return true; 
-		}
+	return true;
+}
+bool SerializeModule_Core_Input(ktkMainManager* p_manager)
+{
+	return true;
+}
 
-		bool DeserializeModule_Core_Input(ktkMainManager* p_manager)
-		{
-			return true;
-		}
-		
-		bool ShutdownModule_Core_Input(ktkMainManager* p_manager)
-		{
-			ktkInput* p_instance =
-				dynamic_cast<ktkInput*>(p_manager->GetInput());
+bool DeserializeModule_Core_Input(ktkMainManager* p_manager)
+{
+	return true;
+}
 
-			KOTEK_ASSERT(p_instance,
-				"you must get a valid pointer of ktkInput. Otherwise you got a "
-			    "different type at all!!");
+bool ShutdownModule_Core_Input(ktkMainManager* p_manager)
+{
+	ktkInput* p_instance = dynamic_cast<ktkInput*>(p_manager->GetInput());
 
-			delete p_instance;
+	KOTEK_ASSERT(p_instance,
+		"you must get a valid pointer of ktkInput. Otherwise you got a "
+		"different type at all!!");
 
-			p_manager->Set_Input(nullptr);
+	delete p_instance;
 
-			return true; 
-		}
-	} // namespace Core
-} // namespace Kotek
+	p_manager->Set_Input(nullptr);
+
+	return true;
+}
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

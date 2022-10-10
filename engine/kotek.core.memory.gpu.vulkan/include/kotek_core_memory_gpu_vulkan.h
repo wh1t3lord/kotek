@@ -4,21 +4,21 @@
 #include <kotek.core.os/include/kotek_core_os.h>
 #include "vk_mem_alloc.h"
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-}
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
 
-namespace Kotek
-{
-	namespace Core
-	{
-		bool InitializeModule_Core_Memory_GPU_Vulkan(ktkMainManager* p_manager);
-		bool ShutdownModule_Core_Memory_GPU_Vulkan(ktkMainManager* p_manager);
-		bool SerializeModule_Core_Memory_GPU_Vulkan(ktkMainManager* p_manager);
-		bool DeserializeModule_Core_Memory_GPU_Vulkan(ktkMainManager* p_manager);
-	}
-}
+class ktkMainManager;
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+bool InitializeModule_Core_Memory_GPU_Vulkan(ktkMainManager* p_manager);
+bool ShutdownModule_Core_Memory_GPU_Vulkan(ktkMainManager* p_manager);
+bool SerializeModule_Core_Memory_GPU_Vulkan(ktkMainManager* p_manager);
+bool DeserializeModule_Core_Memory_GPU_Vulkan(ktkMainManager* p_manager);
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

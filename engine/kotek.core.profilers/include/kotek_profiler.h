@@ -14,23 +14,23 @@
 
 #endif
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+class ktkProfiler : public ktkIProfiler
 {
-	namespace Core
-	{
-		class ktkProfiler : public ktkIProfiler
-		{
-		public:
-			ktkProfiler(void);
-			~ktkProfiler(void);
+public:
+	ktkProfiler(void);
+	~ktkProfiler(void);
 
-			void Initialize(void) override;
-			void Shutdown(void) override;
+	void Initialize(void) override;
+	void Shutdown(void) override;
 
-			void FrameMark(void) override;
-		};
-	} // namespace Core
-} // namespace Kotek
+	void FrameMark(void) override;
+};
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
 
 #ifdef KOTEK_USE_CPU_PROFILER
 	#define KOTEK_CPU_PROFILE() ZoneScoped;

@@ -24,24 +24,23 @@ struct fmt::formatter<Kotek::ktk::string, Kotek::ktk::tchar>
 	}
 };
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+
+template <typename... Args>
+ktk::string format(const ktk::string& text, Args&&... args) noexcept
 {
-	namespace ktk
-	{
-		template <typename... Args>
-		ktk::string format(const ktk::string& text, Args&&... args) noexcept
-		{
-			const auto& data =
-				fmt::format(text.get_as_is(), std::forward<Args>(args)...);
+	const auto& data =
+		fmt::format(text.get_as_is(), std::forward<Args>(args)...);
 
-			return ktk::string(data.begin(), data.end());
-		}
+	return ktk::string(data.begin(), data.end());
+}
 
-		template <typename... Args>
-		void print(fmt::format_string<Args...> fmt, Args&&... args)
-		{
-			fmt::print(fmt, args...);
-		}
+template <typename... Args>
+void print(fmt::format_string<Args...> fmt, Args&&... args)
+{
+	fmt::print(fmt, args...);
+}
 
-	} // namespace ktk
-} // namespace Kotek
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK
