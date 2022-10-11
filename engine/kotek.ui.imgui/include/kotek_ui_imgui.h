@@ -56,22 +56,21 @@ KOTEK_CPP_DISABLE_ALL_WARNINGS_POP
 
 #include "kotek_ui_imgui_wrapper.h"
 
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+class ktkMainManager;
 
-namespace Kotek
-{
-	namespace UI
-	{
-		bool InitializeModule_UI_IMGUI(Core::ktkMainManager*);
-		bool ShutdownModule_UI_IMGUI(Core::ktkMainManager*);
-		bool SerializeModule_UI_IMGUI(Core::ktkMainManager*);
-		bool DeserializeModule_UI_IMGUI(Core::ktkMainManager*);
-	} // namespace UI
-} // namespace Kotek
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_UI
+
+bool InitializeModule_UI_IMGUI(Core::ktkMainManager*);
+bool ShutdownModule_UI_IMGUI(Core::ktkMainManager*);
+bool SerializeModule_UI_IMGUI(Core::ktkMainManager*);
+bool DeserializeModule_UI_IMGUI(Core::ktkMainManager*);
+
+KOTEK_END_NAMESPACE_UI
+KOTEK_END_NAMESPACE_KOTEK

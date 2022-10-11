@@ -1,18 +1,18 @@
 #pragma once
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-}
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
 
-namespace Kotek
-{
-	namespace Render
-	{
-		bool InitializeModule_Render_Shared_DX(Core::ktkMainManager*);
-		bool ShutdownModule_Render_Shared_DX(Core::ktkMainManager*);
-	} // namespace Render
-} // namespace Kotek
+class ktkMainManager;
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_RENDER
+
+bool InitializeModule_Render_Shared_DX(Core::ktkMainManager*);
+bool ShutdownModule_Render_Shared_DX(Core::ktkMainManager*);
+
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK

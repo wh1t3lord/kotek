@@ -5,19 +5,19 @@
 #include "kotek_render_graph_simplified_types_output.h"
 #include "kotek_render_data_types.h"
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
 
-namespace Kotek
-{
-	namespace Render
-	{
-		bool InitializeModule_Render_Shared_GL(Core::ktkMainManager*);
-		bool ShutdownModule_Render_Shared_GL(Core::ktkMainManager*);
-	} // namespace Render
-} // namespace Kotek
+class ktkMainManager;
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_RENDER
+
+bool InitializeModule_Render_Shared_GL(Core::ktkMainManager*);
+bool ShutdownModule_Render_Shared_GL(Core::ktkMainManager*);
+
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK

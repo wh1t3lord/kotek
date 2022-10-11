@@ -6,21 +6,21 @@
 	#include <kotek.ui.cef/include/kotek_ui_cef.h>
 #endif
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
 
-namespace Kotek
-{
-	namespace UI
-	{
-		bool InitializeModule_UI(Core::ktkMainManager* p_main_manager);
-		bool ShutdownModule_UI(Core::ktkMainManager* p_main_manager);
-		bool SerializeModule_UI(Core::ktkMainManager* p_main_manager);
-		bool DeserializeModule_UI(Core::ktkMainManager* p_main_manager);
-	} // namespace UI
-} // namespace Kotek
+class ktkMainManager;
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_UI
+
+bool InitializeModule_UI(Core::ktkMainManager* p_main_manager);
+bool ShutdownModule_UI(Core::ktkMainManager* p_main_manager);
+bool SerializeModule_UI(Core::ktkMainManager* p_main_manager);
+bool DeserializeModule_UI(Core::ktkMainManager* p_main_manager);
+
+KOTEK_END_NAMESPACE_UI
+KOTEK_END_NAMESPACE_KOTEK

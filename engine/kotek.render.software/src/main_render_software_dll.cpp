@@ -1,19 +1,19 @@
 #include "../include/kotek_render_software.h"
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_RENDER
+
+bool InitializeModule_Render_Software(Core::ktkMainManager* p_main_manager)
 {
-	namespace Render
-	{
-		bool InitializeModule_Render_Software(Core::ktkMainManager* p_main_manager)
-		{
-			KOTEK_MESSAGE("render module is initialized");
+	KOTEK_MESSAGE("render module is initialized");
 
-			return true;
-		}
+	return true;
+}
 
-		bool ShutdownModule_Render_Software(Core::ktkMainManager* p_main_manager)
-		{
-			return true;
-		}
-	} // namespace Render
-} // namespace Kotek
+bool ShutdownModule_Render_Software(Core::ktkMainManager* p_main_manager)
+{
+	return true;
+}
+
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK

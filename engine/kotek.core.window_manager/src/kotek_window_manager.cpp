@@ -1,61 +1,61 @@
 #include "../include/kotek_window_manager.h"
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+ktkWindowManager::ktkWindowManager(void) : m_p_active_window{} {}
+
+ktkWindowManager::~ktkWindowManager(void) {}
+
+void ktkWindowManager::Initialize(ktkIWindow* p_active_window)
 {
-	namespace Core
+	this->m_p_active_window = p_active_window;
+}
+
+void ktkWindowManager::Shutdown(void)
+{
+	if (this->m_p_active_window)
 	{
-		ktkWindowManager::ktkWindowManager(void) : m_p_active_window{} {}
+		this->m_p_active_window->Shutdown();
+		delete this->m_p_active_window;
+		this->m_p_active_window = nullptr;
+	}
+}
 
-		ktkWindowManager::~ktkWindowManager(void) {}
+void ktkWindowManager::ActiveWindow_PollEvents(void)
+{
+	this->m_p_active_window->PollEvents();
+}
 
-		void ktkWindowManager::Initialize(ktkIWindow* p_active_window)
-		{
-			this->m_p_active_window = p_active_window;
-		}
+void* ktkWindowManager::ActiveWindow_GetHandle(void) const noexcept
+{
+	return this->m_p_active_window->GetHandle();
+}
 
-		void ktkWindowManager::Shutdown(void)
-		{
-			if (this->m_p_active_window)
-			{
-				this->m_p_active_window->Shutdown();
-				delete this->m_p_active_window;
-				this->m_p_active_window = nullptr;
-			}
-		}
+int ktkWindowManager::ActiveWindow_GetHeight(void) const noexcept
+{
+	return this->m_p_active_window->GetHeight();
+}
 
-		void ktkWindowManager::ActiveWindow_PollEvents(void)
-		{
-			this->m_p_active_window->PollEvents();
-		}
+int ktkWindowManager::ActiveWindow_GetWidth(void) const noexcept
+{
+	return this->m_p_active_window->GetWidth();
+}
 
-		void* ktkWindowManager::ActiveWindow_GetHandle(void) const noexcept
-		{
-			return this->m_p_active_window->GetHandle();
-		}
+bool ktkWindowManager::ActiveWindow_ShouldToClose(void)
+{
+	return this->m_p_active_window->Is_NeedToClose();
+}
 
-		int ktkWindowManager::ActiveWindow_GetHeight(void) const noexcept
-		{
-			return this->m_p_active_window->GetHeight();
-		}
+void ktkWindowManager::ActiveWindow_MakeContextCurrent(void) noexcept
+{
+	this->m_p_active_window->MakeContextCurrent();
+}
 
-		int ktkWindowManager::ActiveWindow_GetWidth(void) const noexcept
-		{
-			return this->m_p_active_window->GetWidth();
-		}
+ktkIWindow* ktkWindowManager::Get_ActiveWindow(void) const noexcept
+{
+	return this->m_p_active_window;
+}
 
-		bool ktkWindowManager::ActiveWindow_ShouldToClose(void)
-		{
-			return this->m_p_active_window->Is_NeedToClose();
-		}
-
-		void ktkWindowManager::ActiveWindow_MakeContextCurrent(void) noexcept
-		{
-			this->m_p_active_window->MakeContextCurrent();
-		}
-
-		ktkIWindow* ktkWindowManager::Get_ActiveWindow(void) const noexcept
-		{
-			return this->m_p_active_window;
-		}
-	} // namespace Core
-} // namespace Kotek
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

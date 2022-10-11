@@ -12,19 +12,15 @@
 	#include <kotek.render.shared.dx/include/kotek_render_shared_dx.h>
 #endif
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+class ktkMainManager;
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
 
-namespace Kotek
-{
-	namespace Render
-	{
-		bool InitializeModule_Render_Shared(Core::ktkMainManager*);
-		bool ShutdownModule_Render_Shared(Core::ktkMainManager*);
-	} // namespace Render
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_RENDER
+bool InitializeModule_Render_Shared(Core::ktkMainManager*);
+bool ShutdownModule_Render_Shared(Core::ktkMainManager*);
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK
