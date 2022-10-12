@@ -23,3 +23,5 @@ add_library(${PROJECT_NAME} STATIC
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	target_link_libraries(${PROJECT_NAME} PUBLIC Boost::headers)
 endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

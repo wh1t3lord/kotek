@@ -2,21 +2,21 @@
 
 #include "kotek_std_alias_casting.h"
 
-namespace Kotek
-{
-	namespace Core
-	{
-		class ktkMainManager;
-	}
-} // namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
 
-namespace Kotek
-{
-	namespace Core
-	{
-		bool InitializeModule_Core_Casting_String(ktkMainManager*);
-		bool ShutdownModule_Core_Casting_String(ktkMainManager*);
-		bool SerializeModule_Core_Casting_String(ktkMainManager*);
-		bool DeserializeModule_Core_Casting_String(ktkMainManager*);
-	} // namespace Core
-} // namespace Kotek
+class ktkMainManager;
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+bool InitializeModule_Core_Casting_String(ktkMainManager*);
+bool ShutdownModule_Core_Casting_String(ktkMainManager*);
+bool SerializeModule_Core_Casting_String(ktkMainManager*);
+bool DeserializeModule_Core_Casting_String(ktkMainManager*);
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

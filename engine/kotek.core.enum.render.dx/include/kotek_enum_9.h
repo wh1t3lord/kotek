@@ -1,12 +1,12 @@
 #pragma once
 
-namespace Kotek
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_RENDER
+
+namespace dx9
 {
-	namespace Render
-	{
-		namespace dx9
-		{
-			
-		}
-	}
+
 }
+
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK
