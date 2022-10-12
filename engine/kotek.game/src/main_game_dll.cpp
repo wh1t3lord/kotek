@@ -11,6 +11,7 @@
 
 bool isUserCallbackUpdateFunctionContainsLoop = false;
 
+#ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 using ktkUserCallbackInitialize = bool(Kotek::Core::ktkMainManager*);
 using ktkUserCallbackShutdown = bool(Kotek::Core::ktkMainManager*);
 using ktkUserCallbackUpdate = void(Kotek::Core::ktkMainManager*);
@@ -23,6 +24,11 @@ Kotek::ktk::function<ktkUserCallbackShutdown>
 Kotek::ktk::function<ktkUserCallbackUpdate> p_user_callback_update_game_library;
 Kotek::ktk::function<ktkUserCallbackInitializeRender>
 	p_user_callback_initialize_render_from_game_library;
+#endif
+
+#ifdef KOTEK_USE_DEVELOPMENT_TYPE_STATIC
+	#include KOTEK_USER_GAME_MODULE_HEADER_FILE
+#endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 
@@ -35,6 +41,7 @@ namespace Game
 
 	bool InitializeModule_Game(Core::ktkMainManager* p_main_manager)
 	{
+#ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 		auto path_to_system_json =
 			p_main_manager->GetFileSystem()->GetFolderByEnum(
 				Core::eFolderIndex::kFolderIndex_Root);
@@ -57,14 +64,14 @@ namespace Game
 		const auto& field_update_callback_name =
 			file.Get_String(Core::kSysInfoFieldName_UpdateCallback);
 
-#ifdef KOTEK_PLATFORM_WINDOWS
+	#ifdef KOTEK_PLATFORM_WINDOWS
 		const auto& field_library_name =
 			file.Get_String(Core::kSysInfoFieldName_UserLibraryNameWindows);
-#elif KOTEK_PLATFORM_LINUX
+	#elif KOTEK_PLATFORM_LINUX
 		KOTEK_ASSERT(false,
 			"we don't test such feature, but it supposes to support on "
 			"Linux platform too");
-#endif
+	#endif
 		const auto& field_initialize_render_callback_name =
 			file.Get_String(Core::kSysInfoFieldName_InitializeCallback_Render);
 
@@ -124,14 +131,27 @@ namespace Game
 			KOTEK_ASSERT(p_main_manager->GetGameManager(),
 				"you must set game manager to main manager!!!!");
 		}
+#elif defined(KOTEK_USE_DEVELOPMENT_TYPE_STATIC)
+		::KOTEK_USER_FUNCTION_INITIALIZE_MODULE_GAME(p_main_manager);
+		KOTEK_ASSERT(p_main_manager->GetGameManager(),
+			"you must set game manager to main manager!");
+#else
+	#error Unknown development type, see what you specified in your cmd/cmake GUI. The macro accepts only two variables STATIC or SHARED
+#endif
+
 		return true;
 	}
 
 	bool ShutdownModule_Game(Core::ktkMainManager* p_main_manager)
 	{
+#ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 		if (p_user_callback_shutdown_game_library)
 			p_user_callback_shutdown_game_library(p_main_manager);
-
+#elif defined(KOTEK_USE_DEVELOPMENT_TYPE_STATIC)
+		::KOTEK_USER_FUNCTION_SHUTDOWN_MODULE_GAME(p_main_manager);
+#else
+	#error Unknown development type, see what you specified in your cmd/cmake GUI. The macro accepts only two variables STATIC or SHARED
+#endif
 		// TODO: unload with resource manager
 		//	p_main_manager.UnLoadUserGameLibrary();
 
@@ -263,8 +283,14 @@ namespace Engine
 
 		UI::InitializeModule_UI(p_main_manager);
 
+#ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 		if (p_user_callback_initialize_render_from_game_library)
 			p_user_callback_initialize_render_from_game_library(p_main_manager);
+#elif defined(KOTEK_USE_DEVELOPMENT_TYPE_STATIC)
+		KOTEK_USER_FUNCTION_INITIALIZE_MODULE_RENDER(p_main_manager);
+#else
+	#error Unknown development type, see what you specified in your cmd/cmake GUI. The macro accepts only two variables STATIC or SHARED
+#endif
 
 		Engine::ValidateMainManager(p_main_manager);
 
@@ -288,8 +314,13 @@ namespace Engine
 
 	bool ExecuteEngine(Core::ktkMainManager* p_main_manager)
 	{
+#ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 		p_user_callback_update_game_library(p_main_manager);
-
+#elif defined(KOTEK_USE_DEVELOPMENT_TYPE_STATIC)
+		KOTEK_USER_FUNCTION_UPDATE_MODULE_GAME(p_main_manager);
+#else
+	#error Unknown development type, see what you specified in your cmd/cmake GUI. The macro accepts only two variables STATIC or SHARED
+#endif
 		return true;
 	}
 
