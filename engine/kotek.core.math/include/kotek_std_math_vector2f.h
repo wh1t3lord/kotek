@@ -11,7 +11,7 @@ namespace math
 	{
 	public:
 		vector2f(float x, float y) : m_base(x, y) {}
-		vector2f(const base_vec2_t& data) : m_base(data) {}
+		vector2f(const Kotek::ktk::math::base_vec2_t& data) : m_base(data) {}
 		vector2f(const vector2f& data) : m_base(data.m_base) {}
 		vector2f(void) : m_base{} {}
 
