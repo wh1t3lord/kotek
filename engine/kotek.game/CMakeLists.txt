@@ -12,8 +12,7 @@ if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 		message(FATAL_ERROR "specify KOTEK_USER_GAME_PROJECT_NAME of folder where your root source directory is located. e.g. see sandbox example https://gitlab.com/wh1t3lord/sandbox")
 	endif()
 
-#	include_directories(../../../${KOTEK_USER_GAME_PROJECT_NAME})
-	add_subdirectory(../../../ ${KOTEK_USER_GAME_PROJECT_NAME})
+	include_directories(../../../${KOTEK_USER_GAME_PROJECT_NAME})
 endif()
 
 add_library(${PROJECT_NAME} STATIC

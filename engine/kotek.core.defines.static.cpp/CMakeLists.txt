@@ -179,6 +179,22 @@ elseif("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 	if ("${KOTEK_GAME_MODULE_FUNCTIONS_FILE}" STREQUAL "")
 		message(FATAL_ERROR "you must specify KOTEK_GAME_MODULE_FUNCTIONS_FILE by writting <path/to/your_file_where_standard_functions_for_running_module_are_defined.h>. But you make a path from root of your folder see sandbox example https://gitlab.com/wh1t3lord/sandbox")
 	endif()
+
+	if ("${KOTEK_USER_FUNCTION_IMG}" STREQUAL "")
+		set(KOTEK_USER_FUNCTION_IMG "InitializeModule_Game")
+	endif()
+
+	if ("${KOTEK_USER_FUNCTION_SMG}" STREQUAL "")
+		set(KOTEK_USER_FUNCTION_SMG "ShutdownModule_Game")
+	endif()
+
+	if ("${KOTEK_USER_FUNCTION_UMG}" STREQUAL "")
+		set(KOTEK_USER_FUNCTION_UMG "UpdateModule_Game")
+	endif()
+
+	if ("${KOTEK_USER_FUNCTION_IMR}" STREQUAL "")
+		set(KOTEK_USER_FUNCTION_IMR "InitializeModule_Render")
+	endif()
 else()
 	message(FATAL_ERROR "you must specify KOTEK_DEVELOPMENT_TYPE as SHARED or STATIC...")
 endif()
@@ -344,6 +360,10 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 		file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} 
 		"
 			#define KOTEK_USER_GAME_MODULE_HEADER_FILE ${KOTEK_GAME_MODULE_FUNCTIONS_FILE}
+			#define KOTEK_USER_FUNCTION_INITIALIZE_MODULE_GAME ${KOTEK_USER_FUNCTION_IMG}
+			#define KOTEK_USER_FUNCTION_SHUTDOWN_MODULE_GAME ${KOTEK_USER_FUNCTION_SMG}
+			#define KOTEK_USER_FUNCTION_UPDATE_MODULE_GAME ${KOTEK_USER_FUNCTION_UMG}
+			#define KOTEK_USER_FUNCTION_INITIALIZE_MODULE_RENDER ${KOTEK_USER_FUNCTION_IMR}
 		")
 	endif()
 else()

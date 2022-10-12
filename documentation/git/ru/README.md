@@ -46,6 +46,78 @@
 
 ## Заметки
 
+### Команды для CMake
+
+#### Смена типа разработки
+
+Предположим, что вам захотелось иметь один "экзешник" в котором просто всё, вам не надо иметь игру которая представлена в виде dll/so/etc. Тогда обращаемся к следующим параметрам, которые мы должны указать:
+
+- KOTEK_DEVELOPMENT_TYPE 
+
+Данный параметр принимает либо SHARED (по умолчанию), либо STATIC, в нашем случае мы пишем так
+
+> -DKOTEK_DEVELOPMENT_TYPE=STATIC
+
+##### Если у нас KOTEK_DEVELOPMENT_TYPE=STATIC
+
+Далее, требуется указать следующие параметры:
+
+- KOTEK_USER_GAME_PROJECT_NAME
+
+Здесь мы указываем наименование папки, корневого каталога (см. раздел документации о стандарте разработки), а также смотрите пример в [sandbox](https://gitlab.com/wh1t3lord/sandbox).
+
+На примере sandbox мы пишем название папки такое
+
+> -DKOTEK_USER_GAME_PROJECT_NAME=sandbox
+
+- KOTEK_USER_GAME_MODULE_FOR_LINK_NAME
+
+Здесь мы также указываем уже наименование проекта которые нужно линковать к kotek.game проекту. 
+
+На примере sandbox будет так
+
+> -DKOTEK_USER_GAME_MODULE_FOR_LINK_NAME="sandbox.game"
+
+- KOTEK_GAME_MODULE_FUNCTIONS_FILE
+
+Здесь мы указываем путь до файла который содержит стандартные функции при обращении к модулю (см. документацию о стандарте разработке для пользователя).
+
+На примере sandbox будет
+
+> -DKOTEK_GAME_MODULE_FUNCTIONS_FILE="<game/sandbox_game.h>"
+
+Таким образом, конечная команда для генерации решения для статической разработки то получаем следующее:
+
+На примере sandbox
+
+> cmake -DCMAKE_BUILD_TYPE=Debug -DKOTEK_DEPS_FOLDER="kotek-engine-deps-win32-vs19-full" -DKOTEK_DEVELOPMENT_TYPE=STATIC -DKOTEK_USER_GAME_PROJECT_NAME=sandbox -DKOTEK_USER_GAME_MODULE_FOR_LINK_NAME="sandbox.game" -DKOTEK_GAME_MODULE_FUNCTIONS_FILE="<game/sandbox_game.h>" ..
+
+Если у вас свои функции для определения модуля, то вы должны определить наименования через соответствующие макросы:
+
+- KOTEK_USER_FUNCTION_IMG
+
+По умолчанию стоит параметр:
+
+> -DKOTEK_USER_FUNCTION_IMG=InitializeModule_Game
+
+- KOTEK_USER_FUNCTION_SMG
+
+По умолчанию стоит параметр:
+
+> -DKOTEK_USER_FUNCTION_SMG=ShutdownModule_Game
+
+- KOTEK_USER_FUNCTION_UMG
+
+По умолчанию стоит параметр:
+
+> -DKOTEK_USER_FUNCTION_UMG=UpdateModule_Game
+
+- KOTEK_USER_FUNCTION_IMR
+
+По умолчанию стоит параметр:
+
+> -DKOTEK_USER_FUNCTION_IMR=InitializeModule_Render
+
 ### Работа с проектами
 
 - Не используйте файлы с форматом ".c" которые относятся строго к языку С, потому что cmake будет генерировать precompiled header files как для С++ так и для С из-за этого вы не сможете собрать свое решение успешно.
