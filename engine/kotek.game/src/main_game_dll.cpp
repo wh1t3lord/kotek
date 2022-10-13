@@ -287,7 +287,7 @@ namespace Engine
 		if (p_user_callback_initialize_render_from_game_library)
 			p_user_callback_initialize_render_from_game_library(p_main_manager);
 #elif defined(KOTEK_USE_DEVELOPMENT_TYPE_STATIC)
-		KOTEK_USER_FUNCTION_INITIALIZE_MODULE_RENDER(p_main_manager);
+		::KOTEK_USER_FUNCTION_INITIALIZE_MODULE_RENDER(p_main_manager);
 #else
 	#error Unknown development type, see what you specified in your cmd/cmake GUI. The macro accepts only two variables STATIC or SHARED
 #endif
@@ -317,7 +317,7 @@ namespace Engine
 #ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 		p_user_callback_update_game_library(p_main_manager);
 #elif defined(KOTEK_USE_DEVELOPMENT_TYPE_STATIC)
-		KOTEK_USER_FUNCTION_UPDATE_MODULE_GAME(p_main_manager);
+		::KOTEK_USER_FUNCTION_UPDATE_MODULE_GAME(p_main_manager);
 #else
 	#error Unknown development type, see what you specified in your cmd/cmake GUI. The macro accepts only two variables STATIC or SHARED
 #endif
