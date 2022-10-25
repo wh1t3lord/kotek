@@ -21,15 +21,12 @@ public:
 	bool DetectTypeByFullPath(
 		const ktk::filesystem::path& path) noexcept override;
 
-	Core::ktkIResourceFormatAnalyzer*
-	Get_FormatAnalyzer() const noexcept override;
-
-	void Set_FormatAnalyzer(
-		Core::ktkIResourceFormatAnalyzer* p_format_analyzer) noexcept override;
+	// TODO: finish this class, because it doesn't have implementation of pure
+	// virtual functions
 
 private:
 	Core::ktkIFileSystem* m_p_filesystem;
-	Core::ktkIResourceFormatAnalyzer* m_p_format_analyzer;
+	ktk::unordered_map<ktk::string, Core::ktkIResourceLoader*> m_loaders;
 };
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK

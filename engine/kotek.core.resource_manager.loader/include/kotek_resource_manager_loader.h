@@ -24,23 +24,8 @@ public:
 	ktkIResourceLoader* Get_Loader(
 		eResourceLoadingType resource_type) const noexcept override;
 
-	ktk::any Load_Text(const ktk::filesystem::path& path) noexcept override;
-	ktk::any Load_Texture(const ktk::filesystem::path& path) noexcept override;
-	ktk::any Load_Model(const ktk::filesystem::path& path) noexcept override;
-	ktk::any Load_Sound(const ktk::filesystem::path& path) noexcept override;
-	ktk::any Load_Video(const ktk::filesystem::path& path) noexcept override;
-	ktk::any Load_CPlusPlusLibrary(
-		const ktk::filesystem::path& path) noexcept override;
-
-	bool Load_Text(const ktk::filesystem::path& path,
-		ktk::any object_from_construct) noexcept override;
-	bool Load_Texture(const ktk::filesystem::path& path,
-		ktk::any object_from_construct) noexcept override;
-	bool Load_Model(const ktk::filesystem::path& path,
-		ktk::any object_from_construct) noexcept override;
-	bool Load_Sound(const ktk::filesystem::path& path,
-		ktk::any object_from_construct) noexcept override;
-	bool Load_Video(const ktk::filesystem::path& path,
+	ktk::any Load(const ktk::filesystem::path& path) noexcept override;
+	bool Load(const ktk::filesystem::path& path,
 		ktk::any object_from_construct) noexcept override;
 
 protected:

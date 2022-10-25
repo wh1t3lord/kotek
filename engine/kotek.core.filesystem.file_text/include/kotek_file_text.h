@@ -18,14 +18,14 @@ constexpr const char* kFormatFile_Text = ".json";
 
 // TODO: think about save and load operations, because it manages
 // resource manager and its loader and saver managers
-class ktkFile
+class ktkFileText
 {
 public:
-	ktkFile(void);
-	ktkFile(const ktkFile& instance);
-	ktkFile(const ktk::string& file_name);
-	ktkFile& operator=(const ktkFile& instance);
-	~ktkFile(void);
+	ktkFileText(void);
+	ktkFileText(const ktkFileText& instance);
+	ktkFileText(const ktk::string& file_name);
+	ktkFileText& operator=(const ktkFileText& instance);
+	~ktkFileText(void);
 
 	/* TODO: implement separated loader and saver classes
 	bool Load(

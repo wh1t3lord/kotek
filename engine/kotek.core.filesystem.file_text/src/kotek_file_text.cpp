@@ -3,25 +3,25 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkFile::ktkFile(void) {}
+ktkFileText::ktkFileText(void) {}
 
-ktkFile::ktkFile(const ktkFile& instance) : m_json(instance.m_json) {}
+ktkFileText::ktkFileText(const ktkFileText& instance) : m_json(instance.m_json) {}
 
-ktkFile::ktkFile(const ktk::string& file_name) : m_file_name(file_name)
+ktkFileText::ktkFileText(const ktk::string& file_name) : m_file_name(file_name)
 {
 	this->m_file_name += kFormatFile_Text;
 }
 
-ktkFile& ktkFile::operator=(const ktkFile& instance)
+ktkFileText& ktkFileText::operator=(const ktkFileText& instance)
 {
 	this->m_json = instance.m_json;
 	return *this;
 }
 
-ktkFile::~ktkFile(void) {}
+ktkFileText::~ktkFileText(void) {}
 
 /* TODO: implement separated loader and saver classes
-bool ktkFile::Load(
+bool ktkFileText::Load(
     Core::ktkMainManager& main_manager, const ktk::string& path)
 {
     if (path.empty())
@@ -96,7 +96,7 @@ bool ktkFile::Load(
     return true;
 }
 
-bool ktkFile::Save(Core::ktkMainManager& main_manager,
+bool ktkFileText::Save(Core::ktkMainManager& main_manager,
     const ktk::string& full_path_to_folder,
     const ktk::string& full_path_to_file, bool is_format)
 {
@@ -104,13 +104,13 @@ bool ktkFile::Save(Core::ktkMainManager& main_manager,
         full_path_to_file, is_format);
 }
 
-bool ktkFile::Save(
+bool ktkFileText::Save(
     Core::ktkMainManager& main_manager, const ktk::string& path)
 {
     return this->Save(main_manager.GetFileSystem(), path);
 }
 
-bool ktkFile::Save(Core::ktkFileSystem* p_file_system,
+bool ktkFileText::Save(Core::ktkFileTextSystem* p_file_system,
     const ktk::string& full_path_to_folder,
     const ktk::string& full_path_to_file, bool is_format)
 {
@@ -157,7 +157,7 @@ bool ktkFile::Save(Core::ktkFileSystem* p_file_system,
     return true;
 }
 
-bool ktkFile::Save(
+bool ktkFileText::Save(
     Core::ktkFileSystem* p_file_system, const ktk::string& path)
 {
     ktk::string full_path_with_file_and_its_format = path;
@@ -172,17 +172,17 @@ bool ktkFile::Save(
 }
 */
 
-ktk::string ktkFile::Get_String(const ktk::string& key_name) const noexcept
+ktk::string ktkFileText::Get_String(const ktk::string& key_name) const noexcept
 {
 	return this->m_json.GetString(key_name);
 }
 
-const ktk::json::object& ktkFile::Get_Json(void) const noexcept
+const ktk::json::object& ktkFileText::Get_Json(void) const noexcept
 {
 	return this->m_json.GetObject();
 }
 
-bool ktkFile::IsKeyExist(const ktk::string& field_name) const noexcept
+bool ktkFileText::IsKeyExist(const ktk::string& field_name) const noexcept
 {
 	if (field_name.empty())
 	{
@@ -195,23 +195,23 @@ bool ktkFile::IsKeyExist(const ktk::string& field_name) const noexcept
 	return json.find(field_name.get_as_legacy()) != json.end();
 }
 
-const ktk::string& ktkFile::Get_FileName(void) const noexcept
+const ktk::string& ktkFileText::Get_FileName(void) const noexcept
 {
 	return this->m_file_name;
 }
 
-void ktkFile::Set_FileName(const ktk::string& file_name) noexcept
+void ktkFileText::Set_FileName(const ktk::string& file_name) noexcept
 {
 	this->m_file_name = file_name;
 	this->m_file_name += kFormatFile_Text;
 }
 
-void ktkFile::Set_Json(const ktkJson& data) noexcept
+void ktkFileText::Set_Json(const ktkJson& data) noexcept
 {
 	this->m_json = data;
 }
 
-ktk::string ktkFile::Get_FileAsSerializedString(void) const noexcept
+ktk::string ktkFileText::Get_FileAsSerializedString(void) const noexcept
 {
 	return this->m_json.Serialize();
 }

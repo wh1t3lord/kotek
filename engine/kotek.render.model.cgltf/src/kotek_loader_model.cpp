@@ -1,26 +1,16 @@
-#include "../include/kotek_loader.h"
+#include "../include/kotek_loader_model.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
 ktkLoaderModel_CGLTF::ktkLoaderModel_CGLTF(Core::ktkIFileSystem* p_filesystem) :
-	m_p_filesystem{p_filesystem}, m_p_format_analyzer{}
+	m_p_filesystem{p_filesystem}
 {
 }
 
-ktkLoaderModel_CGLTF::ktkLoaderModel_CGLTF(void) :
-	m_p_filesystem{}, m_p_format_analyzer{}
-{
-}
+ktkLoaderModel_CGLTF::ktkLoaderModel_CGLTF(void) : m_p_filesystem{} {}
 
-ktkLoaderModel_CGLTF::~ktkLoaderModel_CGLTF(void)
-{
-	if (this->m_p_format_analyzer)
-	{
-		delete this->m_p_format_analyzer;
-		this->m_p_format_analyzer = nullptr;
-	}
-}
+ktkLoaderModel_CGLTF::~ktkLoaderModel_CGLTF(void) {}
 
 ktk::any ktkLoaderModel_CGLTF::Load(const ktk::filesystem::path& path) noexcept
 {
@@ -54,19 +44,16 @@ Core::eResourceLoadingType ktkLoaderModel_CGLTF::Get_Type(void) const noexcept
 bool ktkLoaderModel_CGLTF::DetectTypeByFullPath(
 	const ktk::filesystem::path& path) noexcept
 {
-	return this->m_p_format_analyzer->Analyze(path);
-}
+	KOTEK_ASSERT(
+		path.empty() == false, "you must pass a not empty path to file!");
 
-Core::ktkIResourceFormatAnalyzer*
-ktkLoaderModel_CGLTF::Get_FormatAnalyzer() const noexcept
-{
-	return this->m_p_format_analyzer;
-}
+	KOTEK_ASSERT(path.has_extension(),
+		"you must have extension for your file, supported extensions "
+		"for analyze: [{}]",
+		this->Get_AllSupportedFormats());
 
-void ktkLoaderModel_CGLTF::Set_FormatAnalyzer(
-	Core::ktkIResourceFormatAnalyzer* p_format_analyzer) noexcept
-{
-	this->m_p_format_analyzer = p_format_analyzer;
+	return this->m_loaders.find(path.extension().c_str()) !=
+		this->m_loaders.end();
 }
 
 KOTEK_END_NAMESPACE_RENDER

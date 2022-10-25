@@ -65,6 +65,48 @@ ktkIResourceLoader* ktkResourceLoaderManager::Get_Loader(
 	return p_result;
 }
 
+ktk::any ktkResourceLoaderManager::Load(
+	const ktk::filesystem::path& path) noexcept
+{
+	KOTEK_ASSERT(path.has_extension(),
+		"you must provide an extension for your file: [{}]", path);
+
+	auto resource_type = this->DetectResourceTypeByFileFormat(path);
+
+	auto* p_loader = this->Get_Loader(resource_type);
+
+	KOTEK_ASSERT(p_loader, "failed to find loader for format file: [{}]",
+		path.extension());
+
+	if (p_loader)
+	{
+		return p_loader->Load(path);
+	}
+
+	return ktk::any();
+}
+
+bool ktkResourceLoaderManager::Load(
+	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
+{
+	KOTEK_ASSERT(path.has_extension(),
+		"you must provide an extension for your file: [{}]", path);
+
+	bool result{};
+
+	auto resource_type = this->DetectResourceTypeByFileFormat(path);
+
+	auto* p_loader = this->Get_Loader(resource_type);
+
+	KOTEK_ASSERT(p_loader, "failed to find loader for format file: [{}]",
+		path.extension());
+
+    if (p_loader)
+		result = p_loader->Load(path, object_from_construct);
+
+	return result;
+}
+
 eResourceLoadingType ktkResourceLoaderManager::DetectResourceTypeByFileFormat(
 	const ktk::filesystem::path& path) noexcept
 {
@@ -100,156 +142,160 @@ eResourceLoadingType ktkResourceLoaderManager::DetectResourceTypeByFileFormat(
 	return result;
 }
 
+/*
 ktk::any ktkResourceLoaderManager::Load_Text(
-	const ktk::filesystem::path& path) noexcept
+    const ktk::filesystem::path& path) noexcept
 {
-	return ktk::any();
+    return ktk::any();
 }
 
 ktk::any ktkResourceLoaderManager::Load_Texture(
-	const ktk::filesystem::path& path) noexcept
+    const ktk::filesystem::path& path) noexcept
 {
-	return ktk::any();
+    return ktk::any();
 }
 
 ktk::any ktkResourceLoaderManager::Load_Model(
-	const ktk::filesystem::path& path) noexcept
+    const ktk::filesystem::path& path) noexcept
 {
-	auto resource_type = this->DetectResourceTypeByFileFormat(path);
+    auto resource_type = this->DetectResourceTypeByFileFormat(path);
 
-	auto* p_loader = this->Get_Loader(resource_type);
+    auto* p_loader = this->Get_Loader(resource_type);
 
-	if (p_loader)
-	{
-		auto result = p_loader->Load(path);
-		return result;
-	}
+    if (p_loader)
+    {
+        auto result = p_loader->Load(path);
+        return result;
+    }
 
-	return ktk::any();
+    return ktk::any();
 }
 
 ktk::any ktkResourceLoaderManager::Load_Sound(
-	const ktk::filesystem::path& path) noexcept
+    const ktk::filesystem::path& path) noexcept
 {
-	return ktk::any();
+    return ktk::any();
 }
 
 ktk::any ktkResourceLoaderManager::Load_Video(
-	const ktk::filesystem::path& path) noexcept
+    const ktk::filesystem::path& path) noexcept
 {
-	return ktk::any();
+    return ktk::any();
 }
 
 ktk::any ktkResourceLoaderManager::Load_CPlusPlusLibrary(
-	const ktk::filesystem::path& path) noexcept
+    const ktk::filesystem::path& path) noexcept
 {
-	return ktk::any();
+    return ktk::any();
 }
 
 bool ktkResourceLoaderManager::Load_Text(
-	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
+    const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
 {
-	if (this->m_p_manager_filesystem->IsValidPath(path) == false)
-	{
-		KOTEK_ASSERT(false, "path is not valid: {}", path.c_str());
-		return false;
-	}
+    if (this->m_p_manager_filesystem->IsValidPath(path) == false)
+    {
+        KOTEK_ASSERT(false, "path is not valid: {}", path.c_str());
+        return false;
+    }
 
-	ktkFile* p_casted_file = std::any_cast<ktkFile*>(object_from_construct);
+    ktkFile* p_casted_file = std::any_cast<ktkFile*>(object_from_construct);
 
-	KOTEK_ASSERT(p_casted_file,
-		"you must have a valid instance of object_from_construct");
+    KOTEK_ASSERT(p_casted_file,
+        "you must have a valid instance of object_from_construct");
 
-	// TODO: make a loader for boost json and for nlohmann as separeted
-	// instances that have implementation based on interface
-	// ktkIResourceLoader
+    // TODO: make a loader for boost json and for nlohmann as separeted
+    // instances that have implementation based on interface
+    // ktkIResourceLoader
 
-	ktkJson json;
+    ktkJson json;
 
 #ifdef KOTEK_DEBUG
-	KOTEK_MESSAGE("reading file: {}", path.c_str());
+    KOTEK_MESSAGE("reading file: {}", path.c_str());
 #endif
 
-	ktk::ifstream file(path);
+    ktk::ifstream file(path);
 
-	if (file.good())
-	{
-		ktk::istreambuf_iterator being(file);
-		ktk::istreambuf_iterator end;
+    if (file.good())
+    {
+        ktk::istreambuf_iterator being(file);
+        ktk::istreambuf_iterator end;
 
-		ktk::string_legacy content(being, end);
+        ktk::string_legacy content(being, end);
 
-		ktk::json::parser parser;
+        ktk::json::parser parser;
 
-		ktk::json::error_code code;
+        ktk::json::error_code code;
 
-		parser.reset();
+        parser.reset();
 
-		parser.write(content, code);
+        parser.write(content, code);
 
-		if (code)
-		{
-			KOTEK_MESSAGE("can't parse file status: [{}]",
-				ktk::string(code.message()).get_as_is());
-		}
-		else
-		{
-			ktk::json::value data = parser.release();
+        if (code)
+        {
+            KOTEK_MESSAGE("can't parse file status: [{}]",
+                ktk::string(code.message()).get_as_is());
+        }
+        else
+        {
+            ktk::json::value data = parser.release();
 
-			KOTEK_ASSERT(data.is_object(),
-				"your file must be object not a some code of json");
+            KOTEK_ASSERT(data.is_object(),
+                "your file must be object not a some code of json");
 
-			json = data.as_object();
-		}
-	}
-	else
-	{
-		KOTEK_MESSAGE("can't read file: {}", path.c_str());
-		return false;
-	}
+            json = data.as_object();
+        }
+    }
+    else
+    {
+        KOTEK_MESSAGE("can't read file: {}", path.c_str());
+        return false;
+    }
 
-	file.close();
+    file.close();
 
-	p_casted_file->Set_Json(json);
-	p_casted_file->Set_FileName(path.filename().string());
+    p_casted_file->Set_Json(json);
+    p_casted_file->Set_FileName(path.filename().string());
 
-	return true;
+    return true;
 }
 
 bool ktkResourceLoaderManager::Load_Texture(
-	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
+    const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
 {
-	return true;
+    return true;
 }
 
 bool ktkResourceLoaderManager::Load_Model(
-	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
+    const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
 {
-	auto resource_type = this->DetectResourceTypeByFileFormat(path);
+    auto resource_type = this->DetectResourceTypeByFileFormat(path);
 
-	auto* p_loader = this->Get_Loader(resource_type);
+    auto* p_loader = this->Get_Loader(resource_type);
 
-	if (p_loader)
-	{
-		bool result = p_loader->Load(path, object_from_construct);
+    bool result{};
 
-		return result;
-	}
+    if (p_loader)
+    {
+        result = p_loader->Load(path, object_from_construct);
 
-	return false;
+        return result;
+    }
+
+    return result;
 }
 
 bool ktkResourceLoaderManager::Load_Sound(
-	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
+    const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
 {
-	return true;
+    return true;
 }
 
 bool ktkResourceLoaderManager::Load_Video(
-	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
+    const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
 {
-	return true;
+    return true;
 }
+*/
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

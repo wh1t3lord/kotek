@@ -209,16 +209,6 @@ public:
 		void* p_instance, const void* p_callbacks) = 0;
 };
 
-class ktkIResourceFormatAnalyzer
-{
-public:
-	virtual ~ktkIResourceFormatAnalyzer(void) {}
-
-	virtual bool Analyze(const ktk::filesystem::path& path) noexcept = 0;
-
-	virtual ktk::string Get_AllFormats(void) const noexcept = 0;
-};
-
 /// \~english @brief This class stands for implementing own loader for
 /// that case it has only 'Load' method names it means that you specify
 /// what the implementation does. Does it load text or model or even any
@@ -247,19 +237,114 @@ public:
 	virtual bool DetectTypeByFullPath(
 		const ktk::filesystem::path& path) noexcept = 0;
 
-	virtual ktkIResourceFormatAnalyzer* Get_FormatAnalyzer() const noexcept = 0;
-	virtual void Set_FormatAnalyzer(
-		ktkIResourceFormatAnalyzer* p_format_analyzer) noexcept = 0;
-
+	/// \~english @brief This is only for user. You just provide your
+	/// description of loader's implementation and access it through interface.
+	/// @return Returns ktk::string instance by const&
 	virtual const ktk::string& Get_UserDescription() const noexcept
 	{
 		return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION");
 	}
 
+	/// \~english @brief This method is for validation purpose and for
+	/// automatization purpose when LoaderManager picks the loader for analyzed
+	/// path with extension. So for example you pass the path like
+	/// 'C:/mygame/gamedata/models/some_stuff/test.obj' so if you registered a
+	/// loader that contains format '.obj' it must return
+	/// eResourceLoadingType::kModel enum value.
+	/// @return What you specified in overriding, otherwise default value is
+	/// eResourceLoadingType::kUnknown. If you got
+	/// eResourceLoadingType::kUnknown it means you forgot to override the
+	/// method.
 	virtual eResourceLoadingType Get_Type() const noexcept
 	{
 		return eResourceLoadingType::kUnknown;
 	}
+
+	virtual bool Is_FormatSupported(
+		const ktk::filesystem::path& path) noexcept = 0;
+
+	// TODO: ask a question to community: is it reasonable to support files
+	// without formats?
+
+	/// \~english @brief this method needs in case when you have one loader (for
+	/// example you implement for eResourceLoadingType::kModel) but it specifies
+	/// three different formats like (.fbx, .obj and .glb) in such case you need
+	/// to implement three own loaders (because the implementation of loading
+	/// process is different), but you need to pass them to this class through
+	/// constructor (IMO the best option, because you strictly specify for user
+	/// what you must have for allocating a such class, instead of deffered
+	/// initialization like AddLoaderByExtension, it is just an example naming
+	/// and an example approach we don't strict you there at all)
+	///
+	/// So how to imagine what was written about?
+	///
+	/// As a standard we provide one class per enum. It means if I have
+	/// eResourceLoadingType::kModel, it means I can provide only one loader for
+	/// this set of files (formats). But of course some users want to support
+	/// many formats and these formats can have different loading algorithms.
+	/// For that case you need to implement 'general' class that will contain
+	/// implementation for each format that you registered in your 'general'
+	/// class.
+	///
+	/// Let's on minimalistic example:
+	/// @code
+	/// class MyGeneralLoaderFor_kModel_Enum : public
+	/// Kotek::Core::ktkIResourceLoader
+	/// {
+	///	public:
+	///		// as we stated previously we need to register for .obj;.fbx;.glb.
+	///		MyGeneralLoaderFor_kModel_Enum(Kotek::Core::ktkIResourceLoader*
+	///	p_loader_obj, Kotek::Core::ktkIResourceLoader* p_loader_fbx,
+	///	Kotek::Core::ktkIResourceLoader* p_loader_fbx);
+	///
+	///		// in this example we didn't provide overridings (in this case the
+	///		// implementation of pure virtual functions) so we just demonstrate
+	///		// the
+	///		// idea
+	///
+	///			virtual ktkIResourceLoader* Get_Loader(
+	///			const ktk::filesystem::path& extension_of_file) noexcept
+	///			override
+	///			{
+	///				// of course you can provide some checking if it contains
+	///				// the key
+	///
+	///				// and provide so default implementation or something else,
+	///				//but
+	///				// still
+	///
+	///
+	///				/// we just show the idea
+	///				return this->m_loaders.at(extension_of_file);
+	///			}
+	///
+	/// private:
+	///		ktk::unordered_map<ktk::string, Kotek::Core::ktkIResourceLoader*>
+	/// m_loaders;
+	/// };
+	/// @endcode
+	///
+	///
+	///
+	/// @param extension_of_file it is an extension of file (e.g.
+	/// '.obj;.gltf;.txt;.png;.jpg;.mp4; etc'), but important, the string must
+	/// be with DOT! So you can't pass just the name of extension, you need to
+	/// pass the '.some_name'. Currently engine doesn't support files without
+	/// formats.
+	/// @return If user registered loader it would return your registered loader
+	/// that mapped to specified extension. For example if you set a key to your
+	/// map as '.txt' and set the value as new ktkMyLoaderForTxTExampleName so
+	/// as the result of overriding of this method you must get your instance of
+	/// ktkMyLoaderForTxTExampleName by passing '.txt' string to that method.
+	/// (You can choose any other container/method/methodology for returning
+	/// your instance that corresponds to passed argument)
+	///
+	/// @see Kotek::Render::ktkLoaderModel_CGLTF default implementation of cgltf
+	/// loader library
+	virtual ktkIResourceLoader* Get_Loader(
+		const ktk::filesystem::path& extension_of_file) noexcept = 0;
+
+	virtual ktk::string Get_AllSupportedFormats(void) const noexcept = 0;
 };
 
 class ktkIResourceLoaderManager
@@ -276,33 +361,8 @@ public:
 	virtual ktkIResourceLoader* Get_Loader(
 		eResourceLoadingType resource_type) const noexcept = 0;
 
-	virtual ktk::any Load_Text(const ktk::filesystem::path& path) noexcept = 0;
-
-	virtual ktk::any Load_Texture(
-		const ktk::filesystem::path& path) noexcept = 0;
-
-	virtual ktk::any Load_Model(const ktk::filesystem::path& path) noexcept = 0;
-
-	virtual ktk::any Load_Sound(const ktk::filesystem::path& path) noexcept = 0;
-
-	virtual ktk::any Load_Video(const ktk::filesystem::path& path) noexcept = 0;
-
-	virtual ktk::any Load_CPlusPlusLibrary(
-		const ktk::filesystem::path& path) noexcept = 0;
-
-	virtual bool Load_Text(const ktk::filesystem::path& path,
-		ktk::any object_from_construct) noexcept = 0;
-
-	virtual bool Load_Texture(const ktk::filesystem::path& path,
-		ktk::any object_from_construct) noexcept = 0;
-
-	virtual bool Load_Model(const ktk::filesystem::path& path,
-		ktk::any object_from_construct) noexcept = 0;
-
-	virtual bool Load_Sound(const ktk::filesystem::path& path,
-		ktk::any object_from_construct) noexcept = 0;
-
-	virtual bool Load_Video(const ktk::filesystem::path& path,
+	virtual ktk::any Load(const ktk::filesystem::path& path) noexcept = 0;
+	virtual bool Load(const ktk::filesystem::path& path,
 		ktk::any object_from_construct) noexcept = 0;
 
 protected:

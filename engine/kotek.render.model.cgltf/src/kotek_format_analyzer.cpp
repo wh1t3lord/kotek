@@ -20,11 +20,6 @@ bool ktkFormatAnalyzer_CGLTF::Analyze(
 {
 	KOTEK_ASSERT(path.empty() == false, "you can't pass an empty path");
 
-	KOTEK_ASSERT(path.has_extension(),
-		"you must have extension for your file, supported extensions "
-		"for analyze: [{}]",
-		this->Get_AllFormats());
-
 	return this->m_formats.find(path.extension().c_str()) !=
 		this->m_formats.end();
 }
