@@ -10,10 +10,8 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 add_library(${PROJECT_NAME} STATIC
 	"include/cgltf.h"
 	"include/cgltf_write.h"
-	"include/kotek_loader.h"
-	"src/kotek_loader.cpp"
-	"include/kotek_format_analyzer.h"
-	"src/kotek_format_analyzer.cpp"
+	"include/kotek_loader_model.h"
+	"src/kotek_loader_model.cpp"
 	"include/kotek_render_model_cgltf.h"
 	"src/main_render_model_cgltf_dll.cpp"
 )
