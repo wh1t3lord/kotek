@@ -1,5 +1,4 @@
 #include "../include/kotek_render_model_cgltf.h"
-#include "../include/kotek_format_analyzer.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
