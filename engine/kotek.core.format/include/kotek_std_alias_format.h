@@ -4,6 +4,7 @@
 // FMT library from that project
 
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
+#include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 #include <fmt/format.h>
 #include <fmt/xchar.h>
@@ -21,6 +22,25 @@ struct fmt::formatter<Kotek::ktk::string, Kotek::ktk::tchar>
 	inline auto format(Kotek::ktk::string const& str, FormatContext& ctx)
 	{
 		return fmt::format_to(ctx.out(), KOTEK_TEXT("{}"), str.get_as_is());
+	}
+};
+
+template <>
+struct fmt::formatter<Kotek::ktk::filesystem::path, Kotek::ktk::tchar>
+{
+	template <typename ParseContext>
+	constexpr inline auto parse(ParseContext& ctx)
+	{
+		return ctx.begin();
+	}
+
+	template <typename FormatContext>
+	inline auto format(
+		Kotek::ktk::filesystem::path const& str, FormatContext& ctx)
+	{
+		return fmt::format_to(ctx.out(), KOTEK_TEXT("{}"),
+			Kotek::ktk::string(
+				reinterpret_cast<const char*>(str.u8string().c_str())));
 	}
 };
 

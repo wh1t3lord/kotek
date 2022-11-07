@@ -38,6 +38,18 @@ namespace Engine
 
 KOTEK_BEGIN_NAMESPACE_KTK
 class string;
+
+// TODO: replace namespace to preprocessor
+namespace math
+{
+	class vector2f;
+	class vector3f;
+	class vector4f;
+	class matrix2x2f;
+	class matrix3x3f;
+	class matrix4x4f;
+	class quaternionf;
+}
 KOTEK_END_NAMESPACE_KTK
 
 KOTEK_END_NAMESPACE_KOTEK
@@ -259,9 +271,6 @@ public:
 	{
 		return eResourceLoadingType::kUnknown;
 	}
-
-	virtual bool Is_FormatSupported(
-		const ktk::filesystem::path& path) noexcept = 0;
 
 	// TODO: ask a question to community: is it reasonable to support files
 	// without formats?
@@ -677,6 +686,23 @@ class ktkIImguiWrapper
 {
 public:
 	virtual ~ktkIImguiWrapper(void) {}
+
+	virtual void EditDragVec2f(
+		const char* label, ktk::math::vector2f* p_vec) = 0;
+	virtual void EditDragVec3f(
+		const char* label, ktk::math::vector3f* p_vec) = 0;
+	virtual void EditDragVec4f(
+		const char* label, ktk::math::vector4f* p_vec) = 0;
+
+	virtual void EditDragMat2x2f(
+		const char* label, ktk::math::matrix2x2f* p_mat) = 0;
+	virtual void EditDragMat3x3f(
+		const char* label, ktk::math::matrix3x3f* p_mat) = 0;
+	virtual void EditDragMat4x4f(
+		const char* label, ktk::math::matrix4x4f* p_mat) = 0;
+
+	virtual void EditDragQuatf(
+		const char* label, ktk::math::quaternionf* p_quat) = 0;
 
 	virtual bool ImGui_ImplGlfw_InitForOpenGL(
 		GLFWwindow* window, bool install_callbacks) = 0;

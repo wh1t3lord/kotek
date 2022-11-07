@@ -21,8 +21,10 @@ public:
 	bool DetectTypeByFullPath(
 		const ktk::filesystem::path& path) noexcept override;
 
-	// TODO: finish this class, because it doesn't have implementation of pure
-	// virtual functions
+	ktkIResourceLoader* Get_Loader(
+		const ktk::filesystem::path& extension_of_file) noexcept override;
+
+	ktk::string Get_AllSupportedFormats(void) const noexcept override;
 
 private:
 	Core::ktkIFileSystem* m_p_filesystem;

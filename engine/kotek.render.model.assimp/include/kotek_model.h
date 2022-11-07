@@ -16,7 +16,7 @@ public:
 private:
 	ktk::string m_path;
 	ktk::string m_filename;
-	Core::ktkFile m_file;
+	Core::ktkFileText m_file;
 };
 
 KOTEK_END_NAMESPACE_RENDER

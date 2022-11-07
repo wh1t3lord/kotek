@@ -6,382 +6,358 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
-namespace ImGui
-{
-	void EditDragVec2f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::vector2f* p_vec)
-	{
-		if (p_wrapper_imgui == nullptr)
-			return;
-
-		if (p_vec == nullptr)
-			return;
-
-		if (p_wrapper_imgui->CollapsingHeader(label))
-		{
-			float value_x = p_vec->Get_X();
-			if (p_wrapper_imgui->DragFloat("X", &value_x))
-			{
-				p_vec->Set_X(value_x);
-			}
-
-			float value_y = p_vec->Get_Y();
-			if (p_wrapper_imgui->DragFloat("Y", &value_y))
-			{
-				p_vec->Set_Y(value_y);
-			}
-		}
-	}
-
-	void EditDragVec3f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::vector3f* p_vec)
-	{
-		if (p_wrapper_imgui == nullptr)
-			return;
-
-		if (p_vec == nullptr)
-			return;
-
-		if (p_wrapper_imgui->CollapsingHeader(label))
-		{
-			float value_x = p_vec->Get_X();
-			if (p_wrapper_imgui->DragFloat("X", &value_x))
-			{
-				p_vec->Set_X(value_x);
-			}
-
-			float value_y = p_vec->Get_Y();
-			if (p_wrapper_imgui->DragFloat("Y", &value_y))
-			{
-				p_vec->Set_Y(value_y);
-			}
-
-			float value_z = p_vec->Get_Z();
-			if (p_wrapper_imgui->DragFloat("Z", &value_z))
-			{
-				p_vec->Set_Z(value_z);
-			}
-		}
-	}
-
-	void EditDragVec4f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::vector4f* p_vec)
-	{
-		if (p_wrapper_imgui == nullptr)
-			return;
-
-		if (p_vec == nullptr)
-			return;
-
-		if (p_wrapper_imgui->CollapsingHeader(label))
-		{
-			float value_x = p_vec->Get_X();
-			if (p_wrapper_imgui->DragFloat("X", &value_x))
-			{
-				p_vec->Set_X(value_x);
-			}
-
-			float value_y = p_vec->Get_Y();
-			if (p_wrapper_imgui->DragFloat("Y", &value_y))
-			{
-				p_vec->Set_Y(value_y);
-			}
-
-			float value_z = p_vec->Get_Z();
-			if (p_wrapper_imgui->DragFloat("Z", &value_z))
-			{
-				p_vec->Set_Z(value_z);
-			}
-
-			float value_w = p_vec->Get_W();
-			if (p_wrapper_imgui->DragFloat("W", &value_w))
-			{
-				p_vec->Set_W(value_w);
-			}
-		}
-	}
-
-	void EditDragMat2x2f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::matrix2x2f* p_mat)
-	{
-		if (p_wrapper_imgui == nullptr)
-			return;
-
-		if (p_mat == nullptr)
-			return;
-
-		if (p_wrapper_imgui->CollapsingHeader(label))
-		{
-			if (p_wrapper_imgui->CollapsingHeader("Row 0"))
-			{
-				float value_x = p_mat->Get_00();
-				if (p_wrapper_imgui->DragFloat("X (00)", &value_x))
-				{
-					p_mat->Set_00(value_x);
-				}
-
-				float value_y = p_mat->Get_01();
-				if (p_wrapper_imgui->DragFloat("Y (01)", &value_y))
-				{
-					p_mat->Set_01(value_y);
-				}
-			}
-
-			if (p_wrapper_imgui->CollapsingHeader("Row 1"))
-			{
-				float value_x = p_mat->Get_10();
-				if (p_wrapper_imgui->DragFloat("X (10)", &value_x))
-				{
-					p_mat->Set_10(value_x);
-				}
-
-				float value_y = p_mat->Get_11();
-				if (p_wrapper_imgui->DragFloat("Y (11)", &value_y))
-				{
-					p_mat->Set_11(value_y);
-				}
-			}
-		}
-	}
-
-	void EditDragMat3x3f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::matrix3x3f* p_mat)
-	{
-		if (p_wrapper_imgui == nullptr)
-			return;
-
-		if (p_mat == nullptr)
-			return;
-
-		if (p_wrapper_imgui->CollapsingHeader(label))
-		{
-			if (p_wrapper_imgui->CollapsingHeader("Row 0"))
-			{
-				float value_x = p_mat->Get_00();
-				if (p_wrapper_imgui->DragFloat("X (00)", &value_x))
-				{
-					p_mat->Set_00(value_x);
-				}
-
-				float value_y = p_mat->Get_01();
-				if (p_wrapper_imgui->DragFloat("Y (01)", &value_y))
-				{
-					p_mat->Set_01(value_y);
-				}
-
-				float value_z = p_mat->Get_02();
-				if (p_wrapper_imgui->DragFloat("Z (02)", &value_z))
-				{
-					p_mat->Set_02(value_z);
-				}
-			}
-
-			if (p_wrapper_imgui->CollapsingHeader("Row 1"))
-			{
-				float value_x = p_mat->Get_10();
-				if (p_wrapper_imgui->DragFloat("X (10)", &value_x))
-				{
-					p_mat->Set_10(value_x);
-				}
-
-				float value_y = p_mat->Get_11();
-				if (p_wrapper_imgui->DragFloat("Y (11)", &value_y))
-				{
-					p_mat->Set_11(value_y);
-				}
-
-				float value_z = p_mat->Get_12();
-				if (p_wrapper_imgui->DragFloat("Z (12)", &value_z))
-				{
-					p_mat->Set_12(value_z);
-				}
-			}
-
-			if (p_wrapper_imgui->CollapsingHeader("Row 2"))
-			{
-				float value_x = p_mat->Get_20();
-				if (p_wrapper_imgui->DragFloat("X (20)", &value_x))
-				{
-					p_mat->Set_20(value_x);
-				}
-
-				float value_y = p_mat->Get_21();
-				if (p_wrapper_imgui->DragFloat("Y (21)", &value_y))
-				{
-					p_mat->Set_21(value_y);
-				}
-
-				float value_z = p_mat->Get_22();
-				if (p_wrapper_imgui->DragFloat("Z (22)", &value_z))
-				{
-					p_mat->Set_22(value_z);
-				}
-			}
-		}
-	}
-
-	void EditDragMat4x4f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::matrix4x4f* p_mat)
-	{
-		if (p_wrapper_imgui == nullptr)
-			return;
-
-		if (p_mat == nullptr)
-			return;
-
-		if (p_wrapper_imgui->CollapsingHeader(label))
-		{
-			if (p_wrapper_imgui->CollapsingHeader("Row 0"))
-			{
-				float value_x = p_mat->Get_00();
-				if (p_wrapper_imgui->DragFloat("X (00)", &value_x))
-				{
-					p_mat->Set_00(value_x);
-				}
-
-				float value_y = p_mat->Get_01();
-				if (p_wrapper_imgui->DragFloat("Y (01)", &value_y))
-				{
-					p_mat->Set_01(value_y);
-				}
-
-				float value_z = p_mat->Get_02();
-				if (p_wrapper_imgui->DragFloat("Z (02)", &value_z))
-				{
-					p_mat->Set_02(value_z);
-				}
-
-				float value_w = p_mat->Get_03();
-				if (p_wrapper_imgui->DragFloat("W (03)", &value_w))
-				{
-					p_mat->Set_03(value_w);
-				}
-			}
-
-			if (p_wrapper_imgui->CollapsingHeader("Row 1"))
-			{
-				float value_x = p_mat->Get_10();
-				if (p_wrapper_imgui->DragFloat("X (10)", &value_x))
-				{
-					p_mat->Set_10(value_x);
-				}
-
-				float value_y = p_mat->Get_11();
-				if (p_wrapper_imgui->DragFloat("Y (11)", &value_y))
-				{
-					p_mat->Set_11(value_y);
-				}
-
-				float value_z = p_mat->Get_12();
-				if (p_wrapper_imgui->DragFloat("Z (12)", &value_z))
-				{
-					p_mat->Set_12(value_z);
-				}
-
-				float value_w = p_mat->Get_13();
-				if (p_wrapper_imgui->DragFloat("W (13)", &value_w))
-				{
-					p_mat->Set_13(value_w);
-				}
-			}
-
-			if (p_wrapper_imgui->CollapsingHeader("Row 2"))
-			{
-				float value_x = p_mat->Get_20();
-				if (p_wrapper_imgui->DragFloat("X (20)", &value_x))
-				{
-					p_mat->Set_20(value_x);
-				}
-
-				float value_y = p_mat->Get_21();
-				if (p_wrapper_imgui->DragFloat("Y (21)", &value_y))
-				{
-					p_mat->Set_21(value_y);
-				}
-
-				float value_z = p_mat->Get_22();
-				if (p_wrapper_imgui->DragFloat("Z (22)", &value_z))
-				{
-					p_mat->Set_22(value_z);
-				}
-
-				float value_w = p_mat->Get_23();
-				if (p_wrapper_imgui->DragFloat("W (23)", &value_w))
-				{
-					p_mat->Set_23(value_w);
-				}
-			}
-
-			if (p_wrapper_imgui->CollapsingHeader("Row 4"))
-			{
-				float value_x = p_mat->Get_30();
-				if (p_wrapper_imgui->DragFloat("X (30)", &value_x))
-				{
-					p_mat->Set_30(value_x);
-				}
-
-				float value_y = p_mat->Get_31();
-				if (p_wrapper_imgui->DragFloat("Y (31)", &value_y))
-				{
-					p_mat->Set_31(value_y);
-				}
-
-				float value_z = p_mat->Get_32();
-				if (p_wrapper_imgui->DragFloat("Z (32)", &value_z))
-				{
-					p_mat->Set_32(value_z);
-				}
-
-				float value_w = p_mat->Get_33();
-				if (p_wrapper_imgui->DragFloat("W (33)", &value_w))
-				{
-					p_mat->Set_33(value_w);
-				}
-			}
-		}
-	}
-
-	void EditDragQuatf(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::quaternionf* p_quat)
-	{
-		if (p_wrapper_imgui == nullptr)
-			return;
-
-		if (p_quat == nullptr)
-			return;
-
-		if (p_wrapper_imgui->CollapsingHeader(label))
-		{
-			float value_x = p_quat->Get_X();
-			if (p_wrapper_imgui->DragFloat("X", &value_x))
-			{
-				p_quat->Set_X(value_x);
-			}
-
-			float value_y = p_quat->Get_Y();
-			if (p_wrapper_imgui->DragFloat("Y", &value_y))
-			{
-				p_quat->Set_Y(value_y);
-			}
-
-			float value_z = p_quat->Get_Z();
-			if (p_wrapper_imgui->DragFloat("Z", &value_z))
-			{
-				p_quat->Set_Z(value_z);
-			}
-
-			float value_w = p_quat->Get_W();
-			if (p_wrapper_imgui->DragFloat("W", &value_w))
-			{
-				p_quat->Set_W(value_w);
-			}
-		}
-	}
-} // namespace ImGui
-
 ktkImguiWrapper::ktkImguiWrapper(void) {}
 
 ktkImguiWrapper::~ktkImguiWrapper(void) {}
+
+void ktkImguiWrapper::EditDragVec2f(
+	const char* label, ktk::math::vector2f* p_vec)
+{
+	if (p_vec == nullptr)
+		return;
+
+	if (this->CollapsingHeader(label))
+	{
+		float value_x = p_vec->Get_X();
+		if (this->DragFloat("X", &value_x))
+		{
+			p_vec->Set_X(value_x);
+		}
+
+		float value_y = p_vec->Get_Y();
+		if (this->DragFloat("Y", &value_y))
+		{
+			p_vec->Set_Y(value_y);
+		}
+	}
+}
+
+void ktkImguiWrapper::EditDragVec3f(
+	const char* label, ktk::math::vector3f* p_vec)
+{
+	if (p_vec == nullptr)
+		return;
+
+	if (this->CollapsingHeader(label))
+	{
+		float value_x = p_vec->Get_X();
+		if (this->DragFloat("X", &value_x))
+		{
+			p_vec->Set_X(value_x);
+		}
+
+		float value_y = p_vec->Get_Y();
+		if (this->DragFloat("Y", &value_y))
+		{
+			p_vec->Set_Y(value_y);
+		}
+
+		float value_z = p_vec->Get_Z();
+		if (this->DragFloat("Z", &value_z))
+		{
+			p_vec->Set_Z(value_z);
+		}
+	}
+}
+
+void ktkImguiWrapper::EditDragVec4f(
+	const char* label, ktk::math::vector4f* p_vec)
+{
+	if (p_vec == nullptr)
+		return;
+
+	if (this->CollapsingHeader(label))
+	{
+		float value_x = p_vec->Get_X();
+		if (this->DragFloat("X", &value_x))
+		{
+			p_vec->Set_X(value_x);
+		}
+
+		float value_y = p_vec->Get_Y();
+		if (this->DragFloat("Y", &value_y))
+		{
+			p_vec->Set_Y(value_y);
+		}
+
+		float value_z = p_vec->Get_Z();
+		if (this->DragFloat("Z", &value_z))
+		{
+			p_vec->Set_Z(value_z);
+		}
+
+		float value_w = p_vec->Get_W();
+		if (this->DragFloat("W", &value_w))
+		{
+			p_vec->Set_W(value_w);
+		}
+	}
+}
+
+void ktkImguiWrapper::EditDragMat2x2f(
+	const char* label, ktk::math::matrix2x2f* p_mat)
+{
+	if (p_mat == nullptr)
+		return;
+
+	if (this->CollapsingHeader(label))
+	{
+		if (this->CollapsingHeader("Row 0"))
+		{
+			float value_x = p_mat->Get_00();
+			if (this->DragFloat("X (00)", &value_x))
+			{
+				p_mat->Set_00(value_x);
+			}
+
+			float value_y = p_mat->Get_01();
+			if (this->DragFloat("Y (01)", &value_y))
+			{
+				p_mat->Set_01(value_y);
+			}
+		}
+
+		if (this->CollapsingHeader("Row 1"))
+		{
+			float value_x = p_mat->Get_10();
+			if (this->DragFloat("X (10)", &value_x))
+			{
+				p_mat->Set_10(value_x);
+			}
+
+			float value_y = p_mat->Get_11();
+			if (this->DragFloat("Y (11)", &value_y))
+			{
+				p_mat->Set_11(value_y);
+			}
+		}
+	}
+}
+
+void ktkImguiWrapper::EditDragMat3x3f(
+	const char* label, ktk::math::matrix3x3f* p_mat)
+{
+	if (p_mat == nullptr)
+		return;
+
+	if (this->CollapsingHeader(label))
+	{
+		if (this->CollapsingHeader("Row 0"))
+		{
+			float value_x = p_mat->Get_00();
+			if (this->DragFloat("X (00)", &value_x))
+			{
+				p_mat->Set_00(value_x);
+			}
+
+			float value_y = p_mat->Get_01();
+			if (this->DragFloat("Y (01)", &value_y))
+			{
+				p_mat->Set_01(value_y);
+			}
+
+			float value_z = p_mat->Get_02();
+			if (this->DragFloat("Z (02)", &value_z))
+			{
+				p_mat->Set_02(value_z);
+			}
+		}
+
+		if (this->CollapsingHeader("Row 1"))
+		{
+			float value_x = p_mat->Get_10();
+			if (this->DragFloat("X (10)", &value_x))
+			{
+				p_mat->Set_10(value_x);
+			}
+
+			float value_y = p_mat->Get_11();
+			if (this->DragFloat("Y (11)", &value_y))
+			{
+				p_mat->Set_11(value_y);
+			}
+
+			float value_z = p_mat->Get_12();
+			if (this->DragFloat("Z (12)", &value_z))
+			{
+				p_mat->Set_12(value_z);
+			}
+		}
+
+		if (this->CollapsingHeader("Row 2"))
+		{
+			float value_x = p_mat->Get_20();
+			if (this->DragFloat("X (20)", &value_x))
+			{
+				p_mat->Set_20(value_x);
+			}
+
+			float value_y = p_mat->Get_21();
+			if (this->DragFloat("Y (21)", &value_y))
+			{
+				p_mat->Set_21(value_y);
+			}
+
+			float value_z = p_mat->Get_22();
+			if (this->DragFloat("Z (22)", &value_z))
+			{
+				p_mat->Set_22(value_z);
+			}
+		}
+	}
+}
+
+void ktkImguiWrapper::EditDragMat4x4f(
+	const char* label, ktk::math::matrix4x4f* p_mat)
+{
+	if (p_mat == nullptr)
+		return;
+
+	if (this->CollapsingHeader(label))
+	{
+		if (this->CollapsingHeader("Row 0"))
+		{
+			float value_x = p_mat->Get_00();
+			if (this->DragFloat("X (00)", &value_x))
+			{
+				p_mat->Set_00(value_x);
+			}
+
+			float value_y = p_mat->Get_01();
+			if (this->DragFloat("Y (01)", &value_y))
+			{
+				p_mat->Set_01(value_y);
+			}
+
+			float value_z = p_mat->Get_02();
+			if (this->DragFloat("Z (02)", &value_z))
+			{
+				p_mat->Set_02(value_z);
+			}
+
+			float value_w = p_mat->Get_03();
+			if (this->DragFloat("W (03)", &value_w))
+			{
+				p_mat->Set_03(value_w);
+			}
+		}
+
+		if (this->CollapsingHeader("Row 1"))
+		{
+			float value_x = p_mat->Get_10();
+			if (this->DragFloat("X (10)", &value_x))
+			{
+				p_mat->Set_10(value_x);
+			}
+
+			float value_y = p_mat->Get_11();
+			if (this->DragFloat("Y (11)", &value_y))
+			{
+				p_mat->Set_11(value_y);
+			}
+
+			float value_z = p_mat->Get_12();
+			if (this->DragFloat("Z (12)", &value_z))
+			{
+				p_mat->Set_12(value_z);
+			}
+
+			float value_w = p_mat->Get_13();
+			if (this->DragFloat("W (13)", &value_w))
+			{
+				p_mat->Set_13(value_w);
+			}
+		}
+
+		if (this->CollapsingHeader("Row 2"))
+		{
+			float value_x = p_mat->Get_20();
+			if (this->DragFloat("X (20)", &value_x))
+			{
+				p_mat->Set_20(value_x);
+			}
+
+			float value_y = p_mat->Get_21();
+			if (this->DragFloat("Y (21)", &value_y))
+			{
+				p_mat->Set_21(value_y);
+			}
+
+			float value_z = p_mat->Get_22();
+			if (this->DragFloat("Z (22)", &value_z))
+			{
+				p_mat->Set_22(value_z);
+			}
+
+			float value_w = p_mat->Get_23();
+			if (this->DragFloat("W (23)", &value_w))
+			{
+				p_mat->Set_23(value_w);
+			}
+		}
+
+		if (this->CollapsingHeader("Row 4"))
+		{
+			float value_x = p_mat->Get_30();
+			if (this->DragFloat("X (30)", &value_x))
+			{
+				p_mat->Set_30(value_x);
+			}
+
+			float value_y = p_mat->Get_31();
+			if (this->DragFloat("Y (31)", &value_y))
+			{
+				p_mat->Set_31(value_y);
+			}
+
+			float value_z = p_mat->Get_32();
+			if (this->DragFloat("Z (32)", &value_z))
+			{
+				p_mat->Set_32(value_z);
+			}
+
+			float value_w = p_mat->Get_33();
+			if (this->DragFloat("W (33)", &value_w))
+			{
+				p_mat->Set_33(value_w);
+			}
+		}
+	}
+}
+
+void ktkImguiWrapper::EditDragQuatf(
+	const char* label, ktk::math::quaternionf* p_quat)
+{
+	if (p_quat == nullptr)
+		return;
+
+	if (this->CollapsingHeader(label))
+	{
+		float value_x = p_quat->Get_X();
+		if (this->DragFloat("X", &value_x))
+		{
+			p_quat->Set_X(value_x);
+		}
+
+		float value_y = p_quat->Get_Y();
+		if (this->DragFloat("Y", &value_y))
+		{
+			p_quat->Set_Y(value_y);
+		}
+
+		float value_z = p_quat->Get_Z();
+		if (this->DragFloat("Z", &value_z))
+		{
+			p_quat->Set_Z(value_z);
+		}
+
+		float value_w = p_quat->Get_W();
+		if (this->DragFloat("W", &value_w))
+		{
+			p_quat->Set_W(value_w);
+		}
+	}
+}
 
 bool ktkImguiWrapper::ImGui_ImplGlfw_InitForOpenGL(
 	GLFWwindow* window, bool install_callbacks)

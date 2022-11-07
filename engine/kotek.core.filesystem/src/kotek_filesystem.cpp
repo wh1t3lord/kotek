@@ -270,7 +270,7 @@ void ktkFileSystem::CreateConfigFiles(void) noexcept
 
 	if (this->IsValidPath(path_to_system_json) == false)
 	{
-		ktkFile sys_info("sys_info");
+		ktkFileText sys_info("sys_info");
 
 		sys_info.Write(
 			kSysInfoFieldName_InitializeCallback, kUserCallbackName_Initialize);

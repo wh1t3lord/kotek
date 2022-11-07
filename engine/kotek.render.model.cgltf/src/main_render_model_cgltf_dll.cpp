@@ -11,12 +11,8 @@ bool InitializeModule_Render_Model_CGLTF(Core::ktkMainManager* p_main_manager)
 	KOTEK_ASSERT(p_main_manager->GetResourceManager()->Get_ResourceLoader(),
 		"you must initialize resource loader");
 
-	ktkFormatAnalyzer_CGLTF* p_format_analyzer = new ktkFormatAnalyzer_CGLTF();
-
 	ktkLoaderModel_CGLTF* p_loader =
 		new ktkLoaderModel_CGLTF(p_main_manager->GetFileSystem());
-
-	p_loader->Set_FormatAnalyzer(p_format_analyzer);
 
 	p_main_manager->GetResourceManager()->Get_ResourceLoader()->Set_Loader(
 		Core::eResourceLoadingType::kModel, p_loader);
@@ -40,14 +36,6 @@ bool ShutdownModule_Render_Model_CGLTF(Core::ktkMainManager* p_main_manager)
 		"bad cast to ktkLoaderModel_CGLTF*, you have something "
 		"different");
 
-	auto* p_format_analyzer =
-		dynamic_cast<ktkFormatAnalyzer_CGLTF*>(p_loader->Get_FormatAnalyzer());
-
-	KOTEK_ASSERT(p_format_analyzer != nullptr,
-		"bad cast to ktkFormatAnalyzer_CGLTF*, you have something "
-		"different");
-
-	delete p_format_analyzer;
 	delete p_loader;
 
 	return true;

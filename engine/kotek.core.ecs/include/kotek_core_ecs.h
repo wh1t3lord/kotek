@@ -1,6 +1,12 @@
 #pragma once
 
 #include "kotek_component_allocator.h"
+#include "kotek_component_camera.h"
+#include "kotek_component_input.h"
+#include "kotek_component_transform.h"
+#include "kotek_component_visibility.h"
+#include "kotek_component_geometry.h"
+
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE

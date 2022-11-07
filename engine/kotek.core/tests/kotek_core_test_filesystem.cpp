@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(file_create_pretty_output)
 
 	filesystem.Initialize();
 
-	ktkFile instance("pretty");
+	ktkFileText instance("pretty");
 
 	auto path =
 		filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_UserTests);

@@ -23,34 +23,26 @@ KOTEK_END_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
-/// \~english @brief This namespace contains default functions for
-/// hanlding different types that ImGui doesn't provide by default, user
-/// can implement its own versions and put it in its pch file too.
-namespace ImGui
-{
-	void EditDragVec2f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::vector2f* p_vec);
-	void EditDragVec3f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::vector3f* p_vec);
-	void EditDragVec4f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::vector4f* p_vec);
-
-	void EditDragMat2x2f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::matrix2x2f* p_mat);
-	void EditDragMat3x3f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::matrix3x3f* p_mat);
-	void EditDragMat4x4f(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::matrix4x4f* p_mat);
-
-	void EditDragQuatf(Core::ktkIImguiWrapper* p_wrapper_imgui,
-		const char* label, ktk::math::quaternionf* p_quat);
-} // namespace ImGui
 
 class ktkImguiWrapper : public Core::ktkIImguiWrapper
 {
 public:
 	ktkImguiWrapper(void);
 	~ktkImguiWrapper(void);
+
+	void EditDragVec2f(const char* label, ktk::math::vector2f* p_vec) override;
+	void EditDragVec3f(const char* label, ktk::math::vector3f* p_vec) override;
+	void EditDragVec4f(const char* label, ktk::math::vector4f* p_vec) override;
+
+	void EditDragMat2x2f(
+		const char* label, ktk::math::matrix2x2f* p_mat) override;
+	void EditDragMat3x3f(
+		const char* label, ktk::math::matrix3x3f* p_mat) override;
+	void EditDragMat4x4f(
+		const char* label, ktk::math::matrix4x4f* p_mat) override;
+
+	void EditDragQuatf(
+		const char* label, ktk::math::quaternionf* p_quat) override;
 
 	bool ImGui_ImplGlfw_InitForOpenGL(
 		GLFWwindow* window, bool install_callbacks) override;

@@ -26,12 +26,13 @@ bool ktkResourceSaverManager::Save_Text(
 		return false;
 	}
 
-	ktkFile* p_casted_file = std::any_cast<ktkFile*>(data);
+	ktkFileText* p_casted_file = std::any_cast<ktkFileText*>(data);
 
-	KOTEK_ASSERT(p_casted_file, "you must have a valid instance of ktkFile");
+	KOTEK_ASSERT(
+		p_casted_file, "you must have a valid instance of ktkFileText");
 
 	KOTEK_ASSERT(p_casted_file->Get_FileName().empty() == false,
-		"you can't have an empty filename in your ktkFile instance");
+		"you can't have an empty filename in your ktkFileText instance");
 
 	auto path_compiled = path;
 
@@ -62,12 +63,13 @@ bool ktkResourceSaverManager::Save_Text_Formatted(
 		return false;
 	}
 
-	ktkFile* p_casted_file = std::any_cast<ktkFile*>(data);
+	ktkFileText* p_casted_file = std::any_cast<ktkFileText*>(data);
 
-	KOTEK_ASSERT(p_casted_file, "you must have a valid instance of ktkFile");
+	KOTEK_ASSERT(
+		p_casted_file, "you must have a valid instance of ktkFileText");
 
 	KOTEK_ASSERT(p_casted_file->Get_FileName().empty() == false,
-		"you can't have an empty filename in your ktkFile instance");
+		"you can't have an empty filename in your ktkFileText instance");
 
 	auto path_compiled = path;
 
