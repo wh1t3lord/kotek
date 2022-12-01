@@ -34,7 +34,14 @@
 Список команд для vcpkg если хотите full для 
 ```
 .\vcpkg\vcpkg install boost:x64-windows
-
+.\vcpkg\vcpkg.exe install bullet3:x64-windows
+.\vcpkg\vcpkg.exe install directxmath:x64-windows
+.\vcpkg\vcpkg.exe install eigen3:x64-windows
+.\vcpkg\vcpkg.exe install fmt:x64-windows
+.\vcpkg\vcpkg.exe install glfw3:x64-windows
+.\vcpkg\vcpkg.exe install glm:x64-windows
+.\vcpkg\vcpkg.exe install imgui[docking-experimental]:x64-windows
+.\vcpkg\vcpkg.exe install ktx:x64-windows
 ```
 
 7.2 Примечание, на текущий момент времени conan не поддерживается, однако планируется для добавления
