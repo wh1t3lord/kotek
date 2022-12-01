@@ -1,6 +1,9 @@
 cmake_minimum_required(VERSION 3.19.3)
 project(kotek.engine)
 
+message("[${PROJECT_NAME}]: CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}")
+message("[${PROJECT_NAME}]: CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}")
+
 # it is our requirement for generating the library e.g. don't just write 'cmake ..'
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
 	message(FATAL_ERROR "[${PROJECT_NAME}]: you must specify CMAKE_BUILD_TYPE flag with the following types: Debug, Release, MinSizeRel, RelWithDebInfo. It supposed to be like -DCMAKE_BUILD_TYPE=Debug")
@@ -21,9 +24,20 @@ message("[${PROJECT_NAME}]: filename for generating preprocessors: '${KOTEK_FILE
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
-		message(FATAL_ERROR "you have to specify your folder where dependencies are stored")
+		# TODO: add conan here
+		message("[${PROJECT_NAME}]: trying to make an attempt to find any package manager that user provides to this path [${CMAKE_CURRENT_SOURCE_DIR}]")
+		if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
+			message("[${PROJECT_NAME}]: VCPKG exists so we use dependencies from vcpkg")
+			set(CMAKE_TOOLCHAIN_FILE "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
+		else()
+			message(FATAL_ERROR "[${PROJECT_NAME}] cmake didn't find vcpkg folder where root CMakeLists.txt is located. Otherwise you have to specify your folder where dependencies are stored")
+		endif()
 	else()
-		message("[${PROJECT_NAME}]: your dependency folder is '${KOTEK_DEPS_FOLDER}'")
+		if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${KOTEK_DEPS_FOLDER}")
+			message("[${PROJECT_NAME}]: your dependency folder is '${KOTEK_DEPS_FOLDER}'")
+		else()
+			message("[${PROJECT_NAME}]: your specified folder [${KOTEK_DEPS_FOLDER}] doesn't exist in path [${CMAKE_CURRENT_SOURCE_DIR}]")
+		endif()
 	endif()
 endif()
 

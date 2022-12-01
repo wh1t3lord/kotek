@@ -16,6 +16,7 @@ cmake_install.cmake
 install_manifest.txt
 bin*/
 kotek-engine-deps-*/
+vcpkg*/
 intermediate/
 intermediate_plugs/
 out/

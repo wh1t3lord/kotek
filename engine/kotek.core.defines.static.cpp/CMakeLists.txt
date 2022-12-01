@@ -10,12 +10,10 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "")
 endif()
 
 if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "")
-	set(PATH_TO_CEF "${CMAKE_CURRENT_SOURCE_DIR}/../../${KOTEK_DEPS_FOLDER}/CEF" CACHE INTERNAL "")
-	set(PATH_TO_CEF_LIB "${CMAKE_CURRENT_SOURCE_DIR}/../../${KOTEK_DEPS_FOLDER}/CEF/lib/${CMAKE_BUILD_TYPE}/" CACHE INTERNAL "")
+	# By default we use RmlUI util I will finish my library
 
-	if (EXISTS "${PATH_TO_CEF}")
-		set(KOTEK_UI_GAME_LIBRARY "CEF" CACHE INTERNAL "")
-	endif()
+	# TODO: add CEF only when we have it in vcpkg or any other package managers
+	set(KOTEK_UI_GAME_LIBRARY "RMLUI" CACHE INTERNAL "")
 endif()
 
 message("[Engine]: KOTEK_STD_LIBRARY=${KOTEK_STD_LIBRARY}")
@@ -43,8 +41,18 @@ if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
 
 	# For C++ code generation
 	set(KOTEK_UI_GAME_LIBRARY_DESCRIPTION_NAME "Chromium Embedded Framework")
+elseif("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "RMLUI")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_RMLUI_LIBRARY)
+
+	set(KOTEK_UI_GAME_LIBRARY_NAME "RMLUI")
+	set(KOTEK_UI_GAME_LIBRARY_DESCRIPTION_NAME "RmlUi")
+elseif("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "ATHENA")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_ATHENA_LIBRARY)
+
+	set(KOTEK_UI_GAME_LIBRARY_NAME "ATHENA")
+	set(KOTEK_UI_GAME_LIBRARY_DESCRIPTION_NAME "Athena")
 else()
-	# TODO: add support for RmlUi
+	message("[${PROJECT_NAME}] you didn't specify any ui library for this generation")
 endif()
 
 if ("${KOTEK_HIDE_CPP_DISABLE_ALL_WARNINGS_PREPROCESSOR}" STREQUAL "ON")
