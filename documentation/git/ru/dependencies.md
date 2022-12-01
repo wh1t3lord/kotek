@@ -27,4 +27,4 @@ ATTENTION: We appreciate your help in case when you show us where we're wrong an
 | [Google's ANGLE](https://github.com/google/angle) | Custom license | Yes |  |
 | [NVIDIA PhysX](https://github.com/NVIDIA-Omniverse/PhysX) | Custom license | Yes |  |
 
-- [На главную страницу](README.md)
+[На главную страницу](README.md)
