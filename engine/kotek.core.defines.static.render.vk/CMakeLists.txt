@@ -17,7 +17,7 @@ if ("${KOTEK_VULKAN_VERSION}" STREQUAL "")
 	set(KOTEK_VULKAN_VERSION "1_0")
 endif()
 
-message("[Engine]: Vulkan is '${KOTEK_VULKAN}'")
+message("[${PROJECT_NAME}]: Vulkan is '${KOTEK_VULKAN}'")
 
 file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 

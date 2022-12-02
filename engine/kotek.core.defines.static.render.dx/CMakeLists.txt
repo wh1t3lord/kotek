@@ -18,7 +18,7 @@ if (WIN32)
 		set(KOTEK_DIRECTX_VERSION 12 CACHE INTERNAL "")
 	endif()
 
-	message("[Engine]: DirectX is '${KOTEK_DIRECTX}'")
+	message("[${PROJECT_NAME}]: DirectX is '${KOTEK_DIRECTX}'")
 
 	if ("${KOTEK_DIRECTX}" STREQUAL "ON")
 

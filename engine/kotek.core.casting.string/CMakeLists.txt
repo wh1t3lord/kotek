@@ -21,6 +21,10 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_casting_string_dll.cpp"
 	"src/kotek_std_alias_casting.cpp")
 
+if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+	target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.string)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)

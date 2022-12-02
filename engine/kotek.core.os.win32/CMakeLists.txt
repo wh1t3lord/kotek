@@ -6,12 +6,13 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	# TODO: add SDL
 	if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "GLFW")
-		find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-	endif()
-else()
-	if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "GLFW")
-		find_package(glfw3 REQUIRED)
+		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+			find_package(glfw3 REQUIRED)
+		else()
+			find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+		endif()
 	endif()
 endif()
 

@@ -6,16 +6,24 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (WIN32)
-	include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
+	if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+
+		else()
+			include_directories("../../${KOTEK_DEPS_FOLDER}/vld/include/")
+		endif()
+	endif()
 endif()
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
-	find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/assimp/${CMAKE_BUILD_TYPE}")
-else()
-	find_package(assimp REQUIRED)
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+		find_package(assimp REQUIRED)
+	else()
+		find_package(assimp REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/assimp/${CMAKE_BUILD_TYPE}")
+	endif()
 endif()
 
 add_library(${PROJECT_NAME} STATIC

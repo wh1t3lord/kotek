@@ -5,11 +5,7 @@ project(kotek.render VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-include_directories("../../${KOTEK_DEPS_FOLDER}/ktx/include/")
-
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
-
-link_directories("../../${KOTEK_DEPS_FOLDER}/ktx/lib/")
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render.h"

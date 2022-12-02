@@ -20,4 +20,8 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_containers_dll.h"
 	"src/main_core_containers_dll_dll.cpp")
 
+if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+	target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

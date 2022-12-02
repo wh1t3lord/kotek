@@ -9,7 +9,7 @@ if ("${KOTEK_TESTS}" STREQUAL "")
 	set(KOTEK_TESTS "ON")
 endif()
 
-message("[Engine]: TESTS is '${KOTEK_TESTS}'")
+message("[${PROJECT_NAME}]: TESTS is '${KOTEK_TESTS}'")
 if ("${KOTEK_TESTS}" STREQUAL "ON")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_TESTS)
 elseif("${KOTEK_TESTS}" STREQUAL "OFF")
@@ -20,7 +20,7 @@ if ("${KOTEK_TESTS_RUNTIME}" STREQUAL "")
 	set(KOTEK_TESTS_RUNTIME "ON")
 endif()
 
-message("[Engine]: TESTS use in runtime is '${KOTEK_TESTS_RUNTIME}'")
+message("[${PROJECT_NAME}]: TESTS use in runtime is '${KOTEK_TESTS_RUNTIME}'")
 
 if ("${KOTEK_TESTS}" STREQUAL "ON")
 	if ("${KOTEK_TESTS_RUNTIME}" STREQUAL "ON")

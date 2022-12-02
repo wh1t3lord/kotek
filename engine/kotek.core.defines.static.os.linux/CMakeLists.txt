@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if (UNIX)
-	message("[Engine]: platform is 'UNIX'")
+	message("[${PROJECT_NAME}]: platform is 'UNIX'")
 
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
 

@@ -21,7 +21,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_containers_deque_dll.cpp")
 
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
-	target_link_libraries(${PROJECT_NAME} PUBLIC Boost::container)
+	target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost Boost::container)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
