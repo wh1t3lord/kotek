@@ -59,7 +59,7 @@
 # TODO: add other dependencies
 ```
 
-> cmake -DCMAKE_BUILD_TYPE=Debug ..
+> cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake ..
 
 
 

@@ -7,11 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
-		find_package(Boost COMPONENTS headers container REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-	endif()
-else()
-	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
-		find_package(Boost COMPONENTS headers container REQUIRED)
+		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+			find_package(Boost COMPONENTS container REQUIRED)
+		else()
+			find_package(Boost COMPONENTS container REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+		endif()
 	endif()
 endif()
 
@@ -21,7 +21,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_containers_array_dll.cpp")
 
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
-	target_link_libraries(${PROJECT_NAME} PUBLIC Boost::headers Boost::container)
+	target_link_libraries(${PROJECT_NAME} PUBLIC Boost::container)
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
