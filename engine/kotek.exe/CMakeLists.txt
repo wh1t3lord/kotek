@@ -64,4 +64,6 @@ if ("${KOTEK_MEMORY_LEAK_DETECTION}" STREQUAL "ON")
     endif()
 endif()
 
+
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.game)

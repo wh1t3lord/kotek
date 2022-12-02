@@ -7,9 +7,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+		find_path(CGLTF_INCLUDE_DIRS "cgltf.h")
+	else()
+
+	endif()
+endif()
+
 add_library(${PROJECT_NAME} STATIC
-	"include/cgltf.h"
-	"include/cgltf_write.h"
 	"include/kotek_loader_model.h"
 	"src/kotek_loader_model.cpp"
 	"include/kotek_render_model_cgltf.h"
@@ -17,5 +23,9 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
+
+if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+	target_include_directories(${PROJECT_NAME} PUBLIC ${CGLTF_INCLUDE_DIRS})
+endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)

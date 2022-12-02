@@ -18,10 +18,13 @@ if(WIN32)
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 			message("[${PROJECT_NAME}]: vcpkg doesn't support VLD package yet")
 		else()
+			list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_VLD_FOUND)
 			target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/vld/include/")
 			target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/vld/lib/Win64/")
 		endif()
 	endif()
 endif()
+
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

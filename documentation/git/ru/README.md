@@ -40,21 +40,24 @@
 Список команд для vcpkg если хотите full для 
 ```
 .\vcpkg\vcpkg install boost:x64-windows
-.\vcpkg\vcpkg.exe install bullet3:x64-windows
-.\vcpkg\vcpkg.exe install directxmath:x64-windows
-.\vcpkg\vcpkg.exe install eigen3:x64-windows
-.\vcpkg\vcpkg.exe install fmt:x64-windows
-.\vcpkg\vcpkg.exe install glfw3:x64-windows
-.\vcpkg\vcpkg.exe install glm:x64-windows
-.\vcpkg\vcpkg.exe install imgui[docking-experimental]:x64-windows
-.\vcpkg\vcpkg.exe install ktx:x64-windows
-.\vcpkg\vcpkg.exe install mimalloc:x64-windows
-.\vcpkg\vcpkg.exe install tracy:x64-windows
-.\vcpkg\vcpkg.exe install shaderc:x64-windows
-.\vcpkg\vcpkg.exe install spirv-reflect:x64-windows
-.\vcpkg\vcpkg.exe install tbb:x64-windows
-.\vcpkg\vcpkg.exe install wxwidgets:x64-windows
-.\vcpkg\vcpkg.exe install angle:x64-windows
+.\vcpkg\vcpkg install bullet3:x64-windows
+.\vcpkg\vcpkg install directxmath:x64-windows
+.\vcpkg\vcpkg install eigen3:x64-windows
+.\vcpkg\vcpkg install fmt:x64-windows
+.\vcpkg\vcpkg install glfw3:x64-windows
+.\vcpkg\vcpkg install glm:x64-windows
+.\vcpkg\vcpkg install imgui[docking-experimental]:x64-windows
+.\vcpkg\vcpkg install ktx:x64-windows
+.\vcpkg\vcpkg install mimalloc:x64-windows
+.\vcpkg\vcpkg install tracy:x64-windows
+.\vcpkg\vcpkg install shaderc:x64-windows
+.\vcpkg\vcpkg install spirv-reflect:x64-windows
+.\vcpkg\vcpkg install tbb:x64-windows
+.\vcpkg\vcpkg install wxwidgets:x64-windows
+.\vcpkg\vcpkg install angle:x64-windows
+.\vcpkg\vcpkg install assimp:x64-windows
+.\vcpkg\vcpkg install cgltf:x64-windows
+.\vcpkg\vcpkg install rmlui[freetype]:x64-windows
 
 # TODO: add other dependencies
 ```
