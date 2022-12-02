@@ -25,6 +25,6 @@ ATTENTION: We appreciate your help in case when you show us where we're wrong an
 | [Visual Leak Detector](https://github.com/KindDragon/vld) | LGPL-2.1 license | Yes | We don't change the code and use only library for linking only and use dll file for 'working with library' |
 | [wxWidgets](https://github.com/wxWidgets/wxWidgets) | wxWidgets license  | Yes | We don't alter the source code of WxWidgets library and use only for linking their pre-build static and dynamic libraries. As the result user gets only dynamic libraries after building the project. |
 | [Google's ANGLE](https://github.com/google/angle) | Custom license | Yes |  |
-| [NVIDIA PhysX](https://github.com/NVIDIA-Omniverse/PhysX) | Custom license | Yes |  |
+| [NVIDIA PhysX](https://github.com/NVIDIA-Omniverse/PhysX) | Custom license | Yes | vcpkg doesn't support this version yet. |
 
 - [На главную страницу](README.md)

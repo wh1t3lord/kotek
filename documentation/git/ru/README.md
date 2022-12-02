@@ -54,6 +54,9 @@
 .\vcpkg\vcpkg.exe install spirv-reflect:x64-windows
 .\vcpkg\vcpkg.exe install tbb:x64-windows
 .\vcpkg\vcpkg.exe install wxwidgets:x64-windows
+.\vcpkg\vcpkg.exe install angle:x64-windows
+
+# TODO: add other dependencies
 ```
 
 > cmake -DCMAKE_BUILD_TYPE=Debug ..
