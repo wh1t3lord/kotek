@@ -50,8 +50,7 @@ KOTEK_BEGIN_NAMESPACE_KTK
 template <typename... Args>
 ktk::string format(const ktk::string& text, Args&&... args) noexcept
 {
-	const auto& data =
-		fmt::format(text.get_as_is(), std::forward<Args>(args)...);
+	const auto& data = vformat(text.get_as_is(), fmt::make_format_args(std::forward<Args>(args)...));
 
 	return ktk::string(data.begin(), data.end());
 }
