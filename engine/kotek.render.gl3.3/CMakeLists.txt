@@ -10,9 +10,13 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 find_package(OpenGL REQUIRED COMPONENTS OpenGL)
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
-    find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
-else()
-    find_package(KTX REQUIRED)
+    if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+        find_package(KTX CONFIG REQUIRED)
+        find_package(unofficial-shaderc CONFIG REQUIRED)
+        find_package(unofficial-spirv-reflect CONFIG REQUIRED)
+    else()
+        find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
+    endif()
 endif()
 
 set(to_include_render_graph_simplified_files
@@ -39,9 +43,7 @@ set(to_include_core_files
     "include/kotek_render_device.h"
     "src/kotek_render_device.cpp"
     "include/kotek_render_swapchain.h"
-    "src/kotek_render_swapchain.cpp"
-    "src/spirv_reflect.cpp"
-    "include/spirv_reflect.h")
+    "src/kotek_render_swapchain.cpp")
 
 set(to_include_module_files
 	"include/kotek_render_gl.h"
@@ -75,11 +77,18 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<ko
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 
-target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/include/")
-target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
+# TODO: delete this
+#target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/include/")
+#target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::GL)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad3.3)
 target_link_libraries(${PROJECT_NAME} PUBLIC KTX::ktx)
+
+if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+    target_link_libraries(main PUBLIC unofficial::shaderc::shaderc)
+    target_link_libraries(main PUBLIC unofficial::shaderc_util::shaderc_util)
+    target_link_libraries(main PUBLIC unofficial::spirv-reflect::spirv-reflect)
+endif()

@@ -6,9 +6,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
-	find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
-else()
-	find_package(TBB REQUIRED)
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+		find_package(TBB REQUIRED)
+	else()
+		find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+	endif()
 endif()
 
 add_library(${PROJECT_NAME} STATIC

@@ -42,6 +42,12 @@
 .\vcpkg\vcpkg.exe install glm:x64-windows
 .\vcpkg\vcpkg.exe install imgui[docking-experimental]:x64-windows
 .\vcpkg\vcpkg.exe install ktx:x64-windows
+.\vcpkg\vcpkg.exe install mimalloc:x64-windows
+.\vcpkg\vcpkg.exe install tracy:x64-windows
+.\vcpkg\vcpkg.exe install shaderc:x64-windows
+.\vcpkg\vcpkg.exe install spirv-reflect:x64-windows
+.\vcpkg\vcpkg.exe install tbb:x64-windows
+.\vcpkg\vcpkg.exe install wxwidgets:x64-windows
 ```
 
 7.2 Примечание, на текущий момент времени conan не поддерживается, однако планируется для добавления

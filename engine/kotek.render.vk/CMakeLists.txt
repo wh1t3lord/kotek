@@ -8,9 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
-    find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
-else()
-    find_package(KTX REQUIRED)
+    if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+        find_package(KTX CONFIG REQUIRED)
+        find_package(unofficial-shaderc CONFIG REQUIRED)
+        find_package(unofficial-spirv-reflect CONFIG REQUIRED)
+    else()
+        find_package(KTX REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/ktx/${CMAKE_BUILD_TYPE}/")
+    endif()
 endif()
 
 add_library(${PROJECT_NAME} STATIC
@@ -75,11 +79,13 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<ko
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 
-target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/include/")
-target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
-
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.imgui)
-target_link_libraries(${PROJECT_NAME} PUBLIC shaderc_combined)
 target_link_libraries(${PROJECT_NAME} PUBLIC KTX::ktx)
+
+if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+    target_link_libraries(main PRIVATE unofficial::shaderc::shaderc)
+    target_link_libraries(main PRIVATE unofficial::shaderc_util::shaderc_util)
+    target_link_libraries(main PUBLIC unofficial::spirv-reflect::spirv-reflect)
+endif()

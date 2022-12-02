@@ -7,7 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 else()
-	find_package(imgui CONFIG REQUIRED)
+	find_package(imgui REQUIRED)
 endif()
 
 add_library(${PROJECT_NAME} STATIC
