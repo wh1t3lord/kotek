@@ -28,8 +28,14 @@
 > cmake -DCMAKE_BUILD_TYPE=Debug -DKOTEK_DEPS_FOLDER="kotek-engine-deps-win32-vs19-full" ..
 
 ### vcpkg 
-7.1 Примечание, вы можете использовать vcpkg вместо скачивания предустановленных библиотек из официальных репозиториев для этого вы ничего не должны делать а только указать тип сборки
-> cmake -DCMAKE_BUILD_TYPE=Debug ..
+7.1 Примечание, вы можете использовать vcpkg вместо скачивания предустановленных библиотек из официальных репозиториев для этого вы ничего не должны делать а только указать тип сборки.
+
+> git clone https://github.com/microsoft/vcpkg
+> .\vcpkg\bootstrap-vcpkg.bat
+
+или если линух, мак
+
+> ./vcpkg/bootstrap-vcpkg.sh
 
 Список команд для vcpkg если хотите full для 
 ```
@@ -49,6 +55,12 @@
 .\vcpkg\vcpkg.exe install tbb:x64-windows
 .\vcpkg\vcpkg.exe install wxwidgets:x64-windows
 ```
+
+> cmake -DCMAKE_BUILD_TYPE=Debug ..
+
+
+
+
 
 7.2 Примечание, на текущий момент времени conan не поддерживается, однако планируется для добавления
 
