@@ -43,7 +43,6 @@
 .\vcpkg\vcpkg install bullet3:x64-windows
 .\vcpkg\vcpkg install directxmath:x64-windows
 .\vcpkg\vcpkg install eigen3:x64-windows
-.\vcpkg\vcpkg install fmt:x64-windows
 .\vcpkg\vcpkg install glfw3:x64-windows
 .\vcpkg\vcpkg install glm:x64-windows
 .\vcpkg\vcpkg install imgui[docking-experimental]:x64-windows
@@ -59,7 +58,7 @@
 .\vcpkg\vcpkg install cgltf:x64-windows
 .\vcpkg\vcpkg install rmlui[freetype]:x64-windows
 
-# TODO: add other dependencies
+# TODO: add other dependencies, sdl2, miniaudio, fmod, physx, 
 ```
 
 > cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake ..

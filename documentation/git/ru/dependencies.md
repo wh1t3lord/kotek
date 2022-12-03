@@ -12,7 +12,7 @@ ATTENTION: We appreciate your help in case when you show us where we're wrong an
 | [Bullet](https://github.com/bulletphysics/bullet3) | Zlib license | Yes |  |
 | [DirectXMath](https://github.com/microsoft/DirectXMath) | MIT license | Yes |  |
 | [Eigen](https://gitlab.com/libeigen/eigen) | MPL 2.0 license | Yes |  |
-| [FMT](https://github.com/fmtlib/fmt) | MIT license | Yes | It is removed, because we use standard <format> header, but if you want you could use it |
+| [FMT](https://github.com/fmtlib/fmt) | MIT license | Yes | |
 | [glfw3](https://github.com/glfw/glfw) | Zlib license | Yes |  |
 | [glm](https://github.com/g-truc/glm) | MIT license | Yes |  |
 | [ImGui](https://github.com/ocornut/imgui) | MIT license | Yes |  |
