@@ -25,4 +25,7 @@ add_library(${PROJECT_NAME} STATIC
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.profilers)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.profilers.cpu)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.profilers.gpu)
-target_link_libraries(${PROJECT_NAME} PUBLIC Tracy::TracyClient)
+
+if ("${KOTEK_CPU_PROFILER}" STREQUAL "ON")
+	target_link_libraries(${PROJECT_NAME} PUBLIC Tracy::TracyClient)
+endif()
