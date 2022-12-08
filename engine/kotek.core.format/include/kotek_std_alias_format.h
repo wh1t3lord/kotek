@@ -9,6 +9,9 @@
 
 #include <format>
 
+enum VkResult;
+enum VkFormat;
+
 template <>
 struct std::formatter<Kotek::ktk::string, Kotek::ktk::tchar>
 {
@@ -44,21 +47,69 @@ struct std::formatter<Kotek::ktk::filesystem::path, Kotek::ktk::tchar>
 	}
 };
 
+template <>
+struct std::formatter<VkResult, Kotek::ktk::tchar>
+{
+	template <typename ParseContext>
+	constexpr inline auto parse(ParseContext& ctx)
+	{
+		return ctx.begin();
+	}
+
+	template <typename FormatContext>
+	inline auto format(VkResult const& result_id, FormatContext& ctx)
+	{
+		return std::format_to(
+			ctx.out(), KOTEK_TEXT("{}"), static_cast<int>(result_id));
+	}
+};
+
+template <>
+struct std::formatter<VkFormat, Kotek::ktk::tchar>
+{
+	template <typename ParseContext>
+	constexpr inline auto parse(ParseContext& ctx)
+	{
+		return ctx.begin();
+	}
+
+	template <typename FormatContext>
+	inline auto format(VkFormat const& result_id, FormatContext& ctx)
+	{
+		return std::format_to(
+			ctx.out(), KOTEK_TEXT("{}"), static_cast<int>(result_id));
+	}
+};
+
+#ifdef SHADERC_STATUS_H_
+template <>
+struct std::formatter<shaderc_compilation_status, Kotek::ktk::tchar>
+{
+	template <typename ParseContext>
+	constexpr inline auto parse(ParseContext& ctx)
+	{
+		return ctx.begin();
+	}
+
+	template <typename FormatContext>
+	inline auto format(
+		shaderc_compilation_status const& result_id, FormatContext& ctx)
+	{
+		return std::format_to(
+			ctx.out(), KOTEK_TEXT("{}"), static_cast<int>(result_id));
+	}
+};
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
 template <typename... Args>
 ktk::string format(const ktk::string& text, Args&&... args) noexcept
 {
-	const auto& data = std::format(text.get_as_is(), fmt::make_format_args(std::forward<Args>(args)...));
-
+	const auto& data =
+		std::vformat(text.get_as_is().c_str(), std::make_wformat_args(args...));
 	return ktk::string(data.begin(), data.end());
-}
-
-template <typename... Args>
-void print(std::format_string<Args...> fmt, Args&&... args)
-{
-	std::print(fmt, args...);
 }
 
 KOTEK_END_NAMESPACE_KTK
