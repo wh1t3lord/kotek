@@ -13,9 +13,9 @@
 // TODO: add ifdef for appropriate things
 // if gl3 we need to check if gl3 is enabled
 // if glfw we need to check if glfw is enabled and etc
-#include <kotek.ui.imgui/include/imgui.h>
-#include <kotek.ui.imgui/include/imgui_impl_glfw.h>
-#include <kotek.ui.imgui/include/imgui_impl_opengl3.h>
+#include <imgui.h>
+#include <imgui_impl_glfw.h>
+#include <imgui_impl_opengl3.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
