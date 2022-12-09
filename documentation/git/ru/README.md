@@ -67,7 +67,11 @@
 .\vcpkg\vcpkg install cgltf:x64-windows
 .\vcpkg\vcpkg install rmlui[freetype]:x64-windows
 
+# for shared configuration
 .\vcpkg\vcpkg install boost:x64-windows bullet3:x64-windows directxmath:x64-windows glfw3:x64-windows eigen3:x64-windows glm:x64-windows imgui[core,win32-binding,sdl2-binding,opengl3-binding,opengl2-binding,glfw-binding,dx9-binding,dx10-binding,dx11-binding,dx12-binding,vulkan-binding,docking-experimental]:x64-windows imguizmo:x64-windows implot:x64-windows ktx:x64-windows mimalloc:x64-windows tracy:x64-windows shaderc:x64-windows spirv-reflect:x64-windows tbb:x64-windows wxwidgets:x64-windows wxwidgets:x64-windows angle:x64-windows assimp:x64-windows cgltf:x64-windows rmlui[freetype]:x64-windows
+
+# for static
+.\vcpkg\vcpkg install boost:x64-windows-static bullet3:x64-windows-static directxmath:x64-windows-static glfw3:x64-windows-static eigen3:x64-windows-static glm:x64-windows-static imgui[core,win32-binding,sdl2-binding,opengl3-binding,opengl2-binding,glfw-binding,dx9-binding,dx10-binding,dx11-binding,dx12-binding,vulkan-binding,docking-experimental]:x64-windows-static imguizmo:x64-windows-static implot:x64-windows-static ktx:x64-windows-static mimalloc:x64-windows-static tracy:x64-windows-static shaderc:x64-windows-static spirv-reflect:x64-windows-static tbb:x64-windows-static wxwidgets:x64-windows-static wxwidgets:x64-windows-static angle:x64-windows-static assimp:x64-windows-static cgltf:x64-windows-static rmlui[freetype]:x64-windows-static
 
 # TODO: add other dependencies, sdl2, miniaudio, fmod, physx, 
 ```
