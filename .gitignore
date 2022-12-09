@@ -34,5 +34,6 @@ doc/doxygen/html/*
 documentation/*
 !documentation/Doxyfile
 !documentation/git/
+!documentation/vcpkg/
 user_data/
 engine/**/kotek_std_preprocessors.h

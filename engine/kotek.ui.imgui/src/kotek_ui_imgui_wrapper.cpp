@@ -1912,20 +1912,20 @@ int ktkImguiWrapper::GetKeyIndex(ImGuiKey imgui_key)
 }
 bool ktkImguiWrapper::IsKeyDown(int user_key_index)
 {
-	return ::ImGui::IsKeyDown(user_key_index);
+	return ::ImGui::IsKeyDown(static_cast<ImGuiKey>(user_key_index));
 }
 bool ktkImguiWrapper::IsKeyPressed(int user_key_index, bool repeat)
 {
-	return ::ImGui::IsKeyPressed(user_key_index, repeat);
+	return ::ImGui::IsKeyPressed(static_cast<ImGuiKey>(user_key_index), repeat);
 }
 bool ktkImguiWrapper::IsKeyReleased(int user_key_index)
 {
-	return ::ImGui::IsKeyReleased(user_key_index);
+	return ::ImGui::IsKeyReleased(static_cast<ImGuiKey>(user_key_index));
 }
 int ktkImguiWrapper::GetKeyPressedAmount(
 	int key_index, float repeat_delay, float rate)
 {
-	return ::ImGui::GetKeyPressedAmount(key_index, repeat_delay, rate);
+	return ::ImGui::GetKeyPressedAmount(static_cast<ImGuiKey>(key_index), repeat_delay, rate);
 }
 void ktkImguiWrapper::CaptureKeyboardFromApp(bool want_capture_keyboard_value)
 {

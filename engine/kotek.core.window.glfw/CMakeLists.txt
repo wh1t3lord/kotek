@@ -5,11 +5,23 @@ project(kotek.core.window.glfw VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+		find_package(glfw3 CONFIG REQUIRED)
+	else()
+	endif()
+endif()
+
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_window_glfw.h"
 	"include/kotek_std_window.h"
 	"src/kotek_std_window.cpp"
 	"src/main_core_window_glfw_dll.cpp")
+
+if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+	target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
+else()
+endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)

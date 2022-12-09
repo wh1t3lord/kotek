@@ -290,7 +290,7 @@ namespace Kotek
 				if (status != shaderc_compilation_status_success)
 				{
 					KOTEK_MESSAGE_ERROR("can't build shader: status[{}] {}",
-						module.GetCompilationStatus(),
+						static_cast<int>(module.GetCompilationStatus()),
 						ktk::cast::to_string(module.GetErrorMessage().c_str()));
 
 					return result;
@@ -344,7 +344,7 @@ namespace Kotek
 				if (status != shaderc_compilation_status_success)
 				{
 					KOTEK_MESSAGE_ERROR("can't build shader: status[{}] {}",
-						module.GetCompilationStatus(),
+						static_cast<int>(module.GetCompilationStatus()),
 						ktk::cast::to_string(module.GetErrorMessage().c_str()));
 
 					return result;

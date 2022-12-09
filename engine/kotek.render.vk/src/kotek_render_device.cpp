@@ -28,7 +28,7 @@ namespace Kotek
 							  "[object:{}][messageCode:{}][location:{}][{}][{}]"
 							  "[{}][{}] {} \n\n\n",
 					object, messageCode, location,
-					ktk::cast::to_string(pLayerPrefix), flags, objectType,
+					ktk::cast::to_string(pLayerPrefix), static_cast<int>(flags), static_cast<int>(objectType),
 					pUserData, ktk::cast::to_string(pMessage));
 
 				return VK_FALSE;

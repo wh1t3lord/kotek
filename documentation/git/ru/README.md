@@ -31,6 +31,9 @@
 7.1 Примечание, вы можете использовать vcpkg вместо скачивания предустановленных библиотек из официальных репозиториев для этого вы ничего не должны делать а только указать тип сборки.
 
 > git clone https://github.com/microsoft/vcpkg
+
+Необходимо заменить исходные triplets на triplets из пути documentation/git/vcpkg/triplets потому что по умолчанию vcpkg может собрать некоторые зависимости при самой старой visual studio. Это стоит учитывать при работе с vcpkg.
+
 > .\vcpkg\bootstrap-vcpkg.bat
 
 или если линух, мак
@@ -45,7 +48,13 @@
 .\vcpkg\vcpkg install eigen3:x64-windows
 .\vcpkg\vcpkg install glfw3:x64-windows
 .\vcpkg\vcpkg install glm:x64-windows
-.\vcpkg\vcpkg install imgui[docking-experimental]:x64-windows
+.\vcpkg\vcpkg install imgui[core,win32-binding,sdl2-binding,opengl3-binding,opengl2-binding,glfw-binding,dx9-binding,dx10-binding,dx11-binding,dx12-binding,vulkan-binding,docking-experimental]:x64-windows
+
+# If you're on MAC
+.\vcpkg\vcpkg install imgui[core,sdl2-binding,opengl3-binding,opengl2-binding,glfw-binding,metal-binding,docking-experimental]:x64-windows
+
+.\vcpkg\vcpkg install imguizmo:x64-windows
+.\vcpkg\vcpkg install implot:x64-windows
 .\vcpkg\vcpkg install ktx:x64-windows
 .\vcpkg\vcpkg install mimalloc:x64-windows
 .\vcpkg\vcpkg install tracy:x64-windows
@@ -61,7 +70,7 @@
 # TODO: add other dependencies, sdl2, miniaudio, fmod, physx, 
 ```
 
-> cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+> cmake -DCMAKE_BUILD_TYPE=Debug -DBOOST_USE_WINAPI_VERSION=BOOST_WINAPI_VERSION_WIN7 -DCMAKE_TOOLCHAIN_FILE=./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake ..
 
 
 
