@@ -18,3 +18,4 @@ add_library(${PROJECT_NAME} STATIC
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.json)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.io)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum)

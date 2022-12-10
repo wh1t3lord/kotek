@@ -21,7 +21,7 @@ ktk::any ktkLoaderFile_JSON::Load(const ktk::filesystem::path& path) noexcept
 		return false;
 	}
 
-	if (this->m_p_main_manager.GetFileSystem()->IsValidPath(path) == false)
+	if (this->m_p_main_manager->GetFileSystem()->IsValidPath(path) == false)
 	{
 		KOTEK_MESSAGE("you path is invalid and doesn't exist");
 		return false;
