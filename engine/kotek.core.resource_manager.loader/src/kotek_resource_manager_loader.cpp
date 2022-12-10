@@ -101,7 +101,7 @@ bool ktkResourceLoaderManager::Load(
 	KOTEK_ASSERT(p_loader, "failed to find loader for format file: [{}]",
 		path.extension());
 
-    if (p_loader)
+	if (p_loader)
 		result = p_loader->Load(path, object_from_construct);
 
 	return result;
@@ -110,6 +110,10 @@ bool ktkResourceLoaderManager::Load(
 eResourceLoadingType ktkResourceLoaderManager::DetectResourceTypeByFileFormat(
 	const ktk::filesystem::path& path) noexcept
 {
+	KOTEK_ASSERT(this->m_loaders.empty() == false,
+		"you must provide some loaders. Otherwise loaders are empty thus "
+	    "loader manager is invalid!");
+
 	eResourceLoadingType result{eResourceLoadingType::kUnknown};
 
 	for (const auto& [resource_type, p_loader] : this->m_loaders)

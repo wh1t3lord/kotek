@@ -1,6 +1,7 @@
 #pragma once
 
 #include "kotek_file_text.h"
+#include "kotek_loader_file_text.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE

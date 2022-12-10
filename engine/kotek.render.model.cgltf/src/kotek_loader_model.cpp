@@ -12,6 +12,10 @@ ktkLoaderModel_CGLTF::ktkLoaderModel_CGLTF(Core::ktkIFileSystem* p_filesystem) :
 	// In such scenario where you just have only one place for loading (e.g.
 	// library that handles that) you just register 'yourself' in order to load
 	// the library
+
+	// TODO: create ktkLoaderModel class that will register this class, the code
+	// below is not corrected because we need to register it to final instance
+	// of all loader's of specified type like models and etc
 	this->m_loaders[".gltf"] = this;
 	this->m_loaders[".glb"] = this;
 }
@@ -124,6 +128,7 @@ ktk::string ktkLoaderModel_CGLTF::Get_AllSupportedFormats(void) const noexcept
 		result += " ; ";
 	}
 
+	result.get_as_is().pop_back();
 	result.get_as_is().pop_back();
 	result.get_as_is().pop_back();
 
