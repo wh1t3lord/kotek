@@ -22,7 +22,12 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_std_memory.cpp"
 )
 
-target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc-static)
+if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC")
+	target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc-static)
+else()
+	target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 
 if ("${KOTEK_MEMORY_LEAK_DETECTION}" STREQUAL "ON")

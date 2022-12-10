@@ -1,10 +1,6 @@
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.game/include/kotek_engine.h>
 
-
-#undef main
-
-
 /**
  * @mainpage Kotek
  *

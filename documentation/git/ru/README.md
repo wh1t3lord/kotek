@@ -76,9 +76,13 @@
 # TODO: add other dependencies, sdl2, miniaudio, fmod, physx, 
 ```
 
-> cmake -DCMAKE_BUILD_TYPE=Debug -DBOOST_USE_WINAPI_VERSION=BOOST_WINAPI_VERSION_WIN7 -DCMAKE_TOOLCHAIN_FILE=./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+Если вы устанавливали пакеты с помощью x64-windows то нужна такая команда:
 
+> cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake ..
 
+Иначе если использовали x64-windows-static:
+
+> cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE="./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-static ..
 
 
 
