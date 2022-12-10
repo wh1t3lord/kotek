@@ -5,18 +5,18 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkLoaderFile_Text::ktkLoaderFile_Text(ktkMainManager* p_main_manager) :
+ktkResourceLoaderFile_Text::ktkResourceLoaderFile_Text(ktkMainManager* p_main_manager) :
 	m_p_main_manager{p_main_manager}
 {
 	this->Register_Loaders();
 }
 
-ktkLoaderFile_Text::~ktkLoaderFile_Text()
+ktkResourceLoaderFile_Text::~ktkResourceLoaderFile_Text()
 {
 	this->Delete_Loaders();
 }
 
-ktk::any ktkLoaderFile_Text::Load(const ktk::filesystem::path& path) noexcept
+ktk::any ktkResourceLoaderFile_Text::Load(const ktk::filesystem::path& path) noexcept
 {
 	KOTEK_ASSERT(this->m_p_main_manager,
 		"you must initialize main manager for this loader");
@@ -34,7 +34,7 @@ ktk::any ktkLoaderFile_Text::Load(const ktk::filesystem::path& path) noexcept
 	return result;
 }
 
-bool ktkLoaderFile_Text::Load(
+bool ktkResourceLoaderFile_Text::Load(
 	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
 {
 	KOTEK_ASSERT(this->m_p_main_manager,
@@ -59,17 +59,17 @@ bool ktkLoaderFile_Text::Load(
 	return result;
 }
 
-const ktk::string& ktkLoaderFile_Text::Get_UserDescription(void) const noexcept
+const ktk::string& ktkResourceLoaderFile_Text::Get_UserDescription(void) const noexcept
 {
 	return KOTEK_TEXT("this is loader for Text files");
 }
 
-Core::eResourceLoadingType ktkLoaderFile_Text::Get_Type(void) const noexcept
+Core::eResourceLoadingType ktkResourceLoaderFile_Text::Get_Type(void) const noexcept
 {
 	return eResourceLoadingType::kText;
 }
 
-bool ktkLoaderFile_Text::DetectTypeByFullPath(
+bool ktkResourceLoaderFile_Text::DetectTypeByFullPath(
 	const ktk::filesystem::path& path) noexcept
 {
 	KOTEK_ASSERT(
@@ -84,7 +84,7 @@ bool ktkLoaderFile_Text::DetectTypeByFullPath(
 		this->m_loaders.end();
 }
 
-ktkIResourceLoader* ktkLoaderFile_Text::Get_Loader(
+ktkIResourceLoader* ktkResourceLoaderFile_Text::Get_Loader(
 	const ktk::filesystem::path& extension_of_file) noexcept
 {
 	KOTEK_ASSERT(extension_of_file.empty() == false,
@@ -103,7 +103,7 @@ ktkIResourceLoader* ktkLoaderFile_Text::Get_Loader(
 	return p_result;
 }
 
-ktk::string ktkLoaderFile_Text::Get_AllSupportedFormats(void) const noexcept
+ktk::string ktkResourceLoaderFile_Text::Get_AllSupportedFormats(void) const noexcept
 {
 	ktk::string result;
 	for (const auto& [format_name, p_loader] : this->m_loaders)
@@ -119,12 +119,12 @@ ktk::string ktkLoaderFile_Text::Get_AllSupportedFormats(void) const noexcept
 	return result;
 }
 
-void ktkLoaderFile_Text::Register_Loaders(void) noexcept 
+void ktkResourceLoaderFile_Text::Register_Loaders(void) noexcept 
 {
 	this->m_loaders[".json"] = new ktkLoaderFile_JSON(this->m_p_main_manager);
 }
 
-void ktkLoaderFile_Text::Delete_Loaders(void) noexcept 
+void ktkResourceLoaderFile_Text::Delete_Loaders(void) noexcept 
 {
 	for (const auto& [loader_name, p_loader] : this->m_loaders)
 	{

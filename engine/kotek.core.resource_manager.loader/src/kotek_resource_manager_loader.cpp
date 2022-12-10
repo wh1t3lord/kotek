@@ -24,6 +24,7 @@ void ktkResourceLoaderManager::Set_Loader(
 		"return type. It is not acceptable because developer must "
 		"strictly specify what its instance contains and for what it "
 		"was created");
+
 	if (this->m_loaders.find(resource_type) != this->m_loaders.end())
 	{
 		KOTEK_MESSAGE_WARNING("[Core] replacing resource loader for type: [{}]",

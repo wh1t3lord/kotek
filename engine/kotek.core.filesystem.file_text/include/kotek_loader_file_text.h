@@ -5,11 +5,11 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-class ktkLoaderFile_Text : public ktkIResourceLoader
+class ktkResourceLoaderFile_Text : public ktkIResourceLoader
 {
 public:
-	ktkLoaderFile_Text(ktkMainManager* p_main_manager);
-	~ktkLoaderFile_Text();
+	ktkResourceLoaderFile_Text(ktkMainManager* p_main_manager);
+	~ktkResourceLoaderFile_Text();
 
 	ktk::any Load(const ktk::filesystem::path& path) noexcept override;
 

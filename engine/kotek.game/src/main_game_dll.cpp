@@ -50,11 +50,14 @@ namespace Game
 
 		Core::ktkFileText file;
 
-		Core::ktkResourceLoaderManager local_loader;
+		KOTEK_ASSERT(p_main_manager->GetResourceManager(),
+			"you must initialize and register resource manager");
+		KOTEK_ASSERT(p_main_manager->GetResourceManager()->Get_ResourceLoader(),
+			"you must initialize and register loaders and loader manager");
 
-		local_loader.Initialize(p_main_manager->GetFileSystem());
-
-		KOTEK_ASSERT(local_loader.Load(path_to_system_json, &file),
+		KOTEK_ASSERT(
+			p_main_manager->GetResourceManager()->Get_ResourceLoader()->Load(
+				path_to_system_json, &file),
 			"can't load text: {}", path_to_system_json.c_str());
 
 		const auto& field_initialize_callback_name =
@@ -301,8 +304,8 @@ namespace Engine
 
 		ktk::vector<const char*> argv_test = {"C:/test"};
 
-		auto p_custom_init_unit_test_initialize_callback = [](void) -> bool 
-		{ 
+		auto p_custom_init_unit_test_initialize_callback = [](void) -> bool
+		{
 			Core::RegisterAllTests();
 			return true;
 		};
