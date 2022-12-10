@@ -86,10 +86,76 @@ ktk::any ktkLoaderFile_JSON::Load(const ktk::filesystem::path& path) noexcept
 bool ktkLoaderFile_JSON::Load(
 	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
 {
+	ktkFileText* p_result = std::any_cast<ktkFileText*>(object_from_construct);
+
+	KOTEK_ASSERT(p_result, "ktkFileText* instance must be valid!");
+
+		if (path.empty())
+	{
+		KOTEK_MESSAGE("can't load file - path is empty");
+		return false;
+	}
+
+	if (this->m_p_main_manager->GetFileSystem()->IsValidPath(path) == false)
+	{
+		KOTEK_MESSAGE("you path is invalid and doesn't exist");
+		return false;
+	}
+
+	KOTEK_MESSAGE("reading file: {}", path);
+
+	ktk::ifstream _file(path);
+
+	if (_file.good())
+	{
+		ktk::istreambuf_iterator begin(_file);
+		ktk::istreambuf_iterator end;
+
+		ktk::string_legacy content(begin, end);
+
+		ktk::json::parse_options options;
+		options.allow_comments = true;
+		options.allow_invalid_utf8 = true;
+		options.allow_trailing_commas = false;
+
+		ktk::json::parser parser(ktk::json::storage_ptr(), options);
+
+		ktk::json::error_code code;
+
+		parser.reset();
+
+		parser.write(content, code);
+
+		if (code)
+		{
+			ktk::string msg(code.message());
+			KOTEK_MESSAGE("can't parse file status[{}]", msg.get_as_is());
+		}
+		else
+		{
+			ktk::json::value data = parser.release();
+
+			KOTEK_ASSERT(data.is_object(),
+				"your file must be object not a some code of json");
+
+			p_result->Set_Json(data.as_object());
+
+			ktk::filesystem::path path_object(path);
+			p_result->Set_FileName(reinterpret_cast<const char*>(
+				path_object.filename().u8string().c_str()), false);
+		}
+	}
+	else
+	{
+		KOTEK_MESSAGE("can't read file: {}", path);
+		return false;
+	}
+
+	_file.close();
 	return true;
 }
 
-const ktk::string& ktkLoaderFile_JSON::Get_UserDescription(void) const noexcept
+ktk::string ktkLoaderFile_JSON::Get_UserDescription(void) const noexcept
 {
 	return KOTEK_TEXT("loader for JSON files (not GeoJSON)");
 }

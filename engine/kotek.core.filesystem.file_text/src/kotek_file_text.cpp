@@ -200,10 +200,12 @@ const ktk::string& ktkFileText::Get_FileName(void) const noexcept
 	return this->m_file_name;
 }
 
-void ktkFileText::Set_FileName(const ktk::string& file_name) noexcept
+void ktkFileText::Set_FileName(const ktk::string& file_name, bool is_apply_format) noexcept
 {
 	this->m_file_name = file_name;
-	this->m_file_name += kFormatFile_Text;
+
+    if (is_apply_format)
+	    this->m_file_name += kFormatFile_Text;
 }
 
 void ktkFileText::Set_Json(const ktkJson& data) noexcept

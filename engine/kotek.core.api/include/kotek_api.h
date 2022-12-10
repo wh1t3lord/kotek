@@ -282,7 +282,7 @@ public:
 	/// \~english @brief This is only for user. You just provide your
 	/// description of loader's implementation and access it through interface.
 	/// @return Returns ktk::string instance by const&
-	virtual const ktk::string& Get_UserDescription() const noexcept
+	virtual ktk::string Get_UserDescription() const noexcept
 	{
 		return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION");
 	}

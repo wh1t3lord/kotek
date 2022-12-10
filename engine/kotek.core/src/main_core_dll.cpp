@@ -19,6 +19,7 @@ void RegisterAllTests(void)
 
 bool InitializeModule_Core(ktkMainManager* p_manager)
 {
+	InitializeModule_Core_Resource_Manager(p_manager);
 	InitializeModule_Core_Enum(p_manager);
 	InitializeModule_Core_API(p_manager);
 	InitializeModule_Core_Memory(p_manager);
@@ -37,7 +38,6 @@ bool InitializeModule_Core(ktkMainManager* p_manager)
 	InitializeModule_Core_Utility(p_manager);
 	InitializeModule_Core_ECS(p_manager);
 	InitializeModule_Core_Input(p_manager);
-	InitializeModule_Core_Resource_Manager(p_manager);
 	InitializeModule_Core_Engine_Config(p_manager);
 	InitializeModule_Core_Main_Manager(p_manager);
 

@@ -19,7 +19,7 @@ void ktkResourceLoaderManager::Set_Loader(
 {
 	KOTEK_ASSERT(p_loader, "you can't pass an invalid pointer here");
 
-	KOTEK_ASSERT(p_loader->Get_Type() == eResourceLoadingType::kUnknown,
+	KOTEK_ASSERT(p_loader->Get_Type() != eResourceLoadingType::kUnknown,
 		"you must override Get_Type method because it uses default "
 		"return type. It is not acceptable because developer must "
 		"strictly specify what its instance contains and for what it "

@@ -18,7 +18,7 @@ public:
 	bool Load(const ktk::filesystem::path& path,
 		ktk::any object_from_construct) noexcept override;
 
-	const ktk::string& Get_UserDescription(void) const noexcept override;
+	ktk::string Get_UserDescription(void) const noexcept override;
 
 	Core::eResourceLoadingType Get_Type(void) const noexcept override;
 

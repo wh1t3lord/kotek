@@ -59,7 +59,7 @@ bool ktkResourceLoaderFile_Text::Load(
 	return result;
 }
 
-const ktk::string& ktkResourceLoaderFile_Text::Get_UserDescription(void) const noexcept
+ktk::string ktkResourceLoaderFile_Text::Get_UserDescription(void) const noexcept
 {
 	return KOTEK_TEXT("this is loader for Text files");
 }

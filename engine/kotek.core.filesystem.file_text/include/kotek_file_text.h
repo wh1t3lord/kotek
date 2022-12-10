@@ -188,9 +188,12 @@ public:
 	 * right and keep that in mind.
 	 *
 	 * \param file_name your string that specifies the name of file
-	 * \return void
+	 * \param is_apply_format means that after your file_name will be applied by
+	 * format what this class accepts. For example if file_name="kek" then the
+	 * final name will be kek.json if is_apply_format=true \return void
 	 */
-	void Set_FileName(const ktk::string& file_name) noexcept;
+	void Set_FileName(
+		const ktk::string& file_name, bool is_apply_format = true) noexcept;
 
 	/**
 	 * Setter for m_json field in class.
