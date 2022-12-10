@@ -4,16 +4,9 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-void RegisterTests_Filesystem_ForModule_Core(void)
-{
-#ifdef KOTEK_USE_TESTS
-	KOTEK_MESSAGE("registered!");
-#endif
-}
-
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
-BOOST_AUTO_TEST_CASE(filesystem_check_folder_tests_for_existance)
+void test_filesystem_check_folder_tests_for_existance()
 {
 	ktkFileSystem instance;
 
@@ -27,7 +20,7 @@ BOOST_AUTO_TEST_CASE(filesystem_check_folder_tests_for_existance)
 	instance.Shutdown();
 }
 
-BOOST_AUTO_TEST_CASE(file_create_pretty_output)
+void test_file_create_pretty_output()
 {
 	ktkFileSystem filesystem;
 
@@ -63,6 +56,25 @@ BOOST_AUTO_TEST_CASE(file_create_pretty_output)
 }
 	#endif
 #endif
+
+void RegisterTests_Filesystem_ForModule_Core(void)
+{
+#ifdef KOTEK_USE_TESTS
+
+	boost::unit_test::test_suite* p_suite =
+		BOOST_TEST_SUITE("Core::FileSystem");
+	
+	p_suite->add(
+		BOOST_TEST_CASE(&test_filesystem_check_folder_tests_for_existance));
+	p_suite->add(BOOST_TEST_CASE(&test_file_create_pretty_output));
+
+	boost::unit_test::framework::master_test_suite().add(p_suite);
+
+
+
+	KOTEK_MESSAGE("registered!");
+#endif
+}
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

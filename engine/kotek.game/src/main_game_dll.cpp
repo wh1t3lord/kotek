@@ -300,8 +300,16 @@ namespace Engine
 					  "TESTING\n\n\n\n\n\n\n\n\n\n\n\n");
 
 		ktk::vector<const char*> argv_test = {"C:/test"};
+
+		auto p_custom_init_unit_test_initialize_callback = [](void) -> bool 
+		{ 
+			Core::RegisterAllTests();
+			return true;
+		};
+
 		auto status = boost::unit_test_framework::unit_test_main(
-			init_unit_test, 1, const_cast<char**>(argv_test.data()));
+			p_custom_init_unit_test_initialize_callback, 1,
+			const_cast<char**>(argv_test.data()));
 
 		KOTEK_ASSERT(status == 0, "you have got failed tests");
 

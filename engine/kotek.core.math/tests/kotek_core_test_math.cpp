@@ -7,18 +7,11 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
-void RegisterTests_Math_ForModule_Core(void)
-{
-#ifdef KOTEK_USE_TESTS
-	KOTEK_MESSAGE("Registered!");
-#endif
-}
 
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
 
-		#pragma region Utility
-BOOST_AUTO_TEST_CASE(equal_function_for_floats_are_not_equal)
+void equal_function_for_floats_are_not_equal()
 {
 	float test1 = 15.1515f;
 	float test2 = 15.1504f;
@@ -26,7 +19,7 @@ BOOST_AUTO_TEST_CASE(equal_function_for_floats_are_not_equal)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1, test2) == false);
 }
 
-BOOST_AUTO_TEST_CASE(equal_function_for_floats_must_be_equal)
+void equal_function_for_floats_must_be_equal()
 {
 	float test1 = 15.1515f;
 	float test2 = 15.1515f;
@@ -34,7 +27,7 @@ BOOST_AUTO_TEST_CASE(equal_function_for_floats_must_be_equal)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1, test2) == true);
 }
 
-BOOST_AUTO_TEST_CASE(equal_function_for_floats_really_close_but_not_equal)
+void equal_function_for_floats_really_close_but_not_equal()
 {
 	float test1 = 15.151514f;
 	float test2 = 15.151513f;
@@ -42,7 +35,7 @@ BOOST_AUTO_TEST_CASE(equal_function_for_floats_really_close_but_not_equal)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1, test2) == false);
 }
 
-BOOST_AUTO_TEST_CASE(equal_function_for_floats_digits)
+void equal_function_for_floats_digits()
 {
 	float test1 = 0.000300f;
 	float test2 = 0.000301f;
@@ -50,7 +43,7 @@ BOOST_AUTO_TEST_CASE(equal_function_for_floats_digits)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1, test2) == false);
 }
 
-BOOST_AUTO_TEST_CASE(equal_function_for_floats_zeros)
+void equal_function_for_floats_zeros()
 {
 	float test1 = 0.0f;
 	float test2 = 0.0f;
@@ -58,7 +51,7 @@ BOOST_AUTO_TEST_CASE(equal_function_for_floats_zeros)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1, test2) == true);
 }
 
-BOOST_AUTO_TEST_CASE(equal_function_for_floats_really_low)
+void equal_function_for_floats_really_low()
 {
 	float test1 = 0.000002f;
 	float test2 = 0.000001f;
@@ -66,7 +59,7 @@ BOOST_AUTO_TEST_CASE(equal_function_for_floats_really_low)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1, test2) == false);
 }
 
-BOOST_AUTO_TEST_CASE(equal_function_for_floats_when_we_sum)
+void equal_function_for_floats_when_we_sum()
 {
 	float test1 = 3.0f;
 	float test2 = 6.0f;
@@ -74,25 +67,22 @@ BOOST_AUTO_TEST_CASE(equal_function_for_floats_when_we_sum)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1 + test2, 9.0f) == true);
 }
 
-BOOST_AUTO_TEST_CASE(equal_function_for_floats_when_we_sum_dirty)
+void equal_function_for_floats_when_we_sum_dirty()
 {
 	float test1 = 3.5151f;
 	float test2 = 2.521f;
 
 	BOOST_CHECK(Kotek::ktk::is_equal(test1 + test2, 6.03f) == false);
 }
-		#pragma endregion
 
-		#pragma region Vector1
-
-BOOST_AUTO_TEST_CASE(vector1f_testing_constructor_default)
+void vector1f_testing_constructor_default()
 {
 	Kotek::ktk::math::vector1f test1;
 
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 0.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_constructor_based_on_number)
+void vector1f_testing_constructor_based_on_number()
 {
 	Kotek::ktk::math::vector1f vec(5.0f);
 
@@ -100,10 +90,10 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_constructor_based_on_number)
 }
 
 		#ifdef KOTEK_USE_MATH_LIBRARY_GLM
-BOOST_AUTO_TEST_CASE(vector1f_testing_constructor_based_on_struct) {}
+void vector1f_testing_constructor_based_on_struct() {}
 		#endif
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_copy_constructor)
+void vector1f_testing_copy_constructor()
 {
 	Kotek::ktk::math::vector1f vec_original(550.5f);
 	Kotek::ktk::math::vector1f vec_copy(vec_original);
@@ -111,7 +101,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_copy_constructor)
 	BOOST_CHECK(Kotek::ktk::is_equal(vec_original.Get_X(), vec_copy.Get_X()));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_assignment_operator_based_on_own_type)
+void vector1f_testing_assignment_operator_based_on_own_type()
 {
 	Kotek::ktk::math::vector1f some(50.0f);
 	Kotek::ktk::math::vector1f some2 = some;
@@ -119,7 +109,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_assignment_operator_based_on_own_type)
 	BOOST_CHECK(Kotek::ktk::is_equal(some.Get_X(), some2.Get_X()));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_assignment_operator_based_on_base_type)
+void vector1f_testing_assignment_operator_based_on_base_type()
 {
 	Kotek::ktk::math::base_vec1_t some(51.0f);
 	Kotek::ktk::math::vector1f some2 = some;
@@ -127,7 +117,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_assignment_operator_based_on_base_type)
 	BOOST_CHECK(Kotek::ktk::is_equal(some2.Get_X(), some));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_setter_single_depth)
+void vector1f_testing_setter_single_depth()
 {
 	Kotek::ktk::math::vector1f test;
 
@@ -136,7 +126,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_setter_single_depth)
 	BOOST_CHECK(Kotek::ktk::is_equal(test.Get_X(), 105.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_setter_two_depth)
+void vector1f_testing_setter_two_depth()
 {
 	Kotek::ktk::math::vector1f test2;
 
@@ -145,7 +135,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_setter_two_depth)
 	BOOST_CHECK(Kotek::ktk::is_equal(test2.Get_X(), 150.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_plus_equal_operator_based_on_number)
+void vector1f_testing_plus_equal_operator_based_on_number()
 {
 	Kotek::ktk::math::vector1f test1 = 3.5f;
 	Kotek::ktk::math::base_decimal_t test2 = 5.5f;
@@ -155,7 +145,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_plus_equal_operator_based_on_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 9.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_plus_equal_operator_based_on_vector)
+void vector1f_testing_plus_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector1f test1 = 3.5f;
 	Kotek::ktk::math::vector1f test2 = 5.5f;
@@ -165,7 +155,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_plus_equal_operator_based_on_vector)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 9.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_subtract_equal_operator_based_on_number)
+void vector1f_testing_subtract_equal_operator_based_on_number()
 {
 	Kotek::ktk::math::vector1f test1 = 5.5f;
 	Kotek::ktk::math::base_decimal_t test2 = 3.5f;
@@ -175,7 +165,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_subtract_equal_operator_based_on_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 2.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_subtract_equal_operator_based_on_vector)
+void vector1f_testing_subtract_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector1f test1 = 5.5f;
 	Kotek::ktk::math::vector1f test2 = 3.5f;
@@ -185,8 +175,8 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_subtract_equal_operator_based_on_vector)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 2.0f));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector1f_testing_multiply_equal_operator_based_on_number_its_scale)
+void 
+	vector1f_testing_multiply_equal_operator_based_on_number_its_scale()
 {
 	Kotek::ktk::math::vector1f test1 = 3.2f;
 	Kotek::ktk::math::base_decimal_t test2 = 5.5f;
@@ -196,8 +186,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 17.6f));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector1f_testing_multiply_equal_operator_based_on_vector_its_per_compunent_multiply)
+void 
+	vector1f_testing_multiply_equal_operator_based_on_vector_its_per_compunent_multiply()
 {
 	Kotek::ktk::math::vector1f test1 = 3.2f;
 	Kotek::ktk::math::vector1f test2 = 5.5f;
@@ -207,8 +197,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 17.6f));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector1f_testing_divide_equal_operator_based_on_number_its_scale)
+void 
+	vector1f_testing_divide_equal_operator_based_on_number_its_scale()
 {
 	Kotek::ktk::math::vector1f test1 = 8.4f;
 	Kotek::ktk::math::base_decimal_t test2 = 2.6f;
@@ -218,8 +208,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.6f)));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector1f_testing_divide_equal_operator_based_on_vector_its_divide)
+void 
+	vector1f_testing_divide_equal_operator_based_on_vector_its_divide()
 {
 	Kotek::ktk::math::vector1f test1 = 8.4f;
 	Kotek::ktk::math::vector1f test2 = 2.6f;
@@ -229,7 +219,7 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.6f)));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_modulo_equal_operator_based_on_number)
+void vector1f_testing_modulo_equal_operator_based_on_number()
 {
 	Kotek::ktk::math::vector1f test1 = 5.3f;
 	Kotek::ktk::math::base_decimal_t test2 = 2.0f;
@@ -239,7 +229,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_modulo_equal_operator_based_on_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(5.3f, 2.0f))));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_modulo_equal_operator_based_on_vector)
+void vector1f_testing_modulo_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector1f test1 = 5.3f;
 	Kotek::ktk::math::vector1f test2 = 2.0f;
@@ -249,7 +239,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_modulo_equal_operator_based_on_vector)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(5.3f, 2.0f))));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_unary_plus_operator)
+void vector1f_testing_unary_plus_operator()
 {
 	Kotek::ktk::math::vector1f test1 = 10.0f;
 
@@ -258,7 +248,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_unary_plus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 10.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_unary_minus_operator)
+void vector1f_testing_unary_minus_operator()
 {
 	Kotek::ktk::math::vector1f test1 = 10.0f;
 
@@ -267,7 +257,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_unary_minus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), -10.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_equal_zeros)
+void vector1f_testing_comparison_equal_zeros()
 {
 	Kotek::ktk::math::vector1f test1;
 	Kotek::ktk::math::vector1f test2;
@@ -275,7 +265,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_equal_zeros)
 	BOOST_CHECK(test1 == test2);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_equal_random)
+void vector1f_testing_comparison_equal_random()
 {
 	Kotek::ktk::math::vector1f test1(150.15125f);
 	Kotek::ktk::math::vector1f test2(150.15125f);
@@ -283,7 +273,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_equal_random)
 	BOOST_CHECK(test1 == test2);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_equal_different)
+void vector1f_testing_comparison_equal_different()
 {
 	Kotek::ktk::math::vector1f test1(15.3f);
 	Kotek::ktk::math::vector1f test2(15.0f);
@@ -293,7 +283,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_equal_different)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_equal_different_dirty)
+void vector1f_testing_comparison_equal_different_dirty()
 {
 	Kotek::ktk::math::vector1f test1(15.14152f);
 	Kotek::ktk::math::vector1f test2(15.14151f);
@@ -303,7 +293,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_equal_different_dirty)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_not_equal_zeros)
+void vector1f_testing_comparison_not_equal_zeros()
 {
 	Kotek::ktk::math::vector1f test1;
 	Kotek::ktk::math::vector1f test2;
@@ -313,7 +303,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_not_equal_zeros)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_not_equal_different)
+void vector1f_testing_comparison_not_equal_different()
 {
 	Kotek::ktk::math::vector1f test1(5.0f);
 	Kotek::ktk::math::vector1f test2(2.0f);
@@ -323,7 +313,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_not_equal_different)
 	BOOST_CHECK(result == true);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_not_equal_equal_dirty)
+void vector1f_testing_comparison_not_equal_equal_dirty()
 {
 	Kotek::ktk::math::vector1f test1(151.25151f);
 	Kotek::ktk::math::vector1f test2(151.25151f);
@@ -333,7 +323,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_not_equal_equal_dirty)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_not_equal_dirty)
+void vector1f_testing_comparison_not_equal_dirty()
 {
 	Kotek::ktk::math::vector1f test1(150.10502f);
 	Kotek::ktk::math::vector1f test2(150.10509f);
@@ -344,7 +334,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_comparison_not_equal_dirty)
 }
 
 		#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-BOOST_AUTO_TEST_CASE(vector1f_testing_cast_operator_xmvector)
+void vector1f_testing_cast_operator_xmvector()
 {
 	Kotek::ktk::math::vector1f test1(150.0f);
 
@@ -356,7 +346,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_cast_operator_xmvector)
 }
 		#endif
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_binary_plus_operator_both_vectors)
+void vector1f_testing_binary_plus_operator_both_vectors()
 {
 	Kotek::ktk::math::vector1f test1(50.5f);
 	Kotek::ktk::math::vector1f test2(5.5f);
@@ -366,7 +356,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_binary_plus_operator_both_vectors)
 	BOOST_CHECK(new_vector == 56.0f);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_binary_plus_operator_vector_number)
+void vector1f_testing_binary_plus_operator_vector_number()
 {
 	Kotek::ktk::math::vector1f test1(50.5f);
 	Kotek::ktk::math::base_decimal_t test2(5.5f);
@@ -376,7 +366,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_binary_plus_operator_vector_number)
 	BOOST_CHECK(new_vector == 56.0f);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_binary_subtract_operator_both_vectors)
+void vector1f_testing_binary_subtract_operator_both_vectors()
 {
 	Kotek::ktk::math::vector1f test1(50.5f);
 	Kotek::ktk::math::vector1f test2(0.5f);
@@ -386,7 +376,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_binary_subtract_operator_both_vectors)
 	BOOST_CHECK(new_vector == 50.0f);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_binary_subtract_operator_vector_number)
+void vector1f_testing_binary_subtract_operator_vector_number()
 {
 	Kotek::ktk::math::vector1f test1(50.5f);
 	Kotek::ktk::math::base_decimal_t test2(0.5f);
@@ -396,7 +386,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_binary_subtract_operator_vector_number)
 	BOOST_CHECK(new_vector == 50.0f);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_binary_mutiply_operator_both_vectors)
+void vector1f_testing_binary_mutiply_operator_both_vectors()
 {
 	Kotek::ktk::math::vector1f test1(5.5f);
 	Kotek::ktk::math::vector1f test2(2.2f);
@@ -406,7 +396,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_binary_mutiply_operator_both_vectors)
 	BOOST_CHECK(new_vector == 12.1f);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_binary_multiply_operator_vector_number)
+void vector1f_testing_binary_multiply_operator_vector_number()
 {
 	Kotek::ktk::math::vector1f test1(5.5f);
 	Kotek::ktk::math::base_decimal_t test2(2.2f);
@@ -416,7 +406,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_binary_multiply_operator_vector_number)
 	BOOST_CHECK(new_vector == 12.1f);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_binary_divide_operator_both_vectors)
+void vector1f_testing_binary_divide_operator_both_vectors()
 {
 	Kotek::ktk::math::vector1f test1(6.6f);
 	Kotek::ktk::math::vector1f test2(0.2f);
@@ -426,7 +416,7 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_binary_divide_operator_both_vectors)
 	BOOST_CHECK(new_vector == 33.0f);
 }
 
-BOOST_AUTO_TEST_CASE(vector1f_testing_binary_divide_operator_vector_number)
+void vector1f_testing_binary_divide_operator_vector_number()
 {
 	Kotek::ktk::math::vector1f test1(6.6f);
 	Kotek::ktk::math::base_decimal_t test2(0.2f);
@@ -435,17 +425,15 @@ BOOST_AUTO_TEST_CASE(vector1f_testing_binary_divide_operator_vector_number)
 
 	BOOST_CHECK(new_vector == 33.0f);
 }
-		#pragma endregion
 
-		#pragma region Vector2
-BOOST_AUTO_TEST_CASE(vector2f_testing_constructor_default)
+void vector2f_testing_constructor_default()
 {
 	Kotek::ktk::math::vector2f test1;
 
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_X(), 0.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_constructor_based_on_number)
+void vector2f_testing_constructor_based_on_number()
 {
 	Kotek::ktk::math::vector2f vec(5.0f, 6.0f);
 
@@ -453,7 +441,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_constructor_based_on_number)
 		Kotek::ktk::is_equal(vec.Get_Y(), 6.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_constructor_based_on_struct)
+void vector2f_testing_constructor_based_on_struct()
 {
 	Kotek::ktk::math::base_vec2_t data = {5.0f, 6.0f};
 	Kotek::ktk::math::vector2f vec(data);
@@ -462,7 +450,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_constructor_based_on_struct)
 		Kotek::ktk::is_equal(vec.Get_Y(), 6.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_copy_constructor)
+void vector2f_testing_copy_constructor()
 {
 	Kotek::ktk::math::vector2f vec_original(550.5f, 153.2f);
 	Kotek::ktk::math::vector2f vec_copy(vec_original);
@@ -471,7 +459,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_copy_constructor)
 		Kotek::ktk::is_equal(vec_original.Get_Y(), vec_copy.Get_Y()));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_assignment_operator_based_on_own_type)
+void vector2f_testing_assignment_operator_based_on_own_type()
 {
 	Kotek::ktk::math::vector2f some(50.0f, 25.4f);
 	Kotek::ktk::math::vector2f some2 = some;
@@ -480,7 +468,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_assignment_operator_based_on_own_type)
 		Kotek::ktk::is_equal(some.Get_Y(), some2.Get_Y()));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_assignment_operator_based_on_base_type)
+void vector2f_testing_assignment_operator_based_on_base_type()
 {
 	Kotek::ktk::math::base_vec2_t some(51.0f, 15.3f);
 	Kotek::ktk::math::vector2f some2 = some;
@@ -489,7 +477,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_assignment_operator_based_on_base_type)
 		Kotek::ktk::is_equal(some2.Get_Y(), some.y));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_setter_single_depth)
+void vector2f_testing_setter_single_depth()
 {
 	Kotek::ktk::math::vector2f test;
 
@@ -500,7 +488,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_setter_single_depth)
 		Kotek::ktk::is_equal(test.Get_Y(), 103.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_setter_two_depth)
+void vector2f_testing_setter_two_depth()
 {
 	Kotek::ktk::math::vector2f test2;
 
@@ -511,7 +499,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_setter_two_depth)
 		Kotek::ktk::is_equal(test2.Get_Y(), 425.25f));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_plus_equal_operator_based_on_vector)
+void vector2f_testing_plus_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector2f test1 = {3.5f, 2.5f};
 	Kotek::ktk::math::vector2f test2 = {1.5f, 2.0f};
@@ -522,7 +510,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_plus_equal_operator_based_on_vector)
 		Kotek::ktk::is_equal(test1.Get_Y(), 4.5f));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_subtract_equal_operator_based_on_vector)
+void vector2f_testing_subtract_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector2f test1 = {3.5f, 2.5f};
 	Kotek::ktk::math::vector2f test2 = {1.5f, 2.0f};
@@ -533,8 +521,8 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_subtract_equal_operator_based_on_vector)
 		Kotek::ktk::is_equal(test1.Get_Y(), 0.5f));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector2f_testing_multiply_equal_operator_based_on_number_its_scale)
+void 
+	vector2f_testing_multiply_equal_operator_based_on_number_its_scale()
 {
 	Kotek::ktk::math::vector2f test1 = {2.0f, 6.4f};
 	Kotek::ktk::math::base_decimal_t test2 = 5.5f;
@@ -545,8 +533,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), 35.2f));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector2f_testing_multiply_equal_operator_based_on_vector_its_per_component_multiply)
+void 
+	vector2f_testing_multiply_equal_operator_based_on_vector_its_per_component_multiply()
 {
 	Kotek::ktk::math::vector2f test1 = {2.0f, 6.4f};
 	Kotek::ktk::math::vector2f test2 = {5.5f, 252.1f};
@@ -557,8 +545,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), (6.4f * 252.1f)));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector2f_testing_divide_equal_operator_based_on_number_its_scale)
+void 
+	vector2f_testing_divide_equal_operator_based_on_number_its_scale()
 {
 	Kotek::ktk::math::vector2f test1 = {8.4f, 2.6f};
 	Kotek::ktk::math::base_decimal_t test2 = 2.0f;
@@ -569,8 +557,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), (2.6f / 2.0f)));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector2f_testing_divide_equal_operator_based_on_vector_its_divide)
+void 
+	vector2f_testing_divide_equal_operator_based_on_vector_its_divide()
 {
 	Kotek::ktk::math::vector2f test1 = {8.4f, 3.5f};
 	Kotek::ktk::math::vector2f test2 = {2.0f, 0.5f};
@@ -581,7 +569,7 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), (3.5f / 0.5f)));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_modulo_equal_operator_based_on_number)
+void vector2f_testing_modulo_equal_operator_based_on_number()
 {
 	Kotek::ktk::math::vector2f test1 = {4.0f, 6.0f};
 	Kotek::ktk::math::base_decimal_t test2 = 2.0f;
@@ -592,7 +580,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_modulo_equal_operator_based_on_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), (std::fmod(6.0f, 2.0f))));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_modulo_equal_operator_based_on_vector)
+void vector2f_testing_modulo_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector2f test1 = {4.0f, 6.0f};
 	Kotek::ktk::math::vector2f test2 = {2.0f, 3.0f};
@@ -603,7 +591,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_modulo_equal_operator_based_on_vector)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), (std::fmod(6.0f, 3.0f))));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_unary_plus_operator)
+void vector2f_testing_unary_plus_operator()
 {
 	Kotek::ktk::math::vector2f test1 = {10.0f, 5.0f};
 
@@ -613,7 +601,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_unary_plus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), 5.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_unary_minus_operator)
+void vector2f_testing_unary_minus_operator()
 {
 	Kotek::ktk::math::vector2f test1 = {10.0f, 5.0f};
 
@@ -623,7 +611,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_unary_minus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Y(), -5.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_zeros)
+void vector2f_testing_comparison_equal_zeros()
 {
 	Kotek::ktk::math::vector2f test1;
 	Kotek::ktk::math::vector2f test2;
@@ -631,7 +619,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_zeros)
 	BOOST_CHECK(test1 == test2);
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_random)
+void vector2f_testing_comparison_equal_random()
 {
 	Kotek::ktk::math::vector2f test1(150.15125f, 1515.1414f);
 	Kotek::ktk::math::vector2f test2(150.15125f, 1515.1414f);
@@ -639,7 +627,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_random)
 	BOOST_CHECK(test1 == test2);
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_different_last_field)
+void vector2f_testing_comparison_equal_different_last_field()
 {
 	Kotek::ktk::math::vector2f test1(15.3f, 4.4f);
 	Kotek::ktk::math::vector2f test2(15.0f, 4.4f);
@@ -649,7 +637,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_different_last_field)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_different_first_field)
+void vector2f_testing_comparison_equal_different_first_field()
 {
 	Kotek::ktk::math::vector2f test1(15.0f, 4.3f);
 	Kotek::ktk::math::vector2f test2(15.0f, 4.4f);
@@ -659,8 +647,8 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_equal_different_first_field)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector2f_testing_comparison_equal_different_dirty_last_field)
+void 
+	vector2f_testing_comparison_equal_different_dirty_last_field()
 {
 	Kotek::ktk::math::vector2f test1(15.14152f, 0.0f);
 	Kotek::ktk::math::vector2f test2(15.14151f, 0.0f);
@@ -670,8 +658,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector2f_testing_comparison_equal_different_dirty_first_field)
+void 
+	vector2f_testing_comparison_equal_different_dirty_first_field()
 {
 	Kotek::ktk::math::vector2f test1(0.0f, 15.14152f);
 	Kotek::ktk::math::vector2f test2(0.0f, 15.14151f);
@@ -681,7 +669,7 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_zeros)
+void vector2f_testing_comparison_not_equal_zeros()
 {
 	Kotek::ktk::math::vector2f test1;
 	Kotek::ktk::math::vector2f test2;
@@ -691,7 +679,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_zeros)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_different)
+void vector2f_testing_comparison_not_equal_different()
 {
 	Kotek::ktk::math::vector2f test1(5.0f, 0.0f);
 	Kotek::ktk::math::vector2f test2(2.0f, 0.0f);
@@ -701,7 +689,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_different)
 	BOOST_CHECK(result == true);
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_equal_dirty)
+void vector2f_testing_comparison_not_equal_equal_dirty()
 {
 	Kotek::ktk::math::vector2f test1(151.25151f, 0.0f);
 	Kotek::ktk::math::vector2f test2(151.25151f, 0.0f);
@@ -711,7 +699,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_equal_dirty)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_dirty)
+void vector2f_testing_comparison_not_equal_dirty()
 {
 	Kotek::ktk::math::vector2f test1(150.10502f, 0.0f);
 	Kotek::ktk::math::vector2f test2(150.10509f, 0.0f);
@@ -722,7 +710,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_comparison_not_equal_dirty)
 }
 
 		#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-BOOST_AUTO_TEST_CASE(vector2f_testing_cast_operator_xmvector)
+void vector2f_testing_cast_operator_xmvector()
 {
 	Kotek::ktk::math::vector2f test1(150.0f, 151.0f);
 
@@ -736,7 +724,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_cast_operator_xmvector)
 }
 		#endif
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_binary_plus_operator_both_vectors)
+void vector2f_testing_binary_plus_operator_both_vectors()
 {
 	Kotek::ktk::math::vector2f test1(50.5f, 2.5f);
 	Kotek::ktk::math::vector2f test2(5.5f, 0.5f);
@@ -747,7 +735,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_binary_plus_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(2.5f + 0.5f, new_vector.Get_Y()));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_binary_subtract_operator_both_vectors)
+void vector2f_testing_binary_subtract_operator_both_vectors()
 {
 	Kotek::ktk::math::vector2f test1(50.5f, 25.0f);
 	Kotek::ktk::math::vector2f test2(0.5f, 5.0f);
@@ -758,7 +746,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_binary_subtract_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(25.0f - 5.0f, new_vector.Get_Y()));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_binary_mutiply_operator_both_vectors)
+void vector2f_testing_binary_mutiply_operator_both_vectors()
 {
 	Kotek::ktk::math::vector2f test1(5.5f, 25.5f);
 	Kotek::ktk::math::vector2f test2(2.2f, 5.5f);
@@ -769,7 +757,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_binary_mutiply_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(25.5f * 5.5f, new_vector.Get_Y()));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_binary_multiply_operator_vector_number)
+void vector2f_testing_binary_multiply_operator_vector_number()
 {
 	Kotek::ktk::math::vector2f test1(5.5f, 2.5f);
 	Kotek::ktk::math::base_decimal_t test2(2.2f);
@@ -780,7 +768,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_binary_multiply_operator_vector_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(2.5f * 2.2f, new_vector.Get_Y()));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_binary_divide_operator_both_vectors)
+void vector2f_testing_binary_divide_operator_both_vectors()
 {
 	Kotek::ktk::math::vector2f test1(6.6f, 3.6f);
 	Kotek::ktk::math::vector2f test2(0.2f, 0.4f);
@@ -791,7 +779,7 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_binary_divide_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(3.6f / 0.4f, new_vector.Get_Y()));
 }
 
-BOOST_AUTO_TEST_CASE(vector2f_testing_binary_divide_operator_vector_number)
+void vector2f_testing_binary_divide_operator_vector_number()
 {
 	Kotek::ktk::math::vector2f test1(6.6f, 3.6f);
 	Kotek::ktk::math::base_decimal_t test2(0.2f);
@@ -801,10 +789,8 @@ BOOST_AUTO_TEST_CASE(vector2f_testing_binary_divide_operator_vector_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.Get_X()));
 	BOOST_CHECK(Kotek::ktk::is_equal(3.6f / 0.2f, new_vector.Get_Y()));
 }
-		#pragma endregion
 
-		#pragma region Vector3
-BOOST_AUTO_TEST_CASE(vector3f_testing_constructor_default)
+void vector3f_testing_constructor_default()
 {
 	Kotek::ktk::math::vector3f test1;
 
@@ -813,7 +799,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_constructor_default)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), 0.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_constructor_based_on_number)
+void vector3f_testing_constructor_based_on_number()
 {
 	Kotek::ktk::math::vector3f vec(5.0f, 6.0f, 7.0f);
 
@@ -822,7 +808,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_constructor_based_on_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(vec.Get_Z(), 7.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_constructor_based_on_struct)
+void vector3f_testing_constructor_based_on_struct()
 {
 	Kotek::ktk::math::base_vec3_t data = {5.0f, 6.0f, 7.0f};
 	Kotek::ktk::math::vector3f vec(data);
@@ -832,7 +818,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_constructor_based_on_struct)
 	BOOST_CHECK(Kotek::ktk::is_equal(vec.Get_Z(), 7.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_copy_constructor)
+void vector3f_testing_copy_constructor()
 {
 	Kotek::ktk::math::vector3f vec_original(550.5f, 153.2f, 25.25f);
 	Kotek::ktk::math::vector3f vec_copy(vec_original);
@@ -842,7 +828,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_copy_constructor)
 	BOOST_CHECK(Kotek::ktk::is_equal(vec_original.Get_Z(), vec_copy.Get_Z()));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_assignment_operator_based_on_own_type)
+void vector3f_testing_assignment_operator_based_on_own_type()
 {
 	Kotek::ktk::math::vector3f some(50.0f, 25.4f, 252.0f);
 	Kotek::ktk::math::vector3f some2 = some;
@@ -852,7 +838,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_assignment_operator_based_on_own_type)
 	BOOST_CHECK(Kotek::ktk::is_equal(some.Get_Z(), some2.Get_Z()));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_assignment_operator_based_on_base_type)
+void vector3f_testing_assignment_operator_based_on_base_type()
 {
 	Kotek::ktk::math::base_vec3_t some(51.0f, 15.3f, 25.0f);
 	Kotek::ktk::math::vector3f some2 = some;
@@ -862,7 +848,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_assignment_operator_based_on_base_type)
 	BOOST_CHECK(Kotek::ktk::is_equal(some2.Get_Z(), some.z));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_setter_single_depth)
+void vector3f_testing_setter_single_depth()
 {
 	Kotek::ktk::math::vector3f test;
 
@@ -875,7 +861,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_setter_single_depth)
 	BOOST_CHECK(Kotek::ktk::is_equal(test.Get_Z(), 144.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_setter_two_depth)
+void vector3f_testing_setter_two_depth()
 {
 	Kotek::ktk::math::vector3f test2;
 
@@ -888,7 +874,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_setter_two_depth)
 	BOOST_CHECK(Kotek::ktk::is_equal(test2.Get_Z(), 325.25f));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_plus_equal_operator_based_on_vector)
+void vector3f_testing_plus_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector3f test1 = {3.5f, 2.5f, 351.0f};
 	Kotek::ktk::math::vector3f test2 = {1.5f, 2.0f, 9.0f};
@@ -900,7 +886,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_plus_equal_operator_based_on_vector)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), 360.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_subtract_equal_operator_based_on_vector)
+void vector3f_testing_subtract_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector3f test1 = {3.5f, 2.5f, 252.0f};
 	Kotek::ktk::math::vector3f test2 = {1.5f, 2.0f, 3.0f};
@@ -911,8 +897,8 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_subtract_equal_operator_based_on_vector)
 		Kotek::ktk::is_equal(test1.Get_Y(), 0.5f));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector3f_testing_multiply_equal_operator_based_on_number_its_scale)
+void 
+	vector3f_testing_multiply_equal_operator_based_on_number_its_scale()
 {
 	Kotek::ktk::math::vector3f test1 = {2.0f, 6.4f, 4.4f};
 	Kotek::ktk::math::base_decimal_t test2 = 5.5f;
@@ -924,8 +910,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), 4.4f * 5.5f));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector3f_testing_multiply_equal_operator_based_on_vector_its_per_component_multiply)
+void 
+	vector3f_testing_multiply_equal_operator_based_on_vector_its_per_component_multiply()
 {
 	Kotek::ktk::math::vector3f test1 = {2.0f, 6.4f, 25.5f};
 	Kotek::ktk::math::vector3f test2 = {5.5f, 252.1f, 60.4f};
@@ -937,8 +923,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), (25.5f * 60.4f)));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector3f_testing_divide_equal_operator_based_on_number_its_scale)
+void 
+	vector3f_testing_divide_equal_operator_based_on_number_its_scale()
 {
 	Kotek::ktk::math::vector3f test1 = {8.4f, 2.6f, 25.0f};
 	Kotek::ktk::math::base_decimal_t test2 = 2.0f;
@@ -950,8 +936,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), (25.0f / 2.0f)));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector3f_testing_divide_equal_operator_based_on_vector_its_divide)
+void 
+	vector3f_testing_divide_equal_operator_based_on_vector_its_divide()
 {
 	Kotek::ktk::math::vector3f test1 = {8.4f, 3.5f, 5.5f};
 	Kotek::ktk::math::vector3f test2 = {2.0f, 0.5f, 52.5f};
@@ -963,7 +949,7 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), (5.5f / 52.5f)));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_modulo_equal_operator_based_on_number)
+void vector3f_testing_modulo_equal_operator_based_on_number()
 {
 	Kotek::ktk::math::vector3f test1 = {4.0f, 6.0f, 8.0f};
 	Kotek::ktk::math::base_decimal_t test2 = 2.0f;
@@ -975,7 +961,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_modulo_equal_operator_based_on_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), (std::fmod(8.0f, 2.0f))));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_modulo_equal_operator_based_on_vector)
+void vector3f_testing_modulo_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector3f test1 = {4.0f, 6.0f, 8.0f};
 	Kotek::ktk::math::vector3f test2 = {2.0f, 3.0f, 4.0f};
@@ -987,7 +973,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_modulo_equal_operator_based_on_vector)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), (std::fmod(8.0f, 4.0f))));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_unary_plus_operator)
+void vector3f_testing_unary_plus_operator()
 {
 	Kotek::ktk::math::vector3f test1 = {10.0f, 5.0f, 15.0f};
 
@@ -998,7 +984,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_unary_plus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), 15.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_unary_minus_operator)
+void vector3f_testing_unary_minus_operator()
 {
 	Kotek::ktk::math::vector3f test1 = {10.0f, 5.0f, 15.0f};
 
@@ -1009,7 +995,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_unary_minus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_Z(), -15.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_equal_zeros)
+void vector3f_testing_comparison_equal_zeros()
 {
 	Kotek::ktk::math::vector3f test1;
 	Kotek::ktk::math::vector3f test2;
@@ -1017,7 +1003,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_equal_zeros)
 	BOOST_CHECK(test1 == test2);
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_equal_random)
+void vector3f_testing_comparison_equal_random()
 {
 	Kotek::ktk::math::vector3f test1(150.15125f, 1515.1414f, 14.24141f);
 	Kotek::ktk::math::vector3f test2(150.15125f, 1515.1414f, 14.24141f);
@@ -1025,7 +1011,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_equal_random)
 	BOOST_CHECK(test1 == test2);
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_equal_different_last_field)
+void vector3f_testing_comparison_equal_different_last_field()
 {
 	Kotek::ktk::math::vector3f test1(15.3f, 4.4f, 15.15f);
 	Kotek::ktk::math::vector3f test2(15.0f, 4.4f, 15.15f);
@@ -1035,7 +1021,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_equal_different_last_field)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_equal_different_first_field)
+void vector3f_testing_comparison_equal_different_first_field()
 {
 	Kotek::ktk::math::vector3f test1(15.0f, 4.3f, 15.15f);
 	Kotek::ktk::math::vector3f test2(15.0f, 4.4f, 15.15f);
@@ -1045,8 +1031,8 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_equal_different_first_field)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector3f_testing_comparison_equal_different_dirty_last_field)
+void 
+	vector3f_testing_comparison_equal_different_dirty_last_field()
 {
 	Kotek::ktk::math::vector3f test1(15.14152f, 0.0f, 0.0f);
 	Kotek::ktk::math::vector3f test2(15.14151f, 0.0f, 0.0f);
@@ -1056,8 +1042,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector3f_testing_comparison_equal_different_dirty_first_field)
+void 
+	vector3f_testing_comparison_equal_different_dirty_first_field()
 {
 	Kotek::ktk::math::vector3f test1(0.0f, 15.14152f, 0.0f);
 	Kotek::ktk::math::vector3f test2(0.0f, 15.14151f, 0.0f);
@@ -1067,7 +1053,7 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_not_equal_zeros)
+void vector3f_testing_comparison_not_equal_zeros()
 {
 	Kotek::ktk::math::vector3f test1;
 	Kotek::ktk::math::vector3f test2;
@@ -1077,7 +1063,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_not_equal_zeros)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_not_equal_different)
+void vector3f_testing_comparison_not_equal_different()
 {
 	Kotek::ktk::math::vector3f test1(5.0f, 0.0f, 0.0f);
 	Kotek::ktk::math::vector3f test2(2.0f, 0.0f, 0.0f);
@@ -1087,7 +1073,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_not_equal_different)
 	BOOST_CHECK(result == true);
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_not_equal_equal_dirty)
+void vector3f_testing_comparison_not_equal_equal_dirty()
 {
 	Kotek::ktk::math::vector3f test1(151.25151f, 0.0f, 0.0f);
 	Kotek::ktk::math::vector3f test2(151.25151f, 0.0f, 0.0f);
@@ -1097,7 +1083,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_not_equal_equal_dirty)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_not_equal_dirty)
+void vector3f_testing_comparison_not_equal_dirty()
 {
 	Kotek::ktk::math::vector3f test1(150.10502f, 0.0f, 1.0f);
 	Kotek::ktk::math::vector3f test2(150.10509f, 0.0f, 1.0f);
@@ -1108,7 +1094,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_comparison_not_equal_dirty)
 }
 
 		#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-BOOST_AUTO_TEST_CASE(vector3f_testing_cast_operator_xmvector)
+void vector3f_testing_cast_operator_xmvector()
 {
 	Kotek::ktk::math::vector3f test1(150.0f, 151.0f, 153.0f);
 
@@ -1124,7 +1110,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_cast_operator_xmvector)
 }
 		#endif
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_binary_plus_operator_both_vectors)
+void vector3f_testing_binary_plus_operator_both_vectors()
 {
 	Kotek::ktk::math::vector3f test1(50.5f, 2.5f, 3.5f);
 	Kotek::ktk::math::vector3f test2(5.5f, 0.5f, 2.5f);
@@ -1136,7 +1122,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_binary_plus_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(3.5f + 2.5f, new_vector.Get_Z()));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_binary_subtract_operator_both_vectors)
+void vector3f_testing_binary_subtract_operator_both_vectors()
 {
 	Kotek::ktk::math::vector3f test1(50.5f, 25.0f, 3.5f);
 	Kotek::ktk::math::vector3f test2(0.5f, 5.0f, 2.5f);
@@ -1148,7 +1134,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_binary_subtract_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(3.5f - 2.5f, new_vector.Get_Z()));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_binary_mutiply_operator_both_vectors)
+void vector3f_testing_binary_mutiply_operator_both_vectors()
 {
 	Kotek::ktk::math::vector3f test1(5.5f, 25.5f, 3.5f);
 	Kotek::ktk::math::vector3f test2(2.2f, 5.5f, 2.5f);
@@ -1160,7 +1146,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_binary_mutiply_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(3.5f * 2.5f, new_vector.Get_Z()));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_binary_multiply_operator_vector_number)
+void vector3f_testing_binary_multiply_operator_vector_number()
 {
 	Kotek::ktk::math::vector3f test1(5.5f, 2.5f, 3.5f);
 	Kotek::ktk::math::base_decimal_t test2(2.2f);
@@ -1172,7 +1158,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_binary_multiply_operator_vector_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(3.5f * 2.2f, new_vector.Get_Z()));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_binary_divide_operator_both_vectors)
+void vector3f_testing_binary_divide_operator_both_vectors()
 {
 	Kotek::ktk::math::vector3f test1(6.6f, 3.6f, 3.5f);
 	Kotek::ktk::math::vector3f test2(0.2f, 0.4f, 0.5f);
@@ -1184,7 +1170,7 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_binary_divide_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(3.5f / 0.5f, new_vector.Get_Z()));
 }
 
-BOOST_AUTO_TEST_CASE(vector3f_testing_binary_divide_operator_vector_number)
+void vector3f_testing_binary_divide_operator_vector_number()
 {
 	Kotek::ktk::math::vector3f test1(6.6f, 3.6f, 2.5f);
 	Kotek::ktk::math::base_decimal_t test2(0.2f);
@@ -1195,10 +1181,8 @@ BOOST_AUTO_TEST_CASE(vector3f_testing_binary_divide_operator_vector_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(3.6f / 0.2f, new_vector.Get_Y()));
 	BOOST_CHECK(Kotek::ktk::is_equal(2.5f / 0.2f, new_vector.Get_Z()));
 }
-		#pragma endregion
 
-		#pragma region Vector4
-BOOST_AUTO_TEST_CASE(vector4f_testing_constructor_default)
+void vector4f_testing_constructor_default()
 {
 	Kotek::ktk::math::vector4f test1;
 
@@ -1208,7 +1192,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_constructor_default)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), 0.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_constructor_based_on_number)
+void vector4f_testing_constructor_based_on_number()
 {
 	Kotek::ktk::math::vector4f vec(5.0f, 6.0f, 7.0f, 8.0f);
 
@@ -1218,7 +1202,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_constructor_based_on_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(vec.Get_W(), 8.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_constructor_based_on_struct)
+void vector4f_testing_constructor_based_on_struct()
 {
 	Kotek::ktk::math::base_vec4_t data = {5.0f, 6.0f, 7.0f, 8.0f};
 	Kotek::ktk::math::vector4f vec(data);
@@ -1229,7 +1213,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_constructor_based_on_struct)
 	BOOST_CHECK(Kotek::ktk::is_equal(vec.Get_W(), 8.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_copy_constructor)
+void vector4f_testing_copy_constructor()
 {
 	Kotek::ktk::math::vector4f vec_original(550.5f, 153.2f, 25.25f, 2525.52f);
 	Kotek::ktk::math::vector4f vec_copy(vec_original);
@@ -1240,7 +1224,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_copy_constructor)
 	BOOST_CHECK(Kotek::ktk::is_equal(vec_original.Get_W(), vec_copy.Get_W()));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_assignment_operator_based_on_own_type)
+void vector4f_testing_assignment_operator_based_on_own_type()
 {
 	Kotek::ktk::math::vector4f some(50.0f, 25.4f, 252.0f, 25215.15f);
 	Kotek::ktk::math::vector4f some2 = some;
@@ -1251,7 +1235,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_assignment_operator_based_on_own_type)
 	BOOST_CHECK(Kotek::ktk::is_equal(some.Get_W(), some2.Get_W()));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_assignment_operator_based_on_base_type)
+void vector4f_testing_assignment_operator_based_on_base_type()
 {
 	Kotek::ktk::math::base_vec4_t some(51.0f, 15.3f, 25.0f, 1511.3f);
 	Kotek::ktk::math::vector4f some2 = some;
@@ -1262,7 +1246,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_assignment_operator_based_on_base_type)
 	BOOST_CHECK(Kotek::ktk::is_equal(some2.Get_W(), some.w));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_setter_single_depth)
+void vector4f_testing_setter_single_depth()
 {
 	Kotek::ktk::math::vector4f test;
 
@@ -1277,7 +1261,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_setter_single_depth)
 	BOOST_CHECK(Kotek::ktk::is_equal(test.Get_W(), 1514.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_setter_two_depth)
+void vector4f_testing_setter_two_depth()
 {
 	Kotek::ktk::math::vector4f test2;
 
@@ -1292,7 +1276,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_setter_two_depth)
 	BOOST_CHECK(Kotek::ktk::is_equal(test2.Get_W(), 3254.25f));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_plus_equal_operator_based_on_vector)
+void vector4f_testing_plus_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector4f test1 = {3.5f, 2.5f, 351.0f, 151.1f};
 	Kotek::ktk::math::vector4f test2 = {1.5f, 2.0f, 9.0f, 15.0f};
@@ -1305,7 +1289,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_plus_equal_operator_based_on_vector)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), (151.1f + 15.0f)));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_subtract_equal_operator_based_on_vector)
+void vector4f_testing_subtract_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector4f test1 = {3.5f, 2.5f, 252.0f, 16.0f};
 	Kotek::ktk::math::vector4f test2 = {1.5f, 2.0f, 3.0f, 4.0f};
@@ -1318,8 +1302,8 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_subtract_equal_operator_based_on_vector)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), (16.0f - 4.0f)));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector4f_testing_multiply_equal_operator_based_on_number_its_scale)
+void 
+	vector4f_testing_multiply_equal_operator_based_on_number_its_scale()
 {
 	Kotek::ktk::math::vector4f test1 = {2.0f, 6.4f, 4.4f, 25.25f};
 	Kotek::ktk::math::base_decimal_t test2 = 5.5f;
@@ -1332,8 +1316,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), 25.25f * 5.5f));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector4f_testing_multiply_equal_operator_based_on_vector_its_per_component_multiply)
+void 
+	vector4f_testing_multiply_equal_operator_based_on_vector_its_per_component_multiply()
 {
 	Kotek::ktk::math::vector4f test1 = {2.0f, 6.4f, 25.5f, 10.10f};
 	Kotek::ktk::math::vector4f test2 = {5.5f, 252.1f, 60.4f, 25.0f};
@@ -1346,8 +1330,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), (10.10f * 25.0f)));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector4f_testing_divide_equal_operator_based_on_number_its_scale)
+void 
+	vector4f_testing_divide_equal_operator_based_on_number_its_scale()
 {
 	Kotek::ktk::math::vector4f test1 = {8.4f, 2.6f, 25.0f, 251.0f};
 	Kotek::ktk::math::base_decimal_t test2 = 2.0f;
@@ -1360,8 +1344,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), (251.0f / 2.0f)));
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector4f_testing_divide_equal_operator_based_on_vector_its_divide)
+void 
+	vector4f_testing_divide_equal_operator_based_on_vector_its_divide()
 {
 	Kotek::ktk::math::vector4f test1 = {8.4f, 3.5f, 5.5f, 251.15f};
 	Kotek::ktk::math::vector4f test2 = {2.0f, 0.5f, 52.5f, 151.0f};
@@ -1374,7 +1358,7 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), (251.15f / 151.0f)));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_modulo_equal_operator_based_on_number)
+void vector4f_testing_modulo_equal_operator_based_on_number()
 {
 	Kotek::ktk::math::vector4f test1 = {4.0f, 6.0f, 8.0f, 151.0f};
 	Kotek::ktk::math::base_decimal_t test2 = 2.0f;
@@ -1387,7 +1371,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_modulo_equal_operator_based_on_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), (std::fmod(151.0f, 2.0f))));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_modulo_equal_operator_based_on_vector)
+void vector4f_testing_modulo_equal_operator_based_on_vector()
 {
 	Kotek::ktk::math::vector4f test1 = {4.0f, 6.0f, 8.0f, 15.0f};
 	Kotek::ktk::math::vector4f test2 = {2.0f, 3.0f, 4.0f, 12.0f};
@@ -1400,7 +1384,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_modulo_equal_operator_based_on_vector)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), (std::fmod(15.0f, 12.0f))));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_unary_plus_operator)
+void vector4f_testing_unary_plus_operator()
 {
 	Kotek::ktk::math::vector4f test1 = {10.0f, 5.0f, 15.0f, 151.0f};
 
@@ -1412,7 +1396,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_unary_plus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), 151.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_unary_minus_operator)
+void vector4f_testing_unary_minus_operator()
 {
 	Kotek::ktk::math::vector4f test1 = {10.0f, 5.0f, 15.0f, 151.0f};
 
@@ -1424,7 +1408,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_unary_minus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(test1.Get_W(), -151.0f));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_equal_zeros)
+void vector4f_testing_comparison_equal_zeros()
 {
 	Kotek::ktk::math::vector4f test1;
 	Kotek::ktk::math::vector4f test2;
@@ -1432,7 +1416,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_equal_zeros)
 	BOOST_CHECK(test1 == test2);
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_equal_random)
+void vector4f_testing_comparison_equal_random()
 {
 	Kotek::ktk::math::vector4f test1(
 		150.15125f, 1515.1414f, 14.24141f, 1515.3515f);
@@ -1442,7 +1426,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_equal_random)
 	BOOST_CHECK(test1 == test2);
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_equal_different_last_field)
+void vector4f_testing_comparison_equal_different_last_field()
 {
 	Kotek::ktk::math::vector4f test1(15.3f, 4.4f, 15.15f, 0.0f);
 	Kotek::ktk::math::vector4f test2(15.0f, 4.4f, 15.15f, 0.0f);
@@ -1452,7 +1436,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_equal_different_last_field)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_equal_different_first_field)
+void vector4f_testing_comparison_equal_different_first_field()
 {
 	Kotek::ktk::math::vector4f test1(15.0f, 4.3f, 15.15f, 0.0f);
 	Kotek::ktk::math::vector4f test2(15.0f, 4.4f, 15.15f, 0.0f);
@@ -1462,8 +1446,8 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_equal_different_first_field)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector4f_testing_comparison_equal_different_dirty_last_field)
+void 
+	vector4f_testing_comparison_equal_different_dirty_last_field()
 {
 	Kotek::ktk::math::vector4f test1(15.14152f, 0.0f, 0.0f, 0.0f);
 	Kotek::ktk::math::vector4f test2(15.14151f, 0.0f, 0.0f, 0.0f);
@@ -1473,8 +1457,8 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(
-	vector4f_testing_comparison_equal_different_dirty_first_field)
+void 
+	vector4f_testing_comparison_equal_different_dirty_first_field()
 {
 	Kotek::ktk::math::vector4f test1(0.0f, 15.14152f, 0.0f, 0.0f);
 	Kotek::ktk::math::vector4f test2(0.0f, 15.14151f, 0.0f, 0.0f);
@@ -1484,7 +1468,7 @@ BOOST_AUTO_TEST_CASE(
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_not_equal_zeros)
+void vector4f_testing_comparison_not_equal_zeros()
 {
 	Kotek::ktk::math::vector4f test1;
 	Kotek::ktk::math::vector4f test2;
@@ -1494,7 +1478,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_not_equal_zeros)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_not_equal_different)
+void vector4f_testing_comparison_not_equal_different()
 {
 	Kotek::ktk::math::vector4f test1(5.0f, 0.0f, 0.0f, 0.0f);
 	Kotek::ktk::math::vector4f test2(2.0f, 0.0f, 0.0f, 0.0f);
@@ -1504,7 +1488,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_not_equal_different)
 	BOOST_CHECK(result == true);
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_not_equal_equal_dirty)
+void vector4f_testing_comparison_not_equal_equal_dirty()
 {
 	Kotek::ktk::math::vector4f test1(151.25151f, 0.0f, 0.0f, 0.0f);
 	Kotek::ktk::math::vector4f test2(151.25151f, 0.0f, 0.0f, 0.0f);
@@ -1514,7 +1498,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_not_equal_equal_dirty)
 	BOOST_CHECK(result == false);
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_not_equal_dirty)
+void vector4f_testing_comparison_not_equal_dirty()
 {
 	Kotek::ktk::math::vector4f test1(150.10502f, 0.0f, 1.0f, 2.0f);
 	Kotek::ktk::math::vector4f test2(150.10509f, 0.0f, 1.0f, 2.0f);
@@ -1525,7 +1509,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_comparison_not_equal_dirty)
 }
 
 		#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-BOOST_AUTO_TEST_CASE(vector4f_testing_cast_operator_xmvector)
+void vector4f_testing_cast_operator_xmvector()
 {
 	Kotek::ktk::math::vector4f test1(150.0f, 151.0f, 153.0f, 164.0f);
 
@@ -1543,7 +1527,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_cast_operator_xmvector)
 }
 		#endif
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_binary_plus_operator_both_vectors)
+void vector4f_testing_binary_plus_operator_both_vectors()
 {
 	Kotek::ktk::math::vector4f test1(50.5f, 2.5f, 3.5f, 252.5f);
 	Kotek::ktk::math::vector4f test2(5.5f, 0.5f, 2.5f, 6.5f);
@@ -1556,7 +1540,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_binary_plus_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(6.5f + 252.5f, new_vector.Get_W()));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_binary_subtract_operator_both_vectors)
+void vector4f_testing_binary_subtract_operator_both_vectors()
 {
 	Kotek::ktk::math::vector4f test1(50.5f, 25.0f, 3.5f, 25.5f);
 	Kotek::ktk::math::vector4f test2(0.5f, 5.0f, 2.5f, 6.0f);
@@ -1569,7 +1553,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_binary_subtract_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(25.5f - 6.0f, new_vector.Get_W()));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_binary_mutiply_operator_both_vectors)
+void vector4f_testing_binary_mutiply_operator_both_vectors()
 {
 	Kotek::ktk::math::vector4f test1(5.5f, 25.5f, 3.5f, 25.5f);
 	Kotek::ktk::math::vector4f test2(2.2f, 5.5f, 2.5f, 25.5f);
@@ -1582,7 +1566,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_binary_mutiply_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(25.5f * 25.5f, new_vector.Get_W()));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_binary_multiply_operator_vector_number)
+void vector4f_testing_binary_multiply_operator_vector_number()
 {
 	Kotek::ktk::math::vector4f test1(5.5f, 2.5f, 3.5f, 15.15f);
 	Kotek::ktk::math::base_decimal_t test2(2.2f);
@@ -1595,7 +1579,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_binary_multiply_operator_vector_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(15.15f * 2.2f, new_vector.Get_W()));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_binary_divide_operator_both_vectors)
+void vector4f_testing_binary_divide_operator_both_vectors()
 {
 	Kotek::ktk::math::vector4f test1(6.6f, 3.6f, 3.5f, 15.5f);
 	Kotek::ktk::math::vector4f test2(0.2f, 0.4f, 0.5f, 5.0f);
@@ -1608,7 +1592,7 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_binary_divide_operator_both_vectors)
 	BOOST_CHECK(Kotek::ktk::is_equal(15.5f / 5.0f, new_vector.Get_W()));
 }
 
-BOOST_AUTO_TEST_CASE(vector4f_testing_binary_divide_operator_vector_number)
+void vector4f_testing_binary_divide_operator_vector_number()
 {
 	Kotek::ktk::math::vector4f test1(6.6f, 3.6f, 2.5f, 151.5f);
 	Kotek::ktk::math::base_decimal_t test2(0.2f);
@@ -1620,18 +1604,8 @@ BOOST_AUTO_TEST_CASE(vector4f_testing_binary_divide_operator_vector_number)
 	BOOST_CHECK(Kotek::ktk::is_equal(2.5f / 0.2f, new_vector.Get_Z()));
 	BOOST_CHECK(Kotek::ktk::is_equal(151.5f / 0.2f, new_vector.Get_W()));
 }
-		#pragma endregion
 
-		#pragma region Matrix 2x2
-
-		#pragma endregion
-
-		#pragma region Matrix 3x3
-
-		#pragma endregion
-
-		#pragma region Matrix 4x4
-BOOST_AUTO_TEST_CASE(matrix4x4f_constructor_values)
+void matrix4x4f_constructor_values()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -1654,7 +1628,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_constructor_values)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_constructor_copy_base_type)
+void matrix4x4f_constructor_copy_base_type()
 {
 	Kotek::ktk::math::base_mat4x4_t copy = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
 		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
@@ -1678,7 +1652,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_constructor_copy_base_type)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_constructor_copy_own_type)
+void matrix4x4f_constructor_copy_own_type()
 {
 	Kotek::ktk::math::base_mat4x4_t copy(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
 		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -1702,7 +1676,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_constructor_copy_own_type)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_constructor_default)
+void matrix4x4f_constructor_default()
 {
 	Kotek::ktk::math::matrix4x4f test;
 
@@ -1724,7 +1698,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_constructor_default)
 	BOOST_CHECK(Kotek::ktk::is_equal(0.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_operator_universal_initialization)
+void matrix4x4f_assignment_operator_universal_initialization()
 {
 	Kotek::ktk::math::matrix4x4f test = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
 		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
@@ -1747,7 +1721,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_operator_universal_initialization)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matri4x4f_assignment_operator_base_type)
+void matri4x4f_assignment_operator_base_type()
 {
 	Kotek::ktk::math::base_mat4x4_t base = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
 		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
@@ -1772,7 +1746,7 @@ BOOST_AUTO_TEST_CASE(matri4x4f_assignment_operator_base_type)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_plus_operator)
+void matrix4x4f_assignment_plus_operator()
 {
 	Kotek::ktk::math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
 		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
@@ -1798,7 +1772,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_plus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(32.0f + 16.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_minus_operator)
+void matrix4x4f_assignment_minus_operator()
 {
 	Kotek::ktk::math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
 		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
@@ -1825,7 +1799,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_minus_operator)
 }
 
 // TODO: add overloads for matrix4x3 and other
-BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_multiply_operator)
+void matrix4x4f_assignment_multiply_operator()
 {
 	Kotek::ktk::math::matrix4x4f copy(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
 		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
@@ -1867,7 +1841,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_multiply_operator)
 	}
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_multiply_operator_base_decimal)
+void matrix4x4f_assignment_multiply_operator_base_decimal()
 {
 	Kotek::ktk::math::base_decimal_t value = 15.0f;
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
@@ -1893,7 +1867,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_multiply_operator_base_decimal)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f * value, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_divide_operator)
+void matrix4x4f_assignment_divide_operator()
 {
 	Kotek::ktk::math::matrix4x4f copy(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
 		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
@@ -1917,7 +1891,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_divide_operator)
 	}
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_divide_operator_decimal)
+void matrix4x4f_assignment_divide_operator_decimal()
 {
 	Kotek::ktk::math::base_decimal_t value = 15.0f;
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
@@ -1945,7 +1919,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_assignment_divide_operator_decimal)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f * factor, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_unary_plus_operator)
+void matrix4x4f_unary_plus_operator()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -1970,7 +1944,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_unary_plus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_unary_minus_operator)
+void matrix4x4f_unary_minus_operator()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -1995,7 +1969,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_unary_minus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(-16.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_comparison_operator_equal)
+void matrix4x4f_comparison_operator_equal()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -2006,7 +1980,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_comparison_operator_equal)
 	BOOST_CHECK(test == test2);
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_comparison_operator_equal_but_one_is_wrong)
+void matrix4x4f_comparison_operator_equal_but_one_is_wrong()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -2017,7 +1991,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_comparison_operator_equal_but_one_is_wrong)
 	BOOST_CHECK((test == test2) == false);
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_comparison_operator_equal_but_two_is_wrong)
+void matrix4x4f_comparison_operator_equal_but_two_is_wrong()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -2028,7 +2002,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_comparison_operator_equal_but_two_is_wrong)
 	BOOST_CHECK((test == test2) == false);
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_comparison_operator_not_equal)
+void matrix4x4f_comparison_operator_not_equal()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -2039,7 +2013,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_comparison_operator_not_equal)
 	BOOST_CHECK(test != test2);
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_comparison_operator_not_equal_two_wrong)
+void matrix4x4f_comparison_operator_not_equal_two_wrong()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -2051,7 +2025,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_comparison_operator_not_equal_two_wrong)
 }
 
 		#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-BOOST_AUTO_TEST_CASE(matrix4x4f_cast_operator_xmmatrix)
+void matrix4x4f_cast_operator_xmmatrix()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -2086,7 +2060,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_cast_operator_xmmatrix)
 		#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		#endif
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_operator_get_element_by_brackets_read_state)
+void matrix4x4f_operator_get_element_by_brackets_read_state()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -2109,7 +2083,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_operator_get_element_by_brackets_read_state)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f, test(3, 3)));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_operator_get_element_by_brackets_write_state)
+void matrix4x4f_operator_get_element_by_brackets_write_state()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -2149,7 +2123,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_operator_get_element_by_brackets_write_state)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f + 1.0f, test(3, 3)));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_setters)
+void matrix4x4f_setters()
 {
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
@@ -2189,7 +2163,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_setters)
 	BOOST_CHECK(Kotek::ktk::is_equal(16.0f + 1.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_plus_operator)
+void matrix4x4f_plus_operator()
 {
 	Kotek::ktk::math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
 		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
@@ -2216,7 +2190,7 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_plus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(32.0f + 16.0f, test.Get_33()));
 }
 
-BOOST_AUTO_TEST_CASE(matrix4x4f_minus_operator)
+void matrix4x4f_minus_operator()
 {
 	Kotek::ktk::math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
 		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
@@ -2242,11 +2216,241 @@ BOOST_AUTO_TEST_CASE(matrix4x4f_minus_operator)
 	BOOST_CHECK(Kotek::ktk::is_equal(31.0f - 15.0f, test.Get_32()));
 	BOOST_CHECK(Kotek::ktk::is_equal(32.0f - 16.0f, test.Get_33()));
 }
-
-		#pragma endregion
-
 	#endif
 #endif
+
+void RegisterTests_Math_ForModule_Core(void)
+{
+#ifdef KOTEK_USE_TESTS
+	boost::unit_test::test_suite* p_suite = BOOST_TEST_SUITE("ktk::math");
+
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		p_suite->add(BOOST_TEST_CASE(&vector1f_testing_cast_operator_xmvector));
+		p_suite->add(BOOST_TEST_CASE(&vector2f_testing_cast_operator_xmvector));
+		p_suite->add(BOOST_TEST_CASE(&vector3f_testing_cast_operator_xmvector));
+		p_suite->add(BOOST_TEST_CASE(&vector4f_testing_cast_operator_xmvector));
+	#endif
+
+	#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+		// TODO: add this
+	#endif
+
+	#ifdef KOTEK_USE_MATH_LIBRARY_EIGEN
+		// TODO: add this
+	#endif
+
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_assignment_operator_based_on_base_type));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_assignment_operator_based_on_own_type));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_binary_divide_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_binary_divide_operator_vector_number));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_binary_multiply_operator_vector_number));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_binary_mutiply_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_binary_plus_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_binary_plus_operator_vector_number));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_binary_subtract_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_binary_subtract_operator_vector_number));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_comparison_equal_different));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_comparison_equal_different_dirty));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_comparison_equal_random));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_comparison_equal_zeros));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_comparison_not_equal_different));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_comparison_not_equal_dirty));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_comparison_not_equal_zeros));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_constructor_based_on_number));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_constructor_default));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_copy_constructor));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_divide_equal_operator_based_on_number_its_scale));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_divide_equal_operator_based_on_vector_its_divide));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_modulo_equal_operator_based_on_number));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_modulo_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_multiply_equal_operator_based_on_number_its_scale));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_divide_equal_operator_based_on_vector_its_divide));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_modulo_equal_operator_based_on_number));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_modulo_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_setter_single_depth));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_setter_two_depth));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_subtract_equal_operator_based_on_number));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_subtract_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_unary_minus_operator));
+	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_unary_plus_operator));
+
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_assignment_operator_based_on_base_type));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_assignment_operator_based_on_own_type));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_binary_divide_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_binary_divide_operator_vector_number));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_binary_multiply_operator_vector_number));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_binary_mutiply_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_binary_plus_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_binary_subtract_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_comparison_equal_different_dirty_first_field));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_comparison_equal_different_dirty_last_field));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_comparison_equal_different_first_field));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_comparison_equal_different_last_field));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_comparison_equal_random));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_comparison_equal_zeros));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_constructor_based_on_number));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_constructor_based_on_struct));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_constructor_default));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_copy_constructor));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_divide_equal_operator_based_on_number_its_scale));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_divide_equal_operator_based_on_vector_its_divide));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_modulo_equal_operator_based_on_number));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_modulo_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_multiply_equal_operator_based_on_number_its_scale));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_multiply_equal_operator_based_on_vector_its_per_component_multiply));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_plus_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_setter_single_depth));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_setter_two_depth));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_subtract_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_unary_minus_operator));
+	p_suite->add(BOOST_TEST_CASE(&vector2f_testing_unary_plus_operator));
+
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_assignment_operator_based_on_base_type));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_assignment_operator_based_on_own_type));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_binary_divide_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_binary_divide_operator_vector_number));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_binary_multiply_operator_vector_number));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_binary_mutiply_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_binary_plus_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_binary_subtract_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_comparison_equal_different_dirty_first_field));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_comparison_equal_different_dirty_last_field));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_comparison_equal_different_first_field));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_comparison_equal_different_last_field));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_comparison_equal_random));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_comparison_equal_zeros));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_constructor_based_on_number));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_constructor_based_on_struct));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_constructor_default));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_copy_constructor));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_divide_equal_operator_based_on_number_its_scale));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_divide_equal_operator_based_on_vector_its_divide));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_modulo_equal_operator_based_on_number));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_modulo_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_multiply_equal_operator_based_on_number_its_scale));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_multiply_equal_operator_based_on_vector_its_per_component_multiply));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_plus_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_setter_single_depth));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_setter_two_depth));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_subtract_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_unary_minus_operator));
+	p_suite->add(BOOST_TEST_CASE(&vector3f_testing_unary_plus_operator));
+
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_assignment_operator_based_on_base_type));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_assignment_operator_based_on_own_type));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_binary_divide_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_binary_divide_operator_vector_number));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_binary_multiply_operator_vector_number));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_binary_mutiply_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_binary_plus_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_binary_subtract_operator_both_vectors));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_comparison_equal_different_dirty_first_field));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_comparison_equal_different_dirty_last_field));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_comparison_equal_different_first_field));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_comparison_equal_different_last_field));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_comparison_equal_random));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_comparison_equal_zeros));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_constructor_based_on_number));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_constructor_based_on_struct));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_constructor_default));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_copy_constructor));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_divide_equal_operator_based_on_number_its_scale));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_divide_equal_operator_based_on_vector_its_divide));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_modulo_equal_operator_based_on_number));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_modulo_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_multiply_equal_operator_based_on_number_its_scale));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_multiply_equal_operator_based_on_vector_its_per_component_multiply));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_plus_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_setter_single_depth));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_setter_two_depth));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_subtract_equal_operator_based_on_vector));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_unary_minus_operator));
+	p_suite->add(BOOST_TEST_CASE(&vector4f_testing_unary_plus_operator));
+	
+	/* 
+	TODO: implementent a such test functions
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_constructor_values));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_constructor_copy_base_type));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_constructor_copy_own_type));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_constructor_default));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_assignment_operator_universal_initialization));
+	p_suite->add(BOOST_TEST_CASE(&matri2x2f_assignment_operator_base_type));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_assignment_plus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_assignment_minus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_assignment_multiply_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_assignment_multiply_operator_base_decimal));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_assignment_divide_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_assignment_divide_operator_decimal));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_unary_plus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_unary_minus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_comparison_operator_equal));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_comparison_operator_equal_but_one_is_wrong));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_comparison_operator_equal_but_two_is_wrong));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_comparison_operator_not_equal));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_comparison_operator_not_equal_two_wrong));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_operator_get_element_by_brackets_read_state));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_operator_get_element_by_brackets_write_state));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_setters));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_plus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix2x2f_minus_operator));
+
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_constructor_values));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_constructor_copy_base_type));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_constructor_copy_own_type));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_constructor_default));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_assignment_operator_universal_initialization));
+	p_suite->add(BOOST_TEST_CASE(&matri3x3f_assignment_operator_base_type));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_assignment_plus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_assignment_minus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_assignment_multiply_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_assignment_multiply_operator_base_decimal));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_assignment_divide_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_assignment_divide_operator_decimal));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_unary_plus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_unary_minus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_comparison_operator_equal));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_comparison_operator_equal_but_one_is_wrong));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_comparison_operator_equal_but_two_is_wrong));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_comparison_operator_not_equal));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_comparison_operator_not_equal_two_wrong));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_operator_get_element_by_brackets_read_state));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_operator_get_element_by_brackets_write_state));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_setters));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_plus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix3x3f_minus_operator));
+	*/
+
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_constructor_values));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_constructor_copy_base_type));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_constructor_copy_own_type));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_constructor_default));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_assignment_operator_universal_initialization));
+	p_suite->add(BOOST_TEST_CASE(&matri4x4f_assignment_operator_base_type));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_assignment_plus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_assignment_minus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_assignment_multiply_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_assignment_multiply_operator_base_decimal));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_assignment_divide_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_assignment_divide_operator_decimal));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_unary_plus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_unary_minus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_comparison_operator_equal));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_comparison_operator_equal_but_one_is_wrong));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_comparison_operator_equal_but_two_is_wrong));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_comparison_operator_not_equal));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_comparison_operator_not_equal_two_wrong));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_operator_get_element_by_brackets_read_state));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_operator_get_element_by_brackets_write_state));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_setters));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_plus_operator));
+	p_suite->add(BOOST_TEST_CASE(&matrix4x4f_minus_operator));
+
+	boost::unit_test::framework::master_test_suite().add(p_suite);
+
+	KOTEK_MESSAGE("Registered!");
+#endif
+}
+
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

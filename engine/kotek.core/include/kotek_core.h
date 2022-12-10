@@ -34,6 +34,8 @@ void RegisterTests_String_ForModule_Core(void);
 void RegisterTests_Filesystem_ForModule_Core(void);
 void RegisterTests_Math_ForModule_Core(void);
 
+void RegisterAllTests(void);
+
 KOTEK_END_NAMESPACE_CORE
 
 KOTEK_END_NAMESPACE_KOTEK

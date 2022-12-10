@@ -42,7 +42,6 @@ bool InitializeModule_Core(ktkMainManager* p_manager)
 	InitializeModule_Core_Main_Manager(p_manager);
 
 	RegisterCommands(p_manager);
-	RegisterAllTests();
 
 	return true;
 }

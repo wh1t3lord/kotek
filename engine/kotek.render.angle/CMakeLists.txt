@@ -76,7 +76,7 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC")
     target_link_libraries(${PROJECT_NAME} PUBLIC zstd::libzstd_static)
 else()
-    target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-shared)
+    target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools)
     target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-opt)
 endif()
 
