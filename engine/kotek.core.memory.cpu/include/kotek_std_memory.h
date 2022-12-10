@@ -9,10 +9,16 @@
 
 #include <cstring>
 
-#include <mimalloc.h>
-
+#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
+	#include <mimalloc.h>
+#endif
 // TODO: add feature in order to disable mimalloc and use regular std::allocator
-#define KOTEK_USE_MEMORY_ALLOCATOR_CLASS mi_stl_allocator
+
+#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
+	#define KOTEK_USE_MEMORY_ALLOCATOR_CLASS mi_stl_allocator
+#else
+	#define KOTEK_USE_MEMORY_ALLOCATOR_CLASS std::allocator
+#endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK

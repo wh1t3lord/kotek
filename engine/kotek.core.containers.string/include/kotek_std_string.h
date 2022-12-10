@@ -73,9 +73,11 @@ public:
 	}
 
 	#ifdef KOTEK_USE_UNICODE
+		#if defined(KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC)
 	string(const ktk::string_legacy& data) : m_data(ktk::cast::to_string(data))
 	{
 	}
+		#endif
 	#else
 	string(const ktk::string_legacy& data) : m_data(data) {}
 	#endif
@@ -93,7 +95,9 @@ public:
 		}
 	}
 
+		#if defined(KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC)
 	string(const ktk::string_unicode& str) : m_data(str) {}
+		#endif
 
 	string(const std::wstring& data) : m_data(data.begin(), data.end()) {}
 	#endif
@@ -363,7 +367,9 @@ public:
 		return std::wstring(this->m_data.begin(), this->m_data.end());
 	}
 
+		#if defined(KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC)
 	operator string_unicode() const { return this->m_data; }
+		#endif
 	#endif
 
 	operator std::string() const
@@ -375,14 +381,16 @@ public:
 	#endif
 	}
 
+	#if defined(KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC)
 	operator string_legacy() const
 	{
-	#ifdef KOTEK_USE_UNICODE
+		#ifdef KOTEK_USE_UNICODE
 		return ktk::cast::to_legacy_string(this->m_data);
-	#else
+		#else
 		return this->m_data;
-	#endif
+		#endif
 	}
+	#endif
 
 	template <typename Type,
 		std::enable_if_t<std::is_arithmetic<Type>::value, bool> = true>

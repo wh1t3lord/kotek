@@ -85,6 +85,16 @@
 > cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE="./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake" -DVCPKG_TARGET_TRIPLET=x64-windows-static-md ..
 
 
+Сейчас vcpkg имеет некоторые нестабильные зависимости это:
+
+- shaderc, оно при генерации решения добавляет не действительный путь до SPIRV-Tools.lib из-за чего вам надо добавлять вручную или удалять лишнее поле. Проблема [здесь](https://github.com/microsoft/vcpkg/issues/28144)
+- mimalloc, оно просто не корректно собирает решение, требуется версия с override но vcpkg не собирает, проблема адресована [здесь](https://github.com/microsoft/vcpkg/pull/25069)
+
+Поэтому предлагается такая команда:
+
+P.S. стоит учитывать что это временное решение, ибо данные проблемы должны быть решены...
+
+> cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake -DKOTEK_MEMORY_ALLOCATOR_CPU=OFF ..
 
 7.2 Примечание, на текущий момент времени conan не поддерживается, однако планируется для добавления
 

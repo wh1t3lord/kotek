@@ -9,11 +9,17 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-		find_package(mimalloc REQUIRED)
+		if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
+			find_package(mimalloc REQUIRED)
+		endif()
 	else()
-		find_package(mimalloc REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
+		if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
+			find_package(mimalloc REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/mimalloc/${CMAKE_BUILD_TYPE}/")
+		endif()
 	endif()
 endif()
+
+message("[${PROJECT_NAME}]: memory allocator for CPU = ${KOTEK_MEMORY_ALLOCATOR_CPU}")
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_memory.h"
@@ -23,9 +29,13 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC")
-	target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc-static)
+	if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
+		target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc-static)
+	endif()
 else()
-	target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc)
+	if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
+		target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc)
+	endif()
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

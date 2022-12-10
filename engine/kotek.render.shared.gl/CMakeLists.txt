@@ -30,4 +30,4 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<ko
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad3.3)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad4.6)
+#target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad4.6)

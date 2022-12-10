@@ -2264,9 +2264,6 @@ void RegisterTests_Math_ForModule_Core(void)
 	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_modulo_equal_operator_based_on_number));
 	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_modulo_equal_operator_based_on_vector));
 	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_multiply_equal_operator_based_on_number_its_scale));
-	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_divide_equal_operator_based_on_vector_its_divide));
-	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_modulo_equal_operator_based_on_number));
-	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_modulo_equal_operator_based_on_vector));
 	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_setter_single_depth));
 	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_setter_two_depth));
 	p_suite->add(BOOST_TEST_CASE(&vector1f_testing_subtract_equal_operator_based_on_number));
