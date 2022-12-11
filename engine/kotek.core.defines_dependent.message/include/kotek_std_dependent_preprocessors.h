@@ -19,11 +19,13 @@
 
 // TODO: create KOTEK_LOG to separate operation into writing in console or text
 // file
-	#define KOTEK_MESSAGE(text, ...)                                     \
-		{                                                                \
-			BOOST_LOG_TRIVIAL(info)                                      \
-				<< (Kotek::ktk::format(KOTEK_TEXT(text), ##__VA_ARGS__)) \
-					   .get_as_is();                                     \
+	#define KOTEK_MESSAGE(text, ...)                                         \
+		{                                                                    \
+			BOOST_LOG_TRIVIAL(info)                                          \
+				<< "[" << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ \
+				<< "]"                                                       \
+				<< (Kotek::ktk::format(KOTEK_TEXT(text), ##__VA_ARGS__))     \
+					   .get_as_is();                                         \
 		}
 
 	#define KOTEK_MESSAGE_WARNING(text, ...)                             \
