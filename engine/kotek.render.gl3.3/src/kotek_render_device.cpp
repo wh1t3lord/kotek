@@ -12,9 +12,12 @@ namespace gl3_3
 	{
 		p_main_manager->Get_WindowManager()->ActiveWindow_MakeContextCurrent();
 
-		KOTEK_ASSERT(gladLoadGLLoader(
-						 reinterpret_cast<GLADloadproc>(glfwGetProcAddress)),
-			"failed to gladLoadGLLoader");
+		int version =
+			Initialize_Glad(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+
+		KOTEK_ASSERT(version, "failed to gladLoadGLLoader");
+
+		KOTEK_MESSAGE("Initialize OpenGL: {}", ktk::string(reinterpret_cast<const char*>(glGetString(GL_VERSION))));
 	}
 
 	void ktkRenderDevice::Shutdown(void) {}

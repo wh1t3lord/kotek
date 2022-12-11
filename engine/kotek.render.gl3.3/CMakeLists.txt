@@ -95,7 +95,7 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::GL)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad3.3)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
 target_link_libraries(${PROJECT_NAME} PUBLIC KTX::ktx)
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
