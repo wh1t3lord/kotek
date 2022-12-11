@@ -1,0 +1,15 @@
+#pragma once
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+class ktkMainManager;
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_RENDER
+// TODO: rename to GL3_3
+bool InitializeModule_Render_GL(Core::ktkMainManager* main_manager);
+bool ShutdownModule_Render_GL(Core::ktkMainManager* main_manager);
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK

@@ -10,6 +10,7 @@ if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "SHARED")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DGLAD_GLAPI_EXPORT)
 endif()
 
+# This is for preventing other projects that doesn't need a glad at all search for <glad/glad.h> header, because it means that we break the connection between libraries and we need to create some sort of visibility where other libraries that doesn't have a target_link_libraries with this library search for glad/glad.h
 list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_GLAD_PREPROCESSOR_VISIBILITY)
 
 add_library(${PROJECT_NAME} ${KOTEK_DEVELOPMENT_TYPE}

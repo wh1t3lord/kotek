@@ -3,7 +3,7 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
-namespace gl3_3
+namespace gl
 {
 	ktkShaderModule::ktkShaderModule(void) :
 		m_shader_handle{}, m_shader_type{gl::eShaderType::kShaderType_Unknown}
@@ -28,7 +28,7 @@ namespace gl3_3
 	{
 		return this->m_shader_type;
 	}
-} // namespace gl3_3
+} // namespace gl
 
 namespace gl
 {

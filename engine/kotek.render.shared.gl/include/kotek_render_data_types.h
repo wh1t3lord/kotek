@@ -12,7 +12,7 @@ KOTEK_END_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
-namespace gl3_3
+namespace gl
 {
 	class ktkShaderModule
 	{
@@ -34,7 +34,7 @@ namespace gl3_3
 		/// @brief enum for determining what is the type of shader
 		gl::eShaderType m_shader_type;
 	};
-} // namespace gl3_3
+} // namespace gl
 
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK
