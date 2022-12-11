@@ -10,16 +10,20 @@ if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "SHARED")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DGLAD_GLAPI_EXPORT)
 endif()
 
-find_package(glad CONFIG REQUIRED)
+list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_GLAD_PREPROCESSOR_VISIBILITY)
 
 add_library(${PROJECT_NAME} ${KOTEK_DEVELOPMENT_TYPE}
+	"include/glad/glad.h"
+	"include/KHR/khrplatform.h"
+	"src/glad.cpp"
 	"include/kotek_render_gl_glad.h"
 	"src/main_render_gl_glad_dll.cpp")
 
 if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "SHARED")
-	#target_compile_definitions(${PROJECT_NAME} PRIVATE ${KOTEK_OUTPUT_PRIVATE_FLAGS})
-	#target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
+	target_compile_definitions(${PROJECT_NAME} PRIVATE ${KOTEK_OUTPUT_PRIVATE_FLAGS})
 endif()
 
+target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
+target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
-target_link_libraries(${PROJECT_NAME} PUBLIC glad::glad)

@@ -12,8 +12,8 @@ namespace gl3_3
 	{
 		p_main_manager->Get_WindowManager()->ActiveWindow_MakeContextCurrent();
 
-		int version =
-			Initialize_Glad(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+		int version = gladLoadGLLoader(
+			reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 
 		KOTEK_ASSERT(version, "failed to gladLoadGLLoader");
 

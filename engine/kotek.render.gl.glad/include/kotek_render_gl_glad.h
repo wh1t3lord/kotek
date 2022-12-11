@@ -3,7 +3,9 @@
 #include <kotek.core.defines.static.render.gl/include/kotek_core_defines_static_render_gl.h>
 
 #ifdef KOTEK_USE_OPENGL
-	#include <glad/glad.h>
+	#ifdef KOTEK_GLAD_PREPROCESSOR_VISIBILITY
+		#include <glad/glad.h>
+	#endif
 #endif
 
 #ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
@@ -22,8 +24,6 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
-
-KOTEK_RENDER_GL_GLAD_API int Initialize_Glad(GLADloadproc p_proc);
 
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK
