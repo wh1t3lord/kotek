@@ -16,41 +16,198 @@ void ktkEngineConfig::Shutdown(void) {}
 
 bool ktkEngineConfig::IsFeatureEnabled(eEngineFeature id) const noexcept
 {
-	if (this->m_engine_flags.find(id) == this->m_engine_flags.end())
-	{
-		KOTEK_MESSAGE_WARNING(
-			"engine doesn't register feature by id: [{}] ([{}])",
-			static_cast<ktk::enum_base_t>(id),
-			helper::Translate_EngineFeature(id));
+	return (this->m_engine_feature_flags & id) == id;
+}
 
-		return false;
-	}
+bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureRender id) const noexcept
+{
+	return false;
+}
 
-	return this->m_engine_flags.at(id);
+bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureRenderer id) const noexcept
+{
+	return false;
+}
+
+bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureSDK id) const noexcept
+{
+	return false;
+}
+
+bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureWindow id) const noexcept
+{
+	return false;
 }
 
 void ktkEngineConfig::SetFeatureStatus(eEngineFeature id, bool status) noexcept
 {
-	this->m_engine_flags[id] = status;
-
-	if (this->IsFeatureRender(id))
+	if (status)
 	{
-		for (const auto& [feature_id, feature_status] : this->m_engine_flags)
+		this->m_engine_feature_flags |= id;
+	}
+	else
+	{
+		this->m_engine_feature_flags &= ~id;
+	}
+}
+
+void ktkEngineConfig::SetFeatureStatus(
+	eEngineFeatureRender id, bool status) noexcept
+{
+	if (status)
+	{
+		this->m_engine_feature_render_flags |= id;
+	}
+	else
+	{
+		this->m_engine_feature_render_flags &= ~id;
+	}
+}
+
+void ktkEngineConfig::SetFeatureStatus(
+	eEngineFeatureRenderer id, bool status) noexcept
+{
+	KOTEK_ASSERT(
+		id != eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX &&
+			id != eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL,
+		"you can't pass system flags for setting, it doesn't make any sense");
+
+	if (status)
+	{
+		// we must have only one (maximum two, the second flag determine general 
+		// disable DirectX
+		eEngineFeatureRenderer render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_12;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_11;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_10;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_9;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_8;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_7;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+
+		// disable OpenGL
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL1_0;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL2_0;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL3_3;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL4_6;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+
+		render_feature = eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_Software;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+
+		render_feature = eEngineFeatureRenderer::kEngine_Render_Renderer_ANGLE;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+
+		render_feature =
+			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+
+		render_feature = eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL;
+		this->m_engine_feature_renderer_flags &= ~render_feature;
+
+		this->m_engine_feature_renderer_flags |= render_feature;
+
+		if (render_feature >
+				eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX &&
+			render_feature <
+				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL)
 		{
-			if (feature_id != id)
-			{
-				if (this->IsFeatureRender(feature_id))
-				{
-					this->m_engine_flags[feature_id] = false;
-				}
-			}
+			this->m_engine_feature_renderer_flags |=
+				eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX;
+		}
+		else if (render_feature >
+				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL &&
+			render_feature <
+				eEngineFeatureRenderer::kEngine_Render_Renderer_Software)
+		{
+			this->m_engine_feature_renderer_flags |=
+				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL;
 		}
 	}
+	else
+	{
+		this->m_engine_feature_renderer_flags &= ~id;
+	}
+}
+
+void ktkEngineConfig::SetFeatureStatus(
+	eEngineFeatureSDK id, bool status) noexcept
+{
+	if (status)
+	{
+		this->m_engine_feature_sdk_flags |= id;
+	}
+	else
+	{
+		this->m_engine_feature_sdk_flags &= ~id;
+	}
+}
+
+void ktkEngineConfig::SetFeatureStatus(
+	eEngineFeatureWindow id, bool status) noexcept
+{
+	if (status)
+	{
+		this->m_engine_feature_window_flags |= id;
+	}
+	else
+	{
+		this->m_engine_feature_window_flags &= ~id;
+	}
+}
+
+eEngineFeature ktkEngineConfig::GetEngineFeature(void) const noexcept
+{
+	return this->m_engine_feature_flags;
+}
+
+eEngineFeatureRender ktkEngineConfig::GetEngineFeatureRender(
+	void) const noexcept
+{
+	return this->m_engine_feature_render_flags;
+}
+
+eEngineFeatureRenderer ktkEngineConfig::GetEngineFeatureRenderer(
+	void) const noexcept
+{
+	return this->m_engine_feature_renderer_flags;
+}
+
+eEngineFeatureSDK ktkEngineConfig::GetEngineFeatureSDK(void) const noexcept
+{
+	return this->m_engine_feature_sdk_flags;
+}
+
+eEngineFeatureWindow ktkEngineConfig::GetEngineFeatureWindow(
+	void) const noexcept
+{
+	return this->m_engine_feature_window_flags;
 }
 
 ktk::string ktkEngineConfig::GetRenderName(void) const noexcept
 {
-	auto for_validation_purpose = this->GetRenderFeature();
+	auto for_validation_purpose = this->GetEngineFeatureRenderer();
 
 #ifdef KOTEK_DEBUG
 	KOTEK_MESSAGE("current renderer id: {}",
@@ -58,52 +215,52 @@ ktk::string ktkEngineConfig::GetRenderName(void) const noexcept
 #endif
 
 	if (this->IsFeatureEnabled(
-			eEngineFeature::kEngine_Render_Renderer_OpenGL3_3))
+			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL3_3))
 	{
 		return kRenderer_OpenGL3_3_Name;
 	}
 	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_OpenGL4_6))
+				 eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL4_6))
 	{
 		return kRenderer_OpenGL4_6_Name;
 	}
 	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_Vulkan))
+				 eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan))
 	{
 		return kRenderer_Vulkan_Name;
 	}
 	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_12))
+				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_12))
 	{
 		return kRenderer_DirectX_12_Name;
 	}
 	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_11))
+				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_11))
 	{
 		return kRenderer_DirectX_11_Name;
 	}
 	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_10))
+				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_10))
 	{
 		return kRenderer_DirectX_10_Name;
 	}
 	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_9))
+				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_9))
 	{
 		return kRenderer_DirectX_9_Name;
 	}
 	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_8))
+				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_8))
 	{
 		return kRenderer_DirectX_8_Name;
 	}
 	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_7))
+				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_7))
 	{
 		return kRenderer_DirectX_7_Name;
 	}
 	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_Software))
+				 eEngineFeatureRenderer::kEngine_Render_Renderer_Software))
 	{
 		return kRenderer_Software_Name;
 	}
@@ -113,6 +270,7 @@ ktk::string ktkEngineConfig::GetRenderName(void) const noexcept
 	return kRenderer_Unknown_Name;
 }
 
+/*
 eEngineFeature ktkEngineConfig::GetRenderFeature(void) const noexcept
 {
 	eEngineFeature result = eEngineFeature::kEngine_Feature_Unknown;
@@ -188,6 +346,7 @@ eEngineFeature ktkEngineConfig::GetRenderFeature(void) const noexcept
 
 	return result;
 }
+*/
 
 bool ktkEngineConfig::IsCurrentRenderLegacy(void) const noexcept
 {
@@ -196,11 +355,11 @@ bool ktkEngineConfig::IsCurrentRenderLegacy(void) const noexcept
 
 bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 {
-	auto render_type = this->GetRenderFeature();
+	auto render_type = this->GetEngineFeatureRenderer();
 
 	return (render_type ==
-			   eEngineFeature::kEngine_Render_Renderer_DirectX_12) ||
-		(render_type == eEngineFeature::kEngine_Render_Renderer_Vulkan);
+			   eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_12) ||
+		(render_type == eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan);
 }
 
 int ktkEngineConfig::GetARGC(void) const noexcept

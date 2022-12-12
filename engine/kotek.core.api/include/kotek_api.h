@@ -225,13 +225,21 @@ public:
 /// that case it has only 'Load' method names it means that you specify
 /// what the implementation does. Does it load text or model or even any
 /// other type?
-/// Our standard is that user implements one general class for each type of possible data 
-/// Like model, text, video, but he provides and implements a classes for each format and user must follow to these rules 
-/// For example, I want to have a loader for Videos, I create ktkLoaderVideo (formally ktkLoaderTypeOfDataName)
-/// Then, I create for each format of that data type like ktkLoaderVideo_MP4, ktkLoaderVideo_AV1, ktkLoaderVideo_XXX and etc
-/// In general class it registers all classes what we created earlier and we register to main ktkResourceManagerLoader
-/// You need to provide two private methods (they are not virtual!!!, you provide them by your own), like say it is Register_Loaders and Delete_Loaders (see our default implementation loader classes) and with a such design you will understand where you have 'general' class and where you have the ended implementation of a format, because ended implementation doesn't have any registered loaders because it is final! 
-/// 
+/// Our standard is that user implements one general class for each type of
+/// possible data Like model, text, video, but he provides and implements a
+/// classes for each format and user must follow to these rules For example, I
+/// want to have a loader for Videos, I create ktkLoaderVideo (formally
+/// ktkLoaderTypeOfDataName) Then, I create for each format of that data type
+/// like ktkLoaderVideo_MP4, ktkLoaderVideo_AV1, ktkLoaderVideo_XXX and etc In
+/// general class it registers all classes what we created earlier and we
+/// register to main ktkResourceManagerLoader You need to provide two private
+/// methods (they are not virtual!!!, you provide them by your own), like say it
+/// is Register_Loaders and Delete_Loaders (see our default implementation
+/// loader classes) and with a such design you will understand where you have
+/// 'general' class and where you have the ended implementation of a format,
+/// because ended implementation doesn't have any registered loaders because it
+/// is final!
+///
 /// So let's see on detailed illustration
 // clang-format off
 /*
@@ -634,9 +642,31 @@ public:
 	virtual void Shutdown(void) = 0;
 
 	virtual bool IsFeatureEnabled(eEngineFeature id) const noexcept = 0;
+	virtual bool IsFeatureEnabled(eEngineFeatureRender id) const noexcept = 0;
+	virtual bool IsFeatureEnabled(eEngineFeatureRenderer id) const noexcept = 0;
+	virtual bool IsFeatureEnabled(eEngineFeatureSDK id) const noexcept = 0;
+	virtual bool IsFeatureEnabled(eEngineFeatureWindow id) const noexcept = 0;
+
 	virtual void SetFeatureStatus(eEngineFeature id, bool status) noexcept = 0;
+	virtual void SetFeatureStatus(
+		eEngineFeatureRender id, bool status) noexcept = 0;
+	virtual void SetFeatureStatus(
+		eEngineFeatureRenderer id, bool status) noexcept = 0;
+	virtual void SetFeatureStatus(
+		eEngineFeatureSDK id, bool status) noexcept = 0;
+	virtual void SetFeatureStatus(
+		eEngineFeatureWindow id, bool status) noexcept = 0;
+
+	virtual eEngineFeature GetEngineFeature(void) const noexcept = 0;
+	virtual eEngineFeatureRender GetEngineFeatureRender(
+		void) const noexcept = 0;
+	virtual eEngineFeatureRenderer GetEngineFeatureRenderer(
+		void) const noexcept = 0;
+	virtual eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept = 0;
+	virtual eEngineFeatureWindow GetEngineFeatureWindow(
+		void) const noexcept = 0;
+
 	virtual ktk::string GetRenderName(void) const noexcept = 0;
-	virtual eEngineFeature GetRenderFeature(void) const noexcept = 0;
 	virtual bool IsCurrentRenderLegacy(void) const noexcept = 0;
 	virtual bool IsCurrentRenderModern(void) const noexcept = 0;
 	virtual int GetARGC(void) const noexcept = 0;

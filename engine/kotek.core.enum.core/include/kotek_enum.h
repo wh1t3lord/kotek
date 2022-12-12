@@ -94,16 +94,16 @@ enum class eResourceCachingPolicy : ktk::enum_base_t
 /// p_main_manager->Get_EngineConfig();
 ///
 ///		// Реально мы ее отмечаем только, однако уже конечному
-///пользователю даем понять какая функция в движке работает. Побольшей
-///части это и есть какое-то подобие конфига, в том смысле, что мы
-///определяем на логическом уровне, что у нас есть, а что у нас нет.
-///Чтобы уже на уровне выполнения кода мы могли обрабатывать условия в
-///динамике, к примеру сейчас включена такая "возможность"/функция, а
-///потом вдруг мы захотели ее отключить и соответственно все места
-///должны иметь покрытие на уровне p_config->IsFeatureEnabled и если
+/// пользователю даем понять какая функция в движке работает. Побольшей
+/// части это и есть какое-то подобие конфига, в том смысле, что мы
+/// определяем на логическом уровне, что у нас есть, а что у нас нет.
+/// Чтобы уже на уровне выполнения кода мы могли обрабатывать условия в
+/// динамике, к примеру сейчас включена такая "возможность"/функция, а
+/// потом вдруг мы захотели ее отключить и соответственно все места
+/// должны иметь покрытие на уровне p_config->IsFeatureEnabled и если
 /// true то исполняем какую-то логику. То есть это формальное
 /// обозначение того факта, что та или иная реализация отработала и как
-///бы она работает, то есть включена.
+/// бы она работает, то есть включена.
 ///		p_config->SetFeatureStatus(Kotek::Core::eEngineFeature::kEngine_Feature_SDK,
 /// true);
 ///
@@ -119,9 +119,9 @@ enum class eResourceCachingPolicy : ktk::enum_base_t
 ///
 ///		if (p_config->IsFeatureEnabled(kEngine_Feature_SDK)) {
 ///			// Если такая функция была включена, то это значит что
-///пользовать реализовал инициализацию и вызвал все необходимые для
-///этого функции, то есть включена возможность = работает в движке прямо
-///сейчас.
+/// пользовать реализовал инициализацию и вызвал все необходимые для
+/// этого функции, то есть включена возможность = работает в движке прямо
+/// сейчас.
 ///
 ///		}
 ///
@@ -219,6 +219,79 @@ enum class eResourceCachingPolicy : ktk::enum_base_t
 /// \~french
 enum class eEngineFeature : ktk::enum_base_t
 {
+	/// \~english @brief This field is system and it means that if the
+	/// required feature is not implemenented or exist you need to use
+	/// this field. For example, the user asks for determining if
+	/// kEngine_Feature_SomethingThatDoesntExistInEnum exists in engine.
+	/// But we can't return anything else as false state, and for
+	/// obtaining the field if the user asks for the field we will
+	/// return kEngine_Feature_Unknown.
+	///
+	/// For understanding check Kotek::Core::ktkEngineConfig's method
+	/// GetRenderFeature.
+	/// \~russian @brief Данное поле системное и используется для того,
+	/// чтобы сказать что запрашиваемое поле не существует вообще, то
+	/// есть в самом перечислении. В таком случае разработчик должен
+	/// воспользоваться данным полем, чтобы сказать пользователю что его
+	/// запрашиваемое поле не существует и неизвестно для системы.
+	///
+	/// Конкретный пример использования определен в методе
+	/// GetRenderFeature в Kotek::Core::ktkEngineConfig.
+	/// \~german @brief
+	/// \~french @brief
+	kNone = 0
+};
+
+enum class eEngineFeatureWindow : ktk::enum_base_t
+{
+	/// \~english @brief This field specifies that (main) window is in
+	/// windowed mode. So if user checks if this feature is in true
+	/// state, so it means the window is in windowed mode. The developer
+	/// must check that the field sets to true only if the window is in
+	/// real windowed mode.
+	/// \~russian @brief Данное поле означает, что (главное) окно
+	/// приложения находится в оконном режиме. Для конечного
+	/// пользователя это означает, что если он хочет проверить данное
+	/// поле, то если оно включено, значит окно реально находится в
+	/// оконном режиме, разработчик должен убедиться и гарантировать,
+	/// что если поле включено, то это соответствует действительности.
+	/// \~german @brief
+	/// \~french @brief
+	kEngine_Window_Windowed = 1 << 2,
+
+	/// \~english @brief This field specifies that window is in
+	/// borderless mode. So if the user checks if this field is set to
+	/// true state, it means that window is in borderless mode. The
+	/// developer must check that window is indeed in borderless mode
+	/// and set this field in true state for notifying user.
+	/// \~russian @brief Данное поле означает, что окно находится в
+	/// оконном режиме, но без оконных рамок. Конечный пользователь при
+	/// проверке должен получать состояние, что окно реально находится в
+	/// соответствующем режиме. За этим должен следить разработчик и
+	/// гарантировать это состояние.
+	/// \~german @brief
+	/// \~french @brief
+	kEngine_Window_Borderless = 1 << 3,
+
+	/// \~english @brief This field specifies that window is in
+	/// fullscreen mode. If user checks that field is in true state it
+	/// means that window is in real fullscreen mode. The developer must
+	/// provide to user that window is in fullscreen and the appropriate
+	/// is in true state.
+	/// \~russian @brief Данное поле показывает что окно находится в
+	/// полноэкранном режиме. Это означает, что если пользователь
+	/// проверяет данное поле что оно включено, то это значит что окно
+	/// реально находится в таком режиме. Разработчик должен
+	/// гарантировать такое состояние.
+	/// \~german @brief
+	/// \~french @brief
+	kEngine_Window_FullScreen = 1 << 4,
+
+	kNone = 0
+};
+
+enum class eEngineFeatureSDK : ktk::enum_base_t
+{
 	/// \~english @brief This field means that your engine is called SDK
 	/// initialization or it means that your SDK implementation is
 	/// working in Engine. So for user it means that if your status of
@@ -235,7 +308,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	///
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Feature_SDK,
+	kEngine_Feature_SDK = 1 << 0,
 
 	/// \~english @brief This field means that your engine implemented
 	/// SDK based on ImGui. So for end user the checking status of this
@@ -252,76 +325,13 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// \~french @brief
 	///
 	///
-	kEngine_Feature_SDK_ImGui,
+	kEngine_Feature_SDK_ImGui = 1 << 1,
 
-	/// \~english @brief This field specifies that (main) window is in
-	/// windowed mode. So if user checks if this feature is in true
-	/// state, so it means the window is in windowed mode. The developer
-	/// must check that the field sets to true only if the window is in
-	/// real windowed mode.
-	/// \~russian @brief Данное поле означает, что (главное) окно
-	/// приложения находится в оконном режиме. Для конечного
-	/// пользователя это означает, что если он хочет проверить данное
-	/// поле, то если оно включено, значит окно реально находится в
-	/// оконном режиме, разработчик должен убедиться и гарантировать,
-	/// что если поле включено, то это соответствует действительности.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Window_Windowed,
+	kNone = 0
+};
 
-	/// \~english @brief This field specifies that window is in
-	/// borderless mode. So if the user checks if this field is set to
-	/// true state, it means that window is in borderless mode. The
-	/// developer must check that window is indeed in borderless mode
-	/// and set this field in true state for notifying user.
-	/// \~russian @brief Данное поле означает, что окно находится в
-	/// оконном режиме, но без оконных рамок. Конечный пользователь при
-	/// проверке должен получать состояние, что окно реально находится в
-	/// соответствующем режиме. За этим должен следить разработчик и
-	/// гарантировать это состояние.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Window_Borderless,
-
-	/// \~english @brief This field specifies that window is in
-	/// fullscreen mode. If user checks that field is in true state it
-	/// means that window is in real fullscreen mode. The developer must
-	/// provide to user that window is in fullscreen and the appropriate
-	/// is in true state.
-	/// \~russian @brief Данное поле показывает что окно находится в
-	/// полноэкранном режиме. Это означает, что если пользователь
-	/// проверяет данное поле что оно включено, то это значит что окно
-	/// реально находится в таком режиме. Разработчик должен
-	/// гарантировать такое состояние.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Window_FullScreen,
-
-	/// \~english @brief This field means that renderer enabled MSAA
-	/// feature. If the field's state is true it means that renderer
-	/// implemented and enabled MSAA feature. The developer must set the
-	/// valid state of field.
-	/// \~russian @brief Данное поле означает что рендерер включил
-	/// возможность MSAA. Если состояние поля true означает что
-	/// разработчик реализовал и включил MSAA. Разработчик должен
-	/// гарантировать что состояние поля соответствует работе рендерера.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Feature_MSAA,
-
-	/// \~english @brief This field means that renderer enabled VSYNC
-	/// feature. If the field's state is true it means that renderer
-	/// implemented and enabled VSYNC feature. The developer must set
-	/// the valid state of field.
-	/// \~russian @brief Данное поле означает что рендерер имеет VSYNC
-	/// функцию. Если поле имеет состояние true это означает, что
-	/// реднерер реализовал и включил VSYNC функцию. Разработчик должен
-	/// гарантировать что состояние поля соответствует работе рендерера.
-	/// \~german @brief
-	/// \~french @brief
-	///
-	kEngine_Render_Feature_VSYNC,
-
+enum class eEngineFeatureRenderer : ktk::enum_base_t
+{
 	// don't use, internal usage only
 	/// \~english @brief This field is system and it means that it
 	/// doesn't use in purpose for detecting which renderer is use. It
@@ -335,7 +345,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// Kotek::Core::ktkEngineConfig
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_DirectX,
+	kEngine_Render_Renderer_DirectX = 1 << 0,
 
 	/// \~english @brief This field means that engine uses DirectX 7. If
 	/// field equals true means that engine uses DirectX 7 currently.
@@ -347,7 +357,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// состояние поле соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_7,
+	kEngine_Render_Renderer_DirectX_7 = 1 << 1,
 
 	/// \~english @brief This field means that engine uses DirectX 8. If
 	/// field equals true means that engine uses DirectX 8 currently.
@@ -359,7 +369,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// поле соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_8,
+	kEngine_Render_Renderer_DirectX_8 = 1 << 2,
 
 	/// \~english @brief This field means that engine uses DirectX 9. If
 	/// the field has a true state it means that engine uses DirectX 9
@@ -371,7 +381,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// что состояние поле соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_9,
+	kEngine_Render_Renderer_DirectX_9 = 1 << 3,
 
 	/// \~english @brief This field means that engine uses DirectX 10.
 	/// If the field equals true that means that engine uses DirectX 10
@@ -382,7 +392,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// что состояние поля соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_10,
+	kEngine_Render_Renderer_DirectX_10 = 1 << 4,
 
 	/// \~english @brief This field means that engine uses DirectX 11.
 	/// If the field equals true that means that engine uses DirectX 11
@@ -394,7 +404,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// гарантировать что состояние поля соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_11,
+	kEngine_Render_Renderer_DirectX_11 = 1 << 5,
 
 	/// \~english @brief This field means that engine uses (or not)
 	/// DirectX version 12. If this field equals true this means that
@@ -408,7 +418,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_12,
+	kEngine_Render_Renderer_DirectX_12 = 1 << 6,
 
 	// don't use, internal usage only
 	/// \~english @brief This field is system and doesn't apply to real
@@ -440,7 +450,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// после него идут только конкретные OpenGL рендереры.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL,
+	kEngine_Render_Renderer_OpenGL = 1 << 7,
 
 	/// \~english @brief This field means tht engine uses OpenGL
 	/// version 1.0. If this field is true it means that engine uses
@@ -453,7 +463,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// данного поля.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL1_0,
+	kEngine_Render_Renderer_OpenGL1_0 = 1 << 8,
 
 	/// \~english @brief This field means that engine uses OpenGL
 	/// version 2.0. If this field is true it means that engine uses
@@ -465,7 +475,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// гарантировать что состояние поля соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL2_0,
+	kEngine_Render_Renderer_OpenGL2_0 = 1 << 9,
 
 	/// \~english @brief This field means that engine uses OpenGL
 	/// version 3.3. If this field is true it means that engine uses
@@ -478,7 +488,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// состояние поля соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL3_3,
+	kEngine_Render_Renderer_OpenGL3_3 = 1 << 10,
 
 	/// \~english @brief This field means that engine uses OpenGL
 	/// version 4.6. If this field is true it means that engine uses
@@ -491,7 +501,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL4_6,
+	kEngine_Render_Renderer_OpenGL4_6 = 1 << 11,
 
 	/// \~english @brief This field means that renderer is Vulkan. In
 	/// Engine it supposed that only one renderer can exist, thus if
@@ -505,7 +515,7 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// соотносится с работой рендерера Vulkan.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_Vulkan,
+	kEngine_Render_Renderer_Vulkan = 1 << 12,
 
 	/// \~english @brief This field means that renderer is software. In
 	/// Engine it supposed that only one renderer can exist, so if you
@@ -521,29 +531,48 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// данным рендерером.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_Software,
+	kEngine_Render_Renderer_Software = 1 << 13,
 
-	/// \~english @brief This field is system and it means that if the
-	/// required feature is not implemenented or exist you need to use
-	/// this field. For example, the user asks for determining if
-	/// kEngine_Feature_SomethingThatDoesntExistInEnum exists in engine.
-	/// But we can't return anything else as false state, and for
-	/// obtaining the field if the user asks for the field we will
-	/// return kEngine_Feature_Unknown.
-	///
-	/// For understanding check Kotek::Core::ktkEngineConfig's method
-	/// GetRenderFeature.
-	/// \~russian @brief Данное поле системное и используется для того,
-	/// чтобы сказать что запрашиваемое поле не существует вообще, то
-	/// есть в самом перечислении. В таком случае разработчик должен
-	/// воспользоваться данным полем, чтобы сказать пользователю что его
-	/// запрашиваемое поле не существует и неизвестно для системы.
-	///
-	/// Конкретный пример использования определен в методе
-	/// GetRenderFeature в Kotek::Core::ktkEngineConfig.
+	kEngine_Render_Renderer_ANGLE = 1 << 14,
+
+	kNone = 0
+};
+
+enum class eEngineFeatureRendererANGLE : ktk::enum_base_t
+{
+	kEngine_Render_Renderer_ANGLE_Feature_Vulkan = 1 << 0,
+	kEngine_Render_Renderer_ANGLE_Feature_DirectX_9 = 1 << 1,
+	kNone = 0
+};
+
+enum class eEngineFeatureRender : ktk::enum_base_t
+{
+	/// \~english @brief This field means that renderer enabled MSAA
+	/// feature. If the field's state is true it means that renderer
+	/// implemented and enabled MSAA feature. The developer must set the
+	/// valid state of field.
+	/// \~russian @brief Данное поле означает что рендерер включил
+	/// возможность MSAA. Если состояние поля true означает что
+	/// разработчик реализовал и включил MSAA. Разработчик должен
+	/// гарантировать что состояние поля соответствует работе рендерера.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Feature_Unknown = -1
+	kEngine_Render_Feature_MSAA = 1 << 0,
+
+	/// \~english @brief This field means that renderer enabled VSYNC
+	/// feature. If the field's state is true it means that renderer
+	/// implemented and enabled VSYNC feature. The developer must set
+	/// the valid state of field.
+	/// \~russian @brief Данное поле означает что рендерер имеет VSYNC
+	/// функцию. Если поле имеет состояние true это означает, что
+	/// реднерер реализовал и включил VSYNC функцию. Разработчик должен
+	/// гарантировать что состояние поля соответствует работе рендерера.
+	/// \~german @brief
+	/// \~french @brief
+	///
+	kEngine_Render_Feature_VSYNC = 1 << 1,
+
+	kNone = 0
 };
 
 enum class eConsoleCommandIndex : ktk::enum_base_t

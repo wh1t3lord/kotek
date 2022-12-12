@@ -42,44 +42,34 @@ public:
 	 */
 	void Shutdown(void) override;
 
-	/**
-	 * Checks if specified logical feature is enabled. It uses when we
-	 * want to check if something from eEngineFeature enum is enabled in
-	 * our engine/system.
-	 *
-	 * Logical feature means it is just a bit for telling user that a
-	 * such feature was initialized/created somewhere. But
-	 * SetFeatureStatus is not for user! (Except the situation if he
-	 * doesn't provide his own implementations)
-	 *
-	 * \param id the field of enum eEngineFeature
-	 * \return true means feature is enabled otherwise it doesn't enable
-	 * in system
-	 *
-	 * @see eEngineFeature enum that contains all supported or possible
-	 * features that engine could have.
-	 *
-	 * @code
-	 * // checks if current renderer is DirectX 11
-	 * p_main_manager->Get_EngineConfig()->IsFeatureEnabled(eEngineFeature::kEngine_Render_Renderer_DirectX_11);
-	 * @endcode
-	 */
-	bool IsFeatureEnabled(eEngineFeature id) const noexcept override;
+	virtual bool IsFeatureEnabled(eEngineFeature id) const noexcept override;
+	virtual bool IsFeatureEnabled(
+		eEngineFeatureRender id) const noexcept override;
+	virtual bool IsFeatureEnabled(
+		eEngineFeatureRenderer id) const noexcept override;
+	virtual bool IsFeatureEnabled(eEngineFeatureSDK id) const noexcept override;
+	virtual bool IsFeatureEnabled(
+		eEngineFeatureWindow id) const noexcept override;
 
-	/**
-	 * Setter for specify if feature we need enable or disable. Depends
-	 * on bool value.
-	 *
-	 * \param id field from eEngineFeature enum.
-	 * \param status true means we set the feature in map as enabled.
-	 * But it doesn't enable physically something it is just a marker
-	 * for noticing to user that a such feature is enabled in system (or
-	 * somewhere was initialized). Otherwise we mark that feature is
-	 * disable (e.g. it might be useful when you switch the renderer in
-	 * one session like we go to OpenGL and after switch to DirectX, so
-	 * OpenGL features will be set to false). \return void
-	 */
-	void SetFeatureStatus(eEngineFeature id, bool status) noexcept override;
+	virtual void SetFeatureStatus(
+		eEngineFeature id, bool status) noexcept override;
+	virtual void SetFeatureStatus(
+		eEngineFeatureRender id, bool status) noexcept override;
+	virtual void SetFeatureStatus(
+		eEngineFeatureRenderer id, bool status) noexcept override;
+	virtual void SetFeatureStatus(
+		eEngineFeatureSDK id, bool status) noexcept override;
+	virtual void SetFeatureStatus(
+		eEngineFeatureWindow id, bool status) noexcept override;
+
+	virtual eEngineFeature GetEngineFeature(void) const noexcept override;
+	virtual eEngineFeatureRender GetEngineFeatureRender(
+		void) const noexcept override;
+	virtual eEngineFeatureRenderer GetEngineFeatureRenderer(
+		void) const noexcept override;
+	virtual eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept override;
+	virtual eEngineFeatureWindow GetEngineFeatureWindow(
+		void) const noexcept override;
 
 	/**
 	 * Get current renderer name in human-readable form.
@@ -87,13 +77,6 @@ public:
 	 * \return ktk::string
 	 */
 	ktk::string GetRenderName(void) const noexcept override;
-
-	/**
-	 * Get current renderer as a eEngineFeature type.
-	 *
-	 * \return some field from eEngineFeature enum.
-	 */
-	eEngineFeature GetRenderFeature(void) const noexcept override;
 
 	/**
 	 * All Graphics APIs that were created before Vulkan and DirectX12
@@ -217,7 +200,11 @@ private:
 	char** m_argv;
 	ktk::mt::atomic<bool> m_is_running;
 	ktk::vector<ktk::string> m_parsed_command_line_arguments;
-	ktk::unordered_map<eEngineFeature, bool> m_engine_flags;
+	eEngineFeature m_engine_feature_flags;
+	eEngineFeatureRender m_engine_feature_render_flags;
+	eEngineFeatureRenderer m_engine_feature_renderer_flags;
+	eEngineFeatureSDK m_engine_feature_sdk_flags;
+	eEngineFeatureWindow m_engine_feature_window_flags;
 	ktk::dll::shared_library m_user_dll;
 };
 
