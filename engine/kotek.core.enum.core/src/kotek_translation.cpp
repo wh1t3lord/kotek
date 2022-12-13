@@ -82,99 +82,154 @@ namespace helper
 	{
 		switch (type)
 		{
-		case eEngineFeature::kEngine_Feature_SDK:
-		{
-			return "SDK";
-		}
-		case eEngineFeature::kEngine_Feature_SDK_ImGui:
-		{
-			return "SDK_ImGui";
-		}
-		case eEngineFeature::kEngine_Feature_Unknown:
-		{
-			return "Unknown";
-		}
-		case eEngineFeature::kEngine_Render_Feature_MSAA:
-		{
-			return "MSAA";
-		}
-		case eEngineFeature::kEngine_Render_Feature_VSYNC:
-		{
-			return "VSYNC";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_DirectX:
-		{
-			return "DirectX (user can't use it)";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_DirectX_10:
-		{
-			return "DirectX 10";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_DirectX_11:
-		{
-			return "DirectX 11";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_DirectX_12:
-		{
-			return "DirectX 12";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_DirectX_7:
-		{
-			return "DirectX 7";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_DirectX_8:
-		{
-			return "DirectX 8";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_DirectX_9:
-		{
-			return "DirectX 9";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_OpenGL:
-		{
-			return "OpenGL";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_OpenGL1_0:
-		{
-			return "OpenGL 1.0";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_OpenGL2_0:
-		{
-			return "OpenGL 2.0";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_OpenGL3_3:
-		{
-			return "OpenGL 3.3";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_OpenGL4_6:
-		{
-			return "OpenGL 4.6";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_Software:
-		{
-			return "Software";
-		}
-		case eEngineFeature::kEngine_Render_Renderer_Vulkan:
-		{
-			return "Vulkan";
-		}
-		case eEngineFeature::kEngine_Window_Borderless:
-		{
-			return "Window_Borderless";
-		}
-		case eEngineFeature::kEngine_Window_FullScreen:
-		{
-			return "Window_FullScreen";
-		}
-		case eEngineFeature::kEngine_Window_Windowed:
-		{
-			return "Window_Windowed";
-		}
 		default:
 		{
 			return "UNDEFINED_ENUM_OF_ENGINE_FEATURE";
 		}
 		}
+	}
+
+	ktk::string Translate_EngineFeatureRender(eEngineFeatureRender type)
+	{
+		switch (type)
+		{
+		case eEngineFeatureRender::kEngine_Render_Feature_MSAA:
+		{
+			return "MSAA";
+		}
+		case eEngineFeatureRender::kEngine_Render_Feature_VSYNC:
+		{
+			return "VSYNC";
+		}
+		default:
+		{
+			return "UNDEFINED_ENUM_OF_ENGINE_FEATURE_RENDER";
+		}
+		}
+	}
+
+	ktk::string Translate_EngineFeatureRenderer(eEngineFeatureRenderer type)
+	{
+		switch (type)
+		{
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_ANGLE:
+		{
+			return "ANGLE";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX:
+		{
+			return "DirectX";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_10:
+		{
+			return "DirectX 10";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_11:
+		{
+			return "DirectX 11";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_12:
+		{
+			return "DirectX 12";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_7:
+		{
+			return "DirectX 7";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_8:
+		{
+			return "DirectX 8";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_9:
+		{
+
+			return "DirectX 9";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL:
+		{
+			return "OpenGL";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL1_0:
+		{
+			return "OpenGL 1.0";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL2_0:
+		{
+			return "OpenGL 2.0";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL3_3:
+		{
+			return "OpenGL 3.3";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL4_6:
+		{
+			return "OpenGL 4.6";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_Software:
+		{
+			return "Software";
+		}
+		case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan:
+		{
+			return "Vulkan";
+		}
+		default:
+		{
+			return "UNDEFINED_ENUM_OF_ENGINE_FEATURE_RENDERER";
+		}
+		}
+	}
+
+	ktk::string Translate_EngineFeatureRendererANGLE(
+		eEngineFeatureRendererANGLE type)
+	{
+		switch (type)
+		{
+		case eEngineFeatureRendererANGLE::
+		kEngine_Render_Renderer_ANGLE_Feature_Desktop_GL:
+		{
+			return "Desktop GL";
+		}
+		case eEngineFeatureRendererANGLE::
+		kEngine_Render_Renderer_ANGLE_Feature_DirectX_9:
+		{
+			return "DirectX 9";
+		}
+		case eEngineFeatureRendererANGLE::
+		kEngine_Render_Renderer_ANGLE_Feature_DirectX_11:
+		{
+			return "DirectX 11";
+		}
+		case eEngineFeatureRendererANGLE::
+		kEngine_Render_Renderer_ANGLE_Feature_Vulkan:
+		{
+			return "Vulkan";
+		}
+		case eEngineFeatureRendererANGLE::
+		kEngine_Render_Renderer_ANGLE_Feature_GL_ES:
+		{
+			return "GL ES";
+		}
+		case eEngineFeatureRendererANGLE::
+		kEngine_Render_Renderer_ANGLE_Feature_Metal:
+		{
+			return "Metal";
+		}
+		default:
+		{
+			return "UNDEFINED_ENUM_OF_ENGINE_FEATURE_RENDERER_ANGLE";
+		}
+		}
+	}
+
+	ktk::string Translate_EngineFeatureSDK(eEngineFeatureSDK type)
+	{
+		return ktk::string();
+	}
+
+	ktk::string Translate_EngineFeatureWindow(eEngineFeatureWindow type)
+	{
+		return ktk::string();
 	}
 
 	ktk::string Translate_ResourceLoadingType(eResourceLoadingType type)

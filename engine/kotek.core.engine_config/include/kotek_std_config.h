@@ -179,19 +179,6 @@ public:
 	void* Get_UserLibrary(void) noexcept override;
 
 private:
-	/**
-	 * Checks if feature is Graphics API. It means if the passed feature
-	 * from enum eEngineFeature is Graphics API like DirectX, OpenGL,
-	 * Vulkan, and etc.
-	 *
-	 * \param feature any field from eEngineFeature or anything what you
-	 * like to pass in it from eEngineFeature enum. \return true means
-	 * your feature is Graphics API like OpenGL or DirectX (more
-	 * specifically like kEngine_Render_Renderer_DirectX_9 or
-	 * kEngine_Render_Renderer_Vulkan). Otherwise it is not Graphics
-	 * API.
-	 */
-	bool IsFeatureRender(eEngineFeature feature) const noexcept;
 
 	void Parse_CommandLine(void) noexcept;
 

@@ -330,178 +330,68 @@ enum class eEngineFeatureSDK : ktk::enum_base_t
 	kNone = 0
 };
 
+/// @brief For checking what version the glad initialized you need to take a
+/// notice on message: 'Initialized GLAD for: Your_Printed_Version_Here'
+enum class eEngineSupportedOpenGLVersion : ktk::enum_base_t
+{
+	kOpenGL_1_0,
+	kOpenGL_1_1,
+	kOpenGL_1_2,
+	kOpenGL_1_3,
+	kOpenGL_1_4,
+	kOpenGL_1_5,
+	kOpenGL_2_0,
+	kOpenGL_2_1,
+	kOpenGL_3_0,
+	kOpenGL_3_1,
+	kOpenGL_3_2,
+	kOpenGL_3_3,
+	kOpenGL_4_0,
+	kOpenGL_4_1,
+	kOpenGL_4_2,
+	kOpenGL_4_3,
+	kOpenGL_4_4,
+	kOpenGL_4_5,
+	kOpenGL_4_6,
+
+	/// @brief don't forget to update this field if a new version with a break
+	/// changes came
+	kOpenGL_Latest = kOpenGL_4_6,
+	kUnknown = -1
+};
+
+/// @brief 
+enum class eEngineSupportedDirectXVersion : ktk::enum_base_t
+{
+	kDirectX_7,
+	kDirectX_8,
+	kDirectX_9,
+	kDirectX_10,
+	kDirectX_11,
+	kDirectX_12,
+
+	/// @brief don't forget to update this field if a new version with a break
+	/// changes came
+	kDirectX_Latest = kDirectX_12,
+	kUnknown = -1
+};
+
 enum class eEngineFeatureRenderer : ktk::enum_base_t
 {
-	// don't use, internal usage only
-	/// \~english @brief This field is system and it means that it
-	/// doesn't use in purpose for detecting which renderer is use. It
-	/// is created for determine if renderer's kind is DirectX.	So it is
-	/// for internal use, it means that for developer's purpose. See
-	/// example in IsFeatureRender of Kotek::Core::ktkEngineConfig.
-	/// \~russian @brief Данное поле используется для определения того
-	/// факта, если поле является рендерером относящиеся к DirectX. Оно
-	/// не используется для определения конкретного рендерера. Пример
-	/// использования есть в IsFeatureRender методе
-	/// Kotek::Core::ktkEngineConfig
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_DirectX = 1 << 0,
-
-	/// \~english @brief This field means that engine uses DirectX 7. If
-	/// field equals true means that engine uses DirectX 7 currently.
-	/// The developer must provide a valid state of this field that
-	/// corresponds to appropriate renderer initialization.
-	/// \~russian @brief Данное поле означает что движок работает с
-	/// DirectX 7. Если состояние равно true это значит что движок
-	/// работает сейчас DirectX 7. Разработчик должен гарантировать что
-	/// состояние поле соответствует работе движка.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_7 = 1 << 1,
-
-	/// \~english @brief This field means that engine uses DirectX 8. If
-	/// field equals true means that engine uses DirectX 8 currently.
-	/// The developer must provide a valid state of this field that
-	/// corresponds to appropriate renderer initialization.
-	/// \~russian @brief Данное поле означает что движок работает с
-	/// DirectX 8. Если состояние равно true это значит движок работает
-	/// сейчас DirectX 8. Разработчик должен гарантировать что состояние
-	/// поле соответствует работе движка.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_8 = 1 << 2,
-
-	/// \~english @brief This field means that engine uses DirectX 9. If
-	/// the field has a true state it means that engine uses DirectX 9
-	/// currently. The developer must check the state of field in order
-	/// to verify the valid state of DirectX 9.
-	/// \~russian @brief Данное поле означает что движок использует
-	/// DirectX 9. Если поле имеет состояние true это значит что движок
-	/// использует сейчас DirectX 9. Разработчик должен гарантировать
-	/// что состояние поле соответствует работе движка.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_9 = 1 << 3,
-
-	/// \~english @brief This field means that engine uses DirectX 10.
-	/// If the field equals true that means that engine uses DirectX 10
-	/// currently. The developer must check the state of this field.
-	/// \~russian @brief Данное поле означает что движок использует
-	/// DirectX 10. Если поле имеет состояние true, это значит движок
-	/// сейчас использует DirectX 10. Разработчик должен гарантировать
-	/// что состояние поля соответствует работе движка.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_10 = 1 << 4,
-
-	/// \~english @brief This field means that engine uses DirectX 11.
-	/// If the field equals true that means that engine uses DirectX 11
-	/// renderer currently. The developer must provide a valid state of
-	/// this field.
-	/// \~russian @brief Данное поле означает что движок имеет
-	/// DirectX 11. Если поле имеет состояние true, это значит что
-	/// рендерер DirectX 11 сейчас работает в движке. Разработчик должен
-	/// гарантировать что состояние поля соответствует работе движка.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_11 = 1 << 5,
-
-	/// \~english @brief This field means that engine uses (or not)
-	/// DirectX version 12. If this field equals true this means that
-	/// engine uses DirectX version 12 currently. The developer must
-	/// gurantee that field works in accordance DirectX 12 initilization
-	/// and creation.
-	/// \~russian @brief Данное поле означает, что движок использует
-	/// рендерер DirectX 12. Если поле имеет состояние равное true, то
-	/// DirectX 12 используется движком сейчас. Разработчик должен
-	/// гарантировать, что состояние данного поля соответствует работе
-	/// движка.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_DirectX_12 = 1 << 6,
-
-	// don't use, internal usage only
-	/// \~english @brief This field is system and doesn't apply to real
-	/// definition of renderer usage. So it means that it uses for
-	/// determine if the current renderer is OpenGL, but doesn't
-	/// detemine which is version, so it is useful when we need to
-	/// compare from OpenGL Renderer to something else. Otherwise it is
-	/// hard to define a place where OpenGL renderers start in enum. Of
-	/// course we could use kEngine_Render_Renderer_OpenGL1_0, but what
-	/// if some older OpenGL's versions exist? The enum will be changed
-	/// and the kEngine_Render_Renderer_OpenGL1_0 will not be first in
-	/// order to specify that from that field starts OpenGL renderers.
-	/// To see real example see the IsFeatureRender in
-	/// Kotek::Core::ktkEngineConfig. (but it is applied to DirectX, but
-	/// it doesn't change the sense)
-	/// \~russian @brief Данное поле системное и на практике не
-	/// используется для определения какого-то рендерера, который может
-	/// использовать внутри движка. Напротив, оно используется только
-	/// для того, чтобы упростить определение того факта, а к какому
-	/// типу рендереров может принадлежать поле не указывая при этом
-	/// версию. К примеру, мы хотим сделать проверку, что только OpenGL
-	/// рендереры являются подходящими, и нам надо взять стартовое поле
-	/// до другого поля. К примеру, если мы возьмем
-	/// kEngine_Render_Renderer_OpenGL1_0, то у нас нет никаких
-	/// гарантий, что не будет ещё более древней версии OpenGL, которая
-	/// может добавиться в данный фреймворк. По этому случаю, это поле
-	/// может измениться и гарантий никаких нет, поэтому было введено
-	/// это поле kEngine_Render_Renderer_OpenGL, чтобы отметить, что
-	/// после него идут только конкретные OpenGL рендереры.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL = 1 << 7,
-
-	/// \~english @brief This field means tht engine uses OpenGL
-	/// version 1.0. If this field is true it means that engine uses
-	/// OpenGL 1.0. The developer must provide a valid state of this
-	/// field for end user.
-	/// \~russian @brief Данное поле означает, что движок использует
-	/// рендерер OpenGL версии 1.0. Если поле имеет состояние true,
-	/// означает что движок использует сейчас OpenGL версии 1.0.
-	/// Разработчик должен гарантировать корректное состояние для
-	/// данного поля.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL1_0 = 1 << 8,
-
-	/// \~english @brief This field means that engine uses OpenGL
-	/// version 2.0. If this field is true it means that engine uses
-	/// OpenGL 2.0. The developer must provide a valid state of this
-	/// field for end user.
-	/// \~russian @brief Данное поле означает, что движок использует
-	/// рендерер OpenGL версии 2.0. Если поле равно true, то движок
-	/// использует сейчас рендерер OpenGL 3.3. Разработчик должен
-	/// гарантировать что состояние поля соответствует работе движка.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL2_0 = 1 << 9,
-
-	/// \~english @brief This field means that engine uses OpenGL
-	/// version 3.3. If this field is true it means that engine uses
-	/// OpenGL 3.3. The developer must provide a valid state of this
-	/// field for end user.
-	/// \~russian @brief Данное поле означает, что движок использует
-	/// рендерер OpenGL версии 3.3. Если данное поле имеет состояние
-	/// true, то это обозначает что движок сейчас работает с рендерером
-	/// OpenGL версии 3.3. Разработчик должен гарантировать что
-	/// состояние поля соответствует работе движка.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL3_3 = 1 << 10,
-
 	/// \~english @brief This field means that engine uses OpenGL
 	/// version 4.6. If this field is true it means that engine uses
 	/// OpenGL 4.6 currently. The developer must check the valid state
 	/// of this field in order to provide it to end user.
 	/// \~russian @brief Данное поле обозначает, что движок использует
-	/// рендерер OpenGL версии 4.6. Если поле имеет true состояние, то
-	/// это значит что движок использует данный рендерер OpenGL 4.6.
-	/// Разработчик должен гарантировать что состояние поля
+	/// рендерер OpenGL версии 4.6 (то есть текущую самую последнюю). Если поле
+	/// имеет true состояние, то это значит что движок использует данный
+	/// рендерер OpenGL 4.6. Разработчик должен гарантировать что состояние поля
 	/// соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL4_6 = 1 << 11,
+	kEngine_Render_Renderer_OpenGL_Latest = 1 << 11,
+
+	kEngine_Render_Renderer_DirectX_Latest = 1 << 12,
 
 	/// \~english @brief This field means that renderer is Vulkan. In
 	/// Engine it supposed that only one renderer can exist, thus if
@@ -515,7 +405,7 @@ enum class eEngineFeatureRenderer : ktk::enum_base_t
 	/// соотносится с работой рендерера Vulkan.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_Vulkan = 1 << 12,
+	kEngine_Render_Renderer_Vulkan = 1 << 13,
 
 	/// \~english @brief This field means that renderer is software. In
 	/// Engine it supposed that only one renderer can exist, so if you
@@ -531,17 +421,22 @@ enum class eEngineFeatureRenderer : ktk::enum_base_t
 	/// данным рендерером.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_Software = 1 << 13,
+	kEngine_Render_Renderer_Software = 1 << 14,
 
-	kEngine_Render_Renderer_ANGLE = 1 << 14,
+	kEngine_Render_Renderer_ANGLE = 1 << 15,
 
 	kNone = 0
 };
 
+/// @brief took information from https://github.com/google/angle
 enum class eEngineFeatureRendererANGLE : ktk::enum_base_t
 {
 	kEngine_Render_Renderer_ANGLE_Feature_Vulkan = 1 << 0,
 	kEngine_Render_Renderer_ANGLE_Feature_DirectX_9 = 1 << 1,
+	kEngine_Render_Renderer_ANGLE_Feature_DirectX_11 = 1 << 2,
+	kEngine_Render_Renderer_ANGLE_Feature_Desktop_GL = 1 << 3,
+	kEngine_Render_Renderer_ANGLE_Feature_GL_ES = 1 << 4,
+	kEngine_Render_Renderer_ANGLE_Feature_Metal = 1 << 5,
 	kNone = 0
 };
 

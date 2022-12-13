@@ -414,12 +414,6 @@ void* ktkEngineConfig::Get_UserLibrary(void) noexcept
 	return &this->m_user_dll;
 }
 
-bool ktkEngineConfig::IsFeatureRender(eEngineFeature feature) const noexcept
-{
-	return (feature > eEngineFeature::kEngine_Render_Renderer_DirectX) &&
-		(feature <= eEngineFeature::kEngine_Render_Renderer_Software);
-}
-
 void ktkEngineConfig::Parse_CommandLine(void) noexcept
 {
 	KOTEK_ASSERT(this->m_argc != -1,
