@@ -266,6 +266,8 @@ namespace Engine
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.2");
 	#elif (_MSC_VER == 1933)
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.3");
+	#elif (_MSC_VER == 1934)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.4");
 	#endif
 
 #endif
@@ -282,6 +284,9 @@ namespace Engine
 
 		Game::InitializeModule_Game(p_main_manager);
 
+		// TODO: make deffered calling of this function from user dll if user
+		// specified that he takes information about fallback renderer in his
+		// config not from sys_info
 		Render::InitializeModule_Render(p_main_manager);
 
 		UI::InitializeModule_UI(p_main_manager);

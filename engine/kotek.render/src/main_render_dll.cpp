@@ -27,12 +27,32 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 
 	if (p_engine_config->IsUserSpecifiedRendererDirectXInCommandLine())
 	{
+		auto version_dx = p_engine_config->GetCurrentDirectXVersion();
+		KOTEK_MESSAGE("you pass command for initializing {}",
+			Kotek::Core::helper::Translate_EngineSupportedDirectXVersion(
+				version_dx));
+
+		switch (version_dx)
+		{
+		default:
+		{
+			KOTEK_MESSAGE("Uknown version of DirectX you pass trying to "
+			              "initialize OpenGL");
+		}
+		}
+		// TODO: add directx
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine())
 	{
+		KOTEK_MESSAGE("you pass command line to application for initializing {}", Kotek::Core::helper::Translate_EngineSupportedOpenGLVersion(p_engine_config->GetCurrentOpenGLVersion()));
+		status = InitializeModule_Render_GL(main_manager);
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
 	{
+		KOTEK_MESSAGE("you pass command line to application for initializing {}",
+			Kotek::Core::helper::Translate_EngineSupportedVulkanVersion(
+				p_engine_config->GetCurrentVulkanVersion()));
+		status = InitializeModule_Render_VK(main_manager);
 	}
 	else
 	{
@@ -70,6 +90,7 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 
 	if (p_engine_config->IsUserSpecifiedRendererDirectXInCommandLine())
 	{
+		// TODO: add DirectX here
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine())
 	{
