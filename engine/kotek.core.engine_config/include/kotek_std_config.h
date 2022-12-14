@@ -61,6 +61,12 @@ public:
 		eEngineFeatureSDK id, bool status) noexcept override;
 	virtual void SetFeatureStatus(
 		eEngineFeatureWindow id, bool status) noexcept override;
+	virtual void SetFeatureStatus(
+		eEngineSupportedOpenGLVersion version, bool status) noexcept override;
+	virtual void SetFeatureStatus(
+		eEngineSupportedDirectXVersion version, bool status) noexcept override;
+	virtual void SetFeatureStatus(
+		eEngineSupportedVulkanVersion version, bool status) noexcept override;
 
 	virtual eEngineFeature GetEngineFeature(void) const noexcept override;
 	virtual eEngineFeatureRender GetEngineFeatureRender(
@@ -69,6 +75,12 @@ public:
 		void) const noexcept override;
 	virtual eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept override;
 	virtual eEngineFeatureWindow GetEngineFeatureWindow(
+		void) const noexcept override;
+	virtual eEngineSupportedDirectXVersion GetCurrentDirectXVersion(
+		void) const noexcept override;
+	virtual eEngineSupportedOpenGLVersion GetCurrentOpenGLVersion(
+		void) const noexcept override;
+	virtual eEngineSupportedVulkanVersion GetCurrentVulkanVersion(
 		void) const noexcept override;
 
 	/**
@@ -82,8 +94,8 @@ public:
 	 * All Graphics APIs that were created before Vulkan and DirectX12
 	 * (and newer) marked as Legacy.
 	 *
-	 * \return if it is not DirectX12 or Vulkan it returns true
-	 * otherwise it is a modern Graphics API.
+	 * \return if it is not IsCurrentRenderModern (e.g. OpenGL 3.3 or Vulkan 1.1
+	 * or DirectX 11)
 	 */
 	bool IsCurrentRenderLegacy(void) const noexcept override;
 
@@ -92,8 +104,9 @@ public:
 	 * Modern by definition of author it is Vulkan or DirectX12 (or
 	 * newer).
 	 *
-	 * \return if Vulkan or DirectX12 means true otherwise false means
-	 * legacy.
+	 * \return if your specified renderer version equals kRendererName_Latest
+	 * means it is a modern version, otherwise false means legacy. (e.g. DirectX
+	 * 12, OpenGL 4.6, Vulkan 1.3)
 	 */
 	bool IsCurrentRenderModern(void) const noexcept override;
 
@@ -179,19 +192,21 @@ public:
 	void* Get_UserLibrary(void) noexcept override;
 
 private:
-
 	void Parse_CommandLine(void) noexcept;
 
 private:
 	int m_argc;
 	char** m_argv;
 	ktk::mt::atomic<bool> m_is_running;
-	ktk::vector<ktk::string> m_parsed_command_line_arguments;
 	eEngineFeature m_engine_feature_flags;
 	eEngineFeatureRender m_engine_feature_render_flags;
 	eEngineFeatureRenderer m_engine_feature_renderer_flags;
 	eEngineFeatureSDK m_engine_feature_sdk_flags;
 	eEngineFeatureWindow m_engine_feature_window_flags;
+	eEngineSupportedDirectXVersion m_engine_current_directx_version;
+	eEngineSupportedOpenGLVersion m_engine_current_opengl_version;
+	eEngineSupportedVulkanVersion m_engine_current_vulkan_version;
+	ktk::vector<ktk::string> m_parsed_command_line_arguments;
 	ktk::dll::shared_library m_user_dll;
 };
 

@@ -360,7 +360,7 @@ enum class eEngineSupportedOpenGLVersion : ktk::enum_base_t
 	kUnknown = -1
 };
 
-/// @brief 
+/// @brief
 enum class eEngineSupportedDirectXVersion : ktk::enum_base_t
 {
 	kDirectX_7,
@@ -373,6 +373,20 @@ enum class eEngineSupportedDirectXVersion : ktk::enum_base_t
 	/// @brief don't forget to update this field if a new version with a break
 	/// changes came
 	kDirectX_Latest = kDirectX_12,
+	kUnknown = -1
+};
+
+enum class eEngineSupportedVulkanVersion : ktk::enum_base_t
+{
+	kVulkan_1_0,
+	kVulkan_1_1,
+	kVulkan_1_2,
+	kVulkan_1_3,
+
+	/// @brief don't forget to update this field if a new version with a break
+	/// changes came
+	kVulkan_Latest = kVulkan_1_3,
+
 	kUnknown = -1
 };
 
@@ -389,9 +403,11 @@ enum class eEngineFeatureRenderer : ktk::enum_base_t
 	/// соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL_Latest = 1 << 11,
+	kEngine_Render_Renderer_OpenGL_Latest = 1 << 1,
+	kEngine_Render_Renderer_OpenGL_SpecifiedByUser = 1 << 2,
 
-	kEngine_Render_Renderer_DirectX_Latest = 1 << 12,
+	kEngine_Render_Renderer_DirectX_Latest = 1 << 3,
+	kEngine_Render_Renderer_DirectX_SpecifiedByUser = 1 << 4,
 
 	/// \~english @brief This field means that renderer is Vulkan. In
 	/// Engine it supposed that only one renderer can exist, thus if
@@ -405,7 +421,8 @@ enum class eEngineFeatureRenderer : ktk::enum_base_t
 	/// соотносится с работой рендерера Vulkan.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_Vulkan = 1 << 13,
+	kEngine_Render_Renderer_Vulkan_Latest = 1 << 5,
+	kEngine_Render_Renderer_Vulkan_SpecifiedByUser = 1 << 6,
 
 	/// \~english @brief This field means that renderer is software. In
 	/// Engine it supposed that only one renderer can exist, so if you
@@ -421,9 +438,9 @@ enum class eEngineFeatureRenderer : ktk::enum_base_t
 	/// данным рендерером.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_Software = 1 << 14,
+	kEngine_Render_Renderer_Software = 1 << 7,
 
-	kEngine_Render_Renderer_ANGLE = 1 << 15,
+	kEngine_Render_Renderer_ANGLE = 1 << 8,
 
 	kNone = 0
 };

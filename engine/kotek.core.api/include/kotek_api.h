@@ -656,6 +656,12 @@ public:
 		eEngineFeatureSDK id, bool status) noexcept = 0;
 	virtual void SetFeatureStatus(
 		eEngineFeatureWindow id, bool status) noexcept = 0;
+	virtual void SetFeatureStatus(
+		eEngineSupportedOpenGLVersion version, bool status) noexcept = 0;
+	virtual void SetFeatureStatus(
+		eEngineSupportedDirectXVersion version, bool status) noexcept = 0;
+	virtual void SetFeatureStatus(
+		eEngineSupportedVulkanVersion version, bool status) noexcept = 0;
 
 	virtual eEngineFeature GetEngineFeature(void) const noexcept = 0;
 	virtual eEngineFeatureRender GetEngineFeatureRender(
@@ -664,6 +670,12 @@ public:
 		void) const noexcept = 0;
 	virtual eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept = 0;
 	virtual eEngineFeatureWindow GetEngineFeatureWindow(
+		void) const noexcept = 0;
+	virtual eEngineSupportedDirectXVersion GetCurrentDirectXVersion(
+		void) const noexcept = 0;
+	virtual eEngineSupportedOpenGLVersion GetCurrentOpenGLVersion(
+		void) const noexcept = 0;
+	virtual eEngineSupportedVulkanVersion GetCurrentVulkanVersion(
 		void) const noexcept = 0;
 
 	virtual ktk::string GetRenderName(void) const noexcept = 0;

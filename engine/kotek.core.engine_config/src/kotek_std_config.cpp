@@ -4,7 +4,12 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 ktkEngineConfig::ktkEngineConfig(void) :
-	m_argc{-1}, m_argv{}, m_is_running{true}
+	m_argc{-1}, m_argv{}, m_is_running{true}, m_engine_feature_flags{},
+	m_engine_feature_render_flags{}, m_engine_feature_sdk_flags{},
+	m_engine_feature_window_flags{},
+	m_engine_current_directx_version{eEngineSupportedDirectXVersion::kUnknown},
+	m_engine_current_opengl_version{eEngineSupportedOpenGLVersion::kUnknown},
+	m_engine_current_vulkan_version{eEngineSupportedVulkanVersion::kUnknown}
 {
 }
 
@@ -67,87 +72,19 @@ void ktkEngineConfig::SetFeatureStatus(
 void ktkEngineConfig::SetFeatureStatus(
 	eEngineFeatureRenderer id, bool status) noexcept
 {
-	KOTEK_ASSERT(
-		id != eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX &&
-			id != eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL,
-		"you can't pass system flags for setting, it doesn't make any sense");
-
 	if (status)
 	{
-		// we must have only one (maximum two, the second flag determine general 
-		// disable DirectX
-		eEngineFeatureRenderer render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_12;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_11;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_10;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_9;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_8;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_7;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
+		this->m_engine_feature_renderer_flags = id;
 
-		// disable OpenGL
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL1_0;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL2_0;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL3_3;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL4_6;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-
-		render_feature = eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_Software;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-
-		render_feature = eEngineFeatureRenderer::kEngine_Render_Renderer_ANGLE;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-
-		render_feature =
-			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-
-		render_feature = eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL;
-		this->m_engine_feature_renderer_flags &= ~render_feature;
-
-		this->m_engine_feature_renderer_flags |= render_feature;
-
-		if (render_feature >
-				eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX &&
-			render_feature <
-				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL)
+		if (id == eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest)
 		{
-			this->m_engine_feature_renderer_flags |=
-				eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX;
-		}
-		else if (render_feature >
-				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL &&
-			render_feature <
-				eEngineFeatureRenderer::kEngine_Render_Renderer_Software)
-		{
-			this->m_engine_feature_renderer_flags |=
-				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL;
+			this->SetFeatureStatus(
+				eEngineSupportedOpenGLVersion::kOpenGL_Latest, true);
 		}
 	}
 	else
 	{
-		this->m_engine_feature_renderer_flags &= ~id;
+		this->m_engine_feature_renderer_flags = eEngineFeatureRenderer::kNone;
 	}
 }
 
@@ -174,6 +111,100 @@ void ktkEngineConfig::SetFeatureStatus(
 	else
 	{
 		this->m_engine_feature_window_flags &= ~id;
+	}
+}
+
+void ktkEngineConfig::SetFeatureStatus(
+	eEngineSupportedOpenGLVersion version, bool status) noexcept
+{
+	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest ||
+			this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGL_SpecifiedByUser,
+		"you can't call this method because your current renderer is not "
+		"OpenGL! Your Renderer is: {}",
+		helper::Translate_EngineFeatureRenderer(
+			this->m_engine_feature_renderer_flags));
+
+	if (this->m_engine_feature_renderer_flags ==
+		eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest)
+	{
+		KOTEK_ASSERT(eEngineSupportedOpenGLVersion::kOpenGL_Latest != version,
+			"you can't specify version that is not latest for OpenGL!");
+	}
+
+	if (status)
+	{
+		this->m_engine_current_opengl_version = version;
+	}
+	else
+	{
+		this->m_engine_current_opengl_version =
+			eEngineSupportedOpenGLVersion::kUnknown;
+	}
+}
+
+void ktkEngineConfig::SetFeatureStatus(
+	eEngineSupportedDirectXVersion version, bool status) noexcept
+{
+	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_Latest ||
+			this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_SpecifiedByUser,
+		"you can't call this method because your current renderer is not "
+		"DirectX! Your Renderer is: {}",
+		helper::Translate_EngineFeatureRenderer(
+			this->m_engine_feature_renderer_flags));
+
+	if (this->m_engine_feature_renderer_flags ==
+		eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest)
+	{
+		KOTEK_ASSERT(eEngineSupportedDirectXVersion::kDirectX_Latest != version,
+			"you can't specify version that is not latest for OpenGL!");
+	}
+
+	if (status)
+	{
+		this->m_engine_current_directx_version = version;
+	}
+	else
+	{
+		this->m_engine_current_directx_version =
+			eEngineSupportedDirectXVersion::kUnknown;
+	}
+}
+
+void ktkEngineConfig::SetFeatureStatus(
+	eEngineSupportedVulkanVersion version, bool status) noexcept
+{
+	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest ||
+			this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::
+					kEngine_Render_Renderer_Vulkan_SpecifiedByUser,
+		"you can't call this method because your current renderer is not "
+		"Vulkan! Your Renderer is: {}",
+		helper::Translate_EngineFeatureRenderer(
+			this->m_engine_feature_renderer_flags));
+
+	if (this->m_engine_feature_renderer_flags ==
+		eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest)
+	{
+		KOTEK_ASSERT(eEngineSupportedVulkanVersion::kVulkan_Latest != version,
+			"you can't specify version that is not latest for OpenGL!");
+	}
+
+	if (status)
+	{
+		this->m_engine_current_vulkan_version = version;
+	}
+	else
+	{
+		this->m_engine_current_vulkan_version =
+			eEngineSupportedVulkanVersion::kUnknown;
 	}
 }
 
@@ -205,146 +236,173 @@ eEngineFeatureWindow ktkEngineConfig::GetEngineFeatureWindow(
 	return this->m_engine_feature_window_flags;
 }
 
+eEngineSupportedDirectXVersion ktkEngineConfig::GetCurrentDirectXVersion(
+	void) const noexcept
+{
+	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_Latest ||
+			this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_SpecifiedByUser,
+		"Your renderer must be DirectX for calling this method! Your Renderer "
+		"is: {}",
+		helper::Translate_EngineFeatureRenderer(
+			this->m_engine_feature_renderer_flags));
+
+	return this->m_engine_current_directx_version;
+}
+
+eEngineSupportedOpenGLVersion ktkEngineConfig::GetCurrentOpenGLVersion(
+	void) const noexcept
+{
+	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest ||
+			this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGL_SpecifiedByUser,
+		"Your renderer must be OpenGL for calling this method! Your Renderer "
+		"is: {}",
+		helper::Translate_EngineFeatureRenderer(
+			this->m_engine_feature_renderer_flags));
+
+	return this->m_engine_current_opengl_version;
+}
+
+eEngineSupportedVulkanVersion ktkEngineConfig::GetCurrentVulkanVersion(
+	void) const noexcept
+{
+	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest ||
+			this->m_engine_feature_renderer_flags ==
+				eEngineFeatureRenderer::
+					kEngine_Render_Renderer_Vulkan_SpecifiedByUser,
+		"your renderer must be Vulkan for calling this method! Your Renderer "
+		"is: {}",
+		helper::Translate_EngineFeatureRenderer(
+			this->m_engine_feature_renderer_flags));
+
+	return this->m_engine_current_vulkan_version;
+}
+
 ktk::string ktkEngineConfig::GetRenderName(void) const noexcept
 {
-	auto for_validation_purpose = this->GetEngineFeatureRenderer();
-
-#ifdef KOTEK_DEBUG
-	KOTEK_MESSAGE("current renderer id: {}",
-		static_cast<ktk::enum_base_t>(for_validation_purpose));
-#endif
-
-	if (this->IsFeatureEnabled(
-			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL3_3))
+	switch (this->m_engine_feature_renderer_flags)
 	{
-		return kRenderer_OpenGL3_3_Name;
-	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL4_6))
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest:
 	{
-		return kRenderer_OpenGL4_6_Name;
+		return helper::Translate_EngineSupportedOpenGLVersion(
+			this->m_engine_current_opengl_version);
 	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan))
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
 	{
-		return kRenderer_Vulkan_Name;
+		return helper::Translate_EngineSupportedOpenGLVersion(
+			this->m_engine_current_opengl_version);
 	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_12))
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest:
 	{
-		return kRenderer_DirectX_12_Name;
+		return helper::Translate_EngineSupportedDirectXVersion(
+			this->m_engine_current_directx_version);
 	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_11))
+	case eEngineFeatureRenderer::
+		kEngine_Render_Renderer_DirectX_SpecifiedByUser:
 	{
-		return kRenderer_DirectX_11_Name;
+		return helper::Translate_EngineSupportedDirectXVersion(
+			this->m_engine_current_directx_version);
 	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_10))
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest:
 	{
-		return kRenderer_DirectX_10_Name;
+		return helper::Translate_EngineSupportedVulkanVersion(
+			this->m_engine_current_vulkan_version);
 	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_9))
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
 	{
-		return kRenderer_DirectX_9_Name;
+		return helper::Translate_EngineSupportedVulkanVersion(
+			this->m_engine_current_vulkan_version);
 	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_8))
+	default:
 	{
-		return kRenderer_DirectX_8_Name;
+		return helper::Translate_EngineFeatureRenderer(
+			this->m_engine_feature_renderer_flags);
 	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_7))
-	{
-		return kRenderer_DirectX_7_Name;
 	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeatureRenderer::kEngine_Render_Renderer_Software))
-	{
-		return kRenderer_Software_Name;
-	}
-
-	KOTEK_ASSERT(false, "can't obtain render name");
-
-	return kRenderer_Unknown_Name;
 }
 
 /*
 eEngineFeature ktkEngineConfig::GetRenderFeature(void) const noexcept
 {
-	eEngineFeature result = eEngineFeature::kEngine_Feature_Unknown;
+    eEngineFeature result = eEngineFeature::kEngine_Feature_Unknown;
 
-	int validation_count = 0;
+    int validation_count = 0;
 
-	if (this->IsFeatureEnabled(
-			eEngineFeature::kEngine_Render_Renderer_OpenGL3_3))
-	{
-		++validation_count;
-		result = eEngineFeature::kEngine_Render_Renderer_OpenGL3_3;
-	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_OpenGL4_6))
-	{
-		++validation_count;
-		result = eEngineFeature::kEngine_Render_Renderer_OpenGL4_6;
-	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_Vulkan))
-	{
-		++validation_count;
-		result = eEngineFeature::kEngine_Render_Renderer_Vulkan;
-	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_12))
-	{
-		++validation_count;
-		result = eEngineFeature::kEngine_Render_Renderer_DirectX_12;
-	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_11))
-	{
-		++validation_count;
-		result = eEngineFeature::kEngine_Render_Renderer_DirectX_11;
-	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_10))
-	{
-		++validation_count;
-		result = eEngineFeature::kEngine_Render_Renderer_DirectX_10;
-	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_9))
-	{
-		++validation_count;
-		result = eEngineFeature::kEngine_Render_Renderer_DirectX_9;
-	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_8))
-	{
-		++validation_count;
-		result = eEngineFeature::kEngine_Render_Renderer_DirectX_8;
-	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_DirectX_7))
-	{
-		++validation_count;
-		result = eEngineFeature::kEngine_Render_Renderer_DirectX_7;
-	}
-	else if (this->IsFeatureEnabled(
-				 eEngineFeature::kEngine_Render_Renderer_Software))
-	{
-		++validation_count;
-		result = eEngineFeature::kEngine_Render_Renderer_Software;
-	}
+    if (this->IsFeatureEnabled(
+            eEngineFeature::kEngine_Render_Renderer_OpenGL3_3))
+    {
+        ++validation_count;
+        result = eEngineFeature::kEngine_Render_Renderer_OpenGL3_3;
+    }
+    else if (this->IsFeatureEnabled(
+                 eEngineFeature::kEngine_Render_Renderer_OpenGL4_6))
+    {
+        ++validation_count;
+        result = eEngineFeature::kEngine_Render_Renderer_OpenGL4_6;
+    }
+    else if (this->IsFeatureEnabled(
+                 eEngineFeature::kEngine_Render_Renderer_Vulkan))
+    {
+        ++validation_count;
+        result = eEngineFeature::kEngine_Render_Renderer_Vulkan;
+    }
+    else if (this->IsFeatureEnabled(
+                 eEngineFeature::kEngine_Render_Renderer_DirectX_12))
+    {
+        ++validation_count;
+        result = eEngineFeature::kEngine_Render_Renderer_DirectX_12;
+    }
+    else if (this->IsFeatureEnabled(
+                 eEngineFeature::kEngine_Render_Renderer_DirectX_11))
+    {
+        ++validation_count;
+        result = eEngineFeature::kEngine_Render_Renderer_DirectX_11;
+    }
+    else if (this->IsFeatureEnabled(
+                 eEngineFeature::kEngine_Render_Renderer_DirectX_10))
+    {
+        ++validation_count;
+        result = eEngineFeature::kEngine_Render_Renderer_DirectX_10;
+    }
+    else if (this->IsFeatureEnabled(
+                 eEngineFeature::kEngine_Render_Renderer_DirectX_9))
+    {
+        ++validation_count;
+        result = eEngineFeature::kEngine_Render_Renderer_DirectX_9;
+    }
+    else if (this->IsFeatureEnabled(
+                 eEngineFeature::kEngine_Render_Renderer_DirectX_8))
+    {
+        ++validation_count;
+        result = eEngineFeature::kEngine_Render_Renderer_DirectX_8;
+    }
+    else if (this->IsFeatureEnabled(
+                 eEngineFeature::kEngine_Render_Renderer_DirectX_7))
+    {
+        ++validation_count;
+        result = eEngineFeature::kEngine_Render_Renderer_DirectX_7;
+    }
+    else if (this->IsFeatureEnabled(
+                 eEngineFeature::kEngine_Render_Renderer_Software))
+    {
+        ++validation_count;
+        result = eEngineFeature::kEngine_Render_Renderer_Software;
+    }
 
-	KOTEK_ASSERT(
-		validation_count > 0, "you must have some initialized renderer!");
+    KOTEK_ASSERT(
+        validation_count > 0, "you must have some initialized renderer!");
 
-	KOTEK_ASSERT(validation_count == 1,
-		"You can't have more than one initialized renderer.");
+    KOTEK_ASSERT(validation_count == 1,
+        "You can't have more than one initialized renderer.");
 
-	return result;
+    return result;
 }
 */
 
@@ -357,9 +415,59 @@ bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 {
 	auto render_type = this->GetEngineFeatureRenderer();
 
-	return (render_type ==
-			   eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_12) ||
-		(render_type == eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan);
+	bool status{};
+
+	switch (this->m_engine_feature_renderer_flags)
+	{
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest:
+	{
+		KOTEK_ASSERT(this->m_engine_current_opengl_version ==
+				eEngineSupportedOpenGLVersion::kOpenGL_Latest,
+			"something is wrong! Your specified renderer is OpenGL latest and "
+			"your version must be kOpenGL_Latest, but it is not true!");
+
+		status = true;
+	}
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
+	{
+		if (this->m_engine_current_opengl_version ==
+			eEngineSupportedOpenGLVersion::kOpenGL_Latest)
+			status = true;
+	}
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest:
+	{
+		KOTEK_ASSERT(this->m_engine_current_directx_version ==
+				eEngineSupportedDirectXVersion::kDirectX_Latest,
+			"something is wrong! your specified renderer is DirectX latest and "
+			"your version must be kDirectX_Latest, but it is not true!");
+
+		status = true;
+	}
+	case eEngineFeatureRenderer::
+		kEngine_Render_Renderer_DirectX_SpecifiedByUser:
+	{
+		if (this->m_engine_current_directx_version ==
+			eEngineSupportedDirectXVersion::kDirectX_Latest)
+			status == true;
+	}
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest:
+	{
+		KOTEK_ASSERT(this->m_engine_current_vulkan_version ==
+				eEngineSupportedVulkanVersion::kVulkan_Latest,
+			"something is wrong! you specified renderer as Vulkan Latest and "
+			"your version must be kVulkan_Latest but it is not that!");
+
+		status = true;
+	}
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
+	{
+		if (this->m_engine_current_vulkan_version ==
+			eEngineSupportedVulkanVersion::kVulkan_Latest)
+			status = true;
+	}
+	}
+
+	return status;
 }
 
 int ktkEngineConfig::GetARGC(void) const noexcept
