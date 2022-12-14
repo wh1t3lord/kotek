@@ -708,6 +708,14 @@ public:
 	virtual bool IsUserSpecifiedRendererVulkanInCommandLine(
 		void) const noexcept = 0;
 
+	virtual eEngineSupportedDirectXVersion GetDirectXVersionFromCommandLine(
+		void) const noexcept = 0;
+	virtual eEngineSupportedOpenGLVersion GetOpenGLVersionFromCommandLine(
+		void) const noexcept = 0;
+	virtual eEngineSupportedVulkanVersion GetVulkanVersionFromCommandLine(
+		void) const noexcept = 0;
+	// TODO: add for angle here
+
 	virtual bool IsApplicationWorking(void) const noexcept = 0;
 	virtual void SetApplicationWorking(bool status) noexcept = 0;
 	virtual void Set_UserLibrary(

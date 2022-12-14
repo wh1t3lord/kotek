@@ -315,4 +315,8 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX11 =
  */
 constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX12 =
 	KOTEK_TEXT("--render_dx_12");
+
+constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX_Latest =
+	KOTEK_TEXT("--render_dx_latest");
+
 KOTEK_END_NAMESPACE_KOTEK

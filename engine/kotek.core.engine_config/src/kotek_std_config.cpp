@@ -285,6 +285,168 @@ eEngineSupportedVulkanVersion ktkEngineConfig::GetCurrentVulkanVersion(
 	return this->m_engine_current_vulkan_version;
 }
 
+eEngineSupportedDirectXVersion
+ktkEngineConfig::GetDirectXVersionFromCommandLine(void) const noexcept
+{
+	KOTEK_ASSERT(this->IsUserSpecifiedValidRenderer(),
+		"you must specify only one renderer or only one version for that "
+		"renderer");
+
+	eEngineSupportedDirectXVersion result{
+		eEngineSupportedDirectXVersion::kUnknown};
+
+	ktk::size_t validation{};
+	if (this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_Render_DirectX12) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedDirectXVersion::kDirectX_12;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_DirectX11) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedDirectXVersion::kDirectX_11;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_DirectX10) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedDirectXVersion::kDirectX_10;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_DirectX9) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedDirectXVersion::kDirectX_9;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_DirectX8) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedDirectXVersion::kDirectX_8;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_DirectX7) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedDirectXVersion::kDirectX_7;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_DirectX_Latest) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedDirectXVersion::kDirectX_Latest;
+	}
+
+	KOTEK_ASSERT(validation <= 1,
+		"something is terribly wrong and you have more than one renderer or "
+	    "renderer versions");
+
+	return result;
+}
+
+eEngineSupportedOpenGLVersion ktkEngineConfig::GetOpenGLVersionFromCommandLine(
+	void) const noexcept
+{
+	KOTEK_ASSERT(this->IsUserSpecifiedValidRenderer(),
+		"you must specify only one renderer or only one version for that "
+		"renderer");
+
+	eEngineSupportedOpenGLVersion result{
+		eEngineSupportedOpenGLVersion::kUnknown};
+
+	ktk::size_t validation{};
+	if (this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_Render_OpenGL3_3) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedOpenGLVersion::kOpenGL_3_3;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_OpenGL4_6) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedOpenGLVersion::kOpenGL_4_6;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_OpenGL_Latest) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedOpenGLVersion::kOpenGL_Latest;
+	}
+
+	KOTEK_ASSERT(validation <= 1,
+		"something is terribly wrong and you have more than one renderer or "
+		"renderer versions");
+
+	return result;
+}
+
+eEngineSupportedVulkanVersion ktkEngineConfig::GetVulkanVersionFromCommandLine(
+	void) const noexcept
+{
+	KOTEK_ASSERT(this->IsUserSpecifiedValidRenderer(),
+		"you must specify only one renderer or only one version for that "
+		"renderer");
+
+	eEngineSupportedVulkanVersion result{eEngineSupportedVulkanVersion::kUnknown};
+
+	ktk::size_t validation{};
+
+	if (this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_Render_Vulkan1_0) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedVulkanVersion::kVulkan_1_0;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_Vulkan1_1) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedVulkanVersion::kVulkan_1_1;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_Vulkan1_2) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedVulkanVersion::kVulkan_1_2;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_Vulkan1_3) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedVulkanVersion::kVulkan_1_3;
+	}
+	else if (this->m_parsed_command_line_arguments.find(
+				 kConsoleCommandArg_Render_Vulkan_Latest) !=
+		this->m_parsed_command_line_arguments.end())
+	{
+		++validation;
+		result = eEngineSupportedVulkanVersion::kVulkan_Latest;
+	}
+
+	KOTEK_ASSERT(validation <= 1,
+		"something is terribly wrong and you have more than one renderer or "
+		"renderer versions");
+
+	return result;
+}
+
 ktk::string ktkEngineConfig::GetRenderName(void) const noexcept
 {
 	switch (this->m_engine_feature_renderer_flags)
@@ -603,8 +765,8 @@ void ktkEngineConfig::Parse_CommandLine(void) noexcept
 	KOTEK_ASSERT(this->m_argc != -1,
 		"you must set argc before calling set argv method!");
 
-	this->m_parsed_command_line_arguments =
-		ktk::vector<ktk::string>(this->m_argv, this->m_argv + this->m_argc);
+	this->m_parsed_command_line_arguments = ktk::unordered_set<ktk::string>(
+		this->m_argv, this->m_argv + this->m_argc);
 }
 
 KOTEK_END_NAMESPACE_CORE

@@ -14,5 +14,6 @@ add_library(${PROJECT_NAME} STATIC
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.dll)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_set)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.string)

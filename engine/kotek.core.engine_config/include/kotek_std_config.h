@@ -8,6 +8,7 @@
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 #include <kotek.core.constants.string/include/kotek_core_constants_string.h>
+#include <kotek.core.containers.unordered_set/include/kotek_core_containers_unordered_set.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -74,6 +75,27 @@ public:
 	eEngineSupportedOpenGLVersion GetCurrentOpenGLVersion(
 		void) const noexcept override;
 	eEngineSupportedVulkanVersion GetCurrentVulkanVersion(
+		void) const noexcept override;
+
+	/// @brief
+	/// @param
+	/// @return if it returns eEngineSupportedDirectXVersion::kUnknown it means
+	/// that you didn't have any command line argument for DirectX
+	eEngineSupportedDirectXVersion GetDirectXVersionFromCommandLine(
+		void) const noexcept override;
+
+	/// @brief
+	/// @param
+	/// @return if it returns eEngineSupportedOpenGLVersion::kUnknown it means
+	/// that you didn't have any command line argument for OpenGL
+	eEngineSupportedOpenGLVersion GetOpenGLVersionFromCommandLine(
+		void) const noexcept override;
+
+	/// @brief
+	/// @param
+	/// @return if it returns eEngineSupportedVulkanVersion::kUnknown it means
+	/// that you didn't have any command line argument for Vulkan
+	eEngineSupportedVulkanVersion GetVulkanVersionFromCommandLine(
 		void) const noexcept override;
 
 	/**
@@ -208,7 +230,7 @@ private:
 	eEngineSupportedDirectXVersion m_engine_current_directx_version;
 	eEngineSupportedOpenGLVersion m_engine_current_opengl_version;
 	eEngineSupportedVulkanVersion m_engine_current_vulkan_version;
-	ktk::vector<ktk::string> m_parsed_command_line_arguments;
+	ktk::unordered_set<ktk::string> m_parsed_command_line_arguments;
 	ktk::dll::shared_library m_user_dll;
 };
 
