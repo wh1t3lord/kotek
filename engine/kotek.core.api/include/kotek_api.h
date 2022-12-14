@@ -687,6 +687,27 @@ public:
 	virtual void SetARGV(char**) noexcept = 0;
 	virtual bool IsContainsConsoleCommandLineArgument(
 		const ktk::string& your_argument) const noexcept = 0;
+
+	/// @brief This method means that argument line of application contains
+	/// valid request for creating renderer. It means that user can specify only
+	/// one renderer and one version for that. For example this line will be
+	/// invalid: --render_dx_9 --render_vk1_3 or this line: --render_vk1_0
+	/// --render_vk1_3 we can't understand what user wanted to say, so we
+	/// support only this type of request when user pass only one line with
+	/// --render_yourrednerername_version or
+	/// --render_yourrenderernameversion_subversion
+	/// @param void, passes nothing to this method
+	/// @return if line is valid returns true otherwise is false
+	virtual bool IsUserSpecifiedValidRenderer(void) const noexcept = 0;
+
+	// TODO: add ANGLE
+	virtual bool IsUserSpecifiedRendererOpenGLInCommandLine(
+		void) const noexcept = 0;
+	virtual bool IsUserSpecifiedRendererDirectXInCommandLine(
+		void) const noexcept = 0;
+	virtual bool IsUserSpecifiedRendererVulkanInCommandLine(
+		void) const noexcept = 0;
+
 	virtual bool IsApplicationWorking(void) const noexcept = 0;
 	virtual void SetApplicationWorking(bool status) noexcept = 0;
 	virtual void Set_UserLibrary(

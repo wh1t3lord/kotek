@@ -182,6 +182,9 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL3_3 =
 constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL4_6 =
 	KOTEK_TEXT("--render_gl4_6");
 
+constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL_Latest =
+	KOTEK_TEXT("--render_gl_latest");
+
 /**
  * Constant expresses that we specify what renderer the engine will use. If
  * you passed this argument engine will force run with Vulkan renderer.
@@ -196,8 +199,20 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL4_6 =
  * "--render_vk"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan =
-	KOTEK_TEXT("--render_vk");
+constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan1_0 =
+	KOTEK_TEXT("--render_vk1_0");
+
+constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan1_1 =
+	KOTEK_TEXT("--render_vk1_1");
+
+constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan1_2 =
+	KOTEK_TEXT("--render_vk1_2");
+
+constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan1_3 =
+	KOTEK_TEXT("--render_vk1_3");
+
+constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan_Latest =
+	KOTEK_TEXT("--render_vk_latest");
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If

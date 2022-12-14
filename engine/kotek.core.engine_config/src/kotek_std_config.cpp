@@ -501,6 +501,82 @@ bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(
 			   }) != this->m_parsed_command_line_arguments.end();
 }
 
+bool ktkEngineConfig::IsUserSpecifiedValidRenderer(void) const noexcept
+{
+	ktk::size_t validation{0};
+	for (const auto& argument : this->m_parsed_command_line_arguments)
+	{
+		if (argument.get_as_is().starts_with(KOTEK_TEXT("--render_")))
+		{
+			++validation;
+		}
+	}
+
+	KOTEK_ASSERT(validation <= 1,
+		"something is wrong and your command line contains more than one "
+		"--render_renderername_verison or "
+		"--render_renderernameversion_subversion");
+
+	return validation <= 1;
+}
+
+bool ktkEngineConfig::IsUserSpecifiedRendererOpenGLInCommandLine(
+	void) const noexcept
+{
+	KOTEK_ASSERT(this->IsUserSpecifiedValidRenderer(), "bad user! bad!");
+
+	bool result{};
+
+	for (const auto& argument : this->m_parsed_command_line_arguments)
+	{
+		if (argument.get_as_is().starts_with(KOTEK_TEXT("--render_gl")))
+		{
+			result = true;
+			break;
+		}
+	}
+
+	return result;
+}
+
+bool ktkEngineConfig::IsUserSpecifiedRendererDirectXInCommandLine(
+	void) const noexcept
+{
+	KOTEK_ASSERT(this->IsUserSpecifiedValidRenderer(), "bad user! bad!");
+
+	bool result{};
+
+	for (const auto& argument : this->m_parsed_command_line_arguments)
+	{
+		if (argument.get_as_is().starts_with(KOTEK_TEXT("--render_dx")))
+		{
+			result = true;
+			break;
+		}
+	}
+
+	return result;
+}
+
+bool ktkEngineConfig::IsUserSpecifiedRendererVulkanInCommandLine(
+	void) const noexcept
+{
+	KOTEK_ASSERT(this->IsUserSpecifiedValidRenderer(), "bad user! bad!");
+
+	bool result{};
+
+	for (const auto& argument : this->m_parsed_command_line_arguments)
+	{
+		if (argument.get_as_is().starts_with(KOTEK_TEXT("--render_vk")))
+		{
+			result = true;
+			break;
+		}
+	}
+
+	return result;
+}
+
 bool ktkEngineConfig::IsApplicationWorking(void) const noexcept
 {
 	return this->m_is_running;

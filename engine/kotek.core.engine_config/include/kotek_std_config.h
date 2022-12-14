@@ -42,45 +42,38 @@ public:
 	 */
 	void Shutdown(void) override;
 
-	virtual bool IsFeatureEnabled(eEngineFeature id) const noexcept override;
-	virtual bool IsFeatureEnabled(
-		eEngineFeatureRender id) const noexcept override;
-	virtual bool IsFeatureEnabled(
-		eEngineFeatureRenderer id) const noexcept override;
-	virtual bool IsFeatureEnabled(eEngineFeatureSDK id) const noexcept override;
-	virtual bool IsFeatureEnabled(
-		eEngineFeatureWindow id) const noexcept override;
+	bool IsFeatureEnabled(eEngineFeature id) const noexcept override;
+	bool IsFeatureEnabled(eEngineFeatureRender id) const noexcept override;
+	bool IsFeatureEnabled(eEngineFeatureRenderer id) const noexcept override;
+	bool IsFeatureEnabled(eEngineFeatureSDK id) const noexcept override;
+	bool IsFeatureEnabled(eEngineFeatureWindow id) const noexcept override;
 
-	virtual void SetFeatureStatus(
-		eEngineFeature id, bool status) noexcept override;
-	virtual void SetFeatureStatus(
+	void SetFeatureStatus(eEngineFeature id, bool status) noexcept override;
+	void SetFeatureStatus(
 		eEngineFeatureRender id, bool status) noexcept override;
-	virtual void SetFeatureStatus(
+	void SetFeatureStatus(
 		eEngineFeatureRenderer id, bool status) noexcept override;
-	virtual void SetFeatureStatus(
-		eEngineFeatureSDK id, bool status) noexcept override;
-	virtual void SetFeatureStatus(
+	void SetFeatureStatus(eEngineFeatureSDK id, bool status) noexcept override;
+	void SetFeatureStatus(
 		eEngineFeatureWindow id, bool status) noexcept override;
-	virtual void SetFeatureStatus(
+	void SetFeatureStatus(
 		eEngineSupportedOpenGLVersion version, bool status) noexcept override;
-	virtual void SetFeatureStatus(
+	void SetFeatureStatus(
 		eEngineSupportedDirectXVersion version, bool status) noexcept override;
-	virtual void SetFeatureStatus(
+	void SetFeatureStatus(
 		eEngineSupportedVulkanVersion version, bool status) noexcept override;
 
-	virtual eEngineFeature GetEngineFeature(void) const noexcept override;
-	virtual eEngineFeatureRender GetEngineFeatureRender(
+	eEngineFeature GetEngineFeature(void) const noexcept override;
+	eEngineFeatureRender GetEngineFeatureRender(void) const noexcept override;
+	eEngineFeatureRenderer GetEngineFeatureRenderer(
 		void) const noexcept override;
-	virtual eEngineFeatureRenderer GetEngineFeatureRenderer(
+	eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept override;
+	eEngineFeatureWindow GetEngineFeatureWindow(void) const noexcept override;
+	eEngineSupportedDirectXVersion GetCurrentDirectXVersion(
 		void) const noexcept override;
-	virtual eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept override;
-	virtual eEngineFeatureWindow GetEngineFeatureWindow(
+	eEngineSupportedOpenGLVersion GetCurrentOpenGLVersion(
 		void) const noexcept override;
-	virtual eEngineSupportedDirectXVersion GetCurrentDirectXVersion(
-		void) const noexcept override;
-	virtual eEngineSupportedOpenGLVersion GetCurrentOpenGLVersion(
-		void) const noexcept override;
-	virtual eEngineSupportedVulkanVersion GetCurrentVulkanVersion(
+	eEngineSupportedVulkanVersion GetCurrentVulkanVersion(
 		void) const noexcept override;
 
 	/**
@@ -153,6 +146,15 @@ public:
 	 */
 	bool IsContainsConsoleCommandLineArgument(
 		const ktk::string& your_argument) const noexcept override;
+
+	bool IsUserSpecifiedValidRenderer(void) const noexcept override;
+
+	bool IsUserSpecifiedRendererOpenGLInCommandLine(
+		void) const noexcept override;
+	bool IsUserSpecifiedRendererDirectXInCommandLine(
+		void) const noexcept override;
+	bool IsUserSpecifiedRendererVulkanInCommandLine(
+		void) const noexcept override;
 
 	/**
 	 * Returns the status of application working.

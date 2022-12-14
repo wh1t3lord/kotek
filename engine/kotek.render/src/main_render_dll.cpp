@@ -13,15 +13,40 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 
 	InitializeModule_Render_Shared(main_manager);
 
+	auto* p_engine_config = main_manager->Get_EngineConfig();
+
+	// TODO: provide an overriding for every instance what implemented here
+	KOTEK_ASSERT(p_engine_config,
+		"you must initialize ktkEngineConfig instance or override it by your "
+		"own implementation");
+
+	KOTEK_ASSERT(p_engine_config->IsUserSpecifiedValidRenderer(),
+		"User didn't specify renderer correctly!");
+
 	bool status{};
-	if (main_manager->Get_EngineConfig()->IsContainsConsoleCommandLineArgument(
+
+	if (p_engine_config->IsUserSpecifiedRendererDirectXInCommandLine())
+	{
+	}
+	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine())
+	{
+	}
+	else if (p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
+	{
+	}
+	else
+	{
+		// TODO: by default run ANGLE with renderer what ANGLE supports
+		// TODO: support feature for sys_info for default renderer field
+	}
+
+	if (p_engine_config->IsContainsConsoleCommandLineArgument(
 			kConsoleCommandArg_Render_OpenGL3_3))
 	{
 		status = InitializeModule_Render_GL(main_manager);
 	}
-	else if (main_manager->Get_EngineConfig()
-				 ->IsContainsConsoleCommandLineArgument(
-					 kConsoleCommandArg_Render_Vulkan))
+	else if (p_engine_config->IsContainsConsoleCommandLineArgument(
+				 kConsoleCommandArg_Render_Vulkan))
 	{
 		status = InitializeModule_Render_VK(main_manager);
 	}
@@ -34,10 +59,10 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 	}
 
 	KOTEK_ASSERT(status, "can't initialize module render {}. See log",
-		main_manager->Get_EngineConfig()->GetRenderName());
+		p_engine_config->GetRenderName());
 
-	KOTEK_MESSAGE("render module {} is initialized",
-		main_manager->Get_EngineConfig()->GetRenderName());
+	KOTEK_MESSAGE(
+		"render module {} is initialized", p_engine_config->GetRenderName());
 
 	return true;
 }
@@ -46,14 +71,13 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 {
 	bool status{};
 
-	if (main_manager->Get_EngineConfig()->IsContainsConsoleCommandLineArgument(
+	if (p_engine_config->IsContainsConsoleCommandLineArgument(
 			kConsoleCommandArg_Render_OpenGL3_3))
 	{
 		status = ShutdownModule_Render_GL(main_manager);
 	}
-	else if (main_manager->Get_EngineConfig()
-				 ->IsContainsConsoleCommandLineArgument(
-					 kConsoleCommandArg_Render_Vulkan))
+	else if (p_engine_config->IsContainsConsoleCommandLineArgument(
+				 kConsoleCommandArg_Render_Vulkan))
 	{
 		status = ShutdownModule_Render_VK(main_manager);
 	}
@@ -63,7 +87,7 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 	}
 
 	KOTEK_ASSERT(status, "failed to shutdown render {} module",
-		main_manager->Get_EngineConfig()->GetRenderName().get_as_is());
+		p_engine_config->GetRenderName().get_as_is());
 
 	return status;
 }
