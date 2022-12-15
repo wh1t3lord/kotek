@@ -115,6 +115,7 @@ int main(int argc, char** argv)
  * - @ref KOTEK_MEMORY_LEAK_DETECTION
  * - @ref KOTEK_CPP_MEMORY_LEAK_LIBRARY
  * - @ref KOTEK_MEMORY_ALLOCATOR_CPU
+ * - @ref KOTEK_NAMESPACE_KOTEK
  * 
  * \page KOTEK_STD_LIBRARY
  * 
@@ -276,6 +277,20 @@ int main(int argc, char** argv)
  * @endcode
  * 
  * \page KOTEK_MEMORY_ALLOCATOR_CPU
+ * 
+ * This flag represents what library will be used for overriding std::allocator or implementing std::allocator and language memory operations like new and delete.
+ * 
+ * By our standard we support only mimalloc library. But we didn't implement a feature for overriding allocator. Probably it is better to implement through plugin system where user can load his library from outside and use it instead of mimalloc, but we will think.
+ * 
+ * Arguments: Empty String, Mimalloc, Any String.
+ * 
+ * Any String stands for your allocator. But now this value represents that you disable mimalloc library for usage. And solution will use default new and delete and default std::allocator for every container what we have.
+ * 
+ * Example if I don't want to use mimalloc library:
+ * 
+ * @code 
+ *	cmake -DKOTEK_MEMORY_ALLOCATOR_CPU=OFF ..
+ * @endcode
  * 
  * 
  * 
