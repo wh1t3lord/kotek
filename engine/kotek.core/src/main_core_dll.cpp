@@ -48,11 +48,15 @@ bool InitializeModule_Core(ktkMainManager* p_manager)
 
 bool SerializeModule_Core(ktkMainManager* p_manager)
 {
+	SerializeModule_Core_FileSystem(p_manager);
+
 	return true;
 }
 
 bool DeserializeModule_Core(ktkMainManager* p_manager)
 {
+	DeserializeModule_Core_FileSystem(p_manager);
+
 	return true;
 }
 

@@ -11,8 +11,8 @@ KOTEK_END_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
-bool InitializeModule_Render_ANGLE(Core::ktkMainManager* main_manager);
-bool ShutdownModule_Render_ANGLE(Core::ktkMainManager* main_manager);
+bool InitializeModule_Render_ANGLE_GLES(Core::ktkMainManager* main_manager);
+bool ShutdownModule_Render_ANGLE_GLES(Core::ktkMainManager* main_manager);
 
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK

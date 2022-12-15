@@ -273,11 +273,34 @@ namespace Engine
 #endif
 	}
 
+	bool Serialize_Engine(Core::ktkMainManager* p_main_manager)
+	{
+		// TODO: remember status from every calling you can't return hardcoded
+		// true result...
+		Core::SerializeModule_Core(p_main_manager);
+
+		return true;
+	}
+
+	bool Deserialize_Engine(Core::ktkMainManager* p_main_manager)
+	{
+		// TODO: remember status from every calling
+		Core::DeserializeModule_Core(p_main_manager);
+
+		return true;
+	}
+
 	bool InitializeEngine(Core::ktkMainManager* p_main_manager)
 	{
 		PrintCompiler();
 
 		Core::InitializeModule_Core(p_main_manager);
+
+		// TODO: must gurantee that write/read operations are not in
+		// InitializeStage, InitializeStage only initializes and validates and
+		// does nothing with write and read operations
+
+		Deserialize_Engine(p_main_manager);
 
 		// TODO: restore when you implement ImGui
 		Game::registerCommands(p_main_manager);
@@ -342,6 +365,8 @@ namespace Engine
 
 	bool ShutdownEngine(Core::ktkMainManager* p_main_manager)
 	{
+		Serialize_Engine(p_main_manager);
+
 		Render::ShutdownModule_Render(p_main_manager);
 		UI::ShutdownModule_UI(p_main_manager);
 		Game::ShutdownModule_Game(p_main_manager);

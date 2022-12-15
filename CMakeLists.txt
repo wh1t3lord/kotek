@@ -178,7 +178,8 @@ add_subdirectory("engine/kotek.render.vk")
 add_subdirectory("engine/kotek.render.gl")
 add_subdirectory("engine/kotek.render.gl.glad")
 add_subdirectory("engine/kotek.render.software")
-add_subdirectory("engine/kotek.render.angle")
+add_subdirectory("engine/kotek.render.angle.gles")
+add_subdirectory("engine/kotek.render.angle.gles23")
 
 add_subdirectory("engine/kotek.exe")
 

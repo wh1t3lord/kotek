@@ -4,17 +4,18 @@
 /**
  * @mainpage Kotek
  *
- * @section doxygen_main_page Table of contents
+ * \~english @section doxygen_main_page Table of contents
  *
  * - @ref doxygen_user_guide
- *  - @ref doxygen_user_guide_getting_started
- *	 - @ref doxygen_user_guide_whydoyouneedit
- *	 - @ref doxygen_user_guide_whydontyouneedit
- *  - @ref doxygen_user_guide_building
- *   - @ref doxygen_user_guide_building_cmake
- *   - @ref doxygen_user_guide_building_cmake_commands
- *  - @ref doxygen_user_guide_examples
- *   - @ref doxygen_user_guide_examples_building
+ *  - @ref doxygen_user_guide_getting_started "Getting started"
+ *	 - @ref doxygen_user_guide_whydoyouneedit "Why do you need it?"
+ *	 - @ref doxygen_user_guide_whydontyouneedit "Why you don't need it"
+ *  - @ref doxygen_user_guide_building "Building"
+ *   - @ref doxygen_user_guide_building_cmake "CMake"
+ *		- @ref doxygen_user_guide_building_cmake_commands "Step by Step"
+ *		- @ref doxygen_user_guide_building_cmake_commands_description "Description of every flag (macroses) what you can pass"
+ *  - @ref doxygen_user_guide_examples "Examples"
+ *   - @ref doxygen_user_guide_examples_building "Building examples"
  *    - @ref doxygen_user_guide_examples_building_specify_deps_folder
  *    - @ref doxygen_user_guide_examples_building_different_libraries
  *	 - @ref doxygen_user_guide_examples_callbacks
@@ -65,6 +66,8 @@
  * - @ref doxygen_information_for_developers
  *  - @ref doxygen_information_for_developers_general_information
  *  - @ref doxygen_information_for_developers_codestyle
+ * 
+ * \~russian @section doxygen_main_page Оглавление
  */
 
 /**
@@ -95,3 +98,15 @@ int main(int argc, char** argv)
 
 	return 0;
 }
+
+
+/**
+ * \~english @page doxygen_user_guide_building_cmake_commands_description "Description of every flag (macroses) what you can pass"
+ * 
+ * \~russian @page doxygen_user_guide_building_cmake_commands_description 
+ */
+
+
+
+
+

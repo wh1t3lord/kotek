@@ -19,7 +19,6 @@ void ktkFileSystem::Initialize(void)
 		"your path must be valid!");
 
 	this->ValidateFolders();
-	this->CreateConfigFiles();
 
 	KOTEK_MESSAGE("filesystem is initialized!");
 }
@@ -261,34 +260,5 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 #endif
 }
 
-void ktkFileSystem::CreateConfigFiles(void) noexcept
-{
-	auto path_to_system_json =
-		this->GetFolderByEnum(eFolderIndex::kFolderIndex_Root);
-
-	path_to_system_json / kConfigFileNameSystemInfo;
-
-	if (this->IsValidPath(path_to_system_json) == false)
-	{
-		ktkFileText sys_info("sys_info");
-
-		sys_info.Write(
-			kSysInfoFieldName_InitializeCallback, kUserCallbackName_Initialize);
-		sys_info.Write(
-			kSysInfoFieldName_ShutdownCallback, kUserCallbackName_Shutdown);
-		sys_info.Write(
-			kSysInfoFieldName_UpdateCallback, kUserCallbackName_Update);
-		sys_info.Write(kSysInfoFieldName_InitializeCallback_Render,
-			kUserCallbackName_Initialize_Render);
-
-		sys_info.Write(kSysInfoFieldName_UserLibraryNameWindows, "game.dll");
-		sys_info.Write(kSysInfoFieldName_UserLibraryNameLinux, "game.so");
-		sys_info.Write(kSysInfoFieldName_UserLibraryNameMacOS, "game.so");
-
-		// TODO: implement saver!!!
-		//				sys_info.Save(this,
-		//				this->GetFolderByEnum(eFolderIndex::kFolderIndex_Root));
-	}
-}
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK
