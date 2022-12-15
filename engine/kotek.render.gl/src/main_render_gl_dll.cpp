@@ -7,8 +7,20 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 bool InitializeModule_Render_GL(Core::ktkMainManager* p_main_manager)
 {
-	p_main_manager->Get_EngineConfig()->SetFeatureStatus(
-		Core::eEngineFeature::kEngine_Render_Renderer_OpenGL3_3, true);
+	auto* p_engine_config = p_main_manager->Get_EngineConfig();
+	
+	auto gl_version = p_engine_config->GetOpenGLVersionFromCommandLine();
+
+	if (gl_version == Kotek::Core::eEngineSupportedOpenGLVersion::kUnknown)
+	{
+
+	}
+	else
+	{
+		p_engine_config->SetFeatureStatus(gl_version, true);
+	}
+
+ 
 
 	gl::ktkRenderDevice* p_render_device = new gl::ktkRenderDevice();
 	gl::ktkRenderSwapchain* p_render_swapchain =

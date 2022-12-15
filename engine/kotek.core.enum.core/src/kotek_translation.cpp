@@ -515,6 +515,180 @@ namespace helper
 		}
 		}
 	}
+
+	eEngineSupportedOpenGLVersion
+	TranslateFromStringToEnum_EngineSupportedOpenGLVersion(
+		const ktk::string& version_name)
+	{
+		eEngineSupportedOpenGLVersion result {eEngineSupportedOpenGLVersion::kUnknown};
+
+		if (version_name.empty())
+			return result;
+			
+		if (version_name.size() != 3)
+			return result;
+
+		int major_version{};
+		int minor_version{};
+
+		major_version = ktk::lexical_cast<int>(version_name.get_as_legacy()[0]);
+		minor_version = ktk::lexical_cast<int>(version_name.get_as_legacy()[2]);
+
+		switch (major_version)
+		{
+		case 0:
+		{
+			return result;
+		}
+		case 1:
+		{
+			switch (minor_version)
+			{
+			case 0:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_1_0;
+				break;
+			}
+			case 1:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_1_1;
+				break;
+			}
+			case 2:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_1_2;
+				break;
+			}
+			case 3:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_1_3;
+				break;
+			}
+			case 4:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_1_4;
+				break;
+			}
+			case 5:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_1_5;
+				break;
+			}
+			default:
+			{
+				return result;
+			}
+			}
+
+			return result;
+		}
+		case 2:
+		{
+			switch (minor_version)
+			{
+			case 0:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_2_0;
+				break;
+			}
+			case 1:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_2_1;
+				break;
+			}
+			default:
+			{
+				return result;
+			}
+			}
+
+			return result;
+		}
+		case 3:
+		{
+			switch (minor_version)
+			{
+			case 0:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_3_0;
+				break;
+			}
+			case 1:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_3_1;
+				break;
+			}
+			case 2:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_3_2;
+				break;
+			}
+			case 3:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_3_3;
+				break;
+			}
+			default:
+			{
+				return result;
+			}
+			}
+
+			return result;
+		}
+		case 4:
+		{
+			switch (minor_version)
+			{
+			case 0:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_4_0;
+				break;
+			}
+			case 1:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_4_1;
+				break;
+			}
+			case 2:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_4_2;
+				break;
+			}
+			case 3:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_4_3;
+				break;
+			}
+			case 4:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_4_4;
+				break;
+			}
+			case 5:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_4_5;
+				break;
+			}
+			case 6:
+			{
+				result = eEngineSupportedOpenGLVersion::kOpenGL_4_6;
+				break;
+			}
+			default:
+			{
+				return result;
+			}
+			}
+
+			return result;
+		}
+		default:
+		{
+			return result;
+		}
+		}
+	}
 } // namespace helper
 
 KOTEK_END_NAMESPACE_CORE

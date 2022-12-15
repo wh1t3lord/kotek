@@ -13,6 +13,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_enum_core.h"
 	"src/kotek_translation.cpp"
 	"src/main_core_enum_core_dll.cpp"
+	"tests/kotek_core_enum_core_test_translation.cpp"
 )
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)

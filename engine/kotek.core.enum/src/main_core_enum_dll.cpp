@@ -34,6 +34,5 @@ bool DeserializeModule_Core_Enum(ktkMainManager* p_manager)
 
 	return true;
 }
-
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

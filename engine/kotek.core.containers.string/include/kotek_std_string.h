@@ -404,6 +404,8 @@ public:
 			your_folder_or_file_name_with_or_without_format) noexcept;
 	#pragma endregion
 
+	ktk::size_t size(void) const noexcept { return this->m_data.size(); }
+
 public:
 	#ifdef KOTEK_USE_UNICODE
 	static constexpr auto npos = string_unicode::npos;

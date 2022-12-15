@@ -22,6 +22,7 @@ enum class eEngineFeatureWindow;
 enum class eConsoleCommandIndex;
 enum class eEngineSupportedOpenGLVersion;
 enum class eEngineSupportedDirectXVersion;
+enum class eEngineSupportedVulkanVersion;
 KOTEK_END_NAMESPACE_CORE
 
 KOTEK_END_NAMESPACE_KOTEK
@@ -49,6 +50,13 @@ namespace helper
 	ktk::string Translate_ResourceLoadingPolicy(eResourceLoadingPolicy type);
 	ktk::string Translate_ResourceCachingPolicy(eResourceCachingPolicy type);
 	ktk::string Translate_ConsoleCommandIndex(eConsoleCommandIndex type);
+
+	/// @brief accepts the form like 'major_version.minor_version', for example it parses strings like '1.3', the string is not acceptable like this '1'.
+	/// @param version_name your string that contains only numbers and one separated dot symbol
+	/// @return converted to appropriate version of OpenGL
+	eEngineSupportedOpenGLVersion
+	TranslateFromStringToEnum_EngineSupportedOpenGLVersion(
+		const ktk::string& version_name);
 } // namespace helper
 
 KOTEK_END_NAMESPACE_CORE
