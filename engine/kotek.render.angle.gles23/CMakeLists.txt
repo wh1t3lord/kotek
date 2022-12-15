@@ -36,8 +36,8 @@ set(to_include_managers_files)
 set(to_include_core_files)
 
 set(to_include_module_files
-	"include/kotek_render_angle_gles2.h"
-    "src/main_render_angle_gles2_dll.cpp")
+	"include/kotek_render_angle_gles23.h"
+    "src/main_render_angle_gles23_dll.cpp")
 
 set(to_include_memory_management_files)
 
