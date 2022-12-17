@@ -15,12 +15,8 @@ constexpr const char* kSysInfoFieldName_ShutdownCallback =
 	"UserCallbackForGameLibrary_Shutdown";
 constexpr const char* kSysInfoFieldName_UpdateCallback =
 	"UserCallbackForGameLibrary_Update";
-constexpr const char* kSysInfoFieldName_UserLibraryNameWindows =
-	"UserGameLibraryName_Win32";
-constexpr const char* kSysInfoFieldName_UserLibraryNameLinux =
-	"UserGameLibraryName_Linux";
-constexpr const char* kSysInfoFieldName_UserLibraryNameMacOS =
-	"UserGameLibraryName_MacOS";
+constexpr const char* kSysInfoFieldName_UserLibraryName =
+	"UserGameLibraryName";
 
 constexpr const char* kSysInfoFieldName_UpdateCallbackContainsLoop =
 	"UserCallbackForGameLibrary_Update_Contains_Loop";

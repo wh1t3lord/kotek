@@ -55,12 +55,8 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 			kUserCallbackName_Initialize_Render);
 
 		// TODO: make predefined on cmake side preprocessor !!! Important
-		sys_info.Write(kSysInfoFieldName_UserLibraryNameWindows,
-			KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME_FOR_WINDOWS);
-		sys_info.Write(kSysInfoFieldName_UserLibraryNameLinux,
-			KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME_FOR_UNIX);
-		sys_info.Write(kSysInfoFieldName_UserLibraryNameMacOS,
-			KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME_FOR_UNIX);
+		sys_info.Write(kSysInfoFieldName_UserLibraryName,
+			KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME);
 
 		sys_info.Write(kSysInfoFieldName_FallbackRenderer,
 			KOTEK_SYSINFO_FIELD_FALLBACK_RENDERER_VALUE);
