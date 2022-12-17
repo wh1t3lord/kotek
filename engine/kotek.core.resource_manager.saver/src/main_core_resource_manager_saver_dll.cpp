@@ -5,6 +5,12 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Resource_Manager_Saver(ktkMainManager* p_manager)
 {
+	KOTEK_ASSERT(p_manager->GetResourceManager(),
+		"you must initialize resource manager");
+
+	p_manager->GetResourceManager()->Set_ResourceSaver(
+		new ktkResourceSaverManager());
+
 	return true;
 }
 
@@ -20,6 +26,21 @@ bool DeserializeModule_Core_Resource_Manager_Saver(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core_Resource_Manager_Saver(ktkMainManager* p_manager)
 {
+	KOTEK_ASSERT(p_manager->GetResourceManager(),
+		"you must have an initialized instance of ktkResourceManager "
+		"(ktkIResourceManager)");
+
+	ktkResourceSaverManager* p_instance =
+		dynamic_cast<ktkResourceSaverManager*>(
+			p_manager->GetResourceManager()->Get_ResourceSaver());
+
+	KOTEK_ASSERT(p_instance,
+		"you must get valid ktkResourceSaverManager* otherwise it means that "
+		"engine can't cast to that type");
+
+	delete p_instance;
+	p_manager->GetResourceManager()->Set_ResourceSaver(nullptr);
+
 	return true;
 }
 

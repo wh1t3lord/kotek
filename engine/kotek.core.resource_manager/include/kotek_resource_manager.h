@@ -23,6 +23,12 @@ public:
 
 	ktkIResourceLoaderManager* Get_ResourceLoader(void) const noexcept override;
 
+	virtual void Set_ResourceSaver(
+		ktkIResourceSaverManager* p_instance) noexcept override;
+
+	virtual ktkIResourceSaverManager* Get_ResourceSaver(
+		void) const noexcept override;
+
 	ktkIRenderResourceManager* Get_RenderResourceManager(
 		void) const noexcept override;
 
@@ -39,6 +45,7 @@ protected:
 
 private:
 	ktkIResourceLoaderManager* m_p_manager_resource_loader;
+	ktkIResourceSaverManager* m_p_manager_resource_saver;
 	ktkIRenderResourceManager* m_p_manager_render_resource;
 	ktkMainManager* m_p_manager_main;
 };

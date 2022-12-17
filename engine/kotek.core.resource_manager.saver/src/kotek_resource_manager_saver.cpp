@@ -3,7 +3,10 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkResourceSaverManager::ktkResourceSaverManager(void) : ktkIResourceSaver() {}
+ktkResourceSaverManager::ktkResourceSaverManager(void) :
+	ktkIResourceSaverManager()
+{
+}
 
 ktkResourceSaverManager::~ktkResourceSaverManager(void) {}
 
@@ -14,175 +17,167 @@ void ktkResourceSaverManager::Initialize(ktkIFileSystem* p_filesystem)
 
 void ktkResourceSaverManager::Shutdown(void) {}
 
-bool ktkResourceSaverManager::Save_Text(
-	const ktk::filesystem::path& path, ktk::any data) noexcept
+void ktkResourceSaverManager::Set_Saver(
+	eResourceLoadingType resource_type, ktkIResourceSaver* p_saver)
 {
-	KOTEK_ASSERT(this->m_p_manager_filesystem,
-		"you must initialize your file system here");
+	KOTEK_ASSERT(p_saver, "you can't pass an invalid pointer here");
 
-	if (this->m_p_manager_filesystem->IsValidPath(path) == false)
+	KOTEK_ASSERT(p_saver->Get_Type() != eResourceLoadingType::kUnknown,
+		"you must override Get_Type method because it uses default return "
+		"type. It is not acceptable because developer must strictly specify "
+		"what its instance contains and for what it was created");
+
+	if (this->m_savers.find(resource_type) != this->m_savers.end())
 	{
-		KOTEK_ASSERT(false, "path is not valid: {}", path.c_str());
-		return false;
+		KOTEK_MESSAGE_WARNING("replacing resource loader for type: [{}]",
+			helper::Translate_ResourceLoadingType(resource_type));
 	}
 
-	ktkFileText* p_casted_file = std::any_cast<ktkFileText*>(data);
+	this->m_savers[resource_type] = p_saver;
+}
 
-	KOTEK_ASSERT(
-		p_casted_file, "you must have a valid instance of ktkFileText");
+ktkIResourceSaver* ktkResourceSaverManager::Get_Saver(
+	eResourceLoadingType resource_type) const noexcept
+{
+	KOTEK_ASSERT(resource_type != eResourceLoadingType::kUnknown,
+		"you must pass a valid enum");
 
-	KOTEK_ASSERT(p_casted_file->Get_FileName().empty() == false,
-		"you can't have an empty filename in your ktkFileText instance");
+	ktkIResourceSaver* p_result{};
 
-	auto path_compiled = path;
+	if (this->m_savers.find(resource_type) != this->m_savers.end())
+	{
+		p_result = this->m_savers.at(resource_type);
 
-	path_compiled /= p_casted_file->Get_FileName().get_as_is();
+		KOTEK_ASSERT(p_result->Get_Type() == resource_type,
+			"you must specify correct type of what you saving: [{}], because "
+			"your saver has [{}]",
+			helper::Translate_ResourceLoadingType(resource_type),
+			helper::Translate_ResourceLoadingType(p_result->Get_Type()));
 
-	ktk::ofstream output_file(path_compiled);
+		if (p_result->Get_Type() != resource_type)
+			p_result = nullptr;
+	}
 
-	output_file << p_casted_file->Get_FileAsSerializedString().get_as_is();
+	if (p_result == nullptr)
+	{
+		KOTEK_MESSAGE_WARNING(
+			"couldn't obtain loader for resource saving type: [{}]",
+			helper::Translate_ResourceLoadingType(resource_type));
+	}
 
-	output_file.close();
+	return p_result;
+}
 
+bool ktkResourceSaverManager::Save(
+	const ktk::filesystem::path& path, ktk::any data) noexcept
+{
+	KOTEK_ASSERT(path.has_extension(),
+		"you must provide an extension for your file: [{}]", path);
+
+	bool result{};
+
+	auto resource_type = this->DetectResourceTypeByFileFormat(path);
+
+	auto* p_saver = this->Get_Saver(resource_type);
+
+	KOTEK_ASSERT(p_saver, "failed to find saver for format file: [{}]",
+		path.extension());
+
+	if (p_saver)
+		result = p_saver->Save(path, data);
+
+	return result;
+}
+
+eResourceLoadingType ktkResourceSaverManager::DetectResourceTypeByFileFormat(
+	const ktk::filesystem::path& path) noexcept
+{
+	KOTEK_ASSERT(this->m_savers.empty() == false,
+		"you must provide some loaders. Otherwise loaders are empty thus "
+		"loader manager is invalid!");
+
+	eResourceLoadingType result{eResourceLoadingType::kUnknown};
+
+	for (const auto& [resource_type, p_saver] : this->m_savers)
+	{
+		bool status = p_saver->DetectTypeByFullPath(path);
+
+		if (status == false)
+		{
 #ifdef KOTEK_DEBUG
-	KOTEK_MESSAGE("file was successfully created: {}", path_compiled.c_str());
+			KOTEK_MESSAGE("Determing format type of file and it is not: {}",
+				helper::Translate_ResourceLoadingType(p_saver->Get_Type()));
+#endif
+		}
+		else
+		{
+#ifdef KOTEK_DEBUG
+			KOTEK_MESSAGE(
+				"Obtained type by loader: {}", p_saver->Get_UserDescription());
 #endif
 
-	return true;
+			result = p_saver->Get_Type();
+			break;
+		}
+	}
+
+	KOTEK_ASSERT(result != eResourceLoadingType::kUnknown,
+		"you didn't provide any detector for a format file: {}",
+		path.extension().c_str());
+
+	return result;
+}
+
+/*
+bool ktkResourceSaverManager::Save_Text(
+    const ktk::filesystem::path& path, ktk::any data) noexcept
+{
+    KOTEK_ASSERT(this->m_p_manager_filesystem,
+        "you must initialize your file system here");
+
+    if (this->m_p_manager_filesystem->IsValidPath(path) == false)
+    {
+        KOTEK_ASSERT(false, "path is not valid: {}", path.c_str());
+        return false;
+    }
+
+    ktkFileText* p_casted_file = std::any_cast<ktkFileText*>(data);
+
+    KOTEK_ASSERT(
+        p_casted_file, "you must have a valid instance of ktkFileText");
+
+    KOTEK_ASSERT(p_casted_file->Get_FileName().empty() == false,
+        "you can't have an empty filename in your ktkFileText instance");
+
+    auto path_compiled = path;
+
+    path_compiled /= p_casted_file->Get_FileName().get_as_is();
+
+    ktk::ofstream output_file(path_compiled);
+
+    output_file << p_casted_file->Get_FileAsSerializedString().get_as_is();
+
+    output_file.close();
+
+#ifdef KOTEK_DEBUG
+    KOTEK_MESSAGE("file was successfully created: {}", path_compiled.c_str());
+#endif
+
+    return true;
 }
 
 bool ktkResourceSaverManager::Save_Text_Formatted(
-	const ktk::filesystem::path& path, ktk::any data) noexcept
+    const ktk::filesystem::path& path, ktk::any data) noexcept
 {
-	KOTEK_ASSERT(this->m_p_manager_filesystem,
-		"you must initialize your filesystem here");
-
-	if (this->m_p_manager_filesystem->IsValidPath(path) == false)
-	{
-		KOTEK_ASSERT(false, "path is not valid: {}", path.c_str());
-		return false;
-	}
-
-	ktkFileText* p_casted_file = std::any_cast<ktkFileText*>(data);
-
-	KOTEK_ASSERT(
-		p_casted_file, "you must have a valid instance of ktkFileText");
-
-	KOTEK_ASSERT(p_casted_file->Get_FileName().empty() == false,
-		"you can't have an empty filename in your ktkFileText instance");
-
-	auto path_compiled = path;
-
-	path_compiled /= p_casted_file->Get_FileName().get_as_is();
-
-	ktk::ofstream output_file(path_compiled);
-
-	this->FormatTextFile_Json(output_file, p_casted_file->Get_Json());
-
-	output_file.close();
-
-#ifdef KOTEK_DEBUG
-	KOTEK_MESSAGE("file was successfully created with formatting: {}",
-		path_compiled.c_str());
-#endif
-
-	return true;
+ 
 }
 
 void ktkResourceSaverManager::FormatTextFile_Json(ktk::ofstream& file,
-	const ktk::json::value& json, std::string* indent) noexcept
+    const ktk::json::value& json, std::string* indent) noexcept
 {
-#ifdef KOTEK_USE_BOOST_LIBRARY
-	std::string indent_;
 
-	if (!indent)
-		indent = &indent_;
-
-	switch (json.kind())
-	{
-	case ktk::json::kind::object:
-	{
-		file << "{\n";
-		indent->append(4, ' ');
-		auto const& obj = json.get_object();
-		if (!obj.empty())
-		{
-			auto it = obj.begin();
-			for (;;)
-			{
-				file << indent->c_str()
-					 << ktk::json::serialize(it->key()).c_str() << " : ";
-				this->FormatTextFile_Json(file, it->value(), indent);
-				if (++it == obj.end())
-					break;
-				file << ",\n";
-			}
-		}
-		file << "\n";
-		indent->resize(indent->size() - 4);
-		file << indent->c_str() << "}";
-		break;
-	}
-
-	case ktk::json::kind::array:
-	{
-		file << "[\n";
-		indent->append(4, ' ');
-		auto const& arr = json.get_array();
-		if (!arr.empty())
-		{
-			auto it = arr.begin();
-			for (;;)
-			{
-				file << indent->c_str();
-				this->FormatTextFile_Json(file, *it, indent);
-				if (++it == arr.end())
-					break;
-				file << ",\n";
-			}
-		}
-		file << "\n";
-		indent->resize(indent->size() - 4);
-		file << indent->c_str() << "]";
-		break;
-	}
-
-	case ktk::json::kind::string:
-	{
-		file << ktk::json::serialize(json.get_string()).c_str();
-		break;
-	}
-
-	case ktk::json::kind::uint64:
-		file << json.get_uint64();
-		break;
-
-	case ktk::json::kind::int64:
-		file << json.get_int64();
-		break;
-
-	case ktk::json::kind::double_:
-		file << json.get_double();
-		break;
-
-	case ktk::json::kind::bool_:
-		if (json.get_bool())
-			file << "true";
-		else
-			file << "false";
-		break;
-
-	case ktk::json::kind::null:
-		file << "null";
-		break;
-	}
-
-	if (indent->empty())
-		file << "\n";
-#else
-	KOTEK_ASSERT(false, "not implemented! (nlohmann)");
-#endif
 }
+*/
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

@@ -5,8 +5,8 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 ktkResourceManager::ktkResourceManager(void) :
-	m_p_manager_resource_loader{}, m_p_manager_render_resource{},
-	m_p_manager_main{}
+	m_p_manager_resource_loader{}, m_p_manager_resource_saver{},
+	m_p_manager_render_resource{}, m_p_manager_main{}
 {
 }
 
@@ -36,6 +36,18 @@ ktkIResourceLoaderManager* ktkResourceManager::Get_ResourceLoader(
 	void) const noexcept
 {
 	return this->m_p_manager_resource_loader;
+}
+
+void ktkResourceManager::Set_ResourceSaver(
+	ktkIResourceSaverManager* p_instance) noexcept
+{
+	this->m_p_manager_resource_saver = p_instance;
+}
+
+ktkIResourceSaverManager* ktkResourceManager::Get_ResourceSaver(
+	void) const noexcept
+{
+	return this->m_p_manager_resource_saver;
 }
 
 ktkIRenderResourceManager* ktkResourceManager::Get_RenderResourceManager(

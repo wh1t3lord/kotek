@@ -292,7 +292,7 @@ public:
 	/// @return Returns ktk::string instance by const&
 	virtual ktk::string Get_UserDescription() const noexcept
 	{
-		return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION");
+		return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION_FOR_LOADER");
 	}
 
 	/// \~english @brief This method is for validation purpose and for
@@ -397,6 +397,8 @@ public:
 class ktkIResourceLoaderManager
 {
 public:
+	ktkIResourceLoaderManager(void) : m_p_manager_filesystem{} {}
+
 	virtual ~ktkIResourceLoaderManager(void) {}
 
 	virtual void Initialize(ktkIFileSystem*) = 0;
@@ -422,62 +424,58 @@ protected:
 class ktkIResourceSaver
 {
 public:
-	ktkIResourceSaver(void) : m_p_manager_filesystem{} {}
+	virtual ~ktkIResourceSaver(void) {}
+
+	virtual bool Save(const ktk::filesystem::path& path,
+		ktk::any object_for_saving) noexcept = 0;
+
+	virtual bool DetectTypeByFullPath(
+		const ktk::filesystem::path& path) noexcept = 0;
+
+ 
+	virtual ktk::string Get_UserDescription() const noexcept
+	{
+		return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION_FOR_SAVER");
+	}
+
+	virtual eResourceLoadingType Get_Type() const noexcept
+	{
+		return eResourceLoadingType::kUnknown;
+	}
+
+	virtual ktkIResourceSaver* Get_Saver(
+		const ktk::filesystem::path& extension_of_file) noexcept = 0;
+
+	virtual ktk::string Get_AllSupportedFormats(void) const noexcept = 0;
+};
+
+class ktkIResourceSaverManager
+{
+public:
+	ktkIResourceSaverManager(void) : m_p_manager_filesystem{} {}
 
 	/**
 	 * Just a virtual destructor in order to being called from child
 	 * destructors
 	 *
 	 */
-	virtual ~ktkIResourceSaver(void) {}
+	virtual ~ktkIResourceSaverManager(void) {}
 
 	virtual void Initialize(ktkIFileSystem*) = 0;
 	virtual void Shutdown(void) = 0;
 
-	/**
-	 * Interface (pure virtual) method for saving text file without
-	 * formatting @see
-	 * Kotek::Core::ktkIResourceSaver#Save_Text_Formatted
-	 *
-	 * \param path supposed to be a path where to save the file with
-	 * file name and format of it. \param data user dependent. Default
-	 * implementation is based on ktkFile class. @see ktkFile. \return
-	 * simplified status of executing. true means success otherwise
-	 * something went wrong. User dependent.
-	 */
-	virtual bool Save_Text(
-		const ktk::filesystem::path& path, ktk::any data) noexcept = 0;
+	virtual void Set_Saver(
+		eResourceLoadingType resource_type, ktkIResourceSaver* p_saver) = 0;
+	virtual ktkIResourceSaver* Get_Saver(
+		eResourceLoadingType resource_type) const noexcept = 0;
 
-	/**
-	 * Interface (pure virtual) method for saving text file with
-	 * formatting that applied in user implementation. @see
-	 * Kotek::Core::ktkIResourceSaver#Save_Text it is not formatting
-	 * method for saving.
-	 *
-	 * \param path supposed a path where to save the file with file name
-	 * and format of it. \param data user dependent. Default
-	 * implementation is @see ktkFile class. \return simplified status
-	 * of executing. True means success otherwise something went wrong.
-	 * User dependent.
-	 *
-	 *
-	 * Example if you want to save your file on stack. Otherwise
-	 * you will get from your resource manager (or from default
-	 * implementation) your ktkFile* and you need to pass to that
-	 * method) ktkFile text_file_instance;
-	 *
-	 * @code
-	 * text_file_instance.Write("my_new_field", "string_data");
-	 *
-	 * Kotek::Core::ktkIResourceSaver*
-	 * p_valid_interface_instance->Save_Text_Formatted("C:/YourFolder/filename.json",
-	 * &text_file_instance);
-	 * @endcode
-	 */
-	virtual bool Save_Text_Formatted(
+	virtual bool Save(
 		const ktk::filesystem::path& path, ktk::any data) noexcept = 0;
 
 protected:
+	virtual eResourceLoadingType DetectResourceTypeByFileFormat(
+		const ktk::filesystem::path& path) noexcept = 0;
+
 	ktkIFileSystem* m_p_manager_filesystem;
 };
 
@@ -572,6 +570,12 @@ public:
 		ktkIResourceLoaderManager* p_instance) noexcept = 0;
 
 	virtual ktkIResourceLoaderManager* Get_ResourceLoader(
+		void) const noexcept = 0;
+
+	virtual void Set_ResourceSaver(
+		ktkIResourceSaverManager* p_instance) noexcept = 0;
+
+	virtual ktkIResourceSaverManager* Get_ResourceSaver(
 		void) const noexcept = 0;
 
 	virtual void Set_RenderResourceManager(

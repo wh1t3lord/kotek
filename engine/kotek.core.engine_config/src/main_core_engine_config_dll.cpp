@@ -34,6 +34,10 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 
 	if (!p_filesystem->IsValidPath(path_to_sys_info_json))
 	{
+		KOTEK_ASSERT(p_manager->GetResourceManager(),
+			"you must initialize resource manager");
+		KOTEK_ASSERT(p_manager->GetResourceManager()->Get_ResourceSaver(),
+			"you must initialize general manager saver");
 		// so we didn't find our file, we need to generate that
 
 		// it is our standard we can't change and alter name of sys_info config!
@@ -58,12 +62,13 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 			KOTEK_SYSINFO_FIELD_FALLBACK_RENDERER_VALUE);
 		sys_info.Write(kSysInfoFieldName_RendererForLoading,
 			KOTEK_SYSINFO_FIELD_RENDERER_FOR_LOADING_VALUE);
-	}
 
+		p_manager->GetResourceManager()->Get_ResourceSaver()->Save(
+			path_to_sys_info_json, &sys_info);
+	}
 
 	if (p_filesystem->IsValidPath(path_to_sys_info_json))
 	{
-		
 	}
 
 	return true;
