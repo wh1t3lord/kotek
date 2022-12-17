@@ -1,5 +1,6 @@
 #include "../include/kotek_core_engine_config.h"
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.filesystem/include/kotek_core_filesystem.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -21,6 +22,52 @@ bool SerializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 
 bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 {
+	auto* p_filesystem = p_manager->GetFileSystem();
+
+	KOTEK_ASSERT(p_filesystem,
+		"you must initialize filesystem instance before calling this function");
+
+	auto path_to_sys_info_json =
+		p_filesystem->GetFolderByEnum(eFolderIndex::kFolderIndex_Root);
+
+	path_to_sys_info_json /= kConfigFileNameSystemInfo;
+
+	if (p_filesystem->IsValidPath(path_to_sys_info_json))
+	{
+		// we do nothing here because this stage in kotek.game
+	}
+	else
+	{
+		// so we didn't find our file, we need to generate that
+
+		// it is our standard we can't change and alter name of sys_info config!
+		// All who uses that must follow one line otherwise it causes break
+		// changes and it is not standartization way :)))))
+		ktkFileText sys_info("sys_info");
+
+		sys_info.Write(
+			kSysInfoFieldName_InitializeCallback, kUserCallbackName_Initialize);
+		sys_info.Write(
+			kSysInfoFieldName_ShutdownCallback, kUserCallbackName_Shutdown);
+		sys_info.Write(
+			kSysInfoFieldName_UpdateCallback, kUserCallbackName_Update);
+		sys_info.Write(kSysInfoFieldName_InitializeCallback_Render,
+			kUserCallbackName_Initialize_Render);
+
+		// TODO: make predefined on cmake side preprocessor !!! Important
+		sys_info.Write(kSysInfoFieldName_UserLibraryNameWindows,
+			KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME_FOR_WINDOWS);
+		sys_info.Write(kSysInfoFieldName_UserLibraryNameLinux,
+			KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME_FOR_UNIX);
+		sys_info.Write(kSysInfoFieldName_UserLibraryNameMacOS,
+			KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME_FOR_UNIX);
+
+		sys_info.Write(kSysInfoFieldName_FallbackRenderer,
+			KOTEK_SYSINFO_FIELD_FALLBACK_RENDERER_VALUE);
+		sys_info.Write(kSysInfoFieldName_RendererForLoading,
+			KOTEK_SYSINFO_FIELD_RENDERER_FOR_LOADING_VALUE);
+	}
+
 	return true;
 }
 
