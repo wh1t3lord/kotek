@@ -745,7 +745,9 @@ public:
 	virtual int GetWidth(void) const noexcept = 0;
 	virtual int GetHeight(void) const noexcept = 0;
 	virtual void* GetHandle(void) const noexcept = 0;
-	virtual void Initialize(Core::eEngineFeature current_render) = 0;
+	virtual void Initialize(Core::eEngineSupportedOpenGLVersion version) = 0;
+	virtual void Initialize(Core::eEngineSupportedDirectXVersion version) = 0;
+	virtual void Initialize(Core::eEngineSupportedVulkanVersion version) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual void PollEvents(void) = 0;
 	virtual bool Is_NeedToClose(void) = 0;

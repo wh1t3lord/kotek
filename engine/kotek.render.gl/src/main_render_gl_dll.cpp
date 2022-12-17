@@ -8,23 +8,23 @@ KOTEK_BEGIN_NAMESPACE_RENDER
 bool InitializeModule_Render_GL(Core::ktkMainManager* p_main_manager)
 {
 	auto* p_engine_config = p_main_manager->Get_EngineConfig();
-	
+
 	auto gl_version = p_engine_config->GetOpenGLVersionFromCommandLine();
 
 	if (gl_version == Kotek::Core::eEngineSupportedOpenGLVersion::kUnknown)
 	{
+		// TODO: config must serialize/deserialize what config's version has if
+		// we have running renderer as OpenGL
 
+		KOTEK_ASSERT(false, "not implemented");
 	}
 	else
 	{
 		p_engine_config->SetFeatureStatus(gl_version, true);
 	}
 
- 
-
 	gl::ktkRenderDevice* p_render_device = new gl::ktkRenderDevice();
-	gl::ktkRenderSwapchain* p_render_swapchain =
-		new gl::ktkRenderSwapchain();
+	gl::ktkRenderSwapchain* p_render_swapchain = new gl::ktkRenderSwapchain();
 	gl::ktkRenderResourceManager* p_render_resource_manager =
 		new gl::ktkRenderResourceManager(p_render_device, p_main_manager);
 
@@ -33,7 +33,7 @@ bool InitializeModule_Render_GL(Core::ktkMainManager* p_main_manager)
 	p_main_manager->SetRenderResourceManager(p_render_resource_manager);
 
 	p_main_manager->Get_WindowManager()->Get_ActiveWindow()->Initialize(
-		p_main_manager->Get_EngineConfig()->GetRenderFeature());
+		gl_version);
 
 	p_render_device->Initialize(p_main_manager);
 
@@ -77,8 +77,7 @@ bool ShutdownModule_Render_GL(Core::ktkMainManager* p_main_manager)
 	p_main_manager->getRenderDevice()->Shutdown();
 
 	gl::ktkRenderDevice* p_render_device =
-		dynamic_cast<gl::ktkRenderDevice*>(
-			p_main_manager->getRenderDevice());
+		dynamic_cast<gl::ktkRenderDevice*>(p_main_manager->getRenderDevice());
 	gl::ktkRenderResourceManager* p_render_resource_manager =
 		dynamic_cast<gl::ktkRenderResourceManager*>(
 			p_main_manager->GetRenderResourceManager());
