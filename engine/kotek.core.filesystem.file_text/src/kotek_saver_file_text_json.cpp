@@ -14,7 +14,7 @@ ktkSaverFile_JSON::~ktkSaverFile_JSON() {}
 bool ktkSaverFile_JSON::Save(
 	const ktk::filesystem::path& path, ktk::any object_for_saving) noexcept
 {
-	KOTEK_ASSERT(path.has_extension() == false,
+	KOTEK_ASSERT(path.has_extension(),
 		"you must save with full path aka filename + extension");
 	KOTEK_ASSERT(path.has_parent_path(),
 		"you must path a FULL path, in this case you just passed a file with "
