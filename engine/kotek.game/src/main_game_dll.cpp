@@ -67,14 +67,8 @@ namespace Game
 		const auto& field_update_callback_name =
 			file.Get_String(Core::kSysInfoFieldName_UpdateCallback);
 
-	#ifdef KOTEK_PLATFORM_WINDOWS
 		const auto& field_library_name =
-			file.Get_String(Core::kSysInfoFieldName_UserLibraryNameWindows);
-	#elif KOTEK_PLATFORM_LINUX
-		KOTEK_ASSERT(false,
-			"we don't test such feature, but it supposes to support on "
-			"Linux platform too");
-	#endif
+			file.Get_String(Core::kSysInfoFieldName_UserLibraryName);
 		const auto& field_initialize_render_callback_name =
 			file.Get_String(Core::kSysInfoFieldName_InitializeCallback_Render);
 

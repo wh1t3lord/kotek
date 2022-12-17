@@ -32,11 +32,7 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 
 	path_to_sys_info_json /= kConfigFileNameSystemInfo;
 
-	if (p_filesystem->IsValidPath(path_to_sys_info_json))
-	{
-		// we do nothing here because this stage in kotek.game
-	}
-	else
+	if (!p_filesystem->IsValidPath(path_to_sys_info_json))
 	{
 		// so we didn't find our file, we need to generate that
 
@@ -62,6 +58,12 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 			KOTEK_SYSINFO_FIELD_FALLBACK_RENDERER_VALUE);
 		sys_info.Write(kSysInfoFieldName_RendererForLoading,
 			KOTEK_SYSINFO_FIELD_RENDERER_FOR_LOADING_VALUE);
+	}
+
+
+	if (p_filesystem->IsValidPath(path_to_sys_info_json))
+	{
+		
 	}
 
 	return true;
