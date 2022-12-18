@@ -34,6 +34,8 @@ void test_file_create_pretty_output()
 	auto path =
 		filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_UserTests);
 
+	path /= instance.Get_FileName().get_as_legacy();
+
 	ktk::string test(KOTEK_TEXT("いくつか"));
 
 	instance.Write("test_field1", "data");
