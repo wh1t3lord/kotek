@@ -64,6 +64,8 @@ void test_file_create_pretty_output()
 	BOOST_REQUIRE(status);
 
 	filesystem.Shutdown();
+	saver_instance.Shutdown();
+	main_manager.Shutdown();
 }
 	#endif
 #endif

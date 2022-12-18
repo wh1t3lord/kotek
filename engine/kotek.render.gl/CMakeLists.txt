@@ -7,8 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-find_package(OpenGL REQUIRED COMPONENTS OpenGL)
-
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
     if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
         find_package(KTX CONFIG REQUIRED)
@@ -92,7 +90,6 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 #target_include_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/include/")
 #target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC OpenGL::GL)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
