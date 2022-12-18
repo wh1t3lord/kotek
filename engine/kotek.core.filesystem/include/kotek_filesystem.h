@@ -23,47 +23,6 @@ constexpr const char* kSysInfoFieldName_UpdateCallbackContainsLoop =
 constexpr const char* kSysInfoFieldName_InitializeCallback_Render =
 	"UserCallbackForGameLibrary_Initialize_Render";
 
-// TODO: implement fallback renderer execution and deffered initializing if user
-// specified UserConfig
-
-/// @brief by our standard we have a fallback situation where for some reason
-/// the specified renderer for loading is not loaded or initialized successful,
-/// it means when you specified for loading OpenGL and OpenGL is not initialized
-/// good it will try to initialize your specified fallback renderer (even if it
-/// is OpenGL it will just try again to execute initialization of OpenGL)
-/// UserConfig value means that information will be taken from your config and
-/// you will have deffered calling of render module (our render module, don't
-/// mistake with your implementation module, see documentation TODO: implement
-/// section in doc)
-constexpr const char* kSysInfoFieldName_FallbackRenderer = "FallbackRenderer";
-
-constexpr const char* kSysInfoFieldName_FallbackRenderer_Vulkan = "Vulkan";
-constexpr const char* kSysInfoFieldName_FallbackRenderer_OpenGL = "OpenGL";
-constexpr const char* kSysInfoFieldName_FallbackRenderer_DirectX = "DirectX";
-constexpr const char* kSysInfoFieldName_FallbackRenderer_ANGLE = "ANGLE";
-constexpr const char* kSysInfoFieldName_FallbackRenderer_Software = "Software";
-constexpr const char* kSysInfoFieldName_FallbackRenderer_UserConfig =
-	"UserConfig";
-
-/// @brief if it is empty or field doesn't present in config we take latest
-/// version of specified renderer
-constexpr const char* kSysInfoFieldName_FallbackRenderer_Version =
-	"FallbackRenderer_Version";
-
-constexpr const char* kSysInfoFieldName_RendererForLoading =
-	"RendererForLoading";
-
-constexpr const char* kSysInfoFieldName_RendererForLoading_Vulkan = "Vulkan";
-constexpr const char* kSysInfoFieldName_RendererForLoading_OpenGL = "OpenGL";
-constexpr const char* kSysInfoFieldName_RendererForLoading_DirectX = "DirectX";
-constexpr const char* kSysInfoFieldName_RendererForLoading_ANGLE = "ANGLE";
-constexpr const char* kSysInfoFieldName_RendererForLoading_Software = "Software";
-constexpr const char* kSysInfoFieldName_RendererForLoading_UserConfig =
-	"UserConfig";
-
-constexpr const char* kSysInfoFieldName_RendererForLoading_Version =
-	"RendererForLoading_Version";
-
 constexpr const char* kUserCallbackName_Initialize = "InitializeModule_Game";
 constexpr const char* kUserCallbackName_Shutdown = "ShutdownModule_Game";
 constexpr const char* kUserCallbackName_Update = "UpdateModule_Game";

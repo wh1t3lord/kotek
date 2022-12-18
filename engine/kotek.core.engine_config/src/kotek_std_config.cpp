@@ -4,12 +4,12 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 ktkEngineConfig::ktkEngineConfig(void) :
-	m_argc{-1}, m_argv{}, m_is_running{true}, m_engine_feature_flags{},
-	m_engine_feature_render_flags{}, m_engine_feature_sdk_flags{},
-	m_engine_feature_window_flags{},
-	m_engine_current_directx_version{eEngineSupportedDirectXVersion::kUnknown},
-	m_engine_current_opengl_version{eEngineSupportedOpenGLVersion::kUnknown},
-	m_engine_current_vulkan_version{eEngineSupportedVulkanVersion::kUnknown}
+	m_argc{-1}, m_argv{}, m_is_running{true},
+	m_engine_feature_flags{eEngineFeature::kNone},
+	m_engine_feature_render_flags{eEngineFeatureRender::kNone},
+	m_engine_feature_sdk_flags{eEngineFeatureSDK::kNone},
+	m_engine_feature_renderer_flags{eEngineFeatureRenderer::kNone},
+	m_engine_feature_window_flags{eEngineFeatureWindow::kNone}
 {
 }
 
@@ -26,22 +26,22 @@ bool ktkEngineConfig::IsFeatureEnabled(eEngineFeature id) const noexcept
 
 bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureRender id) const noexcept
 {
-	return false;
+	return (this->m_engine_feature_render_flags & id) == id;
 }
 
 bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureRenderer id) const noexcept
 {
-	return false;
+	return (this->m_engine_feature_renderer_flags & id) == id;
 }
 
 bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureSDK id) const noexcept
 {
-	return false;
+	return (this->m_engine_feature_sdk_flags & id) == id;
 }
 
 bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureWindow id) const noexcept
 {
-	return false;
+	return (this->m_engine_feature_window_flags & id) == id;
 }
 
 void ktkEngineConfig::SetFeatureStatus(eEngineFeature id, bool status) noexcept
@@ -74,17 +74,37 @@ void ktkEngineConfig::SetFeatureStatus(
 {
 	if (status)
 	{
-		this->m_engine_feature_renderer_flags = id;
-
-		if (id == eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest)
+		if (eEngineFeatureRenderer::kNone == id)
 		{
-			this->SetFeatureStatus(
-				eEngineSupportedOpenGLVersion::kOpenGL_Latest, true);
+			this->m_engine_feature_renderer_flags = id;
+		}
+		else
+		{
+			this->m_engine_feature_renderer_flags |= id;
+
+			if (id ==
+				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest)
+			{
+				this->SetFeatureStatus(
+					eEngineSupportedOpenGLVersion::kOpenGL_Latest, true);
+			}
+			else if (id ==
+				eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest)
+			{
+				this->SetFeatureStatus(
+					eEngineSupportedVulkanVersion::kVulkan_Latest, true);
+			}
+			else if (id ==
+				eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest)
+			{
+				this->SetFeatureStatus(
+					eEngineSupportedDirectXVersion::kDirectX_Latest, true);
+			}
 		}
 	}
 	else
 	{
-		this->m_engine_feature_renderer_flags = eEngineFeatureRenderer::kNone;
+		this->m_engine_feature_renderer_flags &= ~id;
 	}
 }
 
@@ -117,11 +137,11 @@ void ktkEngineConfig::SetFeatureStatus(
 void ktkEngineConfig::SetFeatureStatus(
 	eEngineSupportedOpenGLVersion version, bool status) noexcept
 {
-	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest ||
-			this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::
-					kEngine_Render_Renderer_OpenGL_SpecifiedByUser,
+	KOTEK_ASSERT(
+		this->IsFeatureEnabled(
+			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest) ||
+			this->IsFeatureEnabled(eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGL_SpecifiedByUser),
 		"you can't call this method because your current renderer is not "
 		"OpenGL! Your Renderer is: {}",
 		helper::Translate_EngineFeatureRenderer(
@@ -136,24 +156,21 @@ void ktkEngineConfig::SetFeatureStatus(
 
 	if (status)
 	{
-		this->m_engine_current_opengl_version = version;
+		this->m_engine_specified_versions_opengl.insert(version);
 	}
 	else
 	{
-		this->m_engine_current_opengl_version =
-			eEngineSupportedOpenGLVersion::kUnknown;
 	}
 }
 
 void ktkEngineConfig::SetFeatureStatus(
 	eEngineSupportedDirectXVersion version, bool status) noexcept
 {
-	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::
-					kEngine_Render_Renderer_DirectX_Latest ||
-			this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::
-					kEngine_Render_Renderer_DirectX_SpecifiedByUser,
+	KOTEK_ASSERT(
+		this->IsFeatureEnabled(
+			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest) ||
+			this->IsFeatureEnabled(eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_SpecifiedByUser),
 		"you can't call this method because your current renderer is not "
 		"DirectX! Your Renderer is: {}",
 		helper::Translate_EngineFeatureRenderer(
@@ -168,23 +185,21 @@ void ktkEngineConfig::SetFeatureStatus(
 
 	if (status)
 	{
-		this->m_engine_current_directx_version = version;
+		this->m_engine_specified_versions_directx.insert(version);
 	}
 	else
 	{
-		this->m_engine_current_directx_version =
-			eEngineSupportedDirectXVersion::kUnknown;
 	}
 }
 
 void ktkEngineConfig::SetFeatureStatus(
 	eEngineSupportedVulkanVersion version, bool status) noexcept
 {
-	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest ||
-			this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::
-					kEngine_Render_Renderer_Vulkan_SpecifiedByUser,
+	KOTEK_ASSERT(
+		this->IsFeatureEnabled(
+			eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest) ||
+			this->IsFeatureEnabled(eEngineFeatureRenderer::
+					kEngine_Render_Renderer_Vulkan_SpecifiedByUser),
 		"you can't call this method because your current renderer is not "
 		"Vulkan! Your Renderer is: {}",
 		helper::Translate_EngineFeatureRenderer(
@@ -199,12 +214,10 @@ void ktkEngineConfig::SetFeatureStatus(
 
 	if (status)
 	{
-		this->m_engine_current_vulkan_version = version;
+		this->m_engine_specified_versions_vulkan.insert(version);
 	}
 	else
 	{
-		this->m_engine_current_vulkan_version =
-			eEngineSupportedVulkanVersion::kUnknown;
 	}
 }
 
@@ -239,50 +252,139 @@ eEngineFeatureWindow ktkEngineConfig::GetEngineFeatureWindow(
 eEngineSupportedDirectXVersion ktkEngineConfig::GetCurrentDirectXVersion(
 	void) const noexcept
 {
-	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::
-					kEngine_Render_Renderer_DirectX_Latest ||
-			this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::
-					kEngine_Render_Renderer_DirectX_SpecifiedByUser,
+	KOTEK_ASSERT(
+		this->IsFeatureEnabled(
+			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest) ||
+			this->IsFeatureEnabled(eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_SpecifiedByUser),
 		"Your renderer must be DirectX for calling this method! Your Renderer "
 		"is: {}",
 		helper::Translate_EngineFeatureRenderer(
 			this->m_engine_feature_renderer_flags));
 
-	return this->m_engine_current_directx_version;
+	eEngineSupportedDirectXVersion result{
+		eEngineSupportedDirectXVersion::kUnknown};
+	if (this->m_engine_specified_versions_directx.empty())
+		return result;
+
+	result = *this->m_engine_specified_versions_directx.begin();
+	return result;
 }
 
 eEngineSupportedOpenGLVersion ktkEngineConfig::GetCurrentOpenGLVersion(
 	void) const noexcept
 {
-	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest ||
-			this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::
-					kEngine_Render_Renderer_OpenGL_SpecifiedByUser,
+	KOTEK_ASSERT(
+		this->IsFeatureEnabled(
+			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest) ||
+			this->IsFeatureEnabled(eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGL_SpecifiedByUser),
 		"Your renderer must be OpenGL for calling this method! Your Renderer "
 		"is: {}",
 		helper::Translate_EngineFeatureRenderer(
 			this->m_engine_feature_renderer_flags));
 
-	return this->m_engine_current_opengl_version;
+	eEngineSupportedOpenGLVersion result{
+		eEngineSupportedOpenGLVersion::kUnknown};
+	if (this->m_engine_specified_versions_opengl.empty())
+		return result;
+
+	result = *this->m_engine_specified_versions_opengl.begin();
+	return result;
 }
 
 eEngineSupportedVulkanVersion ktkEngineConfig::GetCurrentVulkanVersion(
 	void) const noexcept
 {
-	KOTEK_ASSERT(this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest ||
-			this->m_engine_feature_renderer_flags ==
-				eEngineFeatureRenderer::
-					kEngine_Render_Renderer_Vulkan_SpecifiedByUser,
+	KOTEK_ASSERT(
+		this->IsFeatureEnabled(
+			eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest) ||
+			this->IsFeatureEnabled(eEngineFeatureRenderer::
+					kEngine_Render_Renderer_Vulkan_SpecifiedByUser),
 		"your renderer must be Vulkan for calling this method! Your Renderer "
 		"is: {}",
 		helper::Translate_EngineFeatureRenderer(
 			this->m_engine_feature_renderer_flags));
 
-	return this->m_engine_current_vulkan_version;
+	eEngineSupportedVulkanVersion result{
+		eEngineSupportedVulkanVersion::kUnknown};
+
+	if (this->m_engine_specified_versions_vulkan.empty())
+		return result;
+
+	result = *this->m_engine_specified_versions_vulkan.begin();
+
+	return result;
+}
+
+eEngineSupportedDirectXVersion ktkEngineConfig::GetFallbackDirectXVersion(
+	void) const noexcept
+{
+	KOTEK_ASSERT(
+		this->IsFeatureEnabled(
+			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest) ||
+			this->IsFeatureEnabled(eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_SpecifiedByUser),
+		"Your renderer must be DirectX for calling this method! Your Renderer "
+		"is: {}",
+		helper::Translate_EngineFeatureRenderer(
+			this->m_engine_feature_renderer_flags));
+
+	eEngineSupportedDirectXVersion result{
+		eEngineSupportedDirectXVersion::kUnknown};
+	if (this->m_engine_specified_versions_directx.size() < 2)
+		return result;
+
+	result = *(++this->m_engine_specified_versions_directx.begin());
+
+	return result;
+}
+
+eEngineSupportedOpenGLVersion ktkEngineConfig::GetFallbackOpenGLVersion(
+	void) const noexcept
+{
+	KOTEK_ASSERT(
+		this->IsFeatureEnabled(
+			eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest) ||
+			this->IsFeatureEnabled(eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGL_SpecifiedByUser),
+		"Your renderer must be OpenGL for calling this method! Your Renderer "
+		"is: {}",
+		helper::Translate_EngineFeatureRenderer(
+			this->m_engine_feature_renderer_flags));
+
+	eEngineSupportedOpenGLVersion result{
+		eEngineSupportedOpenGLVersion::kUnknown};
+	if (this->m_engine_specified_versions_opengl.size() < 2)
+		return result;
+
+	result = *(++this->m_engine_specified_versions_opengl.begin());
+
+	return result;
+}
+
+eEngineSupportedVulkanVersion ktkEngineConfig::GetFallbackVulkanVersion(
+	void) const noexcept
+{
+	KOTEK_ASSERT(
+		this->IsFeatureEnabled(
+			eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest) ||
+			this->IsFeatureEnabled(eEngineFeatureRenderer::
+					kEngine_Render_Renderer_Vulkan_SpecifiedByUser),
+		"your renderer must be Vulkan for calling this method! Your Renderer "
+		"is: {}",
+		helper::Translate_EngineFeatureRenderer(
+			this->m_engine_feature_renderer_flags));
+
+	eEngineSupportedVulkanVersion result{
+		eEngineSupportedVulkanVersion::kUnknown};
+
+	if (this->m_engine_specified_versions_vulkan.size() < 2)
+		return result;
+
+	result = *(++this->m_engine_specified_versions_vulkan.begin());
+
+	return result;
 }
 
 eEngineSupportedDirectXVersion
@@ -348,7 +450,7 @@ ktkEngineConfig::GetDirectXVersionFromCommandLine(void) const noexcept
 
 	KOTEK_ASSERT(validation <= 1,
 		"something is terribly wrong and you have more than one renderer or "
-	    "renderer versions");
+		"renderer versions");
 
 	return result;
 }
@@ -400,7 +502,8 @@ eEngineSupportedVulkanVersion ktkEngineConfig::GetVulkanVersionFromCommandLine(
 		"you must specify only one renderer or only one version for that "
 		"renderer");
 
-	eEngineSupportedVulkanVersion result{eEngineSupportedVulkanVersion::kUnknown};
+	eEngineSupportedVulkanVersion result{
+		eEngineSupportedVulkanVersion::kUnknown};
 
 	ktk::size_t validation{};
 
@@ -454,33 +557,33 @@ ktk::string ktkEngineConfig::GetRenderName(void) const noexcept
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest:
 	{
 		return helper::Translate_EngineSupportedOpenGLVersion(
-			this->m_engine_current_opengl_version);
+			this->GetCurrentOpenGLVersion());
 	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
 	{
 		return helper::Translate_EngineSupportedOpenGLVersion(
-			this->m_engine_current_opengl_version);
+			this->GetFallbackOpenGLVersion());
 	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest:
 	{
 		return helper::Translate_EngineSupportedDirectXVersion(
-			this->m_engine_current_directx_version);
+			this->GetCurrentDirectXVersion());
 	}
 	case eEngineFeatureRenderer::
 		kEngine_Render_Renderer_DirectX_SpecifiedByUser:
 	{
 		return helper::Translate_EngineSupportedDirectXVersion(
-			this->m_engine_current_directx_version);
+			this->GetCurrentDirectXVersion());
 	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest:
 	{
 		return helper::Translate_EngineSupportedVulkanVersion(
-			this->m_engine_current_vulkan_version);
+			this->GetCurrentVulkanVersion());
 	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
 	{
 		return helper::Translate_EngineSupportedVulkanVersion(
-			this->m_engine_current_vulkan_version);
+			this->GetCurrentVulkanVersion());
 	}
 	default:
 	{
@@ -583,7 +686,7 @@ bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 	{
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest:
 	{
-		KOTEK_ASSERT(this->m_engine_current_opengl_version ==
+		KOTEK_ASSERT(this->GetCurrentOpenGLVersion() ==
 				eEngineSupportedOpenGLVersion::kOpenGL_Latest,
 			"something is wrong! Your specified renderer is OpenGL latest and "
 			"your version must be kOpenGL_Latest, but it is not true!");
@@ -592,13 +695,13 @@ bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
 	{
-		if (this->m_engine_current_opengl_version ==
+		if (this->GetCurrentOpenGLVersion() ==
 			eEngineSupportedOpenGLVersion::kOpenGL_Latest)
 			status = true;
 	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest:
 	{
-		KOTEK_ASSERT(this->m_engine_current_directx_version ==
+		KOTEK_ASSERT(this->GetCurrentDirectXVersion() ==
 				eEngineSupportedDirectXVersion::kDirectX_Latest,
 			"something is wrong! your specified renderer is DirectX latest and "
 			"your version must be kDirectX_Latest, but it is not true!");
@@ -608,13 +711,13 @@ bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 	case eEngineFeatureRenderer::
 		kEngine_Render_Renderer_DirectX_SpecifiedByUser:
 	{
-		if (this->m_engine_current_directx_version ==
+		if (this->GetCurrentDirectXVersion() ==
 			eEngineSupportedDirectXVersion::kDirectX_Latest)
 			status == true;
 	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest:
 	{
-		KOTEK_ASSERT(this->m_engine_current_vulkan_version ==
+		KOTEK_ASSERT(this->GetCurrentVulkanVersion() ==
 				eEngineSupportedVulkanVersion::kVulkan_Latest,
 			"something is wrong! you specified renderer as Vulkan Latest and "
 			"your version must be kVulkan_Latest but it is not that!");
@@ -623,7 +726,7 @@ bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
 	{
-		if (this->m_engine_current_vulkan_version ==
+		if (this->GetCurrentVulkanVersion() ==
 			eEngineSupportedVulkanVersion::kVulkan_Latest)
 			status = true;
 	}
@@ -758,6 +861,24 @@ void ktkEngineConfig::Set_UserLibrary(
 void* ktkEngineConfig::Get_UserLibrary(void) noexcept
 {
 	return &this->m_user_dll;
+}
+
+const ktk::unordered_set<eEngineSupportedDirectXVersion>&
+ktkEngineConfig::Get_SpecifiedVersionsDirectX(void) const noexcept
+{
+	return this->m_engine_specified_versions_directx;
+}
+
+const ktk::unordered_set<eEngineSupportedOpenGLVersion>&
+ktkEngineConfig::Get_SpecifiedVersionsOpenGL(void) const noexcept
+{
+	return this->m_engine_specified_versions_opengl;
+}
+
+const ktk::unordered_set<eEngineSupportedVulkanVersion>&
+ktkEngineConfig::Get_SpecifiedVersionsVulkan(void) const noexcept
+{
+	return this->m_engine_specified_versions_vulkan;
 }
 
 void ktkEngineConfig::Parse_CommandLine(void) noexcept

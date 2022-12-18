@@ -39,7 +39,7 @@
  *    - @ref doxygen_user_guide_examples_window_ancient_renderers_directx
  *    - @ref doxygen_user_guide_examples_window_ancient_renderers_opengl
  *   - @ref doxygen_user_guide_examples_plugins
- * - @ref doxygen_faq
+ * - @ref doxygen_faq "Frequintly asked questions (FAQ)"
  *  - @ref doxygen_faq_why
  *  - @ref doxygen_faq_whatif
  *  - @ref doxygen_faq_howtoreadthisdocumentation
@@ -102,6 +102,7 @@ int main(int argc, char** argv)
 }
 
 // clang-format off
+// doxygen_user_guide_building_cmake_commands_description
 /**
  * \~english @page doxygen_user_guide_building_cmake_commands_description "Description of every flag (macroses) what you can pass"
  * 
@@ -296,4 +297,50 @@ int main(int argc, char** argv)
  * 
  * \~russian @page doxygen_user_guide_building_cmake_commands_description 
  */
+// clang-format on
+
+// clang-format off
+// doxygen_standards_about_renderers
+/**
+* \~english @page doxygen_standards_about_renderers "How we standardize Renderers"
+* 
+* - @ref doxygen_standards_about_renderers_case_command_line "Handling application command line"
+* - @ref doxygen_standards_about_renderers_case_config "Handling config"
+* - @ref doxygen_standards_about_renderers_case_fallback "Handling fallback"
+* 
+* It is important to notice that we can't standardize the initialization and shutdown in engine. It means that user must handle what renderer must be initialized, how it knows, and how many renderers user must handle. 
+* 
+* First of all, we have the following scenarios:
+* 
+* 1. User wants to specify renderer through command line of application e.g. shortcut, target section
+* 2. User wants to specify renderer through serialized data e.g. config aka json (see standart section about text files in our engine)
+* 3. Engine must handle a situation where the specified renderer can't be executed well and we have a fallback scenario and we should initialize engine on another renderer what user must have. (probably if you are lazy you can try to use our software renderer implementation), but it supposed that user thinks about a such case and they can implement a new renderer for supporting old devices.
+* 
+* 
+* \~russian @page doxygen_standards_about_renderers "О Рендерерах"
+*/
+
+/**
+* \~english @page doxygen_standards_about_renderers_case_command_line "Handling command line"
+* 
+* \~russian @page doxygen_standards_about_renderers_case_command_line ""
+*/
+
+
+/**
+* \~english @page doxygen_standards_about_renderers_case_config "Handling config"
+* 
+* 
+* 
+* 
+* \~russian @page doxygen_standards_about_renderers_case_config ""
+*/
+
+/**
+* \~english @page doxygen_standards_about_renderers_case_fallback "Handling fallback"
+* 
+* 
+* \~russian @page doxygen_standards_about_renderers_case_fallback ""
+*/
+
 // clang-format on

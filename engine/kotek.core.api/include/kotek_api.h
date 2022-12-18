@@ -432,7 +432,6 @@ public:
 	virtual bool DetectTypeByFullPath(
 		const ktk::filesystem::path& path) noexcept = 0;
 
- 
 	virtual ktk::string Get_UserDescription() const noexcept
 	{
 		return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION_FOR_SAVER");
@@ -675,11 +674,19 @@ public:
 	virtual eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept = 0;
 	virtual eEngineFeatureWindow GetEngineFeatureWindow(
 		void) const noexcept = 0;
+
 	virtual eEngineSupportedDirectXVersion GetCurrentDirectXVersion(
 		void) const noexcept = 0;
 	virtual eEngineSupportedOpenGLVersion GetCurrentOpenGLVersion(
 		void) const noexcept = 0;
 	virtual eEngineSupportedVulkanVersion GetCurrentVulkanVersion(
+		void) const noexcept = 0;
+
+	virtual eEngineSupportedDirectXVersion GetFallbackDirectXVersion(
+		void) const noexcept = 0;
+	virtual eEngineSupportedOpenGLVersion GetFallbackOpenGLVersion(
+		void) const noexcept = 0;
+	virtual eEngineSupportedVulkanVersion GetFallbackVulkanVersion(
 		void) const noexcept = 0;
 
 	virtual ktk::string GetRenderName(void) const noexcept = 0;

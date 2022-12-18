@@ -57,6 +57,14 @@ namespace helper
 	eEngineSupportedOpenGLVersion
 	TranslateFromStringToEnum_EngineSupportedOpenGLVersion(
 		const ktk::string& version_name);
+
+	eEngineSupportedVulkanVersion
+	TranslateFromStringToEnum_EngineSupportedVulkanVersion(
+		const ktk::string& version_name);
+
+	eEngineSupportedDirectXVersion
+	TranslateFromStringToEnum_EngineSupportedDirectXVersion(
+		const ktk::string& version_name);
 } // namespace helper
 
 KOTEK_END_NAMESPACE_CORE

@@ -5,23 +5,14 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
-bool InitializeModule_Render_GL(Core::ktkMainManager* p_main_manager)
+bool InitializeModule_Render_GL(Core::ktkMainManager* p_main_manager,
+	Core::eEngineSupportedOpenGLVersion version)
 {
 	auto* p_engine_config = p_main_manager->Get_EngineConfig();
 
-	auto gl_version = p_engine_config->GetOpenGLVersionFromCommandLine();
-
-	if (gl_version == Kotek::Core::eEngineSupportedOpenGLVersion::kUnknown)
-	{
-		// TODO: config must serialize/deserialize what config's version has if
-		// we have running renderer as OpenGL
-
-		KOTEK_ASSERT(false, "not implemented");
-	}
-	else
-	{
-		p_engine_config->SetFeatureStatus(gl_version, true);
-	}
+	auto gl_version = version;
+	p_engine_config->SetFeatureStatus(gl_version, true);
+ 
 
 	gl::ktkRenderDevice* p_render_device = new gl::ktkRenderDevice();
 	gl::ktkRenderSwapchain* p_render_swapchain = new gl::ktkRenderSwapchain();

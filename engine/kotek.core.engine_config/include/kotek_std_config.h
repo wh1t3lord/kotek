@@ -12,7 +12,8 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
-
+// TODO: implement unit test for testing all methods about flags and class in
+// general!
 /**
  * Implementation class of ktkIEngineConfig interface.
  */
@@ -57,10 +58,31 @@ public:
 	void SetFeatureStatus(eEngineFeatureSDK id, bool status) noexcept override;
 	void SetFeatureStatus(
 		eEngineFeatureWindow id, bool status) noexcept override;
+
+	/// \~english @brief As a standard you can specify two versions, but one
+	/// uses as loading and the second one for fallback scenarios. @see
+	/// doxygen_standards_about_renderers
+	/// @param version your version of eEngineSupportedOpenGLVersion
+	/// @param status true means it will be added to set otherwise it will be
+	/// removed from set
 	void SetFeatureStatus(
 		eEngineSupportedOpenGLVersion version, bool status) noexcept override;
+
+	/// \~english @brief As a standard you can specify two versions, but one
+	/// uses as loading and the second one for fallback scenarios. @see
+	/// doxygen_standards_about_renderers
+	/// @param version your version of eEngineSupportedDirectXVersion
+	/// @param status true means it will be added to set otherwise it will be
+	/// removed from set
 	void SetFeatureStatus(
 		eEngineSupportedDirectXVersion version, bool status) noexcept override;
+
+	/// \~english @brief As a standard you can specify two versions, but one
+	/// uses as loading and the second one for fallback scenarios. @see
+	/// doxygen_standards_about_renderers
+	/// @param version your version of eEngineSupportedVulkanVersion
+	/// @param status true means it will be added to set otherwise it will be
+	/// removed from set
 	void SetFeatureStatus(
 		eEngineSupportedVulkanVersion version, bool status) noexcept override;
 
@@ -70,11 +92,19 @@ public:
 		void) const noexcept override;
 	eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept override;
 	eEngineFeatureWindow GetEngineFeatureWindow(void) const noexcept override;
+
 	eEngineSupportedDirectXVersion GetCurrentDirectXVersion(
 		void) const noexcept override;
 	eEngineSupportedOpenGLVersion GetCurrentOpenGLVersion(
 		void) const noexcept override;
 	eEngineSupportedVulkanVersion GetCurrentVulkanVersion(
+		void) const noexcept override;
+
+	eEngineSupportedDirectXVersion GetFallbackDirectXVersion(
+		void) const noexcept override;
+	eEngineSupportedOpenGLVersion GetFallbackOpenGLVersion(
+		void) const noexcept override;
+	eEngineSupportedVulkanVersion GetFallbackVulkanVersion(
 		void) const noexcept override;
 
 	/// @brief
@@ -215,6 +245,24 @@ public:
 	 */
 	void* Get_UserLibrary(void) noexcept override;
 
+	// we can't standardize the types of fields so we provide these not virtual
+	// methods for accessing through casting, otherwise user must implement own
+	// version of engine config with his interface if he doesn't like something
+	// in ours. These methods for situation where user wants to implement a
+	// functionality where fallback renderes are differs of versions like if we
+	// failed to start 11 version we go to 10 if failed 10 we go to 9 if failed
+	// 9 we go to 8. Of course it is the most non trivial case and I guess
+	// nobody will do that but who knows...
+	// Standartization means standartization and you must handle all possible
+	// situations...
+
+	const ktk::unordered_set<eEngineSupportedDirectXVersion>&
+	Get_SpecifiedVersionsDirectX(void) const noexcept;
+	const ktk::unordered_set<eEngineSupportedOpenGLVersion>&
+	Get_SpecifiedVersionsOpenGL(void) const noexcept;
+	const ktk::unordered_set<eEngineSupportedVulkanVersion>&
+	Get_SpecifiedVersionsVulkan(void) const noexcept;
+
 private:
 	void Parse_CommandLine(void) noexcept;
 
@@ -227,9 +275,12 @@ private:
 	eEngineFeatureRenderer m_engine_feature_renderer_flags;
 	eEngineFeatureSDK m_engine_feature_sdk_flags;
 	eEngineFeatureWindow m_engine_feature_window_flags;
-	eEngineSupportedDirectXVersion m_engine_current_directx_version;
-	eEngineSupportedOpenGLVersion m_engine_current_opengl_version;
-	eEngineSupportedVulkanVersion m_engine_current_vulkan_version;
+	ktk::unordered_set<eEngineSupportedDirectXVersion>
+		m_engine_specified_versions_directx;
+	ktk::unordered_set<eEngineSupportedOpenGLVersion>
+		m_engine_specified_versions_opengl;
+	ktk::unordered_set<eEngineSupportedVulkanVersion>
+		m_engine_specified_versions_vulkan;
 	ktk::unordered_set<ktk::string> m_parsed_command_line_arguments;
 	ktk::dll::shared_library m_user_dll;
 };

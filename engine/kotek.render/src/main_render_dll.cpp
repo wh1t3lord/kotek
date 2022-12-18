@@ -27,7 +27,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 
 	if (p_engine_config->IsUserSpecifiedRendererDirectXInCommandLine())
 	{
-		auto version_dx = p_engine_config->GetCurrentDirectXVersion();
+		auto version_dx = p_engine_config->GetDirectXVersionFromCommandLine();
 		KOTEK_MESSAGE("you pass command for initializing {}",
 			Kotek::Core::helper::Translate_EngineSupportedDirectXVersion(
 				version_dx));
@@ -37,32 +37,66 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		default:
 		{
 			KOTEK_MESSAGE("Uknown version of DirectX you pass trying to "
-			              "initialize OpenGL");
+						  "initialize OpenGL");
 		}
 		}
 		// TODO: add directx
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine())
 	{
-		KOTEK_MESSAGE("you pass command line to application for initializing {}", Kotek::Core::helper::Translate_EngineSupportedOpenGLVersion(p_engine_config->GetCurrentOpenGLVersion()));
-		status = InitializeModule_Render_GL(main_manager);
+		KOTEK_MESSAGE(
+			"you pass command line to application for initializing {}",
+			Kotek::Core::helper::Translate_EngineSupportedOpenGLVersion(
+				p_engine_config->GetOpenGLVersionFromCommandLine()));
+		status = InitializeModule_Render_GL(
+			main_manager, p_engine_config->GetOpenGLVersionFromCommandLine());
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
 	{
-		KOTEK_MESSAGE("you pass command line to application for initializing {}",
+		KOTEK_MESSAGE(
+			"you pass command line to application for initializing {}",
 			Kotek::Core::helper::Translate_EngineSupportedVulkanVersion(
-				p_engine_config->GetCurrentVulkanVersion()));
+				p_engine_config->GetVulkanVersionFromCommandLine()));
 		status = InitializeModule_Render_VK(main_manager);
 	}
 	else
 	{
-		// TODO: by default run ANGLE with renderer what ANGLE supports
-		// TODO: support feature for sys_info for default renderer field
+		// TODO: finish for all renderers
+		bool is_gl =
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGL_Latest) ||
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGL_SpecifiedByUser);
 
-		KOTEK_MESSAGE("trying to initialize default render OpenGL, "
-					  "because you don't specify any or coudn't define "
-					  "from serialized user data");
-		status = InitializeModule_Render_GL(main_manager);
+		bool is_vk =
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_Vulkan_Latest) ||
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_Vulkan_SpecifiedByUser);
+
+		bool is_dx =
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_Latest) ||
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_SpecifiedByUser);
+
+		if (is_gl)
+		{
+			status = InitializeModule_Render_GL(
+				main_manager, p_engine_config->GetCurrentOpenGLVersion());
+		}
+		else if (is_vk)
+		{
+			status = InitializeModule_Render_VK(main_manager);
+		}
+		else if (is_dx)
+		{
+			KOTEK_ASSERT(false, "not implemented");
+		}
+		else
+		{
+			KOTEK_ASSERT(false, "todo: finish other renderers like angle etc");
+		}
 	}
 
 	KOTEK_ASSERT(status, "can't initialize module render {}. See log",
@@ -102,12 +136,42 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 	}
 	else
 	{
-		// TODO: by default run ANGLE with renderer what ANGLE supports
-		// TODO: support feature for sys_info for default renderer field
+		// TODO: finish for all renderers
+		bool is_gl =
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGL_Latest) ||
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGL_SpecifiedByUser);
 
-		status = ShutdownModule_Render_GL(main_manager);
+		bool is_vk =
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_Vulkan_Latest) ||
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_Vulkan_SpecifiedByUser);
+
+		bool is_dx =
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_Latest) ||
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_DirectX_SpecifiedByUser);
+
+		if (is_gl)
+		{
+			status = ShutdownModule_Render_GL(main_manager);
+		}
+		else if (is_vk)
+		{
+			status = ShutdownModule_Render_VK(main_manager);
+		}
+		else if (is_dx)
+		{
+			KOTEK_ASSERT(false, "not implemented");
+		}
+		else
+		{
+			KOTEK_ASSERT(false, "todo: finish other renderers like angle etc");
+		}
 	}
-
 
 	KOTEK_ASSERT(status, "failed to shutdown render {} module",
 		p_engine_config->GetRenderName().get_as_is());

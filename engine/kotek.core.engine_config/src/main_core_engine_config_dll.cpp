@@ -58,11 +58,6 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 		sys_info.Write(kSysInfoFieldName_UserLibraryName,
 			KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME);
 
-		sys_info.Write(kSysInfoFieldName_FallbackRenderer,
-			KOTEK_SYSINFO_FIELD_FALLBACK_RENDERER_VALUE);
-		sys_info.Write(kSysInfoFieldName_RendererForLoading,
-			KOTEK_SYSINFO_FIELD_RENDERER_FOR_LOADING_VALUE);
-
 		p_manager->GetResourceManager()->Get_ResourceSaver()->Save(
 			path_to_sys_info_json, &sys_info);
 	}

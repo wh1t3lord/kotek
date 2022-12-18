@@ -301,11 +301,6 @@ namespace Engine
 
 		Game::InitializeModule_Game(p_main_manager);
 
-		// TODO: make deffered calling of this function from user dll if user
-		// specified that he takes information about fallback renderer in his
-		// config not from sys_info
-		Render::InitializeModule_Render(p_main_manager);
-
 		UI::InitializeModule_UI(p_main_manager);
 
 #ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
@@ -321,6 +316,7 @@ namespace Engine
 
 #ifdef KOTEK_DEBUG
 	#ifdef KOTEK_USE_TESTS_RUNTIME
+		#ifdef KOTEK_USE_BOOST_LIBRARY
 		KOTEK_MESSAGE("UNIT TESTING UNIT TESTING UNIT "
 					  "TESTING\n\n\n\n\n\n\n\n\n\n\n\n");
 
@@ -339,6 +335,9 @@ namespace Engine
 		KOTEK_ASSERT(status == 0, "you have got failed tests");
 
 		KOTEK_MESSAGE("\n\n\n\n\nUNIT TESTING UNIT TESTING UNIT TESTING");
+		#else
+		// TODO: find alternative for std case!
+		#endif
 	#endif
 #endif
 
@@ -361,7 +360,6 @@ namespace Engine
 	{
 		Serialize_Engine(p_main_manager);
 
-		Render::ShutdownModule_Render(p_main_manager);
 		UI::ShutdownModule_UI(p_main_manager);
 		Game::ShutdownModule_Game(p_main_manager);
 		Core::ShutdownModule_Core(p_main_manager);

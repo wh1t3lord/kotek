@@ -108,6 +108,8 @@ namespace helper
 		}
 	}
 
+	// TODO: re implement that in order to detect all possible flags what this
+	// flag has
 	ktk::string Translate_EngineFeatureRenderer(eEngineFeatureRenderer type)
 	{
 		switch (type)
@@ -142,7 +144,7 @@ namespace helper
 			return "DirectX version is specified by user";
 		}
 		case eEngineFeatureRenderer::
-		kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
+			kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
 		{
 			return "Vulkan version is specified by user";
 		}
@@ -520,11 +522,12 @@ namespace helper
 	TranslateFromStringToEnum_EngineSupportedOpenGLVersion(
 		const ktk::string& version_name)
 	{
-		eEngineSupportedOpenGLVersion result {eEngineSupportedOpenGLVersion::kUnknown};
+		eEngineSupportedOpenGLVersion result{
+			eEngineSupportedOpenGLVersion::kUnknown};
 
 		if (version_name.empty())
 			return result;
-			
+
 		if (version_name.size() != 3)
 			return result;
 
@@ -688,6 +691,115 @@ namespace helper
 			return result;
 		}
 		}
+	}
+
+	eEngineSupportedVulkanVersion
+	TranslateFromStringToEnum_EngineSupportedVulkanVersion(
+		const ktk::string& version_name)
+	{
+		eEngineSupportedVulkanVersion result{
+			eEngineSupportedVulkanVersion::kUnknown};
+
+		if (version_name.empty())
+			return result;
+
+		if (version_name.size() != 3)
+			return result;
+
+		int major_version{};
+		int minor_version{};
+
+		major_version = ktk::lexical_cast<int>(version_name.get_as_legacy()[0]);
+		minor_version = ktk::lexical_cast<int>(version_name.get_as_legacy()[2]);
+
+		switch (major_version)
+		{
+		case 1:
+		{
+			switch (minor_version)
+			{
+			case 0:
+			{
+				result = eEngineSupportedVulkanVersion::kVulkan_1_0;
+				break;
+			}
+			case 1:
+			{
+				result = eEngineSupportedVulkanVersion::kVulkan_1_1;
+				break;
+			}
+			case 2:
+			{
+				result = eEngineSupportedVulkanVersion::kVulkan_1_2;
+				break;
+			}
+			case 3:
+			{
+				result = eEngineSupportedVulkanVersion::kVulkan_1_3;
+				break;
+			}
+			}
+
+			return result;
+		}
+		default:
+		{
+			return result;
+		}
+		}
+	}
+
+	eEngineSupportedDirectXVersion
+	TranslateFromStringToEnum_EngineSupportedDirectXVersion(
+		const ktk::string& version_name)
+	{
+		eEngineSupportedDirectXVersion result{
+			eEngineSupportedDirectXVersion::kUnknown};
+
+		if (version_name.empty())
+			return result;
+
+		if (version_name.size() > 2)
+			return result;
+
+		int version =
+			ktk::lexical_cast<int>(version_name.get_as_legacy().c_str());
+
+		switch (version)
+		{
+		case 7:
+		{
+			result = eEngineSupportedDirectXVersion::kDirectX_7;
+			break;
+		}
+		case 8:
+		{
+			result = eEngineSupportedDirectXVersion::kDirectX_8;
+			break;
+		}
+		case 9:
+		{
+			result = eEngineSupportedDirectXVersion::kDirectX_9;
+			break;
+		}
+		case 10:
+		{
+			result = eEngineSupportedDirectXVersion::kDirectX_10;
+			break;
+		}
+		case 11:
+		{
+			result = eEngineSupportedDirectXVersion::kDirectX_11;
+			break;
+		}
+		case 12:
+		{
+			result = eEngineSupportedDirectXVersion::kDirectX_12;
+			break;
+		}
+		}
+
+		return result;
 	}
 } // namespace helper
 
