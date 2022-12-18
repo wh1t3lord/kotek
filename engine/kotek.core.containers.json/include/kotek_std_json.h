@@ -178,6 +178,9 @@ public:
 
 	const ktk::json::object& GetObject(void) const noexcept;
 
+	// TODO: standartize this thing for any type what the kotek has, containers,
+	// math structures, graphs and etc
+
 	template <typename DataType>
 	void Write(const ktk::string& field_name, DataType data) noexcept
 	{

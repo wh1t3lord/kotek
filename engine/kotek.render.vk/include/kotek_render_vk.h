@@ -5,7 +5,7 @@ namespace Kotek
 	namespace Render
 	{
 		// TODO: make support for versioning!!!
-		bool InitializeModule_Render_VK(Core::ktkMainManager* main_manager);
+		bool InitializeModule_Render_VK(Core::ktkMainManager* main_manager, Core::eEngineSupportedVulkanVersion version);
 		bool ShutdownModule_Render_VK(Core::ktkMainManager* main_manager);
 
 #ifdef KOTEK_DEBUG

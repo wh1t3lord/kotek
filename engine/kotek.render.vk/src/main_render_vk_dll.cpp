@@ -22,30 +22,17 @@ namespace Kotek
 		}
 #endif
 
-		bool InitializeModule_Render_VK(Core::ktkMainManager* p_main_manager)
+		bool InitializeModule_Render_VK(Core::ktkMainManager* p_main_manager,
+			Core::eEngineSupportedVulkanVersion version)
 		{
 			KOTEK_CPU_PROFILE();
 
 			auto* p_engine_config = p_main_manager->Get_EngineConfig();
 
-			auto vk_version =
-				p_engine_config->GetVulkanVersionFromCommandLine();
-
-			if (vk_version ==
-				Kotek::Core::eEngineSupportedVulkanVersion::kUnknown)
-			{
-				// TODO: config must serialize/deserialize what config's version
-				// has if we have running renderer as OpenGL
-
-				KOTEK_ASSERT(false, "not implemented");
-			}
-			else
-			{
-				p_engine_config->SetFeatureStatus(vk_version, true);
-			}
+			p_engine_config->SetFeatureStatus(version, true);
 
 			vk::ktkRenderDevice* p_render_manager_device =
-				new vk::ktkRenderDevice();
+				new vk::ktkRenderDevice(version);
 
 			p_main_manager->setRenderDevice(p_render_manager_device);
 
@@ -61,7 +48,7 @@ namespace Kotek
 				p_render_manager_render_resource);
 
 			p_main_manager->Get_WindowManager()->Get_ActiveWindow()->Initialize(
-				vk_version);
+				version);
 
 			p_render_manager_device->Initialize(p_main_manager);
 

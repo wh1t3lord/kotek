@@ -8,6 +8,7 @@
 #include <kotek.core.containers.any/include/kotek_core_containers_any.h>
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
 #include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
+#include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 
 // TODO: add ifdef for appropriate things
@@ -665,6 +666,17 @@ public:
 		eEngineSupportedDirectXVersion version, bool status) noexcept = 0;
 	virtual void SetFeatureStatus(
 		eEngineSupportedVulkanVersion version, bool status) noexcept = 0;
+	virtual void SetFeatureStatus(
+		const ktk::vector<eEngineSupportedDirectXVersion>&
+			fallback_versions) noexcept = 0;
+	virtual void SetFeatureStatus(
+		const ktk::vector<eEngineSupportedOpenGLVersion>&
+			fallback_versions) noexcept = 0;
+	virtual void SetFeatureStatus(
+		const ktk::vector<eEngineSupportedVulkanVersion>&
+			fallback_versions) noexcept = 0;
+	virtual void SetFeatureStatus(
+		const ktk::vector<eEngineFeatureRenderer>& gapis) noexcept = 0;
 
 	virtual eEngineFeature GetEngineFeature(void) const noexcept = 0;
 	virtual eEngineFeatureRender GetEngineFeatureRender(
@@ -675,18 +687,20 @@ public:
 	virtual eEngineFeatureWindow GetEngineFeatureWindow(
 		void) const noexcept = 0;
 
-	virtual eEngineSupportedDirectXVersion GetCurrentDirectXVersion(
+	virtual eEngineSupportedDirectXVersion GetDirectXVersionForLoading(
 		void) const noexcept = 0;
-	virtual eEngineSupportedOpenGLVersion GetCurrentOpenGLVersion(
+	virtual eEngineSupportedOpenGLVersion GetOpenGLVersionForLoading(
 		void) const noexcept = 0;
-	virtual eEngineSupportedVulkanVersion GetCurrentVulkanVersion(
+	virtual eEngineSupportedVulkanVersion GetVulkanVersionForLoading(
 		void) const noexcept = 0;
 
-	virtual eEngineSupportedDirectXVersion GetFallbackDirectXVersion(
-		void) const noexcept = 0;
-	virtual eEngineSupportedOpenGLVersion GetFallbackOpenGLVersion(
-		void) const noexcept = 0;
-	virtual eEngineSupportedVulkanVersion GetFallbackVulkanVersion(
+	virtual const ktk::vector<eEngineSupportedDirectXVersion>&
+	GetFallbackDirectXVersions(void) const noexcept = 0;
+	virtual const ktk::vector<eEngineSupportedOpenGLVersion>&
+	GetFallbackOpenGLVersions(void) const noexcept = 0;
+	virtual const ktk::vector<eEngineSupportedVulkanVersion>&
+	GetFallbackVulkanVersions(void) const noexcept = 0;
+	virtual const ktk::vector<eEngineFeatureRenderer>& GetFallbackRendereres(
 		void) const noexcept = 0;
 
 	virtual ktk::string GetRenderName(void) const noexcept = 0;

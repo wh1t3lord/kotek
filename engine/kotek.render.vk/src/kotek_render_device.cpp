@@ -28,8 +28,9 @@ namespace Kotek
 							  "[object:{}][messageCode:{}][location:{}][{}][{}]"
 							  "[{}][{}] {} \n\n\n",
 					object, messageCode, location,
-					ktk::cast::to_string(pLayerPrefix), static_cast<int>(flags), static_cast<int>(objectType),
-					pUserData, ktk::cast::to_string(pMessage));
+					ktk::cast::to_string(pLayerPrefix), static_cast<int>(flags),
+					static_cast<int>(objectType), pUserData,
+					ktk::cast::to_string(pMessage));
 
 				return VK_FALSE;
 			}
@@ -44,9 +45,11 @@ namespace Kotek
 			VkPhysicalDeviceFloat16Int8FeaturesKHR features_fp16 = {};
 			VkPhysicalDevice16BitStorageFeatures features_storage_16bit = {};
 
-			ktkRenderDevice::ktkRenderDevice() :
-				m_p_surface(nullptr), m_width(-1), m_height(-1),
-				m_p_allocator(nullptr)
+			ktkRenderDevice::ktkRenderDevice(
+				Core::eEngineSupportedVulkanVersion version) :
+				m_p_surface(nullptr),
+				m_width(-1), m_height(-1),
+				m_p_allocator(nullptr), m_current_version{version}
 			{
 			}
 
@@ -114,8 +117,7 @@ namespace Kotek
 						p_raw_resource_manager);
 
 				p_raw_swapchain->Resize(this, width, height);
-				p_render_resource_manager->Resize(
-					this, p_raw_swapchain);
+				p_render_resource_manager->Resize(this, p_raw_swapchain);
 				p_raw_renderer->Resize();
 			}
 
@@ -302,7 +304,9 @@ namespace Kotek
 
 				VmaAllocatorCreateInfo info = {};
 
-				info.vulkanApiVersion = KOTEK_USE_VULKAN_VERSION;
+				info.vulkanApiVersion =
+					helper::TranslateEnumVersionToInstanceVersion(
+						this->m_current_version);
 				info.device = p_device;
 				info.instance = p_instance;
 				info.physicalDevice = p_physical_device;
@@ -323,7 +327,9 @@ namespace Kotek
 			{
 				KOTEK_CPU_PROFILE();
 
-				constexpr ktk::uint32_t required_version = KOTEK_USE_VULKAN_VERSION;
+				ktk::uint32_t required_version =
+					helper::TranslateEnumVersionToInstanceVersion(
+						this->m_current_version);
 
 				const ktk::uint32_t user_version = this->GetApiVersion();
 
@@ -970,8 +976,7 @@ namespace Kotek
 			{
 				this->m_p_surface = static_cast<VkSurfaceKHR>(
 					main_manager->GetGameManager()->CreateSurface(
-						main_manager,
-						this->m_p_instance, nullptr));
+						main_manager, this->m_p_instance, nullptr));
 			}
 
 			ktk::uint32_t ktkRenderDevice::GetApiVersion() const noexcept
@@ -1049,6 +1054,34 @@ namespace Kotek
 				ktk::string TranslateVkResultToString(VkResult result) noexcept
 				{
 					return string_VkResult(result);
+				}
+				ktk::uint32_t TranslateEnumVersionToInstanceVersion(
+					Core::eEngineSupportedVulkanVersion version) noexcept
+				{
+					switch (version)
+					{
+					case Core::eEngineSupportedVulkanVersion::kVulkan_1_0:
+					{
+						return VK_API_VERSION_1_0;
+					}
+					case Core::eEngineSupportedVulkanVersion::kVulkan_1_1:
+					{
+						return VK_API_VERSION_1_1;
+					}
+					case Core::eEngineSupportedVulkanVersion::kVulkan_1_2:
+					{
+						return VK_API_VERSION_1_2;
+					}
+					case Core::eEngineSupportedVulkanVersion::kVulkan_1_3:
+					{
+						// TODO: update it when you update Vulkan SDK
+						return VK_API_VERSION_1_2;
+					}
+					default:
+					{
+						return VK_API_VERSION_1_2;
+					}
+					}
 				}
 			} // namespace helper
 

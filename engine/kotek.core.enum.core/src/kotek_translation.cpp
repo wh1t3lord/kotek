@@ -528,8 +528,14 @@ namespace helper
 		if (version_name.empty())
 			return result;
 
-		if (version_name.size() != 3)
+		if (version_name.size() != 3 && version_name != "Latest")
 			return result;
+
+		if (version_name == "Latest")
+		{
+			result = eEngineSupportedOpenGLVersion::kOpenGL_Latest;
+			return result;
+		}
 
 		int major_version{};
 		int minor_version{};
@@ -703,8 +709,14 @@ namespace helper
 		if (version_name.empty())
 			return result;
 
-		if (version_name.size() != 3)
+		if (version_name.size() != 3 && version_name != "Latest")
 			return result;
+
+		if (version_name == "Latest")
+		{
+			result = eEngineSupportedVulkanVersion::kVulkan_Latest;
+			return result;
+		}
 
 		int major_version{};
 		int minor_version{};
@@ -759,8 +771,14 @@ namespace helper
 		if (version_name.empty())
 			return result;
 
-		if (version_name.size() > 2)
+		if (version_name.size() > 2 && version_name != "Latest")
 			return result;
+
+		if (version_name == "Latest")
+		{
+			result = eEngineSupportedDirectXVersion::kDirectX_Latest;
+			return result;
+		}
 
 		int version =
 			ktk::lexical_cast<int>(version_name.get_as_legacy().c_str());
@@ -797,6 +815,43 @@ namespace helper
 			result = eEngineSupportedDirectXVersion::kDirectX_12;
 			break;
 		}
+		}
+
+		return result;
+	}
+
+	eEngineFeatureRenderer TranslateFromStringToEnum_EngineFeatureRenderer(
+		const ktk::string& renderer_name)
+	{
+		eEngineFeatureRenderer result{eEngineFeatureRenderer::kNone};
+
+		if (renderer_name.empty())
+			return result;
+
+		if (renderer_name == "ANGLE")
+		{
+			result = eEngineFeatureRenderer::kEngine_Render_Renderer_ANGLE;
+		}
+		else if (renderer_name == "Software")
+		{
+			result = eEngineFeatureRenderer::kEngine_Render_Renderer_Software;
+		}
+		else if (renderer_name == "DirectX")
+		{
+			result = eEngineFeatureRenderer::
+				kEngine_Render_Renderer_DirectX_SpecifiedByUser;
+		}
+		else if (renderer_name == "Vulkan")
+		{
+
+			result = eEngineFeatureRenderer::
+				kEngine_Render_Renderer_Vulkan_SpecifiedByUser;
+		}
+		else if (renderer_name == "OpenGL")
+		{
+
+			result = eEngineFeatureRenderer::
+				kEngine_Render_Renderer_OpenGL_SpecifiedByUser;
 		}
 
 		return result;

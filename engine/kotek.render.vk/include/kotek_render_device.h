@@ -25,12 +25,14 @@ namespace Kotek
 					VkColorSpaceKHR color_space) noexcept;
 				ktk::string TranslateVkFormatToString(VkFormat format) noexcept;
 				ktk::string TranslateVkResultToString(VkResult result) noexcept;
+				ktk::uint32_t TranslateEnumVersionToInstanceVersion(
+					Core::eEngineSupportedVulkanVersion version) noexcept;
 			} // namespace helper
 
 			class ktkRenderDevice : public Core::ktkIRenderDevice
 			{
 			public:
-				ktkRenderDevice(void);
+				ktkRenderDevice(Core::eEngineSupportedVulkanVersion version);
 				~ktkRenderDevice(void);
 
 				void Initialize(Core::ktkMainManager* main_manager) override;
@@ -89,7 +91,7 @@ namespace Kotek
 					VkPhysicalDevice p_physical_device,
 					VkInstance p_instance) noexcept;
 				void DestroyAllocator(void) noexcept;
-				void InitializeInstance(void) noexcept;
+				void InitializeInstance() noexcept;
 
 				// This initialized both and physical and non physical just all
 				void InitializeDevice(
@@ -160,6 +162,8 @@ namespace Kotek
 				ktk::uint32_t m_queue_index_present;
 				ktk::uint32_t m_queue_index_graphics;
 				ktk::uint32_t m_queue_index_compute;
+
+				Core::eEngineSupportedVulkanVersion m_current_version;
 
 				VkInstance m_p_instance;
 				VkDevice m_p_device;

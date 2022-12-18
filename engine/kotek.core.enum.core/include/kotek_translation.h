@@ -51,8 +51,11 @@ namespace helper
 	ktk::string Translate_ResourceCachingPolicy(eResourceCachingPolicy type);
 	ktk::string Translate_ConsoleCommandIndex(eConsoleCommandIndex type);
 
-	/// @brief accepts the form like 'major_version.minor_version', for example it parses strings like '1.3', the string is not acceptable like this '1'.
-	/// @param version_name your string that contains only numbers and one separated dot symbol
+	/// @brief accepts the form like 'major_version.minor_version', for example
+	/// it parses strings like '1.3', the string is not acceptable like this
+	/// '1'.
+	/// @param version_name your string that contains only numbers and one
+	/// separated dot symbol
 	/// @return converted to appropriate version of OpenGL
 	eEngineSupportedOpenGLVersion
 	TranslateFromStringToEnum_EngineSupportedOpenGLVersion(
@@ -65,6 +68,15 @@ namespace helper
 	eEngineSupportedDirectXVersion
 	TranslateFromStringToEnum_EngineSupportedDirectXVersion(
 		const ktk::string& version_name);
+
+	/// \~english @brief all converted becomes as specified_by_user or it takes
+	/// the final version like it doesn't have specified_by_user and latest e.g.
+	/// ANGLE or Software
+	/// @param renderer_name ANGLE, Software, DirectX, Vulkan, OpenGL as quoted
+	/// strings
+	/// @return eEngineFeatureRenderer
+	eEngineFeatureRenderer TranslateFromStringToEnum_EngineFeatureRenderer(
+		const ktk::string& renderer_name);
 } // namespace helper
 
 KOTEK_END_NAMESPACE_CORE

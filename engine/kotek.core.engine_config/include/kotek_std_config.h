@@ -59,32 +59,23 @@ public:
 	void SetFeatureStatus(
 		eEngineFeatureWindow id, bool status) noexcept override;
 
-	/// \~english @brief As a standard you can specify two versions, but one
-	/// uses as loading and the second one for fallback scenarios. @see
-	/// doxygen_standards_about_renderers
-	/// @param version your version of eEngineSupportedOpenGLVersion
-	/// @param status true means it will be added to set otherwise it will be
-	/// removed from set
 	void SetFeatureStatus(
 		eEngineSupportedOpenGLVersion version, bool status) noexcept override;
 
-	/// \~english @brief As a standard you can specify two versions, but one
-	/// uses as loading and the second one for fallback scenarios. @see
-	/// doxygen_standards_about_renderers
-	/// @param version your version of eEngineSupportedDirectXVersion
-	/// @param status true means it will be added to set otherwise it will be
-	/// removed from set
 	void SetFeatureStatus(
 		eEngineSupportedDirectXVersion version, bool status) noexcept override;
 
-	/// \~english @brief As a standard you can specify two versions, but one
-	/// uses as loading and the second one for fallback scenarios. @see
-	/// doxygen_standards_about_renderers
-	/// @param version your version of eEngineSupportedVulkanVersion
-	/// @param status true means it will be added to set otherwise it will be
-	/// removed from set
 	void SetFeatureStatus(
 		eEngineSupportedVulkanVersion version, bool status) noexcept override;
+
+	void SetFeatureStatus(const ktk::vector<eEngineSupportedDirectXVersion>&
+			fallback_versions) noexcept override;
+	void SetFeatureStatus(const ktk::vector<eEngineSupportedOpenGLVersion>&
+			fallback_versions) noexcept override;
+	void SetFeatureStatus(const ktk::vector<eEngineSupportedVulkanVersion>&
+			fallback_versions) noexcept override;
+	void SetFeatureStatus(
+		const ktk::vector<eEngineFeatureRenderer>& gapis) noexcept override;
 
 	eEngineFeature GetEngineFeature(void) const noexcept override;
 	eEngineFeatureRender GetEngineFeatureRender(void) const noexcept override;
@@ -93,18 +84,20 @@ public:
 	eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept override;
 	eEngineFeatureWindow GetEngineFeatureWindow(void) const noexcept override;
 
-	eEngineSupportedDirectXVersion GetCurrentDirectXVersion(
+	eEngineSupportedDirectXVersion GetDirectXVersionForLoading(
 		void) const noexcept override;
-	eEngineSupportedOpenGLVersion GetCurrentOpenGLVersion(
+	eEngineSupportedOpenGLVersion GetOpenGLVersionForLoading(
 		void) const noexcept override;
-	eEngineSupportedVulkanVersion GetCurrentVulkanVersion(
+	eEngineSupportedVulkanVersion GetVulkanVersionForLoading(
 		void) const noexcept override;
 
-	eEngineSupportedDirectXVersion GetFallbackDirectXVersion(
+	const ktk::vector<eEngineSupportedDirectXVersion>&
+	GetFallbackDirectXVersions(void) const noexcept override;
+	const ktk::vector<eEngineSupportedOpenGLVersion>& GetFallbackOpenGLVersions(
 		void) const noexcept override;
-	eEngineSupportedOpenGLVersion GetFallbackOpenGLVersion(
+	const ktk::vector<eEngineSupportedVulkanVersion>& GetFallbackVulkanVersions(
 		void) const noexcept override;
-	eEngineSupportedVulkanVersion GetFallbackVulkanVersion(
+	const ktk::vector<eEngineFeatureRenderer>& GetFallbackRendereres(
 		void) const noexcept override;
 
 	/// @brief
@@ -245,7 +238,7 @@ public:
 	 */
 	void* Get_UserLibrary(void) noexcept override;
 
-	// we can't standardize the types of fields so we provide these not virtual
+	// we can't standardize the types of fields so we provide these not
 	// methods for accessing through casting, otherwise user must implement own
 	// version of engine config with his interface if he doesn't like something
 	// in ours. These methods for situation where user wants to implement a
@@ -255,13 +248,6 @@ public:
 	// nobody will do that but who knows...
 	// Standartization means standartization and you must handle all possible
 	// situations...
-
-	const ktk::unordered_set<eEngineSupportedDirectXVersion>&
-	Get_SpecifiedVersionsDirectX(void) const noexcept;
-	const ktk::unordered_set<eEngineSupportedOpenGLVersion>&
-	Get_SpecifiedVersionsOpenGL(void) const noexcept;
-	const ktk::unordered_set<eEngineSupportedVulkanVersion>&
-	Get_SpecifiedVersionsVulkan(void) const noexcept;
 
 private:
 	void Parse_CommandLine(void) noexcept;
@@ -275,12 +261,13 @@ private:
 	eEngineFeatureRenderer m_engine_feature_renderer_flags;
 	eEngineFeatureSDK m_engine_feature_sdk_flags;
 	eEngineFeatureWindow m_engine_feature_window_flags;
-	ktk::unordered_set<eEngineSupportedDirectXVersion>
-		m_engine_specified_versions_directx;
-	ktk::unordered_set<eEngineSupportedOpenGLVersion>
-		m_engine_specified_versions_opengl;
-	ktk::unordered_set<eEngineSupportedVulkanVersion>
-		m_engine_specified_versions_vulkan;
+	eEngineSupportedOpenGLVersion m_version_for_loading_opengl;
+	eEngineSupportedDirectXVersion m_version_for_loading_directx;
+	eEngineSupportedVulkanVersion m_version_for_loading_vulkan;
+	ktk::vector<eEngineFeatureRenderer> m_fallback_renderers;
+	ktk::vector<eEngineSupportedDirectXVersion> m_fallback_directx_versions;
+	ktk::vector<eEngineSupportedOpenGLVersion> m_fallback_opengl_versions;
+	ktk::vector<eEngineSupportedVulkanVersion> m_fallback_vulkan_versions;
 	ktk::unordered_set<ktk::string> m_parsed_command_line_arguments;
 	ktk::dll::shared_library m_user_dll;
 };

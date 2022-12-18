@@ -57,7 +57,8 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 			"you pass command line to application for initializing {}",
 			Kotek::Core::helper::Translate_EngineSupportedVulkanVersion(
 				p_engine_config->GetVulkanVersionFromCommandLine()));
-		status = InitializeModule_Render_VK(main_manager);
+		status = InitializeModule_Render_VK(
+			main_manager, p_engine_config->GetVulkanVersionFromCommandLine());
 	}
 	else
 	{
@@ -83,11 +84,12 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		if (is_gl)
 		{
 			status = InitializeModule_Render_GL(
-				main_manager, p_engine_config->GetCurrentOpenGLVersion());
+				main_manager, p_engine_config->GetOpenGLVersionForLoading());
 		}
 		else if (is_vk)
 		{
-			status = InitializeModule_Render_VK(main_manager);
+			status = InitializeModule_Render_VK(
+				main_manager, p_engine_config->GetVulkanVersionForLoading());
 		}
 		else if (is_dx)
 		{
@@ -96,6 +98,82 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		else
 		{
 			KOTEK_ASSERT(false, "todo: finish other renderers like angle etc");
+		}
+	}
+
+	if (!status)
+	{
+		const auto& enum_renderers = p_engine_config->GetFallbackRendereres();
+
+		for (auto renderer : enum_renderers)
+		{
+			bool is_inited{};
+
+			switch (renderer)
+			{
+			case Core::eEngineFeatureRenderer::kEngine_Render_Renderer_ANGLE:
+			{
+				break;
+			}
+			case Core::eEngineFeatureRenderer::kEngine_Render_Renderer_Software:
+			{
+				break;
+			}
+			case Core::eEngineFeatureRenderer::
+				kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
+			{
+				const auto& enum_vk_versions =
+					p_engine_config->GetFallbackVulkanVersions();
+
+				for (auto version : enum_vk_versions)
+				{
+					is_inited =
+						InitializeModule_Render_VK(main_manager, version);
+
+					if (is_inited)
+						break;
+				}
+
+				break;
+			}
+			case Core::eEngineFeatureRenderer::
+				kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
+			{
+				const auto& enum_gl_versions =
+					p_engine_config->GetFallbackOpenGLVersions();
+
+				for (auto version : enum_gl_versions)
+				{
+					is_inited =
+						InitializeModule_Render_GL(main_manager, version);
+
+					if (is_inited)
+						break;
+				}
+
+				break;
+			}
+			case Core::eEngineFeatureRenderer::
+				kEngine_Render_Renderer_DirectX_SpecifiedByUser:
+			{
+				const auto& enum_dx_versions =
+					p_engine_config->GetFallbackDirectXVersions();
+
+				for (auto version : enum_dx_versions)
+				{
+					KOTEK_ASSERT(false, "not implemented");
+				}
+
+				break;
+			}
+			default:
+			{
+				KOTEK_ASSERT(false, "not implemented");
+			}
+
+				if (is_inited)
+					break;
+			}
 		}
 	}
 
