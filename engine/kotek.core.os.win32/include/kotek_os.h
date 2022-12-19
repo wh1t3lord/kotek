@@ -40,6 +40,7 @@
 	#endif
 
 	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
+		#define GLFW_INCLUDE_NONE
 		#include <GLFW/glfw3.h>
 
 		#define GLFW_EXPOSE_NATIVE_WIN32

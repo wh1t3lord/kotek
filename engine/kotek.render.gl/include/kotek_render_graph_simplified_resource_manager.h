@@ -1,5 +1,7 @@
 #pragma once
 
+#include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_CORE

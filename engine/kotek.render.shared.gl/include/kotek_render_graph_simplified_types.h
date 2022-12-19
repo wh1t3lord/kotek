@@ -20,38 +20,38 @@ namespace gl
 		ktkRenderGraphTextureInfo(void);
 		~ktkRenderGraphTextureInfo(void);
 
-		GLenum Get_Target(void) const noexcept;
-		void Set_Target(GLenum value) noexcept;
+		ktk::uint32_t Get_Target(void) const noexcept;
+		void Set_Target(ktk::uint32_t value) noexcept;
 
-		GLint Get_Level(void) const noexcept;
-		void Set_Level(GLint value) noexcept;
+		ktk::int32_t Get_Level(void) const noexcept;
+		void Set_Level(ktk::int32_t value) noexcept;
 
-		GLint Get_InternalFormat(void) const noexcept;
+		ktk::int32_t Get_InternalFormat(void) const noexcept;
 
-		GLsizei Get_Width(void) const noexcept;
-		void Set_Width(GLsizei value) noexcept;
+		ktk::int32_t Get_Width(void) const noexcept;
+		void Set_Width(ktk::int32_t value) noexcept;
 
-		GLsizei Get_Height(void) const noexcept;
-		void Set_Height(GLsizei value) noexcept;
+		ktk::int32_t Get_Height(void) const noexcept;
+		void Set_Height(ktk::int32_t value) noexcept;
 
-		GLsizei Get_Depth(void) const noexcept;
-		void Set_Depth(GLsizei value) noexcept;
+		ktk::int32_t Get_Depth(void) const noexcept;
+		void Set_Depth(ktk::int32_t value) noexcept;
 
-		GLint Get_Border(void) const noexcept;
-		void Set_Border(GLint value) noexcept;
+		ktk::int32_t Get_Border(void) const noexcept;
+		void Set_Border(ktk::int32_t value) noexcept;
 
-		GLenum Get_Format(void) const noexcept;
-		void Set_Format(GLenum value) noexcept;
+		ktk::uint32_t Get_Format(void) const noexcept;
+		void Set_Format(ktk::uint32_t value) noexcept;
 
 	private:
-		GLenum m_target;
-		GLint m_level;
-		GLint m_internalformat;
-		GLsizei m_width;
-		GLsizei m_height;
-		GLsizei m_depth;
-		GLint m_border;
-		GLenum m_format;
+		ktk::uint32_t m_target;
+		ktk::int32_t m_level;
+		ktk::int32_t m_internalformat;
+		ktk::int32_t m_width;
+		ktk::int32_t m_height;
+		ktk::int32_t m_depth;
+		ktk::int32_t m_border;
+		ktk::uint32_t m_format;
 	};
 
 	class ktkRenderGraphBufferInfo

@@ -13,13 +13,13 @@ namespace gl
 	ktkShaderModule::~ktkShaderModule(void) {}
 
 	void ktkShaderModule::Set_Shader(
-		gl::eShaderType type, GLuint handle_id) noexcept
+		gl::eShaderType type, ktk::uint32_t handle_id) noexcept
 	{
 		this->m_shader_type = type;
 		this->m_shader_handle = handle_id;
 	}
 
-	GLuint ktkShaderModule::Get_Shader(void) const noexcept
+	ktk::uint32_t ktkShaderModule::Get_Shader(void) const noexcept
 	{
 		return this->m_shader_handle;
 	}

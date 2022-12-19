@@ -101,76 +101,76 @@ namespace gl
 
 	ktkRenderGraphTextureInfo::~ktkRenderGraphTextureInfo(void) {}
 
-	GLenum ktkRenderGraphTextureInfo::Get_Target(void) const noexcept
+	ktk::uint32_t ktkRenderGraphTextureInfo::Get_Target(void) const noexcept
 	{
 		return this->m_target;
 	}
 
-	void ktkRenderGraphTextureInfo::Set_Target(GLenum value) noexcept
+	void ktkRenderGraphTextureInfo::Set_Target(ktk::uint32_t value) noexcept
 	{
 		this->m_target = value;
 	}
 
-	GLint ktkRenderGraphTextureInfo::Get_Level(void) const noexcept
+	ktk::int32_t ktkRenderGraphTextureInfo::Get_Level(void) const noexcept
 	{
 		return this->m_level;
 	}
 
-	void ktkRenderGraphTextureInfo::Set_Level(GLint value) noexcept
+	void ktkRenderGraphTextureInfo::Set_Level(ktk::int32_t value) noexcept
 	{
 		this->m_level = value;
 	}
 
-	GLint ktkRenderGraphTextureInfo::Get_InternalFormat(void) const noexcept
+	ktk::int32_t ktkRenderGraphTextureInfo::Get_InternalFormat(void) const noexcept
 	{
 		return this->m_internalformat;
 	}
 
-	GLsizei ktkRenderGraphTextureInfo::Get_Width(void) const noexcept
+	ktk::int32_t ktkRenderGraphTextureInfo::Get_Width(void) const noexcept
 	{
 		return this->m_width;
 	}
 
-	void ktkRenderGraphTextureInfo::Set_Width(GLsizei value) noexcept
+	void ktkRenderGraphTextureInfo::Set_Width(ktk::int32_t value) noexcept
 	{
 		this->m_width = value;
 	}
 
-	GLsizei ktkRenderGraphTextureInfo::Get_Height(void) const noexcept
+	ktk::int32_t ktkRenderGraphTextureInfo::Get_Height(void) const noexcept
 	{
 		return this->m_height;
 	}
 
-	void ktkRenderGraphTextureInfo::Set_Height(GLsizei value) noexcept
+	void ktkRenderGraphTextureInfo::Set_Height(ktk::int32_t value) noexcept
 	{
 		this->m_height = value;
 	}
 
-	GLsizei ktkRenderGraphTextureInfo::Get_Depth(void) const noexcept
+	ktk::int32_t ktkRenderGraphTextureInfo::Get_Depth(void) const noexcept
 	{
 		return this->m_depth;
 	}
 
-	void ktkRenderGraphTextureInfo::Set_Depth(GLsizei value) noexcept
+	void ktkRenderGraphTextureInfo::Set_Depth(ktk::int32_t value) noexcept
 	{
 		this->m_depth = value;
 	}
 
-	GLint ktkRenderGraphTextureInfo::Get_Border(void) const noexcept
+	ktk::int32_t ktkRenderGraphTextureInfo::Get_Border(void) const noexcept
 	{
 		return this->m_border;
 	}
-	void ktkRenderGraphTextureInfo::Set_Border(GLint value) noexcept
+	void ktkRenderGraphTextureInfo::Set_Border(ktk::int32_t value) noexcept
 	{
 		this->m_border = value;
 	}
 
-	GLenum ktkRenderGraphTextureInfo::Get_Format(void) const noexcept
+	ktk::uint32_t ktkRenderGraphTextureInfo::Get_Format(void) const noexcept
 	{
 		return this->m_format;
 	}
 
-	void ktkRenderGraphTextureInfo::Set_Format(GLenum value) noexcept
+	void ktkRenderGraphTextureInfo::Set_Format(ktk::uint32_t value) noexcept
 	{
 		this->m_format = value;
 	}

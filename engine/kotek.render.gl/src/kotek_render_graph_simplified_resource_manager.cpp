@@ -3,6 +3,8 @@
 #include "../include/kotek_render_resource_manager.h"
 #include "../include/kotek_render_shader_manager.h"
 
+#include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 namespace gl
