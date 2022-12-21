@@ -40,14 +40,14 @@ void test_file_create_pretty_output()
 
 	instance.Write("test_field1", "data");
 	instance.Write("test_field2", "data2");
-	instance.Write<const ktk::string&>("ktk::string", test);
+	instance.Write<ktk::string>("ktk::string", test);
 
 		#ifdef KOTEK_USE_UNICODE
-	instance.Write<const ktk::string&>("KOTEK_TEXT", KOTEK_TEXT("いくつか"));
-	instance.Write("wchar_t", L"いくつか");
-	instance.Write("char8_t", u8"いくつか");
-	instance.Write("char16_t", u"いくつか");
-	instance.Write("char32_t", U"いくつか");
+	instance.Write<ktk::string>("KOTEK_TEXT", KOTEK_TEXT("いくつか"));
+	instance.Write<ktk::wstring>("wchar_t", L"いくつか");
+	instance.Write<ktk::u8string>("char8_t", u8"いくつか");
+	instance.Write<ktk::u16string>("char16_t", u"いくつか");
+	instance.Write<ktk::u32string>("char32_t", U"いくつか");
 		#endif
 
 	ktkResourceSaverManager saver_instance;

@@ -15,8 +15,8 @@ inline void tag_invoke(const ktk::json::value_from_tag&,
 {
 	Kotek::ktk::json::object str;
 
-	str["type"] = "char8_t";
-	str["raw_string"] = {casted};
+	str["type"] = helper::ObtainCharTypeName_FromString();
+	str["raw_string"] = {data.get_as_is()};
 
 	write_to = str;
 }
@@ -90,71 +90,98 @@ inline ktk::string tag_invoke(const ktk::json::value_to_tag<ktk::string>&,
 	return result;
 }
 
+inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+	Kotek::ktk::json::value& write_to, const ktk::u8string& str)
+{
+	Kotek::ktk::json::object result;
+
+	result["type"] = "char8_t";
+	result["raw_string"] = {str};
+
+	write_to = result;
+}
+
+inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+	Kotek::ktk::json::value& write_to, const ktk::u16string& str)
+{
+	Kotek::ktk::json::object result;
+
+	result["type"] = "char16_t";
+	result["raw_string"] = {str};
+
+	write_to = result;
+}
+
+inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+	Kotek::ktk::json::value& write_to, const ktk::u32string& str)
+{
+	Kotek::ktk::json::object result;
+
+	result["type"] = "char32_t";
+	result["raw_string"] = {str};
+
+	write_to = result;
+}
+
+inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+	Kotek::ktk::json::value& write_to, const ktk::wstring& str)
+{
+	Kotek::ktk::json::object result;
+
+	result["type"] = "wchar_t";
+	result["raw_string"] = {str};
+
+	write_to = result;
+}
+
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
 
 namespace std
 {
+	inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+		Kotek::ktk::json::value& write_to, const u8string& str)
+	{
+		Kotek::ktk::json::object result;
 
-}
+		result["type"] = "char8_t";
+		result["raw_string"] = {str};
 
-inline void tag_invoke(
-	const KOTEK_USE_NAMESPACE_KOTEK ktk::json::value_from_tag&,
-	KOTEK_USE_NAMESPACE_KOTEK ktk::json::value& write_to, const char8_t* p_string)
-{
-	Kotek::ktk::u8string casted = p_string;
+		write_to = result;
+	}
 
-	Kotek::ktk::json::object str;
+	inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+		Kotek::ktk::json::value& write_to, const u16string& str)
+	{
+		Kotek::ktk::json::object result;
 
-	str["type"] = "char8_t";
-	str["raw_string"] = {casted};
+		result["type"] = "char16_t";
+		result["raw_string"] = {str};
 
-	write_to = str;
-}
+		write_to = result;
+	}
 
-inline void tag_invoke(
-	const KOTEK_USE_NAMESPACE_KOTEK ktk::json::value_from_tag&,
-	KOTEK_USE_NAMESPACE_KOTEK ktk::json::value& write_to,
-	const char16_t* p_string)
-{
-	Kotek::ktk::u16string casted = p_string;
+	inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+		Kotek::ktk::json::value& write_to, const u32string& str)
+	{
+		Kotek::ktk::json::object result;
 
-	Kotek::ktk::json::object str;
+		result["type"] = "char32_t";
+		result["raw_string"] = {str};
 
-	str["type"] = "char16_t";
-	str["raw_string"] = {casted};
+		write_to = result;
+	}
 
-	write_to = str;
-}
+	inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+		Kotek::ktk::json::value& write_to, const wstring& str)
+	{
+		Kotek::ktk::json::object result;
 
-inline void tag_invoke(
-	const KOTEK_USE_NAMESPACE_KOTEK ktk::json::value_from_tag&,
-	KOTEK_USE_NAMESPACE_KOTEK ktk::json::value& write_to,
-	const char32_t* p_string)
-{
-	Kotek::ktk::u32string casted = p_string;
+		result["type"] = "wchar_t";
+		result["raw_string"] = {str};
 
-	Kotek::ktk::json::object str;
-
-	str["type"] = "char32_t";
-	str["raw_string"] = {casted};
-
-	write_to = str;
-}
-
-inline void tag_invoke(
-	const KOTEK_USE_NAMESPACE_KOTEK ktk::json::value_from_tag&,
-	KOTEK_USE_NAMESPACE_KOTEK ktk::json::value& write_to,
-	const wchar_t* p_string)
-{
-	Kotek::ktk::wstring casted = p_string;
-
-	Kotek::ktk::json::object str;
-
-	str["type"] = "wchar_t";
-	str["raw_string"] = {casted};
-
-	write_to = str;
-}
+		write_to = result;
+	}
+} // namespace std
 
 #endif

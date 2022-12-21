@@ -75,7 +75,7 @@ public:
 	template <typename DataType>
 	void Write(const ktk::string& field_name, DataType data) noexcept
 	{
-		this->m_json[field_name.get_as_legacy().c_str()] = data;
+		this->m_json[field_name.get_as_legacy().c_str()] = ktk::json::value_from(data);
 	}
 
 	ktk::json::value& operator[](ktk::json::string_view key) noexcept 
