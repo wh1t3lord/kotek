@@ -21,6 +21,11 @@
 #include <kotek.core.ecs/include/kotek_core_ecs.h>
 #include <kotek.core.engine_config/include/kotek_core_engine_config.h>
 
+#include "kotek_json_casting_math_matrix.h"
+#include "kotek_json_casting_math_vector.h"
+#include "kotek_json_casting_std_vector.h"
+#include "kotek_json_casting_string.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -34,6 +39,7 @@ void RegisterTests_String_ForModule_Core(void);
 void RegisterTests_Filesystem_ForModule_Core(void);
 void RegisterTests_Math_ForModule_Core(void);
 void RegisterTests_Translation_ForModule_Enum_Core(void);
+void RegisterTests_Json_ForModule_Core(void);
 void RegisterAllTests(void);
 
 KOTEK_END_NAMESPACE_CORE

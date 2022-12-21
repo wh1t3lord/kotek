@@ -61,16 +61,16 @@ namespace Game
 			"can't load text: {}", path_to_system_json.c_str());
 
 		const auto& field_initialize_callback_name =
-			file.Get_String(Core::kSysInfoFieldName_InitializeCallback);
+			file.Get<ktk::string>(Core::kSysInfoFieldName_InitializeCallback);
 		const auto& field_shutdown_callback_name =
-			file.Get_String(Core::kSysInfoFieldName_ShutdownCallback);
+			file.Get<ktk::string>(Core::kSysInfoFieldName_ShutdownCallback);
 		const auto& field_update_callback_name =
-			file.Get_String(Core::kSysInfoFieldName_UpdateCallback);
+			file.Get<ktk::string>(Core::kSysInfoFieldName_UpdateCallback);
 
 		const auto& field_library_name =
-			file.Get_String(Core::kSysInfoFieldName_UserLibraryName);
+			file.Get<ktk::string>(Core::kSysInfoFieldName_UserLibraryName);
 		const auto& field_initialize_render_callback_name =
-			file.Get_String(Core::kSysInfoFieldName_InitializeCallback_Render);
+			file.Get<ktk::string>(Core::kSysInfoFieldName_InitializeCallback_Render);
 
 		KOTEK_ASSERT(field_library_name.empty() == false,
 			"you can't have an invalid name of library, because you need "

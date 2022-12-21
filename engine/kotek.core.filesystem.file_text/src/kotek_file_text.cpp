@@ -172,11 +172,6 @@ bool ktkFileText::Save(
 }
 */
 
-ktk::string ktkFileText::Get_String(const ktk::string& key_name) const noexcept
-{
-	return this->m_json.GetString(key_name);
-}
-
 const ktk::json::object& ktkFileText::Get_Json(void) const noexcept
 {
 	return this->m_json.GetObject();

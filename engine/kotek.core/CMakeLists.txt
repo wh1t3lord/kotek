@@ -20,7 +20,8 @@ endif()
 if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON")
 	message("[${PROJECT_NAME}]: adding tests for runtime in project ${PROJECT_NAME}")
 	set(to_include_tests 
-		"tests/kotek_core_test_filesystem.cpp")
+		"tests/kotek_core_test_filesystem.cpp"
+		"tests/kotek_core_test_json.cpp")
 elseif("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "OFF")
 	# TODO: add support for own projects for unit testing
 	message("[${PROJECT_NAME}]: creating test projects for project ${PROJECT_NAME}")
@@ -35,6 +36,12 @@ message("[${PROJECT_NAME}]: files to attach (KOTEK_TESTS): ${to_include_tests}")
 add_library(${PROJECT_NAME} STATIC 
 	"src/main_core_dll.cpp"
 	"include/kotek_core.h"
+	"include/kotek_json_casting_math_matrix.h"
+	"include/kotek_json_casting_math_vector.h"
+	"include/kotek_json_casting_std_vector.h"
+	"include/kotek_json_casting_std_map.h"
+	"include/kotek_json_casting_string.h"
+	"include/kotek_json_casting_other.h"
 	${to_include_tests}
 )
 

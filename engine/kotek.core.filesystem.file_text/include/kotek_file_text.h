@@ -60,8 +60,6 @@ public:
 		return this->m_json.Get<ReturnType>(key_name);
 	}
 
-	ktk::string Get_String(const ktk::string& key_name) const noexcept;
-
 	const ktk::json::object& Get_Json(void) const noexcept;
 
 	bool IsKeyExist(const ktk::string& field_name) const noexcept;
