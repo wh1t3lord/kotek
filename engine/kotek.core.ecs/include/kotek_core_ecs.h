@@ -6,7 +6,7 @@
 #include "kotek_component_transform.h"
 #include "kotek_component_visibility.h"
 #include "kotek_component_geometry.h"
-
+#include "kotek_component_model.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
