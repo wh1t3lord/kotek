@@ -19,7 +19,7 @@ inline void tag_invoke(const ktk::json::value_from_tag&,
 	{
 		Kotek::ktk::json::object str;
 
-		Kotek::ktk::json::array raw_string = {data.get_as_is()};
+		Kotek::ktk::json::array raw_string(data.cbegin(), data.cend());
 		str["type"] = helper::ObtainCharTypeName_FromString();
 		str["raw_string"] = raw_string;
 		write_to = str;

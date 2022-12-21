@@ -6,7 +6,8 @@
 #ifdef KOTEK_USE_BOOST_LIBRARY
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
-KOTEK_BEGIN_NAMESPACE_CORE
+KOTEK_BEGIN_NAMESPACE_KTK
+KOTEK_BEGIN_NAMESPACE_MATH
 
 inline void tag_invoke(const ktk::json::value_from_tag&,
 	ktk::json::value& write_to, const ktk::math::matrix2x2f& data)
@@ -156,7 +157,8 @@ inline ktk::math::matrix4x4f tag_invoke(
 	return result;
 }
 
-KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_MATH
+KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
 
 #endif
