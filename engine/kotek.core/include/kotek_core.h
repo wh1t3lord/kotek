@@ -25,6 +25,7 @@
 #include "kotek_json_casting_math_vector.h"
 #include "kotek_json_casting_std_vector.h"
 #include "kotek_json_casting_string.h"
+#include "kotek_json_casting_other.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 

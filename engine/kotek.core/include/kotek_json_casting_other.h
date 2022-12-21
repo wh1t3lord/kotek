@@ -8,13 +8,14 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-void tag_invoke(const ktk::json::value_from_tag&, ktk::json::value& write_to,
+inline void tag_invoke(const ktk::json::value_from_tag&,
+	ktk::json::value& write_to,
 	const ktkJson& data)
 {
 	write_to = data.GetObject();
 }
 
-ktkJson tag_invoke(
+inline ktkJson tag_invoke(
 	const ktk::json::value_to_tag<ktkJson>&, const ktk::json::value& read_from)
 {
 	const ktk::json::object& object = read_from.as_object();
