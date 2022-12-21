@@ -13,7 +13,14 @@ void test_json_std_vector()
 
 void test_json_std_map() {}
 
-void test_json_vector1f() {}
+void test_json_vector1f() 
+{
+	ktk::math::vector1f test(10.0f);
+
+	auto value = ktk::json::value_from(test);
+
+	KOTEK_ASSERT(ktk::json::serialize(value) == "([10.0f])", "sas");
+}
 
 void test_json_vector2f() {}
  
@@ -39,6 +46,8 @@ void RegisterTests_Json_ForModule_Core(void)
 
 	p_suite->add(BOOST_TEST_CASE(&test_json_vector1f));
 	p_suite->add(BOOST_TEST_CASE(&test_json_vector2f));
+	p_suite->add(BOOST_TEST_CASE(&test_json_vector3f));
+	p_suite->add(BOOST_TEST_CASE(&test_json_vector4f));
 
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
