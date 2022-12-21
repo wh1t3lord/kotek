@@ -13,81 +13,105 @@ KOTEK_BEGIN_NAMESPACE_KTK
 inline void tag_invoke(const ktk::json::value_from_tag&,
 	ktk::json::value& write_to, const ktk::string& data)
 {
-	Kotek::ktk::json::object str;
+	ktk::string type = helper::ObtainCharTypeName_FromString();
 
-	str["type"] = helper::ObtainCharTypeName_FromString();
-	str["raw_string"] = {data.get_as_is()};
+	if (type != "char")
+	{
+		Kotek::ktk::json::object str;
 
-	write_to = str;
+		Kotek::ktk::json::array raw_string = {data.get_as_is()};
+		str["type"] = helper::ObtainCharTypeName_FromString();
+		str["raw_string"] = raw_string;
+		write_to = str;
+	}
+	else
+	{
+		Kotek::ktk::json::string str;
+
+		str = data.get_as_legacy().c_str();
+
+		write_to = str;
+	}
 }
 
 inline ktk::string tag_invoke(const ktk::json::value_to_tag<ktk::string>&,
 	const ktk::json::value& read_from)
 {
-	const ktk::json::object& str = read_from.as_object();
-
-	ktk::tstring result;
-
-	const auto& char_name = str.at("type").as_string();
-
-	if (char_name == "char8_t")
+	if (read_from.is_object())
 	{
-		ktk::u8string buffer;
+		const ktk::json::object& str = read_from.as_object();
 
-		const auto& raw_number_string_buffer = str.at("raw_string").as_array();
+		ktk::tstring result;
+		const auto& char_name = str.at("type").as_string();
 
-		for (const auto number : raw_number_string_buffer)
+		if (char_name == "char8_t")
 		{
-			buffer += number.as_int64();
+			ktk::u8string buffer;
+
+			const auto& raw_number_string_buffer =
+				str.at("raw_string").as_array();
+
+			for (const auto number : raw_number_string_buffer)
+			{
+				buffer += number.as_int64();
+			}
+
+			result = ktk::tstring(buffer.begin(), buffer.end());
+		}
+		else if (char_name == "char16_t")
+		{
+			ktk::u16string buffer;
+
+			const auto& raw_number_string_buffer =
+				str.at("raw_string").as_array();
+
+			for (const auto number : raw_number_string_buffer)
+			{
+				buffer += number.as_int64();
+			}
+
+			result = ktk::tstring(buffer.begin(), buffer.end());
+		}
+		else if (char_name == "char32_t")
+		{
+			ktk::u32string buffer;
+
+			const auto& raw_number_string_buffer =
+				str.at("raw_string").as_array();
+
+			for (const auto number : raw_number_string_buffer)
+			{
+				buffer += number.as_int64();
+			}
+
+			result = ktk::tstring(buffer.begin(), buffer.end());
+		}
+		else if (char_name == "wchar_t")
+		{
+			ktk::wstring buffer;
+
+			const auto& raw_number_string_buffer =
+				str.at("raw_string").as_array();
+
+			for (const auto number : raw_number_string_buffer)
+			{
+				buffer += number.as_int64();
+			}
+
+			result = ktk::tstring(buffer.begin(), buffer.end());
+		}
+		else
+		{
+			KOTEK_ASSERT(
+				false, "can't find an appropriate casting for your type");
 		}
 
-		result = ktk::tstring(buffer.begin(), buffer.end());
-	}
-	else if (char_name == "char16_t")
-	{
-		ktk::u16string buffer;
-
-		const auto& raw_number_string_buffer = str.at("raw_string").as_array();
-
-		for (const auto number : raw_number_string_buffer)
-		{
-			buffer += number.as_int64();
-		}
-
-		result = ktk::tstring(buffer.begin(), buffer.end());
-	}
-	else if (char_name == "char32_t")
-	{
-		ktk::u32string buffer;
-
-		const auto& raw_number_string_buffer = str.at("raw_string").as_array();
-
-		for (const auto number : raw_number_string_buffer)
-		{
-			buffer += number.as_int64();
-		}
-
-		result = ktk::tstring(buffer.begin(), buffer.end());
-	}
-	else if (char_name == "wchar_t")
-	{
-		ktk::wstring buffer;
-
-		const auto& raw_number_string_buffer = str.at("raw_string").as_array();
-
-		for (const auto number : raw_number_string_buffer)
-		{
-			buffer += number.as_int64();
-		}
-
-		result = ktk::tstring(buffer.begin(), buffer.end());
+		return result;
 	}
 	else
 	{
-		KOTEK_ASSERT(false, "can't find an appropriate casting for your type");
+		return ktk::string(read_from.as_string().c_str());
 	}
-
-	return result;
 }
 
 inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
@@ -95,8 +119,10 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 {
 	Kotek::ktk::json::object result;
 
+	Kotek::ktk::json::array raw_string(str.begin(), str.end());
+
 	result["type"] = "char8_t";
-	result["raw_string"] = {str};
+	result["raw_string"] = raw_string;
 
 	write_to = result;
 }
@@ -106,8 +132,10 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 {
 	Kotek::ktk::json::object result;
 
+	Kotek::ktk::json::array raw_string(str.begin(), str.end());
+
 	result["type"] = "char16_t";
-	result["raw_string"] = {str};
+	result["raw_string"] = raw_string;
 
 	write_to = result;
 }
@@ -117,8 +145,10 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 {
 	Kotek::ktk::json::object result;
 
+	Kotek::ktk::json::array raw_string(str.begin(), str.end());
+
 	result["type"] = "char32_t";
-	result["raw_string"] = {str};
+	result["raw_string"] = raw_string;
 
 	write_to = result;
 }
@@ -128,8 +158,10 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 {
 	Kotek::ktk::json::object result;
 
+	Kotek::ktk::json::array raw_string(str.begin(), str.end());
+
 	result["type"] = "wchar_t";
-	result["raw_string"] = {str};
+	result["raw_string"] = raw_string;
 
 	write_to = result;
 }
@@ -144,8 +176,10 @@ namespace std
 	{
 		Kotek::ktk::json::object result;
 
+		Kotek::ktk::json::array raw_string(str.begin(), str.end());
+
 		result["type"] = "char8_t";
-		result["raw_string"] = {str};
+		result["raw_string"] = raw_string;
 
 		write_to = result;
 	}
@@ -155,8 +189,10 @@ namespace std
 	{
 		Kotek::ktk::json::object result;
 
+		Kotek::ktk::json::array raw_string(str.begin(), str.end());
+
 		result["type"] = "char16_t";
-		result["raw_string"] = {str};
+		result["raw_string"] = raw_string;
 
 		write_to = result;
 	}
@@ -166,8 +202,10 @@ namespace std
 	{
 		Kotek::ktk::json::object result;
 
+		Kotek::ktk::json::array raw_string(str.begin(), str.end());
+
 		result["type"] = "char32_t";
-		result["raw_string"] = {str};
+		result["raw_string"] = raw_string;
 
 		write_to = result;
 	}
@@ -177,8 +215,10 @@ namespace std
 	{
 		Kotek::ktk::json::object result;
 
+		Kotek::ktk::json::array raw_string(str.begin(), str.end());
+
 		result["type"] = "wchar_t";
-		result["raw_string"] = {str};
+		result["raw_string"] = raw_string;
 
 		write_to = result;
 	}

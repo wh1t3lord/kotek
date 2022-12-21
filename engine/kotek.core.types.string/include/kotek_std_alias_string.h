@@ -71,7 +71,7 @@ namespace helper
 		}
 		else
 		{
-			return "";
+			return "char";
 		}
 	}
 } // namespace helper
