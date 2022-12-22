@@ -7,6 +7,7 @@
 	#include <ShellScalingApi.h>
 	#include <dwmapi.h>
 	#include <windows.h>
+	#include <commdlg.h>
 
 	#ifdef KOTEK_USE_VULKAN
 		#define VK_USE_PLATFORM_WIN32_KHR
