@@ -16,50 +16,7 @@ namespace Kotek
 	{
 		namespace ecs
 		{
-			class ktkComponentInput
-			{
-				KOTEK_COMPONENT(ktkComponentInput)
 
-			public:
-				ktkComponentInput(void);
-				~ktkComponentInput(void);
-
-				float GetPositionMouseX(void) const noexcept;
-
-				float GetPositionMouseY(void) const noexcept;
-
-				void SetPositionMouseX(float value) noexcept;
-
-				void SetPositionMouseY(float value) noexcept;
-
-				float GetOffsetMousePositionX(void) const noexcept;
-
-				float GetOffsetMousePositionY(void) const noexcept;
-
-				void SetOffsetMousePositionX(float value) noexcept;
-
-				void SetOffsetMousePositionY(float value) noexcept;
-
-				float GetPositionMousePreviousX(void) const noexcept;
-
-				float GetPositionMousePreviousY(void) const noexcept;
-
-				void SetPositionMousePreviousX(float value) noexcept;
-
-				void SetPositionMousePreviousY(float value) noexcept;
-
-				void Clear(void) noexcept;
-				void DrawImGui(
-					Kotek::Core::ktkMainManager* main_manager) noexcept;
-
-			private:
-				float m_position_mouse_x;
-				float m_position_mouse_y;
-				float m_position_mouse_previous_x;
-				float m_position_mouse_previous_y;
-				float m_offset_mouse_position_x;
-				float m_offset_mouse_position_y;
-			};
 		} // namespace ecs
 	}     // namespace Game
 } // namespace Sandbox

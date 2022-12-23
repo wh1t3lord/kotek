@@ -1,13 +1,72 @@
 #pragma once
 
 #include "kotek_component_allocator.h"
-#include "kotek_component_camera.h"
-#include "kotek_component_input.h"
-#include "kotek_component_transform.h"
-#include "kotek_component_visibility.h"
-#include "kotek_component_geometry.h"
-#include "kotek_component_model.h"
-#include "kotek_component_actor.h"
+
+#include <kotek.core.defines_dependent.ecs/include/kotek_core_defines_dependent_ecs.h>
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_GAME
+KOTEK_BEGIN_NAMESPACE_ECS
+KOTEK_BEGIN_NAMESPACE_ECS_FRONTEND
+
+class ktkComponentHandleCamera
+{
+	KOTEK_COMPONENT(ktkComponentHandleCamera)
+
+public:
+	ktkComponentHandleCamera(void) {}
+	~ktkComponentHandleCamera(void) {}
+};
+
+class ktkComponentHandleInput
+{
+	KOTEK_COMPONENT(ktkComponentHandleInput)
+
+public:
+	ktkComponentHandleInput(void) {}
+	~ktkComponentHandleInput(void) {}
+};
+
+class ktkComponentHandleModel
+{
+	KOTEK_COMPONENT(ktkComponentHandleModel)
+
+public:
+	ktkComponentHandleModel(void) {}
+	~ktkComponentHandleModel(void) {}
+};
+
+class ktkComponentHandleTransform
+{
+	KOTEK_COMPONENT(ktkComponentHandleTransform)
+
+public:
+	ktkComponentHandleTransform(void) {}
+	~ktkComponentHandleTransform(void) {}
+};
+
+class ktkComponentHandleVisibility
+{
+	KOTEK_COMPONENT(ktkComponentHandleVisibility)
+
+public:
+	ktkComponentHandleVisibility(void) {}
+	~ktkComponentHandleVisibility(void) {}
+};
+
+class ktkComponentHandleActor
+{
+	KOTEK_COMPONENT(ktkComponentHandleActor)
+
+public:
+	ktkComponentHandleActor(void) {}
+	~ktkComponentHandleActor(void) {}
+};
+
+KOTEK_END_NAMESPACE_ECS_FRONTEND
+KOTEK_END_NAMESPACE_ECS
+KOTEK_END_NAMESPACE_GAME
+KOTEK_END_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE

@@ -5,7 +5,8 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 ktkWindow::ktkWindow(void) :
-	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr}
+	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr},
+	m_title_name{"Kotek Engine"}
 {
 }
 
@@ -94,7 +95,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedOpenGLVersion version)
 
 	KOTEK_ASSERT(version != Core::eEngineSupportedOpenGLVersion::kUnknown,
 		"you must pass a valid version of OpenGL what you want to initialize "
-	    "for");
+		"for");
 
 	switch (version)
 	{
@@ -228,8 +229,9 @@ void ktkWindow::Initialize(Core::eEngineSupportedOpenGLVersion version)
 
 	this->ObtainInformationAboutDisplay();
 
-	this->m_p_window = glfwCreateWindow(this->m_screen_size_width,
-		this->m_screen_size_height, "Kotek Engine", nullptr, nullptr);
+	this->m_p_window =
+		glfwCreateWindow(this->m_screen_size_width, this->m_screen_size_height,
+			this->m_title_name.get_as_legacy().c_str(), nullptr, nullptr);
 
 	if (!this->m_p_window)
 	{
@@ -239,7 +241,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedOpenGLVersion version)
 	}
 }
 
-void ktkWindow::Initialize(Core::eEngineSupportedDirectXVersion version) 
+void ktkWindow::Initialize(Core::eEngineSupportedDirectXVersion version)
 {
 	if (!glfwInit())
 	{
@@ -249,7 +251,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedDirectXVersion version)
 
 	KOTEK_ASSERT(version != Core::eEngineSupportedDirectXVersion::kUnknown,
 		"you must pass a valid version of DirectX what you want to initialize "
-	    "for");
+		"for");
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
@@ -276,7 +278,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedVulkanVersion version)
 
 	KOTEK_ASSERT(version != Core::eEngineSupportedVulkanVersion::kUnknown,
 		"you must pass a valid version of Vulkan what you want to initialize "
-	    "for");
+		"for");
 
 	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
@@ -336,6 +338,20 @@ void ktkWindow::PollEvents(void)
 bool ktkWindow::Is_NeedToClose(void)
 {
 	return glfwWindowShouldClose(this->m_p_window);
+}
+
+void ktkWindow::SetTitle(const char* p_utf8_or_char_string) noexcept
+{
+	if (this->m_p_window)
+	{
+		if (p_utf8_or_char_string)
+		{
+			ktk::string_legacy test = this->m_title_name.get_as_legacy();
+			test += p_utf8_or_char_string;
+
+			glfwSetWindowTitle(this->m_p_window, test.c_str());
+		}
+	}
 }
 
 void ktkWindow::ObtainInformationAboutDisplay(void)

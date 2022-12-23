@@ -17,32 +17,7 @@ namespace Kotek
 	{
 		namespace ecs
 		{
-			class ktkComponentTransform
-			{
-				KOTEK_COMPONENT(ktkComponentTransform)
-
-			public:
-				ktkComponentTransform(void);
-				~ktkComponentTransform(void);
-
-				const Kotek::ktk::math::vec3f_t& GetPosition(void) const noexcept;
-				void SetPosition(const Kotek::ktk::math::vec3f_t& pos) noexcept;
-
-				const Kotek::ktk::math::vec3f_t& GetScale(void) const noexcept;
-				void SetScale(const Kotek::ktk::math::vec3f_t& scale) noexcept;
-				
-				const Kotek::ktk::math::quatf_t& GetRotation(void) const noexcept;
-				void SetRotation(const Kotek::ktk::math::quatf_t& rot) noexcept;
-
-				void Clear(void) noexcept;
-				void DrawImGui(
-					Kotek::Core::ktkMainManager* main_manager) noexcept;
-				
-			private:
-				Kotek::ktk::math::vec3f_t m_position;
-				Kotek::ktk::math::vec3f_t m_scale;
-				Kotek::ktk::math::quatf_t m_rotation;
-			};
+		
 		} // namespace ecs
 	}     // namespace Game
 } // namespace Sandbox

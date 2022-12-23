@@ -497,6 +497,8 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_App_Close,
 	kConsoleCommand_App_Hide,
 	kConsoleCommand_App_Show,
+	kConsoleCommand_App_AddTextToExistedWindowTitle,
+
 	kConsoleCommand_Render_UploadAllResourcesToGPU,
 
 	kConsoleCommand_SDK_LoadScene,

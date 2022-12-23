@@ -18,11 +18,7 @@
 #include <imgui_impl_glfw.h>
 #include <imgui_impl_opengl3.h>
 
-
 #include "kotek_api_sdk.h"
-
-
-
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -775,6 +771,14 @@ public:
 
 	virtual int GetWidth(void) const noexcept = 0;
 	virtual int GetHeight(void) const noexcept = 0;
+
+	// TODO: be sure that if we don't use any window library we need to
+	// implement own and in such case we should return native HWND, linux
+	// window's handle and etc
+	/// @brief it depends. If you use GLFW = glfwWindow, SDL = sdl's window
+	/// handle and etc
+	/// @param
+	/// @return
 	virtual void* GetHandle(void) const noexcept = 0;
 	virtual void Initialize(Core::eEngineSupportedOpenGLVersion version) = 0;
 	virtual void Initialize(Core::eEngineSupportedDirectXVersion version) = 0;
@@ -783,6 +787,7 @@ public:
 	virtual void PollEvents(void) = 0;
 	virtual bool Is_NeedToClose(void) = 0;
 	virtual void MakeContextCurrent(void) noexcept = 0;
+	virtual void SetTitle(const char* p_utf8_or_char_string) noexcept = 0;
 };
 
 class ktkIWindowManager

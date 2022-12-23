@@ -49,6 +49,7 @@ public:
 	void MakeContextCurrent(void) noexcept override;
 	void PollEvents(void) override;
 	bool Is_NeedToClose(void) override;
+	void SetTitle(const char* p_utf8_or_char_string) noexcept override;
 
 private:
 	void ObtainInformationAboutDisplay(void);
