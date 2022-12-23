@@ -179,6 +179,29 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 			"can't create directory for shaders root folder");
 	}
 
+
+	status = this->AddGamedataFolderToStorage(
+		this->m_storage_paths.at(eFolderIndex::kFolderIndex_AI),
+		eFolderIndex::kFolderIndex_AI, KOTEK_TEXT("ai"));
+
+	if (status == false)
+	{
+		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
+						 eFolderIndex::kFolderIndex_AI)),
+			"can't create directory for ai");
+	}
+
+	status = this->AddGamedataFolderToStorage(
+		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Levels),
+		eFolderIndex::kFolderIndex_Levels, KOTEK_TEXT("levels"));
+
+	if (status == false)
+	{
+		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
+						 eFolderIndex::kFolderIndex_Levels)),
+			"can't create directory for levels");
+	}
+
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
 		eFolderIndex::kFolderIndex_Shaders_GLSL, KOTEK_TEXT("glsl"));

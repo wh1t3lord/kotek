@@ -23,6 +23,10 @@ if (WIN32)
 #target_link_libraries(${PROJECT_NAME} kotek.render.dx12)
 endif()
 
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.vk)
+
+# TODO: Vulkan you implement in the last stage of development. First gl and gl without shaderc!
+#target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.vk) 
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.software)

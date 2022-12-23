@@ -19,7 +19,9 @@ enum class eFolderIndex : ktk::enum_base_t
 	kFolderIndex_Shaders_WEBGPU,
 	kFolderindex_Shaders_SPV,
 	kFolderIndex_Models,
-	kFolderIndex_Sound,
+	kFolderIndex_Sounds,
+	kFolderIndex_Levels,
+	kFolderIndex_AI,
 	kFolderIndex_UserTests,
 	kFolderIndex_UserData_ShaderCache,
 	kFolderIndex_UserData
