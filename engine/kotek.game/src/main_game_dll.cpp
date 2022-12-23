@@ -360,8 +360,8 @@ namespace Engine
 	{
 		Serialize_Engine(p_main_manager);
 
-		UI::ShutdownModule_UI(p_main_manager);
 		Game::ShutdownModule_Game(p_main_manager);
+		UI::ShutdownModule_UI(p_main_manager);
 		Core::ShutdownModule_Core(p_main_manager);
 
 		return true;
