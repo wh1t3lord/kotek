@@ -1,8 +1,14 @@
 #include "../include/kotek_render.h"
 
 #include <kotek.render.model/include/kotek_render_model.h>
-#include <kotek.render.gl/include/kotek_render_gl.h>
-#include <kotek.render.vk/include/kotek_render_vk.h>
+
+#ifdef KOTEK_USE_RENDER_OPENGL
+	#include <kotek.render.gl/include/kotek_render_gl.h>
+#endif
+
+#ifdef KOTEK_USE_RENDER_VULKAN
+	#include <kotek.render.vk/include/kotek_render_vk.h>
+#endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
@@ -53,12 +59,14 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
 	{
+#ifdef KOTEK_USE_RENDER_VULKAN
 		KOTEK_MESSAGE(
 			"you pass command line to application for initializing {}",
 			Kotek::Core::helper::Translate_EngineSupportedVulkanVersion(
 				p_engine_config->GetVulkanVersionFromCommandLine()));
 		status = InitializeModule_Render_VK(
 			main_manager, p_engine_config->GetVulkanVersionFromCommandLine());
+#endif
 	}
 	else
 	{
@@ -88,8 +96,10 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		}
 		else if (is_vk)
 		{
+#ifdef KOTEK_USE_RENDER_VULKAN
 			status = InitializeModule_Render_VK(
 				main_manager, p_engine_config->GetVulkanVersionForLoading());
+#endif
 		}
 		else if (is_dx)
 		{
@@ -122,6 +132,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 			case Core::eEngineFeatureRenderer::
 				kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
 			{
+#ifdef KOTEK_USE_RENDER_VULKAN
 				const auto& enum_vk_versions =
 					p_engine_config->GetFallbackVulkanVersions();
 
@@ -133,6 +144,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 					if (is_inited)
 						break;
 				}
+#endif
 
 				break;
 			}
@@ -210,7 +222,9 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
 	{
+#ifdef KOTEK_USE_RENDER_VULKAN
 		status = ShutdownModule_Render_VK(main_manager);
+#endif
 	}
 	else
 	{
@@ -239,7 +253,9 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 		}
 		else if (is_vk)
 		{
+#ifdef KOTEK_USE_RENDER_VULKAN
 			status = ShutdownModule_Render_VK(main_manager);
+#endif
 		}
 		else if (is_dx)
 		{

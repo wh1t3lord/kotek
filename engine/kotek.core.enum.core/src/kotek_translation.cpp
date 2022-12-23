@@ -35,13 +35,21 @@ namespace helper
 		{
 			return "Shaders";
 		}
-		case eFolderIndex::kFolderIndex_Sound:
+		case eFolderIndex::kFolderIndex_Sounds:
 		{
-			return "Sound";
+			return "Sounds";
 		}
 		case eFolderIndex::kFolderIndex_Textures:
 		{
 			return "Textures";
+		}
+		case eFolderIndex::kFolderIndex_Levels:
+		{
+			return "Levels";
+		}
+		case eFolderIndex::kFolderIndex_AI:
+		{
+			return "AI";
 		}
 		case eFolderIndex::kFolderIndex_UserData:
 		{

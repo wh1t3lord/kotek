@@ -1,7 +1,5 @@
 #pragma once
 
-#include <shaderc/shaderc.hpp>
-
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 class ktkMainManager;

@@ -181,7 +181,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_AI),
+		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
 		eFolderIndex::kFolderIndex_AI, KOTEK_TEXT("ai"));
 
 	if (status == false)
@@ -192,7 +192,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Levels),
+		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
 		eFolderIndex::kFolderIndex_Levels, KOTEK_TEXT("levels"));
 
 	if (status == false)
