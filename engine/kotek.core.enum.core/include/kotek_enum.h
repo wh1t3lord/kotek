@@ -497,7 +497,15 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_App_Close,
 	kConsoleCommand_App_Hide,
 	kConsoleCommand_App_Show,
-	kConsoleCommand_Render_UploadAllResourcesToGPU
+	kConsoleCommand_Render_UploadAllResourcesToGPU,
+
+	kConsoleCommand_SDK_LoadScene,
+	kConsoleCommand_SDK_SaveScene,
+	kConsoleCommand_SDK_Redo,
+	kConsoleCommand_SDK_Undo,
+	kConsoleCommand_SDK_CloseCurrentScene,
+	kConsoleCommand_SDK_StartSimulate,
+	kConsoleCommand_SDK_StopSimulate
 };
 
 KOTEK_END_NAMESPACE_CORE
