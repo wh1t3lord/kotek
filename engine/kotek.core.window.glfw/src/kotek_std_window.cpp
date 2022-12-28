@@ -5,15 +5,19 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 ktkWindow::ktkWindow(void) :
-	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr},
-	m_title_name{"Kotek Engine"}
+	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr}
 {
+	this->SetStringToTitle(
+		static_cast<ktk::enum_base_t>(eWindowTitleType::kTitle_ApplicationName),
+		"Kotek Engine");
 }
 
 ktkWindow::ktkWindow(const ktk::string& title_name) :
-	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr},
-	m_title_name{title_name}
+	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr}
 {
+	this->SetStringToTitle(
+		static_cast<ktk::enum_base_t>(eWindowTitleType::kTitle_ApplicationName),
+		title_name.get_as_legacy().c_str());
 }
 
 ktkWindow::~ktkWindow(void) {}
@@ -229,9 +233,8 @@ void ktkWindow::Initialize(Core::eEngineSupportedOpenGLVersion version)
 
 	this->ObtainInformationAboutDisplay();
 
-	this->m_p_window =
-		glfwCreateWindow(this->m_screen_size_width, this->m_screen_size_height,
-			this->m_title_name.get_as_legacy().c_str(), nullptr, nullptr);
+	this->m_p_window = glfwCreateWindow(this->m_screen_size_width,
+		this->m_screen_size_height, this->GetTitle().c_str(), nullptr, nullptr);
 
 	if (!this->m_p_window)
 	{
@@ -340,18 +343,41 @@ bool ktkWindow::Is_NeedToClose(void)
 	return glfwWindowShouldClose(this->m_p_window);
 }
 
-void ktkWindow::SetTitle(const char* p_utf8_or_char_string) noexcept
+void ktkWindow::SetStringToTitle(
+	ktk::enum_base_t id, const char* p_utf8_or_char_string) noexcept
 {
+	KOTEK_ASSERT(p_utf8_or_char_string,
+		"you can't pass an invalid pointer of string here");
+
+	this->m_titles[id] = p_utf8_or_char_string;
+
 	if (this->m_p_window)
 	{
-		if (p_utf8_or_char_string)
-		{
-			ktk::string_legacy test = this->m_title_name.get_as_legacy();
-			test += p_utf8_or_char_string;
-
-			glfwSetWindowTitle(this->m_p_window, test.c_str());
-		}
+		glfwSetWindowTitle(this->m_p_window, this->GetTitle().c_str());
 	}
+}
+
+void ktkWindow::RemoveStringFromTitle(ktk::enum_base_t id) noexcept
+{
+	if (this->m_titles.find(id) != this->m_titles.end())
+	{
+		this->m_titles.erase(id);
+	}
+}
+
+ktk::string_legacy ktkWindow::GetTitle(void) const noexcept
+{
+	ktk::string_legacy result;
+
+	for (const auto& [id, string] : this->m_titles)
+	{
+		result += string;
+		result += " ";
+	}
+
+	result.pop_back();
+
+	return result;
 }
 
 void ktkWindow::ObtainInformationAboutDisplay(void)

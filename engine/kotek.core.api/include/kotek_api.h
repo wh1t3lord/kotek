@@ -53,6 +53,9 @@ namespace math
 	class matrix4x4f;
 	class quaternionf;
 }
+
+using entity_t = ktk::uint32_t;
+
 KOTEK_END_NAMESPACE_KTK
 
 KOTEK_END_NAMESPACE_KOTEK
@@ -787,7 +790,10 @@ public:
 	virtual void PollEvents(void) = 0;
 	virtual bool Is_NeedToClose(void) = 0;
 	virtual void MakeContextCurrent(void) noexcept = 0;
-	virtual void SetTitle(const char* p_utf8_or_char_string) noexcept = 0;
+	virtual void SetStringToTitle(
+		ktk::enum_base_t id, const char* p_utf8_or_char_string) noexcept = 0;
+	virtual void RemoveStringFromTitle(ktk::enum_base_t id) noexcept = 0;
+	virtual ktk::string_legacy GetTitle(void) const noexcept = 0;
 };
 
 class ktkIWindowManager

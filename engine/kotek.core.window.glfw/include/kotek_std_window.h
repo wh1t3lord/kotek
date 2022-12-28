@@ -7,6 +7,8 @@
 #include <kotek.core.defines_dependent.message/include/kotek_core_defines_dependent_message.h>
 #include <kotek.core.api/include/kotek_api.h>
 
+#include <kotek.core.containers.unordered_map/include/kotek_core_containers_unordered_map.h>
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
@@ -49,7 +51,11 @@ public:
 	void MakeContextCurrent(void) noexcept override;
 	void PollEvents(void) override;
 	bool Is_NeedToClose(void) override;
-	void SetTitle(const char* p_utf8_or_char_string) noexcept override;
+
+	void SetStringToTitle(ktk::enum_base_t id,
+		const char* p_utf8_or_char_string) noexcept override;
+	void RemoveStringFromTitle(ktk::enum_base_t id) noexcept override;
+	ktk::string_legacy GetTitle(void) const noexcept override;
 
 private:
 	void ObtainInformationAboutDisplay(void);
@@ -58,7 +64,7 @@ private:
 	int m_screen_size_width;
 	int m_screen_size_height;
 	GLFWwindow* m_p_window;
-	ktk::string m_title_name;
+	ktk::unordered_map<ktk::enum_base_t, ktk::string_legacy> m_titles;
 };
 
 KOTEK_END_NAMESPACE_CORE

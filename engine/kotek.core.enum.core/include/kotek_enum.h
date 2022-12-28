@@ -55,6 +55,33 @@ enum class eResourceCachingPolicy : ktk::enum_base_t
 	kWithoutCache
 };
 
+enum class eWindowTitleType : ktk::enum_base_t
+{
+	// probably all possible cases for output in window's title
+	kTitle_ApplicationName,
+	kTitle_Time,
+	kTitle_GitVersion,
+	kTitle_ApplicationVersion,
+	kTitle_CurrentSceneName,
+	kTitle_FPS,
+	kTitle_Ping,
+	kTitle_PlayerName,
+	kTitle_EntitiesCount,
+	kTitle_CurrentLevelName,
+
+	// this is for user
+	kTitle_Reserved1,
+	kTitle_Reserved2,
+	kTitle_Reserved3,
+	kTitle_Reserved4,
+	kTitle_Reserved5,
+	kTitle_Reserved6,
+	kTitle_Reserved7,
+	kTitle_Reserved8,
+	kTitle_Reserved9,
+	kTitle_Reserved10
+};
+
 /// \~russian @brief Данное перечисление определяет какие возможности
 /// имеет движок.
 ///
