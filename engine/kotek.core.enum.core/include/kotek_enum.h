@@ -534,7 +534,16 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_SDK_Undo,
 	kConsoleCommand_SDK_CloseCurrentScene,
 	kConsoleCommand_SDK_StartSimulate,
-	kConsoleCommand_SDK_StopSimulate
+	kConsoleCommand_SDK_StopSimulate,
+	kConsoleCommand_SDK_SelectEntity,
+	kConsoleCommand_SDK_DeleteComponentFromEntity,
+	kConsoleCommand_SDK_CreateComponentForEntity,
+	kConsoleCommand_SDK_DeleteEntity,
+	kConsoleCommand_SDK_SendMessageToLogWindow,
+	kConsoleCommand_SDK_SendMessageWarningToLogWindow,
+	kConsoleCommand_SDK_SendMessageErrorToLogWindow,
+	kConsoleCommand_SDK_SendMessageInfoToLogWindow,
+	kConsoleCommand_SDK_SendMessageGreyToLogWindow
 };
 
 KOTEK_END_NAMESPACE_CORE
