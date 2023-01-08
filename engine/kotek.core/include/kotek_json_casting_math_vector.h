@@ -100,6 +100,31 @@ inline ktk::math::vector4f tag_invoke(
 	return result;
 }
 
+inline void tag_invoke(const ktk::json::value_from_tag&,
+	ktk::json::value& write_to, const ktk::math::quaternionf& data)
+{
+	ktk::json::array result = {
+		data.Get_X(), data.Get_Y(), data.Get_Z(), data.Get_W()};
+
+	write_to = result;
+}
+
+inline ktk::math::quaternionf tag_invoke(
+	const ktk::json::value_to_tag<ktk::math::quaternionf>&,
+	const ktk::json::value& read_from)
+{
+	const auto& vec = read_from.as_array();
+
+	float x = static_cast<float>(vec[0].as_double());
+	float y = static_cast<float>(vec[1].as_double());
+	float z = static_cast<float>(vec[2].as_double());
+	float w = static_cast<float>(vec[3].as_double());
+
+	ktk::math::quaternionf result(x, y, z, w);
+
+	return result;
+}
+
 KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
