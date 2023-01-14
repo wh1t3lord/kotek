@@ -538,6 +538,7 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_SDK_SelectEntity,
 	kConsoleCommand_SDK_DeleteComponentFromEntity,
 	kConsoleCommand_SDK_CreateComponentForEntity,
+	kConsoleCommand_SDK_CreateEntity,
 	kConsoleCommand_SDK_DeleteEntity,
 	kConsoleCommand_SDK_SendMessageToLogWindow,
 	kConsoleCommand_SDK_SendMessageWarningToLogWindow,

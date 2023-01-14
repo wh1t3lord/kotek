@@ -16,6 +16,7 @@ public:
 
 	virtual void Execute() = 0;
 	virtual void Undo() = 0;
+	virtual const char* GetName() = 0;
 };
 
 /// @brief manager stores registered command that will be accessed through
