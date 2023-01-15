@@ -803,6 +803,93 @@ const ImVec4& ktkImguiWrapper::GetStyleColorVec4(ImGuiCol idx)
 {
 	return ::ImGui::GetStyleColorVec4(idx);
 }
+
+void ktkImguiWrapper::Separator()
+{
+	::ImGui::Separator();
+}
+
+void ktkImguiWrapper::SameLine(float offset_from_start_x, float spacing)
+{
+	::ImGui::SameLine(offset_from_start_x, spacing);
+}
+
+void ktkImguiWrapper::NewLine()
+{
+	::ImGui::NewLine();
+}
+
+void ktkImguiWrapper::Spacing()
+{
+	::ImGui::Spacing();
+}
+
+void ktkImguiWrapper::Dummy(const ImVec2& size)
+{
+	::ImGui::Dummy(size);
+}
+
+void ktkImguiWrapper::Indent(float indent_w)
+{
+	::ImGui::Indent(indent_w);
+}
+
+void ktkImguiWrapper::Unindent(float indent_w)
+{
+	::ImGui::Unindent(indent_w);
+}
+
+void ktkImguiWrapper::BeginGroup()
+{
+	::ImGui::BeginGroup();
+}
+
+void ktkImguiWrapper::EndGroup()
+{
+	::ImGui::EndGroup();
+}
+
+ImVec2 ktkImguiWrapper::GetCursorPos()
+{
+	return ImVec2();
+}
+float ktkImguiWrapper::GetCursorPosX()
+{
+	return 0.0f;
+}
+float ktkImguiWrapper::GetCursorPosY()
+{
+	return 0.0f;
+}
+void ktkImguiWrapper::SetCursorPos(const ImVec2& local_pos) {}
+void ktkImguiWrapper::SetCursorPosX(float local_x) {}
+void ktkImguiWrapper::SetCursorPosY(float local_y) {}
+ImVec2 ktkImguiWrapper::GetCursorStartPos()
+{
+	return ImVec2();
+}
+ImVec2 ktkImguiWrapper::GetCursorScreenPos()
+{
+	return ImVec2();
+}
+void ktkImguiWrapper::SetCursorScreenPos(const ImVec2& pos) {}
+void ktkImguiWrapper::AlignTextToFramePadding() {}
+float ktkImguiWrapper::GetTextLineHeight()
+{
+	return 0.0f;
+}
+float ktkImguiWrapper::GetTextLineHeightWithSpacing()
+{
+	return 0.0f;
+}
+float ktkImguiWrapper::GetFrameHeight()
+{
+	return 0.0f;
+}
+float ktkImguiWrapper::GetFrameHeightWithSpacing()
+{
+	return 0.0f;
+}
 void ktkImguiWrapper::PushID(const char* str_id)
 {
 	::ImGui::PushID(str_id);
@@ -1925,7 +2012,8 @@ bool ktkImguiWrapper::IsKeyReleased(int user_key_index)
 int ktkImguiWrapper::GetKeyPressedAmount(
 	int key_index, float repeat_delay, float rate)
 {
-	return ::ImGui::GetKeyPressedAmount(static_cast<ImGuiKey>(key_index), repeat_delay, rate);
+	return ::ImGui::GetKeyPressedAmount(
+		static_cast<ImGuiKey>(key_index), repeat_delay, rate);
 }
 void ktkImguiWrapper::CaptureKeyboardFromApp(bool want_capture_keyboard_value)
 {

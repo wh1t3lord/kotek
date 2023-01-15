@@ -295,12 +295,16 @@ public:
 	}
 	#pragma endregion
 
+	// TODO: must be sure that we save in unicode and it is always valid, so by
+	// our design if we use unicode legacy converts to UTF8 in order to support
+	// char
 	string_legacy get_as_legacy() const noexcept
 	{
 		// TODO: if we are use unicode and uchar != char so we must convert to
 		// u8 and obtain casted const char* otherwise information will be lost!
 	#ifdef KOTEK_USE_UNICODE
-		return reinterpret_cast<const char*>(ktk::cast::to_utf8(this->m_data).c_str());
+		return reinterpret_cast<const char*>(
+			ktk::cast::to_utf8(this->m_data).c_str());
 	#else
 		return this->m_data;
 	#endif

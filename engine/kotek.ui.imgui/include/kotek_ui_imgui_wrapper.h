@@ -175,6 +175,31 @@ public:
 	ImU32 GetColorU32(ImU32 col) override;
 	const ImVec4& GetStyleColorVec4(ImGuiCol idx) override;
 
+	void Separator() override;
+	void SameLine(
+		float offset_from_start_x = 0.0f, float spacing = -1.0f) override;
+	void NewLine() override;
+	void Spacing() override;
+	void Dummy(const ImVec2& size) override;
+	void Indent(float indent_w = 0.0f) override;
+	void Unindent(float indent_w = 0.0f) override;
+	void BeginGroup() override;
+	void EndGroup() override;
+	ImVec2 GetCursorPos() override;
+	float GetCursorPosX() override;
+	float GetCursorPosY() override;
+	void SetCursorPos(const ImVec2& local_pos) override;
+	void SetCursorPosX(float local_x) override;
+	void SetCursorPosY(float local_y) override;
+	ImVec2 GetCursorStartPos() override;
+	ImVec2 GetCursorScreenPos() override;
+	void SetCursorScreenPos(const ImVec2& pos) override;
+	void AlignTextToFramePadding() override;
+	float GetTextLineHeight() override;
+	float GetTextLineHeightWithSpacing() override;
+	float GetFrameHeight() override;
+	float GetFrameHeightWithSpacing() override;
+
 	void PushID(const char* str_id) override;
 	void PushID(const char* str_id_begin, const char* str_id_end) override;
 	void PushID(const void* ptr_id) override;

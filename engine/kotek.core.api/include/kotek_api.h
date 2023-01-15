@@ -994,6 +994,31 @@ public:
 	virtual ImU32 GetColorU32(ImU32 col) = 0;
 	virtual const ImVec4& GetStyleColorVec4(ImGuiCol idx) = 0;
 
+	virtual void Separator() = 0;
+	virtual void SameLine(
+		float offset_from_start_x = 0.0f, float spacing = -1.0f) = 0;
+	virtual void NewLine() = 0;
+	virtual void Spacing() = 0;
+	virtual void Dummy(const ImVec2& size) = 0;
+	virtual void Indent(float indent_w = 0.0f) = 0;
+	virtual void Unindent(float indent_w = 0.0f) = 0;
+	virtual void BeginGroup() = 0;
+	virtual void EndGroup() = 0;
+	virtual ImVec2 GetCursorPos() = 0;
+	virtual float GetCursorPosX() = 0;
+	virtual float GetCursorPosY() = 0;
+	virtual void SetCursorPos(const ImVec2& local_pos) = 0;
+	virtual void SetCursorPosX(float local_x) = 0;
+	virtual void SetCursorPosY(float local_y) = 0;
+	virtual ImVec2 GetCursorStartPos() = 0;
+	virtual ImVec2 GetCursorScreenPos() = 0;
+	virtual void SetCursorScreenPos(const ImVec2& pos) = 0;
+	virtual void AlignTextToFramePadding() = 0;
+	virtual float GetTextLineHeight() = 0;
+	virtual float GetTextLineHeightWithSpacing() = 0;
+	virtual float GetFrameHeight() = 0;
+	virtual float GetFrameHeightWithSpacing() = 0;
+
 	virtual void PushID(const char* str_id) = 0;
 	virtual void PushID(const char* str_id_begin, const char* str_id_end) = 0;
 	virtual void PushID(const void* ptr_id) = 0;
