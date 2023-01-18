@@ -54,8 +54,6 @@ namespace math
 	class quaternionf;
 }
 
-using entity_t = ktk::uint32_t;
-
 KOTEK_END_NAMESPACE_KTK
 
 KOTEK_END_NAMESPACE_KOTEK

@@ -7,6 +7,14 @@
 #include <kotek.core.containers.any/include/kotek_core_containers_any.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KTK
+using entity_t = ktk::uint32_t;
+KOTEK_END_NAMESPACE_KTK
+
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 class ktkISDKRedoUndo
@@ -17,6 +25,8 @@ public:
 	virtual void Execute() = 0;
 	virtual void Undo() = 0;
 	virtual const char* GetName() = 0;
+	virtual Kotek::ktk::entity_t GetEntityID(void) const noexcept { return -1; }
+	virtual void SetEntityID(Kotek::ktk::entity_t id) noexcept {}
 };
 
 /// @brief manager stores registered command that will be accessed through
@@ -26,7 +36,7 @@ public:
 	virtual ~ktkISDKCommandHistoryManager(void) {}
 
 	/// @brief adds and executes
-	/// @param p_command 
+	/// @param p_command
 	virtual void ExecuteCommand(ktkISDKRedoUndo* p_command) = 0;
 
 	virtual void Undo() = 0;
