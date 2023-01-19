@@ -20,6 +20,11 @@ public:
 	string(void) = default;
 	~string(void) = default;
 
+	using value_type = tstring::value_type;
+	using iterator = tstring::iterator;
+	using const_iterator = tstring::const_iterator;
+	using size_type = tstring::size_type;
+
 	#ifdef KOTEK_USE_UNICODE
 	template <typename T,
 		std::enable_if_t<std::is_arithmetic<T>::value, bool> = true>
@@ -411,6 +416,23 @@ public:
 	#pragma endregion
 
 	ktk::size_t size(void) const noexcept { return this->m_data.size(); }
+
+	iterator insert(const const_iterator _where, const tchar ch) 
+	{
+		return this->m_data.insert(_where, ch);
+	}
+
+	iterator insert(
+		const const_iterator _where, const size_type count, const tchar ch)
+	{
+		return this->m_data.insert(_where, count, ch);
+	}
+
+	iterator insert(
+		const const_iterator _where, const std::initializer_list<tchar> list)
+	{
+		return this->m_data.insert(_where, list);
+	}
 
 public:
 	#ifdef KOTEK_USE_UNICODE

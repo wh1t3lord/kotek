@@ -51,7 +51,7 @@ namespace helper
 		auto id_char32_t = typeid(char32_t).hash_code();
 		auto id_wchar_t = typeid(wchar_t).hash_code();
 
-		auto id_current_type = typeid(string_unicode::value_type).hash_code();
+		auto id_current_type = typeid(tstring::value_type).hash_code();
 
 		if (id_current_type == id_char8_t)
 		{

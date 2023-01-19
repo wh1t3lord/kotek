@@ -10,17 +10,49 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
-inline void tag_invoke(const ktk::json::value_from_tag&,
-	ktk::json::value& write_to, const ktk::string& data)
+inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+	Kotek::ktk::json::value& write_to, const Kotek::ktk::string_legacy& str)
 {
-	ktk::string type = helper::ObtainCharTypeName_FromString();
+	Kotek::ktk::json::object result;
+
+	Kotek::ktk::json::array raw_string(str.begin(), str.end());
+
+	#ifdef KOTEK_UNICODE
+	result["type"] = "char8_t";
+	#else
+	result["type"] = "char";
+	#endif
+
+	result["raw_string"] = raw_string;
+
+	write_to = result;
+}
+
+inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+	Kotek::ktk::json::value& write_to, const Kotek::ktk::string_unicode& str)
+{
+	Kotek::ktk::json::object result;
+
+	Kotek::ktk::json::array raw_string(str.begin(), str.end());
+
+	result["type"] = Kotek::ktk::helper::ObtainCharTypeName_FromString();
+	result["raw_string"] = raw_string;
+
+	write_to = result;
+}
+
+inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
+	Kotek::ktk::json::value& write_to, const Kotek::ktk::string& data)
+{
+	Kotek::ktk::string type =
+		Kotek::ktk::helper::ObtainCharTypeName_FromString();
 
 	if (type != "char")
 	{
 		Kotek::ktk::json::object str;
 
 		Kotek::ktk::json::array raw_string(data.cbegin(), data.cend());
-		str["type"] = helper::ObtainCharTypeName_FromString();
+		str["type"] = Kotek::ktk::helper::ObtainCharTypeName_FromString();
 		str["raw_string"] = raw_string;
 		write_to = str;
 	}
@@ -34,19 +66,20 @@ inline void tag_invoke(const ktk::json::value_from_tag&,
 	}
 }
 
-inline ktk::string tag_invoke(const ktk::json::value_to_tag<ktk::string>&,
-	const ktk::json::value& read_from)
+inline Kotek::ktk::string tag_invoke(
+	const Kotek::ktk::json::value_to_tag<Kotek::ktk::string>&,
+	const Kotek::ktk::json::value& read_from)
 {
 	if (read_from.is_object())
 	{
-		const ktk::json::object& str = read_from.as_object();
+		const Kotek::ktk::json::object& str = read_from.as_object();
 
-		ktk::tstring result;
+		Kotek::ktk::tstring result;
 		const auto& char_name = str.at("type").as_string();
 
 		if (char_name == "char8_t")
 		{
-			ktk::u8string buffer;
+			Kotek::ktk::u8string buffer;
 
 			const auto& raw_number_string_buffer =
 				str.at("raw_string").as_array();
@@ -56,11 +89,11 @@ inline ktk::string tag_invoke(const ktk::json::value_to_tag<ktk::string>&,
 				buffer += number.as_int64();
 			}
 
-			result = ktk::tstring(buffer.begin(), buffer.end());
+			result = Kotek::ktk::tstring(buffer.begin(), buffer.end());
 		}
 		else if (char_name == "char16_t")
 		{
-			ktk::u16string buffer;
+			Kotek::ktk::u16string buffer;
 
 			const auto& raw_number_string_buffer =
 				str.at("raw_string").as_array();
@@ -70,11 +103,11 @@ inline ktk::string tag_invoke(const ktk::json::value_to_tag<ktk::string>&,
 				buffer += number.as_int64();
 			}
 
-			result = ktk::tstring(buffer.begin(), buffer.end());
+			result = Kotek::ktk::tstring(buffer.begin(), buffer.end());
 		}
 		else if (char_name == "char32_t")
 		{
-			ktk::u32string buffer;
+			Kotek::ktk::u32string buffer;
 
 			const auto& raw_number_string_buffer =
 				str.at("raw_string").as_array();
@@ -84,11 +117,11 @@ inline ktk::string tag_invoke(const ktk::json::value_to_tag<ktk::string>&,
 				buffer += number.as_int64();
 			}
 
-			result = ktk::tstring(buffer.begin(), buffer.end());
+			result = Kotek::ktk::tstring(buffer.begin(), buffer.end());
 		}
 		else if (char_name == "wchar_t")
 		{
-			ktk::wstring buffer;
+			Kotek::ktk::wstring buffer;
 
 			const auto& raw_number_string_buffer =
 				str.at("raw_string").as_array();
@@ -98,7 +131,7 @@ inline ktk::string tag_invoke(const ktk::json::value_to_tag<ktk::string>&,
 				buffer += number.as_int64();
 			}
 
-			result = ktk::tstring(buffer.begin(), buffer.end());
+			result = Kotek::ktk::tstring(buffer.begin(), buffer.end());
 		}
 		else
 		{
@@ -110,12 +143,13 @@ inline ktk::string tag_invoke(const ktk::json::value_to_tag<ktk::string>&,
 	}
 	else
 	{
-		return ktk::string(read_from.as_string().c_str());
+		return Kotek::ktk::string(read_from.as_string().c_str());
 	}
 }
 
+	#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
 inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-	Kotek::ktk::json::value& write_to, const ktk::u8string& str)
+	Kotek::ktk::json::value& write_to, const Kotek::ktk::u8string& str)
 {
 	Kotek::ktk::json::object result;
 
@@ -128,7 +162,7 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 }
 
 inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-	Kotek::ktk::json::value& write_to, const ktk::u16string& str)
+	Kotek::ktk::json::value& write_to, const Kotek::ktk::u16string& str)
 {
 	Kotek::ktk::json::object result;
 
@@ -141,7 +175,7 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 }
 
 inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-	Kotek::ktk::json::value& write_to, const ktk::u32string& str)
+	Kotek::ktk::json::value& write_to, const Kotek::ktk::u32string& str)
 {
 	Kotek::ktk::json::object result;
 
@@ -154,7 +188,7 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 }
 
 inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-	Kotek::ktk::json::value& write_to, const ktk::wstring& str)
+	Kotek::ktk::json::value& write_to, const Kotek::ktk::wstring& str)
 {
 	Kotek::ktk::json::object result;
 
@@ -165,14 +199,16 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 
 	write_to = result;
 }
+	#endif
 
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
 
 namespace std
 {
+
 	inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-		Kotek::ktk::json::value& write_to, const u8string& str)
+		Kotek::ktk::json::value& write_to, const std::u8string& str)
 	{
 		Kotek::ktk::json::object result;
 
@@ -185,7 +221,7 @@ namespace std
 	}
 
 	inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-		Kotek::ktk::json::value& write_to, const u16string& str)
+		Kotek::ktk::json::value& write_to, const std::u16string& str)
 	{
 		Kotek::ktk::json::object result;
 
@@ -198,7 +234,7 @@ namespace std
 	}
 
 	inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-		Kotek::ktk::json::value& write_to, const u32string& str)
+		Kotek::ktk::json::value& write_to, const std::u32string& str)
 	{
 		Kotek::ktk::json::object result;
 
@@ -211,7 +247,7 @@ namespace std
 	}
 
 	inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-		Kotek::ktk::json::value& write_to, const wstring& str)
+		Kotek::ktk::json::value& write_to, const std::wstring& str)
 	{
 		Kotek::ktk::json::object result;
 
