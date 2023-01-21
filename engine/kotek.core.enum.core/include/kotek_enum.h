@@ -63,6 +63,8 @@ enum class eWindowTitleType : ktk::enum_base_t
 	kTitle_GitVersion,
 	kTitle_ApplicationVersion,
 	kTitle_CurrentSceneName,
+	// that star * when scene was changed
+	kTitle_CurrentSceneEditStatus,
 	kTitle_FPS,
 	kTitle_Ping,
 	kTitle_PlayerName,
@@ -544,7 +546,9 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_SDK_SendMessageWarningToLogWindow,
 	kConsoleCommand_SDK_SendMessageErrorToLogWindow,
 	kConsoleCommand_SDK_SendMessageInfoToLogWindow,
-	kConsoleCommand_SDK_SendMessageGreyToLogWindow
+	kConsoleCommand_SDK_SendMessageGreyToLogWindow,
+
+	kConsoleCommand_SDK_ShowModalWindow_SaveAndCloseOrCloseScene
 };
 
 KOTEK_END_NAMESPACE_CORE
