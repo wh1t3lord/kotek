@@ -8,10 +8,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(RmlUi CONFIG REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC
+	"include/kotek_ui_game_ui_manager.h"
+	"src/kotek_ui_game_ui_manager.cpp"
 	"include/kotek_ui_rmlui.h"
 	"src/main_ui_rmlui_dll.cpp")
+
+if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
+	target_compile_definitions(${PROJECT_NAME} PUBLIC -DRMLUI_STATIC_LIB)
+endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC 
 	RmlCore 
 	RmlDebugger
 )
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
