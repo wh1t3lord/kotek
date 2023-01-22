@@ -4,6 +4,8 @@
 
 #ifdef KOTEK_USE_CEF_LIBRARY
 	#include <kotek.ui.cef/include/kotek_ui_cef.h>
+#elif defined(KOTEK_USE_RMLUI_LIBRARY)
+	#include <kotek.ui.rmlui/include/kotek_ui_rmlui.h>
 #endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
