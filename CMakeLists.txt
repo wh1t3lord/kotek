@@ -158,6 +158,8 @@ add_subdirectory("engine/kotek.ui.imgui")
 
 if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
 	add_subdirectory("engine/kotek.ui.cef")
+elseif("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "RMLUI")
+	add_subdirectory("engine/kotek.ui.rmlui")
 endif()
 
 if (WIN32)
