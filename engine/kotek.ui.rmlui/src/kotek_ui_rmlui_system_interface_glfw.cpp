@@ -1,0 +1,7 @@
+#include "../include/kotek_ui_rmlui_system_interface_glfw.h"
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_UI
+
+KOTEK_END_NAMESPACE_UI
+KOTEK_END_NAMESPACE_KOTEK

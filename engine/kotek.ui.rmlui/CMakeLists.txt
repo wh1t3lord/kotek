@@ -5,11 +5,18 @@ project(kotek.ui.rmlui VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(RmlUi CONFIG REQUIRED)
+find_package(RmlUi 5.0 CONFIG REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_ui_game_ui_manager.h"
 	"src/kotek_ui_game_ui_manager.cpp"
+	"include/kotek_ui_rmlui_system_interface_glfw.h"
+	"src/kotek_ui_rmlui_system_interface_glfw.cpp"
+	# TODO: implement for SDL
+
+	"include/kotek_ui_rmlui_render_interface_gl3.h"
+	"src/kotek_ui_rmlui_render_interface_gl3.cpp"
+
 	"include/kotek_ui_rmlui.h"
 	"src/main_ui_rmlui_dll.cpp")
 
@@ -25,3 +32,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
