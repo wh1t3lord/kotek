@@ -18,9 +18,12 @@ public:
 	ktkGameUI_RMLUI(void);
 	~ktkGameUI_RMLUI(void);
 
-	void Initialize(Core::ktkIEngineConfig* p_config) noexcept override;
+	void Initialize(Core::ktkIEngineConfig* p_config,
+		void* p_os_window_handle, int width, int height) noexcept override;
 	void Shutdown(void) noexcept override;
 	void UpdateInput(void* p_any, void* p_any2) noexcept override;
+
+private:
 
 private:
 	Rml::RenderInterface* m_p_render_interface;

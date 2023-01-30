@@ -35,7 +35,8 @@ ktkGameUI_RMLUI::~ktkGameUI_RMLUI(void)
 #endif
 }
 
-void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config) noexcept
+void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
+	void* p_os_window_handle, int width, int height) noexcept
 {
 #ifdef KOTEK_USE_RMLUI_LIBRARY
 	bool status = Rml::Initialise();
@@ -80,10 +81,82 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config) noexcept
 		"failed to initialize renderer internface because there's no "
 		"implemented solution for your request!");
 
+	ktkRenderInterface_GL3* p_gl3 = dynamic_cast<ktkRenderInterface_GL3*>(this->m_p_render_interface);
+
+	if (p_gl3)
+	{
+		p_gl3->SetViewport(width, height);
+	}
+
+	// TODO: add for other renderers
+
 	Rml::SetRenderInterface(this->m_p_render_interface);
 
 	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
-	this->m_p_system_interface = new ktkSystemInterface_GLFW();
+	ktkSystemInterface_GLFW* p_system_interface = new ktkSystemInterface_GLFW();
+	p_system_interface->SetWindow(static_cast<GLFWwindow*>(p_os_window_handle));
+
+	glfwSetInputMode(static_cast<GLFWwindow*>(p_os_window_handle),
+		GLFW_LOCK_KEY_MODS, GLFW_TRUE);
+
+
+	glfwSetKeyCallback(static_cast<GLFWwindow*>(p_os_window_handle),
+		[](GLFWwindow* /*window*/, int glfw_key, int /*scancode*/,
+			int glfw_action, int glfw_mods)
+		{
+			if (!data->context)
+				return;
+
+			// Store the active modifiers for later because GLFW doesn't provide
+		    // them in the callbacks to the mouse input events.
+			data->glfw_active_modifiers = glfw_mods;
+
+			// Override the default key event callback to add global shortcuts
+		    // for the samples.
+			Rml::Context* context = data->context;
+			KeyDownCallback key_down_callback = data->key_down_callback;
+
+			switch (glfw_action)
+			{
+			case GLFW_PRESS:
+			case GLFW_REPEAT:
+			{
+				const Rml::Input::KeyIdentifier key =
+					RmlGLFW::ConvertKey(glfw_key);
+				const int key_modifier =
+					RmlGLFW::ConvertKeyModifiers(glfw_mods);
+				float dp_ratio = 1.f;
+				glfwGetWindowContentScale(data->window, &dp_ratio, nullptr);
+
+				// See if we have any global shortcuts that take priority over
+			    // the context.
+				if (key_down_callback &&
+					!key_down_callback(
+						context, key, key_modifier, dp_ratio, true))
+					break;
+				// Otherwise, hand the event over to the context by calling the
+			    // input handler as normal.
+				if (!RmlGLFW::ProcessKeyCallback(
+						context, glfw_key, glfw_action, glfw_mods))
+					break;
+				// The key was not consumed by the context either, try keyboard
+			    // shortcuts of lower priority.
+				if (key_down_callback &&
+					!key_down_callback(
+						context, key, key_modifier, dp_ratio, false))
+					break;
+			}
+			break;
+			case GLFW_RELEASE:
+				RmlGLFW::ProcessKeyCallback(
+					context, glfw_key, glfw_action, glfw_mods);
+				break;
+			}
+		});
+
+
+
+	this->m_p_system_interface = p_system_interface;
 
 	Rml::SetSystemInterface(this->m_p_system_interface);
 	#elif KOTEK_USE_WINDOW_LIBRARY_SDL
@@ -112,10 +185,7 @@ void ktkGameUI_RMLUI::Shutdown(void) noexcept
 #endif
 }
 
-void ktkGameUI_RMLUI::UpdateInput(void* p_any, void* p_any2) noexcept 
-{
-	
-}
+void ktkGameUI_RMLUI::UpdateInput(void* p_any, void* p_any2) noexcept {}
 
 KOTEK_END_NAMESPACE_UI
 KOTEK_END_NAMESPACE_KOTEK

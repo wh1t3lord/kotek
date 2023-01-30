@@ -816,7 +816,8 @@ class ktkIGameUIManager
 public:
 	virtual ~ktkIGameUIManager(void) {}
 
-	virtual void Initialize(ktkIEngineConfig* p_config) noexcept = 0;
+	virtual void Initialize(ktkIEngineConfig* p_config,
+		void* p_os_window_handle, int width, int height) noexcept = 0;
 
 	/// \~english @brief we can't provide a universal interface because some
 	/// libraries provide own contexts, callbacks for handling that
