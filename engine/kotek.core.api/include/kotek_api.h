@@ -816,7 +816,18 @@ class ktkIGameUIManager
 public:
 	virtual ~ktkIGameUIManager(void) {}
 
-	virtual void Initialize(void) noexcept = 0;
+	virtual void Initialize(ktkIEngineConfig* p_config) noexcept = 0;
+
+	/// \~english @brief we can't provide a universal interface because some
+	/// libraries provide own contexts, callbacks for handling that
+	/// @param p_any you can pass there any valid instance that will not wipeout
+	/// if we talk about pointers it means that you saved your instance
+	/// somewhere and you handle own creation/destruction
+	/// @param p_any2  you can pass there any valid instance that will not
+	/// wipeout if we talk about pointers it means that you saved your instance
+	/// somewhere and you handle own creation/destruction
+	virtual void UpdateInput(void* p_any, void* p_any2) noexcept = 0;
+
 	virtual void Shutdown(void) noexcept = 0;
 };
 

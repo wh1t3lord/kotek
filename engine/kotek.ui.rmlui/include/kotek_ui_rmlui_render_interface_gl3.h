@@ -16,11 +16,11 @@ namespace Gfx
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
-class RenderInterface_GL3 : public Rml::RenderInterface
+class ktkRenderInterface_GL3 : public Rml::RenderInterface
 {
 public:
-	RenderInterface_GL3();
-	~RenderInterface_GL3();
+	ktkRenderInterface_GL3();
+	~ktkRenderInterface_GL3();
 
 	// Returns true if the renderer was successfully constructed.
 	explicit operator bool() const { return static_cast<bool>(shaders); }

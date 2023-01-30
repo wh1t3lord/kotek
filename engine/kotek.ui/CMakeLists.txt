@@ -13,4 +13,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.imgui)
 
 if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
 	target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.cef)
+elseif("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "RMLUI")
+	target_link_libraries(${RPOJECT_NAME} PUBLIC kotek.ui.rmlui)
 endif()

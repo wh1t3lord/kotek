@@ -35,3 +35,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window)

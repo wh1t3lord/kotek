@@ -325,7 +325,7 @@ namespace Gfx
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
-RenderInterface_GL3::RenderInterface_GL3()
+ktkRenderInterface_GL3::ktkRenderInterface_GL3()
 {
 	shaders = Rml::MakeUnique<Gfx::ShadersData>();
 
@@ -333,19 +333,19 @@ RenderInterface_GL3::RenderInterface_GL3()
 		shaders.reset();
 }
 
-RenderInterface_GL3::~RenderInterface_GL3()
+ktkRenderInterface_GL3::~ktkRenderInterface_GL3()
 {
 	if (shaders)
 		Gfx::DestroyShaders(*shaders);
 }
 
-void RenderInterface_GL3::SetViewport(int width, int height)
+void ktkRenderInterface_GL3::SetViewport(int width, int height)
 {
 	viewport_width = width;
 	viewport_height = height;
 }
 
-void RenderInterface_GL3::BeginFrame()
+void ktkRenderInterface_GL3::BeginFrame()
 {
 	RMLUI_ASSERT(viewport_width >= 0 && viewport_height >= 0);
 	glViewport(0, 0, viewport_width, viewport_height);
@@ -369,16 +369,16 @@ void RenderInterface_GL3::BeginFrame()
 	SetTransform(nullptr);
 }
 
-void RenderInterface_GL3::EndFrame() {}
+void ktkRenderInterface_GL3::EndFrame() {}
 
-void RenderInterface_GL3::Clear()
+void ktkRenderInterface_GL3::Clear()
 {
 	glClearStencil(0);
 	glClearColor(0, 0, 0, 1);
 	glClear(GL_COLOR_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
-void RenderInterface_GL3::RenderGeometry(Rml::Vertex* vertices,
+void ktkRenderInterface_GL3::RenderGeometry(Rml::Vertex* vertices,
 	int num_vertices, int* indices, int num_indices,
 	const Rml::TextureHandle texture, const Rml::Vector2f& translation)
 {
@@ -392,7 +392,7 @@ void RenderInterface_GL3::RenderGeometry(Rml::Vertex* vertices,
 	}
 }
 
-Rml::CompiledGeometryHandle RenderInterface_GL3::CompileGeometry(
+Rml::CompiledGeometryHandle ktkRenderInterface_GL3::CompileGeometry(
 	Rml::Vertex* vertices, int num_vertices, int* indices, int num_indices,
 	Rml::TextureHandle texture)
 {
@@ -443,7 +443,7 @@ Rml::CompiledGeometryHandle RenderInterface_GL3::CompileGeometry(
 	return (Rml::CompiledGeometryHandle)geometry;
 }
 
-void RenderInterface_GL3::RenderCompiledGeometry(
+void ktkRenderInterface_GL3::RenderCompiledGeometry(
 	Rml::CompiledGeometryHandle handle, const Rml::Vector2f& translation)
 {
 	Gfx::CompiledGeometryData* geometry = (Gfx::CompiledGeometryData*)handle;
@@ -481,7 +481,7 @@ void RenderInterface_GL3::RenderCompiledGeometry(
 	Gfx::CheckGLError("RenderCompiledGeometry");
 }
 
-void RenderInterface_GL3::ReleaseCompiledGeometry(
+void ktkRenderInterface_GL3::ReleaseCompiledGeometry(
 	Rml::CompiledGeometryHandle handle)
 {
 	Gfx::CompiledGeometryData* geometry = (Gfx::CompiledGeometryData*)handle;
@@ -493,7 +493,7 @@ void RenderInterface_GL3::ReleaseCompiledGeometry(
 	delete geometry;
 }
 
-void RenderInterface_GL3::EnableScissorRegion(bool enable)
+void ktkRenderInterface_GL3::EnableScissorRegion(bool enable)
 {
 	ScissoringState new_state = ScissoringState::Disable;
 
@@ -519,7 +519,7 @@ void RenderInterface_GL3::EnableScissorRegion(bool enable)
 	}
 }
 
-void RenderInterface_GL3::SetScissorRegion(int x, int y, int width, int height)
+void ktkRenderInterface_GL3::SetScissorRegion(int x, int y, int width, int height)
 {
 	if (transform_active)
 	{
@@ -574,7 +574,7 @@ struct TGAHeader
 // Restore packing
 #pragma pack()
 
-bool RenderInterface_GL3::LoadTexture(Rml::TextureHandle& texture_handle,
+bool ktkRenderInterface_GL3::LoadTexture(Rml::TextureHandle& texture_handle,
 	Rml::Vector2i& texture_dimensions, const Rml::String& source)
 {
 	Rml::FileInterface* file_interface = Rml::GetFileInterface();
@@ -676,7 +676,7 @@ bool RenderInterface_GL3::LoadTexture(Rml::TextureHandle& texture_handle,
 	return success;
 }
 
-bool RenderInterface_GL3::GenerateTexture(Rml::TextureHandle& texture_handle,
+bool ktkRenderInterface_GL3::GenerateTexture(Rml::TextureHandle& texture_handle,
 	const Rml::byte* source, const Rml::Vector2i& source_dimensions)
 {
 	GLuint texture_id = 0;
@@ -703,12 +703,12 @@ bool RenderInterface_GL3::GenerateTexture(Rml::TextureHandle& texture_handle,
 	return true;
 }
 
-void RenderInterface_GL3::ReleaseTexture(Rml::TextureHandle texture_handle)
+void ktkRenderInterface_GL3::ReleaseTexture(Rml::TextureHandle texture_handle)
 {
 	glDeleteTextures(1, (GLuint*)&texture_handle);
 }
 
-void RenderInterface_GL3::SetTransform(const Rml::Matrix4f* new_transform)
+void ktkRenderInterface_GL3::SetTransform(const Rml::Matrix4f* new_transform)
 {
 	transform_active = (new_transform != nullptr);
 	transform = projection *
@@ -716,7 +716,7 @@ void RenderInterface_GL3::SetTransform(const Rml::Matrix4f* new_transform)
 	transform_dirty_state = ProgramId::All;
 }
 
-void RenderInterface_GL3::SubmitTransformUniform(
+void ktkRenderInterface_GL3::SubmitTransformUniform(
 	ProgramId program_id, int uniform_location)
 {
 	if ((int)program_id & (int)transform_dirty_state)

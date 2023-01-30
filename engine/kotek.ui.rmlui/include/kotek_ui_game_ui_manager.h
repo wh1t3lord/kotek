@@ -3,13 +3,11 @@
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 #include <kotek.core.api/include/kotek_api.h>
 
-KOTEK_BEGIN_NAMESPACE_KOTEK
-KOTEK_BEGIN_NAMESPACE_UI
-
-
-
-KOTEK_END_NAMESPACE_UI
-KOTEK_END_NAMESPACE_KOTEK
+namespace Rml
+{
+	class RenderInterface;
+	class SystemInterface;
+} // namespace Rml
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
@@ -20,10 +18,13 @@ public:
 	ktkGameUI_RMLUI(void);
 	~ktkGameUI_RMLUI(void);
 
-	void Initialize(void) noexcept override;
+	void Initialize(Core::ktkIEngineConfig* p_config) noexcept override;
 	void Shutdown(void) noexcept override;
+	void UpdateInput(void* p_any, void* p_any2) noexcept override;
 
 private:
+	Rml::RenderInterface* m_p_render_interface;
+	Rml::SystemInterface* m_p_system_interface;
 };
 
 KOTEK_END_NAMESPACE_UI
