@@ -7,6 +7,7 @@ namespace Rml
 {
 	class RenderInterface;
 	class SystemInterface;
+	class Context;
 } // namespace Rml
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -23,11 +24,19 @@ public:
 	void Shutdown(void) noexcept override;
 	void UpdateInput(void* p_any, void* p_any2) noexcept override;
 
+	void Render(void) noexcept override;
+
+	Rml::RenderInterface* Get_RenderInterface(void);
+	Rml::SystemInterface* Get_SystemInterface(void);
+	Rml::Context* Get_Context(void);
+
 private:
+	void Initialize_GLFW(void* p_os_window_handle);
 
 private:
 	Rml::RenderInterface* m_p_render_interface;
 	Rml::SystemInterface* m_p_system_interface;
+	Rml::Context* m_p_context;
 };
 
 KOTEK_END_NAMESPACE_UI

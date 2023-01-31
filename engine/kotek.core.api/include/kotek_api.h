@@ -829,6 +829,8 @@ public:
 	/// somewhere and you handle own creation/destruction
 	virtual void UpdateInput(void* p_any, void* p_any2) noexcept = 0;
 
+	virtual void Render(void) noexcept = 0;
+
 	virtual void Shutdown(void) noexcept = 0;
 };
 

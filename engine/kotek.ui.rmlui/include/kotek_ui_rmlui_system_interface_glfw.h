@@ -13,6 +13,8 @@ class GLFWcursor;
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
+using KeyDownCallback = bool (*)(Rml::Context* context, Rml::Input::KeyIdentifier key, int key_modifier, float native_dp_ratio, bool priority);
+
 class ktkSystemInterface_GLFW : public Rml::SystemInterface
 {
 public:
@@ -32,12 +34,22 @@ public:
 	void SetClipboardText(const Rml::String& text) override;
 	void GetClipboardText(Rml::String& text) override;
 
+	int Get_GLFWActiveModifiers(void) const;
+	void Set_GLFWActiveModifies(int value) noexcept;
+
+	KeyDownCallback Get_KeyDownCallback(void);
+	void Set_KeyDownCallback(KeyDownCallback p_callback) noexcept;
+
 private:
 	GLFWwindow* window = nullptr;
 
 	GLFWcursor* cursor_pointer = nullptr;
 	GLFWcursor* cursor_cross = nullptr;
 	GLFWcursor* cursor_text = nullptr;
+
+	KeyDownCallback m_p_callback_key_down = nullptr;
+
+	int m_glfw_active_modifiers = 0;
 };
 
 namespace RmlGLFW

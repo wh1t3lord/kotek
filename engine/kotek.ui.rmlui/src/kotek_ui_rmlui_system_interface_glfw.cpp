@@ -69,6 +69,26 @@ void ktkSystemInterface_GLFW::GetClipboardText(Rml::String& text)
 		text = Rml::String(glfwGetClipboardString(window));
 }
 
+int ktkSystemInterface_GLFW::Get_GLFWActiveModifiers(void) const
+{
+	return this->m_glfw_active_modifiers;
+}
+
+void ktkSystemInterface_GLFW::Set_GLFWActiveModifies(int value) noexcept 
+{
+	this->m_glfw_active_modifiers = value;
+}
+
+KeyDownCallback ktkSystemInterface_GLFW::Get_KeyDownCallback(void)
+{
+	return KeyDownCallback();
+}
+
+void ktkSystemInterface_GLFW::Set_KeyDownCallback(
+	KeyDownCallback p_callback) noexcept
+{
+}
+
 bool RmlGLFW::ProcessKeyCallback(
 	Rml::Context* context, int key, int action, int mods)
 {
