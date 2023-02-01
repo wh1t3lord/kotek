@@ -101,6 +101,7 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 		"can't create context for RMLUI something is wrong, probably library "
 		"doesn't support your system...");
 
+	// TODO: think about it well
 	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
 	this->Initialize_GLFW(p_os_window_handle);
 	#elif KOTEK_USE_WINDOW_LIBRARY_SDL

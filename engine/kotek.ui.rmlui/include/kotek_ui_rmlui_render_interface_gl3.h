@@ -51,6 +51,7 @@ public:
 	void EnableScissorRegion(bool enable) override;
 	void SetScissorRegion(int x, int y, int width, int height) override;
 
+	// TODO: replace tga, implement for ktx
 	bool LoadTexture(Rml::TextureHandle& texture_handle,
 		Rml::Vector2i& texture_dimensions, const Rml::String& source) override;
 	bool GenerateTexture(Rml::TextureHandle& texture_handle,
@@ -92,7 +93,6 @@ private:
 
 	Rml::UniquePtr<Gfx::ShadersData> shaders;
 };
-
 
 KOTEK_END_NAMESPACE_UI
 KOTEK_END_NAMESPACE_KOTEK
