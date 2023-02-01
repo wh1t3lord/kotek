@@ -7,8 +7,8 @@
 	#include <RmlUi/Core/Input.h>
 #endif
 
-class GLFWwindow;
-class GLFWcursor;
+struct GLFWwindow;
+struct GLFWcursor;
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
