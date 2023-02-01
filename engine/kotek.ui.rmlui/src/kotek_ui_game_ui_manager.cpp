@@ -40,10 +40,6 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 	void* p_os_window_handle, int width, int height) noexcept
 {
 #ifdef KOTEK_USE_RMLUI_LIBRARY
-	bool status = Rml::Initialise();
-
-	KOTEK_ASSERT(status, "Can't initialize RmlUI library!");
-
 	KOTEK_ASSERT(
 		p_config, "you must pass a valid instance of engine config here");
 
@@ -60,6 +56,7 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 				Core::eEngineSupportedOpenGLVersion::kOpenGL_3_0)
 			{
 				this->m_p_render_interface = new ktkRenderInterface_GL3();
+				break;
 			}
 			else
 			{
@@ -70,6 +67,7 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 			kEngine_Render_Renderer_OpenGL_Latest:
 		{
 			this->m_p_render_interface = new ktkRenderInterface_GL3();
+			break;
 		}
 		default:
 		{
@@ -94,19 +92,22 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 
 	Rml::SetRenderInterface(this->m_p_render_interface);
 
-	this->m_p_context =
-		Rml::CreateContext("main", Rml::Vector2i(width, height));
-
-	KOTEK_ASSERT(this->m_p_context,
-		"can't create context for RMLUI something is wrong, probably library "
-		"doesn't support your system...");
-
 	// TODO: think about it well
 	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
 	this->Initialize_GLFW(p_os_window_handle);
 	#elif KOTEK_USE_WINDOW_LIBRARY_SDL
 
 	#endif
+
+	bool status = Rml::Initialise();
+	KOTEK_ASSERT(status, "Can't initialize RmlUI library!");
+
+	this->m_p_context =
+		Rml::CreateContext("main", Rml::Vector2i(width, height));
+
+	KOTEK_ASSERT(this->m_p_context,
+		"can't create context for RMLUI something is wrong, probably library "
+		"doesn't support your system...");
 
 #endif
 }
@@ -166,10 +167,6 @@ void ktkGameUI_RMLUI::Initialize_GLFW(void* p_os_window_handle)
 
 	glfwSetInputMode(static_cast<GLFWwindow*>(p_os_window_handle),
 		GLFW_LOCK_KEY_MODS, GLFW_TRUE);
-
-	Rml::Context* p_context = this->m_p_context;
-	glfwSetWindowUserPointer(
-		static_cast<GLFWwindow*>(p_os_window_handle), this);
 
 	glfwSetKeyCallback(static_cast<GLFWwindow*>(p_os_window_handle),
 		[](GLFWwindow* window, int glfw_key, int /*scancode*/, int glfw_action,
