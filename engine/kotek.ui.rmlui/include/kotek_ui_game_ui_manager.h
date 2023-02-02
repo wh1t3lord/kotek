@@ -22,7 +22,6 @@ public:
 	void Initialize(Core::ktkIEngineConfig* p_config,
 		void* p_os_window_handle, int width, int height) noexcept override;
 	void Shutdown(void) noexcept override;
-	void UpdateInput(void* p_any, void* p_any2) noexcept override;
 
 	void Render(void) noexcept override;
 
