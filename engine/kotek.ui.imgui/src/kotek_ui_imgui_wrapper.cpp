@@ -429,6 +429,12 @@ void ktkImguiWrapper::ImGui_ImplGlfw_MonitorCallback(
 	::ImGui_ImplGlfw_MonitorCallback(monitor, event);
 }
 
+void ktkImguiWrapper::ImGui_ImplGlfw_CursorPosCallback(
+	GLFWwindow* window, double x, double y)
+{
+	::ImGui_ImplGlfw_CursorPosCallback(window, x, y);
+}
+
 bool ktkImguiWrapper::ImGui_ImplOpenGL3_Init(const char* glsl_version)
 {
 	return ::ImGui_ImplOpenGL3_Init(glsl_version);

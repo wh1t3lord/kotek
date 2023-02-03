@@ -885,6 +885,8 @@ public:
 		GLFWwindow* window, unsigned int c) = 0;
 	virtual void ImGui_ImplGlfw_MonitorCallback(
 		GLFWmonitor* monitor, int event) = 0;
+	virtual void ImGui_ImplGlfw_CursorPosCallback(
+		GLFWwindow* window, double x, double y) = 0;
 
 	virtual bool ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL) = 0;
 	virtual void ImGui_ImplOpenGL3_Shutdown() = 0;

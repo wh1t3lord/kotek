@@ -82,6 +82,7 @@ void ktkWindow::RegisterUserMainManager(
 	KOTEK_ASSERT(this->m_p_window, "you can't have an invalid window");
 
 	glfwSetWindowUserPointer(this->m_p_window, p_manager);
+	glfwSetMonitorUserPointer(glfwGetPrimaryMonitor(), p_manager);
 }
 
 void* ktkWindow::GetHandle(void) const noexcept

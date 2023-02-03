@@ -358,6 +358,8 @@ enum class eEngineFeatureSDK : ktk::enum_base_t
 	///
 	kEngine_Feature_SDK_ImGui = 1 << 1,
 
+	kEngine_Feature_SDK_ImGui_Initialized = 1 << 2,
+
 	kNone = 0
 };
 

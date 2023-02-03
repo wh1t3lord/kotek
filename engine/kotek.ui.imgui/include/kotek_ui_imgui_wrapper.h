@@ -67,6 +67,8 @@ public:
 		GLFWwindow* window, unsigned int c) override;
 	void ImGui_ImplGlfw_MonitorCallback(
 		GLFWmonitor* monitor, int event) override;
+	void ImGui_ImplGlfw_CursorPosCallback(
+		GLFWwindow* window, double x, double y) override;
 
 	bool ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL) override;
 	void ImGui_ImplOpenGL3_Shutdown() override;
