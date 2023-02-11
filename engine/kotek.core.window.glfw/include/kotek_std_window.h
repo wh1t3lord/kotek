@@ -55,7 +55,7 @@ public:
 	void SetStringToTitle(ktk::enum_base_t id,
 		const char* p_utf8_or_char_string) noexcept override;
 	void RemoveStringFromTitle(ktk::enum_base_t id) noexcept override;
-	ktk::string_legacy GetTitle(void) const noexcept override;
+    ktk::cstring GetTitle(void) const noexcept override;
 
 private:
 	void ObtainInformationAboutDisplay(void);
@@ -64,7 +64,7 @@ private:
 	int m_screen_size_width;
 	int m_screen_size_height;
 	GLFWwindow* m_p_window;
-	ktk::unordered_map<ktk::enum_base_t, ktk::string_legacy> m_titles;
+    ktk::unordered_map<ktk::enum_base_t, ktk::cstring> m_titles;
 };
 
 KOTEK_END_NAMESPACE_CORE

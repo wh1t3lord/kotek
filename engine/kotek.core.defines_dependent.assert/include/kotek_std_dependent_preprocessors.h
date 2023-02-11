@@ -2,8 +2,7 @@
 
 #include <kotek.core.defines_dependent.message/include/kotek_core_defines_dependent_message.h>
 
-#define KOTEK_ASSERT(statement, text, ...)      \
-	{                                           \
+#define KOTEK_ASSERT(statement, text, ...)  {   \
 		bool _xstatus = statement;              \
 		if (_xstatus == false)                  \
 		{                                       \

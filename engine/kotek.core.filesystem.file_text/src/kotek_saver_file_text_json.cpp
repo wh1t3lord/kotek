@@ -62,7 +62,7 @@ bool ktkSaverFile_JSON::DetectTypeByFullPath(
 	return false;
 }
 
-ktk::string ktkSaverFile_JSON::Get_UserDescription() const noexcept
+ktk::cstring ktkSaverFile_JSON::Get_UserDescription() const noexcept
 {
 	return KOTEK_TEXT("JSON saver (not GeoJSON)");
 }
@@ -78,7 +78,7 @@ ktkIResourceSaver* ktkSaverFile_JSON::Get_Saver(
 	return nullptr;
 }
 
-ktk::string ktkSaverFile_JSON::Get_AllSupportedFormats(void) const noexcept
+ktk::cstring ktkSaverFile_JSON::Get_AllSupportedFormats(void) const noexcept
 {
 	return kFormatFile_Text;
 }

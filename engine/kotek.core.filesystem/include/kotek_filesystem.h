@@ -66,7 +66,7 @@ public:
 
 private:
 	bool AddGamedataFolderToStorage(const ktk::filesystem::path& path,
-		eFolderIndex id, const ktk::string& folder_name) noexcept;
+        eFolderIndex id, const ktk::cstring& folder_name) noexcept;
 
 	void ValidateFolders(void) noexcept;
 

@@ -17,14 +17,14 @@ public:
 	bool DetectTypeByFullPath(
 		const ktk::filesystem::path& path) noexcept override;
 
-	ktk::string Get_UserDescription() const noexcept override;
+    ktk::cstring Get_UserDescription() const noexcept override;
 
 	eResourceLoadingType Get_Type() const noexcept override;
 
 	ktkIResourceSaver* Get_Saver(
 		const ktk::filesystem::path& extension_of_file) noexcept override;
 
-	ktk::string Get_AllSupportedFormats(void) const noexcept override;
+    ktk::cstring Get_AllSupportedFormats(void) const noexcept override;
 
 private:
 	void Register_Savers(void) noexcept;
@@ -32,7 +32,7 @@ private:
 
 private:
 	ktkMainManager* m_p_main_manager;
-	ktk::unordered_map<ktk::string, ktkIResourceSaver*> m_savers;
+    ktk::unordered_map<ktk::cstring, ktkIResourceSaver*> m_savers;
 };
 
 KOTEK_END_NAMESPACE_CORE

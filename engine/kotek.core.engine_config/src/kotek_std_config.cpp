@@ -487,7 +487,7 @@ eEngineSupportedVulkanVersion ktkEngineConfig::GetVulkanVersionFromCommandLine(
 	return result;
 }
 
-ktk::string ktkEngineConfig::GetRenderName(void) const noexcept
+ktk::cstring ktkEngineConfig::GetRenderName(void) const noexcept
 {
 	switch (this->m_engine_feature_renderer_flags)
 	{
@@ -650,7 +650,7 @@ bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 	{
 		if (this->GetDirectXVersionForLoading() ==
 			eEngineSupportedDirectXVersion::kDirectX_Latest)
-			status == true;
+            status = true;
 	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest:
 	{
@@ -698,8 +698,9 @@ bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(
 {
 	return std::find_if(this->m_parsed_command_line_arguments.begin(),
 			   this->m_parsed_command_line_arguments.end(),
-			   [your_argument](const ktk::string& argument) -> bool {
-				   return argument == your_argument;
+               [your_argument](const ktk::cstring& argument) -> bool {
+                    ktk::cstring_view wrapped_argument = reinterpret_cast<const char*>(your_argument.c_str());
+                   return argument == wrapped_argument;
 			   }) != this->m_parsed_command_line_arguments.end();
 }
 
@@ -708,7 +709,7 @@ bool ktkEngineConfig::IsUserSpecifiedValidRenderer(void) const noexcept
 	ktk::size_t validation{0};
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-		if (argument.get_as_is().starts_with(KOTEK_TEXT("--render_")))
+        if (argument.starts_with(KOTEK_TEXT("--render_")))
 		{
 			++validation;
 		}
@@ -731,7 +732,7 @@ bool ktkEngineConfig::IsUserSpecifiedRendererOpenGLInCommandLine(
 
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-		if (argument.get_as_is().starts_with(KOTEK_TEXT("--render_gl")))
+        if (argument.starts_with(KOTEK_TEXT("--render_gl")))
 		{
 			result = true;
 			break;
@@ -750,7 +751,7 @@ bool ktkEngineConfig::IsUserSpecifiedRendererDirectXInCommandLine(
 
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-		if (argument.get_as_is().starts_with(KOTEK_TEXT("--render_dx")))
+        if (argument.starts_with(KOTEK_TEXT("--render_dx")))
 		{
 			result = true;
 			break;
@@ -769,7 +770,7 @@ bool ktkEngineConfig::IsUserSpecifiedRendererVulkanInCommandLine(
 
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-		if (argument.get_as_is().starts_with(KOTEK_TEXT("--render_vk")))
+        if (argument.starts_with(KOTEK_TEXT("--render_vk")))
 		{
 			result = true;
 			break;
@@ -805,7 +806,7 @@ void ktkEngineConfig::Parse_CommandLine(void) noexcept
 	KOTEK_ASSERT(this->m_argc != -1,
 		"you must set argc before calling set argv method!");
 
-	this->m_parsed_command_line_arguments = ktk::unordered_set<ktk::string>(
+    this->m_parsed_command_line_arguments = ktk::unordered_set<ktk::cstring>(
 		this->m_argv, this->m_argv + this->m_argc);
 }
 

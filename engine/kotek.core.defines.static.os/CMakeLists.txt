@@ -9,5 +9,10 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_defines_static_os.h"
 	"src/main_core_defines_static_os_dll.cpp")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.win32)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.linux)
+if (WIN32)
+    target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.win32)
+endif()
+
+if (UNIX)
+    target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.linux)
+endif()

@@ -1,7 +1,12 @@
 #pragma once
 
+#ifdef KOTEK_PLATFORM_WINDOWS
 #include <kotek.core.os.win32/include/kotek_core_os_win32.h>
+#elif defined(KOTEK_PLATFORM_LINUX)
 #include <kotek.core.os.linux/include/kotek_core_os_linux.h>
+#else
+#error unknown platform
+#endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE

@@ -20,6 +20,7 @@ add_library(${PROJECT_NAME} STATIC
 	${to_include_render_graph_simplified_files}
 	"include/kotek_render_shared_gl.h"
 	"include/kotek_render_data_types.h"
+	"include/kotek_render_format.h"
 	"src/kotek_render_data_types.cpp"
 	"src/main_render_shared_gl_dll.cpp"
 )

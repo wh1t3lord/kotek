@@ -10,7 +10,7 @@ namespace math
 	class vector1f
 	{
 	public:
-		vector1f(float x) : m_base(x) {}
+        vector1f(float x) : m_base{x} {}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -92,7 +92,7 @@ namespace math
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		vector1f& operator-=(const base_vec1_t& data)
 		{
-			this->m_base -= value;
+            this->m_base -= data;
 			return *this;
 		}
 #endif
@@ -130,7 +130,7 @@ namespace math
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		vector1f& operator*=(const base_vec1_t& data)
 		{
-			this->m_base *= value;
+            this->m_base *= data;
 			return *this;
 		}
 #endif
@@ -169,36 +169,46 @@ namespace math
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		vector1f& operator/=(const base_vec1_t& data)
 		{
-			this->m_base /= value;
+            this->m_base /= data;
 			return *this;
 		}
 #endif
 
 		vector1f& operator%=(float value) noexcept
 		{
-			this->m_base = std::fmod(this->m_base, value);
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+            this->m_base = std::fmod(this->m_base, value);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+            this->m_base.x = std::fmod(this->m_base.x, value);
+#endif
+
 			return *this;
 		}
 
 		vector1f& operator%=(const vector1f& data) noexcept
 		{
-			this->m_base = std::fmod(this->m_base, data.m_base);
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+            this->m_base = std::fmod(this->m_base, data.m_base);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+            this->m_base.x = std::fmod(this->m_base.x, data.m_base.x);
+#endif
 			return *this;
 		}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		vector1f& operator%=(const base_vec1_t& data) noexcept
-		{
-			this->m_base %= data;
-			return *this;
-		}
+        vector1f& operator%=(const base_vec1_t& data) noexcept
+        {
+            this->m_base.x = std::fmod(this->m_base.x, data.x);
+            return *this;
+        }
 #endif
 
 		vector1f operator+() const noexcept
 		{
 			return *this;
 		}
+
 		vector1f operator-() const noexcept
 		{
 			return vector1f(-this->m_base);
@@ -212,6 +222,7 @@ namespace math
 
 			return DirectX::XMVector2Equal(casted_original, casted_argument);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+            return this->m_base == data.m_base;
 #endif
 		}
 
@@ -223,6 +234,7 @@ namespace math
 
 			return DirectX::XMVector2NotEqual(casted_original, casted_argument);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+            return this->m_base != data.m_base;
 #endif
 		}
 
@@ -239,13 +251,13 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+            return this->m_base.x;
 #endif
 		}
 
 		vector1f& Set_X(float x) noexcept
 		{
-			this->m_base = x;
-			return *this;
+            return this->operator=(x);
 		}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -285,7 +297,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+        return (a.Get_Base() + b.Get_Base());
 #endif
 	}
 
@@ -304,6 +316,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+        return (a.Get_Base() - b.Get_Base());
 #endif
 	}
 
@@ -323,7 +336,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+        return (a.Get_Base() * b.Get_Base());
 #endif
 	}
 
@@ -342,7 +355,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+        return (a.Get_Base() * b);
 #endif
 	}
 
@@ -367,7 +380,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+        return (a.Get_Base() / b.Get_Base());
 #endif
 	}
 
@@ -386,6 +399,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+        return (a.Get_Base() / b);
 #endif
 	}
 } // namespace math

@@ -38,7 +38,7 @@ ktk::any ktkLoaderFile_JSON::Load(const ktk::filesystem::path& path) noexcept
 		ktk::istreambuf_iterator begin(_file);
 		ktk::istreambuf_iterator end;
 
-		ktk::string_legacy content(begin, end);
+        ktk::string content(begin, end);
 
 		ktk::json::parse_options options;
 		options.allow_comments = true;
@@ -51,12 +51,11 @@ ktk::any ktkLoaderFile_JSON::Load(const ktk::filesystem::path& path) noexcept
 
 		parser.reset();
 
-		parser.write(content, code);
+        parser.write(reinterpret_cast<const char*>(content.c_str()), code);
 
 		if (code)
 		{
-			ktk::string msg(code.message());
-			KOTEK_MESSAGE("can't parse file status[{}]", msg.get_as_is());
+            KOTEK_MESSAGE("can't parse file status[{}]", code.message());
 		}
 		else
 		{
@@ -68,8 +67,11 @@ ktk::any ktkLoaderFile_JSON::Load(const ktk::filesystem::path& path) noexcept
 			result.Set_Json(data.as_object());
 
 			ktk::filesystem::path path_object(path);
-			result.Set_FileName(reinterpret_cast<const char*>(
-				path_object.filename().u8string().c_str()));
+#ifdef KOTEK_USE_UNICODE
+            result.Set_FileName(path_object.filename().u8string().c_str());
+#else
+            result.Set_FileName(path_object.filename().string());
+#endif
 		}
 	}
 	else
@@ -111,7 +113,7 @@ bool ktkLoaderFile_JSON::Load(
 		ktk::istreambuf_iterator begin(_file);
 		ktk::istreambuf_iterator end;
 
-		ktk::string_legacy content(begin, end);
+        ktk::string content(begin, end);
 
 		ktk::json::parse_options options;
 		options.allow_comments = true;
@@ -124,12 +126,11 @@ bool ktkLoaderFile_JSON::Load(
 
 		parser.reset();
 
-		parser.write(content, code);
+        parser.write(reinterpret_cast<const char*>(content.c_str()), code);
 
 		if (code)
-		{
-			ktk::string msg(code.message());
-			KOTEK_MESSAGE("can't parse file status[{}]", msg.get_as_is());
+        {
+            KOTEK_MESSAGE("can't parse file status[{}]", code.message());
 		}
 		else
 		{
@@ -141,8 +142,12 @@ bool ktkLoaderFile_JSON::Load(
 			p_result->Set_Json(data.as_object());
 
 			ktk::filesystem::path path_object(path);
-			p_result->Set_FileName(reinterpret_cast<const char*>(
-				path_object.filename().u8string().c_str()), false);
+
+#ifdef KOTEK_USE_UNICODE
+            p_result->Set_FileName(path_object.filename().u8string().c_str(), false);
+#else
+            p_result->Set_FileName(path_object.filename().string().c_str(), false);
+#endif
 		}
 	}
 	else
@@ -155,7 +160,7 @@ bool ktkLoaderFile_JSON::Load(
 	return true;
 }
 
-ktk::string ktkLoaderFile_JSON::Get_UserDescription(void) const noexcept
+ktk::cstring ktkLoaderFile_JSON::Get_UserDescription(void) const noexcept
 {
 	return KOTEK_TEXT("loader for JSON files (not GeoJSON)");
 }
@@ -177,7 +182,7 @@ ktkIResourceLoader* ktkLoaderFile_JSON::Get_Loader(
 	return nullptr;
 }
 
-ktk::string ktkLoaderFile_JSON::Get_AllSupportedFormats(void) const noexcept
+ktk::cstring ktkLoaderFile_JSON::Get_AllSupportedFormats(void) const noexcept
 {
 	return kFormatFile_Text;
 }

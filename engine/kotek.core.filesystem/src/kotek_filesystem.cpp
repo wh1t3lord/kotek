@@ -101,7 +101,7 @@ ktk::string ktkFileSystem::ReadFile(
 
 bool ktkFileSystem::AddGamedataFolderToStorage(
 	const ktk::filesystem::path& path, eFolderIndex id,
-	const ktk::string& folder_name) noexcept
+    const ktk::cstring& folder_name) noexcept
 {
 	if (this->m_storage_paths.find(id) != this->m_storage_paths.end())
 	{
@@ -111,7 +111,7 @@ bool ktkFileSystem::AddGamedataFolderToStorage(
 	}
 
 	ktk::filesystem::path result(path);
-	result /= folder_name.get_as_is();
+    result /= folder_name.c_str();
 
 	this->m_storage_paths[id] = result;
 

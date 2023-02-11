@@ -442,7 +442,7 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 	#elif __clang__
 		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH _Pragma(\"clang diagnostic push\") _Pragma(\"clang diagnostic ignored \"-Wall\"\") _Pragma(\"clang diagnostic ignored \"-Wextra\"\")
 	#elif __GNUC__
-		#error Not implemented for GCC
+		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH _Pragma(\"GCC diagnostic push\") _Pragma(\"GCC diagnostic ignored \"-Wimplicit-fallthrough\"\") _Pragma(\"GCC diagnostic ignored \"-Wunused-function\"\") _Pragma(\"GCC diagnostic ignored \"-Wunused-parameter\"\") _Pragma(\"GCC diagnostic ignored \"-Wunused-variable\"\") _Pragma(\"GCC diagnostic ignored \"-Wmissing-field-initializers\"\") _Pragma(\"GCC diagnostic ignored \"-Wswitch\"\") _Pragma(\"GCC diagnostic ignored \"-Wpedantic\"\") _Pragma(\"GCC diagnostic ignored \"-Wattributes\"\") _Pragma(\"GCC diagnostic ignored \"-Wignored-qualifiers\"\") _Pragma(\"GCC diagnostic ignored \"-Wparentheses\"\")
 	#else
 		#error Unknown compiler send the issue to authors!
 	#endif
@@ -452,7 +452,7 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 	#elif __clang__
 		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP _Pragma(\"clang diagnostic pop\")
 	#elif __GNUC__
-		#error Not implemented for GCC
+		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP _Pragma(\"GCC diagnostic pop\")
 	#else
 		#error Unknown compiler send the issue to authors!
 	#endif
@@ -483,8 +483,6 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 
 	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
 	#ifndef NDEBUG
-		#define KOTEK_DEBUG
-
 		// for use in terms of all, we should provide for every preprocessor and 
 		// the _USE_ form even if it doesn't required 
 		// or if it will not be used in practice
@@ -637,7 +635,12 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 		"
 			#define KOTEK_USE_MEMORY_ALLOCATOR_CPU_${KOTEK_MEMORY_ALLOCATOR_CPU}
 		")
-	endif()
+        else()
+            file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+                "
+                    #define KOTEK_USE_MEMORY_ALLOCATOR_CPU_STD
+                ")
+        endif()
 
 	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
 	"

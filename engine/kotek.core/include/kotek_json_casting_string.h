@@ -11,31 +11,14 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
 inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-	Kotek::ktk::json::value& write_to, const Kotek::ktk::string_legacy& str)
+    Kotek::ktk::json::value& write_to, const Kotek::ktk::cstring& str)
 {
 	Kotek::ktk::json::object result;
 
 	Kotek::ktk::json::array raw_string(str.begin(), str.end());
 
-	#ifdef KOTEK_UNICODE
-	result["type"] = "char8_t";
-	#else
 	result["type"] = "char";
-	#endif
 
-	result["raw_string"] = raw_string;
-
-	write_to = result;
-}
-
-inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-	Kotek::ktk::json::value& write_to, const Kotek::ktk::string_unicode& str)
-{
-	Kotek::ktk::json::object result;
-
-	Kotek::ktk::json::array raw_string(str.begin(), str.end());
-
-	result["type"] = Kotek::ktk::helper::ObtainCharTypeName_FromString();
 	result["raw_string"] = raw_string;
 
 	write_to = result;
@@ -44,7 +27,7 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 	Kotek::ktk::json::value& write_to, const Kotek::ktk::string& data)
 {
-	Kotek::ktk::string type =
+    Kotek::ktk::cstring type =
 		Kotek::ktk::helper::ObtainCharTypeName_FromString();
 
 	if (type != "char")
@@ -58,15 +41,15 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 	}
 	else
 	{
-		Kotek::ktk::json::string str;
+        Kotek::ktk::json::string str;
 
-		str = data.get_as_legacy().c_str();
+        str = reinterpret_cast<const char*>(data.c_str());
 
 		write_to = str;
 	}
 }
 
-inline Kotek::ktk::string tag_invoke(
+inline Kotek::ktk::cstring tag_invoke(
 	const Kotek::ktk::json::value_to_tag<Kotek::ktk::string>&,
 	const Kotek::ktk::json::value& read_from)
 {
@@ -74,12 +57,12 @@ inline Kotek::ktk::string tag_invoke(
 	{
 		const Kotek::ktk::json::object& str = read_from.as_object();
 
-		Kotek::ktk::tstring result;
+        Kotek::ktk::cstring result;
 		const auto& char_name = str.at("type").as_string();
 
 		if (char_name == "char8_t")
 		{
-			Kotek::ktk::u8string buffer;
+            Kotek::ktk::u8string buffer;
 
 			const auto& raw_number_string_buffer =
 				str.at("raw_string").as_array();
@@ -89,61 +72,61 @@ inline Kotek::ktk::string tag_invoke(
 				buffer += number.as_int64();
 			}
 
-			result = Kotek::ktk::tstring(buffer.begin(), buffer.end());
+            result = reinterpret_cast<const char*>(buffer.c_str());
 		}
-		else if (char_name == "char16_t")
-		{
-			Kotek::ktk::u16string buffer;
+        else if (char_name == "char16_t")
+        {
+            Kotek::ktk::u16string buffer;
 
-			const auto& raw_number_string_buffer =
-				str.at("raw_string").as_array();
+            const auto& raw_number_string_buffer =
+                str.at("raw_string").as_array();
 
-			for (const auto number : raw_number_string_buffer)
-			{
-				buffer += number.as_int64();
-			}
+            for (const auto number : raw_number_string_buffer)
+            {
+                buffer += number.as_int64();
+            }
 
-			result = Kotek::ktk::tstring(buffer.begin(), buffer.end());
-		}
-		else if (char_name == "char32_t")
-		{
-			Kotek::ktk::u32string buffer;
+            result = reinterpret_cast<const char*>(Kotek::ktk::string(buffer.begin(), buffer.end()).c_str());
+        }
+        else if (char_name == "char32_t")
+        {
+            Kotek::ktk::u32string buffer;
 
-			const auto& raw_number_string_buffer =
-				str.at("raw_string").as_array();
+            const auto& raw_number_string_buffer =
+                str.at("raw_string").as_array();
 
-			for (const auto number : raw_number_string_buffer)
-			{
-				buffer += number.as_int64();
-			}
+            for (const auto number : raw_number_string_buffer)
+            {
+                buffer += number.as_int64();
+            }
 
-			result = Kotek::ktk::tstring(buffer.begin(), buffer.end());
-		}
-		else if (char_name == "wchar_t")
-		{
-			Kotek::ktk::wstring buffer;
+            result = reinterpret_cast<const char*>(Kotek::ktk::string(buffer.begin(), buffer.end()).c_str());
+        }
+        else if (char_name == "wchar_t")
+        {
+            Kotek::ktk::wstring buffer;
 
-			const auto& raw_number_string_buffer =
-				str.at("raw_string").as_array();
+            const auto& raw_number_string_buffer =
+                str.at("raw_string").as_array();
 
-			for (const auto number : raw_number_string_buffer)
-			{
-				buffer += number.as_int64();
-			}
+            for (const auto number : raw_number_string_buffer)
+            {
+                buffer += number.as_int64();
+            }
 
-			result = Kotek::ktk::tstring(buffer.begin(), buffer.end());
-		}
+            result = reinterpret_cast<const char*>(Kotek::ktk::string(buffer.begin(), buffer.end()).c_str());
+        }
 		else
 		{
 			KOTEK_ASSERT(
-				false, "can't find an appropriate casting for your type");
+                false, "can't find an appropriate casting for your type. Engine supports only UTF-8 and char strings");
 		}
 
 		return result;
 	}
 	else
 	{
-		return Kotek::ktk::string(read_from.as_string().c_str());
+        return read_from.as_string().c_str();
 	}
 }
 

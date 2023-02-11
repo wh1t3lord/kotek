@@ -9,37 +9,37 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
-#ifdef KOTEK_USE_UNICODE
-using string_unicode = std::basic_string<uchar, std::char_traits<uchar>,
-	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<uchar>>;
-#endif
+#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_STD
+using string = std::u8string;
+using string_view = std::u8string_view;
 
-using string_legacy = std::basic_string<char, std::char_traits<char>,
-	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char>>;
+using u8string = std::u8string;
+using u8string_view = std::u8string_view;
 
+using u16string = std::u16string;
+using u16string_view = std::u16string_view;
+
+using u32string = std::u32string;
+using u32string_view = std::u32string_view;
+
+using wstring = std::wstring;
+using wstring_view = std::wstring_view;
+
+using cstring = std::string;
+using cstring_view = std::string_view;
+#else
+using string = std::basic_string<tchar, std::char_traits<tchar>,
+    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<tchar>>;
 using u8string = std::basic_string<char8_t, std::char_traits<char8_t>,
-	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char8_t>>;
+    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char8_t>>;
 using u16string = std::basic_string<char16_t, std::char_traits<char16_t>,
-	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char16_t>>;
+    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char16_t>>;
 using u32string = std::basic_string<char32_t, std::char_traits<char32_t>,
-	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char32_t>>;
+    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char32_t>>;
 using wstring = std::basic_string<wchar_t, std::char_traits<wchar_t>,
-	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<wchar_t>>;
-
-using tstring = std::basic_string<tchar, std::char_traits<tchar>,
-	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<tchar>>;
-
-#ifdef KOTEK_PLATFORM_WINDOWS
-/// <summary>
-/// Use this only for casting operation under CRD_USE_UNICODE == 0!
-/// For instance: ktk::string_windows your_string(string_legacy.begin(),
-/// string_legacy.end());
-/// </summary>
-using string_windows = std::basic_string<wchar_t, std::char_traits<wchar_t>,
-	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<wchar_t>>;
-#elif defined(KOTEK_PLATFORM_LINUX)
-using wstring = std::basic_string<wchar_t, std::char_traits<wchar_t>,
-	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<wchar_t>>;
+    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<wchar_t>>;
+using cstring = std::basic_string<char, std::char_traits<char>,
+    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char>>;
 #endif
 
 namespace helper
@@ -51,7 +51,7 @@ namespace helper
 		auto id_char32_t = typeid(char32_t).hash_code();
 		auto id_wchar_t = typeid(wchar_t).hash_code();
 
-		auto id_current_type = typeid(tstring::value_type).hash_code();
+        auto id_current_type = typeid(string::value_type).hash_code();
 
 		if (id_current_type == id_char8_t)
 		{

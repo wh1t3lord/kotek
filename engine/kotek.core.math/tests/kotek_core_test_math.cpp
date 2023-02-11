@@ -114,7 +114,11 @@ void vector1f_testing_assignment_operator_based_on_base_type()
 	Kotek::ktk::math::base_vec1_t some(51.0f);
 	Kotek::ktk::math::vector1f some2 = some;
 
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	BOOST_CHECK(Kotek::ktk::is_equal(some2.Get_X(), some));
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+    BOOST_CHECK(Kotek::ktk::is_equal(some2.Get_X(), some.x));
+#endif
 }
 
 void vector1f_testing_setter_single_depth()
@@ -2169,8 +2173,8 @@ void matrix4x4f_plus_operator()
 		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
 
 	test = test +
-		Kotek::ktk::math::matrix4x4f({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-			8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f});
+        Kotek::ktk::math::matrix4x4f(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
+            8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
 
 	BOOST_CHECK(Kotek::ktk::is_equal(17.0f + 1.0f, test.Get_00()));
 	BOOST_CHECK(Kotek::ktk::is_equal(18.0f + 2.0f, test.Get_01()));
@@ -2196,8 +2200,8 @@ void matrix4x4f_minus_operator()
 		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
 
 	test = test -
-		Kotek::ktk::math::matrix4x4f({1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-			8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f});
+        Kotek::ktk::math::matrix4x4f(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
+            8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
 
 	BOOST_CHECK(Kotek::ktk::is_equal(17.0f - 1.0f, test.Get_00()));
 	BOOST_CHECK(Kotek::ktk::is_equal(18.0f - 2.0f, test.Get_01()));

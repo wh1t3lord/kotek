@@ -4,8 +4,6 @@
 #include <kotek.core.defines.static.render/include/kotek_core_defines_render.h>
 
 #ifdef KOTEK_PLATFORM_LINUX
-	#error TODO implement for linux
-
 	#define VK_USE_PLATFORM_XLIB_KHR
 	#define VK_USE_PLATFORM_XCB_KHR
 

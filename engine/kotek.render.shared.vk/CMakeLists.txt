@@ -5,6 +5,8 @@ project(kotek.render.shared.vk VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Vulkan REQUIRED)
+
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 add_library(${PROJECT_NAME} STATIC

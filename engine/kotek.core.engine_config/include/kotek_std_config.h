@@ -126,7 +126,7 @@ public:
 	 *
 	 * \return ktk::string
 	 */
-	ktk::string GetRenderName(void) const noexcept override;
+    ktk::cstring GetRenderName(void) const noexcept override;
 
 	/**
 	 * All Graphics APIs that were created before Vulkan and DirectX12
@@ -268,7 +268,7 @@ private:
 	ktk::vector<eEngineSupportedDirectXVersion> m_fallback_directx_versions;
 	ktk::vector<eEngineSupportedOpenGLVersion> m_fallback_opengl_versions;
 	ktk::vector<eEngineSupportedVulkanVersion> m_fallback_vulkan_versions;
-	ktk::unordered_set<ktk::string> m_parsed_command_line_arguments;
+    ktk::unordered_set<ktk::cstring> m_parsed_command_line_arguments;
 	ktk::dll::shared_library m_user_dll;
 };
 

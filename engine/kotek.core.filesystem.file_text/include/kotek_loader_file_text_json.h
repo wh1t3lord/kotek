@@ -18,7 +18,7 @@ public:
 	bool Load(const ktk::filesystem::path& path,
 		ktk::any object_from_construct) noexcept override;
 
-	ktk::string Get_UserDescription(void) const noexcept override;
+    ktk::cstring Get_UserDescription(void) const noexcept override;
 
 	Core::eResourceLoadingType Get_Type(void) const noexcept override;
 
@@ -28,11 +28,11 @@ public:
 	ktkIResourceLoader* Get_Loader(
 		const ktk::filesystem::path& extension_of_file) noexcept override;
 
-	ktk::string Get_AllSupportedFormats(void) const noexcept override;
+    ktk::cstring Get_AllSupportedFormats(void) const noexcept override;
 
 private:
 	ktkMainManager* m_p_main_manager;
-	ktk::unordered_map<ktk::string, ktkIResourceLoader*> m_loaders;
+    ktk::unordered_map<ktk::cstring, ktkIResourceLoader*> m_loaders;
 };
 
 KOTEK_END_NAMESPACE_CORE

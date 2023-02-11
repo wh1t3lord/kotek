@@ -17,7 +17,7 @@ ktkWindow::ktkWindow(const ktk::string& title_name) :
 {
 	this->SetStringToTitle(
 		static_cast<ktk::enum_base_t>(eWindowTitleType::kTitle_ApplicationName),
-		title_name.get_as_legacy().c_str());
+        reinterpret_cast<const char*>(title_name.c_str()));
 }
 
 ktkWindow::~ktkWindow(void) {}
@@ -320,7 +320,7 @@ void ktkWindow::MakeContextCurrent(void) noexcept
 		const char* description_error{};
 		if (glfwGetError(&description_error))
 		{
-			KOTEK_MESSAGE("{}", ktk::string(description_error).get_as_is());
+            KOTEK_MESSAGE("{}", description_error);
 		}
 #endif
 	}
@@ -334,7 +334,7 @@ void ktkWindow::PollEvents(void)
 	const char* description_error{};
 	if (glfwGetError(&description_error))
 	{
-		KOTEK_MESSAGE("{}", ktk::string(description_error).get_as_is());
+        KOTEK_MESSAGE("{}", description_error);
 	}
 #endif
 }
@@ -366,9 +366,9 @@ void ktkWindow::RemoveStringFromTitle(ktk::enum_base_t id) noexcept
 	}
 }
 
-ktk::string_legacy ktkWindow::GetTitle(void) const noexcept
+ktk::cstring ktkWindow::GetTitle(void) const noexcept
 {
-	ktk::string_legacy result;
+    ktk::cstring result;
 
 	for (const auto& [id, string] : this->m_titles)
 	{
@@ -389,7 +389,7 @@ void ktkWindow::ObtainInformationAboutDisplay(void)
 	{
 		const char* message;
 		glfwGetError(&message);
-		KOTEK_ASSERT(false, "{}", ktk::string(message).get_as_is());
+        KOTEK_ASSERT(false, "{}", message);
 		return;
 	}
 

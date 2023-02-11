@@ -49,7 +49,7 @@ public:
 			return std::any_cast<ReturnType>(result);
 		}
 
-		ktk::string_legacy key_name_legacy = key_name.get_as_legacy();
+        ktk::cstring key_name_legacy = reinterpret_cast<const char*>(key_name.c_str());
 
 		if (this->m_json.find(key_name_legacy) == this->m_json.end())
 		{
@@ -73,9 +73,9 @@ public:
 	// math structures, graphs and etc
 
 	template <typename DataType>
-	void Write(const ktk::string& field_name, DataType data) noexcept
+    void Write(const ktk::cstring& field_name, DataType data) noexcept
 	{
-		this->m_json[field_name.get_as_legacy().c_str()] = ktk::json::value_from(data);
+        this->m_json[field_name.c_str()] = ktk::json::value_from(data);
 	}
 
 	ktk::json::value& operator[](ktk::json::string_view key) noexcept 
@@ -86,10 +86,16 @@ public:
 	ktk::string Serialize(void) const noexcept
 	{
 #ifdef KOTEK_USE_BOOST_LIBRARY
-		if (this->m_json.empty())
-			return "";
+        ktk::string result;
 
-		return ktk::json::serialize(this->m_json);
+		if (this->m_json.empty())
+            return result;
+
+        const auto& string = ktk::json::serialize(this->m_json);
+
+        result = ktk::string(string.begin(), string.end());
+
+        return result;
 #else
 		return "";
 #endif

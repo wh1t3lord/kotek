@@ -13,71 +13,71 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
  * use std::filesystem::path::preferred_separator
  */
 #ifdef KOTEK_PLATFORM_WINDOWS
-constexpr ktk::tchar kPathSeparator = KOTEK_TEXT('\\');
+constexpr char kPathSeparator = '\\';
 #else
-constexpr tchar kPathSeparator = KOTEK_TEXT('/');
+constexpr char kPathSeparator = '/';
 #endif
 
 /**
  * Constant expresses in string that it is OpenGL version 3.3
  */
-constexpr const ktk::tchar* kRenderer_OpenGL3_3_Name = KOTEK_TEXT("OpenGL 3.3");
+constexpr const char* kRenderer_OpenGL3_3_Name = "OpenGL 3.3";
 
 /**
  * Constant expresses in string that it is OpenGL version 2.0
  */
-constexpr const ktk::tchar* kRenderer_OpenGL2_0_Name = KOTEK_TEXT("OpenGL 2.0");
+constexpr const char* kRenderer_OpenGL2_0_Name = "OpenGL 2.0";
 
 /**
  * Constant expresses in string that it is OpenGL version 4.6
  */
-constexpr const ktk::tchar* kRenderer_OpenGL4_6_Name = KOTEK_TEXT("OpenGL 4.6");
+constexpr const char* kRenderer_OpenGL4_6_Name = "OpenGL 4.6";
 
 /**
  * Constant expresses in string that it is DirectX 7
  */
-constexpr const ktk::tchar* kRenderer_DirectX_7_Name = KOTEK_TEXT("DirectX 7");
+constexpr const char* kRenderer_DirectX_7_Name = "DirectX 7";
 
 /**
  * Constant expresses in string that it is DirectX 8
  */
-constexpr const ktk::tchar* kRenderer_DirectX_8_Name = KOTEK_TEXT("DirectX 8");
+constexpr const char* kRenderer_DirectX_8_Name = "DirectX 8";
 
 /**
  * Constant expresses in string that it is DirectX 9
  */
-constexpr const ktk::tchar* kRenderer_DirectX_9_Name = KOTEK_TEXT("DirectX 9");
+constexpr const char* kRenderer_DirectX_9_Name = "DirectX 9";
 
 /**
  * Constant expresses in string that it is DirectX 10
  */
-constexpr const ktk::tchar* kRenderer_DirectX_10_Name =
-	KOTEK_TEXT("DirectX 10");
+constexpr const char* kRenderer_DirectX_10_Name =
+    "DirectX 10";
 
 /**
  * Constant expresses in string that it is DirectX 11
  */
-constexpr const ktk::tchar* kRenderer_DirectX_11_Name =
-	KOTEK_TEXT("DirectX 11");
+constexpr const char* kRenderer_DirectX_11_Name =
+    "DirectX 11";
 
 /**
  * Constant expresses in string that it is DirectX 12
  */
-constexpr const ktk::tchar* kRenderer_DirectX_12_Name =
-	KOTEK_TEXT("DirectX 12");
+constexpr const char* kRenderer_DirectX_12_Name =
+    "DirectX 12";
 
 /**
  * Constant expresses in string that it is Vulkan
  */
-constexpr const ktk::tchar* kRenderer_Vulkan_Name = KOTEK_TEXT("Vulkan");
+constexpr const char* kRenderer_Vulkan_Name = "Vulkan";
 
 /**
  * Constant expresses in string that it is Software renderer
  */
-constexpr const ktk::tchar* kRenderer_Software_Name = KOTEK_TEXT("Software");
+constexpr const char* kRenderer_Software_Name = "Software";
 
-constexpr const ktk::tchar* kRenderer_Unknown_Name =
-	KOTEK_TEXT("RENDERER_UNKNOWN");
+constexpr const char* kRenderer_Unknown_Name =
+    "RENDERER_UNKNOWN";
 
 /**
  * Constant expresses in string that it is a flag used in application
@@ -99,7 +99,7 @@ constexpr const ktk::tchar* kRenderer_Unknown_Name =
  * "--editor"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Editor = KOTEK_TEXT("--editor");
+constexpr const char* kConsoleCommandArg_Editor = "--editor";
 
 /**
  * Constant expresses in string that it is a flag used in application
@@ -121,8 +121,8 @@ constexpr const ktk::tchar* kConsoleCommandArg_Editor = KOTEK_TEXT("--editor");
  * "--editor_imgui"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Editor_ImGui =
-	KOTEK_TEXT("--editor_imgui");
+constexpr const char* kConsoleCommandArg_Editor_ImGui =
+    "--editor_imgui";
 
 /**
  * Constant expresses that we specify width for our executable.
@@ -133,7 +133,7 @@ constexpr const ktk::tchar* kConsoleCommandArg_Editor_ImGui =
  * "--width 1920"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Width = KOTEK_TEXT("--width");
+constexpr const char* kConsoleCommandArg_Width = "--width";
 
 /**
  * Constant expresses that we specify height for our executable.
@@ -144,7 +144,7 @@ constexpr const ktk::tchar* kConsoleCommandArg_Width = KOTEK_TEXT("--width");
  * "--height 1080"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Height = KOTEK_TEXT("--height");
+constexpr const char* kConsoleCommandArg_Height = "--height";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -161,8 +161,8 @@ constexpr const ktk::tchar* kConsoleCommandArg_Height = KOTEK_TEXT("--height");
  * "--render_gl3_3"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL3_3 =
-	KOTEK_TEXT("--render_gl3_3");
+constexpr const char* kConsoleCommandArg_Render_OpenGL3_3 =
+    "--render_gl3_3";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -179,11 +179,11 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL3_3 =
  * "--render_gl4_6"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL4_6 =
-	KOTEK_TEXT("--render_gl4_6");
+constexpr const char* kConsoleCommandArg_Render_OpenGL4_6 =
+    "--render_gl4_6";
 
-constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL_Latest =
-	KOTEK_TEXT("--render_gl_latest");
+constexpr const char* kConsoleCommandArg_Render_OpenGL_Latest =
+    "--render_gl_latest";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -199,20 +199,20 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_OpenGL_Latest =
  * "--render_vk"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan1_0 =
-	KOTEK_TEXT("--render_vk1_0");
+constexpr const char* kConsoleCommandArg_Render_Vulkan1_0 =
+    "--render_vk1_0";
 
-constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan1_1 =
-	KOTEK_TEXT("--render_vk1_1");
+constexpr const char* kConsoleCommandArg_Render_Vulkan1_1 =
+    "--render_vk1_1";
 
-constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan1_2 =
-	KOTEK_TEXT("--render_vk1_2");
+constexpr const char* kConsoleCommandArg_Render_Vulkan1_2 =
+    "--render_vk1_2";
 
-constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan1_3 =
-	KOTEK_TEXT("--render_vk1_3");
+constexpr const char* kConsoleCommandArg_Render_Vulkan1_3 =
+    "--render_vk1_3";
 
-constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan_Latest =
-	KOTEK_TEXT("--render_vk_latest");
+constexpr const char* kConsoleCommandArg_Render_Vulkan_Latest =
+    "--render_vk_latest";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -228,8 +228,8 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_Vulkan_Latest =
  * "--render_dx_7"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX7 =
-	KOTEK_TEXT("--render_dx_7");
+constexpr const char* kConsoleCommandArg_Render_DirectX7 =
+    "--render_dx_7";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -245,8 +245,8 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX7 =
  * "--render_dx_8"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX8 =
-	KOTEK_TEXT("--render_dx_8");
+constexpr const char* kConsoleCommandArg_Render_DirectX8 =
+    "--render_dx_8";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -262,8 +262,8 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX8 =
  * "--render_dx_9"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX9 =
-	KOTEK_TEXT("--render_dx_9");
+constexpr const char* kConsoleCommandArg_Render_DirectX9 =
+    "--render_dx_9";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -279,8 +279,8 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX9 =
  * "--render_dx_10"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX10 =
-	KOTEK_TEXT("--render_dx_10");
+constexpr const char* kConsoleCommandArg_Render_DirectX10 =
+    "--render_dx_10";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -296,8 +296,8 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX10 =
  * "--render_dx_11"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX11 =
-	KOTEK_TEXT("--render_dx_11");
+constexpr const char* kConsoleCommandArg_Render_DirectX11 =
+    "--render_dx_11";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -313,10 +313,10 @@ constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX11 =
  * "--render_dx_12"
  * @endcode
  */
-constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX12 =
-	KOTEK_TEXT("--render_dx_12");
+constexpr const char* kConsoleCommandArg_Render_DirectX12 =
+    "--render_dx_12";
 
-constexpr const ktk::tchar* kConsoleCommandArg_Render_DirectX_Latest =
-	KOTEK_TEXT("--render_dx_latest");
+constexpr const char* kConsoleCommandArg_Render_DirectX_Latest =
+    "--render_dx_latest";
 
 KOTEK_END_NAMESPACE_KOTEK

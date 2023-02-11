@@ -1,5 +1,7 @@
 #pragma once
 
+#include "kotek_render_format.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 

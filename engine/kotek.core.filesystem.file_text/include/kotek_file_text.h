@@ -23,7 +23,7 @@ class ktkFileText
 public:
 	ktkFileText(void);
 	ktkFileText(const ktkFileText& instance);
-	ktkFileText(const ktk::string& file_name);
+    ktkFileText(const ktk::cstring& file_name);
 	ktkFileText& operator=(const ktkFileText& instance);
 	~ktkFileText(void);
 
@@ -72,7 +72,7 @@ public:
 	 * \return void
 	 */
 	template <typename DataType>
-	void Write(const ktk::string& field_name, DataType data) noexcept
+    void Write(const ktk::cstring& field_name, DataType data) noexcept
 	{
 		this->m_json.Write<DataType>(field_name, data);
 	}
@@ -84,7 +84,7 @@ public:
 	 * "something.kFormatFile_Text" (see kFormatFile_Text constant in
 	 * header kotek_file_text.h)
 	 */
-	const ktk::string& Get_FileName(void) const noexcept;
+    const ktk::cstring& Get_FileName(void) const noexcept;
 
 	/**
 	 * Set file name to m_file_name field in class.
@@ -131,7 +131,7 @@ serializing when you save your file through Saver of Resource Manager.
 
 private:
 	ktkJson m_json;
-	ktk::string m_file_name;
+    ktk::cstring m_file_name;
 };
 
 KOTEK_END_NAMESPACE_CORE

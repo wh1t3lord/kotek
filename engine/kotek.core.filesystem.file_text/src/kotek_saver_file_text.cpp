@@ -51,7 +51,7 @@ bool ktkResourceSaverFile_Text::DetectTypeByFullPath(
 		this->m_savers.end();
 }
 
-ktk::string ktkResourceSaverFile_Text::Get_UserDescription() const noexcept
+ktk::cstring ktkResourceSaverFile_Text::Get_UserDescription() const noexcept
 {
 	return KOTEK_TEXT("this is saver for Text files");
 }
@@ -79,19 +79,19 @@ ktkIResourceSaver* ktkResourceSaverFile_Text::Get_Saver(
 	return p_result;
 }
 
-ktk::string ktkResourceSaverFile_Text::Get_AllSupportedFormats(
+ktk::cstring ktkResourceSaverFile_Text::Get_AllSupportedFormats(
 	void) const noexcept
 {
-	ktk::string result;
+    ktk::cstring result;
 	for (const auto& [format_name, p_saver] : this->m_savers)
 	{
 		result += format_name;
 		result += " ; ";
 	}
 
-	result.get_as_is().pop_back();
-	result.get_as_is().pop_back();
-	result.get_as_is().pop_back();
+    result.pop_back();
+    result.pop_back();
+    result.pop_back();
 
 	return result;
 }

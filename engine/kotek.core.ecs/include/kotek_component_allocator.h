@@ -27,9 +27,9 @@ public:
 	~ktkComponentAllocator(void) {}
 
 	// TODO: it's better to remove because you have GetComponentName
-	ktk::string GetDebugName(void) const noexcept override
+    ktk::cstring GetDebugName(void) const noexcept override
 	{
-		return ktk::cast::to_string(typeid(ComponentType).name());
+        return typeid(ComponentType).name();
 	}
 
 	bool Create(ktk::entity_t id) noexcept override
