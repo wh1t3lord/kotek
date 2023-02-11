@@ -22,8 +22,8 @@ bool ktkModel::Load(Core::ktkMainManager& main_manager, const ktk::string& path)
 
 	if (status == false)
 	{
-		KOTEK_MESSAGE(
-			"failed to load json (maybe it's invalid): {}", path.get_as_is());
+        KOTEK_MESSAGE("failed to load json (maybe it's invalid): {}",
+            reinterpret_cast<const char*>(path.c_str()));
 		return false;
 	}
 

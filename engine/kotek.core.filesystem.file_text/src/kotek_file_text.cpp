@@ -5,7 +5,9 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 ktkFileText::ktkFileText(void) {}
 
-ktkFileText::ktkFileText(const ktkFileText& instance) : m_json(instance.m_json) {}
+ktkFileText::ktkFileText(const ktkFileText& instance) : m_json(instance.m_json)
+{
+}
 
 ktkFileText::ktkFileText(const ktk::cstring& file_name) : m_file_name(file_name)
 {
@@ -177,7 +179,7 @@ const ktk::json::object& ktkFileText::Get_Json(void) const noexcept
 	return this->m_json.GetObject();
 }
 
-bool ktkFileText::IsKeyExist(const ktk::string& field_name) const noexcept
+bool ktkFileText::IsKeyExist(const ktk::cstring& field_name) const noexcept
 {
 	if (field_name.empty())
 	{
@@ -187,7 +189,7 @@ bool ktkFileText::IsKeyExist(const ktk::string& field_name) const noexcept
 
 	const ktk::json::object& json = this->m_json.GetObject();
 
-    return json.find(reinterpret_cast<const char*>(field_name.c_str())) != json.end();
+    return json.find(field_name.c_str()) != json.end();
 }
 
 const ktk::cstring& ktkFileText::Get_FileName(void) const noexcept
@@ -195,12 +197,13 @@ const ktk::cstring& ktkFileText::Get_FileName(void) const noexcept
 	return this->m_file_name;
 }
 
-void ktkFileText::Set_FileName(const ktk::string& file_name, bool is_apply_format) noexcept
+void ktkFileText::Set_FileName(
+    const ktk::string& file_name, bool is_apply_format) noexcept
 {
     this->m_file_name = reinterpret_cast<const char*>(file_name.c_str());
 
     if (is_apply_format)
-	    this->m_file_name += kFormatFile_Text;
+        this->m_file_name += kFormatFile_Text;
 }
 
 void ktkFileText::Set_Json(const ktkJson& data) noexcept

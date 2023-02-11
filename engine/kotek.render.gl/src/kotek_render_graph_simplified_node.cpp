@@ -29,7 +29,8 @@ namespace gl
 
 		KOTEK_ASSERT(
 			this->m_p_programs->find(program_name) != this->m_p_programs->end(),
-			"can't find program by name: [{}]", program_name);
+            "can't find program by name: [{}]",
+            reinterpret_cast<const char*>(program_name.c_str()));
 
 		return this->m_p_programs->at(program_name);
 	}

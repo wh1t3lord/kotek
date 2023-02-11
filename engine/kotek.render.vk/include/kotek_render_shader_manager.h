@@ -102,22 +102,15 @@ namespace Kotek
 				kShaderLoadingDataType_NotInitialized
 			};
 
-			constexpr const ktk::tchar* _kShaderPrefix_Vertex =
-				KOTEK_TEXT("vert");
-			constexpr const ktk::tchar* _kShaderPrefix_Fragment =
-				KOTEK_TEXT("frag");
-			constexpr const ktk::tchar* _kShaderPrefix_Compute =
-				KOTEK_TEXT("comp");
-			constexpr const ktk::tchar* _kShaderPrefix_Task =
-				KOTEK_TEXT("task");
-			constexpr const ktk::tchar* _kShaderPrefix_Mesh =
-				KOTEK_TEXT("mesh");
-			constexpr const ktk::tchar* _kShaderPrefix_Geometry =
-				KOTEK_TEXT("geom");
-			constexpr const ktk::tchar* _kShaderPrefix_TessellationEvaluation =
-				KOTEK_TEXT("tese");
-			constexpr const ktk::tchar* _kShaderPrefix_TessellationControl =
-				KOTEK_TEXT("tesc");
+            constexpr const char* _kShaderPrefix_Vertex = "vert";
+            constexpr const char* _kShaderPrefix_Fragment = "frag";
+            constexpr const char* _kShaderPrefix_Compute = "comp";
+            constexpr const char* _kShaderPrefix_Task = "task";
+            constexpr const char* _kShaderPrefix_Mesh = "mesh";
+            constexpr const char* _kShaderPrefix_Geometry = "geom";
+            constexpr const char* _kShaderPrefix_TessellationEvaluation =
+                "tese";
+            constexpr const char* _kShaderPrefix_TessellationControl = "tesc";
 
 			namespace helper
 			{
@@ -135,10 +128,10 @@ namespace Kotek
 					VkDescriptorType type) noexcept;
 
 				void printDescriptorSet() noexcept;
-				
+
 				void printBindingInfo(
 					const descriptor_set_info_t& info) noexcept;
-				
+
 				shader_type_t GetShaderTypeByShaderStageFlagBits(
 					VkShaderStageFlagBits bits) noexcept;
 
@@ -478,15 +471,13 @@ namespace Kotek
 
 				ktk::vector<ktk::uint32_t> compileShaderToSPIRV(
 					const ktk::string& path_to_file, shaderc_shader_kind type,
-					const ktk::map<ktk::string_legacy, ktk::string_legacy>&
-						macros = ktk::map<ktk::string_legacy,
-							ktk::string_legacy>()) noexcept;
+                    const ktk::map<ktk::cstring, ktk::cstring>& macros =
+                        ktk::map<ktk::cstring, ktk::cstring>()) noexcept;
 
 				ktk::vector<ktk::uint32_t> compileShaderFromStringToSPIRV(
 					const ktk::string& code_as_string, shaderc_shader_kind type,
-					const ktk::map<ktk::string_legacy, ktk::string_legacy>&
-						macros = ktk::map<ktk::string_legacy,
-							ktk::string_legacy>()) noexcept;
+                    const ktk::map<ktk::cstring, ktk::cstring>& macros =
+                        ktk::map<ktk::cstring, ktk::cstring>()) noexcept;
 
 				shader_type_t detectType(
 					const ktk::string& path_to_file) noexcept;

@@ -86,7 +86,7 @@ namespace gl
 			std::end(this->m_passes))
 		{
 			KOTEK_ASSERT(false, "render pass is already existed in storage! {}",
-				render_pass_name.get_as_is());
+                reinterpret_cast<const char*>(render_pass_name.c_str()));
 
 			this->m_failed_passes_for_adding.push_back(p_pass);
 
@@ -203,9 +203,8 @@ namespace gl
 					"(e.g. render targets or attachments in frame "
 					"buffer) because you have: {} and render pass[{}]",
 					gl::helper::Translate_RenderGraphBuilderTypeToString(
-						this->m_render_graph_type)
-						.get_as_is(),
-					render_pass_name.get_as_is());
+						this->m_render_graph_type),
+                    reinterpret_cast<const char*>(render_pass_name.c_str()));
 			}
 
 			for (const auto& [texture_name, info_create] :
@@ -215,7 +214,7 @@ namespace gl
 						images_to_create.end(),
 					"you want ot create a texture which is already "
 					"added: {}",
-					texture_name.get_as_is());
+                    reinterpret_cast<const char*>(texture_name.c_str()));
 
 				images_to_create[texture_name] = {
 					render_pass_name, texture_name, info_create};

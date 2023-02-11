@@ -694,12 +694,13 @@ void ktkEngineConfig::SetARGV(char** p_char) noexcept
 }
 
 bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(
-	const ktk::string& your_argument) const noexcept
+    const ktk::cstring& your_argument) const noexcept
 {
 	return std::find_if(this->m_parsed_command_line_arguments.begin(),
 			   this->m_parsed_command_line_arguments.end(),
-               [your_argument](const ktk::cstring& argument) -> bool {
-                    ktk::cstring_view wrapped_argument = reinterpret_cast<const char*>(your_argument.c_str());
+               [your_argument](const ktk::cstring& argument) -> bool
+               {
+                   ktk::cstring_view wrapped_argument = your_argument.c_str();
                    return argument == wrapped_argument;
 			   }) != this->m_parsed_command_line_arguments.end();
 }

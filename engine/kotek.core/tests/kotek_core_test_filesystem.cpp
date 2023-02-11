@@ -34,16 +34,16 @@ void test_file_create_pretty_output()
 	auto path =
 		filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_UserTests);
 
-	path /= instance.Get_FileName().get_as_legacy();
+    path /= instance.Get_FileName().c_str();
 
-	ktk::string test(KOTEK_TEXT("いくつか"));
+    ktk::string test(u8"いくつか");
 
 	instance.Write("test_field1", "data");
 	instance.Write("test_field2", "data2");
-	instance.Write<ktk::string>("ktk::string", test);
+    instance.Write<ktk::string>("ktk::string", test);
 
 		#ifdef KOTEK_USE_UNICODE
-	instance.Write<ktk::string>("KOTEK_TEXT", KOTEK_TEXT("いくつか"));
+    instance.Write<ktk::string>("KOTEK_TEXT", u8"いくつか");
 	instance.Write<ktk::wstring>("wchar_t", L"いくつか");
 	instance.Write<ktk::u8string>("char8_t", u8"いくつか");
 	instance.Write<ktk::u16string>("char16_t", u"いくつか");

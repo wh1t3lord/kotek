@@ -53,8 +53,8 @@ namespace Kotek
 				if (this->isExtensionPresent(p_instance_extension_name))
 				{
 #ifdef KOTEK_DEBUG
-					KOTEK_MESSAGE("add extension: [{}]",
-						ktk::cast::to_string(p_instance_extension_name));
+                    KOTEK_MESSAGE(
+                        "add extension: [{}]", p_instance_extension_name);
 #endif
 
 					this->m_extension_names.push_back(
@@ -63,7 +63,7 @@ namespace Kotek
 				}
 
 				KOTEK_ASSERT(false, "extension doesn't exist in vulkan: [{}]",
-					ktk::cast::to_string(p_instance_extension_name));
+                    p_instance_extension_name);
 
 				return false;
 			}
@@ -74,8 +74,7 @@ namespace Kotek
 				if (this->isLayerPresent(p_instance_layer_name))
 				{
 #ifdef KOTEK_DEBUG
-					KOTEK_MESSAGE("add layer: [{}]",
-						ktk::cast::to_string(p_instance_layer_name));
+                    KOTEK_MESSAGE("add layer: [{}]", p_instance_layer_name);
 #endif
 
 					this->m_layer_names.push_back(p_instance_layer_name);
@@ -83,7 +82,7 @@ namespace Kotek
 				}
 
 				KOTEK_ASSERT(false, "layer doesn't exist in vulkan: [{}]",
-					ktk::cast::to_string(p_instance_layer_name));
+                    p_instance_layer_name);
 
 				return false;
 			}
@@ -207,17 +206,15 @@ namespace Kotek
 							{
 								KOTEK_MESSAGE("obtained extensions for layer: "
 											  "[{}], count:{}",
-									ktk::cast::to_string(layer.layerName),
-									temp_data.size());
+                                    layer.layerName, temp_data.size());
 
 								for (const auto& extension : temp_data)
 								{
 									if (this->isExtensionPresent(
 											extension.extensionName) == false)
 									{
-										KOTEK_MESSAGE("new extension added: {}",
-											ktk::cast::to_string(
-												extension.extensionName));
+                                        KOTEK_MESSAGE("new extension added: {}",
+                                            extension.extensionName);
 
 										this->m_extension_properties.push_back(
 											extension);
@@ -230,7 +227,7 @@ namespace Kotek
 					{
 						KOTEK_MESSAGE(
 							"! can't obtain extensions for layer: [{}]",
-							ktk::cast::to_string(layer.layerName));
+                            layer.layerName);
 					}
 				}
 			}

@@ -242,7 +242,7 @@ namespace Kotek
 					{
 						KOTEK_ASSERT(false,
 							"you can't add the same texture twice [{}]",
-							image_name.get_as_is());
+                            reinterpret_cast<const char*>(image_name.c_str()));
 						return;
 					}
 
@@ -304,8 +304,9 @@ namespace Kotek
 							KOTEK_ASSERT(false,
 								"you can't add the existed shader by type: "
 								"[{}]",
-								helper::translateShaderTypeToString(type)
-									.get_as_is());
+                                reinterpret_cast<const char*>(
+                                    helper::translateShaderTypeToString(type)
+                                        .c_str()));
 							return;
 						}
 					}

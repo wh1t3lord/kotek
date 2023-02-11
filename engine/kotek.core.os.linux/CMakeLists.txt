@@ -35,3 +35,5 @@ endif()
 if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "GLFW")
 	target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
 endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)

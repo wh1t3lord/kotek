@@ -10,16 +10,14 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 namespace gl
 {
-	constexpr const ktk::tchar* _kShaderPrefix_Vertex = KOTEK_TEXT("vert");
-	constexpr const ktk::tchar* _kShaderPrefix_Fragment = KOTEK_TEXT("frag");
-	constexpr const ktk::tchar* _kShaderPrefix_Compute = KOTEK_TEXT("comp");
-	constexpr const ktk::tchar* _kShaderPrefix_Task = KOTEK_TEXT("task");
-	constexpr const ktk::tchar* _kShaderPrefix_Mesh = KOTEK_TEXT("mesh");
-	constexpr const ktk::tchar* _kShaderPrefix_Geometry = KOTEK_TEXT("geom");
-	constexpr const ktk::tchar* _kShaderPrefix_TessellationEvaluation =
-		KOTEK_TEXT("tese");
-	constexpr const ktk::tchar* _kShaderPrefix_TessellationControl =
-		KOTEK_TEXT("tesc");
+    constexpr const char* _kShaderPrefix_Vertex = ("vert");
+    constexpr const char* _kShaderPrefix_Fragment = ("frag");
+    constexpr const char* _kShaderPrefix_Compute = ("comp");
+    constexpr const char* _kShaderPrefix_Task = ("task");
+    constexpr const char* _kShaderPrefix_Mesh = ("mesh");
+    constexpr const char* _kShaderPrefix_Geometry = ("geom");
+    constexpr const char* _kShaderPrefix_TessellationEvaluation = ("tese");
+    constexpr const char* _kShaderPrefix_TessellationControl = ("tesc");
 
 	class ktkRenderShaderManager
 	{

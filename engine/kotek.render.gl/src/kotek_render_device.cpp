@@ -19,7 +19,8 @@ namespace gl
 
 		KOTEK_ASSERT(version, "failed to gladLoadGLLoader");
 
-		KOTEK_MESSAGE("Initialized GLAD for: {}", ktk::string(reinterpret_cast<const char*>(glGetString(GL_VERSION))));
+        KOTEK_MESSAGE("Initialized GLAD for: {}",
+            reinterpret_cast<const char*>(glGetString(GL_VERSION)));
 	}
 
 	void ktkRenderDevice::Shutdown(void) {}

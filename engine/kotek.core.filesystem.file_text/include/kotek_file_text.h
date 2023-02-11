@@ -55,14 +55,14 @@ public:
 	*/
 
 	template <typename ReturnType = ktkJson>
-	ReturnType Get(const ktk::string& key_name) const noexcept
+    ReturnType Get(const ktk::cstring& key_name) const noexcept
 	{
 		return this->m_json.Get<ReturnType>(key_name);
 	}
 
 	const ktk::json::object& Get_Json(void) const noexcept;
 
-	bool IsKeyExist(const ktk::string& field_name) const noexcept;
+    bool IsKeyExist(const ktk::cstring& field_name) const noexcept;
 
 	/**
 	 * Template for specifying types for writting in field in json.

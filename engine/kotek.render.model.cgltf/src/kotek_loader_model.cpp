@@ -73,8 +73,7 @@ bool ktkLoaderModel_CGLTF::Load(
 	return result;
 }
 
-ktk::string ktkLoaderModel_CGLTF::Get_UserDescription(
-	void) const noexcept
+ktk::cstring ktkLoaderModel_CGLTF::Get_UserDescription(void) const noexcept
 {
 	return KOTEK_TEXT("this is loader based on cgltf library for "
 					  "loading glTF 2.0 models (.glb, .gltf)");
@@ -119,18 +118,18 @@ Core::ktkIResourceLoader* ktkLoaderModel_CGLTF::Get_Loader(
 	return p_result;
 }
 
-ktk::string ktkLoaderModel_CGLTF::Get_AllSupportedFormats(void) const noexcept
+ktk::cstring ktkLoaderModel_CGLTF::Get_AllSupportedFormats(void) const noexcept
 {
-	ktk::string result;
+    ktk::cstring result;
 	for (const auto& [format_name, p_loader] : this->m_loaders)
 	{
-		result += format_name;
+        result += format_name;
 		result += " ; ";
 	}
 
-	result.get_as_is().pop_back();
-	result.get_as_is().pop_back();
-	result.get_as_is().pop_back();
+    result.pop_back();
+    result.pop_back();
+    result.pop_back();
 
 	return result;
 }

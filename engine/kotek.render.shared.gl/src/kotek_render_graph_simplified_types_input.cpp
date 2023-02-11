@@ -25,7 +25,7 @@ namespace gl
 				this->m_input_textures.end(),
 			"you must have a unique and unregistered image, found a "
 			"duplicate: {}",
-			image_name.get_as_is());
+            reinterpret_cast<const char*>(image_name.c_str()));
 
 		this->m_input_textures[image_name] = info_create;
 	}
@@ -96,7 +96,8 @@ namespace gl
 			this->m_input_shaders.find(user_name_for_access_in_the_code) !=
 				this->m_input_shaders.end(),
 			"can't find the specified shader name in the map: {}",
-			user_name_for_access_in_the_code);
+            reinterpret_cast<const char*>(
+                user_name_for_access_in_the_code.c_str()));
 
 		return this->m_input_shaders.at(user_name_for_access_in_the_code);
 	}

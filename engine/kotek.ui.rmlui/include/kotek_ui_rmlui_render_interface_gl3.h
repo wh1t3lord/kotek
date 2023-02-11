@@ -13,6 +13,10 @@ namespace Gfx
 	struct ShadersData;
 }
 
+#ifdef KOTEK_PLATFORM_LINUX
+    #undef None
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 

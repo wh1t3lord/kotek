@@ -982,7 +982,7 @@ void ktkImguiWrapper::LabelText(const char* label, const char* fmt, ...)
 	va_list args;
 	va_start(args, fmt);
 	::ImGui::LabelText(label, fmt, args);
-	va_end(fmt);
+    va_end(args);
 }
 void ktkImguiWrapper::LabelTextV(
 	const char* label, const char* fmt, va_list args)

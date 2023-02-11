@@ -57,6 +57,8 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_defines_static_os_linux.h"
 	"src/main_core_defines_static_os_linux_dll.cpp")
 
-target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
+if (UNIX)
+    target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
+endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

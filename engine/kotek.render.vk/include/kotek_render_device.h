@@ -21,10 +21,12 @@ namespace Kotek
 		{
 			namespace helper
 			{
-				ktk::string TranslateVkColorSpaceToString(
+                ktk::cstring TranslateVkColorSpaceToString(
 					VkColorSpaceKHR color_space) noexcept;
-				ktk::string TranslateVkFormatToString(VkFormat format) noexcept;
-				ktk::string TranslateVkResultToString(VkResult result) noexcept;
+                ktk::cstring TranslateVkFormatToString(
+                    VkFormat format) noexcept;
+                ktk::cstring TranslateVkResultToString(
+                    VkResult result) noexcept;
 				ktk::uint32_t TranslateEnumVersionToInstanceVersion(
 					Core::eEngineSupportedVulkanVersion version) noexcept;
 			} // namespace helper
@@ -144,7 +146,7 @@ namespace Kotek
 				/// <param name="pattern">your format string</param>
 				/// <param name="api_version">your api version for
 				/// formatting</param> <returns></returns>
-				void PrintApiVersion(const ktk::string& pattern,
+                void PrintApiVersion(const ktk::cstring& pattern,
 					ktk::uint32_t api_version) const noexcept;
 
 				void PrintSurfaceFormats(

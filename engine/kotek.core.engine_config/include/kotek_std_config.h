@@ -190,7 +190,7 @@ public:
 	 * \return true means it exists otherwise it doesn't present
 	 */
 	bool IsContainsConsoleCommandLineArgument(
-		const ktk::string& your_argument) const noexcept override;
+        const ktk::cstring& your_argument) const noexcept override;
 
 	bool IsUserSpecifiedValidRenderer(void) const noexcept override;
 

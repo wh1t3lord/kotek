@@ -713,7 +713,7 @@ public:
 	virtual void SetARGC(int) noexcept = 0;
 	virtual void SetARGV(char**) noexcept = 0;
 	virtual bool IsContainsConsoleCommandLineArgument(
-		const ktk::string& your_argument) const noexcept = 0;
+        const ktk::cstring& your_argument) const noexcept = 0;
 
 	/// @brief This method means that argument line of application contains
 	/// valid request for creating renderer. It means that user can specify only

@@ -35,7 +35,7 @@ namespace gl
 		const char* description_error{};
 		if (glfwGetError(&description_error))
 		{
-			KOTEK_MESSAGE("{}", ktk::string(description_error).get_as_is());
+            KOTEK_MESSAGE("{}", description_error);
 		}
 	#endif
 #elif defined(KOTEK_USE_WINDOW_LIBRARY_SDL)

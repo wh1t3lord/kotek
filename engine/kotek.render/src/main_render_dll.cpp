@@ -268,7 +268,7 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 	}
 
 	KOTEK_ASSERT(status, "failed to shutdown render {} module",
-		p_engine_config->GetRenderName().get_as_is());
+        p_engine_config->GetRenderName());
 
 	return status;
 }

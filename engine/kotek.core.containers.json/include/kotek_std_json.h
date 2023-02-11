@@ -32,7 +32,7 @@ public:
 	/// <param name="key_name">json key</param>
 	/// <returns>Your specified ReturnType</returns>
 	template <typename ReturnType>
-	ReturnType Get(const ktk::string& key_name) const noexcept
+    ReturnType Get(const ktk::cstring& key_name) const noexcept
 	{
 		ktk::any result = ReturnType{};
 
@@ -49,9 +49,7 @@ public:
 			return std::any_cast<ReturnType>(result);
 		}
 
-        ktk::cstring key_name_legacy = reinterpret_cast<const char*>(key_name.c_str());
-
-		if (this->m_json.find(key_name_legacy) == this->m_json.end())
+        if (this->m_json.find(key_name.c_str()) == this->m_json.end())
 		{
 			KOTEK_MESSAGE_WARNING(
 				"your file doesn't contain key: {}", key_name);
@@ -59,7 +57,7 @@ public:
 			return std::any_cast<ReturnType>(result);
 		}
 
-		const auto& json_value = this->m_json.at(key_name_legacy);
+        const auto& json_value = this->m_json.at(key_name);
 
 		result = ktk::json::value_to<ReturnType>(json_value);
 #endif
@@ -78,7 +76,7 @@ public:
         this->m_json[field_name.c_str()] = ktk::json::value_from(data);
 	}
 
-	ktk::json::value& operator[](ktk::json::string_view key) noexcept 
+    ktk::json::value& operator[](ktk::json::string_view key) noexcept
 	{
 		return this->m_json[key];
 	}

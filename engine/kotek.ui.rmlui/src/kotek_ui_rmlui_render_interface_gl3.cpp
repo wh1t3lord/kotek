@@ -1,6 +1,8 @@
 #include "../include/kotek_ui_rmlui_render_interface_gl3.h"
 
-#include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
+#ifdef KOTEK_PLATFORM_LINUX
+    #undef Always
+#endif
 
 #include <RmlUi/Core/Core.h>
 #include <RmlUi/Core/FileInterface.h>
@@ -519,7 +521,8 @@ void ktkRenderInterface_GL3::EnableScissorRegion(bool enable)
 	}
 }
 
-void ktkRenderInterface_GL3::SetScissorRegion(int x, int y, int width, int height)
+void ktkRenderInterface_GL3::SetScissorRegion(
+    int x, int y, int width, int height)
 {
 	if (transform_active)
 	{
@@ -592,7 +595,7 @@ bool ktkRenderInterface_GL3::LoadTexture(Rml::TextureHandle& texture_handle,
 	{
 		Rml::Log::Message(Rml::Log::LT_ERROR,
 			"Texture file size is smaller than TGAHeader, file is not a valid "
-		    "TGA image.");
+            "TGA image.");
 		file_interface->Close(file_handle);
 		return false;
 	}

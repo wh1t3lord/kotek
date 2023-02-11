@@ -6,8 +6,9 @@
 #ifdef KOTEK_PLATFORM_LINUX
 	#define VK_USE_PLATFORM_XLIB_KHR
 	#define VK_USE_PLATFORM_XCB_KHR
-
 	#include <vulkan/vulkan.h>
+
+    #include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
 
 	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
 		#include <GLFW/glfw3.h>

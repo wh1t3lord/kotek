@@ -213,22 +213,19 @@ public:
 
 	void TextUnformatted(
 		const char* text, const char* text_end = NULL) override;
-	void Text(const char* fmt, ...) IM_FMTARGS(1) override;
-	void TextV(const char* fmt, va_list args) IM_FMTLIST(1) override;
-	void TextColored(const ImVec4& col, const char* fmt, ...)
-		IM_FMTARGS(2) override;
-	void TextColoredV(const ImVec4& col, const char* fmt, va_list args)
-		IM_FMTLIST(2) override;
-	void TextDisabled(const char* fmt, ...) IM_FMTARGS(1) override;
-	void TextDisabledV(const char* fmt, va_list args) IM_FMTLIST(1) override;
-	void TextWrapped(const char* fmt, ...) IM_FMTARGS(1) override;
-	void TextWrappedV(const char* fmt, va_list args) IM_FMTLIST(1) override;
-	void LabelText(const char* label, const char* fmt, ...)
-		IM_FMTARGS(2) override;
-	void LabelTextV(const char* label, const char* fmt, va_list args)
-		IM_FMTLIST(2) override;
-	void BulletText(const char* fmt, ...) IM_FMTARGS(1) override;
-	void BulletTextV(const char* fmt, va_list args) IM_FMTLIST(1) override;
+    void Text(const char* fmt, ...) override;
+    void TextV(const char* fmt, va_list args) override;
+    void TextColored(const ImVec4& col, const char* fmt, ...) override;
+    void TextColoredV(
+        const ImVec4& col, const char* fmt, va_list args) override;
+    void TextDisabled(const char* fmt, ...) override;
+    void TextDisabledV(const char* fmt, va_list args) override;
+    void TextWrapped(const char* fmt, ...) override;
+    void TextWrappedV(const char* fmt, va_list args) override;
+    void LabelText(const char* label, const char* fmt, ...) override;
+    void LabelTextV(const char* label, const char* fmt, va_list args) override;
+    void BulletText(const char* fmt, ...) override;
+    void BulletTextV(const char* fmt, va_list args) override;
 
 	bool Button(const char* label, const ImVec2& size = ImVec2(0, 0)) override;
 	bool SmallButton(const char* label) override;
@@ -391,23 +388,19 @@ public:
 		ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0, 0)) override;
 	void SetColorEditOptions(ImGuiColorEditFlags flags) override;
 	bool TreeNode(const char* label) override;
-	bool TreeNode(const char* str_id, const char* fmt, ...)
-		IM_FMTARGS(2) override;
-	bool TreeNode(const void* ptr_id, const char* fmt, ...)
-		IM_FMTARGS(2) override;
-	bool TreeNodeV(const char* str_id, const char* fmt, va_list args)
-		IM_FMTLIST(2) override;
-	bool TreeNodeV(const void* ptr_id, const char* fmt, va_list args)
-		IM_FMTLIST(2) override;
+    bool TreeNode(const char* str_id, const char* fmt, ...) override;
+    bool TreeNode(const void* ptr_id, const char* fmt, ...) override;
+    bool TreeNodeV(const char* str_id, const char* fmt, va_list args) override;
+    bool TreeNodeV(const void* ptr_id, const char* fmt, va_list args) override;
 	bool TreeNodeEx(const char* label, ImGuiTreeNodeFlags flags = 0) override;
 	bool TreeNodeEx(const char* str_id, ImGuiTreeNodeFlags flags,
-		const char* fmt, ...) IM_FMTARGS(3) override;
+        const char* fmt, ...) override;
 	bool TreeNodeEx(const void* ptr_id, ImGuiTreeNodeFlags flags,
-		const char* fmt, ...) IM_FMTARGS(3) override;
+        const char* fmt, ...) override;
 	bool TreeNodeExV(const char* str_id, ImGuiTreeNodeFlags flags,
-		const char* fmt, va_list args) IM_FMTLIST(3) override;
+        const char* fmt, va_list args) override;
 	bool TreeNodeExV(const void* ptr_id, ImGuiTreeNodeFlags flags,
-		const char* fmt, va_list args) IM_FMTLIST(3) override;
+        const char* fmt, va_list args) override;
 	void TreePush(const char* str_id) override;
 	void TreePush(const void* ptr_id = NULL) override;
 	void TreePop() override;
@@ -469,8 +462,8 @@ public:
 
 	void BeginTooltip() override;
 	void EndTooltip() override;
-	void SetTooltip(const char* fmt, ...) IM_FMTARGS(1) override;
-	void SetTooltipV(const char* fmt, va_list args) IM_FMTLIST(1) override;
+    void SetTooltip(const char* fmt, ...) override;
+    void SetTooltipV(const char* fmt, va_list args) override;
 
 	bool BeginPopup(const char* str_id, ImGuiWindowFlags flags = 0) override;
 	bool BeginPopupModal(const char* name, bool* p_open = NULL,
@@ -554,8 +547,8 @@ public:
 	void LogToClipboard(int auto_open_depth = -1) override;
 	void LogFinish() override;
 	void LogButtons() override;
-	void LogText(const char* fmt, ...) IM_FMTARGS(1) override;
-	void LogTextV(const char* fmt, va_list args) IM_FMTLIST(1) override;
+    void LogText(const char* fmt, ...) override;
+    void LogTextV(const char* fmt, va_list args) override;
 
 	bool BeginDragDropSource(ImGuiDragDropFlags flags = 0) override;
 	bool SetDragDropPayload(const char* type, const void* data, size_t sz,

@@ -101,7 +101,8 @@ namespace gl
 			KOTEK_ASSERT(
 				this->m_render_passes_and_its_shaders.find(pipeline_name) ==
 					this->m_render_passes_and_its_shaders.end(),
-				"found duplicate the pipeline name: [{}]", pipeline_name);
+                "found duplicate the pipeline name: [{}]",
+                reinterpret_cast<const char*>(pipeline_name.c_str()));
 
 			for (const auto& [shader_type, info_shader_creation] :
 				map_shader_type_info_creation)
@@ -139,8 +140,7 @@ namespace gl
 		case gl::eShaderLoadingDataType::kShaderLoadingDataType_FilePathString:
 		{
 			result = p_manager->LoadShader(
-				std::get<Kotek::ktk::string>(info_creation.Get_Data())
-					.get_as_is());
+				std::get<Kotek::ktk::string>(info_creation.Get_Data()));
 			break;
 		}
 		case gl::eShaderLoadingDataType::kShaderLoadingDataType_NotInitialized:
@@ -179,7 +179,7 @@ namespace gl
 		{
 #ifdef KOTEK_DEBUG
 			KOTEK_MESSAGE("[GL] deleting shader handles for render pass: [{}]",
-				render_pass_name);
+                reinterpret_cast<const char*>(render_pass_name.c_str()));
 #endif
 
 			for (const auto& [shader_type, shader_module] :
@@ -199,7 +199,7 @@ namespace gl
 		{
 #ifdef KOTEK_DEBUG
 			KOTEK_MESSAGE("[GL] deleting program handles for render pass: [{}]",
-				render_pass_name);
+                reinterpret_cast<const char*>(render_pass_name.c_str()));
 #endif
 
 			glDeleteProgram(program_handle_id);
@@ -221,7 +221,7 @@ namespace gl
 #ifdef KOTEK_DEBUG
 					KOTEK_MESSAGE("attached shader type to "
 								  "render_pass_name[{}]: [{}]",
-						render_pass_name,
+                        reinterpret_cast<const char*>(render_pass_name.c_str()),
 						gl::helper::Translate_ShaderType(shader_type));
 #endif
 
@@ -240,8 +240,7 @@ namespace gl
 					glGetProgramInfoLog(
 						program, sizeof(buffer), nullptr, buffer);
 
-					KOTEK_ASSERT(
-						false, "failed to link: {}", ktk::string(buffer));
+                    KOTEK_ASSERT(false, "failed to link: {}", buffer);
 				}
 #endif
 

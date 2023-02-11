@@ -27,10 +27,9 @@ namespace Kotek
 				KOTEK_MESSAGE("|||VALIDATION_MESSAGE||| "
 							  "[object:{}][messageCode:{}][location:{}][{}][{}]"
 							  "[{}][{}] {} \n\n\n",
-					object, messageCode, location,
-					ktk::cast::to_string(pLayerPrefix), static_cast<int>(flags),
-					static_cast<int>(objectType), pUserData,
-					ktk::cast::to_string(pMessage));
+                    object, messageCode, location, pLayerPrefix,
+                    static_cast<int>(flags), static_cast<int>(objectType),
+                    pUserData, pMessage);
 
 				return VK_FALSE;
 			}
@@ -864,8 +863,7 @@ namespace Kotek
 					{
 						if (result.addExtensionName(it) == false)
 						{
-							KOTEK_ASSERT(false, "missed extension: {}",
-								ktk::cast::to_string(it));
+                            KOTEK_ASSERT(false, "missed extension: {}", it);
 						}
 					}
 
@@ -991,7 +989,7 @@ namespace Kotek
 				return result;
 			}
 
-			void ktkRenderDevice::PrintApiVersion(const ktk::string& pattern,
+            void ktkRenderDevice::PrintApiVersion(const ktk::cstring& pattern,
 				ktk::uint32_t api_version) const noexcept
 			{
 				KOTEK_MESSAGE_STRING(pattern, ((api_version >> 29)),
@@ -1007,11 +1005,10 @@ namespace Kotek
 				for (const auto& format : formats)
 				{
 					KOTEK_MESSAGE("Surface format: {}",
-						helper::TranslateVkFormatToString(format.format)
-							.get_as_is());
+                        helper::TranslateVkFormatToString(format.format));
 					KOTEK_MESSAGE("Surface color space: {}",
-						helper::TranslateVkColorSpaceToString(format.colorSpace)
-							.get_as_is());
+                        helper::TranslateVkColorSpaceToString(
+                            format.colorSpace));
 				}
 #endif
 			}
@@ -1020,38 +1017,37 @@ namespace Kotek
 				const VkPhysicalDeviceProperties& props) const noexcept
 			{
 				auto p_get_name_of_device_type =
-					[](VkPhysicalDeviceType id) -> ktk::string
+                    [](VkPhysicalDeviceType id) -> ktk::cstring
 				{ return string_VkPhysicalDeviceType(id); };
 
 				KOTEK_MESSAGE("VIDEO CARD INFO");
 
-				KOTEK_MESSAGE(
-					"name: {}", ktk::string(props.deviceName).get_as_is());
+                KOTEK_MESSAGE("name: {}", props.deviceName);
 
 				this->PrintApiVersion(
 					"videocard API VERSION DEVICE: {}.{}.{}.{}",
 					props.apiVersion);
 
 				KOTEK_MESSAGE("device type: {}",
-					p_get_name_of_device_type(props.deviceType).get_as_is());
+                    p_get_name_of_device_type(props.deviceType));
 
 				KOTEK_MESSAGE("VIDEO CARD INFO");
 			}
 
 			namespace helper
 			{
-				ktk::string TranslateVkColorSpaceToString(
+                ktk::cstring TranslateVkColorSpaceToString(
 					VkColorSpaceKHR color_space) noexcept
 				{
 					return string_VkColorSpaceKHR(color_space);
 				}
 
-				ktk::string TranslateVkFormatToString(VkFormat format) noexcept
+                ktk::cstring TranslateVkFormatToString(VkFormat format) noexcept
 				{
 					return string_VkFormat(format);
 				}
 
-				ktk::string TranslateVkResultToString(VkResult result) noexcept
+                ktk::cstring TranslateVkResultToString(VkResult result) noexcept
 				{
 					return string_VkResult(result);
 				}

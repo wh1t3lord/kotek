@@ -41,8 +41,8 @@ namespace gl
 
 		ktkShaderModule result;
 
-		ktk::string_legacy converted = code_as_string.get_as_legacy();
-		const char* p_str = converted.c_str();
+        const char* p_str =
+            reinterpret_cast<const char*>(code_as_string.c_str());
 
 		GLuint shader_handle{};
 
@@ -77,7 +77,7 @@ namespace gl
 		{
 			glGetShaderInfoLog(shader_handle, sizeof(buffer), nullptr, buffer);
 
-			KOTEK_ASSERT(false, "{}", ktk::string(buffer));
+            KOTEK_ASSERT(false, "{}", buffer);
 		}
 #endif
 

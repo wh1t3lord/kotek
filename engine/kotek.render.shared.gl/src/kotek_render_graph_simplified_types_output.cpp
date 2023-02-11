@@ -25,9 +25,10 @@ namespace gl
 
 		KOTEK_ASSERT(this->m_output_buffers.find(buffer_name) ==
 				this->m_output_buffers.end(),
-			"you can't add a duplicate: {}", buffer_name.get_as_is());
+            "you can't add a duplicate: {}",
+            reinterpret_cast<const char*>(buffer_name.c_str()));
 
-		this->m_output_buffers[buffer_name] = info;
+        this->m_output_buffers[buffer_name] = info;
 	}
 
 	const ktk::unordered_map<ktk::string, gl::ktkRenderGraphBufferInfo>&
@@ -44,9 +45,10 @@ namespace gl
 			image_name.empty() == false, "you can't pass an empty image name");
 		KOTEK_ASSERT(this->m_output_textures.find(image_name) ==
 				this->m_output_textures.end(),
-			"you can't add the duplicate: {}", image_name.get_as_is());
+            "you can't add the duplicate: {}",
+            reinterpret_cast<const char*>(image_name.c_str()));
 
-		this->m_output_textures[image_name] = info;
+        this->m_output_textures[image_name] = info;
 	}
 
 	const ktk::unordered_map<ktk::string, gl::ktkRenderGraphTextureInfo>&

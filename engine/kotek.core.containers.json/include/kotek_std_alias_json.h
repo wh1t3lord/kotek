@@ -3,6 +3,7 @@
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
+    #undef Bool
 	#include <boost/json.hpp>
 #elif defined(KOTEK_USE_STD_LIBRARY)
 	#error add replacement for boost

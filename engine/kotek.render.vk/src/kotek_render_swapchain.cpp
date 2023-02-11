@@ -219,9 +219,8 @@ namespace Kotek
 							p_main_manager->GetGameManager()->GetWindowWidth();
 
 						p_main_manager->GetGameManager()->GetConsole()->Execute(
-							Core::eConsoleCommandIndex::
-								kConsoleCommand_Resize,
-							{ktk::string(width), ktk::string(height)});
+                            Core::eConsoleCommandIndex::kConsoleCommand_Resize,
+                            {std::to_string(width), std::to_string(height)});
 					}
 					else
 					{

@@ -99,11 +99,9 @@ namespace Kotek
 										{
 											KOTEK_MESSAGE(
 												"obtained new device extension "
-												"from layer[{}]: {}",
-												ktk::cast::to_string(
-													layer.layerName),
-												ktk::cast::to_string(
-													extension.extensionName));
+                                                "from layer[{}]: {}",
+                                                layer.layerName,
+                                                extension.extensionName);
 
 											this->m_device_extension_properties
 												.push_back(extension);
@@ -139,8 +137,8 @@ namespace Kotek
 					return true;
 				}
 
-				KOTEK_ASSERT(false, "can't add extension: [{}]",
-					ktk::cast::to_string(extension_name));
+                KOTEK_ASSERT(
+                    false, "can't add extension: [{}]", extension_name);
 
 				return false;
 			}
@@ -158,15 +156,13 @@ namespace Kotek
 				this->m_p_next = p_data;
 			}
 
-			ktk::uint32_t
-			ktkRenderDeviceProperties::getCountExtensionsName(
+            ktk::uint32_t ktkRenderDeviceProperties::getCountExtensionsName(
 				void) const noexcept
 			{
 				return this->m_device_extension_names.size();
 			}
 
-			const char* const*
-			ktkRenderDeviceProperties::getDataExtensionsName(
+            const char* const* ktkRenderDeviceProperties::getDataExtensionsName(
 				void) const noexcept
 			{
 				return this->m_device_extension_names.data();

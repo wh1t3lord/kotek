@@ -70,7 +70,8 @@ namespace Game
 		const auto& field_library_name =
 			file.Get<ktk::string>(Core::kSysInfoFieldName_UserLibraryName);
 		const auto& field_initialize_render_callback_name =
-			file.Get<ktk::string>(Core::kSysInfoFieldName_InitializeCallback_Render);
+            file.Get<ktk::string>(
+                Core::kSysInfoFieldName_InitializeCallback_Render);
 
 		KOTEK_ASSERT(field_library_name.empty() == false,
 			"you can't have an invalid name of library, because you need "
@@ -78,7 +79,8 @@ namespace Game
 
 		auto path_to_user_dll = ktk::dll::program_location().parent_path();
 
-		path_to_user_dll /= field_library_name.get_as_is().c_str();
+        path_to_user_dll /=
+            reinterpret_cast<const char*>(field_library_name.c_str());
 
 		p_main_manager->Get_EngineConfig()->Set_UserLibrary(
 			path_to_user_dll.c_str());
@@ -87,40 +89,46 @@ namespace Game
 
 		p_user_callback_initialize_game_library =
 			p_user_dll->get<ktkUserCallbackInitialize>(
-				field_initialize_callback_name.get_as_legacy().c_str());
+                reinterpret_cast<const char*>(
+                    field_initialize_callback_name.c_str()));
 
 		p_user_callback_shutdown_game_library =
 			p_user_dll->get<ktkUserCallbackShutdown>(
-				field_shutdown_callback_name.get_as_legacy().c_str());
+                reinterpret_cast<const char*>(
+                    field_shutdown_callback_name.c_str()));
 
 		p_user_callback_update_game_library =
 			p_user_dll->get<ktkUserCallbackUpdate>(
-				field_update_callback_name.get_as_legacy().c_str());
+                reinterpret_cast<const char*>(
+                    field_update_callback_name.c_str()));
 
 		p_user_callback_initialize_render_from_game_library =
 			p_user_dll->get<ktkUserCallbackInitializeRender>(
-				field_initialize_render_callback_name.get_as_legacy().c_str());
+                reinterpret_cast<const char*>(
+                    field_initialize_render_callback_name.c_str()));
 
 		KOTEK_ASSERT(p_user_callback_initialize_game_library != nullptr,
 			"can't obtain function from game user library {}: {}",
-			field_library_name.get_as_is(),
-			field_initialize_callback_name.get_as_is());
+            reinterpret_cast<const char*>(field_library_name.c_str()),
+            reinterpret_cast<const char*>(
+                field_initialize_callback_name.c_str()));
 
 		KOTEK_ASSERT(p_user_callback_shutdown_game_library != nullptr,
 			"can't obtain function from game user library {}: {}",
-			field_library_name.get_as_is(),
-			field_shutdown_callback_name.get_as_is());
+            reinterpret_cast<const char*>(field_library_name.c_str()),
+            reinterpret_cast<const char*>(
+                field_shutdown_callback_name.c_str()));
 
 		KOTEK_ASSERT(p_user_callback_update_game_library != nullptr,
 			"can't obtain function from game user library {}: {}",
-			field_library_name.get_as_is(),
-			field_update_callback_name.get_as_is());
+            reinterpret_cast<const char*>(field_library_name.c_str()),
+            reinterpret_cast<const char*>(field_update_callback_name.c_str()));
 
 		KOTEK_ASSERT(
 			p_user_callback_initialize_render_from_game_library != nullptr,
 			"can't obtain function from game user library {}: {}",
-			field_library_name.get_as_is(),
-			field_update_callback_name.get_as_is());
+            reinterpret_cast<const char*>(field_library_name.c_str()),
+            reinterpret_cast<const char*>(field_update_callback_name.c_str()));
 
 		if (p_user_callback_initialize_game_library)
 		{
@@ -167,11 +175,11 @@ namespace Engine
 			"manager");
 		KOTEK_ASSERT(p_main_manager->GetInput(),
 			"you didn't initialize input manager field in "
-			"main manager");
+            "main manager");
 
 		if (p_main_manager->Get_EngineConfig()
-				->IsContainsConsoleCommandLineArgument(
-					kConsoleCommandArg_Editor) == false)
+                ->IsContainsConsoleCommandLineArgument(
+                    kConsoleCommandArg_Editor) == false)
 		{
 			KOTEK_ASSERT(p_main_manager->getRenderDevice(),
 				"you didn't initialize render device manager field in main "
@@ -192,8 +200,7 @@ namespace Engine
 	void PrintCompiler(void) noexcept
 	{
 #if defined(__llvm__) || defined(__clang__)
-		KOTEK_MESSAGE("Compiled with: Clang {}",
-			Kotek::ktk::cast::to_string(__clang_version__));
+        KOTEK_MESSAGE("Compiled with: Clang {}", __clang_version__);
 
 #elif (_MSC_VER > 0)
 

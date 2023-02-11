@@ -23,8 +23,8 @@ namespace gl
 		for (auto* p_pass : this->m_passes)
 		{
 #ifdef KOTEK_DEBUG
-			KOTEK_MESSAGE(
-				"Deleting render pass {}", p_pass->Get_Name().get_as_is());
+            KOTEK_MESSAGE("Deleting render pass {}",
+                reinterpret_cast<const char*>(p_pass->Get_Name().c_str()));
 #endif
 
 			delete p_pass;
