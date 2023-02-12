@@ -2,7 +2,7 @@
 
 #define KOTEK_COMPONENT(YourClass)                                          \
 public:                                                                     \
-	static const Kotek::ktk::string& GetComponentName(void) noexcept        \
+    static const Kotek::ktk::cstring& GetComponentName(void) noexcept       \
 	{                                                                       \
 		return m_component_name;                                            \
 	}                                                                       \
@@ -30,5 +30,5 @@ public:                                                                     \
 	}                                                                       \
                                                                             \
 private:                                                                    \
-	inline static Kotek::ktk::string m_component_name = #YourClass;         \
+    inline static Kotek::ktk::cstring m_component_name = #YourClass;        \
 	bool m_is_enabled = true;

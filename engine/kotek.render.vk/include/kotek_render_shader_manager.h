@@ -118,13 +118,13 @@ namespace Kotek
 
 				bool isBufferByDescriptorType(VkDescriptorType type) noexcept;
 
-				ktk::string translateShaderTypeToString(
+                ktk::cstring translateShaderTypeToString(
 					shader_type_t type) noexcept;
 
-				ktk::string translateShaderTypeToStringFormat(
+                ktk::cstring translateShaderTypeToStringFormat(
 					shader_type_t type) noexcept;
 
-				ktk::string translateDescriptorTypeToString(
+                ktk::cstring translateDescriptorTypeToString(
 					VkDescriptorType type) noexcept;
 
 				void printDescriptorSet() noexcept;
@@ -388,14 +388,14 @@ namespace Kotek
 				descriptor_set_info_t(ktk::uint32_t descriptor_set_index,
 					ktk::uint32_t binding_index, VkDescriptorType type,
 					shader_type_t shader_type,
-					const ktk::string& shader_variable_name);
+                    const ktk::cstring& shader_variable_name);
 				descriptor_set_info_t(void);
 				~descriptor_set_info_t(void);
 
 				ktk::uint32_t getDescriptorSetIndex(void) const noexcept;
 				ktk::uint32_t getBindingIndex(void) const noexcept;
 				VkDescriptorType getDescriptorType(void) const noexcept;
-				const ktk::string& getVariableName(void) const noexcept;
+                const ktk::cstring& getVariableName(void) const noexcept;
 
 				shader_type_t GetShaderType(void) const noexcept;
 
@@ -404,7 +404,7 @@ namespace Kotek
 				ktk::uint32_t m_binding_index;
 				shader_type_t m_shader_type;
 				VkDescriptorType m_type;
-				ktk::string m_variable_name;
+                ktk::cstring m_variable_name;
 			};
 
 			/*
@@ -455,7 +455,7 @@ namespace Kotek
 				shader_module_t loadShader(const ktk::string& path) noexcept;
 
 				shader_module_t loadShaderAsString(
-					const ktk::string& code_as_string,
+                    const ktk::cstring& code_as_string,
 					shader_type_t type) noexcept;
 
 				void destroyShader(const shader_module_t& instance) noexcept;
@@ -470,12 +470,13 @@ namespace Kotek
 				 */
 
 				ktk::vector<ktk::uint32_t> compileShaderToSPIRV(
-					const ktk::string& path_to_file, shaderc_shader_kind type,
+                    const ktk::cstring& path_to_file, shaderc_shader_kind type,
                     const ktk::map<ktk::cstring, ktk::cstring>& macros =
                         ktk::map<ktk::cstring, ktk::cstring>()) noexcept;
 
 				ktk::vector<ktk::uint32_t> compileShaderFromStringToSPIRV(
-					const ktk::string& code_as_string, shaderc_shader_kind type,
+                    const ktk::cstring& code_as_string,
+                    shaderc_shader_kind type,
                     const ktk::map<ktk::cstring, ktk::cstring>& macros =
                         ktk::map<ktk::cstring, ktk::cstring>()) noexcept;
 

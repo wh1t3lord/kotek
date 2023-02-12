@@ -73,7 +73,7 @@ namespace Kotek
 					count_of_entity_elements);
 
 				KOTEK_MESSAGE("allocated static buffer {} pool with {} Mbs",
-					ktk::string(vma_name_allocation).get_as_is(),
+                    vma_name_allocation,
 					total_memory_size / ktk::kMemoryConvertValue_Megabytes);
 			}
 

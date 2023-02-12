@@ -749,7 +749,7 @@ namespace Kotek
 				// move it to streaming manager (?)
 				void UploadAll(void) noexcept;
 
-				ktkRenderTexture CreateTexture(const ktk::string& texture_name,
+                ktkRenderTexture CreateTexture(const ktk::cstring& texture_name,
 					const ktkRenderTextureCreateInfoBase& info,
 					eTextureType type) noexcept;
 
@@ -885,7 +885,7 @@ namespace Kotek
 
 			namespace helper
 			{
-				ktk::string TranslateRenderGraphBuilderTypeToString(
+                ktk::cstring TranslateRenderGraphBuilderTypeToString(
 					eRenderGraphBuilderType type) noexcept;
 
 				VkGraphicsPipelineCreateInfo InitializeGraphicsPipeline(

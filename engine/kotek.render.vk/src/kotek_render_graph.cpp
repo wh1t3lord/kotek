@@ -12,12 +12,10 @@ namespace Kotek
 				const ktk::vector<ktkRenderGraphRenderPass*>& passes,
 				const ktk::vector<ktkRenderGraphNode>& nodes,
 				kotek_render_command_list_ring* p_command_list_ring,
-				ktkRenderDevice* p_device,
-				Core::ktkProfiler* p_profiler) :
+                ktkRenderDevice* p_device, Core::ktkProfiler* p_profiler) :
 				m_passes(passes),
 				m_nodes(nodes), m_p_command_list_ring(p_command_list_ring),
-				m_p_render_device(p_device),
-				m_p_profiler(p_profiler)
+                m_p_render_device(p_device), m_p_profiler(p_profiler)
 			{
 				KOTEK_ASSERT(this->m_passes.empty() == false,
 					"you can't create render graph without any passes!");
@@ -37,9 +35,7 @@ namespace Kotek
 					"you must initialize render device");
 			}
 
-			ktkRenderGraph::ktkRenderGraph(void) : m_p_profiler(nullptr)
-			{
-			}
+            ktkRenderGraph::ktkRenderGraph(void) : m_p_profiler(nullptr) {}
 
 			ktkRenderGraph::~ktkRenderGraph(void) {}
 
@@ -52,8 +48,9 @@ namespace Kotek
 				for (auto*& p_item : this->m_passes)
 				{
 #ifdef KOTEK_DEBUG
-					KOTEK_MESSAGE("deleting render pass {}",
-						p_item->GetName().get_as_is());
+                    KOTEK_MESSAGE("deleting render pass {}",
+                        reinterpret_cast<const char*>(
+                            p_item->GetName().c_str()));
 #endif
 					delete p_item;
 					p_item = nullptr;
@@ -88,7 +85,8 @@ namespace Kotek
 				for (auto*& p_pass : this->m_passes)
 				{
 					VkCommandBuffer p_command_buffer =
-						this->m_p_command_list_ring->GetNewCommandList(this->m_p_render_device);
+                        this->m_p_command_list_ring->GetNewCommandList(
+                            this->m_p_render_device);
 
 					auto status = vkBeginCommandBuffer(p_command_buffer, &info);
 
@@ -105,7 +103,7 @@ namespace Kotek
 				const auto& all_buffers =
 					this->m_p_command_list_ring
 						->GetAllCommandsBufferForCurrentFrame();
-				
+
 				ktk::uint32_t all_count =
 					this->m_p_command_list_ring
 						->GetCountOfCommandBuffersPerFrame();
@@ -117,9 +115,9 @@ namespace Kotek
 					status =
 						vkEndCommandBuffer(all_buffers[current_buffer_index]);
 
-					KOTEK_ASSERT(status == VkResult::VK_SUCCESS, "failed to vkEndCommandBuffer");
+                    KOTEK_ASSERT(status == VkResult::VK_SUCCESS,
+                        "failed to vkEndCommandBuffer");
 				}
-
 			}
 
 			ktk::uint32_t ktkRenderGraph::GetNodesCount(void) const noexcept
@@ -127,8 +125,8 @@ namespace Kotek
 				return this->m_nodes.size();
 			}
 
-			kotek_render_command_list_ring*
-			ktkRenderGraph::GetCommandListRing(void) const noexcept
+            kotek_render_command_list_ring* ktkRenderGraph::GetCommandListRing(
+                void) const noexcept
 			{
 				return this->m_p_command_list_ring;
 			}

@@ -62,8 +62,8 @@ namespace Kotek
 					const ktkRenderGraphStorageOutput&
 						storage_of_render_pass_output,
 					const ktk::unordered_map<ktk::texture_id_t,
-						ktkRenderGraphResourceInfo<
-							ktkRenderTextureInfo>>& texture_to_create,
+                        ktkRenderGraphResourceInfo<ktkRenderTextureInfo>>&
+                        texture_to_create,
 					const ktk::unordered_map<ktk::string,
 						ktkRenderGraphResourceInfo<VkBufferCreateInfo>>&
 						buffer_to_create) noexcept
@@ -81,8 +81,8 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphResourceManager::CreateTexture(
-				const ktkRenderGraphResourceInfo<
-					ktkRenderTextureInfo>& info) noexcept
+                const ktkRenderGraphResourceInfo<ktkRenderTextureInfo>&
+                    info) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -93,7 +93,7 @@ namespace Kotek
 					this->m_all_render_graph_textures.end())
 				{
 					KOTEK_ASSERT(false, "can't rewrite texture {}",
-						texture_name.get_as_is());
+                        reinterpret_cast<const char*>(texture_name.c_str()));
 					return;
 				}
 
@@ -124,8 +124,7 @@ namespace Kotek
 							eTextureType::kTextureType_Single);
 			}
 
-			const ktkRenderTexture*
-			ktkRenderGraphResourceManager::GetTexture(
+            const ktkRenderTexture* ktkRenderGraphResourceManager::GetTexture(
 				const ktk::string& render_pass_name,
 				const ktk::string& texture_name) const noexcept
 			{
@@ -148,7 +147,8 @@ namespace Kotek
 					this->m_storage_render_passes_textures.end())
 				{
 					KOTEK_ASSERT(false, "can't find renderp pass by name {}",
-						render_pass_name.get_as_is());
+                        reinterpret_cast<const char*>(
+                            render_pass_name.c_str()));
 					return p_result;
 				}
 
@@ -159,7 +159,9 @@ namespace Kotek
 				{
 					KOTEK_ASSERT(false,
 						"can't find texture {} in render pass {}",
-						texture_name.get_as_is(), render_pass_name.get_as_is());
+                        reinterpret_cast<const char*>(texture_name.c_str()),
+                        reinterpret_cast<const char*>(
+                            render_pass_name.c_str()));
 					return p_result;
 				}
 
@@ -171,8 +173,7 @@ namespace Kotek
 			}
 
 			const ktk::unordered_map<ktk::render_pass_id_t,
-				ktk::unordered_map<ktk::texture_id_t,
-					ktkRenderGraphTexture*>>&
+                ktk::unordered_map<ktk::texture_id_t, ktkRenderGraphTexture*>>&
 			ktkRenderGraphResourceManager::GetRenderGraph_RenderPasses_Textures(
 				void) const noexcept
 			{
@@ -192,7 +193,7 @@ namespace Kotek
 				{
 					KOTEK_ASSERT(false,
 						"can't find texture [{}] in all storages",
-						texture_name.get_as_is());
+                        reinterpret_cast<const char*>(texture_name.c_str()));
 				}
 				else
 				{
@@ -231,7 +232,8 @@ namespace Kotek
 							KOTEK_ASSERT(false,
 								"Can't find descriptor sets by pipeline name: "
 								"{}",
-								pipeline_name.get_as_is());
+                                reinterpret_cast<const char*>(
+                                    pipeline_name.c_str()));
 						}
 					}
 
@@ -256,7 +258,8 @@ namespace Kotek
 					this->m_storage_render_passes_render_passes_handles.end())
 				{
 					KOTEK_ASSERT(false, "can't find render pass by name: {}",
-						render_pass_name.get_as_is());
+                        reinterpret_cast<const char*>(
+                            render_pass_name.c_str()));
 					return nullptr;
 				}
 
@@ -281,7 +284,8 @@ namespace Kotek
 				{
 					KOTEK_ASSERT(false,
 						"can't find VkFramebuffer by render pass name: {}",
-						render_pass_name.get_as_is());
+                        reinterpret_cast<const char*>(
+                            render_pass_name.c_str()));
 					return nullptr;
 				}
 
@@ -305,7 +309,7 @@ namespace Kotek
 				{
 					KOTEK_ASSERT(false,
 						"Can't find VkPipeline by pipeline name: {}",
-						pipeline_name.get_as_is());
+                        reinterpret_cast<const char*>(pipeline_name.c_str()));
 					return nullptr;
 				}
 
@@ -348,7 +352,7 @@ namespace Kotek
 #ifdef KOTEK_DEBUG
 					KOTEK_MESSAGE(
 						"Destroying VkDescriptorSetLayout for pipeline: {}",
-						pipeline_name.get_as_is());
+                        reinterpret_cast<const char*>(pipeline_name.c_str()));
 #endif
 					vkDestroyDescriptorSetLayout(
 						this->m_p_render_device->GetDevice(),
@@ -363,7 +367,7 @@ namespace Kotek
 #ifdef KOTEK_DEBUG
 					KOTEK_MESSAGE(
 						"Destroying VkPipelineLayout for pipeline: {}",
-						pipeline_name.get_as_is());
+                        reinterpret_cast<const char*>(pipeline_name.c_str()));
 #endif
 					vkDestroyPipelineLayout(
 						this->m_p_render_device->GetDevice(), p_pipeline_layout,
@@ -378,7 +382,7 @@ namespace Kotek
 				{
 #ifdef KOTEK_DEBUG
 					KOTEK_MESSAGE("Destroying VkShaderModules in pipeline: {}",
-						pipeline_name.get_as_is());
+                        reinterpret_cast<const char*>(pipeline_name.c_str()));
 #endif
 					for (const auto& [shader_type, shader_module] :
 						map_shader_type_and_shader_module)
@@ -459,7 +463,7 @@ namespace Kotek
 			}
 
 			bool ktkRenderGraphResourceManager::IsFileOrSourceCodeString(
-				const ktk::string& string_to_analyze) noexcept
+                const ktk::cstring& string_to_analyze) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -471,7 +475,7 @@ namespace Kotek
 
 				bool is_file = true;
 
-				if (string_to_analyze.get_as_is().find(KOTEK_TEXT("main")) !=
+                if (string_to_analyze.find(KOTEK_TEXT("main")) !=
 					ktk::string::npos)
 				{
 					// it's source code, because it's direct text of shader
@@ -482,7 +486,7 @@ namespace Kotek
 			}
 
 			bool ktkRenderGraphResourceManager::IsFileWithFormat(
-				const ktk::string& path_name) noexcept
+                const ktk::cstring& path_name) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -492,8 +496,7 @@ namespace Kotek
 					return false;
 				}
 
-				if (path_name.get_as_is().find(KOTEK_TEXT(".")) ==
-					ktk::string::npos)
+                if (path_name.find(KOTEK_TEXT(".")) == ktk::string::npos)
 				{
 					return false;
 				}
@@ -548,21 +551,32 @@ namespace Kotek
 										"between passes",
 										helper::translateShaderTypeToString(
 											shader_type)
-											.get_as_is(),
-										pipeline_name.get_as_is());
+                                            .c_str(),
+                                        reinterpret_cast<const char*>(
+                                            pipeline_name.c_str()));
 								}
 							}
 
 							ktk::string shader_string_copy =
 								std::get<ktk::string>(shader_data.getData());
 
-							if (this->IsFileWithFormat(shader_string_copy) ==
-								false)
+                            if (this->IsFileWithFormat(
+                                    reinterpret_cast<const char*>(
+                                        shader_string_copy.c_str())) == false)
 							{
 								// means without format
-								shader_string_copy +=
-									helper::translateShaderTypeToStringFormat(
-										shader_type);
+#ifdef KOTEK_USE_UNICODE
+                                const auto& shader_type_string =
+                                    helper::translateShaderTypeToStringFormat(
+                                        shader_type);
+                                shader_string_copy +=
+                                    ktk::string(shader_type_string.begin(),
+                                        shader_type_string.end());
+#else
+                                shader_string_copy +=
+                                    helper::translateShaderTypeToStringFormat(
+                                        shader_type);
+#endif
 							}
 
 							this->m_storage_shaders[pipeline_name]
@@ -578,8 +592,10 @@ namespace Kotek
 							this->m_storage_shaders[pipeline_name]
 												   [shader_type] =
 								p_shader_manager->loadShaderAsString(
-									std::get<ktk::string>(
-										shader_data.getData()),
+                                    reinterpret_cast<const char*>(
+                                        std::get<ktk::string>(
+                                            shader_data.getData())
+                                            .c_str()),
 									shader_type);
 						}
 						case shader_loading_data_type_t::
@@ -605,8 +621,7 @@ namespace Kotek
 			ktkRenderGraphResourceManager::CreateSubpassDependencies(
 				const ktkRenderGraphStorageOutput& storage_output,
 				const ktk::unordered_map<ktk::texture_id_t,
-					ktkRenderGraphResourceInfo<
-						ktkRenderTextureInfo>>&
+                    ktkRenderGraphResourceInfo<ktkRenderTextureInfo>>&
 					texture_to_create) noexcept
 			{
 				ktk::vector<VkSubpassDependency> result;
@@ -659,7 +674,8 @@ namespace Kotek
 						KOTEK_ASSERT(false,
 							"can't add existed pipeline to descriptor set "
 							"layouts: {}",
-							pipeline_name.get_as_is());
+                            reinterpret_cast<const char*>(
+                                pipeline_name.c_str()));
 						continue;
 					}
 
@@ -668,7 +684,8 @@ namespace Kotek
 					{
 						KOTEK_ASSERT(false,
 							"can't add existed pipeline to pipeline layout: {}",
-							pipeline_name.get_as_is());
+                            reinterpret_cast<const char*>(
+                                pipeline_name.c_str()));
 						continue;
 					}
 
@@ -796,8 +813,10 @@ namespace Kotek
 
 								KOTEK_ASSERT(p_texture,
 									"can't find texture {} in pass {}",
-									data.GetRenderPassName().get_as_is(),
-									texture_name.get_as_is());
+                                    reinterpret_cast<const char*>(
+                                        data.GetRenderPassName().c_str()),
+                                    reinterpret_cast<const char*>(
+                                        texture_name.c_str()));
 
 								// TODO: think about it do we need to hardcode
 								// here and is it fine? I mean about image
@@ -831,7 +850,8 @@ namespace Kotek
 					KOTEK_ASSERT(false,
 						"you can't overwrite your existed frame buffer for "
 						"pass: {}",
-						render_pass_name.get_as_is());
+                        reinterpret_cast<const char*>(
+                            render_pass_name.c_str()));
 				}
 
 				ktk::vector<VkImageView> attachments;
@@ -851,7 +871,8 @@ namespace Kotek
 							"create framebuffer with backbuffer, because you "
 							"don't have any output images and you "
 							"SetUseBackBuffer to false for render pass: {}",
-							render_pass_name.get_as_is());
+                            reinterpret_cast<const char*>(
+                                render_pass_name.c_str()));
 
 						return;
 					}
@@ -867,10 +888,12 @@ namespace Kotek
 							this->GetTexture(render_pass_name, texture_name);
 
 						KOTEK_ASSERT(p_texture, "your texture is invalid {}",
-							p_texture->GetTextureName().get_as_is());
+                            reinterpret_cast<const char*>(
+                                p_texture->GetTextureName().c_str()));
 						KOTEK_ASSERT(p_texture->GetImageViewHandle(),
 							"VkImageView handle is invalid {}",
-							p_texture->GetTextureName().get_as_is());
+                            reinterpret_cast<const char*>(
+                                p_texture->GetTextureName().c_str()));
 
 						attachments.push_back(p_texture->GetImageViewHandle());
 					}
@@ -913,8 +936,7 @@ namespace Kotek
 			void ktkRenderGraphResourceManager::CreateRenderPass(
 				const ktk::string& render_pass_name,
 				const ktk::vector<VkSubpassDependency>& dependencies,
-				const ktkRenderGraphStorageOutput&
-					storage_output) noexcept
+                const ktkRenderGraphStorageOutput& storage_output) noexcept
 			{
 				if (this->m_storage_render_passes_render_passes_handles.find(
 						render_pass_name) !=
@@ -923,7 +945,8 @@ namespace Kotek
 					KOTEK_ASSERT(false,
 						"you can't overwrite the existed VkRenderPass for "
 						"pass: {}",
-						render_pass_name.get_as_is());
+                        reinterpret_cast<const char*>(
+                            render_pass_name.c_str()));
 				}
 
 				KOTEK_ASSERT(render_pass_name.empty() == false,
@@ -1064,7 +1087,8 @@ namespace Kotek
 				{
 					KOTEK_MESSAGE_WARNING("you don't create "
 										  "VkPipeline for render pass: {}",
-						render_pass_name.get_as_is());
+                        reinterpret_cast<const char*>(
+                            render_pass_name.c_str()));
 
 					return;
 				}
@@ -1096,7 +1120,8 @@ namespace Kotek
 						KOTEK_ASSERT(false,
 							"each pipeline must have unique name and you can't "
 							"overwrite existed VkPipeline {}",
-							pipeline_name.get_as_is());
+                            reinterpret_cast<const char*>(
+                                pipeline_name.c_str()));
 					}
 
 					for (const auto& [shader_type, shader_module] :
@@ -1359,10 +1384,11 @@ namespace Kotek
 							KOTEK_ASSERT(result != bindings_from_storage.end(),
 								"your storage doesn't have binding for "
 								"variable {} in shader {}",
-								binding.getVariableName().get_as_is(),
+                                reinterpret_cast<const char*>(
+                                    binding.getVariableName().c_str()),
 								helper::translateShaderTypeToString(
 									binding.GetShaderType())
-									.get_as_is());
+                                    .c_str());
 						}
 					}
 				}

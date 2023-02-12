@@ -68,7 +68,7 @@ namespace gl
 	public:
 		explicit ktkRenderGraphShaderTextInfo(
 			eShaderLoadingDataType type_loading_data,
-			const ktk::string& path_to_file_or_source_code_string);
+            const ktk::string& path_to_file_or_source_code_string);
 
 		explicit ktkRenderGraphShaderTextInfo(
 			eShaderLoadingDataType type_loading_data, void* p_data);

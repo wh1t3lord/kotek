@@ -38,7 +38,7 @@ namespace Kotek
 				KOTEK_ASSERT(this->m_pipelines.find(pipeline_name) !=
 						this->m_pipelines.end(),
 					"you must contain your VkPipeline by pipeline name: {}",
-					pipeline_name.get_as_is());
+                    reinterpret_cast<const char*>(pipeline_name.c_str()));
 
 				return this->m_pipelines.at(pipeline_name);
 			}
@@ -54,7 +54,7 @@ namespace Kotek
 						this->m_pipelines_layout.end(),
 					"you must contain your VkPipelineLayout by pipeline name: "
 					"{}",
-					pipeline_name.get_as_is());
+                    reinterpret_cast<const char*>(pipeline_name.c_str()));
 
 				return this->m_pipelines_layout.at(pipeline_name);
 			}
@@ -70,7 +70,7 @@ namespace Kotek
 					this->m_pipeline_descriptor_sets.find(pipeline_name) !=
 						this->m_pipeline_descriptor_sets.end(),
 					"you must contain your VkPipeline by pipeline name: {}",
-					pipeline_name.get_as_is());
+                    reinterpret_cast<const char*>(pipeline_name.c_str()));
 
 				return this->m_pipeline_descriptor_sets.at(pipeline_name);
 			}

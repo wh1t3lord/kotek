@@ -408,14 +408,13 @@ namespace Kotek
 				ktk::uint32_t index = 1;
 				for (auto p_image : this->m_swapchain_images)
 				{
-					ktk::string formatted =
-						ktk::format("Swapchain Image #{}", index);
+                    auto formatted = ktk::format("Swapchain Image #{}", index);
 
 					this->m_p_device->GetHelper()
 						.getDebug()
 						.setDebugNameToResource(this->m_p_device->GetDevice(),
 							VkObjectType::VK_OBJECT_TYPE_IMAGE, p_image,
-							formatted.get_as_legacy().c_str());
+                            formatted.c_str());
 
 					++index;
 				}

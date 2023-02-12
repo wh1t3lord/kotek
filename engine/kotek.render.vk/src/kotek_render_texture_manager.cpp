@@ -9,8 +9,7 @@ namespace Kotek
 		namespace vk
 		{
 			ktkRenderTextureManager::ktkRenderTextureManager(
-				ktkRenderDevice* p_device,
-				kotek_render_upload_heap* p_heap) :
+                ktkRenderDevice* p_device, kotek_render_upload_heap* p_heap) :
 				m_p_device(p_device),
 				m_p_heap(p_heap)
 			{
@@ -31,7 +30,7 @@ namespace Kotek
 			}
 
 			ktkRenderTexture ktkRenderTextureManager::CreateTexture(
-				const ktk::string& texture_name,
+                const ktk::cstring& texture_name,
 				const ktkRenderTextureCreateInfoBase& info,
 				eTextureType type) noexcept
 			{
@@ -50,7 +49,8 @@ namespace Kotek
 					return result;
 				}
 
-				result.SetTextureName(texture_name);
+                result.SetTextureName(
+                    ktk::string(texture_name.begin(), texture_name.end()));
 				result.SetCreateInfoImage(info.getImageCreateInfo());
 				result.SetCreateInfoSampler(info.getSamplerCreateInfo());
 				result.SetTextureType(type);
@@ -61,14 +61,15 @@ namespace Kotek
 				return result;
 			}
 
-			ktkRenderGraphTexture
-			ktkRenderTextureManager::CreateTexture(
-				const ktkRenderGraphResourceInfo<
-					ktkRenderTextureInfo>& info) noexcept
+            ktkRenderGraphTexture ktkRenderTextureManager::CreateTexture(
+                const ktkRenderGraphResourceInfo<ktkRenderTextureInfo>&
+                    info) noexcept
 			{
-				ktkRenderGraphTexture result(this->CreateTexture(
-					info.GetResourceName(), info.GetInfo().GetCreateInfo(),
-					info.GetInfo().GetTypeTexture()));
+                ktkRenderGraphTexture result(
+                    this->CreateTexture(reinterpret_cast<const char*>(
+                                            info.GetResourceName().c_str()),
+                        info.GetInfo().GetCreateInfo(),
+                        info.GetInfo().GetTypeTexture()));
 
 				result.SetInfo(info);
 				result.SetRenderPassName(info.GetRenderPassName());
@@ -78,8 +79,7 @@ namespace Kotek
 
 			// TODO: refactor this
 			void ktkRenderTextureManager::AllocateTexture(
-				VmaAllocator p_allocator,
-				ktkRenderTexture& texture) noexcept
+                VmaAllocator p_allocator, ktkRenderTexture& texture) noexcept
 			{
 				KOTEK_ASSERT(p_allocator,
 					"you can't pass an invalid vmaAllocator instance");
@@ -89,13 +89,13 @@ namespace Kotek
 				VkImageView p_image_view = nullptr;
 				VkSampler p_sampler = nullptr;
 
-				const auto& texture_name =
-					texture.GetTextureName().get_as_legacy();
+                const auto& texture_name = texture.GetTextureName();
 
 				VmaAllocationCreateInfo info = {};
 				info.usage = VMA_MEMORY_USAGE_GPU_ONLY;
 				info.flags = VMA_ALLOCATION_CREATE_USER_DATA_COPY_STRING_BIT;
-				info.pUserData = const_cast<char*>(texture_name.c_str());
+                info.pUserData = const_cast<char*>(
+                    reinterpret_cast<const char*>(texture_name.c_str()));
 
 				VmaAllocationInfo info_gpu = {};
 
@@ -173,19 +173,23 @@ namespace Kotek
 
 #ifdef KOTEK_DEBUG
 				KOTEK_MESSAGE("allocated texture [{}] for {:.3f} Mbs",
-					texture.GetTextureName().get_as_is(),
+                    reinterpret_cast<const char*>(
+                        texture.GetTextureName().c_str()),
 					static_cast<float>(static_cast<float>(info_gpu.size) /
 						static_cast<float>(
 							ktk::kMemoryConvertValue_Megabytes)));
 
 				this->m_p_device->GetHelper().getDebug().setDebugNameToResource(
 					this->m_p_device->GetDevice(),
-					VkObjectType::VK_OBJECT_TYPE_IMAGE, p_image, texture.GetTextureName().get_as_legacy().c_str());
+                    VkObjectType::VK_OBJECT_TYPE_IMAGE, p_image,
+                    reinterpret_cast<const char*>(
+                        texture.GetTextureName().c_str()));
 
 				this->m_p_device->GetHelper().getDebug().setDebugNameToResource(
 					this->m_p_device->GetDevice(),
 					VkObjectType::VK_OBJECT_TYPE_IMAGE_VIEW, p_image_view,
-					texture.GetTextureName().get_as_legacy().c_str());
+                    reinterpret_cast<const char*>(
+                        texture.GetTextureName().c_str()));
 #endif
 			}
 
@@ -223,8 +227,7 @@ namespace Kotek
 			}
 
 			void ktkRenderTextureManager::DestroyTexture(
-				VmaAllocator p_allocator,
-				ktkRenderTexture& texture) noexcept
+                VmaAllocator p_allocator, ktkRenderTexture& texture) noexcept
 			{
 				KOTEK_ASSERT(
 					p_allocator, "you can't pass an invalid VmaAllocator");
@@ -232,7 +235,8 @@ namespace Kotek
 #ifdef KOTEK_DEBUG
 				// TODO: add allocation size what texture has
 				KOTEK_MESSAGE("deallocating texture {}",
-					texture.GetTextureName().get_as_is());
+                    reinterpret_cast<const char*>(
+                        texture.GetTextureName().c_str()));
 #endif
 
 				vkDestroyImageView(this->m_p_device->GetDevice(),
@@ -246,8 +250,7 @@ namespace Kotek
 			}
 
 			void ktkRenderTextureManager::DestroyTexture(
-				VmaAllocator p_allocator,
-				ktkRenderTexture* p_texture) noexcept
+                VmaAllocator p_allocator, ktkRenderTexture* p_texture) noexcept
 			{
 				this->DestroyTexture(p_allocator, *p_texture);
 			}
@@ -325,15 +328,14 @@ namespace Kotek
 					p_texture->GetCreateInfoImage().extent.height;
 				info_copy.imageExtent.depth =
 					p_texture->GetCreateInfoImage().extent.depth;
-				info_copy.imageOffset = VkOffset3D{0,0,0};
-				
+                info_copy.imageOffset = VkOffset3D{0, 0, 0};
+
 				ktk::memory::memcpy(p_allocated, p_data, upload_size);
 
 				this->m_p_heap->addCopy(p_texture->GetImageHandle(), info_copy);
 			}
 
-			VkImageViewType
-			ktkRenderTextureManager::DetectTypeByTextureFormat(
+            VkImageViewType ktkRenderTextureManager::DetectTypeByTextureFormat(
 				VkImageType type_image) noexcept
 			{
 				switch (type_image)
@@ -447,7 +449,7 @@ namespace Kotek
 
 			namespace helper
 			{
-				ktk::string TranslateRenderGraphBuilderTypeToString(
+                ktk::cstring TranslateRenderGraphBuilderTypeToString(
 					eRenderGraphBuilderType type) noexcept
 				{
 					switch (type)
@@ -462,21 +464,19 @@ namespace Kotek
 					{
 						return "render_graph_builder_type_forward_with_outputs";
 					}
-					case eRenderGraphBuilderType::
-						kRenderBuilderFor_Deferred:
+                    case eRenderGraphBuilderType::kRenderBuilderFor_Deferred:
 					{
 						return "render_graph_builder_type_deferred";
 					}
-					case eRenderGraphBuilderType::
-						kRenderBuilderFor_Undefined:
+                    case eRenderGraphBuilderType::kRenderBuilderFor_Undefined:
 					{
 						return "render_graph_builder_type_undefined (not "
 							   "initialized)";
 					}
 					default:
 					{
-						KOTEK_ASSERT(
-							false, "can't translate this type: {}", static_cast<ktk::enum_base_t>(type));
+                        KOTEK_ASSERT(false, "can't translate this type: {}",
+                            static_cast<ktk::enum_base_t>(type));
 
 						return "render_graph_builder_type_INVALID";
 					}
@@ -499,15 +499,13 @@ namespace Kotek
 						p_info_tesselation =
 							&info.GetPipelineTessellationState();
 
-					return InitializeGraphicsPipeline(
-						p_state_vertex,
+                    return InitializeGraphicsPipeline(p_state_vertex,
 						&info.GetPipelineInputAssemblyState(),
 						&info.GetPipelineViewportState(),
 						&info.GetPipelineRasterizationState(),
 						&info.GetPipelineMultisampleState(),
 						&info.GetPipelineDepthStencilState(),
-						p_state_color_blend,
-						p_state_dynamic, p_layout, p_pass,
+                        p_state_color_blend, p_state_dynamic, p_layout, p_pass,
 						p_info_tesselation, info.GetSubpassIndex());
 				}
 			} // namespace helper
@@ -547,20 +545,22 @@ namespace Kotek
 				m_state_tessellation(state_tessellation),
 				m_state_viewport(state_viewport)
 			{
-/*
-				VkPipelineColorBlendStateCreateInfo info = {};
+                /*
+                                VkPipelineColorBlendStateCreateInfo info = {};
 
-				this->m_state_dynamic = helper::InitializePipelineDynamicState(
-					this->m_dynamic_states);
+                                this->m_state_dynamic =
+                   helper::InitializePipelineDynamicState(
+                                    this->m_dynamic_states);
 
-				this->m_state_color_blend =
-					helper::InitializePipelineColorBlendState(
-						this->m_attachments_blend);
+                                this->m_state_color_blend =
+                                    helper::InitializePipelineColorBlendState(
+                                        this->m_attachments_blend);
 
-				this->m_state_vertex =
-					helper::InitializePipelineVertexInputState(
-						this->m_vertex_descriptions, this->m_vertex_attributes);
-*/
+                                this->m_state_vertex =
+                                    helper::InitializePipelineVertexInputState(
+                                        this->m_vertex_descriptions,
+                   this->m_vertex_attributes);
+                */
 			}
 
 			ktkRenderGraphPipelineInfo::ktkRenderGraphPipelineInfo(void) {}

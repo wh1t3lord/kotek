@@ -26,7 +26,7 @@ namespace gl
 
 	void ktkRenderGraphSimplifiedBuilder::Initialize(
 		Core::ktkIRenderGraphResourceManager* p_resource_manager,
-		const ktk::string& backbuffer_name,
+        const ktk::cstring& backbuffer_name,
 		const gl::eRenderGraphBuilderType& render_graph_type_id,
 		const gl::eRenderGraphBuilderPipelineRenderingType&
 			rendering_pipeline_type)
@@ -61,7 +61,7 @@ namespace gl
 	}
 
 	bool ktkRenderGraphSimplifiedBuilder::Register_RenderPass(
-		const ktk::string& render_pass_name,
+        const ktk::cstring& render_pass_name,
 		ktkRenderGraphSimplifiedRenderPass* p_pass) noexcept
 	{
 		KOTEK_ASSERT(
@@ -76,7 +76,8 @@ namespace gl
 
 		if (p_pass)
 		{
-			p_pass->Set_Name(render_pass_name);
+            p_pass->Set_Name(
+                ktk::string(render_pass_name.begin(), render_pass_name.end()));
 		}
 
 		if (std::find_if(this->m_passes.begin(), this->m_passes.end(),
@@ -101,7 +102,7 @@ namespace gl
 		return true;
 	}
 
-	const ktk::string& ktkRenderGraphSimplifiedBuilder::Get_BackBufferName(
+    const ktk::cstring& ktkRenderGraphSimplifiedBuilder::Get_BackBufferName(
 		void) const noexcept
 	{
 		return this->m_backbuffer_name;

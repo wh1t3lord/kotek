@@ -45,17 +45,17 @@ namespace gl
 
 		void Initialize(
 			Core::ktkIRenderGraphResourceManager* p_resource_manager,
-			const ktk::string& backbuffer_name,
+            const ktk::cstring& backbuffer_name,
 			const gl::eRenderGraphBuilderType& render_graph_type_id,
 			const gl::eRenderGraphBuilderPipelineRenderingType&
 				rendering_pipeline_type);
 
 		ktkRenderGraphSimplified Compile(void);
 
-		bool Register_RenderPass(const ktk::string& render_pass_name,
+        bool Register_RenderPass(const ktk::cstring& render_pass_name,
 			ktkRenderGraphSimplifiedRenderPass* p_pass) noexcept;
 
-		const ktk::string& Get_BackBufferName(void) const noexcept;
+        const ktk::cstring& Get_BackBufferName(void) const noexcept;
 
 		gl::eRenderGraphBuilderType Get_RenderGraphBuilderType(
 			void) const noexcept;
@@ -106,7 +106,7 @@ namespace gl
 		ktk::vector<ktkRenderGraphSimplifiedRenderPass*> m_passes;
 		ktk::vector<ktkRenderGraphSimplifiedRenderPass*>
 			m_failed_passes_for_adding;
-		ktk::string m_backbuffer_name;
+        ktk::cstring m_backbuffer_name;
 	};
 } // namespace gl
 KOTEK_END_NAMESPACE_RENDER

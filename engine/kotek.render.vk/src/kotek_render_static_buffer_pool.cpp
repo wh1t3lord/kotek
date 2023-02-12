@@ -23,7 +23,7 @@ namespace Kotek
 			void kotek_render_static_buffer_pool::initialize(
 				ktkRenderDevice* p_render_device,
 				ktk::uint32_t total_memory_size, bool is_use_gpu_memory,
-				const ktk::string& vma_name_allocation)
+                const ktk::cstring& vma_name_allocation)
 			{
 				VkResult status = VK_ERROR_UNKNOWN;
 
@@ -173,23 +173,21 @@ namespace Kotek
 					KOTEK_DEBUG_VK_SET_OBJECT_NAME(p_render_device,
 						VK_OBJECT_TYPE_DEVICE_MEMORY,
 						this->m_p_device_gpu_memory,
-						(ktk::string(
+                        (ktk::cstring(
 							 "Static buffer pool GPU device memory - ") +
 							vma_name_allocation)
-							.get_as_legacy()
 							.c_str());
 				}
 
 				KOTEK_DEBUG_VK_SET_OBJECT_NAME(p_render_device,
 					VK_OBJECT_TYPE_DEVICE_MEMORY, this->m_p_device_memory,
-					((ktk::string("Static buffer pool CPU device memory - ") +
+                    ((ktk::cstring("Static buffer pool CPU device memory - ") +
 						vma_name_allocation)
-							.get_as_legacy()
 							.c_str()));
 
 				KOTEK_MESSAGE("allocated static buffer {} pool with {} Mbs",
-					vma_name_allocation.get_as_is(),
-					total_memory_size / ktk::kMemoryConvertValue_Megabytes);
+                    vma_name_allocation,
+                    total_memory_size / ktk::kMemoryConvertValue_Megabytes);
 			}
 
 			void kotek_render_static_buffer_pool::shutdown(

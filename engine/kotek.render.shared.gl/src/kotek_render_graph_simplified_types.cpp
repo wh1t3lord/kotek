@@ -6,7 +6,7 @@ namespace gl
 {
 	ktkRenderGraphShaderTextInfo::ktkRenderGraphShaderTextInfo(
 		eShaderLoadingDataType type_loading_data,
-		const ktk::string& path_to_file_or_source_code_string) :
+        const ktk::string& path_to_file_or_source_code_string) :
 		m_type{type_loading_data},
 		m_data{path_to_file_or_source_code_string}
 	{
@@ -121,7 +121,8 @@ namespace gl
 		this->m_level = value;
 	}
 
-	ktk::int32_t ktkRenderGraphTextureInfo::Get_InternalFormat(void) const noexcept
+    ktk::int32_t ktkRenderGraphTextureInfo::Get_InternalFormat(
+        void) const noexcept
 	{
 		return this->m_internalformat;
 	}

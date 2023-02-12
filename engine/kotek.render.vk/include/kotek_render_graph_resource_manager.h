@@ -17,8 +17,7 @@ namespace Kotek
 	{
 		namespace vk
 		{
-			constexpr const char* kBackBufferName =
-				"KOTEK_BACKBUFFER_VK_NAME";
+            constexpr const char* kBackBufferName = "KOTEK_BACKBUFFER_VK_NAME";
 
 			// TODO: add aliases for human readable design, because we need to
 			// read types and understand what we place there and what that key
@@ -98,9 +97,9 @@ namespace Kotek
 
 				// TRUE - file | FALSE - source code
 				bool IsFileOrSourceCodeString(
-					const ktk::string& string_to_analyze) noexcept;
+                    const ktk::cstring& string_to_analyze) noexcept;
 
-				bool IsFileWithFormat(const ktk::string& path_name) noexcept;
+                bool IsFileWithFormat(const ktk::cstring& path_name) noexcept;
 
 				void CreateShaders_Modules(const ktk::unordered_map<
 					ktk::pipeline_id_t,

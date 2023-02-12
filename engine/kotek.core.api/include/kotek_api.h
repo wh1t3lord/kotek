@@ -156,7 +156,7 @@ public:
 	virtual void draw(void) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual void Resize(void) = 0;
-	virtual ktk::string GetName(void) const noexcept = 0;
+    virtual ktk::cstring GetName(void) const noexcept = 0;
 };
 
 class ktkIFileSystem

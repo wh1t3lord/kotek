@@ -20,7 +20,7 @@ namespace Kotek
 				ktkRenderDevice* p_render_device,
 				ktk::uint32_t number_of_back_buffers,
 				ktk::uint32_t memory_total_size,
-				const ktk::string& debug_name) noexcept
+                const ktk::cstring& debug_name) noexcept
 			{
 				VkDevice p_device = p_render_device->GetDevice();
 
@@ -163,9 +163,8 @@ namespace Kotek
 			}
 
 			void kotek_render_dynamic_buffer_ring::SetDescriptorSet(
-				ktkRenderDevice* p_render_device,
-				ktk::uint32_t binding_index, ktk::uint32_t size,
-				VkDescriptorType descriptor_type,
+                ktkRenderDevice* p_render_device, ktk::uint32_t binding_index,
+                ktk::uint32_t size, VkDescriptorType descriptor_type,
 				VkDescriptorSet p_set) noexcept
 			{
 				KOTEK_ASSERT(
@@ -186,8 +185,7 @@ namespace Kotek
 				write.pNext = nullptr;
 				write.dstSet = p_set;
 				write.descriptorCount = 1;
-				write.descriptorType =
-					descriptor_type;
+                write.descriptorType = descriptor_type;
 				write.pBufferInfo = &info;
 				write.dstArrayElement = 0;
 				write.dstBinding = binding_index;
@@ -200,9 +198,8 @@ namespace Kotek
 			}
 
 			void kotek_render_dynamic_buffer_ring::SetDescriptorSet(
-				ktkRenderDevice* p_render_device,
-				ktk::uint32_t binding_index, VkSampler p_sampler,
-				VkImageLayout layout, VkImageView p_view,
+                ktkRenderDevice* p_render_device, ktk::uint32_t binding_index,
+                VkSampler p_sampler, VkImageLayout layout, VkImageView p_view,
 				VkDescriptorType descriptor_type,
 				VkDescriptorSet p_set) noexcept
 			{
@@ -227,8 +224,7 @@ namespace Kotek
 
 				writes[0].sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET;
 				writes[0].pNext = nullptr;
-				writes[0].descriptorType =
-					descriptor_type;
+                writes[0].descriptorType = descriptor_type;
 				writes[0].descriptorCount = 1;
 				writes[0].dstSet = p_set;
 				writes[0].dstBinding = binding_index;

@@ -25,7 +25,7 @@ namespace Kotek
 
 				void initialize(ktkRenderDevice* p_render_device,
 					ktk::uint32_t total_memory_size, bool is_use_gpu_memory,
-					const ktk::string& vma_name_allocation);
+                    const ktk::cstring& vma_name_allocation);
 
 				void shutdown(ktkRenderDevice* p_render_device);
 
