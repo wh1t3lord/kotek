@@ -439,19 +439,31 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 #ifndef KOTEK_HIDE_CPP_DISABLE_ALL_WARNINGS_PREPROCESSOR
 	#ifdef _WIN32
 		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH _Pragma(\"warning(push,0)\")
-	#elif __clang__
-		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH _Pragma(\"clang diagnostic push\") _Pragma(\"clang diagnostic ignored \"-Wall\"\") _Pragma(\"clang diagnostic ignored \"-Wextra\"\")
-	#elif __GNUC__
-		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH _Pragma(\"GCC diagnostic push\") _Pragma(\"GCC diagnostic ignored \"-Wimplicit-fallthrough\"\") _Pragma(\"GCC diagnostic ignored \"-Wunused-function\"\") _Pragma(\"GCC diagnostic ignored \"-Wunused-parameter\"\") _Pragma(\"GCC diagnostic ignored \"-Wunused-variable\"\") _Pragma(\"GCC diagnostic ignored \"-Wmissing-field-initializers\"\") _Pragma(\"GCC diagnostic ignored \"-Wswitch\"\") _Pragma(\"GCC diagnostic ignored \"-Wpedantic\"\") _Pragma(\"GCC diagnostic ignored \"-Wattributes\"\") _Pragma(\"GCC diagnostic ignored \"-Wignored-qualifiers\"\") _Pragma(\"GCC diagnostic ignored \"-Wparentheses\"\")
+	#elif defined(__clang__)
+		#define DIAGNOSTIC_HELPER0(x) #x
+		#define DIAGNOSTIC_HELPER1(kind, y) DIAGNOSTIC_HELPER0(clang diagnostic kind #y)
+
+		#define PRGM_CLANG(kind, warning) \
+			_Pragma(DIAGNOSTIC_HELPER1(kind, warning))
+
+		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH _Pragma(\"clang diagnostic push\") PRGM_CLANG(ignored, -Wall) PRGM_CLANG(ignored, -Wextra)
+	#elif defined(__GNUC__)
+		#define DIAGNOSTIC_HELPER0(x) #x
+		#define DIAGNOSTIC_HELPER1(kind, y) DIAGNOSTIC_HELPER0(GCC diagnostic kind #y)
+
+		#define PRGM_GCC(kind, warning) \
+			_Pragma(DIAGNOSTIC_HELPER1(kind, warning))
+
+                #define KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH _Pragma(\"GCC diagnostic push\") PRGM_GCC(ignored, -Wimplicit-fallthrough) PRGM_GCC(ignored, -Wunused-function) PRGM_GCC(ignored, -Wunused-parameter) PRGM_GCC(ignored, -Wunused-variable) PRGM_GCC(ignored, -Wmissing-field-initializers) PRGM_GCC(ignored, -Wswitch) PRGM_GCC(ignored, -Wpedantic) PRGM_GCC(ignored, -Wattributes) PRGM_GCC(ignored, -Wignored-qualifiers) PRGM_GCC(ignored, -Wparentheses)
 	#else
 		#error Unknown compiler send the issue to authors!
 	#endif
 
 	#ifdef _WIN32
 		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP _Pragma(\"warning(pop)\")
-	#elif __clang__
+	#elif defined(__clang__)
 		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP _Pragma(\"clang diagnostic pop\")
-	#elif __GNUC__
+	#elif defined(__GNUC__)
 		#define KOTEK_CPP_DISABLE_ALL_WARNINGS_POP _Pragma(\"GCC diagnostic pop\")
 	#else
 		#error Unknown compiler send the issue to authors!

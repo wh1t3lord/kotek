@@ -10,7 +10,7 @@ namespace cast
 {
 	// @ Converts from 1,0,yes,no,true,false into appropriate bool type
 	// Register independent
-	bool to_bool(const string& your_logical_string_written_in_text) noexcept;
+    bool to_bool(const cstring& your_logical_string_written_in_text) noexcept;
 } // namespace cast
 
 KOTEK_END_NAMESPACE_KTK

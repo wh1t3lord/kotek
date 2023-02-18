@@ -9,20 +9,19 @@ KOTEK_BEGIN_NAMESPACE_KTK
 
 namespace cast
 {
-	bool to_bool(const string& your_logical_string_written_in_text) noexcept
-	{
-        const char* casted =
-            reinterpret_cast<const char*>(your_logical_string_written_in_text.c_str());
 
+    bool to_bool(const cstring& str) noexcept
+    {
 #ifdef KOTEK_USE_BOOST_LIBRARY
-		if (boost::iequals(casted, "no") || boost::iequals(casted, "false") ||
-            boost::iequals(casted, "0"))
-			return false;
+        if (boost::iequals(str.c_str(), "no") ||
+            boost::iequals(str.c_str(), "false") ||
+            boost::iequals(str.c_str(), "0"))
+            return false;
 #else
 #endif
 
-		return true;
-	}
+        return true;
+    }
 
 } // namespace cast
 

@@ -16,7 +16,7 @@ list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_GLAD_PREPROCESSOR_VISIBILITY)
 add_library(${PROJECT_NAME} ${KOTEK_DEVELOPMENT_TYPE}
 	"include/glad/glad.h"
 	"include/KHR/khrplatform.h"
-	"src/glad.c"
+	"src/glad.cpp"
 	"include/kotek_render_gl_glad.h"
 	"src/main_render_gl_glad_dll.cpp")
 
