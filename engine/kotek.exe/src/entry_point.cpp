@@ -91,6 +91,7 @@
  * @endcode
  */
 // clang-format on
+
 int main(int argc, char** argv)
 {
 	Kotek::Core::ktkMainManager main_manager(argc, argv);

@@ -5,32 +5,44 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Defines_Static_OS(ktkMainManager* p_manager)
 {
-	InitializeModule_Core_Defines_Static_OS_Windows(p_manager);
-	InitializeModule_Core_Defines_Static_OS_Linux(p_manager);
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+    InitializeModule_Core_Defines_Static_OS_Windows(p_manager);
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+    InitializeModule_Core_Defines_Static_OS_Linux(p_manager);
+#endif
 
 	return true;
 }
 
 bool ShutdownModule_Core_Defines_Static_OS(ktkMainManager* p_manager)
 {
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
 	ShutdownModule_Core_Defines_Static_OS_Windows(p_manager);
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
 	ShutdownModule_Core_Defines_Static_OS_Linux(p_manager);
+#endif
 
 	return true;
 }
 
 bool SerializeModule_Core_Defines_Static_OS(ktkMainManager* p_manager)
 {
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
 	SerializeModule_Core_Defines_Static_OS_Windows(p_manager);
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
 	SerializeModule_Core_Defines_Static_OS_Linux(p_manager);
+#endif
 
 	return true;
 }
 
 bool DeserializeModule_Core_Defines_Static_OS(ktkMainManager* p_manager)
 {
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
 	DeserializeModule_Core_Defines_Static_OS_Windows(p_manager);
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
 	DeserializeModule_Core_Defines_Static_OS_Linux(p_manager);
+#endif
 
 	return true;
 }

@@ -22,6 +22,10 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_containers_json.h"
 	"src/main_core_containers_json_dll.cpp")
 
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 	target_link_libraries(${PROJECT_NAME} PUBLIC 
 		Boost::boost 

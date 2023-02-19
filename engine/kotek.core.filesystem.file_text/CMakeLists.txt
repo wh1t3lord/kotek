@@ -19,6 +19,10 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_filesystem_file_text.h"
 	"src/main_core_filesystem_file_text_dll.cpp")
 
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.json)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.io)

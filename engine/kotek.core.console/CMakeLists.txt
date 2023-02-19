@@ -11,6 +11,10 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_console.h"
 	"src/main_core_console_dll.cpp")
 
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)

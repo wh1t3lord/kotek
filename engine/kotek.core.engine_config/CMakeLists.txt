@@ -11,6 +11,10 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_engine_config.h"
 	"src/main_core_engine_config_dll.cpp")
 
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.dll)

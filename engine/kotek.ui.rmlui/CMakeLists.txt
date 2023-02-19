@@ -20,6 +20,10 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_ui_rmlui.h"
 	"src/main_ui_rmlui_dll.cpp")
 
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 	target_compile_definitions(${PROJECT_NAME} PUBLIC -DRMLUI_STATIC_LIB)
 endif()

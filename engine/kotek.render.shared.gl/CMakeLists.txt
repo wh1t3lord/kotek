@@ -25,6 +25,10 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_render_shared_gl_dll.cpp"
 )
 
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 source_group("Render Graph/Simplified" FILES ${to_include_render_graph_simplified_files})
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")

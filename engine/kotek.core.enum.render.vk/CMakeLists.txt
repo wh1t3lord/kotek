@@ -13,4 +13,8 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_enum_render_vk_dll.cpp"
 )
 
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)

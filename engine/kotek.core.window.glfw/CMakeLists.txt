@@ -18,6 +18,10 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_std_window.cpp"
 	"src/main_core_window_glfw_dll.cpp")
 
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 	target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 else()

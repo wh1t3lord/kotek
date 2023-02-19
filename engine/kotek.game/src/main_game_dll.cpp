@@ -5,7 +5,7 @@
 
 #ifdef KOTEK_DEBUG
 	#define BOOST_TEST_MODULE kotek_engine_test_module
-	#define BOOST_TEST_ALTERNATIVE_INIT_API
+    #define BOOST_TEST_ALTERNATIVE_INIT_API
 	#include <boost/test/unit_test.hpp>
 #endif
 
@@ -324,6 +324,7 @@ namespace Engine
 #ifdef KOTEK_DEBUG
 	#ifdef KOTEK_USE_TESTS_RUNTIME
 		#ifdef KOTEK_USE_BOOST_LIBRARY
+            #ifdef KOTEK_USE_PLATFORM_WINDOWS
 		KOTEK_MESSAGE("UNIT TESTING UNIT TESTING UNIT "
 					  "TESTING\n\n\n\n\n\n\n\n\n\n\n\n");
 
@@ -342,6 +343,7 @@ namespace Engine
 		KOTEK_ASSERT(status == 0, "you have got failed tests");
 
 		KOTEK_MESSAGE("\n\n\n\n\nUNIT TESTING UNIT TESTING UNIT TESTING");
+            #endif
 		#else
 		// TODO: find alternative for std case!
 		#endif

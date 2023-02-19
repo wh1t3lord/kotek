@@ -69,6 +69,10 @@ add_library(${PROJECT_NAME} STATIC
     ${to_include_memory_management_files}
 )
 
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
 source_group("Render Graph/Simplified" FILES ${to_include_render_graph_simplified_files})
 source_group("Managers" FILES ${to_include_managers_files})
 source_group("Core" FILES ${to_include_core_files})
