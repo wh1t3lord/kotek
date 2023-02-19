@@ -92,7 +92,7 @@ bool ktkLoaderFile_JSON::Load(
 
 	KOTEK_ASSERT(p_result, "ktkFileText* instance must be valid!");
 
-		if (path.empty())
+    if (path.empty())
 	{
 		KOTEK_MESSAGE("can't load file - path is empty");
 		return false;
@@ -106,14 +106,14 @@ bool ktkLoaderFile_JSON::Load(
 
 	KOTEK_MESSAGE("reading file: {}", path);
 
-	ktk::ifstream _file(path);
+    ktk::cifstream _file(path);
 
 	if (_file.good())
 	{
-		ktk::istreambuf_iterator begin(_file);
-		ktk::istreambuf_iterator end;
+        ktk::cistreambuf_iterator begin(_file);
+        ktk::cistreambuf_iterator end;
 
-        ktk::string content(begin, end);
+        ktk::cstring content(begin, end);
 
 		ktk::json::parse_options options;
 		options.allow_comments = true;
@@ -144,9 +144,11 @@ bool ktkLoaderFile_JSON::Load(
 			ktk::filesystem::path path_object(path);
 
 #ifdef KOTEK_USE_UNICODE
-            p_result->Set_FileName(path_object.filename().u8string().c_str(), false);
+            p_result->Set_FileName(
+                path_object.filename().u8string().c_str(), false);
 #else
-            p_result->Set_FileName(path_object.filename().string().c_str(), false);
+            p_result->Set_FileName(
+                path_object.filename().string().c_str(), false);
 #endif
 		}
 	}

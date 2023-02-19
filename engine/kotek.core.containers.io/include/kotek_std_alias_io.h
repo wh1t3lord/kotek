@@ -13,19 +13,19 @@ KOTEK_BEGIN_NAMESPACE_KTK
 
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 using ofstream = std::basic_ofstream<tchar, std::char_traits<tchar>>;
-using ofstream_legacy = std::basic_ofstream<char, std::char_traits<char>>;
+using cofstream = std::basic_ofstream<char, std::char_traits<char>>;
 
 using ifstream = std::basic_ifstream<tchar, std::char_traits<tchar>>;
-using ifstream_legacy = std::basic_ifstream<char, std::char_traits<char>>;
+using cifstream = std::basic_ifstream<char, std::char_traits<char>>;
 
 using istreambuf_iterator =
 	std::istreambuf_iterator<tchar, std::char_traits<tchar>>;
-using istreambuf_iterator_legacy =
+using cistreambuf_iterator =
 	std::istreambuf_iterator<char, std::char_traits<char>>;
 
 using ostreambuf_iterator =
 	std::ostreambuf_iterator<tchar, std::char_traits<tchar>>;
-using ostreambuf_iterator_legacy =
+using costreambuf_iterator =
 	std::ostreambuf_iterator<char, std::char_traits<char>>;
 #else
 #endif

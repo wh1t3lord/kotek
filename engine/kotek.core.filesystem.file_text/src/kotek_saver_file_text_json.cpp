@@ -43,7 +43,7 @@ bool ktkSaverFile_JSON::Save(
 	KOTEK_ASSERT(p_casted_file->Get_FileName().empty() == false,
 		"you can't have an empty filename in your ktkFileText instance");
 
-	ktk::ofstream output_file(path);
+    ktk::cofstream output_file(path);
 
 	this->FormatTextFile_JSON(output_file, p_casted_file->Get_Json());
 
@@ -83,7 +83,7 @@ ktk::cstring ktkSaverFile_JSON::Get_AllSupportedFormats(void) const noexcept
 	return kFormatFile_Text;
 }
 
-void ktkSaverFile_JSON::FormatTextFile_JSON(ktk::ofstream& file,
+void ktkSaverFile_JSON::FormatTextFile_JSON(ktk::cofstream& file,
 	const ktk::json::value& json, std::string* indent) noexcept
 {
 #ifdef KOTEK_USE_BOOST_LIBRARY

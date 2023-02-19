@@ -51,7 +51,7 @@ private:
 	 * \param indent
 	 * \return void
 	 */
-	void FormatTextFile_JSON(ktk::ofstream& file, const ktk::json::value& json,
+    void FormatTextFile_JSON(ktk::cofstream& file, const ktk::json::value& json,
 		std::string* indent = nullptr) noexcept;
 
 private:
