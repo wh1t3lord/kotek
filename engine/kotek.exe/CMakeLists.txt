@@ -59,6 +59,15 @@ if ("${KOTEK_SDK}" STREQUAL "ON")
     endif()
 endif()
 
+if (UNIX)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/*.ktk" $<TARGET_FILE_DIR:${PROJECT_NAME}> COMMENT "Copying ktk file because non-Windows platforms don't operate with dlls and cmake treat them e.g. .so and .a as one type of library and they go only to library_output_folder and it means that we need to implemenet that functionality for non-Windows platforms that restore Window's cmake functionality that dynamic libraries are copied to specified runtime output directory because dynamic libs on Windows are treated by cmake as runtime objects instead of libraries as on Linux")
+
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
+        "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/*.so" $<TARGET_FILE_DIR:${PROJECT_NAME}> COMMENT "Copying ktk file because non-Windows platforms don't operate with dlls and cmake treat them e.g. .so and .a as one type of library and they go only to library_output_folder and it means that we need to implemenet that functionality for non-Windows platforms that restore Window's cmake functionality that dynamic libraries are copied to specified runtime output directory because dynamic libs on Windows are treated by cmake as runtime objects instead of libraries as on Linux")
+
+endif()
+
 if ("${KOTEK_MEMORY_LEAK_DETECTION}" STREQUAL "ON")
     if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
         if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
