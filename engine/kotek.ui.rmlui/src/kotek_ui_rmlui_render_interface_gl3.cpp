@@ -10,6 +10,8 @@
 #include <RmlUi/Core/Platform.h>
 #include <string.h>
 
+#include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
+
 #if defined(RMLUI_PLATFORM_WIN32) && !defined(__MINGW32__)
 	// function call missing argument list
 	#pragma warning(disable : 4551)

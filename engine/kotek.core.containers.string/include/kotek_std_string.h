@@ -10,7 +10,7 @@ KOTEK_BEGIN_NAMESPACE_KTK
 
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 
-std::size_t hash_value(const string& instance);
+std::size_t hash_value(const ktk::string& instance);
 
 #else   
 #endif

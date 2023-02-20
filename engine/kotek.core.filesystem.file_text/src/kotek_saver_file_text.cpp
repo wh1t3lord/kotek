@@ -47,8 +47,8 @@ bool ktkResourceSaverFile_Text::DetectTypeByFullPath(
 		"for analyze: [{}]",
 		this->Get_AllSupportedFormats());
 
-	return this->m_savers.find(path.extension().c_str()) !=
-		this->m_savers.end();
+	return this->m_savers.find(reinterpret_cast<const char*>(
+			   path.extension().u8string().c_str())) != this->m_savers.end();
 }
 
 ktk::cstring ktkResourceSaverFile_Text::Get_UserDescription() const noexcept
@@ -68,10 +68,12 @@ ktkIResourceSaver* ktkResourceSaverFile_Text::Get_Saver(
 		"your extension is an empty string");
 
 	Core::ktkIResourceSaver* p_result{};
-	if (this->m_savers.find(extension_of_file.c_str()) == this->m_savers.end())
+	if (this->m_savers.find(reinterpret_cast<const char*>(
+			extension_of_file.u8string().c_str())) == this->m_savers.end())
 		return p_result;
 
-	p_result = this->m_savers.at(extension_of_file.c_str());
+	p_result = this->m_savers.at(
+		reinterpret_cast<const char*>(extension_of_file.u8string().c_str()));
 
 	KOTEK_ASSERT(p_result,
 		"your m_loaders field contains invalid pointer of loader instance");
@@ -82,16 +84,16 @@ ktkIResourceSaver* ktkResourceSaverFile_Text::Get_Saver(
 ktk::cstring ktkResourceSaverFile_Text::Get_AllSupportedFormats(
 	void) const noexcept
 {
-    ktk::cstring result;
+	ktk::cstring result;
 	for (const auto& [format_name, p_saver] : this->m_savers)
 	{
 		result += format_name;
 		result += " ; ";
 	}
 
-    result.pop_back();
-    result.pop_back();
-    result.pop_back();
+	result.pop_back();
+	result.pop_back();
+	result.pop_back();
 
 	return result;
 }

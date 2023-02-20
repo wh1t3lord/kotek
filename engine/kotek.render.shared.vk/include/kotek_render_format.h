@@ -4,7 +4,7 @@
 
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
 template <>
-struct std::formatter<VkResult, Kotek::ktk::tchar>
+struct std::formatter<VkResult, char>
 {
 	template <typename ParseContext>
 	constexpr inline auto parse(ParseContext& ctx)
@@ -15,13 +15,12 @@ struct std::formatter<VkResult, Kotek::ktk::tchar>
 	template <typename FormatContext>
 	inline auto format(VkResult const& result_id, FormatContext& ctx)
 	{
-		return std::format_to(
-			ctx.out(), KOTEK_TEXT("{}"), static_cast<int>(result_id));
+		return std::format_to(ctx.out(), "{}", static_cast<int>(result_id));
 	}
 };
 
 template <>
-struct std::formatter<VkFormat, Kotek::ktk::tchar>
+struct std::formatter<VkFormat, char>
 {
 	template <typename ParseContext>
 	constexpr inline auto parse(ParseContext& ctx)
@@ -32,13 +31,12 @@ struct std::formatter<VkFormat, Kotek::ktk::tchar>
 	template <typename FormatContext>
 	inline auto format(VkFormat const& result_id, FormatContext& ctx)
 	{
-		return std::format_to(
-			ctx.out(), KOTEK_TEXT("{}"), static_cast<int>(result_id));
+		return std::format_to(ctx.out(), "{}", static_cast<int>(result_id));
 	}
 };
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 template <>
-struct fmt::formatter<VkResult, Kotek::ktk::tchar>
+struct fmt::formatter<VkResult, char>
 {
 	template <typename ParseContext>
 	constexpr inline auto parse(ParseContext& ctx)
@@ -50,12 +48,12 @@ struct fmt::formatter<VkResult, Kotek::ktk::tchar>
 	inline auto format(VkResult const& result_id, FormatContext& ctx)
 	{
 		return fmt::format_to(
-			ctx.out(), KOTEK_TEXT("{}"), static_cast<int>(result_id));
+			ctx.out(), "{}", static_cast<int>(result_id));
 	}
 };
 
 template <>
-struct fmt::formatter<VkFormat, Kotek::ktk::tchar>
+struct fmt::formatter<VkFormat, char>
 {
 	template <typename ParseContext>
 	constexpr inline auto parse(ParseContext& ctx)
@@ -67,7 +65,7 @@ struct fmt::formatter<VkFormat, Kotek::ktk::tchar>
 	inline auto format(VkFormat const& result_id, FormatContext& ctx)
 	{
 		return fmt::format_to(
-			ctx.out(), KOTEK_TEXT("{}"), static_cast<int>(result_id));
+			ctx.out(), "{}", static_cast<int>(result_id));
 	}
 };
 #endif

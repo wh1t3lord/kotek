@@ -12,7 +12,10 @@ void ktkFileSystem::Initialize(void)
 		ktk::filesystem::current_path();
 
 	KOTEK_MESSAGE("root path: {}",
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root).c_str());
+		reinterpret_cast<const char*>(
+			this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root)
+				.u8string()
+				.c_str()));
 
 	KOTEK_ASSERT(this->IsValidPath(
 					 this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root)),
@@ -77,8 +80,8 @@ ktk::string ktkFileSystem::ReadFile(
 
 	if (this->IsValidPath(path_to_file) == false)
 	{
-		KOTEK_MESSAGE_WARNING(
-			"can't load file by following path: [{}]", path_to_file.c_str());
+		KOTEK_MESSAGE_WARNING("can't load file by following path: [{}]",
+			reinterpret_cast<const char*>(path_to_file.u8string().c_str()));
 		return result;
 	}
 
@@ -92,7 +95,7 @@ ktk::string ktkFileSystem::ReadFile(
 	else
 	{
 		KOTEK_MESSAGE("something is wrong while reading file: [{}]",
-			path_to_file.c_str());
+			reinterpret_cast<const char*>(path_to_file.u8string().c_str()));
 		return result;
 	}
 
@@ -101,7 +104,7 @@ ktk::string ktkFileSystem::ReadFile(
 
 bool ktkFileSystem::AddGamedataFolderToStorage(
 	const ktk::filesystem::path& path, eFolderIndex id,
-    const ktk::cstring& folder_name) noexcept
+	const ktk::cstring& folder_name) noexcept
 {
 	if (this->m_storage_paths.find(id) != this->m_storage_paths.end())
 	{
@@ -111,7 +114,7 @@ bool ktkFileSystem::AddGamedataFolderToStorage(
 	}
 
 	ktk::filesystem::path result(path);
-    result /= folder_name.c_str();
+	result /= folder_name.c_str();
 
 	this->m_storage_paths[id] = result;
 
@@ -178,7 +181,6 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 						 eFolderIndex::kFolderIndex_Shaders)),
 			"can't create directory for shaders root folder");
 	}
-
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),

@@ -142,7 +142,7 @@ eResourceLoadingType ktkResourceLoaderManager::DetectResourceTypeByFileFormat(
 
 	KOTEK_ASSERT(result != eResourceLoadingType::kUnknown,
 		"you didn't provide any detector for a format file: {}",
-		path.extension().c_str());
+		reinterpret_cast<const char*>(path.extension().u8string().c_str()));
 
 	return result;
 }

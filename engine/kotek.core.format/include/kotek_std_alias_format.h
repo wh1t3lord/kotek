@@ -34,7 +34,7 @@ struct std::formatter<Kotek::ktk::string, char>
 		return std::format_to(
 			ctx.out(), u8"{}", reinterpret_cast<const char*>(str.c_str()));
 	#else
-		return std::format_to(ctx.out(), "{}", reinterpret_cast<const char*>());
+		return std::format_to(ctx.out(), "{}", str.c_str());
 	#endif
 	}
 };
@@ -54,7 +54,7 @@ struct std::formatter<Kotek::ktk::filesystem::path, char>
 	{
 	#ifdef KOTEK_USE_UNICODE
 		return std::format_to(
-			ctx.out(), u8"{}", Kotek::ktk::string(str.u8string().c_str()));
+			ctx.out(), "{}", reinterpret_cast<const char*>(str.u8string().c_str()));
 	#else
 		return std::format_to(
 			ctx.out(), "{}", Kotek::ktk::string(str.string().c_str()));

@@ -95,8 +95,8 @@ bool ktkLoaderModel_CGLTF::DetectTypeByFullPath(
 		"for analyze: [{}]",
 		this->Get_AllSupportedFormats());
 
-	return this->m_loaders.find(path.extension().c_str()) !=
-		this->m_loaders.end();
+	return this->m_loaders.find(reinterpret_cast<const char*>(
+			   path.extension().u8string().c_str())) != this->m_loaders.end();
 }
 
 Core::ktkIResourceLoader* ktkLoaderModel_CGLTF::Get_Loader(
@@ -106,11 +106,11 @@ Core::ktkIResourceLoader* ktkLoaderModel_CGLTF::Get_Loader(
 		"your extension is an empty string");
 
 	Core::ktkIResourceLoader* p_result{};
-	if (this->m_loaders.find(extension_of_file.c_str()) ==
+	if (this->m_loaders.find(reinterpret_cast<const char*>(extension_of_file.u8string().c_str())) ==
 		this->m_loaders.end())
 		return p_result;
 
-	p_result = this->m_loaders.at(extension_of_file.c_str());
+	p_result = this->m_loaders.at(reinterpret_cast<const char*>(extension_of_file.u8string().c_str()));
 
 	KOTEK_ASSERT(p_result,
 		"your m_loaders field contains invalid pointer of loader instance");
@@ -120,16 +120,16 @@ Core::ktkIResourceLoader* ktkLoaderModel_CGLTF::Get_Loader(
 
 ktk::cstring ktkLoaderModel_CGLTF::Get_AllSupportedFormats(void) const noexcept
 {
-    ktk::cstring result;
+	ktk::cstring result;
 	for (const auto& [format_name, p_loader] : this->m_loaders)
 	{
-        result += format_name;
+		result += format_name;
 		result += " ; ";
 	}
 
-    result.pop_back();
-    result.pop_back();
-    result.pop_back();
+	result.pop_back();
+	result.pop_back();
+	result.pop_back();
 
 	return result;
 }

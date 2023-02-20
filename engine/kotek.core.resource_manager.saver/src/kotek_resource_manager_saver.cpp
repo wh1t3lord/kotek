@@ -123,7 +123,7 @@ eResourceLoadingType ktkResourceSaverManager::DetectResourceTypeByFileFormat(
 
 	KOTEK_ASSERT(result != eResourceLoadingType::kUnknown,
 		"you didn't provide any detector for a format file: {}",
-		path.extension().c_str());
+		reinterpret_cast<const char*>(path.extension().u8string().c_str()));
 
 	return result;
 }
@@ -169,7 +169,7 @@ bool ktkResourceSaverManager::Save_Text(
 bool ktkResourceSaverManager::Save_Text_Formatted(
     const ktk::filesystem::path& path, ktk::any data) noexcept
 {
- 
+
 }
 
 void ktkResourceSaverManager::FormatTextFile_Json(ktk::ofstream& file,

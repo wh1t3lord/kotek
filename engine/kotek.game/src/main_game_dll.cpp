@@ -5,7 +5,7 @@
 
 #ifdef KOTEK_DEBUG
 	#define BOOST_TEST_MODULE kotek_engine_test_module
-    #define BOOST_TEST_ALTERNATIVE_INIT_API
+	#define BOOST_TEST_ALTERNATIVE_INIT_API
 	#include <boost/test/unit_test.hpp>
 #endif
 
@@ -58,7 +58,9 @@ namespace Game
 		KOTEK_ASSERT(
 			p_main_manager->GetResourceManager()->Get_ResourceLoader()->Load(
 				path_to_system_json, &file),
-			"can't load text: {}", path_to_system_json.c_str());
+			"can't load text: {}",
+			reinterpret_cast<const char*>(
+				path_to_system_json.u8string().c_str()));
 
 		const auto& field_initialize_callback_name =
 			file.Get<ktk::string>(Core::kSysInfoFieldName_InitializeCallback);
@@ -70,8 +72,8 @@ namespace Game
 		const auto& field_library_name =
 			file.Get<ktk::string>(Core::kSysInfoFieldName_UserLibraryName);
 		const auto& field_initialize_render_callback_name =
-            file.Get<ktk::string>(
-                Core::kSysInfoFieldName_InitializeCallback_Render);
+			file.Get<ktk::string>(
+				Core::kSysInfoFieldName_InitializeCallback_Render);
 
 		KOTEK_ASSERT(field_library_name.empty() == false,
 			"you can't have an invalid name of library, because you need "
@@ -79,8 +81,8 @@ namespace Game
 
 		auto path_to_user_dll = ktk::dll::program_location().parent_path();
 
-        path_to_user_dll /=
-            reinterpret_cast<const char*>(field_library_name.c_str());
+		path_to_user_dll /=
+			reinterpret_cast<const char*>(field_library_name.c_str());
 
 		p_main_manager->Get_EngineConfig()->Set_UserLibrary(
 			path_to_user_dll.c_str());
@@ -89,46 +91,46 @@ namespace Game
 
 		p_user_callback_initialize_game_library =
 			p_user_dll->get<ktkUserCallbackInitialize>(
-                reinterpret_cast<const char*>(
-                    field_initialize_callback_name.c_str()));
+				reinterpret_cast<const char*>(
+					field_initialize_callback_name.c_str()));
 
 		p_user_callback_shutdown_game_library =
 			p_user_dll->get<ktkUserCallbackShutdown>(
-                reinterpret_cast<const char*>(
-                    field_shutdown_callback_name.c_str()));
+				reinterpret_cast<const char*>(
+					field_shutdown_callback_name.c_str()));
 
 		p_user_callback_update_game_library =
 			p_user_dll->get<ktkUserCallbackUpdate>(
-                reinterpret_cast<const char*>(
-                    field_update_callback_name.c_str()));
+				reinterpret_cast<const char*>(
+					field_update_callback_name.c_str()));
 
 		p_user_callback_initialize_render_from_game_library =
 			p_user_dll->get<ktkUserCallbackInitializeRender>(
-                reinterpret_cast<const char*>(
-                    field_initialize_render_callback_name.c_str()));
+				reinterpret_cast<const char*>(
+					field_initialize_render_callback_name.c_str()));
 
 		KOTEK_ASSERT(p_user_callback_initialize_game_library != nullptr,
 			"can't obtain function from game user library {}: {}",
-            reinterpret_cast<const char*>(field_library_name.c_str()),
-            reinterpret_cast<const char*>(
-                field_initialize_callback_name.c_str()));
+			reinterpret_cast<const char*>(field_library_name.c_str()),
+			reinterpret_cast<const char*>(
+				field_initialize_callback_name.c_str()));
 
 		KOTEK_ASSERT(p_user_callback_shutdown_game_library != nullptr,
 			"can't obtain function from game user library {}: {}",
-            reinterpret_cast<const char*>(field_library_name.c_str()),
-            reinterpret_cast<const char*>(
-                field_shutdown_callback_name.c_str()));
+			reinterpret_cast<const char*>(field_library_name.c_str()),
+			reinterpret_cast<const char*>(
+				field_shutdown_callback_name.c_str()));
 
 		KOTEK_ASSERT(p_user_callback_update_game_library != nullptr,
 			"can't obtain function from game user library {}: {}",
-            reinterpret_cast<const char*>(field_library_name.c_str()),
-            reinterpret_cast<const char*>(field_update_callback_name.c_str()));
+			reinterpret_cast<const char*>(field_library_name.c_str()),
+			reinterpret_cast<const char*>(field_update_callback_name.c_str()));
 
 		KOTEK_ASSERT(
 			p_user_callback_initialize_render_from_game_library != nullptr,
 			"can't obtain function from game user library {}: {}",
-            reinterpret_cast<const char*>(field_library_name.c_str()),
-            reinterpret_cast<const char*>(field_update_callback_name.c_str()));
+			reinterpret_cast<const char*>(field_library_name.c_str()),
+			reinterpret_cast<const char*>(field_update_callback_name.c_str()));
 
 		if (p_user_callback_initialize_game_library)
 		{
@@ -175,11 +177,11 @@ namespace Engine
 			"manager");
 		KOTEK_ASSERT(p_main_manager->GetInput(),
 			"you didn't initialize input manager field in "
-            "main manager");
+			"main manager");
 
 		if (p_main_manager->Get_EngineConfig()
-                ->IsContainsConsoleCommandLineArgument(
-                    kConsoleCommandArg_Editor) == false)
+				->IsContainsConsoleCommandLineArgument(
+					kConsoleCommandArg_Editor) == false)
 		{
 			KOTEK_ASSERT(p_main_manager->getRenderDevice(),
 				"you didn't initialize render device manager field in main "
@@ -200,7 +202,7 @@ namespace Engine
 	void PrintCompiler(void) noexcept
 	{
 #if defined(__llvm__) || defined(__clang__)
-        KOTEK_MESSAGE("Compiled with: Clang {}", __clang_version__);
+		KOTEK_MESSAGE("Compiled with: Clang {}", __clang_version__);
 
 #elif (_MSC_VER > 0)
 
@@ -324,7 +326,7 @@ namespace Engine
 #ifdef KOTEK_DEBUG
 	#ifdef KOTEK_USE_TESTS_RUNTIME
 		#ifdef KOTEK_USE_BOOST_LIBRARY
-            #ifdef KOTEK_USE_PLATFORM_WINDOWS
+			#ifdef KOTEK_USE_PLATFORM_WINDOWS
 		KOTEK_MESSAGE("UNIT TESTING UNIT TESTING UNIT "
 					  "TESTING\n\n\n\n\n\n\n\n\n\n\n\n");
 
@@ -343,7 +345,7 @@ namespace Engine
 		KOTEK_ASSERT(status == 0, "you have got failed tests");
 
 		KOTEK_MESSAGE("\n\n\n\n\nUNIT TESTING UNIT TESTING UNIT TESTING");
-            #endif
+			#endif
 		#else
 		// TODO: find alternative for std case!
 		#endif

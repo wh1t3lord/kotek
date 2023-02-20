@@ -1043,7 +1043,7 @@ namespace Kotek
 				{
 					KOTEK_ASSERT(false,
 						"invalid format or system doesn't support it: {}",
-						image_format);
+						static_cast<int>(image_format));
 					return 0;
 				}
 				}
