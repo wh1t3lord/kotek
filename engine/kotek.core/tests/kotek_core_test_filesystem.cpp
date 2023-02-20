@@ -34,16 +34,20 @@ void test_file_create_pretty_output()
 	auto path =
 		filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_UserTests);
 
-    path /= instance.Get_FileName().c_str();
+	path /= instance.Get_FileName().c_str();
 
-    ktk::string test(u8"いくつか");
+		#ifdef KOTEK_USE_UNICODE
+	ktk::string test(u8"いくつか");
+		#else
+	ktk::string test("いくつか");
+		#endif
 
 	instance.Write("test_field1", "data");
 	instance.Write("test_field2", "data2");
-    instance.Write<ktk::string>("ktk::string", test);
+	instance.Write<ktk::string>("ktk::string", test);
 
 		#ifdef KOTEK_USE_UNICODE
-    instance.Write<ktk::string>("KOTEK_TEXT", u8"いくつか");
+	instance.Write<ktk::string>("KOTEK_TEXT", u8"いくつか");
 	instance.Write<ktk::wstring>("wchar_t", L"いくつか");
 	instance.Write<ktk::u8string>("char8_t", u8"いくつか");
 	instance.Write<ktk::u16string>("char16_t", u"いくつか");
@@ -57,7 +61,8 @@ void test_file_create_pretty_output()
 
 	ktkResourceSaverFile_Text saver_texts_instance(&main_manager);
 
-	saver_instance.Set_Saver(eResourceLoadingType::kText, &saver_texts_instance);
+	saver_instance.Set_Saver(
+		eResourceLoadingType::kText, &saver_texts_instance);
 
 	bool status = saver_instance.Save(path, &instance);
 

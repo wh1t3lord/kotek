@@ -549,8 +549,8 @@ namespace helper
 		int major_version{};
 		int minor_version{};
 
-        major_version = ktk::lexical_cast<int>(reinterpret_cast<const char*>(version_name[0]));
-        minor_version = ktk::lexical_cast<int>(reinterpret_cast<const char*>(version_name[2]));
+        major_version = ktk::lexical_cast<int>(version_name[0]);
+        minor_version = ktk::lexical_cast<int>(version_name[2]);
 
 		switch (major_version)
 		{
@@ -730,8 +730,8 @@ namespace helper
 		int major_version{};
 		int minor_version{};
 
-        major_version = ktk::lexical_cast<int>(reinterpret_cast<const char*>(version_name[0]));
-        minor_version = ktk::lexical_cast<int>(reinterpret_cast<const char*>(version_name[2]));
+        major_version = ktk::lexical_cast<int>(version_name[0]);
+        minor_version = ktk::lexical_cast<int>(version_name[2]);
 
 		switch (major_version)
 		{
@@ -790,7 +790,7 @@ namespace helper
 		}
 
 		int version =
-            ktk::lexical_cast<int>(reinterpret_cast<const char*>(version_name.c_str()));
+            ktk::lexical_cast<int>(version_name.c_str());
 
 		switch (version)
 		{
