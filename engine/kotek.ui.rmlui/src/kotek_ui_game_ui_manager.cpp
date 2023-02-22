@@ -131,25 +131,56 @@ void ktkGameUI_RMLUI::Shutdown(void) noexcept
 #endif
 }
 
-void ktkGameUI_RMLUI::Render(void) noexcept {
+void ktkGameUI_RMLUI::Render(void) noexcept
+{
 #ifdef KOTEK_USE_RMLUI_LIBRARY
+	ktkRenderInterface_GL3* p_render_interface =
+		static_cast<ktkRenderInterface_GL3*>(this->m_p_render_interface);
 
+	p_render_interface->BeginFrame();
+	p_render_interface->Clear();
+
+	this->m_p_context->Render();
+
+	p_render_interface->EndFrame();
+#endif
+}
+
+void ktkGameUI_RMLUI::Update(void) noexcept
+{
+#ifdef KOTEK_USE_RMLUI_LIBRARY
+	if (this->m_p_context)
+	{
+		this->m_p_context->Update();
+	}
 #endif
 }
 
 Rml::RenderInterface* ktkGameUI_RMLUI::Get_RenderInterface(void)
 {
+#ifdef KOTEK_USE_RMLUI_LIBRARY
 	return this->m_p_render_interface;
+#else
+	return nullptr;
+#endif
 }
 
 Rml::SystemInterface* ktkGameUI_RMLUI::Get_SystemInterface(void)
 {
+#ifdef KOTEK_USE_RMLUI_LIBRARY
 	return this->m_p_system_interface;
+#else
+	return nullptr;
+#endif
 }
 
 Rml::Context* ktkGameUI_RMLUI::Get_Context(void)
 {
+#ifdef KOTEK_USE_RMLUI_LIBRARY
 	return this->m_p_context;
+#else
+	return nullptr;
+#endif
 }
 
 void ktkGameUI_RMLUI::Initialize_GLFW(void* p_os_window_handle)

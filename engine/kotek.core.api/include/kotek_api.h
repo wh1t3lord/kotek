@@ -819,7 +819,7 @@ public:
 		void* p_os_window_handle, int width, int height) noexcept = 0;
 
 	virtual void Render(void) noexcept = 0;
-
+	virtual void Update(void) noexcept = 0;
 	virtual void Shutdown(void) noexcept = 0;
 };
 

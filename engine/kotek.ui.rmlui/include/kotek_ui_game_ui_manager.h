@@ -24,7 +24,7 @@ public:
 	void Shutdown(void) noexcept override;
 
 	void Render(void) noexcept override;
-
+	void Update(void) noexcept override;
 	Rml::RenderInterface* Get_RenderInterface(void);
 	Rml::SystemInterface* Get_SystemInterface(void);
 	Rml::Context* Get_Context(void);
