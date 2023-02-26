@@ -102,9 +102,41 @@
 # You can add it, but last time it couldn't build successful
 # ./vcpkg/vcpkg install usd:x64-linux
 
-./vcpkg/vcpkg install shader-slang:x64-linux
+./vcpkg/vcpkg install shader-slang:x64-linux-dynamic
 ./vcpkg/vcpkg install entt:x64-linux
 ./vcpkg/vcpkg install fmt:x64-linux
+
+
+## If you want to build for Windows XP
+
+You need to install mingw for appropriate architecture
+
+./vcpkg/vcpkg install boost:x64-mingw-dynamic
+./vcpkg/vcpkg install bullet3:x64-mingw-dynamic
+./vcpkg/vcpkg install directxmath:x64-mingw-dynamic
+./vcpkg/vcpkg install eigen3:x64-mingw-dynamic
+./vcpkg/vcpkg install glfw3:x64-mingw-dynamic
+./vcpkg/vcpkg install glm:x64-mingw-dynamic
+./vcpkg/vcpkg install imgui[core,sdl2-binding,opengl3-binding,opengl2-binding,glfw-binding,vulkan-binding,docking-experimental]:x64-mingw-dynamic
+./vcpkg/vcpkg install imguizmo:x64-mingw-dynamic
+./vcpkg/vcpkg install implot:x64-mingw-dynamic
+./vcpkg/vcpkg install ktx:x64-mingw-dynamic
+./vcpkg/vcpkg install mimalloc:x64-mingw-dynamic
+./vcpkg/vcpkg install tracy:x64-mingw-dynamic
+./vcpkg/vcpkg install shaderc:x64-mingw-dynamic
+./vcpkg/vcpkg install spirv-reflect:x64-mingw-dynamic
+./vcpkg/vcpkg install tbb:x64-mingw-dynamic
+./vcpkg/vcpkg install wxwidgets:x64-mingw-dynamic
+./vcpkg/vcpkg install angle:x64-mingw-dynamic
+./vcpkg/vcpkg install assimp:x64-mingw-dynamic
+./vcpkg/vcpkg install cgltf:x64-mingw-dynamic
+./vcpkg/vcpkg install rmlui[freetype]:x64-mingw-dynamic
+
+# You can add it, but last time it couldn't build successful
+# ./vcpkg/vcpkg install usd:x64-mingw-dynamic
+
+./vcpkg/vcpkg install shader-slang:x64-mingw-dynamic
+./vcpkg/vcpkg install entt:x64-mingw-dynamic
 
 # Mac
 
