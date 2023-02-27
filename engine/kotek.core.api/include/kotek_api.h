@@ -156,7 +156,7 @@ public:
 	virtual void draw(void) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual void Resize(void) = 0;
-    virtual ktk::cstring GetName(void) const noexcept = 0;
+	virtual ktk::cstring GetName(void) const noexcept = 0;
 };
 
 class ktkIFileSystem
@@ -293,7 +293,7 @@ public:
 	/// \~english @brief This is only for user. You just provide your
 	/// description of loader's implementation and access it through interface.
 	/// @return Returns ktk::string instance by const&
-    virtual ktk::cstring Get_UserDescription() const noexcept
+	virtual ktk::cstring Get_UserDescription() const noexcept
 	{
 		return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION_FOR_LOADER");
 	}
@@ -394,7 +394,7 @@ public:
 	virtual ktkIResourceLoader* Get_Loader(
 		const ktk::filesystem::path& extension_of_file) noexcept = 0;
 
-    virtual ktk::cstring Get_AllSupportedFormats(void) const noexcept = 0;
+	virtual ktk::cstring Get_AllSupportedFormats(void) const noexcept = 0;
 };
 
 class ktkIResourceLoaderManager
@@ -435,7 +435,7 @@ public:
 	virtual bool DetectTypeByFullPath(
 		const ktk::filesystem::path& path) noexcept = 0;
 
-    virtual ktk::cstring Get_UserDescription() const noexcept
+	virtual ktk::cstring Get_UserDescription() const noexcept
 	{
 		return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION_FOR_SAVER");
 	}
@@ -448,7 +448,7 @@ public:
 	virtual ktkIResourceSaver* Get_Saver(
 		const ktk::filesystem::path& extension_of_file) noexcept = 0;
 
-    virtual ktk::cstring Get_AllSupportedFormats(void) const noexcept = 0;
+	virtual ktk::cstring Get_AllSupportedFormats(void) const noexcept = 0;
 };
 
 class ktkIResourceSaverManager
@@ -705,7 +705,7 @@ public:
 	virtual const ktk::vector<eEngineFeatureRenderer>& GetFallbackRendereres(
 		void) const noexcept = 0;
 
-    virtual ktk::cstring GetRenderName(void) const noexcept = 0;
+	virtual ktk::cstring GetRenderName(void) const noexcept = 0;
 	virtual bool IsCurrentRenderLegacy(void) const noexcept = 0;
 	virtual bool IsCurrentRenderModern(void) const noexcept = 0;
 	virtual int GetARGC(void) const noexcept = 0;
@@ -713,7 +713,7 @@ public:
 	virtual void SetARGC(int) noexcept = 0;
 	virtual void SetARGV(char**) noexcept = 0;
 	virtual bool IsContainsConsoleCommandLineArgument(
-        const ktk::cstring& your_argument) const noexcept = 0;
+		const ktk::cstring& your_argument) const noexcept = 0;
 
 	/// @brief This method means that argument line of application contains
 	/// valid request for creating renderer. It means that user can specify only
@@ -758,7 +758,7 @@ public:
 	virtual bool Create(ktk::entity_t id) noexcept = 0;
 	virtual void* Get(ktk::entity_t id) noexcept = 0;
 	virtual bool Remove(ktk::entity_t id) noexcept = 0;
-    virtual ktk::cstring GetDebugName(void) const noexcept = 0;
+	virtual ktk::cstring GetDebugName(void) const noexcept = 0;
 	virtual ktk::string GetComponentName(void) const noexcept = 0;
 	virtual void DrawImGui(Kotek::Core::ktkMainManager* main_manager,
 		Kotek::ktk::entity_t entity_id) noexcept = 0;
@@ -790,7 +790,7 @@ public:
 	virtual void SetStringToTitle(
 		ktk::enum_base_t id, const char* p_utf8_or_char_string) noexcept = 0;
 	virtual void RemoveStringFromTitle(ktk::enum_base_t id) noexcept = 0;
-    virtual ktk::cstring GetTitle(void) const noexcept = 0;
+	virtual ktk::cstring GetTitle(void) const noexcept = 0;
 };
 
 class ktkIWindowManager
@@ -832,6 +832,16 @@ public:
 	virtual void Shutdown(void) noexcept = 0;
 
 	virtual void AddText(const ktk::string& message) noexcept = 0;
+};
+
+class ktkIVideoPlayerManager
+{
+public:
+	virtual ~ktkIVideoPlayerManager(void) {}
+
+	virtual void Initialize(void) noexcept = 0;
+	virtual void Shutdown(void) noexcept = 0;
+	virtual void Render(void) noexcept = 0;
 };
 
 /// \~russian @brief данный класс создан чтобы пользователь и

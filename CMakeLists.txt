@@ -44,9 +44,6 @@ endif()
 
 include_directories("engine")
 
-
-add_subdirectory("engine/kotek.core.defines")
-add_subdirectory("engine/kotek.core.defines.static")
 add_subdirectory("engine/kotek.core.defines.static.cpp")
 add_subdirectory("engine/kotek.core.defines.static.git")
 add_subdirectory("engine/kotek.core.defines.static.render")
@@ -61,11 +58,17 @@ add_subdirectory("engine/kotek.core.defines.static.profilers")
 add_subdirectory("engine/kotek.core.defines.static.sdk")
 add_subdirectory("engine/kotek.core.defines.static.string")
 add_subdirectory("engine/kotek.core.defines.static.tests")
-add_subdirectory("engine/kotek.core.defines_dependent")
+add_subdirectory("engine/kotek.core.defines.static")
+
+
 add_subdirectory("engine/kotek.core.defines_dependent.text")
 add_subdirectory("engine/kotek.core.defines_dependent.message")
 add_subdirectory("engine/kotek.core.defines_dependent.assert")
 add_subdirectory("engine/kotek.core.defines_dependent.ecs")
+add_subdirectory("engine/kotek.core.defines_dependent")
+
+add_subdirectory("engine/kotek.core.defines")
+
 add_subdirectory("engine/kotek.core")
 add_subdirectory("engine/kotek.core.api")
 add_subdirectory("engine/kotek.core.types")
@@ -161,6 +164,9 @@ if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
 elseif("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "RMLUI")
 	add_subdirectory("engine/kotek.ui.rmlui")
 endif()
+
+add_subdirectory("engine/kotek.ui.videoplayer")
+add_subdirectory("engine/kotek.ui.videoplayer.avif")
 
 if (WIN32)
 	# DEPRECATED: undo comments when you finish vulkan renderer!

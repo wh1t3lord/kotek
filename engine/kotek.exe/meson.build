@@ -1,0 +1,68 @@
+project('kotek', 'version', '1', 'languages', 'cpp', default_options : ['default_library=static'])
+cmake_cxx_standard = '20'
+cmake_cxx_standard_required = 'ON'
+if 'WIN32'
+  if '${KOTEK_DEPS_FOLDER_ENABLE}', 'STREQUAL', 'ON'
+    if '${KOTEK_DEPS_FOLDER}', 'STREQUAL', 'vcpkg'
+      # Spirv-tools
+      #find_package(SPIRV-Tools CONFIG REQUIRED)
+      #find_package(SPIRV-Tools-opt CONFIG REQUIRED)
+      #find_package(SPIRV-Tools-link CONFIG REQUIRED)
+      #find_package(SPIRV-Tools-lint CONFIG REQUIRED)
+    else
+      # include_directories('../../${KOTEK_DEPS_FOLDER}/vld/include/')
+      # link_directories('../../${KOTEK_DEPS_FOLDER}/vld/lib/Win64/')
+    endif
+  endif
+endif
+PROJECT_NAME_exe = executable(project_name, 'src/entry_point.cpp')
+# add_compile_options('$<$<CXX_COMPILER_ID:MSVC>:/MP>')
+# set_target_properties([project_name, 'PROPERTIES', 'VS_DEBUGGER_WORKING_DIRECTORY', '${CMAKE_SOURCE_DIR}'])
+if '${KOTEK_SDK}', 'STREQUAL', 'ON'
+  if 'WIN32'
+    # TODO: you need to remove that thing and use a cmake package for installation those .dlls!
+    if '${KOTEK_DEPS_FOLDER}', 'STREQUAL', 'vcpkg'
+    else
+      # set_target_properties([project_name, 'PROPERTIES', 'VS_DEBUGGER_ENVIRONMENT', 'PATH=%PATH%;$(ProjectDir)../../../${KOTEK_DEPS_FOLDER}/wxWidgets/lib/vc_x64_dll/;${CMAKE_RUNTIME_OUTPUT_DIRECTORY}'])
+      if '${CMAKE_BUILD_TYPE}', 'STREQUAL', 'Debug'
+        # file(['GLOB', 'WXWIDGETS_DLLS', project_source_dir, '../../../${KOTEK_DEPS_FOLDER}/wxWidgets/lib/vc_x64_dll/*ud*.dll'])
+        # foreach(['CurrentHeaderFile', 'IN', 'LISTS', 'WXWIDGETS_DLLS'])
+        # add_custom_command(['TARGET', project_name, 'POST_BUILD', 'COMMAND', cmake_command, '-E', 'copy_if_different', currentheaderfile, '$<TARGET_FILE_DIR:${PROJECT_NAME}>', 'COMMENT', 'Copying header: ${CurrentHeaderFile}'])
+        # endforeach()
+      else
+        # file(['GLOB', 'WXWIDGETS_DLLS', project_source_dir, '../../../${KOTEK_DEPS_FOLDER}/wxWidgets/lib/vc_x64_dll/*u_*.dll'])
+        # foreach(['CurrentHeaderFile', 'IN', 'LISTS', 'WXWIDGETS_DLLS'])
+        # add_custom_command(['TARGET', project_name, 'POST_BUILD', 'COMMAND', cmake_command, '-E', 'copy_if_different', currentheaderfile, '$<TARGET_FILE_DIR:${PROJECT_NAME}>', 'COMMENT', 'Copying header: ${CurrentHeaderFile}'])
+        # endforeach()
+      endif
+    endif
+  endif
+endif
+if 'UNIX'
+  # add_custom_command(['TARGET', project_name, 'POST_BUILD', 'COMMAND', cmake_command, '-E', 'copy_if_different', '${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/*.ktk', '$<TARGET_FILE_DIR:${PROJECT_NAME}>', 'COMMENT', 'Copying ktk file because non-Windows platforms don't operate with dlls and cmake treat them e.g. .so and .a as one type of library and they go only to library_output_folder and it means that we need to implemenet that functionality for non-Windows platforms that restore Window's cmake functionality that dynamic libraries are copied to specified runtime output directory because dynamic libs on Windows are treated by cmake as runtime objects instead of libraries as on Linux'])
+  # add_custom_command(['TARGET', project_name, 'POST_BUILD', 'COMMAND', cmake_command, '-E', 'copy_if_different', '${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/*.so', '$<TARGET_FILE_DIR:${PROJECT_NAME}>', 'COMMENT', 'Copying ktk file because non-Windows platforms don't operate with dlls and cmake treat them e.g. .so and .a as one type of library and they go only to library_output_folder and it means that we need to implemenet that functionality for non-Windows platforms that restore Window's cmake functionality that dynamic libraries are copied to specified runtime output directory because dynamic libs on Windows are treated by cmake as runtime objects instead of libraries as on Linux'])
+endif
+if '${KOTEK_MEMORY_LEAK_DETECTION}', 'STREQUAL', 'ON'
+  if '${CMAKE_BUILD_TYPE}', 'STREQUAL', 'Debug'
+    if '${KOTEK_DEPS_FOLDER}', 'STREQUAL', 'vcpkg'
+    else
+      # add_custom_command(['TARGET', project_name, 'POST_BUILD', 'COMMAND', cmake_command, '-E', 'copy_directory', '${PROJECT_SOURCE_DIR}../../../${KOTEK_DEPS_FOLDER}/vld/bin/Win64/', '$<TARGET_FILE_DIR:${PROJECT_NAME}>'])
+    endif
+  endif
+  if '${KOTEK_DEPS_FOLDER}', 'STREQUAL', 'vcpkg'
+    # Spirv-Tools, TODO: add when you will change all projects to SHARED, STATIC and HYBRID (most of them static, but sandbox.game is shared and glad projects too!)
+    # if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "SHARED")
+    #     target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-shared)
+    # elseif("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
+    #     target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-static)
+    # else()
+    #     message(FATAL_ERROR "[${PROJECT_NAME}]: you must specify development type as 'SHARED' or 'STATIC'")
+    # endif()
+    #target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-static)
+    #target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-opt)
+    #target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-link)
+    #target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-lint)
+  else
+  endif
+endif
+# target_link_libraries([project_name, 'PUBLIC', 'kotek.game'])
