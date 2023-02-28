@@ -8,6 +8,8 @@
 	#include <kotek.ui.rmlui/include/kotek_ui_rmlui.h>
 #endif
 
+#include <kotek.ui.videoplayer/include/kotek_ui_videoplayer.h>
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 

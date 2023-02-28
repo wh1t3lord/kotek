@@ -16,3 +16,5 @@ if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
 elseif("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "RMLUI")
 	target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.rmlui)
 endif()
+
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.videoplayer)

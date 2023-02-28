@@ -13,6 +13,8 @@ bool InitializeModule_UI(Core::ktkMainManager* p_main_manager)
 	InitializeModule_UI_RMLUI(p_main_manager);
 #endif
 
+	InitializeModule_UI_VideoPlayer(p_main_manager);
+
 	return true;
 }
 bool ShutdownModule_UI(Core::ktkMainManager* p_main_manager)
@@ -24,6 +26,8 @@ bool ShutdownModule_UI(Core::ktkMainManager* p_main_manager)
 #elif defined(KOTEK_USE_RMLUI_LIBRARY)
 	ShutdownModule_UI_RMLUI(p_main_manager);
 #endif
+
+	ShutdownModule_UI_VideoPlayer(p_main_manager);
 
 	return true;
 }
@@ -37,6 +41,8 @@ bool SerializeModule_UI(Core::ktkMainManager* p_main_manager)
 	SerializeModule_UI_RMLUI(p_main_manager);
 #endif
 
+	SerializeModule_UI_VideoPlayer(p_main_manager);
+
 	return true;
 }
 bool DeserializeModule_UI(Core::ktkMainManager* p_main_manager)
@@ -48,6 +54,8 @@ bool DeserializeModule_UI(Core::ktkMainManager* p_main_manager)
 #elif defined(KOTEK_USE_RMLUI_LIBRARY)
 	DeserializeModule_UI_RMLUI(p_main_manager);
 #endif
+
+	DeserializeModule_UI_VideoPlayer(p_main_manager);
 
 	return true;
 }
