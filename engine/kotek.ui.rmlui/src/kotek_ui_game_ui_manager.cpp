@@ -156,6 +156,28 @@ void ktkGameUI_RMLUI::Update(void) noexcept
 #endif
 }
 
+bool ktkGameUI_RMLUI::LoadDocument(const char* p_path_to_file) 
+{
+	bool result{};
+
+	if (!p_path_to_file)
+	{
+		KOTEK_MESSAGE_WARNING("you need to pass a valid string!");
+		return result;
+	}
+
+	if (!this->m_p_context)
+	{
+		KOTEK_MESSAGE_WARNING(
+			"context wasn't initialized");
+		return result;
+	}
+
+	result = !!(this->m_p_context->LoadDocument(p_path_to_file));
+
+	return result;
+}
+
 Rml::RenderInterface* ktkGameUI_RMLUI::Get_RenderInterface(void)
 {
 #ifdef KOTEK_USE_RMLUI_LIBRARY

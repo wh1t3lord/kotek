@@ -821,6 +821,7 @@ public:
 	virtual void Render(void) noexcept = 0;
 	virtual void Update(void) noexcept = 0;
 	virtual void Shutdown(void) noexcept = 0;
+	virtual bool LoadDocument(const char* p_path_to_file) = 0;
 };
 
 class ktkILogManager

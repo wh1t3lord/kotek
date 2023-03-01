@@ -25,9 +25,12 @@ public:
 
 	void Render(void) noexcept override;
 	void Update(void) noexcept override;
+	bool LoadDocument(const char* p_path_to_file) override;
+
 	Rml::RenderInterface* Get_RenderInterface(void);
 	Rml::SystemInterface* Get_SystemInterface(void);
 	Rml::Context* Get_Context(void);
+
 
 private:
 	void Initialize_GLFW(void* p_os_window_handle);
