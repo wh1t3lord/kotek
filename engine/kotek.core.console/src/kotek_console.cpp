@@ -13,7 +13,7 @@ void ktkConsole::Initialize(void)
 }
 
 void ktkConsole::RegisterCommand(
-	eConsoleCommandIndex id, const ktk::console_command_t& p_function) noexcept
+	ktk::enum_base_t id, const ktk::console_command_t& p_function) noexcept
 {
 	if (this->m_storage.find(id) != this->m_storage.end())
 	{
@@ -32,7 +32,7 @@ void ktkConsole::RegisterCommand(
 }
 
 void ktkConsole::PushCommand(
-	eConsoleCommandIndex id, ktk::console_command_args_t data) noexcept
+	ktk::enum_base_t id, ktk::console_command_args_t data) noexcept
 {
 	if (this->m_storage.find(id) == this->m_storage.end())
 	{
@@ -42,6 +42,10 @@ void ktkConsole::PushCommand(
 	}
 
 	this->m_buffer.push({data, this->m_storage.at(id)});
+
+#ifdef KOTEK_DEBUG
+	KOTEK_MESSAGE("command pushed: {}", id);
+#endif
 }
 
 void ktkConsole::Flush(void)
@@ -63,7 +67,7 @@ void ktkConsole::Flush(void)
 void ktkConsole::Shutdown(void) {}
 
 void ktkConsole::Execute(
-	eConsoleCommandIndex id, ktk::console_command_args_t data) noexcept
+	ktk::enum_base_t id, ktk::console_command_args_t data) noexcept
 {
 	if (this->m_storage.find(id) == this->m_storage.end())
 	{

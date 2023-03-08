@@ -20,6 +20,7 @@ enum class eConsoleCommandIndex;
 enum class eEngineSupportedOpenGLVersion;
 enum class eEngineSupportedDirectXVersion;
 enum class eEngineSupportedVulkanVersion;
+enum class eInputType;
 KOTEK_END_NAMESPACE_CORE
 
 KOTEK_END_NAMESPACE_KOTEK
@@ -47,6 +48,7 @@ namespace helper
     ktk::cstring Translate_ResourceLoadingPolicy(eResourceLoadingPolicy type);
     ktk::cstring Translate_ResourceCachingPolicy(eResourceCachingPolicy type);
     ktk::cstring Translate_ConsoleCommandIndex(eConsoleCommandIndex type);
+	ktk::cstring Translate_InputType(eInputType type);
 
 	/// @brief accepts the form like 'major_version.minor_version', for example
 	/// it parses strings like '1.3', the string is not acceptable like this

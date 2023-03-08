@@ -936,7 +936,7 @@ void ktkImguiWrapper::Text(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	::ImGui::Text(fmt, args);
+	::ImGui::TextV(fmt, args);
 	va_end(args);
 }
 void ktkImguiWrapper::TextV(const char* fmt, va_list args)

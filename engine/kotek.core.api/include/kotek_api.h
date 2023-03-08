@@ -791,6 +791,8 @@ public:
 		ktk::enum_base_t id, const char* p_utf8_or_char_string) noexcept = 0;
 	virtual void RemoveStringFromTitle(ktk::enum_base_t id) noexcept = 0;
 	virtual ktk::cstring GetTitle(void) const noexcept = 0;
+
+	virtual void Set_InputType(ktk::enum_base_t type) noexcept = 0;
 };
 
 class ktkIWindowManager

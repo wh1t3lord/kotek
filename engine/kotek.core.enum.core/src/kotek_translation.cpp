@@ -527,6 +527,29 @@ namespace helper
 		}
 	}
 
+	ktk::cstring Translate_InputType(eInputType type)
+	{
+		switch (type)
+		{
+		case eInputType::kInputType_Cursor:
+		{
+			return KOTEK_TEXT("InputType_Cursor");
+		}
+		case eInputType::kInputType_DisabledCursor:
+		{
+			return KOTEK_TEXT("InputType_DisabledCursor");
+		}
+		case eInputType::kInputType_HiddenCursor:
+		{
+			return KOTEK_TEXT("InputType_HiddenCursor");
+		}
+		default:
+		{
+			return KOTEK_TEXT("UNDEFINED_ENUM_OF_INPUT_TYPE");
+		}
+		}
+	}
+
 	eEngineSupportedOpenGLVersion
 	TranslateFromStringToEnum_EngineSupportedOpenGLVersion(
         const ktk::cstring& version_name)

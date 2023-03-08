@@ -56,6 +56,7 @@ public:
 		const char* p_utf8_or_char_string) noexcept override;
 	void RemoveStringFromTitle(ktk::enum_base_t id) noexcept override;
     ktk::cstring GetTitle(void) const noexcept override;
+	void Set_InputType(ktk::enum_base_t type) noexcept override;
 
 private:
 	void ObtainInformationAboutDisplay(void);

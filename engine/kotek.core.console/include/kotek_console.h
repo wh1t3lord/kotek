@@ -31,20 +31,20 @@ public:
 	void Initialize(void) override;
 	void Shutdown(void) override;
 
-	void RegisterCommand(eConsoleCommandIndex id,
+	void RegisterCommand(ktk::enum_base_t id,
 		const ktk::console_command_t& p_function) noexcept;
-	void PushCommand(eConsoleCommandIndex id,
+	void PushCommand(ktk::enum_base_t id,
 		ktk::console_command_args_t data = {}) noexcept;
 	void Flush(void);
 
-	void Execute(eConsoleCommandIndex id,
+	void Execute(ktk::enum_base_t id,
 		ktk::console_command_args_t data = {}) noexcept;
 
 private:
 	// TODO: make thread safe queue
 	ktk::queue<ktk::pair<ktk::console_command_base_t, ktk::console_command_t>>
 		m_buffer;
-	ktk::unordered_map<eConsoleCommandIndex, ktk::console_command_t> m_storage;
+	ktk::unordered_map<ktk::enum_base_t, ktk::console_command_t> m_storage;
 };
 
 KOTEK_END_NAMESPACE_CORE

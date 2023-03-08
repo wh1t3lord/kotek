@@ -24,7 +24,8 @@ enum class eFolderIndex : ktk::enum_base_t
 	kFolderIndex_AI,
 	kFolderIndex_UserTests,
 	kFolderIndex_UserData_ShaderCache,
-	kFolderIndex_UserData
+	kFolderIndex_UserData,
+	kEndOfEnum
 };
 
 enum class eResourceLoadingType : ktk::enum_base_t
@@ -36,13 +37,15 @@ enum class eResourceLoadingType : ktk::enum_base_t
 	kVideo,
 	kDLL,
 	kAutoDetect,
-	kUnknown = -1
+	kUnknown = -1,
+	kEndOfEnum
 };
 
 enum class eResourceLoadingPolicy : ktk::enum_base_t
 {
 	kAsync,
-	kSync
+	kSync,
+	kEndOfEnum
 };
 
 enum class eResourceCachingPolicy : ktk::enum_base_t
@@ -52,7 +55,8 @@ enum class eResourceCachingPolicy : ktk::enum_base_t
 
 	// TODO: think about it and do we need really implement this?
 	// Using temporary instances that resource manager has
-	kWithoutCache
+	kWithoutCache,
+	kEndOfEnum
 };
 
 enum class eWindowTitleType : ktk::enum_base_t
@@ -71,17 +75,8 @@ enum class eWindowTitleType : ktk::enum_base_t
 	kTitle_EntitiesCount,
 	kTitle_CurrentLevelName,
 
-	// this is for user
-	kTitle_Reserved1,
-	kTitle_Reserved2,
-	kTitle_Reserved3,
-	kTitle_Reserved4,
-	kTitle_Reserved5,
-	kTitle_Reserved6,
-	kTitle_Reserved7,
-	kTitle_Reserved8,
-	kTitle_Reserved9,
-	kTitle_Reserved10
+	
+	kEndOfEnum
 };
 
 /// \~russian @brief Данное перечисление определяет какие возможности
@@ -390,7 +385,8 @@ enum class eEngineSupportedOpenGLVersion : ktk::enum_base_t
 	/// @brief don't forget to update this field if a new version with a break
 	/// changes came
 	kOpenGL_Latest = kOpenGL_4_6,
-	kUnknown = -1
+	kUnknown = -1,
+	kEndOfEnum
 };
 
 /// @brief
@@ -406,7 +402,8 @@ enum class eEngineSupportedDirectXVersion : ktk::enum_base_t
 	/// @brief don't forget to update this field if a new version with a break
 	/// changes came
 	kDirectX_Latest = kDirectX_12,
-	kUnknown = -1
+	kUnknown = -1,
+	kEndOfEnum
 };
 
 enum class eEngineSupportedVulkanVersion : ktk::enum_base_t
@@ -420,7 +417,8 @@ enum class eEngineSupportedVulkanVersion : ktk::enum_base_t
 	/// changes came
 	kVulkan_Latest = kVulkan_1_3,
 
-	kUnknown = -1
+	kUnknown = -1,
+	kEndOfEnum
 };
 
 enum class eEngineFeatureRenderer : ktk::enum_base_t
@@ -530,6 +528,8 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_App_Show,
 	kConsoleCommand_App_AddTextToExistedWindowTitle,
 
+	kConsoleCommand_Input_Type,
+
 	kConsoleCommand_Render_UploadAllResourcesToGPU,
 
 	kConsoleCommand_SDK_LoadScene,
@@ -550,7 +550,17 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_SDK_SendMessageInfoToLogWindow,
 	kConsoleCommand_SDK_SendMessageGreyToLogWindow,
 
-	kConsoleCommand_SDK_ShowModalWindow_SaveAndCloseOrCloseScene
+	kConsoleCommand_SDK_ShowModalWindow_SaveAndCloseOrCloseScene,
+	kEndOfEnum
+};
+
+enum class eInputType : ktk::enum_base_t
+{
+	kInputType_Cursor,
+	kInputType_HiddenCursor,
+	kInputType_DisabledCursor,
+
+	kEndOfEnum
 };
 
 KOTEK_END_NAMESPACE_CORE

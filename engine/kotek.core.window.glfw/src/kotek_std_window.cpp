@@ -381,6 +381,48 @@ ktk::cstring ktkWindow::GetTitle(void) const noexcept
 	return result;
 }
 
+void ktkWindow::Set_InputType(ktk::enum_base_t type) noexcept 
+{
+	Kotek::Core::eInputType input = static_cast<Kotek::Core::eInputType>(type);
+
+	switch (input)
+	{
+	case Core::eInputType::kInputType_Cursor:
+	{
+		if (this->m_p_window)
+		{
+			glfwSetInputMode(this->m_p_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		}
+
+		break;
+	}
+	case Core::eInputType::kInputType_DisabledCursor:
+	{
+		if (this->m_p_window)
+		{
+			glfwSetInputMode(
+				this->m_p_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+		}
+
+		break;
+	}
+	case Core::eInputType::kInputType_HiddenCursor:
+	{
+		if (this->m_p_window)
+		{
+			glfwSetInputMode(this->m_p_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+		}
+
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false,
+			"you pass wrong type or can't find the value of enum: {}", type);
+	}
+	}
+}
+
 void ktkWindow::ObtainInformationAboutDisplay(void)
 {
 	const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());

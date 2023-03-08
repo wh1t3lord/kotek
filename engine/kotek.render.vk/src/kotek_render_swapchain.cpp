@@ -219,8 +219,8 @@ namespace Kotek
 							p_main_manager->GetGameManager()->GetWindowWidth();
 
 						p_main_manager->GetGameManager()->GetConsole()->Execute(
-                            Core::eConsoleCommandIndex::kConsoleCommand_Resize,
-                            {std::to_string(width), std::to_string(height)});
+                            static_cast<Kotek::ktk::enum_base_t>(Core::eConsoleCommandIndex::kConsoleCommand_Resize),
+                            {width, height});
 					}
 					else
 					{
