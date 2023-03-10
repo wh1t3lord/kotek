@@ -68,6 +68,9 @@ public:
 	void SetFeatureStatus(
 		eEngineSupportedVulkanVersion version, bool status) noexcept override;
 
+	void SetFeatureStatus(
+		eEngineSupportedOpenGLESVersion version, bool status) noexcept override;
+
 	void SetFeatureStatus(const ktk::vector<eEngineSupportedDirectXVersion>&
 			fallback_versions) noexcept override;
 	void SetFeatureStatus(const ktk::vector<eEngineSupportedOpenGLVersion>&
@@ -119,6 +122,9 @@ public:
 	/// @return if it returns eEngineSupportedVulkanVersion::kUnknown it means
 	/// that you didn't have any command line argument for Vulkan
 	eEngineSupportedVulkanVersion GetVulkanVersionFromCommandLine(
+		void) const noexcept override;
+
+	eEngineSupportedOpenGLESVersion GetOpenGLESVersionForLoading(
 		void) const noexcept override;
 
 	/**
@@ -261,9 +267,7 @@ private:
 	eEngineFeatureRenderer m_engine_feature_renderer_flags;
 	eEngineFeatureSDK m_engine_feature_sdk_flags;
 	eEngineFeatureWindow m_engine_feature_window_flags;
-	eEngineSupportedOpenGLVersion m_version_for_loading_opengl;
-	eEngineSupportedDirectXVersion m_version_for_loading_directx;
-	eEngineSupportedVulkanVersion m_version_for_loading_vulkan;
+	ktk::enum_base_t m_version_renderer;
 	ktk::vector<eEngineFeatureRenderer> m_fallback_renderers;
 	ktk::vector<eEngineSupportedDirectXVersion> m_fallback_directx_versions;
 	ktk::vector<eEngineSupportedOpenGLVersion> m_fallback_opengl_versions;

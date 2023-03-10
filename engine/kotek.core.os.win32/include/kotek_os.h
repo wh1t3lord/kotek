@@ -40,6 +40,13 @@
 		#endif
 	#endif
 
+	// TODO: add preprocessor for each version/header
+	#include <GLES/egl.h>
+	#include <GLES2/gl2.h>
+	#include <GLES3/gl3.h>
+	#include <GLES3/gl31.h>
+	#include <GLES3/gl32.h>
+
 	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
 		#define GLFW_INCLUDE_NONE
 		#include <GLFW/glfw3.h>

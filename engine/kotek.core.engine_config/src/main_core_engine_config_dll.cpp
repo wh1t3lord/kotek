@@ -10,6 +10,7 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 	ktkEngineConfig* p_instance = new ktkEngineConfig();
 	p_instance->Initialize();
 
+	p_instance->SetFeatureStatus(eEngineFeatureRenderer::KOTEK_USE_STARTUP_RENDERER)
 	p_manager->Set_EngineConfig(p_instance);
 
 	return true;
@@ -61,9 +62,25 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 		p_manager->GetResourceManager()->Get_ResourceSaver()->Save(
 			path_to_sys_info_json, &sys_info);
 	}
-
-	if (p_filesystem->IsValidPath(path_to_sys_info_json))
+	else
 	{
+
+	}
+
+	auto path_to_user_data =
+		p_filesystem->GetFolderByEnum(eFolderIndex::kFolderIndex_UserData);
+
+	ktk::cstring user_data_settings_name = KOTEK_USE_USER_DATA_CONFIG_NAME;
+	user_data_settings_name += kFormatFile_Text;
+
+	auto path_to_user_data_config = path_to_user_data / user_data_settings_name;
+	if (!p_filesystem->IsValidPath(path_to_user_data_config))
+	{
+
+	}
+	else
+	{
+
 	}
 
 	return true;

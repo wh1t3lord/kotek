@@ -100,6 +100,12 @@ void ktkEngineConfig::SetFeatureStatus(
 				this->SetFeatureStatus(
 					eEngineSupportedDirectXVersion::kDirectX_Latest, true);
 			}
+			else if (id ==
+				eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGLES_Latest)
+			{
+				this->SetFeatureStatus(
+					eEngineSupportedOpenGLESVersion::kOpenGLES_Latest, true);
+			}
 		}
 	}
 	else
@@ -156,12 +162,11 @@ void ktkEngineConfig::SetFeatureStatus(
 
 	if (status)
 	{
-		this->m_version_for_loading_opengl = version;
+		this->m_version_renderer = static_cast<ktk::enum_base_t>(version);
 	}
 	else
 	{
-		this->m_version_for_loading_opengl =
-			eEngineSupportedOpenGLVersion::kUnknown;
+		this->m_version_renderer = static_cast<ktk::enum_base_t>(eEngineSupportedOpenGLVersion::kUnknown);
 	}
 }
 
@@ -187,12 +192,12 @@ void ktkEngineConfig::SetFeatureStatus(
 
 	if (status)
 	{
-		this->m_version_for_loading_directx = version;
+		this->m_version_renderer = static_cast<ktk::enum_base_t>(version);
 	}
 	else
 	{
-		this->m_version_for_loading_directx =
-			eEngineSupportedDirectXVersion::kUnknown;
+		this->m_version_renderer =
+			static_cast<ktk::enum_base_t>(eEngineSupportedDirectXVersion::kUnknown);
 	}
 }
 
@@ -218,13 +223,18 @@ void ktkEngineConfig::SetFeatureStatus(
 
 	if (status)
 	{
-		this->m_version_for_loading_vulkan = version;
+		this->m_version_renderer = static_cast<ktk::enum_base_t>(version);
 	}
 	else
 	{
-		this->m_version_for_loading_vulkan =
-			eEngineSupportedVulkanVersion::kUnknown;
+		this->m_version_renderer = static_cast<ktk::enum_base_t>(
+			eEngineSupportedVulkanVersion::kUnknown);
 	}
+}
+
+void ktkEngineConfig::SetFeatureStatus(
+	eEngineSupportedOpenGLESVersion version, bool status) noexcept
+{
 }
 
 void ktkEngineConfig::SetFeatureStatus(
@@ -285,19 +295,19 @@ eEngineFeatureWindow ktkEngineConfig::GetEngineFeatureWindow(
 eEngineSupportedDirectXVersion ktkEngineConfig::GetDirectXVersionForLoading(
 	void) const noexcept
 {
-	return this->m_version_for_loading_directx;
+	return static_cast<eEngineSupportedDirectXVersion>(this->m_version_renderer);
 }
 
 eEngineSupportedOpenGLVersion ktkEngineConfig::GetOpenGLVersionForLoading(
 	void) const noexcept
 {
-	return this->m_version_for_loading_opengl;
+	return static_cast<eEngineSupportedOpenGLVersion>(this->m_version_renderer);
 }
 
 eEngineSupportedVulkanVersion ktkEngineConfig::GetVulkanVersionForLoading(
 	void) const noexcept
 {
-	return this->m_version_for_loading_vulkan;
+	return static_cast<eEngineSupportedVulkanVersion>(this->m_version_renderer);
 }
 
 const ktk::vector<eEngineSupportedDirectXVersion>&
@@ -485,6 +495,12 @@ eEngineSupportedVulkanVersion ktkEngineConfig::GetVulkanVersionFromCommandLine(
 		"renderer versions");
 
 	return result;
+}
+
+eEngineSupportedOpenGLESVersion ktkEngineConfig::GetOpenGLESVersionForLoading(
+	void) const noexcept
+{
+	return static_cast<eEngineSupportedOpenGLESVersion>(this->m_version_renderer);
 }
 
 ktk::cstring ktkEngineConfig::GetRenderName(void) const noexcept

@@ -662,12 +662,16 @@ public:
 		eEngineFeatureSDK id, bool status) noexcept = 0;
 	virtual void SetFeatureStatus(
 		eEngineFeatureWindow id, bool status) noexcept = 0;
+
 	virtual void SetFeatureStatus(
 		eEngineSupportedOpenGLVersion version, bool status) noexcept = 0;
 	virtual void SetFeatureStatus(
 		eEngineSupportedDirectXVersion version, bool status) noexcept = 0;
 	virtual void SetFeatureStatus(
 		eEngineSupportedVulkanVersion version, bool status) noexcept = 0;
+	void SetFeatureStatus(
+		eEngineSupportedOpenGLESVersion version, bool status) noexcept = 0;
+
 	virtual void SetFeatureStatus(
 		const ktk::vector<eEngineSupportedDirectXVersion>&
 			fallback_versions) noexcept = 0;
@@ -694,6 +698,8 @@ public:
 	virtual eEngineSupportedOpenGLVersion GetOpenGLVersionForLoading(
 		void) const noexcept = 0;
 	virtual eEngineSupportedVulkanVersion GetVulkanVersionForLoading(
+		void) const noexcept = 0;
+	virtual eEngineSupportedOpenGLESVersion GetOpenGLESVersionForLoading(
 		void) const noexcept = 0;
 
 	virtual const ktk::vector<eEngineSupportedDirectXVersion>&

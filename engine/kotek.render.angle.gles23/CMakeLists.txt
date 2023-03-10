@@ -10,7 +10,7 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
     if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
         find_package(Ktx CONFIG REQUIRED)
-        
+
         if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC" OR UNIX)
             find_package(zstd CONFIG REQUIRED)
             find_package(Threads REQUIRED)
@@ -24,7 +24,11 @@ set(to_include_render_graph_simplified_files)
 
 set(to_include_managers_files)
 
-set(to_include_core_files)
+set(to_include_core_files
+    "include/kotek_render_device.h"
+    "src/kotek_render_device.cpp"
+    "include/kotek_render_swapchain.h"
+    "src/kotek_render_swapchain.cpp")
 
 set(to_include_module_files
 	"include/kotek_render_angle_gles23.h"

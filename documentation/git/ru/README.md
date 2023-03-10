@@ -162,7 +162,7 @@ You need to install mingw for appropriate architecture
 
 P.S. стоит учитывать что это временное решение, ибо данные проблемы должны быть решены...
 
-> cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake -DKOTEK_MEMORY_ALLOCATOR_CPU=OFF ..
+> cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_TOOLCHAIN_FILE=./kotek/vcpkg/scripts/buildsystems/vcpkg.cmake -DKOTEK_MEMORY_ALLOCATOR_CPU=OFF -DKOTEK_STARTUP_RENDERER=OpenGLES_SpecifiedByUser -DKOTEK_STARTUP_RENDERER_VERSION=OpenGLES_3_1 ..
 
 7.2 Примечание, на текущий момент времени conan не поддерживается, однако планируется для добавления
 
@@ -260,6 +260,10 @@ P.S. стоит учитывать что это временное решени
 По умолчанию стоит параметр:
 
 > -DKOTEK_USER_FUNCTION_IMR=InitializeModule_Render
+
+Чтобы сменить имя файла для сохранения пользовательских настрок то:
+
+> -DKOTEK_USER_DATA_CONFIG_NAME=somenamehere
 
 ### Работа с проектами
 

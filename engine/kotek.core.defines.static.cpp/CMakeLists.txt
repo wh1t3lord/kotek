@@ -105,6 +105,22 @@ if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "")
 	set(KOTEK_MEMORY_ALLOCATOR_CPU "MIMALLOC" CACHE INTERNAL "")
 endif()
 
+### User Data
+
+# file name where user settings are saved it includes every preferences on every possible field in your game/system
+if ("${KOTEK_USER_DATA_CONFIG_NAME}" STREQUAL "")
+	set(KOTEK_USER_DATA_CONFIG_NAME "settings" CACHE INTERNAL "")
+endif()
+
+### Startup renderer
+
+if ("${KOTEK_STARTUP_RENDERER}" STREQUAL "")
+	message(FATAL_ERROR "you must specify renderer what you need to load. see documentation.")
+endif()
+
+if ("${KOTEK_STARTUP_RENDERER_VERSION}" STREQUAL "")
+	message(FATAL_ERROR "you must specify renderer version what you need to load. see documentation.")
+endif()
 
 ### Namespaces
 
@@ -673,6 +689,21 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 			#define KOTEK_USE_SDK_IMGUI
 			#define KOTEK_USE_UI_IMGUI_LIBRARY_IMGUI
 		#endif
+	")
+
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} 
+	"
+		#define KOTEK_USE_USER_DATA_CONFIG_NAME \"${KOTEK_USER_DATA_CONFIG_NAME}\"
+	")
+
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+	"
+		#define KOTEK_USE_STARTUP_RENDERER kEngine_Render_Renderer_${KOTEK_STARTUP_RENDERER}
+	")
+
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+	"
+		#define KOTEK_USE_STARTUP_RENDERER_VERSION k${KOTEK_STARTUP_RENDERER_VERSION}
 	")
 else()
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")

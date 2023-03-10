@@ -35,6 +35,10 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_math_matrix_4x4_f.h"
 	"include/kotek_std_math.h"
 	"include/kotek_core_math.h"
+	"include/kotek_std_math_functions_vector.h"
+	"include/kotek_std_math_functions_matrix.h"
+	"include/kotek_std_math_functions_numeric.h"
+	"include/kotek_std_math_functions.h"
 	"tests/kotek_core_test_math.cpp"
 	"src/main_core_math_dll.cpp")
 

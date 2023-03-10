@@ -389,6 +389,19 @@ enum class eEngineSupportedOpenGLVersion : ktk::enum_base_t
 	kEndOfEnum
 };
 
+enum class eEngineSupportedOpenGLESVersion : ktk::enum_base_t
+{
+	kOpenGLES_1,
+	kOpenGLES_2,
+	kOpenGLES_3_0,
+	kOpenGLES_3_1,
+	kOpenGLES_3_2,
+	kOpenGLES_Latest = kOpenGLES_3_2,
+
+	kUnknown = -1,
+	kEndOfEnum
+};
+
 /// @brief
 enum class eEngineSupportedDirectXVersion : ktk::enum_base_t
 {
@@ -471,7 +484,8 @@ enum class eEngineFeatureRenderer : ktk::enum_base_t
 	/// \~french @brief
 	kEngine_Render_Renderer_Software = 1 << 7,
 
-	kEngine_Render_Renderer_ANGLE = 1 << 8,
+	kEngine_Render_Renderer_OpenGLES_Latest = 1 << 8,
+	kEngine_Render_Renderer_OpenGLES_SpecifiedByUser = 1 << 9,
 
 	kNone = 0
 };
