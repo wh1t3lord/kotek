@@ -14,7 +14,7 @@ namespace gles
 
 	void ktkRenderDevice::Initialize(Core::ktkMainManager* p_main_manager) 
 	{
-		KOTEK_MESSAGE("Initialized renderer: {}", glGetString(GL_VERSION));
+		KOTEK_MESSAGE("Initialized renderer: {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
 	}
 
 	void ktkRenderDevice::Shutdown(void) {}

@@ -6,6 +6,9 @@
 	#include <kotek.render.gl/include/kotek_render_gl.h>
 #endif
 
+// TODO: preprocessor for enabling gles and for other renderers add pls
+#include <kotek.render.angle.gles23/include/kotek_render_angle_gles23.h>
+
 #ifdef KOTEK_USE_RENDER_VULKAN
 	#include <kotek.render.vk/include/kotek_render_vk.h>
 #endif
@@ -35,8 +38,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 	{
 		auto version_dx = p_engine_config->GetRendererVersionFromCommandLine();
 		KOTEK_MESSAGE("you pass command for initializing {}",
-			Kotek::Core::helper::Translate_EngineSupportedRenderer(
-				version_dx));
+			Kotek::Core::helper::Translate_EngineSupportedRenderer(version_dx));
 
 		switch (version_dx)
 		{
@@ -113,7 +115,8 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		}
 		else if (is_gles)
 		{
-			KOTEK_ASSERT(false, "implement!!!!");
+			status = InitializeModule_Render_ANGLE_GLES23(
+				main_manager, p_engine_config->GetRendererVersionEnum());
 		}
 		else
 		{
@@ -131,7 +134,8 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 
 			switch (renderer)
 			{
-			case Core::eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGLES_SpecifiedByUser:
+			case Core::eEngineFeatureRenderer::
+				kEngine_Render_Renderer_OpenGLES_SpecifiedByUser:
 			{
 				KOTEK_ASSERT(false, "not implemented");
 				break;
@@ -258,6 +262,12 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
 					kEngine_Render_Renderer_DirectX_SpecifiedByUser);
 
+		bool is_gles =
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGLES_Latest) ||
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGLES_SpecifiedByUser);
+
 		if (is_gl)
 		{
 			status = ShutdownModule_Render_GL(main_manager);
@@ -272,6 +282,10 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 		{
 			KOTEK_ASSERT(false, "not implemented");
 		}
+		else if (is_gles)
+		{
+			status = ShutdownModule_Render_ANGLE_GLES23(main_manager);
+		}
 		else
 		{
 			KOTEK_ASSERT(false, "todo: finish other renderers like angle etc");
@@ -279,7 +293,7 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 	}
 
 	KOTEK_ASSERT(status, "failed to shutdown render {} module",
-        p_engine_config->GetRenderName());
+		p_engine_config->GetRenderName());
 
 	return status;
 }
