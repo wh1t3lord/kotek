@@ -6,7 +6,7 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 bool InitializeModule_Render_GL(Core::ktkMainManager* p_main_manager,
-	Core::eEngineSupportedOpenGLVersion version)
+	Core::eEngineSupportedRenderer version)
 {
 	auto* p_engine_config = p_main_manager->Get_EngineConfig();
 

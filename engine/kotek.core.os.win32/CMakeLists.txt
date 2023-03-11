@@ -47,10 +47,7 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 	endif()
 
 	target_link_libraries(${PROJECT_NAME} PUBLIC 
-		unofficial::angle::libEGL
-		unofficial::angle::libANGLE
-		unofficial::angle::libGLESv2
-		unofficial::angle::angle_common)
+		unofficial::angle::libGLESv2)
 endif()
 
 

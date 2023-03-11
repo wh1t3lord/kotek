@@ -185,6 +185,19 @@ constexpr const char* kConsoleCommandArg_Render_OpenGL4_6 =
 constexpr const char* kConsoleCommandArg_Render_OpenGL_Latest =
     "--render_gl_latest";
 
+constexpr const char* kConsoleCommandArg_Render_OpenGLES1_0 =
+	"--render_gles1_0";
+constexpr const char* kConsoleCommandArg_Render_OpenGLES2_0 =
+	"--render_gles2_0";
+constexpr const char* kConsoleCommandArg_Render_OpenGLES3_0 =
+	"--render_gles3_0";
+constexpr const char* kConsoleCommandArg_Render_OpenGLES3_1 =
+	"--render_gles3_1";
+constexpr const char* kConsoleCommandArg_Render_OpenGLES3_2 =
+	"--render_gles3_2";
+constexpr const char* kConsoleCommandArg_Render_OpenGLES_Latest =
+	"--render_gles_latest";
+
 /**
  * Constant expresses that we specify what renderer the engine will use. If
  * you passed this argument engine will force run with Vulkan renderer.

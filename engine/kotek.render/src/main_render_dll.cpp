@@ -33,9 +33,9 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 
 	if (p_engine_config->IsUserSpecifiedRendererDirectXInCommandLine())
 	{
-		auto version_dx = p_engine_config->GetDirectXVersionFromCommandLine();
+		auto version_dx = p_engine_config->GetRendererVersionFromCommandLine();
 		KOTEK_MESSAGE("you pass command for initializing {}",
-			Kotek::Core::helper::Translate_EngineSupportedDirectXVersion(
+			Kotek::Core::helper::Translate_EngineSupportedRenderer(
 				version_dx));
 
 		switch (version_dx)
@@ -52,10 +52,10 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 	{
 		KOTEK_MESSAGE(
 			"you pass command line to application for initializing {}",
-			Kotek::Core::helper::Translate_EngineSupportedOpenGLVersion(
-				p_engine_config->GetOpenGLVersionFromCommandLine()));
+			Kotek::Core::helper::Translate_EngineSupportedRenderer(
+				p_engine_config->GetRendererVersionEnum()));
 		status = InitializeModule_Render_GL(
-			main_manager, p_engine_config->GetOpenGLVersionFromCommandLine());
+			main_manager, p_engine_config->GetRendererVersionEnum());
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
 	{
@@ -89,10 +89,16 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
 					kEngine_Render_Renderer_DirectX_SpecifiedByUser);
 
+		bool is_gles =
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGLES_Latest) ||
+			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
+					kEngine_Render_Renderer_OpenGLES_SpecifiedByUser);
+
 		if (is_gl)
 		{
 			status = InitializeModule_Render_GL(
-				main_manager, p_engine_config->GetOpenGLVersionForLoading());
+				main_manager, p_engine_config->GetRendererVersionEnum());
 		}
 		else if (is_vk)
 		{
@@ -104,6 +110,10 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		else if (is_dx)
 		{
 			KOTEK_ASSERT(false, "not implemented");
+		}
+		else if (is_gles)
+		{
+			KOTEK_ASSERT(false, "implement!!!!");
 		}
 		else
 		{
@@ -121,8 +131,9 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 
 			switch (renderer)
 			{
-			case Core::eEngineFeatureRenderer::kEngine_Render_Renderer_ANGLE:
+			case Core::eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGLES_SpecifiedByUser:
 			{
+				KOTEK_ASSERT(false, "not implemented");
 				break;
 			}
 			case Core::eEngineFeatureRenderer::kEngine_Render_Renderer_Software:
@@ -134,7 +145,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 			{
 #ifdef KOTEK_USE_RENDER_VULKAN
 				const auto& enum_vk_versions =
-					p_engine_config->GetFallbackVulkanVersions();
+					p_engine_config->GetFallbackRendererVersions();
 
 				for (auto version : enum_vk_versions)
 				{
@@ -152,7 +163,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 				kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
 			{
 				const auto& enum_gl_versions =
-					p_engine_config->GetFallbackOpenGLVersions();
+					p_engine_config->GetFallbackRendererVersions();
 
 				for (auto version : enum_gl_versions)
 				{
@@ -169,7 +180,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 				kEngine_Render_Renderer_DirectX_SpecifiedByUser:
 			{
 				const auto& enum_dx_versions =
-					p_engine_config->GetFallbackDirectXVersions();
+					p_engine_config->GetFallbackRendererVersions();
 
 				for (auto version : enum_dx_versions)
 				{

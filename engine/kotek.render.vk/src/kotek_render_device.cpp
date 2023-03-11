@@ -45,7 +45,7 @@ namespace Kotek
 			VkPhysicalDevice16BitStorageFeatures features_storage_16bit = {};
 
 			ktkRenderDevice::ktkRenderDevice(
-				Core::eEngineSupportedVulkanVersion version) :
+				Core::eEngineSupportedRenderer version) :
 				m_p_surface(nullptr),
 				m_width(-1), m_height(-1),
 				m_p_allocator(nullptr), m_current_version{version}
@@ -1052,26 +1052,25 @@ namespace Kotek
 					return string_VkResult(result);
 				}
 				ktk::uint32_t TranslateEnumVersionToInstanceVersion(
-					Core::eEngineSupportedVulkanVersion version) noexcept
+					Core::eEngineSupportedRenderer version) noexcept
 				{
 					switch (version)
 					{
-					case Core::eEngineSupportedVulkanVersion::kVulkan_1_0:
+					case Core::eEngineSupportedRenderer::kVulkan_1_0:
 					{
 						return VK_API_VERSION_1_0;
 					}
-					case Core::eEngineSupportedVulkanVersion::kVulkan_1_1:
+					case Core::eEngineSupportedRenderer::kVulkan_1_1:
 					{
 						return VK_API_VERSION_1_1;
 					}
-					case Core::eEngineSupportedVulkanVersion::kVulkan_1_2:
+					case Core::eEngineSupportedRenderer::kVulkan_1_2:
 					{
 						return VK_API_VERSION_1_2;
 					}
-					case Core::eEngineSupportedVulkanVersion::kVulkan_1_3:
+					case Core::eEngineSupportedRenderer::kVulkan_1_3:
 					{
-						// TODO: update it when you update Vulkan SDK
-						return VK_API_VERSION_1_2;
+						return VK_API_VERSION_1_3;
 					}
 					default:
 					{

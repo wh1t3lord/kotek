@@ -7,11 +7,11 @@ KOTEK_BEGIN_NAMESPACE_RENDER
 
 namespace gles
 {
-	class ktkRenderDevice3 : public Core::ktkIRenderDevice
+	class ktkRenderDevice : public Core::ktkIRenderDevice
 	{
 	public:
-		ktkRenderDevice3(void);
-		~ktkRenderDevice3(void);
+		ktkRenderDevice(Core::eEngineSupportedRenderer version);
+		~ktkRenderDevice(void);
 
 		void Initialize(Core::ktkMainManager* main_manager) override;
 		void Shutdown(void) override;
@@ -28,6 +28,7 @@ namespace gles
 	private:
 		int m_width;
 		int m_height;
+		Core::eEngineSupportedRenderer m_version;
 	};
 } // namespace gles
 

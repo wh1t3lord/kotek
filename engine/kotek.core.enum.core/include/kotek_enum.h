@@ -358,10 +358,30 @@ enum class eEngineFeatureSDK : ktk::enum_base_t
 	kNone = 0
 };
 
-/// @brief For checking what version the glad initialized you need to take a
-/// notice on message: 'Initialized GLAD for: Your_Printed_Version_Here'
-enum class eEngineSupportedOpenGLVersion : ktk::enum_base_t
+/// @brief
+enum class eEngineSupportedRenderer : ktk::enum_base_t
 {
+	kDirectX_7,
+	kDirectX_8,
+	kDirectX_9,
+	kDirectX_10,
+	kDirectX_11,
+	kDirectX_12,
+	kDirectX_Latest = kDirectX_12,
+
+	kVulkan_1_0,
+	kVulkan_1_1,
+	kVulkan_1_2,
+	kVulkan_1_3, 
+	kVulkan_Latest = kVulkan_1_3,
+
+	kOpenGLES_1,
+	kOpenGLES_2,
+	kOpenGLES_3_0,
+	kOpenGLES_3_1,
+	kOpenGLES_3_2,
+	kOpenGLES_Latest = kOpenGLES_3_2,
+
 	kOpenGL_1_0,
 	kOpenGL_1_1,
 	kOpenGL_1_2,
@@ -381,54 +401,7 @@ enum class eEngineSupportedOpenGLVersion : ktk::enum_base_t
 	kOpenGL_4_4,
 	kOpenGL_4_5,
 	kOpenGL_4_6,
-
-	/// @brief don't forget to update this field if a new version with a break
-	/// changes came
 	kOpenGL_Latest = kOpenGL_4_6,
-	kUnknown = -1,
-	kEndOfEnum
-};
-
-enum class eEngineSupportedOpenGLESVersion : ktk::enum_base_t
-{
-	kOpenGLES_1,
-	kOpenGLES_2,
-	kOpenGLES_3_0,
-	kOpenGLES_3_1,
-	kOpenGLES_3_2,
-	kOpenGLES_Latest = kOpenGLES_3_2,
-
-	kUnknown = -1,
-	kEndOfEnum
-};
-
-/// @brief
-enum class eEngineSupportedDirectXVersion : ktk::enum_base_t
-{
-	kDirectX_7,
-	kDirectX_8,
-	kDirectX_9,
-	kDirectX_10,
-	kDirectX_11,
-	kDirectX_12,
-
-	/// @brief don't forget to update this field if a new version with a break
-	/// changes came
-	kDirectX_Latest = kDirectX_12,
-	kUnknown = -1,
-	kEndOfEnum
-};
-
-enum class eEngineSupportedVulkanVersion : ktk::enum_base_t
-{
-	kVulkan_1_0,
-	kVulkan_1_1,
-	kVulkan_1_2,
-	kVulkan_1_3,
-
-	/// @brief don't forget to update this field if a new version with a break
-	/// changes came
-	kVulkan_Latest = kVulkan_1_3,
 
 	kUnknown = -1,
 	kEndOfEnum

@@ -60,22 +60,9 @@ public:
 		eEngineFeatureWindow id, bool status) noexcept override;
 
 	void SetFeatureStatus(
-		eEngineSupportedOpenGLVersion version, bool status) noexcept override;
+		eEngineSupportedRenderer version, bool status) noexcept override;
 
-	void SetFeatureStatus(
-		eEngineSupportedDirectXVersion version, bool status) noexcept override;
-
-	void SetFeatureStatus(
-		eEngineSupportedVulkanVersion version, bool status) noexcept override;
-
-	void SetFeatureStatus(
-		eEngineSupportedOpenGLESVersion version, bool status) noexcept override;
-
-	void SetFeatureStatus(const ktk::vector<eEngineSupportedDirectXVersion>&
-			fallback_versions) noexcept override;
-	void SetFeatureStatus(const ktk::vector<eEngineSupportedOpenGLVersion>&
-			fallback_versions) noexcept override;
-	void SetFeatureStatus(const ktk::vector<eEngineSupportedVulkanVersion>&
+	void SetFeatureStatus(const ktk::vector<eEngineSupportedRenderer>&
 			fallback_versions) noexcept override;
 	void SetFeatureStatus(
 		const ktk::vector<eEngineFeatureRenderer>& gapis) noexcept override;
@@ -86,46 +73,15 @@ public:
 		void) const noexcept override;
 	eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept override;
 	eEngineFeatureWindow GetEngineFeatureWindow(void) const noexcept override;
-
-	eEngineSupportedDirectXVersion GetDirectXVersionForLoading(
+	eEngineSupportedRenderer GetRendererVersionEnum(
 		void) const noexcept override;
-	eEngineSupportedOpenGLVersion GetOpenGLVersionForLoading(
-		void) const noexcept override;
-	eEngineSupportedVulkanVersion GetVulkanVersionForLoading(
-		void) const noexcept override;
-
-	const ktk::vector<eEngineSupportedDirectXVersion>&
-	GetFallbackDirectXVersions(void) const noexcept override;
-	const ktk::vector<eEngineSupportedOpenGLVersion>& GetFallbackOpenGLVersions(
-		void) const noexcept override;
-	const ktk::vector<eEngineSupportedVulkanVersion>& GetFallbackVulkanVersions(
-		void) const noexcept override;
+	ktk::enum_base_t GetRendererVersion(void) const noexcept override;
+ 
 	const ktk::vector<eEngineFeatureRenderer>& GetFallbackRendereres(
 		void) const noexcept override;
-
-	/// @brief
-	/// @param
-	/// @return if it returns eEngineSupportedDirectXVersion::kUnknown it means
-	/// that you didn't have any command line argument for DirectX
-	eEngineSupportedDirectXVersion GetDirectXVersionFromCommandLine(
-		void) const noexcept override;
-
-	/// @brief
-	/// @param
-	/// @return if it returns eEngineSupportedOpenGLVersion::kUnknown it means
-	/// that you didn't have any command line argument for OpenGL
-	eEngineSupportedOpenGLVersion GetOpenGLVersionFromCommandLine(
-		void) const noexcept override;
-
-	/// @brief
-	/// @param
-	/// @return if it returns eEngineSupportedVulkanVersion::kUnknown it means
-	/// that you didn't have any command line argument for Vulkan
-	eEngineSupportedVulkanVersion GetVulkanVersionFromCommandLine(
-		void) const noexcept override;
-
-	eEngineSupportedOpenGLESVersion GetOpenGLESVersionForLoading(
-		void) const noexcept override;
+	const ktk::vector<eEngineSupportedRenderer>&
+	GetFallbackRendererVersions(void) const noexcept override;
+ 
 
 	/**
 	 * Get current renderer name in human-readable form.
@@ -207,6 +163,9 @@ public:
 	bool IsUserSpecifiedRendererVulkanInCommandLine(
 		void) const noexcept override;
 
+	eEngineSupportedRenderer GetRendererVersionFromCommandLine(
+		void) const noexcept override;
+
 	/**
 	 * Returns the status of application working.
 	 *
@@ -269,9 +228,7 @@ private:
 	eEngineFeatureWindow m_engine_feature_window_flags;
 	ktk::enum_base_t m_version_renderer;
 	ktk::vector<eEngineFeatureRenderer> m_fallback_renderers;
-	ktk::vector<eEngineSupportedDirectXVersion> m_fallback_directx_versions;
-	ktk::vector<eEngineSupportedOpenGLVersion> m_fallback_opengl_versions;
-	ktk::vector<eEngineSupportedVulkanVersion> m_fallback_vulkan_versions;
+	ktk::vector<eEngineSupportedRenderer> m_fallback_renderers_versions;
     ktk::unordered_set<ktk::cstring> m_parsed_command_line_arguments;
 	ktk::dll::shared_library m_user_dll;
 };

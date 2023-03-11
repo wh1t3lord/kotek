@@ -15,52 +15,52 @@ KOTEK_BEGIN_NAMESPACE_CORE
 	#ifdef KOTEK_DEBUG
 void test_translation_to_enum_invalid_cases()
 {
-	eEngineSupportedOpenGLVersion result{};
+	eEngineSupportedRenderer result{};
 
-	result =
-        helper::TranslateFromStringToEnum_EngineSupportedOpenGLVersion(KOTEK_TEXT("0.0"));
+	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
+		KOTEK_TEXT("GL"), KOTEK_TEXT("0.0"));
 
-	BOOST_CHECK(result == eEngineSupportedOpenGLVersion::kUnknown);
+	BOOST_CHECK(result == eEngineSupportedRenderer::kUnknown);
 
-	result =
-        helper::TranslateFromStringToEnum_EngineSupportedOpenGLVersion(KOTEK_TEXT("1.9"));
+	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
+		KOTEK_TEXT("GL"), KOTEK_TEXT("1.9"));
 
-	BOOST_CHECK(result == eEngineSupportedOpenGLVersion::kUnknown);
+	BOOST_CHECK(result == eEngineSupportedRenderer::kUnknown);
 
-	result =
-        helper::TranslateFromStringToEnum_EngineSupportedOpenGLVersion(KOTEK_TEXT("2.9"));
+	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
+		KOTEK_TEXT("GL"), KOTEK_TEXT("2.9"));
 
-	BOOST_CHECK(result == eEngineSupportedOpenGLVersion::kUnknown);
+	BOOST_CHECK(result == eEngineSupportedRenderer::kUnknown);
 
-	result =
-        helper::TranslateFromStringToEnum_EngineSupportedOpenGLVersion(KOTEK_TEXT("3.9"));
+	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
+		KOTEK_TEXT("GL"), KOTEK_TEXT("3.9"));
 
-	BOOST_CHECK(result == eEngineSupportedOpenGLVersion::kUnknown);
+	BOOST_CHECK(result == eEngineSupportedRenderer::kUnknown);
 }
 
 void test_translation_to_enum_valid_cases()
 {
-	eEngineSupportedOpenGLVersion result{};
+	eEngineSupportedRenderer result{};
 
-	result =
-        helper::TranslateFromStringToEnum_EngineSupportedOpenGLVersion(KOTEK_TEXT("1.0"));
+	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
+		KOTEK_TEXT("GL"), KOTEK_TEXT("1.0"));
 
-	BOOST_CHECK(result == eEngineSupportedOpenGLVersion::kOpenGL_1_0);
+	BOOST_CHECK(result == eEngineSupportedRenderer::kOpenGL_1_0);
 
-	result =
-        helper::TranslateFromStringToEnum_EngineSupportedOpenGLVersion(KOTEK_TEXT("2.1"));
+	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
+		KOTEK_TEXT("GL"), KOTEK_TEXT("2.1"));
 
-	BOOST_CHECK(result == eEngineSupportedOpenGLVersion::kOpenGL_2_1);
+	BOOST_CHECK(result == eEngineSupportedRenderer::kOpenGL_2_1);
 
-	result =
-        helper::TranslateFromStringToEnum_EngineSupportedOpenGLVersion(KOTEK_TEXT("3.2"));
+	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
+		KOTEK_TEXT("GL"), KOTEK_TEXT("3.2"));
 
-	BOOST_CHECK(result == eEngineSupportedOpenGLVersion::kOpenGL_3_2);
+	BOOST_CHECK(result == eEngineSupportedRenderer::kOpenGL_3_2);
 
-	result =
-        helper::TranslateFromStringToEnum_EngineSupportedOpenGLVersion(KOTEK_TEXT("4.6"));
+	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
+		KOTEK_TEXT("GL"), KOTEK_TEXT("4.6"));
 
-	BOOST_CHECK(result == eEngineSupportedOpenGLVersion::kOpenGL_4_6);
+	BOOST_CHECK(result == eEngineSupportedRenderer::kOpenGL_4_6);
 }
 	#endif
 #endif

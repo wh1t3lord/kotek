@@ -23,7 +23,7 @@ namespace Kotek
 #endif
 
 		bool InitializeModule_Render_VK(Core::ktkMainManager* p_main_manager,
-			Core::eEngineSupportedVulkanVersion version)
+			Core::eEngineSupportedRenderer version)
 		{
 			KOTEK_CPU_PROFILE();
 

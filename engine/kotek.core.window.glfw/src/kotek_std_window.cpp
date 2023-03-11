@@ -90,212 +90,291 @@ void* ktkWindow::GetHandle(void) const noexcept
 	return this->m_p_window;
 }
 
-void ktkWindow::Initialize(Core::eEngineSupportedOpenGLVersion version)
+void ktkWindow::Initialize(Core::eEngineSupportedRenderer version) 
 {
-	if (!glfwInit())
+	if (version >= Core::eEngineSupportedRenderer::kOpenGL_1_0 ||
+		version <= Core::eEngineSupportedRenderer::kOpenGL_Latest)
 	{
-		KOTEK_ASSERT(false, "can't initialize GLFW");
-		return;
-	}
+		if (!glfwInit())
+		{
+			KOTEK_ASSERT(false, "can't initialize GLFW");
+			return;
+		}
 
-	KOTEK_ASSERT(version != Core::eEngineSupportedOpenGLVersion::kUnknown,
-		"you must pass a valid version of OpenGL what you want to initialize "
-		"for");
+		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
+			"you must pass a valid version of OpenGL what you want to "
+		    "initialize "
+			"for");
 
-	switch (version)
-	{
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_1_0:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_1_1:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_1_2:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_1_3:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_1_4:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_1_5:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_2_0:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_2_1:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_3_0:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_3_1:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_3_2:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_3_3:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_4_0:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_4_1:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_4_2:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_4_3:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_4_4:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_4_5:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
-		break;
-	}
-	case Core::eEngineSupportedOpenGLVersion::kOpenGL_4_6:
-	{
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-		break;
-	}
-	default:
-	{
-		// TODO: create preprocessor for defininng major and minor version
-		// through preprocessor and configurable from cmake for user
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-		break;
-	}
-	}
+		switch (version)
+		{
+		case Core::eEngineSupportedRenderer::kOpenGL_1_0:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_1_1:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_1_2:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_1_3:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_1_4:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_1_5:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_2_0:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_2_1:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_3_0:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_3_1:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_3_2:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_3_3:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_4_0:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_4_1:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_4_2:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_4_3:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_4_4:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_4_5:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGL_4_6:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+			break;
+		}
+		default:
+		{
+			// TODO: create preprocessor for defininng major and minor version
+			// through preprocessor and configurable from cmake for user
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+			break;
+		}
+		}
 
-	// TODO: make changable core or compat profile choosing, again you need to
-	// create configurable macro for this
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+		// TODO: make changable core or compat profile choosing, again you need
+		// to create configurable macro for this
+		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	this->ObtainInformationAboutDisplay();
+		this->ObtainInformationAboutDisplay();
 
-	this->m_p_window = glfwCreateWindow(this->m_screen_size_width,
-		this->m_screen_size_height, this->GetTitle().c_str(), nullptr, nullptr);
+		this->m_p_window = glfwCreateWindow(this->m_screen_size_width,
+			this->m_screen_size_height, this->GetTitle().c_str(), nullptr,
+			nullptr);
 
-	if (!this->m_p_window)
-	{
-		glfwTerminate();
-		KOTEK_ASSERT(false, "can't create GLFW window");
-		return;
+		if (!this->m_p_window)
+		{
+			glfwTerminate();
+			KOTEK_ASSERT(false, "can't create GLFW window");
+			return;
+		}
 	}
-}
-
-void ktkWindow::Initialize(Core::eEngineSupportedDirectXVersion version)
-{
-	if (!glfwInit())
+	else if (version >= Core::eEngineSupportedRenderer::kOpenGLES_1 ||
+		version <= Core::eEngineSupportedRenderer::kOpenGLES_Latest)
 	{
-		KOTEK_ASSERT(false, "can't initialize GLFW");
-		return;
+		if (!glfwInit())
+		{
+			KOTEK_ASSERT(false, "can't initialize GLFW");
+			return;
+		}
+
+		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
+			"you must pass a valid version of OpenGL what you want to "
+			"initialize "
+			"for");
+
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+
+		switch (version)
+		{
+		case Core::eEngineSupportedRenderer::kOpenGLES_1:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGLES_2:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGLES_3_0:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGLES_3_1:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+			break;
+		}
+		case Core::eEngineSupportedRenderer::kOpenGLES_3_2:
+		{
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+			break;
+		}
+		default:
+		{
+			// TODO: create preprocessor for defininng major and minor version
+			// through preprocessor and configurable from cmake for user
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+			break;
+		}
+		}
+
+		this->ObtainInformationAboutDisplay();
+
+		this->m_p_window = glfwCreateWindow(this->m_screen_size_width,
+			this->m_screen_size_height, this->GetTitle().c_str(), nullptr,
+			nullptr);
+
+		if (!this->m_p_window)
+		{
+			glfwTerminate();
+			KOTEK_ASSERT(false, "can't create GLFW window");
+			return;
+		}
 	}
-
-	KOTEK_ASSERT(version != Core::eEngineSupportedDirectXVersion::kUnknown,
-		"you must pass a valid version of DirectX what you want to initialize "
-		"for");
-
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
-
-	this->ObtainInformationAboutDisplay();
-
-	this->m_p_window = glfwCreateWindow(this->m_screen_size_width,
-		this->m_screen_size_height, "Kotek Engine", nullptr, nullptr);
-
-	if (!this->m_p_window)
+	else if (version >= Core::eEngineSupportedRenderer::kDirectX_7 ||
+		version <= Core::eEngineSupportedRenderer::kDirectX_Latest)
 	{
-		glfwTerminate();
-		KOTEK_ASSERT(false, "can't create GLFW window");
-		return;
+		if (!glfwInit())
+		{
+			KOTEK_ASSERT(false, "can't initialize GLFW");
+			return;
+		}
+
+		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
+			"you must pass a valid version of DirectX what you want to "
+		    "initialize "
+			"for");
+
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+
+		this->ObtainInformationAboutDisplay();
+
+		this->m_p_window = glfwCreateWindow(this->m_screen_size_width,
+			this->m_screen_size_height, "Kotek Engine", nullptr, nullptr);
+
+		if (!this->m_p_window)
+		{
+			glfwTerminate();
+			KOTEK_ASSERT(false, "can't create GLFW window");
+			return;
+		}
 	}
-}
-
-void ktkWindow::Initialize(Core::eEngineSupportedVulkanVersion version)
-{
-	if (!glfwInit())
+	else if (version <= Core::eEngineSupportedRenderer::kVulkan_1_0 ||
+		version <= Core::eEngineSupportedRenderer::kVulkan_Latest)
 	{
-		KOTEK_ASSERT(false, "can't initialize GLFW");
-		return;
-	}
+		if (!glfwInit())
+		{
+			KOTEK_ASSERT(false, "can't initialize GLFW");
+			return;
+		}
 
-	KOTEK_ASSERT(version != Core::eEngineSupportedVulkanVersion::kUnknown,
-		"you must pass a valid version of Vulkan what you want to initialize "
-		"for");
+		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
+			"you must pass a valid version of DirectX what you want to "
+		    "initialize "
+			"for");
 
-	glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 
-	this->ObtainInformationAboutDisplay();
+		this->ObtainInformationAboutDisplay();
 
-	this->m_p_window = glfwCreateWindow(this->m_screen_size_width,
-		this->m_screen_size_height, "Kotek Engine", nullptr, nullptr);
+		this->m_p_window = glfwCreateWindow(this->m_screen_size_width,
+			this->m_screen_size_height, "Kotek Engine", nullptr, nullptr);
 
-	if (!this->m_p_window)
-	{
-		glfwTerminate();
-		KOTEK_ASSERT(false, "can't create GLFW window");
-		return;
+		if (!this->m_p_window)
+		{
+			glfwTerminate();
+			KOTEK_ASSERT(false, "can't create GLFW window");
+			return;
+		}
 	}
 }
 

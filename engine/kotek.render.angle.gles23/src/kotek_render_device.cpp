@@ -5,42 +5,45 @@ KOTEK_BEGIN_NAMESPACE_RENDER
 
 namespace gles
 {
-	ktkRenderDevice3::ktkRenderDevice3(void) : m_width{}, m_height{} {}
-
-	ktkRenderDevice3::~ktkRenderDevice3(void) {}
-
-	void ktkRenderDevice3::Initialize(Core::ktkMainManager* p_main_manager) 
+	ktkRenderDevice::ktkRenderDevice(Core::eEngineSupportedRenderer version) :
+		m_width{}, m_height{}, m_version{version}
 	{
-		
 	}
 
-	void ktkRenderDevice3::Shutdown(void) {}
+	ktkRenderDevice::~ktkRenderDevice(void) {}
 
-	void ktkRenderDevice3::Resize(Core::ktkIRenderSwapchain* p_raw_swapchain,
+	void ktkRenderDevice::Initialize(Core::ktkMainManager* p_main_manager) 
+	{
+		KOTEK_MESSAGE("Initialized renderer: {}", glGetString(GL_VERSION));
+	}
+
+	void ktkRenderDevice::Shutdown(void) {}
+
+	void ktkRenderDevice::Resize(Core::ktkIRenderSwapchain* p_raw_swapchain,
 		Core::kotek_i_renderer* p_raw_renderer,
 		Core::ktkIRenderResourceManager* p_raw_resource_manager, int width,
 		int height)
 	{
 	}
 
-	int ktkRenderDevice3::GetWidth(void) const noexcept
+	int ktkRenderDevice::GetWidth(void) const noexcept
 	{
 		return this->m_width;
 	}
 
-	int ktkRenderDevice3::GetHeight(void) const noexcept
+	int ktkRenderDevice::GetHeight(void) const noexcept
 	{
 		return this->m_height;
 	}
 
-	void ktkRenderDevice3::GPUFlush(void) {}
+	void ktkRenderDevice::GPUFlush(void) {}
 
-	void ktkRenderDevice3::SetWidth(int width) noexcept
+	void ktkRenderDevice::SetWidth(int width) noexcept
 	{
 		this->m_width = width;
 	}
 
-	void ktkRenderDevice3::SetHeight(int height) noexcept
+	void ktkRenderDevice::SetHeight(int height) noexcept
 	{
 		this->m_height = height;
 	}

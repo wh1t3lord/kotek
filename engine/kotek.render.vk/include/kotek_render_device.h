@@ -28,13 +28,13 @@ namespace Kotek
                 ktk::cstring TranslateVkResultToString(
                     VkResult result) noexcept;
 				ktk::uint32_t TranslateEnumVersionToInstanceVersion(
-					Core::eEngineSupportedVulkanVersion version) noexcept;
+					Core::eEngineSupportedRenderer version) noexcept;
 			} // namespace helper
 
 			class ktkRenderDevice : public Core::ktkIRenderDevice
 			{
 			public:
-				ktkRenderDevice(Core::eEngineSupportedVulkanVersion version);
+				ktkRenderDevice(Core::eEngineSupportedRenderer version);
 				~ktkRenderDevice(void);
 
 				void Initialize(Core::ktkMainManager* main_manager) override;
@@ -165,7 +165,7 @@ namespace Kotek
 				ktk::uint32_t m_queue_index_graphics;
 				ktk::uint32_t m_queue_index_compute;
 
-				Core::eEngineSupportedVulkanVersion m_current_version;
+				Core::eEngineSupportedRenderer m_current_version;
 
 				VkInstance m_p_instance;
 				VkDevice m_p_device;

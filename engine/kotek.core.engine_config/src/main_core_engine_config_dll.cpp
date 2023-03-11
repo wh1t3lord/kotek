@@ -10,7 +10,77 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 	ktkEngineConfig* p_instance = new ktkEngineConfig();
 	p_instance->Initialize();
 
-	p_instance->SetFeatureStatus(eEngineFeatureRenderer::KOTEK_USE_STARTUP_RENDERER)
+	auto renderer_type = eEngineFeatureRenderer::KOTEK_USE_STARTUP_RENDERER;
+
+	p_instance->SetFeatureStatus(renderer_type, true);
+	
+	eEngineSupportedRenderer renderer_version{};
+
+	switch (renderer_type)
+	{
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest:
+	{
+		renderer_version = eEngineSupportedRenderer::kDirectX_Latest;
+		break;
+	}
+	case eEngineFeatureRenderer::
+	kEngine_Render_Renderer_DirectX_SpecifiedByUser:
+	{
+		renderer_version =
+			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
+
+		KOTEK_ASSERT(renderer_version >= eEngineSupportedRenderer::kDirectX_7 &&
+				renderer_version <= eEngineSupportedRenderer::kDirectX_Latest,
+			"You passed DirectX renderer but version is not for DirectX at all!");
+
+		break;
+	}
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGLES_Latest:
+	{
+		renderer_version = eEngineSupportedRenderer::kOpenGLES_Latest;
+
+		KOTEK_ASSERT(
+			renderer_version >= eEngineSupportedRenderer::kOpenGLES_1 &&
+				renderer_version <= eEngineSupportedRenderer::kOpenGLES_Latest,
+			"you passed OpenGL ES renderer but version is not for OpenGL ES at "
+		    "all!");
+		break;
+	}
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
+	{
+		renderer_version =
+			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
+
+		KOTEK_ASSERT(
+			renderer_version >= eEngineSupportedRenderer::kOpenGL_1_0 &&
+				renderer_version <= eEngineSupportedRenderer::kOpenGL_Latest,
+			"you passed OpenGL renderer but version is not for OpenGL at all!");
+		break;
+	}
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest:
+	{
+		renderer_version = eEngineSupportedRenderer::kVulkan_Latest;
+		break;
+	}
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
+	{
+		renderer_version =
+			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
+
+		KOTEK_ASSERT(
+			renderer_version >= eEngineSupportedRenderer::kVulkan_1_0 &&
+				renderer_version <= eEngineSupportedRenderer::kVulkan_Latest,
+			"you passed Vulkan but version is not for Vulkan at all!");
+		break;
+	}
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_Software:
+	{
+		KOTEK_ASSERT(false, "think about it");
+		break;
+	}
+	}
+
+
 	p_manager->Set_EngineConfig(p_instance);
 
 	return true;

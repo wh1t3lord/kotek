@@ -664,22 +664,9 @@ public:
 		eEngineFeatureWindow id, bool status) noexcept = 0;
 
 	virtual void SetFeatureStatus(
-		eEngineSupportedOpenGLVersion version, bool status) noexcept = 0;
-	virtual void SetFeatureStatus(
-		eEngineSupportedDirectXVersion version, bool status) noexcept = 0;
-	virtual void SetFeatureStatus(
-		eEngineSupportedVulkanVersion version, bool status) noexcept = 0;
-	void SetFeatureStatus(
-		eEngineSupportedOpenGLESVersion version, bool status) noexcept = 0;
+		eEngineSupportedRenderer version, bool status) noexcept = 0;
 
-	virtual void SetFeatureStatus(
-		const ktk::vector<eEngineSupportedDirectXVersion>&
-			fallback_versions) noexcept = 0;
-	virtual void SetFeatureStatus(
-		const ktk::vector<eEngineSupportedOpenGLVersion>&
-			fallback_versions) noexcept = 0;
-	virtual void SetFeatureStatus(
-		const ktk::vector<eEngineSupportedVulkanVersion>&
+	virtual void SetFeatureStatus(const ktk::vector<eEngineSupportedRenderer>&
 			fallback_versions) noexcept = 0;
 	virtual void SetFeatureStatus(
 		const ktk::vector<eEngineFeatureRenderer>& gapis) noexcept = 0;
@@ -693,23 +680,13 @@ public:
 	virtual eEngineFeatureWindow GetEngineFeatureWindow(
 		void) const noexcept = 0;
 
-	virtual eEngineSupportedDirectXVersion GetDirectXVersionForLoading(
+	virtual eEngineSupportedRenderer GetRendererVersionEnum(
 		void) const noexcept = 0;
-	virtual eEngineSupportedOpenGLVersion GetOpenGLVersionForLoading(
-		void) const noexcept = 0;
-	virtual eEngineSupportedVulkanVersion GetVulkanVersionForLoading(
-		void) const noexcept = 0;
-	virtual eEngineSupportedOpenGLESVersion GetOpenGLESVersionForLoading(
-		void) const noexcept = 0;
-
-	virtual const ktk::vector<eEngineSupportedDirectXVersion>&
-	GetFallbackDirectXVersions(void) const noexcept = 0;
-	virtual const ktk::vector<eEngineSupportedOpenGLVersion>&
-	GetFallbackOpenGLVersions(void) const noexcept = 0;
-	virtual const ktk::vector<eEngineSupportedVulkanVersion>&
-	GetFallbackVulkanVersions(void) const noexcept = 0;
+	virtual ktk::enum_base_t GetRendererVersion(void) const noexcept = 0;
 	virtual const ktk::vector<eEngineFeatureRenderer>& GetFallbackRendereres(
 		void) const noexcept = 0;
+	virtual const ktk::vector<eEngineSupportedRenderer>&
+	GetFallbackRendererVersions(void) const noexcept = 0;
 
 	virtual ktk::cstring GetRenderName(void) const noexcept = 0;
 	virtual bool IsCurrentRenderLegacy(void) const noexcept = 0;
@@ -741,12 +718,9 @@ public:
 	virtual bool IsUserSpecifiedRendererVulkanInCommandLine(
 		void) const noexcept = 0;
 
-	virtual eEngineSupportedDirectXVersion GetDirectXVersionFromCommandLine(
+	virtual eEngineSupportedRenderer GetRendererVersionFromCommandLine(
 		void) const noexcept = 0;
-	virtual eEngineSupportedOpenGLVersion GetOpenGLVersionFromCommandLine(
-		void) const noexcept = 0;
-	virtual eEngineSupportedVulkanVersion GetVulkanVersionFromCommandLine(
-		void) const noexcept = 0;
+
 	// TODO: add for angle here
 
 	virtual bool IsApplicationWorking(void) const noexcept = 0;
@@ -786,9 +760,7 @@ public:
 	/// @param
 	/// @return
 	virtual void* GetHandle(void) const noexcept = 0;
-	virtual void Initialize(Core::eEngineSupportedOpenGLVersion version) = 0;
-	virtual void Initialize(Core::eEngineSupportedDirectXVersion version) = 0;
-	virtual void Initialize(Core::eEngineSupportedVulkanVersion version) = 0;
+	virtual void Initialize(Core::eEngineSupportedRenderer version) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual void PollEvents(void) = 0;
 	virtual bool Is_NeedToClose(void) = 0;

@@ -52,8 +52,10 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 		case Core::eEngineFeatureRenderer::
 			kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
 		{
-			if (p_config->GetOpenGLVersionForLoading() >=
-				Core::eEngineSupportedOpenGLVersion::kOpenGL_3_0)
+			if ((p_config->GetRendererVersionEnum() >=
+						Core::eEngineSupportedRenderer::kOpenGL_3_0 &&
+					p_config->GetRendererVersionEnum() <=
+						Core::eEngineSupportedRenderer::kOpenGL_Latest))
 			{
 				this->m_p_render_interface = new ktkRenderInterface_GL3();
 				break;
@@ -62,6 +64,26 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 			{
 				KOTEK_ASSERT(false, "not implemented");
 			}
+
+			break;
+		}
+		case Core::eEngineFeatureRenderer::
+		kEngine_Render_Renderer_OpenGLES_SpecifiedByUser:
+				
+		{
+			if ((p_config->GetRendererVersionEnum() >=
+						Core::eEngineSupportedRenderer::kOpenGLES_3_0 &&
+					p_config->GetRendererVersionEnum() <=
+						Core::eEngineSupportedRenderer::kOpenGLES_Latest))
+			{
+				this->m_p_render_interface = new ktkRenderInterface_GL3();
+				break;
+			}
+			else
+			{
+				KOTEK_ASSERT(false, "not implemented");
+			}
+			break;
 		}
 		case Core::eEngineFeatureRenderer::
 			kEngine_Render_Renderer_OpenGL_Latest:
@@ -156,7 +178,7 @@ void ktkGameUI_RMLUI::Update(void) noexcept
 #endif
 }
 
-bool ktkGameUI_RMLUI::LoadDocument(const char* p_path_to_file) 
+bool ktkGameUI_RMLUI::LoadDocument(const char* p_path_to_file)
 {
 	bool result{};
 
@@ -168,8 +190,7 @@ bool ktkGameUI_RMLUI::LoadDocument(const char* p_path_to_file)
 
 	if (!this->m_p_context)
 	{
-		KOTEK_MESSAGE_WARNING(
-			"context wasn't initialized");
+		KOTEK_MESSAGE_WARNING("context wasn't initialized");
 		return result;
 	}
 

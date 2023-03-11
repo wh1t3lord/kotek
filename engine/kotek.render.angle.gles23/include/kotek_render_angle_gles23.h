@@ -11,7 +11,7 @@ KOTEK_END_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
-bool InitializeModule_Render_ANGLE_GLES23(Core::ktkMainManager* main_manager);
+bool InitializeModule_Render_ANGLE_GLES23(Core::ktkMainManager* main_manager, Core::eEngineSupportedRenderer version);
 bool ShutdownModule_Render_ANGLE_GLES23(Core::ktkMainManager* main_manager);
 
 KOTEK_END_NAMESPACE_RENDER

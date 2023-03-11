@@ -43,9 +43,8 @@ public:
 	int GetHeight(void) const noexcept override;
 	void* GetHandle(void) const noexcept override;
 
-	void Initialize(Core::eEngineSupportedOpenGLVersion version) override;
-	void Initialize(Core::eEngineSupportedDirectXVersion version) override;
-	void Initialize(Core::eEngineSupportedVulkanVersion version) override;
+	void Initialize(Core::eEngineSupportedRenderer version) override;
+ 
 	void Shutdown(void) override;
 
 	void MakeContextCurrent(void) noexcept override;
