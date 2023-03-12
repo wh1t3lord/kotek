@@ -7,7 +7,7 @@ KOTEK_BEGIN_NAMESPACE_RENDER
 namespace gl
 {
 	ktkRenderResourceManager::ktkRenderResourceManager(
-		ktkRenderDevice* p_device, Core::ktkMainManager* p_manager) :
+		Core::ktkIRenderDevice* p_device, Core::ktkMainManager* p_manager) :
 		m_p_render_device{p_device},
 		m_p_render_manager_texture{}, m_p_render_manager_shader{},
 		m_p_main_manager{p_manager}

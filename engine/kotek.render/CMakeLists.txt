@@ -34,3 +34,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl)
 #target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.vk) 
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.software)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.angle.gles23)

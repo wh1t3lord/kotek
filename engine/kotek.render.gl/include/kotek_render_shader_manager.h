@@ -10,15 +10,7 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 namespace gl
 {
-    constexpr const char* _kShaderPrefix_Vertex = ("vert");
-    constexpr const char* _kShaderPrefix_Fragment = ("frag");
-    constexpr const char* _kShaderPrefix_Compute = ("comp");
-    constexpr const char* _kShaderPrefix_Task = ("task");
-    constexpr const char* _kShaderPrefix_Mesh = ("mesh");
-    constexpr const char* _kShaderPrefix_Geometry = ("geom");
-    constexpr const char* _kShaderPrefix_TessellationEvaluation = ("tese");
-    constexpr const char* _kShaderPrefix_TessellationControl = ("tesc");
-
+	// TODO: use shader-lang
 	class ktkRenderShaderManager
 	{
 	public:

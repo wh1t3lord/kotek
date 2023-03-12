@@ -143,15 +143,11 @@ void ktkEngineConfig::SetFeatureStatus(
 void ktkEngineConfig::SetFeatureStatus(
 	eEngineSupportedRenderer version, bool status) noexcept
 {
-	if (this->IsFeatureEnabled(
-			eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest))
-	{
-		KOTEK_ASSERT(eEngineSupportedRenderer::kDirectX_Latest != version,
-			"you can't pass not latest version while you specified that "
-		    "renderer needs latest version");
-
+	if (status)
 		this->m_version_renderer = static_cast<ktk::enum_base_t>(version);
-	}
+	else
+		this->m_version_renderer =
+			static_cast<ktk::enum_base_t>(eEngineSupportedRenderer::kUnknown);
 }
 
 void ktkEngineConfig::SetFeatureStatus(

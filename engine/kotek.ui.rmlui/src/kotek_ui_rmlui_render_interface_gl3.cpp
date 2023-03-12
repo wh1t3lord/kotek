@@ -1,7 +1,8 @@
 #include "../include/kotek_ui_rmlui_render_interface_gl3.h"
+#include <kotek.core.enum/include/kotek_core_enum.h>
 
 #ifdef KOTEK_PLATFORM_LINUX
-    #undef Always
+	#undef Always
 #endif
 
 #include <RmlUi/Core/Core.h>
@@ -21,7 +22,6 @@
 
 #if defined RMLUI_PLATFORM_EMSCRIPTEN
 	#define RMLUI_SHADER_HEADER "#version 300 es\nprecision highp float;\n"
-	#include <GLES3/gl3.h>
 #elif defined RMLUI_GL3_CUSTOM_LOADER
 	#define RMLUI_SHADER_HEADER "#version 330\n"
 	#include RMLUI_GL3_CUSTOM_LOADER
@@ -29,7 +29,7 @@
 	#define RMLUI_SHADER_HEADER "#version 330\n"
 #endif
 
-static const char* shader_main_vertex = RMLUI_SHADER_HEADER R"(
+static const char* shader_main_vertex_gl = RMLUI_SHADER_HEADER R"(
 uniform vec2 _translate;
 uniform mat4 _transform;
 in vec2 inPosition;
@@ -46,7 +46,7 @@ void main() {
 }
 )";
 
-static const char* shader_main_fragment_texture = RMLUI_SHADER_HEADER R"(
+static const char* shader_main_fragment_texture_gl = RMLUI_SHADER_HEADER R"(
 uniform sampler2D _tex;
 in vec2 fragTexCoord;
 in vec4 fragColor;
@@ -56,7 +56,49 @@ void main() {
 	finalColor = fragColor * texColor;
 }
 )";
-static const char* shader_main_fragment_color = RMLUI_SHADER_HEADER R"(
+static const char* shader_main_fragment_color_gl = RMLUI_SHADER_HEADER R"(
+in vec2 fragTexCoord;
+in vec4 fragColor;
+out vec4 finalColor;
+void main() {
+	finalColor = fragColor;
+}
+)";
+
+static const char* shader_main_vertex_gles =
+	"#version 300 es\nprecision highp float;\n"
+	R"(
+uniform vec2 _translate;
+uniform mat4 _transform;
+in vec2 inPosition;
+in vec4 inColor0;
+in vec2 inTexCoord0;
+out vec2 fragTexCoord;
+out vec4 fragColor;
+void main() {
+	fragTexCoord = inTexCoord0;
+	fragColor = inColor0;
+	vec2 translatedPos = inPosition + _translate.xy;
+	vec4 outPos = _transform * vec4(translatedPos, 0, 1);
+    gl_Position = outPos;
+}
+)";
+
+static const char* shader_main_fragment_texture_gles =
+	"#version 300 es\nprecision highp float;\n"
+	R"(
+uniform sampler2D _tex;
+in vec2 fragTexCoord;
+in vec4 fragColor;
+out vec4 finalColor;
+void main() {
+	vec4 texColor = texture(_tex, fragTexCoord);
+	finalColor = fragColor * texColor;
+}
+)";
+static const char* shader_main_fragment_color_gles =
+	"#version 300 es\nprecision highp float;\n"
+	R"(
 in vec2 fragTexCoord;
 in vec4 fragColor;
 out vec4 finalColor;
@@ -260,7 +302,8 @@ namespace Gfx
 		return true;
 	}
 
-	static bool CreateShaders(ShadersData& out_shaders)
+	static bool CreateShaders(
+		ShadersData& out_shaders, Kotek::Core::eEngineSupportedRenderer version)
 	{
 		out_shaders = {};
 		GLuint& main_vertex = out_shaders.shader_main_vertex;
@@ -268,45 +311,93 @@ namespace Gfx
 		GLuint& main_fragment_texture =
 			out_shaders.shader_main_fragment_texture;
 
-		main_vertex = CreateShader(GL_VERTEX_SHADER, shader_main_vertex);
-		if (!main_vertex)
+		if (version >= Kotek::Core::eEngineSupportedRenderer::kOpenGL_3_3 &&
+			version <= Kotek::Core::eEngineSupportedRenderer::kOpenGL_Latest)
 		{
-			Rml::Log::Message(Rml::Log::LT_ERROR,
-				"Could not create OpenGL shader: 'shader_main_vertex'.");
-			return false;
-		}
-		main_fragment_color =
-			CreateShader(GL_FRAGMENT_SHADER, shader_main_fragment_color);
-		if (!main_fragment_color)
-		{
-			Rml::Log::Message(Rml::Log::LT_ERROR,
-				"Could not create OpenGL shader: "
-				"'shader_main_fragment_color'.");
-			return false;
-		}
-		main_fragment_texture =
-			CreateShader(GL_FRAGMENT_SHADER, shader_main_fragment_texture);
-		if (!main_fragment_texture)
-		{
-			Rml::Log::Message(Rml::Log::LT_ERROR,
-				"Could not create OpenGL shader: "
-				"'shader_main_fragment_texture'.");
-			return false;
-		}
+			main_vertex = CreateShader(GL_VERTEX_SHADER, shader_main_vertex_gl);
+			if (!main_vertex)
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR,
+					"Could not create OpenGL shader: 'shader_main_vertex'.");
+				return false;
+			}
+			main_fragment_color =
+				CreateShader(GL_FRAGMENT_SHADER, shader_main_fragment_color_gl);
+			if (!main_fragment_color)
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR,
+					"Could not create OpenGL shader: "
+					"'shader_main_fragment_color'.");
+				return false;
+			}
+			main_fragment_texture = CreateShader(
+				GL_FRAGMENT_SHADER, shader_main_fragment_texture_gl);
+			if (!main_fragment_texture)
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR,
+					"Could not create OpenGL shader: "
+					"'shader_main_fragment_texture'.");
+				return false;
+			}
 
-		if (!CreateProgram(
-				main_vertex, main_fragment_color, out_shaders.program_color))
-		{
-			Rml::Log::Message(Rml::Log::LT_ERROR,
-				"Could not create OpenGL program: 'program_color'.");
-			return false;
+			if (!CreateProgram(main_vertex, main_fragment_color,
+					out_shaders.program_color))
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR,
+					"Could not create OpenGL program: 'program_color'.");
+				return false;
+			}
+			if (!CreateProgram(main_vertex, main_fragment_texture,
+					out_shaders.program_texture))
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR,
+					"Could not create OpenGL program: 'program_texture'.");
+				return false;
+			}
 		}
-		if (!CreateProgram(main_vertex, main_fragment_texture,
-				out_shaders.program_texture))
+		else
 		{
-			Rml::Log::Message(Rml::Log::LT_ERROR,
-				"Could not create OpenGL program: 'program_texture'.");
-			return false;
+			main_vertex =
+				CreateShader(GL_VERTEX_SHADER, shader_main_vertex_gles);
+			if (!main_vertex)
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR,
+					"Could not create OpenGL shader: 'shader_main_vertex'.");
+				return false;
+			}
+			main_fragment_color = CreateShader(
+				GL_FRAGMENT_SHADER, shader_main_fragment_color_gles);
+			if (!main_fragment_color)
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR,
+					"Could not create OpenGL shader: "
+					"'shader_main_fragment_color'.");
+				return false;
+			}
+			main_fragment_texture = CreateShader(
+				GL_FRAGMENT_SHADER, shader_main_fragment_texture_gles);
+			if (!main_fragment_texture)
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR,
+					"Could not create OpenGL shader: "
+					"'shader_main_fragment_texture'.");
+				return false;
+			}
+
+			if (!CreateProgram(main_vertex, main_fragment_color,
+					out_shaders.program_color))
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR,
+					"Could not create OpenGL program: 'program_color'.");
+				return false;
+			}
+			if (!CreateProgram(main_vertex, main_fragment_texture,
+					out_shaders.program_texture))
+			{
+				Rml::Log::Message(Rml::Log::LT_ERROR,
+					"Could not create OpenGL program: 'program_texture'.");
+				return false;
+			}
 		}
 
 		return true;
@@ -329,11 +420,14 @@ namespace Gfx
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
-ktkRenderInterface_GL3::ktkRenderInterface_GL3()
+ktkRenderInterface_GL3::ktkRenderInterface_GL3(
+	Core::eEngineSupportedRenderer version)
 {
 	shaders = Rml::MakeUnique<Gfx::ShadersData>();
 
-	if (!Gfx::CreateShaders(*shaders))
+	m_version = version;
+
+	if (!Gfx::CreateShaders(*shaders, m_version))
 		shaders.reset();
 }
 
@@ -524,7 +618,7 @@ void ktkRenderInterface_GL3::EnableScissorRegion(bool enable)
 }
 
 void ktkRenderInterface_GL3::SetScissorRegion(
-    int x, int y, int width, int height)
+	int x, int y, int width, int height)
 {
 	if (transform_active)
 	{
@@ -597,7 +691,7 @@ bool ktkRenderInterface_GL3::LoadTexture(Rml::TextureHandle& texture_handle,
 	{
 		Rml::Log::Message(Rml::Log::LT_ERROR,
 			"Texture file size is smaller than TGAHeader, file is not a valid "
-            "TGA image.");
+			"TGA image.");
 		file_interface->Close(file_handle);
 		return false;
 	}

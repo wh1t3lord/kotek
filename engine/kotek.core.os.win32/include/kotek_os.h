@@ -40,12 +40,7 @@
 		#endif
 	#endif
 
-	// TODO: add preprocessor for each version/header
-	#include <GLES/egl.h>
-	#include <GLES2/gl2.h>
-	#include <GLES3/gl3.h>
-	#include <GLES3/gl31.h>
-	#include <GLES3/gl32.h>
+	#include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>	
 
 	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
 		#define GLFW_INCLUDE_NONE
@@ -56,6 +51,7 @@
 	#endif
 
 	#ifdef KOTEK_USE_OPENGL
-		// glad uses only in private form, like you initialize in appropriate kotek.render.glx.x version
+	// glad uses only in private form, like you initialize in appropriate
+	// kotek.render.glx.x version
 	#endif
 #endif

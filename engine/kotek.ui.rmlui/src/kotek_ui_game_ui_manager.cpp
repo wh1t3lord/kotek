@@ -57,7 +57,7 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 					p_config->GetRendererVersionEnum() <=
 						Core::eEngineSupportedRenderer::kOpenGL_Latest))
 			{
-				this->m_p_render_interface = new ktkRenderInterface_GL3();
+				this->m_p_render_interface = new ktkRenderInterface_GL3(p_config->GetRendererVersionEnum());
 				break;
 			}
 			else
@@ -76,7 +76,7 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 					p_config->GetRendererVersionEnum() <=
 						Core::eEngineSupportedRenderer::kOpenGLES_Latest))
 			{
-				this->m_p_render_interface = new ktkRenderInterface_GL3();
+				this->m_p_render_interface = new ktkRenderInterface_GL3(p_config->GetRendererVersionEnum());
 				break;
 			}
 			else
@@ -88,7 +88,7 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 		case Core::eEngineFeatureRenderer::
 			kEngine_Render_Renderer_OpenGL_Latest:
 		{
-			this->m_p_render_interface = new ktkRenderInterface_GL3();
+			this->m_p_render_interface = new ktkRenderInterface_GL3(p_config->GetRendererVersionEnum());
 			break;
 		}
 		default:

@@ -543,8 +543,7 @@ namespace helper
 		if (renderer_name.empty())
 			return result;
 
-		if (version_name != KOTEK_TEXT("Latest"))
-			return result;
+		bool is_latest = ktk::to_lower(version_name) == KOTEK_TEXT("latest");
 
 		int major_version{};
 		int minor_version{};
@@ -553,6 +552,11 @@ namespace helper
 		{
 			major_version = ktk::lexical_cast<int>(version_name[0]);
 			minor_version = ktk::lexical_cast<int>(version_name[2]);
+
+			if (is_latest)
+			{
+				return eEngineSupportedRenderer::kOpenGL_Latest;
+			}
 
 			switch (major_version)
 			{
@@ -716,6 +720,11 @@ namespace helper
 			major_version = ktk::lexical_cast<int>(version_name[0]);
 			minor_version = ktk::lexical_cast<int>(version_name[2]);
 
+			if (is_latest)
+			{
+				return eEngineSupportedRenderer::kOpenGLES_Latest;
+			}
+
 			switch (major_version)
 			{
 			case 1:
@@ -765,6 +774,11 @@ namespace helper
 		{
 			major_version = ktk::lexical_cast<int>(version_name.c_str());
 
+			if (is_latest)
+			{
+				return eEngineSupportedRenderer::kDirectX_Latest;
+			}
+
 			switch (major_version)
 			{
 			case 7:
@@ -805,6 +819,11 @@ namespace helper
 		{
 			major_version = ktk::lexical_cast<int>(version_name[0]);
 			minor_version = ktk::lexical_cast<int>(version_name[2]);
+
+			if (is_latest)
+			{
+				return eEngineSupportedRenderer::kVulkan_Latest;
+			}
 
 			switch (major_version)
 			{
@@ -851,41 +870,43 @@ namespace helper
 	}
 
 	eEngineFeatureRenderer TranslateFromStringToEnum_EngineFeatureRenderer(
-		const ktk::cstring& renderer_name)
+		const ktk::cstring& name)
 	{
 		eEngineFeatureRenderer result{eEngineFeatureRenderer::kNone};
 
-		if (renderer_name.empty())
+		if (name.empty())
 			return result;
 
-		if (renderer_name == KOTEK_TEXT("ANGLE") ||
-			renderer_name == KOTEK_TEXT("OpenGL ES") ||
-			renderer_name == KOTEK_TEXT("OpenGLES") ||
-			renderer_name == KOTEK_TEXT("GLES") ||
-			renderer_name == KOTEK_TEXT("GL ES"))
+		auto renderer_name = ktk::to_lower(name);
+
+		if (renderer_name == KOTEK_TEXT("angle") ||
+			renderer_name == KOTEK_TEXT("opengl es") ||
+			renderer_name == KOTEK_TEXT("opengles") ||
+			renderer_name == KOTEK_TEXT("gles") ||
+			renderer_name == KOTEK_TEXT("gl es"))
 		{
 			result = eEngineFeatureRenderer::
 				kEngine_Render_Renderer_OpenGLES_SpecifiedByUser;
 		}
-		else if (renderer_name == KOTEK_TEXT("Software") ||
-			renderer_name == KOTEK_TEXT("SW"))
+		else if (renderer_name == KOTEK_TEXT("software") ||
+			renderer_name == KOTEK_TEXT("sw"))
 		{
 			result = eEngineFeatureRenderer::kEngine_Render_Renderer_Software;
 		}
-		else if (renderer_name == KOTEK_TEXT("DirectX") ||
-			renderer_name == KOTEK_TEXT("DX"))
+		else if (renderer_name == KOTEK_TEXT("directx") ||
+			renderer_name == KOTEK_TEXT("dx"))
 		{
 			result = eEngineFeatureRenderer::
 				kEngine_Render_Renderer_DirectX_SpecifiedByUser;
 		}
-		else if (renderer_name == KOTEK_TEXT("Vulkan") ||
-			renderer_name == KOTEK_TEXT("VK"))
+		else if (renderer_name == KOTEK_TEXT("vulkan") ||
+			renderer_name == KOTEK_TEXT("vk"))
 		{
 			result = eEngineFeatureRenderer::
 				kEngine_Render_Renderer_Vulkan_SpecifiedByUser;
 		}
-		else if (renderer_name == KOTEK_TEXT("OpenGL") ||
-			renderer_name == KOTEK_TEXT("GL"))
+		else if (renderer_name == KOTEK_TEXT("opengl") ||
+			renderer_name == KOTEK_TEXT("gl"))
 		{
 			result = eEngineFeatureRenderer::
 				kEngine_Render_Renderer_OpenGL_SpecifiedByUser;

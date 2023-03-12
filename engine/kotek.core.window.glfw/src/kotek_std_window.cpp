@@ -92,7 +92,7 @@ void* ktkWindow::GetHandle(void) const noexcept
 
 void ktkWindow::Initialize(Core::eEngineSupportedRenderer version) 
 {
-	if (version >= Core::eEngineSupportedRenderer::kOpenGL_1_0 ||
+	if (version >= Core::eEngineSupportedRenderer::kOpenGL_1_0 &&
 		version <= Core::eEngineSupportedRenderer::kOpenGL_Latest)
 	{
 		if (!glfwInit())
@@ -249,7 +249,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			return;
 		}
 	}
-	else if (version >= Core::eEngineSupportedRenderer::kOpenGLES_1 ||
+	else if (version >= Core::eEngineSupportedRenderer::kOpenGLES_1 &&
 		version <= Core::eEngineSupportedRenderer::kOpenGLES_Latest)
 	{
 		if (!glfwInit())
@@ -262,8 +262,6 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			"you must pass a valid version of OpenGL what you want to "
 			"initialize "
 			"for");
-
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
 
 		switch (version)
 		{
@@ -307,6 +305,9 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 		}
 		}
 
+		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+		glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+
 		this->ObtainInformationAboutDisplay();
 
 		this->m_p_window = glfwCreateWindow(this->m_screen_size_width,
@@ -315,12 +316,14 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 
 		if (!this->m_p_window)
 		{
+			const char* p_test{};
+			glfwGetError(&p_test);
+			KOTEK_ASSERT(false, "can't create GLFW window, reason: {}", p_test);
 			glfwTerminate();
-			KOTEK_ASSERT(false, "can't create GLFW window");
 			return;
 		}
 	}
-	else if (version >= Core::eEngineSupportedRenderer::kDirectX_7 ||
+	else if (version >= Core::eEngineSupportedRenderer::kDirectX_7 &&
 		version <= Core::eEngineSupportedRenderer::kDirectX_Latest)
 	{
 		if (!glfwInit())
@@ -348,7 +351,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			return;
 		}
 	}
-	else if (version <= Core::eEngineSupportedRenderer::kVulkan_1_0 ||
+	else if (version <= Core::eEngineSupportedRenderer::kVulkan_1_0 &&
 		version <= Core::eEngineSupportedRenderer::kVulkan_Latest)
 	{
 		if (!glfwInit())

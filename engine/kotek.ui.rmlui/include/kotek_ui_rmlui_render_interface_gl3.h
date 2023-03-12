@@ -18,12 +18,18 @@ namespace Gfx
 #endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+enum class eEngineSupportedRenderer;
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
 class ktkRenderInterface_GL3 : public Rml::RenderInterface
 {
 public:
-	ktkRenderInterface_GL3();
+	ktkRenderInterface_GL3(Core::eEngineSupportedRenderer version);
 	~ktkRenderInterface_GL3();
 
 	// Returns true if the renderer was successfully constructed.
@@ -96,6 +102,7 @@ private:
 	int viewport_height = 0;
 
 	Rml::UniquePtr<Gfx::ShadersData> shaders;
+	Core::eEngineSupportedRenderer m_version;
 };
 
 KOTEK_END_NAMESPACE_UI

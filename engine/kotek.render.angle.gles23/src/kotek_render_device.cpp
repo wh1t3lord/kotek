@@ -14,7 +14,15 @@ namespace gles
 
 	void ktkRenderDevice::Initialize(Core::ktkMainManager* p_main_manager) 
 	{
-		KOTEK_MESSAGE("Initialized renderer: {}", reinterpret_cast<const char*>(glGetString(GL_VERSION)));
+		p_main_manager->Get_WindowManager()->ActiveWindow_MakeContextCurrent();
+		
+		int version = gladLoadGLES2Loader(
+			reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
+
+		KOTEK_ASSERT(version, "failed to gladLoadGLLoader");
+
+		KOTEK_MESSAGE("Initialized GLAD for: {}",
+			reinterpret_cast<const char*>(glGetString(GL_VERSION)));
 	}
 
 	void ktkRenderDevice::Shutdown(void) {}

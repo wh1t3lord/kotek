@@ -46,6 +46,30 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 		    "all!");
 		break;
 	}
+	case eEngineFeatureRenderer::
+	kEngine_Render_Renderer_OpenGLES_SpecifiedByUser:
+	{
+		renderer_version =
+			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
+
+		KOTEK_ASSERT(
+			renderer_version >= eEngineSupportedRenderer::kOpenGLES_1 &&
+				renderer_version <= eEngineSupportedRenderer::kOpenGLES_Latest,
+			"you passed OpenGL ES renderer but version is not for OpenGL ES at "
+			"all!");
+		break;
+	}
+	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest:
+	{
+		renderer_version =
+			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
+
+		KOTEK_ASSERT(
+			renderer_version >= eEngineSupportedRenderer::kOpenGL_1_0 &&
+				renderer_version <= eEngineSupportedRenderer::kOpenGL_Latest,
+			"you passed OpenGL renderer but version is not for OpenGL at all!");
+		break;
+	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
 	{
 		renderer_version =
@@ -80,7 +104,7 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 	}
 	}
 
-
+	p_instance->SetFeatureStatus(renderer_version, true);
 	p_manager->Set_EngineConfig(p_instance);
 
 	return true;

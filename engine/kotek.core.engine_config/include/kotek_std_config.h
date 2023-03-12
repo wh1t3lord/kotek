@@ -59,6 +59,7 @@ public:
 	void SetFeatureStatus(
 		eEngineFeatureWindow id, bool status) noexcept override;
 
+	// passing false set to kUnknown
 	void SetFeatureStatus(
 		eEngineSupportedRenderer version, bool status) noexcept override;
 

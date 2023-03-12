@@ -20,9 +20,25 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
     endif()
 endif()
 
-set(to_include_render_graph_simplified_files)
+set(to_include_render_graph_simplified_files
+    "../kotek.render.gl/include/kotek_render_graph_simplified_node.h"
+    "../kotek.render.gl/src/kotek_render_graph_simplified_node.cpp"
+    "../kotek.render.gl/include/kotek_render_graph_simplified_resource_manager.h"
+    "../kotek.render.gl/src/kotek_render_graph_simplified_resource_manager.cpp"
+    "../kotek.render.gl/include/kotek_render_graph_simplified.h"
+    "../kotek.render.gl/src/kotek_render_graph_simplified.cpp"
+    "../kotek.render.gl/include/kotek_render_graph_simplified_render_pass.h"
+    "../kotek.render.gl/src/kotek_render_graph_simplified_render_pass.cpp"
+    "../kotek.render.gl/include/kotek_render_graph_simplified_builder.h"
+    "../kotek.render.gl/src/kotek_render_graph_simplified_builder.cpp")
 
-set(to_include_managers_files)
+set(to_include_managers_files
+    "../kotek.render.gl/include/kotek_render_shader_manager.h"
+    "../kotek.render.gl/src/kotek_render_shader_manager.cpp"
+    "../kotek.render.gl/include/kotek_render_texture_manager.h"
+    "../kotek.render.gl/src/kotek_render_texture_manager.cpp"
+    "../kotek.render.gl/include/kotek_render_resource_manager.h"
+    "../kotek.render.gl/src/kotek_render_resource_manager.cpp")
 
 set(to_include_core_files
     "include/kotek_render_device.h"

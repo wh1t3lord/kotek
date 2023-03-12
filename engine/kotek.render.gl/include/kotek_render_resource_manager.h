@@ -18,8 +18,9 @@ namespace gl
 	class ktkRenderResourceManager : public Core::ktkIRenderResourceManager
 	{
 	public:
+		// this is because GL shares some implementations with GLES
 		ktkRenderResourceManager(
-			ktkRenderDevice* p_device, Core::ktkMainManager* p_manager);
+			Core::ktkIRenderDevice* p_device, Core::ktkMainManager* p_manager);
 		ktkRenderResourceManager(void) = delete;
 
 		~ktkRenderResourceManager(void);
@@ -43,7 +44,7 @@ namespace gl
 		ktkRenderShaderManager* Get_ManagerShader(void) const noexcept;
 
 	private:
-		ktkRenderDevice* m_p_render_device;
+		Core::ktkIRenderDevice* m_p_render_device;
 		ktkRenderTextureManager* m_p_render_manager_texture;
 		ktkRenderShaderManager* m_p_render_manager_shader;
 		Core::ktkMainManager* m_p_main_manager;
