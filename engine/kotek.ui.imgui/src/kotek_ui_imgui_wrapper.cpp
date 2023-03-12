@@ -625,10 +625,14 @@ void ktkImguiWrapper::SetNextWindowBgAlpha(float alpha)
 {
 	::ImGui::SetNextWindowBgAlpha(alpha);
 }
+
 void ktkImguiWrapper::SetNextWindowViewport(ImGuiID viewport_id)
 {
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	::ImGui::SetNextWindowViewport(viewport_id);
+#endif
 }
+
 void ktkImguiWrapper::SetWindowPos(const ImVec2& pos, ImGuiCond cond)
 {
 	::ImGui::SetWindowPos(pos, cond);
@@ -982,7 +986,7 @@ void ktkImguiWrapper::LabelText(const char* label, const char* fmt, ...)
 	va_list args;
 	va_start(args, fmt);
 	::ImGui::LabelText(label, fmt, args);
-    va_end(args);
+	va_end(args);
 }
 void ktkImguiWrapper::LabelTextV(
 	const char* label, const char* fmt, va_list args)
@@ -1737,6 +1741,8 @@ void ktkImguiWrapper::SetTabItemClosed(const char* tab_or_docked_window_label)
 {
 	::ImGui::SetTabItemClosed(tab_or_docked_window_label);
 }
+
+#ifdef KOTEK_USE_IMGUI_DOCKING
 ImGuiID ktkImguiWrapper::DockSpace(ImGuiID id, const ImVec2& size,
 	ImGuiDockNodeFlags flags, const ImGuiWindowClass* window_class)
 {
@@ -1763,6 +1769,8 @@ bool ktkImguiWrapper::IsWindowDocked()
 {
 	return ::ImGui::IsWindowDocked();
 }
+#endif
+
 void ktkImguiWrapper::LogToTTY(int auto_open_depth)
 {
 	::ImGui::LogToTTY(auto_open_depth);
@@ -1936,13 +1944,22 @@ ImDrawList* ktkImguiWrapper::GetForegroundDrawList()
 {
 	return ::ImGui::GetForegroundDrawList();
 }
+
 ImDrawList* ktkImguiWrapper::GetBackgroundDrawList(ImGuiViewport* viewport)
 {
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	return ::ImGui::GetBackgroundDrawList(viewport);
+#else
+	return nullptr;
+#endif
 }
 ImDrawList* ktkImguiWrapper::GetForegroundDrawList(ImGuiViewport* viewport)
 {
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	return ::ImGui::GetForegroundDrawList(viewport);
+#else
+	return nullptr;
+#endif
 }
 ImDrawListSharedData* ktkImguiWrapper::GetDrawListSharedData()
 {
@@ -2138,33 +2155,51 @@ void ktkImguiWrapper::MemFree(void* ptr)
 {
 	::ImGui::MemFree(ptr);
 }
+
+#ifdef KOTEK_USE_IMGUI_DOCKING
 ImGuiPlatformIO& ktkImguiWrapper::GetPlatformIO()
 {
 	return ::ImGui::GetPlatformIO();
 }
+#endif
 void ktkImguiWrapper::UpdatePlatformWindows()
 {
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	::ImGui::UpdatePlatformWindows();
+#endif
 }
 void ktkImguiWrapper::RenderPlatformWindowsDefault(
 	void* platform_render_arg, void* renderer_render_arg)
 {
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	::ImGui::RenderPlatformWindowsDefault(
 		platform_render_arg, renderer_render_arg);
+#endif
 }
 void ktkImguiWrapper::DestroyPlatformWindows()
 {
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	::ImGui::DestroyPlatformWindows();
+#endif
 }
 ImGuiViewport* ktkImguiWrapper::FindViewportByID(ImGuiID id)
 {
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	return ::ImGui::FindViewportByID(id);
+#else
+	return nullptr;
+#endif
 }
 ImGuiViewport* ktkImguiWrapper::FindViewportByPlatformHandle(
 	void* platform_handle)
 {
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	return ::ImGui::FindViewportByPlatformHandle(platform_handle);
+#else
+	return nullptr;
+#endif
 }
+
 void ktkImguiWrapper::SetTooltip(const char* fmt, ...)
 {
 	va_list args;

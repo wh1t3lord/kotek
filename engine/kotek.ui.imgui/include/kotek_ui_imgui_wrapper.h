@@ -2,9 +2,9 @@
 
 #include <kotek.core.api/include/kotek_api.h>
 
-#include <imgui.h>
-#include <imgui_impl_opengl3.h>
-#include <imgui_impl_glfw.h>
+#include "imgui.h"
+#include "imgui_impl_opengl3.h"
+#include "imgui_impl_glfw.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
@@ -213,19 +213,19 @@ public:
 
 	void TextUnformatted(
 		const char* text, const char* text_end = NULL) override;
-    void Text(const char* fmt, ...) override;
-    void TextV(const char* fmt, va_list args) override;
-    void TextColored(const ImVec4& col, const char* fmt, ...) override;
-    void TextColoredV(
-        const ImVec4& col, const char* fmt, va_list args) override;
-    void TextDisabled(const char* fmt, ...) override;
-    void TextDisabledV(const char* fmt, va_list args) override;
-    void TextWrapped(const char* fmt, ...) override;
-    void TextWrappedV(const char* fmt, va_list args) override;
-    void LabelText(const char* label, const char* fmt, ...) override;
-    void LabelTextV(const char* label, const char* fmt, va_list args) override;
-    void BulletText(const char* fmt, ...) override;
-    void BulletTextV(const char* fmt, va_list args) override;
+	void Text(const char* fmt, ...) override;
+	void TextV(const char* fmt, va_list args) override;
+	void TextColored(const ImVec4& col, const char* fmt, ...) override;
+	void TextColoredV(
+		const ImVec4& col, const char* fmt, va_list args) override;
+	void TextDisabled(const char* fmt, ...) override;
+	void TextDisabledV(const char* fmt, va_list args) override;
+	void TextWrapped(const char* fmt, ...) override;
+	void TextWrappedV(const char* fmt, va_list args) override;
+	void LabelText(const char* label, const char* fmt, ...) override;
+	void LabelTextV(const char* label, const char* fmt, va_list args) override;
+	void BulletText(const char* fmt, ...) override;
+	void BulletTextV(const char* fmt, va_list args) override;
 
 	bool Button(const char* label, const ImVec2& size = ImVec2(0, 0)) override;
 	bool SmallButton(const char* label) override;
@@ -388,19 +388,19 @@ public:
 		ImGuiColorEditFlags flags = 0, ImVec2 size = ImVec2(0, 0)) override;
 	void SetColorEditOptions(ImGuiColorEditFlags flags) override;
 	bool TreeNode(const char* label) override;
-    bool TreeNode(const char* str_id, const char* fmt, ...) override;
-    bool TreeNode(const void* ptr_id, const char* fmt, ...) override;
-    bool TreeNodeV(const char* str_id, const char* fmt, va_list args) override;
-    bool TreeNodeV(const void* ptr_id, const char* fmt, va_list args) override;
+	bool TreeNode(const char* str_id, const char* fmt, ...) override;
+	bool TreeNode(const void* ptr_id, const char* fmt, ...) override;
+	bool TreeNodeV(const char* str_id, const char* fmt, va_list args) override;
+	bool TreeNodeV(const void* ptr_id, const char* fmt, va_list args) override;
 	bool TreeNodeEx(const char* label, ImGuiTreeNodeFlags flags = 0) override;
 	bool TreeNodeEx(const char* str_id, ImGuiTreeNodeFlags flags,
-        const char* fmt, ...) override;
+		const char* fmt, ...) override;
 	bool TreeNodeEx(const void* ptr_id, ImGuiTreeNodeFlags flags,
-        const char* fmt, ...) override;
+		const char* fmt, ...) override;
 	bool TreeNodeExV(const char* str_id, ImGuiTreeNodeFlags flags,
-        const char* fmt, va_list args) override;
+		const char* fmt, va_list args) override;
 	bool TreeNodeExV(const void* ptr_id, ImGuiTreeNodeFlags flags,
-        const char* fmt, va_list args) override;
+		const char* fmt, va_list args) override;
 	void TreePush(const char* str_id) override;
 	void TreePush(const void* ptr_id = NULL) override;
 	void TreePop() override;
@@ -462,8 +462,8 @@ public:
 
 	void BeginTooltip() override;
 	void EndTooltip() override;
-    void SetTooltip(const char* fmt, ...) override;
-    void SetTooltipV(const char* fmt, va_list args) override;
+	void SetTooltip(const char* fmt, ...) override;
+	void SetTooltipV(const char* fmt, va_list args) override;
 
 	bool BeginPopup(const char* str_id, ImGuiWindowFlags flags = 0) override;
 	bool BeginPopupModal(const char* name, bool* p_open = NULL,
@@ -530,6 +530,7 @@ public:
 	bool TabItemButton(const char* label, ImGuiTabItemFlags flags = 0) override;
 	void SetTabItemClosed(const char* tab_or_docked_window_label) override;
 
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	ImGuiID DockSpace(ImGuiID id, const ImVec2& size = ImVec2(0, 0),
 		ImGuiDockNodeFlags flags = 0,
 		const ImGuiWindowClass* window_class = NULL) override;
@@ -540,6 +541,7 @@ public:
 	void SetNextWindowClass(const ImGuiWindowClass* window_class) override;
 	ImGuiID GetWindowDockID() override;
 	bool IsWindowDocked() override;
+#endif
 
 	void LogToTTY(int auto_open_depth = -1) override;
 	void LogToFile(
@@ -547,8 +549,8 @@ public:
 	void LogToClipboard(int auto_open_depth = -1) override;
 	void LogFinish() override;
 	void LogButtons() override;
-    void LogText(const char* fmt, ...) override;
-    void LogTextV(const char* fmt, va_list args) override;
+	void LogText(const char* fmt, ...) override;
+	void LogTextV(const char* fmt, va_list args) override;
 
 	bool BeginDragDropSource(ImGuiDragDropFlags flags = 0) override;
 	bool SetDragDropPayload(const char* type, const void* data, size_t sz,
@@ -667,7 +669,10 @@ public:
 	void* MemAlloc(size_t size) override;
 	void MemFree(void* ptr) override;
 
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	ImGuiPlatformIO& GetPlatformIO() override;
+#endif
+
 	void UpdatePlatformWindows() override;
 	void RenderPlatformWindowsDefault(void* platform_render_arg = NULL,
 		void* renderer_render_arg = NULL) override;

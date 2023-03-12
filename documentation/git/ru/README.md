@@ -48,9 +48,6 @@
 .\vcpkg\vcpkg install eigen3:x64-windows
 .\vcpkg\vcpkg install glfw3:x64-windows
 .\vcpkg\vcpkg install glm:x64-windows
-.\vcpkg\vcpkg install imgui[core,win32-binding,sdl2-binding,opengl3-binding,opengl2-binding,glfw-binding,dx9-binding,dx10-binding,dx11-binding,dx12-binding,vulkan-binding,docking-experimental]:x64-windows
-.\vcpkg\vcpkg install imguizmo:x64-windows
-.\vcpkg\vcpkg install implot:x64-windows
 .\vcpkg\vcpkg install ktx:x64-windows
 .\vcpkg\vcpkg install mimalloc:x64-windows
 .\vcpkg\vcpkg install tracy:x64-windows
@@ -70,10 +67,10 @@
 .\vcpkg\vcpkg.exe install entt:x64-windows
 
 # for shared configuration
-.\vcpkg\vcpkg install boost:x64-windows bullet3:x64-windows directxmath:x64-windows glfw3:x64-windows eigen3:x64-windows glm:x64-windows imgui[core,win32-binding,sdl2-binding,opengl3-binding,opengl2-binding,glfw-binding,dx9-binding,dx10-binding,dx11-binding,dx12-binding,vulkan-binding,docking-experimental]:x64-windows imguizmo:x64-windows implot:x64-windows ktx:x64-windows mimalloc:x64-windows tracy:x64-windows shaderc:x64-windows spirv-reflect:x64-windows tbb:x64-windows wxwidgets:x64-windows wxwidgets:x64-windows angle:x64-windows assimp:x64-windows cgltf:x64-windows rmlui[freetype]:x64-windows shader-slang:x64-windows entt:x64-windows
+.\vcpkg\vcpkg install boost:x64-windows bullet3:x64-windows directxmath:x64-windows glfw3:x64-windows eigen3:x64-windows glm:x64-windows ktx:x64-windows mimalloc:x64-windows tracy:x64-windows shaderc:x64-windows spirv-reflect:x64-windows tbb:x64-windows wxwidgets:x64-windows wxwidgets:x64-windows angle:x64-windows assimp:x64-windows cgltf:x64-windows rmlui[freetype]:x64-windows shader-slang:x64-windows entt:x64-windows
 
 # for static
-.\vcpkg\vcpkg install boost:x64-windows-static-md bullet3:x64-windows-static-md directxmath:x64-windows-static-md glfw3:x64-windows-static-md eigen3:x64-windows-static-md glm:x64-windows-static-md imgui[core,win32-binding,sdl2-binding,opengl3-binding,opengl2-binding,glfw-binding,dx9-binding,dx10-binding,dx11-binding,dx12-binding,vulkan-binding,docking-experimental]:x64-windows-static-md imguizmo:x64-windows-static-md implot:x64-windows-static-md ktx:x64-windows-static-md mimalloc:x64-windows-static-md tracy:x64-windows-static-md shaderc:x64-windows-static-md spirv-reflect:x64-windows-static-md tbb:x64-windows-static-md wxwidgets:x64-windows-static-md wxwidgets:x64-windows-static-md angle:x64-windows-static-md assimp:x64-windows-static-md cgltf:x64-windows-static-md rmlui[freetype]:x64-windows-static-md shader-slang:x64-windows-static-md entt:x64-windows-static-md
+.\vcpkg\vcpkg install boost:x64-windows-static-md bullet3:x64-windows-static-md directxmath:x64-windows-static-md glfw3:x64-windows-static-md eigen3:x64-windows-static-md glm:x64-windows-static-md ktx:x64-windows-static-md mimalloc:x64-windows-static-md tracy:x64-windows-static-md shaderc:x64-windows-static-md spirv-reflect:x64-windows-static-md tbb:x64-windows-static-md wxwidgets:x64-windows-static-md wxwidgets:x64-windows-static-md angle:x64-windows-static-md assimp:x64-windows-static-md cgltf:x64-windows-static-md rmlui[freetype]:x64-windows-static-md shader-slang:x64-windows-static-md entt:x64-windows-static-md
 
 
 # Linux
@@ -84,9 +81,6 @@
 ./vcpkg/vcpkg install eigen3:x64-linux
 ./vcpkg/vcpkg install glfw3:x64-linux
 ./vcpkg/vcpkg install glm:x64-linux
-./vcpkg/vcpkg install imgui[core,sdl2-binding,opengl3-binding,opengl2-binding,glfw-binding,vulkan-binding,docking-experimental]:x64-linux
-./vcpkg/vcpkg install imguizmo:x64-linux
-./vcpkg/vcpkg install implot:x64-linux
 ./vcpkg/vcpkg install ktx:x64-linux
 ./vcpkg/vcpkg install mimalloc:x64-linux
 ./vcpkg/vcpkg install tracy:x64-linux
@@ -117,9 +111,6 @@ You need to install mingw for appropriate architecture
 ./vcpkg/vcpkg install eigen3:x64-mingw-dynamic
 ./vcpkg/vcpkg install glfw3:x64-mingw-dynamic
 ./vcpkg/vcpkg install glm:x64-mingw-dynamic
-./vcpkg/vcpkg install imgui[core,sdl2-binding,opengl3-binding,opengl2-binding,glfw-binding,vulkan-binding,docking-experimental]:x64-mingw-dynamic
-./vcpkg/vcpkg install imguizmo:x64-mingw-dynamic
-./vcpkg/vcpkg install implot:x64-mingw-dynamic
 ./vcpkg/vcpkg install ktx:x64-mingw-dynamic
 ./vcpkg/vcpkg install mimalloc:x64-mingw-dynamic
 ./vcpkg/vcpkg install tracy:x64-mingw-dynamic

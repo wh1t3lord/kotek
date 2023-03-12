@@ -37,10 +37,13 @@ namespace Kotek
 				auto& io = ImGui::GetIO();
 
 				io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+#ifdef KOTEK_USE_IMGUI_DOCKING
 				io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
+#endif
 
 				ImGui::StyleColorsDark();
 
+#ifdef KOTEK_USE_IMGUI_DOCKING
 				if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 				{
 					ImGuiStyle& style = ImGui::GetStyle();
@@ -48,12 +51,14 @@ namespace Kotek
 					style.WindowRounding = 0.0f;
 					style.Colors[ImGuiCol_WindowBg].w = 1.0f;
 				}
+#endif
 
 				//	ImGui_ImplGlfw_InitForVulkan(g_manager_render_device->getGLFWwindow(),
 				// true);
 
-// 				ImGui_ImplGlfw_InitForVulkan(
-// 					main_manager.GetWindow()->GetHandle(), true);
+				// 				ImGui_ImplGlfw_InitForVulkan(
+				// 					main_manager.GetWindow()->GetHandle(),
+				// true);
 
 				//   this->createFontTexture(
 				//       static_cast<ktkRenderDevice*>(main_manager.getRenderDevice()),
@@ -82,8 +87,7 @@ namespace Kotek
 
 			void kotek_render_imgui_manager::draw(VkCommandBuffer p_cmd,
 				ktkRenderDevice* p_render_device,
-				ktkRenderResourceManager*
-					p_render_resource_manager) noexcept
+				ktkRenderResourceManager* p_render_resource_manager) noexcept
 			{
 				return;
 
@@ -287,8 +291,7 @@ namespace Kotek
 
 			void kotek_render_imgui_manager::createFontTexture(
 				ktkRenderDevice* p_render_device,
-				ktkRenderResourceManager*
-					p_render_resource_manager) noexcept
+				ktkRenderResourceManager* p_render_resource_manager) noexcept
 			{
 				this->createImage(p_render_device);
 				this->createImageMemoryAndBind(p_render_device);
@@ -477,8 +480,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::copyBufferToImage(
-				ktkRenderResourceManager*
-					p_render_resource_manager) noexcept
+				ktkRenderResourceManager* p_render_resource_manager) noexcept
 			{
 				kotek_render_upload_heap* p_heap =
 					p_render_resource_manager->getUploadHeap();
@@ -543,8 +545,7 @@ namespace Kotek
 			}
 
 			void kotek_render_imgui_manager::writeDataToSuballocatedPartOfHeap(
-				ktkRenderResourceManager*
-					p_render_resource_manager) noexcept
+				ktkRenderResourceManager* p_render_resource_manager) noexcept
 			{
 				ImGui::GetIO().Fonts->SetTexID(
 					static_cast<ImTextureID>(this->m_p_image));
@@ -620,8 +621,7 @@ namespace Kotek
 
 			void kotek_render_imgui_manager::compileShaders(
 				ktkRenderDevice* p_render_device,
-				ktkRenderResourceManager*
-					p_render_resource_manager) noexcept
+				ktkRenderResourceManager* p_render_resource_manager) noexcept
 			{
 				const char* vertShaderTextGLSL =
 					"#version 400\n"
@@ -771,11 +771,11 @@ namespace Kotek
 					KOTEK_ASSERT(
 						status_allocation, "can't allocate descriptor set");
 
-/*
-					p_render_resource_manager->GetDynamicBufferRing()
-						->SetDescriptorSet(p_render_device, 0,
-							sizeof(VERTEX_CONSTANT_BUFFER),
-							this->m_descriptor_sets[i]);*/
+					/*
+					                    p_render_resource_manager->GetDynamicBufferRing()
+					                        ->SetDescriptorSet(p_render_device,
+					   0, sizeof(VERTEX_CONSTANT_BUFFER),
+					                            this->m_descriptor_sets[i]);*/
 
 					VkDescriptorImageInfo info_descriptor_image[1] = {};
 

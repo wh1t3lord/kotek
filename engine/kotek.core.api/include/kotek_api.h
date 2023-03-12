@@ -14,9 +14,9 @@
 // TODO: add ifdef for appropriate things
 // if gl3 we need to check if gl3 is enabled
 // if glfw we need to check if glfw is enabled and etc
-#include <imgui.h>
-#include <imgui_impl_glfw.h>
-#include <imgui_impl_opengl3.h>
+#include <kotek.ui.imgui/include/imgui.h>
+#include <kotek.ui.imgui/include/imgui_impl_glfw.h>
+#include <kotek.ui.imgui/include/imgui_impl_opengl3.h>
 
 #include "kotek_api_sdk.h"
 
@@ -1354,6 +1354,8 @@ public:
 		const char* label, ImGuiTabItemFlags flags = 0) = 0;
 	virtual void SetTabItemClosed(const char* tab_or_docked_window_label) = 0;
 
+// TODO: implement docking preprocessor for enabling
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	virtual ImGuiID DockSpace(ImGuiID id, const ImVec2& size = ImVec2(0, 0),
 		ImGuiDockNodeFlags flags = 0,
 		const ImGuiWindowClass* window_class = NULL) = 0;
@@ -1364,6 +1366,7 @@ public:
 	virtual void SetNextWindowClass(const ImGuiWindowClass* window_class) = 0;
 	virtual ImGuiID GetWindowDockID() = 0;
 	virtual bool IsWindowDocked() = 0;
+#endif
 
 	virtual void LogToTTY(int auto_open_depth = -1) = 0;
 	virtual void LogToFile(
@@ -1493,7 +1496,10 @@ public:
 	virtual void* MemAlloc(size_t size) = 0;
 	virtual void MemFree(void* ptr) = 0;
 
+#ifdef KOTEK_USE_IMGUI_DOCKING
 	virtual ImGuiPlatformIO& GetPlatformIO() = 0;
+#endif
+
 	virtual void UpdatePlatformWindows() = 0;
 	virtual void RenderPlatformWindowsDefault(
 		void* platform_render_arg = NULL, void* renderer_render_arg = NULL) = 0;
