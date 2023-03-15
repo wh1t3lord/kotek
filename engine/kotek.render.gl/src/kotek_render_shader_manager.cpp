@@ -32,13 +32,32 @@ namespace gl
 	{
 		KOTEK_ASSERT(
 			path.empty() == false, "you can't pass an empty path to file");
-
-		KOTEK_ASSERT(
-			this->m_p_filesystem->IsValidPath(path), "you passed invalid pass");
+		KOTEK_ASSERT(path.has_extension(),
+			"you must pass filename with extension at least");
 
 		ktkShaderModule result;
 
-		const auto& utf8_path = path.u8string();
+		auto real_path = path;
+		if (!this->m_p_filesystem->IsValidPath(path))
+		{
+			// so you passed a name with extension
+
+			auto path_to_folder = this->m_p_filesystem->GetFolderByEnum(
+				Core::eFolderIndex::kFolderIndex_Shaders_GLSL);
+
+			path_to_folder /= real_path;
+
+			if (!this->m_p_filesystem->IsValidPath(path_to_folder))
+			{
+				KOTEK_ASSERT(false, "path is not valid at all!");
+			}
+			else
+			{
+				real_path = path_to_folder;
+			}
+		}
+
+		const auto& utf8_path = real_path.u8string();
 
 		auto type =
 			this->DetectType(reinterpret_cast<const char*>(utf8_path.c_str()));
@@ -46,7 +65,7 @@ namespace gl
 		KOTEK_ASSERT(
 			type != eShaderType::kShaderType_Unknown, "failed to detect type");
 
-		result = this->LoadShader(path, type);
+		result = this->LoadShader(real_path, type);
 
 		return result;
 	}
