@@ -10,7 +10,15 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 namespace gl
 {
-	// TODO: use shader-lang
+	constexpr const char* _kShaderPrefix_Vertex = "vert";
+	constexpr const char* _kShaderPrefix_Fragment = "frag";
+	constexpr const char* _kShaderPrefix_Compute = "comp";
+	constexpr const char* _kShaderPrefix_Task = "task";
+	constexpr const char* _kShaderPrefix_Mesh = "mesh";
+	constexpr const char* _kShaderPrefix_Geometry = "geom";
+	constexpr const char* _kShaderPrefix_TessellationEvaluation = "tese";
+	constexpr const char* _kShaderPrefix_TessellationControl = "tesc";
+
 	class ktkRenderShaderManager
 	{
 	public:
@@ -29,7 +37,11 @@ namespace gl
 		void DestroyShader(const ktkShaderModule& instance) noexcept;
 
 	private:
+		gl::eShaderType DetectType(const ktk::cstring& path_to_file) noexcept;
+
+	private:
 		Core::ktkMainManager* m_p_main_manager;
+		Core::ktkIFileSystem* m_p_filesystem;
 	};
 } // namespace gl
 KOTEK_END_NAMESPACE_RENDER

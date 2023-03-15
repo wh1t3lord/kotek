@@ -18,6 +18,8 @@ constexpr char kPathSeparator = '\\';
 constexpr char kPathSeparator = '/';
 #endif
 
+constexpr const char* kRenderer_OpenGLES_3_Name = "OpenGL ES 3";
+
 /**
  * Constant expresses in string that it is OpenGL version 3.3
  */

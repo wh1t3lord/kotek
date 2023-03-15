@@ -9,6 +9,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_ui_videoplayer_avif.h"
-	"src/main_ui_videoplayer_avif_dll.cpp")
+	"src/main_ui_videoplayer_avif_dll.cpp"
+	"include/kotek_ui_videoplayer.h"
+	"src/kotek_ui_videoplayer.cpp"
+)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
