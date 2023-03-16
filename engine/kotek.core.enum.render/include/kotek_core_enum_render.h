@@ -14,6 +14,9 @@
 	#include <kotek.core.enum.render.vk/include/kotek_core_enum_render_vk.h>
 #endif
 
+#include "kotek_enum.h"
+#include "kotek_translation.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 

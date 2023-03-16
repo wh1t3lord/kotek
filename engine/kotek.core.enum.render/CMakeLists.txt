@@ -9,6 +9,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_enum_render.h" 
+	"include/kotek_enum.h"
+	"include/kotek_translation.h"
+	"src/kotek_translation.cpp"
 	"src/main_core_enum_render_dll.cpp"
 )
 
