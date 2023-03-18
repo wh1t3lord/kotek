@@ -77,19 +77,18 @@ public:
 	eEngineSupportedRenderer GetRendererVersionEnum(
 		void) const noexcept override;
 	ktk::enum_base_t GetRendererVersion(void) const noexcept override;
- 
+
 	const ktk::vector<eEngineFeatureRenderer>& GetFallbackRendereres(
 		void) const noexcept override;
-	const ktk::vector<eEngineSupportedRenderer>&
-	GetFallbackRendererVersions(void) const noexcept override;
- 
+	const ktk::vector<eEngineSupportedRenderer>& GetFallbackRendererVersions(
+		void) const noexcept override;
 
 	/**
 	 * Get current renderer name in human-readable form.
 	 *
 	 * \return ktk::string
 	 */
-    ktk::cstring GetRenderName(void) const noexcept override;
+	ktk::cstring GetRenderName(void) const noexcept override;
 
 	/**
 	 * All Graphics APIs that were created before Vulkan and DirectX12
@@ -153,7 +152,7 @@ public:
 	 * \return true means it exists otherwise it doesn't present
 	 */
 	bool IsContainsConsoleCommandLineArgument(
-        const ktk::cstring& your_argument) const noexcept override;
+		const ktk::cstring& your_argument) const noexcept override;
 
 	bool IsUserSpecifiedValidRenderer(void) const noexcept override;
 
@@ -215,6 +214,10 @@ public:
 	// Standartization means standartization and you must handle all possible
 	// situations...
 
+	ktk::size_t Get_VideoMemoryTotal(void) const noexcept override;
+	ktk::size_t Get_VideoMemoryForInitialize(void) const noexcept override;
+	void Set_VideoMemoryForInitialize(ktk::size_t value) noexcept override;
+
 private:
 	void Parse_CommandLine(void) noexcept;
 
@@ -228,9 +231,10 @@ private:
 	eEngineFeatureSDK m_engine_feature_sdk_flags;
 	eEngineFeatureWindow m_engine_feature_window_flags;
 	ktk::enum_base_t m_version_renderer;
+	ktk::size_t m_video_memory_for_initialize;
 	ktk::vector<eEngineFeatureRenderer> m_fallback_renderers;
 	ktk::vector<eEngineSupportedRenderer> m_fallback_renderers_versions;
-    ktk::unordered_set<ktk::cstring> m_parsed_command_line_arguments;
+	ktk::unordered_set<ktk::cstring> m_parsed_command_line_arguments;
 	ktk::dll::shared_library m_user_dll;
 };
 

@@ -1,5 +1,7 @@
 #include "../include/kotek_render_shader_manager.h"
 #include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
+#include "../include/kotek_render_buffer_manager.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 namespace gl
@@ -11,13 +13,33 @@ namespace gl
 		KOTEK_ASSERT(p_main_manager, "must be valid");
 
 		this->m_p_filesystem = p_main_manager->GetFileSystem();
+		this->m_p_render_uniform_manager = new ktkRenderBufferManager();
 	}
 
-	ktkRenderShaderManager::~ktkRenderShaderManager(void) {}
+	ktkRenderShaderManager::~ktkRenderShaderManager(void)
+	{
+		if (this->m_p_render_uniform_manager)
+		{
+			delete this->m_p_render_uniform_manager;
+		}
+	}
 
-	void ktkRenderShaderManager::Initialize(void) {}
+	void ktkRenderShaderManager::Initialize(ktk::size_t memory_size_uniform) 
+	{
+		if (this->m_p_render_uniform_manager)
+		{
+			this->m_p_render_uniform_manager->Initialize(
+				memory_size_uniform, "uniform manager", GL_UNIFORM_BUFFER);
+		}
+	}
 
-	void ktkRenderShaderManager::Shutdown(void) {}
+	void ktkRenderShaderManager::Shutdown(void) 
+	{
+		if (this->m_p_render_uniform_manager)
+		{
+			this->m_p_render_uniform_manager->Shutdown();
+		}
+	}
 
 	ktkShaderModule ktkRenderShaderManager::LoadShader(
 		const ktk::filesystem::path& path, gl::eShaderType type) noexcept

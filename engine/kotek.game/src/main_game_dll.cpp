@@ -50,15 +50,10 @@ namespace Game
 
 		Core::ktkFileText file;
 
-		KOTEK_ASSERT(p_main_manager->GetResourceManager(),
-			"you must initialize and register resource manager");
-		KOTEK_ASSERT(p_main_manager->GetResourceManager()->Get_ResourceLoader(),
-			"you must initialize and register loaders and loader manager");
+		Core::ktkResourceLoaderFile_Text resource_loader_text(p_main_manager);
 
-		KOTEK_ASSERT(
-			p_main_manager->GetResourceManager()->Get_ResourceLoader()->Load(
-				path_to_system_json, &file),
-			"can't load text: {}",
+		auto status = resource_loader_text.Load(path_to_system_json, &file);
+		KOTEK_ASSERT(status, "can't load text: {}",
 			reinterpret_cast<const char*>(
 				path_to_system_json.u8string().c_str()));
 

@@ -104,6 +104,7 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 	}
 	}
 
+	p_instance->Set_VideoMemoryForInitialize(1024 * 1024 * 32);
 	p_instance->SetFeatureStatus(renderer_version, true);
 	p_manager->Set_EngineConfig(p_instance);
 

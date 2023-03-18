@@ -53,12 +53,20 @@ namespace Kotek
 					ktkRenderResourceManager&&) = delete;
 
 				void initialize(Core::ktkIRenderDevice* p_raw_device,
-					Core::ktkIRenderSwapchain* p_raw_swapchain) override;
+					Core::ktkIRenderSwapchain* p_raw_swapchain,
+					ktk::size_t memory_size =
+						ktk::kMemoryConvertValue_Megabytes * 32) override;
 
 				void shutdown(Core::ktkIRenderDevice* p_raw_device) override;
 
 				void Resize(Core::ktkIRenderDevice* p_raw_device,
 					Core::ktkIRenderSwapchain* p_raw_swapchain) override;
+
+				void LoadGeometry(ktk::enum_base_t resource_loading_type,
+					ktk::entity_t id) override;
+				void LoadGeometry(ktk::enum_base_t resource_loading_type,
+					const ktk::filesystem::path& path_to_file,
+					ktk::entity_t id) override;
 
 				kotek_render_dynamic_buffer_ring* GetDynamicBufferRing(
 					void) noexcept;

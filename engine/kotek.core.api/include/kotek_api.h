@@ -106,11 +106,21 @@ public:
 	virtual ~ktkIRenderResourceManager(void) {}
 
 	// TODO: change signature on void
+	// TODO: think about dynamic memory if we are exceeded we can use more
+	// memory and etc
 	virtual void initialize(ktkIRenderDevice* p_raw_device,
-		ktkIRenderSwapchain* p_raw_swapchain) = 0;
+		ktkIRenderSwapchain* p_raw_swapchain,
+		ktk::size_t memory_size = 1024 * 1024 * 32) = 0;
 
 	// TODO: change signature on void
 	virtual void shutdown(ktkIRenderDevice* p_raw_device) = 0;
+
+	virtual void LoadGeometry(
+		ktk::enum_base_t resource_loading_type, ktk::entity_t id) = 0;
+	virtual void LoadGeometry(ktk::enum_base_t resource_loading_type,
+		const ktk::filesystem::path& path_to_file, ktk::entity_t id) = 0;
+
+
 
 	virtual void Resize(ktkIRenderDevice* p_raw_device,
 		ktkIRenderSwapchain* p_raw_swapchain) = 0;
@@ -404,7 +414,7 @@ public:
 
 	virtual ~ktkIResourceLoaderManager(void) {}
 
-	virtual void Initialize(ktkIFileSystem*) = 0;
+	virtual void Initialize(ktkIFileSystem*, ktkMainManager*) = 0;
 	virtual void Shutdown(void) = 0;
 
 	virtual void Set_Loader(
@@ -463,7 +473,7 @@ public:
 	 */
 	virtual ~ktkIResourceSaverManager(void) {}
 
-	virtual void Initialize(ktkIFileSystem*) = 0;
+	virtual void Initialize(ktkIFileSystem*, ktkMainManager*) = 0;
 	virtual void Shutdown(void) = 0;
 
 	virtual void Set_Saver(
@@ -488,25 +498,38 @@ public:
 		eResourceCachingPolicy type_policy_caching,
 		eResourceLoadingType type_of_loading_resource,
 		const ktk::filesystem::path& resource_path) :
-		m_policy_loading{type_loading},
-		m_policy_caching{type_policy_caching},
-		m_resource_type{type_of_loading_resource}, m_resource_path{
-													   resource_path}
+		m_is_for_entity{},
+		m_policy_loading{type_loading}, m_policy_caching{type_policy_caching},
+		m_resource_type{type_of_loading_resource}, m_id{}, m_resource_path{
+															   resource_path}
+	{
+	}
+
+	ktkLoadingRequest(eResourceLoadingPolicy type_loading,
+		eResourceCachingPolicy type_policy_caching,
+		eResourceLoadingType type_of_loading_resource,
+		const ktk::filesystem::path& resource_path, Kotek::ktk::entity_t id) :
+		m_is_for_entity{true},
+		m_policy_loading{type_loading}, m_policy_caching{type_policy_caching},
+		m_resource_type{type_of_loading_resource}, m_id{id}, m_resource_path{
+																 resource_path}
 	{
 	}
 
 	ktkLoadingRequest(void) :
-		m_policy_caching{}, m_policy_loading{eResourceLoadingPolicy::kAsync},
-		m_resource_type{eResourceLoadingType::kAutoDetect}
+		m_is_for_entity{}, m_policy_caching{},
+		m_policy_loading{eResourceLoadingPolicy::kAsync},
+		m_resource_type{eResourceLoadingType::kAutoDetect}, m_id{}
 	{
 	}
 
-	~ktkLoadingRequest() = default;
+	virtual ~ktkLoadingRequest() = default;
 
 	virtual ktkLoadingRequest& Set_LoadingPolicy(
 		eResourceLoadingPolicy policy) noexcept
 	{
 		this->m_policy_loading = policy;
+		return *this;
 	}
 
 	virtual eResourceLoadingPolicy Get_LoadingPolicy(void) const noexcept
@@ -518,6 +541,7 @@ public:
 		eResourceCachingPolicy policy) noexcept
 	{
 		this->m_policy_caching = policy;
+		return *this;
 	}
 
 	virtual eResourceCachingPolicy Get_CachingPolicy(void) const noexcept
@@ -529,6 +553,7 @@ public:
 		eResourceLoadingType type) noexcept
 	{
 		this->m_resource_type = type;
+		return *this;
 	}
 
 	virtual eResourceLoadingType Get_ResourceType() const noexcept
@@ -540,6 +565,7 @@ public:
 		const ktk::filesystem::path& path) noexcept
 	{
 		this->m_resource_path = path;
+		return *this;
 	}
 
 	virtual const ktk::filesystem::path& Get_ResourcePath(void) const noexcept
@@ -547,10 +573,22 @@ public:
 		return this->m_resource_path;
 	}
 
+	virtual bool Is_ForEntity(void) const noexcept
+	{
+		return this->m_is_for_entity;
+	}
+
+	virtual Kotek::ktk::entity_t Get_EntityID(void) const noexcept
+	{
+		return this->m_id;
+	}
+
 private:
+	bool m_is_for_entity;
 	eResourceLoadingPolicy m_policy_loading;
 	eResourceCachingPolicy m_policy_caching;
 	eResourceLoadingType m_resource_type;
+	Kotek::ktk::entity_t m_id;
 	ktk::filesystem::path m_resource_path;
 };
 
@@ -562,11 +600,7 @@ public:
 	virtual void Initialize(void) = 0;
 	virtual void Shutdown(void) = 0;
 
-	template <typename ResourceType>
-	ResourceType Load(const ktkLoadingRequest& request) noexcept
-	{
-		return any_cast<ResourceType>(this->Load_Resource(request));
-	}
+	virtual ktk::any Load(const ktkLoadingRequest& request) noexcept = 0;
 
 	virtual void Set_ResourceLoader(
 		ktkIResourceLoaderManager* p_instance) noexcept = 0;
@@ -591,10 +625,7 @@ public:
 
 	virtual void Update_WorkerQueue(void) noexcept = 0;
 
-	// TODO: implement saving
-
-protected:
-	virtual ktk::any Load_Resource(const ktkLoadingRequest& request) = 0;
+	// TODO: saving implement
 };
 
 class ktkIResourceCacherManager
@@ -689,6 +720,11 @@ public:
 	GetFallbackRendererVersions(void) const noexcept = 0;
 
 	virtual ktk::cstring GetRenderName(void) const noexcept = 0;
+
+	virtual ktk::size_t Get_VideoMemoryTotal(void) const noexcept = 0;
+	virtual ktk::size_t Get_VideoMemoryForInitialize(void) const noexcept = 0;
+	virtual void Set_VideoMemoryForInitialize(ktk::size_t value) noexcept = 0;
+
 	virtual bool IsCurrentRenderLegacy(void) const noexcept = 0;
 	virtual bool IsCurrentRenderModern(void) const noexcept = 0;
 	virtual int GetARGC(void) const noexcept = 0;

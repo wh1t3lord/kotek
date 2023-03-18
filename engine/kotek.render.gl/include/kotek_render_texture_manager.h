@@ -10,7 +10,7 @@ namespace gl
 		ktkRenderTextureManager(Core::ktkMainManager* p_main_manager);
 		~ktkRenderTextureManager(void);
 
-		void Initialize(void);
+		void Initialize(ktk::size_t memory_size);
 		void Shutdown(void);
 
 		bool Create_Texture(const ktk::string& texture_name,
@@ -19,6 +19,11 @@ namespace gl
 		void Destroy_Texture(const ktk::string& texture_name) noexcept;
 
 	private:
+		// we just collect stats for validating
+		ktk::size_t m_memory_size;
+		ktk::size_t m_available_memory;
+		ktk::size_t m_used_memory;
+
 		Core::ktkMainManager* m_p_main_manager;
 	};
 } // namespace gl

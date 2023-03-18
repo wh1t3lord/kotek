@@ -38,10 +38,10 @@ bool InitializeModule_Render_ANGLE_GLES23(Core::ktkMainManager* p_main_manager,
 		p_main_manager->Get_WindowManager()->ActiveWindow_GetHeight());
 
 	p_render_swapchain->Initialize(p_render_device);
-	p_render_resource_manager->initialize(p_render_device, p_render_swapchain);
+	p_render_resource_manager->initialize(p_render_device, p_render_swapchain,
+		p_engine_config->Get_VideoMemoryForInitialize());
 
-	p_main_manager->GetResourceManager()->Set_RenderResourceManager(
-		p_render_resource_manager);
+	p_main_manager->SetRenderResourceManager(p_render_resource_manager);
 
 	KOTEK_MESSAGE("render module is initialized");
 

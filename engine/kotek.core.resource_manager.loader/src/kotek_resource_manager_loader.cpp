@@ -7,9 +7,13 @@ ktkResourceLoaderManager::ktkResourceLoaderManager(void) {}
 
 ktkResourceLoaderManager::~ktkResourceLoaderManager(void) {}
 
-void ktkResourceLoaderManager::Initialize(ktkIFileSystem* p_manager_filesystem)
+void ktkResourceLoaderManager::Initialize(
+	ktkIFileSystem* p_manager_filesystem, ktkMainManager* p_main_manager)
 {
 	this->m_p_manager_filesystem = p_manager_filesystem;
+
+	this->Set_Loader(eResourceLoadingType::kText,
+		new ktkResourceLoaderFile_Text(p_main_manager));
 }
 
 void ktkResourceLoaderManager::Shutdown(void) {}

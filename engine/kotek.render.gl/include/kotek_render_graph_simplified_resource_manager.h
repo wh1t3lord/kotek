@@ -72,8 +72,8 @@ namespace gl
 	private:
 		ktkRenderDevice* m_p_render_device;
 		ktkRenderResourceManager* m_p_render_resource_manager;
-		Core::ktkResourceManager* m_p_manager_resource;
-
+		Core::ktkIResourceManager* m_p_manager_resource;
+		Core::ktkMainManager* m_p_main_manager;
 		ktk::unordered_map<ktk::string,
 			ktk::unordered_map<gl::eShaderType, ktkShaderModule>>
 			m_render_passes_and_its_shaders;

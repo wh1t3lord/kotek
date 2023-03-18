@@ -39,7 +39,14 @@ set(to_include_managers_files
     "include/kotek_render_texture_manager.h"
     "src/kotek_render_texture_manager.cpp"
     "include/kotek_render_resource_manager.h"
-    "src/kotek_render_resource_manager.cpp")
+    "src/kotek_render_resource_manager.cpp"
+    "include/kotek_render_buffer_manager.h"
+    "src/kotek_render_buffer_manager.cpp"
+    "include/kotek_render_geometry_manager.h"
+    "src/kotek_render_geometry_manager.cpp"
+    "include/offsetAllocator.hpp"
+    "src/offsetAllocator.cpp"
+)
 
 set(to_include_core_files
     "include/kotek_render_device.h"

@@ -14,7 +14,7 @@ public:
 	ktkResourceSaverManager(void);
 	~ktkResourceSaverManager(void);
 
-	void Initialize(ktkIFileSystem* p_filesystem) override;
+	void Initialize(ktkIFileSystem* p_filesystem, ktkMainManager* p_main_manager) override;
 	void Shutdown(void) override;
 
 	void Set_Saver(eResourceLoadingType resource_type,

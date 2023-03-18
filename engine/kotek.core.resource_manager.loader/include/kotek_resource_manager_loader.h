@@ -15,7 +15,7 @@ public:
 	ktkResourceLoaderManager(void);
 	~ktkResourceLoaderManager(void);
 
-	void Initialize(ktkIFileSystem* p_manager_filesystem) override;
+	void Initialize(ktkIFileSystem* p_manager_filesystem, ktkMainManager* p_main_manager) override;
 	void Shutdown(void) override;
 
 	void Set_Loader(eResourceLoadingType resource_type,

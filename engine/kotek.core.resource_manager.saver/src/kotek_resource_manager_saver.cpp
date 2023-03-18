@@ -10,9 +10,13 @@ ktkResourceSaverManager::ktkResourceSaverManager(void) :
 
 ktkResourceSaverManager::~ktkResourceSaverManager(void) {}
 
-void ktkResourceSaverManager::Initialize(ktkIFileSystem* p_filesystem)
+void ktkResourceSaverManager::Initialize(
+	ktkIFileSystem* p_filesystem, ktkMainManager* p_main_manager)
 {
 	this->m_p_manager_filesystem = p_filesystem;
+
+	this->Set_Saver(eResourceLoadingType::kText,
+		new ktkResourceSaverFile_Text(p_main_manager));
 }
 
 void ktkResourceSaverManager::Shutdown(void) {}

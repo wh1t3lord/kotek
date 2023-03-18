@@ -55,7 +55,8 @@ namespace Kotek
 
 			void ktkRenderResourceManager::initialize(
 				Core::ktkIRenderDevice* p_raw_device,
-				Core::ktkIRenderSwapchain* p_raw_swapchain)
+				Core::ktkIRenderSwapchain* p_raw_swapchain,
+				ktk::size_t memory_size)
 			{
 				ktkRenderDevice* p_render_device =
 					static_cast<ktkRenderDevice*>(p_raw_device);

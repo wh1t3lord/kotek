@@ -38,7 +38,14 @@ set(to_include_managers_files
     "../kotek.render.gl/include/kotek_render_texture_manager.h"
     "../kotek.render.gl/src/kotek_render_texture_manager.cpp"
     "../kotek.render.gl/include/kotek_render_resource_manager.h"
-    "../kotek.render.gl/src/kotek_render_resource_manager.cpp")
+    "../kotek.render.gl/src/kotek_render_resource_manager.cpp"
+    "../kotek.render.gl/include/kotek_render_buffer_manager.h"
+    "../kotek.render.gl/src/kotek_render_buffer_manager.cpp"
+    "../kotek.render.gl/include/kotek_render_geometry_manager.h"
+    "../kotek.render.gl/src/kotek_render_geometry_manager.cpp"
+    "../kotek.render.gl/include/offsetAllocator.hpp"
+    "../kotek.render.gl/src/offsetAllocator.cpp"
+)
 
 set(to_include_core_files
     "include/kotek_render_device.h"

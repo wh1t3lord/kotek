@@ -33,12 +33,15 @@ enum class eResourceLoadingType : ktk::enum_base_t
 	kText,
 	kTexture,
 	kModel,
+	kModelStatic_Triangle,
+	kModelStatic_Box,
+	kModelStatic_Sphere,
 	kSound,
 	kVideo,
 	kDLL,
 	kAutoDetect,
-	kUnknown = -1,
-	kEndOfEnum
+	kEndOfEnum,
+	kUnknown = -1
 };
 
 enum class eResourceLoadingPolicy : ktk::enum_base_t
@@ -50,11 +53,7 @@ enum class eResourceLoadingPolicy : ktk::enum_base_t
 
 enum class eResourceCachingPolicy : ktk::enum_base_t
 {
-	// Returns constructed object
 	kCache,
-
-	// TODO: think about it and do we need really implement this?
-	// Using temporary instances that resource manager has
 	kWithoutCache,
 	kEndOfEnum
 };
@@ -75,7 +74,6 @@ enum class eWindowTitleType : ktk::enum_base_t
 	kTitle_EntitiesCount,
 	kTitle_CurrentLevelName,
 
-	
 	kEndOfEnum
 };
 
@@ -372,7 +370,7 @@ enum class eEngineSupportedRenderer : ktk::enum_base_t
 	kVulkan_1_0,
 	kVulkan_1_1,
 	kVulkan_1_2,
-	kVulkan_1_3, 
+	kVulkan_1_3,
 	kVulkan_Latest = kVulkan_1_3,
 
 	kOpenGLES_1,
@@ -518,6 +516,8 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_Input_Type,
 
 	kConsoleCommand_Render_UploadAllResourcesToGPU,
+
+	kConsoleCommand_ResourceManager_Load,
 
 	kConsoleCommand_SDK_LoadScene,
 	kConsoleCommand_SDK_SaveScene,

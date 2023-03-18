@@ -14,10 +14,9 @@ namespace gl
 			Core::ktkMainManager* p_main_manager) :
 		m_p_render_device{
 			static_cast<ktkRenderDevice*>(p_main_manager->getRenderDevice())},
-		m_p_manager_resource{static_cast<Core::ktkResourceManager*>(
-			p_main_manager->GetResourceManager())}
+		m_p_manager_resource{}, m_p_main_manager{p_main_manager}
 	{
-		KOTEK_ASSERT(this->m_p_manager_resource,
+		KOTEK_ASSERT(p_main_manager->GetRenderResourceManager(),
 			"you must initialize resource manager before using this "
 			"class (ctor). Something is wrong if you didn't make "
 			"overriding the default implementation class of "
@@ -25,7 +24,7 @@ namespace gl
 
 		this->m_p_render_resource_manager =
 			dynamic_cast<ktkRenderResourceManager*>(
-				this->m_p_manager_resource->Get_RenderResourceManager());
+				p_main_manager->GetRenderResourceManager());
 
 		KOTEK_ASSERT(this->m_p_render_resource_manager,
 			"you must initialize render resource manager, something is "
@@ -49,8 +48,11 @@ namespace gl
 	{
 		KOTEK_ASSERT(
 			this->m_p_render_device, "you must initialize ktkRenderDevice");
-		KOTEK_ASSERT(this->m_p_manager_resource,
+		KOTEK_ASSERT(this->m_p_main_manager->GetResourceManager(),
 			"you must initialize ktkResourceManager");
+
+		this->m_p_manager_resource =
+			this->m_p_main_manager->GetResourceManager();
 
 		if (type_of_framebuffer ==
 			gl::eRenderGraphBuilderType::kRenderBuilderFor_Forward_Only)
@@ -101,8 +103,8 @@ namespace gl
 			KOTEK_ASSERT(
 				this->m_render_passes_and_its_shaders.find(pipeline_name) ==
 					this->m_render_passes_and_its_shaders.end(),
-                "found duplicate the pipeline name: [{}]",
-                reinterpret_cast<const char*>(pipeline_name.c_str()));
+				"found duplicate the pipeline name: [{}]",
+				reinterpret_cast<const char*>(pipeline_name.c_str()));
 
 			for (const auto& [shader_type, info_shader_creation] :
 				map_shader_type_info_creation)
@@ -179,7 +181,7 @@ namespace gl
 		{
 #ifdef KOTEK_DEBUG
 			KOTEK_MESSAGE("[GL] deleting shader handles for render pass: [{}]",
-                reinterpret_cast<const char*>(render_pass_name.c_str()));
+				reinterpret_cast<const char*>(render_pass_name.c_str()));
 #endif
 
 			for (const auto& [shader_type, shader_module] :
@@ -199,7 +201,7 @@ namespace gl
 		{
 #ifdef KOTEK_DEBUG
 			KOTEK_MESSAGE("[GL] deleting program handles for render pass: [{}]",
-                reinterpret_cast<const char*>(render_pass_name.c_str()));
+				reinterpret_cast<const char*>(render_pass_name.c_str()));
 #endif
 
 			glDeleteProgram(program_handle_id);
@@ -221,7 +223,7 @@ namespace gl
 #ifdef KOTEK_DEBUG
 					KOTEK_MESSAGE("attached shader type to "
 								  "render_pass_name[{}]: [{}]",
-                        reinterpret_cast<const char*>(render_pass_name.c_str()),
+						reinterpret_cast<const char*>(render_pass_name.c_str()),
 						gl::helper::Translate_ShaderType(shader_type));
 #endif
 
@@ -240,7 +242,7 @@ namespace gl
 					glGetProgramInfoLog(
 						program, sizeof(buffer), nullptr, buffer);
 
-                    KOTEK_ASSERT(false, "failed to link: {}", buffer);
+					KOTEK_ASSERT(false, "failed to link: {}", buffer);
 				}
 #endif
 

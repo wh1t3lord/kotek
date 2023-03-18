@@ -7,13 +7,6 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Resource_Manager_Loader(ktkMainManager* p_manager)
 {
-	KOTEK_ASSERT(p_manager->GetResourceManager(),
-		"you must initialize resource manager before calling this "
-		"function!");
-
-	p_manager->GetResourceManager()->Set_ResourceLoader(
-		new ktkResourceLoaderManager());
-
 	return true;
 }
 

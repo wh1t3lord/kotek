@@ -9,7 +9,8 @@ ktkEngineConfig::ktkEngineConfig(void) :
 	m_engine_feature_render_flags{eEngineFeatureRender::kNone},
 	m_engine_feature_sdk_flags{eEngineFeatureSDK::kNone},
 	m_engine_feature_renderer_flags{eEngineFeatureRenderer::kNone},
-	m_engine_feature_window_flags{eEngineFeatureWindow::kNone}
+	m_engine_feature_window_flags{eEngineFeatureWindow::kNone},
+	m_video_memory_for_initialize{}
 {
 }
 
@@ -655,6 +656,22 @@ void ktkEngineConfig::Set_UserLibrary(
 void* ktkEngineConfig::Get_UserLibrary(void) noexcept
 {
 	return &this->m_user_dll;
+}
+
+// TODO: finish this
+ktk::size_t ktkEngineConfig::Get_VideoMemoryTotal(void) const noexcept
+{
+	return 0;
+}
+
+ktk::size_t ktkEngineConfig::Get_VideoMemoryForInitialize(void) const noexcept
+{
+	return this->m_video_memory_for_initialize;
+}
+
+void ktkEngineConfig::Set_VideoMemoryForInitialize(ktk::size_t value) noexcept
+{
+	this->m_video_memory_for_initialize = value;
 }
 
 void ktkEngineConfig::Parse_CommandLine(void) noexcept

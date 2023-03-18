@@ -7,11 +7,14 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Resource_Manager(ktkMainManager* p_manager)
 {
-	ktkResourceManager* p_instance = new ktkResourceManager();
+	// TODO: DELETE resource manager is user specific and we provide loader and saver
+	// but not resource manager cuz it depends on components and many other
+	// stuff
+	// ktkResourceManager* p_instance = new ktkResourceManager();
 
-	p_instance->Set_MainManager(p_manager);
+	//p_instance->Set_MainManager(p_manager);
 
-	p_manager->SetResourceManager(p_instance);
+	//	p_manager->SetResourceManager(p_instance);
 
 	InitializeModule_Core_Resource_Manager_Loader(p_manager);
 	InitializeModule_Core_Resource_Manager_Saver(p_manager);
@@ -39,16 +42,6 @@ bool ShutdownModule_Core_Resource_Manager(ktkMainManager* p_manager)
 {
 	ShutdownModule_Core_Resource_Manager_Loader(p_manager);
 	ShutdownModule_Core_Resource_Manager_Saver(p_manager);
-
-	ktkResourceManager* p_instance =
-		dynamic_cast<ktkResourceManager*>(p_manager->GetResourceManager());
-
-	KOTEK_ASSERT(p_instance,
-		"you must got a valid casted instance of ktkResourceManager. "
-		"Otherwise it is a different type at all!!");
-
-	delete p_instance;
-	p_manager->SetResourceManager(nullptr);
 
 	return true;
 }

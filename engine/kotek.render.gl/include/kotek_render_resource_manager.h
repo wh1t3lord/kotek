@@ -2,6 +2,7 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
+class ktkRenderGeometryManager;
 namespace gl
 {
 	class ktkRenderDevice;
@@ -33,20 +34,32 @@ namespace gl
 			ktkRenderResourceManager&&) = delete;
 
 		void initialize(Core::ktkIRenderDevice* p_raw_device,
-			Core::ktkIRenderSwapchain* p_raw_swapchain) override;
+			Core::ktkIRenderSwapchain* p_raw_swapchain,
+			ktk::size_t memory_size = ktk::kMemoryConvertValue_Megabytes *
+				32) override;
 
 		void shutdown(Core::ktkIRenderDevice* p_raw_device) override;
 
 		void Resize(Core::ktkIRenderDevice* p_raw_device,
 			Core::ktkIRenderSwapchain* p_raw_swapchain) override;
 
+		// called from a thread! Not render thread!!!!
+		// not cached , without cache
+		void LoadGeometry(
+			ktk::enum_base_t resource_loading_type, ktk::entity_t id) override;
+		void LoadGeometry(ktk::enum_base_t resource_loading_type,
+			const ktk::filesystem::path& path_to_file,
+			ktk::entity_t id) override;
+
 		ktkRenderTextureManager* Get_ManagerTexture(void) const noexcept;
 		ktkRenderShaderManager* Get_ManagerShader(void) const noexcept;
+		ktkRenderGeometryManager* Get_ManagerGeometry(void) const noexcept;
 
 	private:
 		Core::ktkIRenderDevice* m_p_render_device;
 		ktkRenderTextureManager* m_p_render_manager_texture;
 		ktkRenderShaderManager* m_p_render_manager_shader;
+		ktkRenderGeometryManager* m_p_render_manager_geometry;
 		Core::ktkMainManager* m_p_main_manager;
 	};
 } // namespace gl

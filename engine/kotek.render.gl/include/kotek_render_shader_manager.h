@@ -4,7 +4,13 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 class ktkMainManager;
 KOTEK_END_NAMESPACE_CORE
-KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_RENDER
+class ktkRenderBufferManager;
+KOTEK_END_NAMESPACE_RENDER
+KOTEK_END_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
@@ -25,7 +31,7 @@ namespace gl
 		ktkRenderShaderManager(Core::ktkMainManager* p_main_manager);
 		~ktkRenderShaderManager(void);
 
-		void Initialize(void);
+		void Initialize(ktk::size_t memory_size_uniform);
 		void Shutdown(void);
 
 		ktkShaderModule LoadShader(
@@ -40,6 +46,7 @@ namespace gl
 		gl::eShaderType DetectType(const ktk::cstring& path_to_file) noexcept;
 
 	private:
+		ktkRenderBufferManager* m_p_render_uniform_manager;
 		Core::ktkMainManager* m_p_main_manager;
 		Core::ktkIFileSystem* m_p_filesystem;
 	};
