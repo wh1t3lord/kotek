@@ -3,6 +3,7 @@
 #include "../include/kotek_render_device.h"
 #include "../include/kotek_render_swapchain.h"
 #include <kotek.render.gl/include/kotek_render_resource_manager.h>
+#include <kotek.render.gl/include/offsetAllocator.hpp>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
