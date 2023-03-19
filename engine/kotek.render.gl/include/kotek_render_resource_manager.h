@@ -51,6 +51,9 @@ namespace gl
 			const ktk::filesystem::path& path_to_file,
 			ktk::entity_t id) override;
 
+		// call only in render thread
+		void Update(void) noexcept;
+
 		ktkRenderTextureManager* Get_ManagerTexture(void) const noexcept;
 		ktkRenderShaderManager* Get_ManagerShader(void) const noexcept;
 		ktkRenderGeometryManager* Get_ManagerGeometry(void) const noexcept;

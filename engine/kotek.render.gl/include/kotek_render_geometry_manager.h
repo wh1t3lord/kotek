@@ -1,12 +1,6 @@
 #pragma once
 
-KOTEK_BEGIN_NAMESPACE_KOTEK
-KOTEK_BEGIN_NAMESPACE_RENDER
-
-class ktkRenderBufferManager;
-
-KOTEK_END_NAMESPACE_RENDER
-KOTEK_END_NAMESPACE_KOTEK
+#include "../include/kotek_render_buffer_manager.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
@@ -22,6 +16,9 @@ public:
 			this->m_position[1] = 0.0f;
 			this->m_position[2] = 0.0f;
 		}
+
+		ktkVertex(float x, float y, float z) { this->Set_Position(x, y, z); }
+
 		~ktkVertex() {}
 
 		void Set_Position(float x, float y, float z) noexcept
@@ -37,6 +34,14 @@ public:
 		float m_position[3];
 	};
 
+private:
+	struct ktkGeometry
+	{
+		ktk::entity_t m_id;
+		ktk::vector<ktkVertex> m_v;
+		ktk::vector<ktk::uint32_t> m_i;
+	};
+
 public:
 	ktkRenderGeometryManager();
 	~ktkRenderGeometryManager();
@@ -44,8 +49,15 @@ public:
 	void Initialize(ktk::size_t memory_size);
 	void Shutdown(void);
 
+	void AddForUpload(const ktk::vector<ktkVertex>& data_v,
+		const ktk::vector<ktk::uint32_t>& data_i, ktk::entity_t id) noexcept;
+
+	void Update(void) noexcept;
+
 	void Upload(const ktk::vector<ktkVertex>& data_v,
 		const ktk::vector<ktk::uint32_t>& data_i, ktk::entity_t id) noexcept;
+
+	GLuint Get_VAO(void) const noexcept;
 
 private:
 	void FreeOffset(ktk::entity_t id);
@@ -55,8 +67,10 @@ private:
 	ktkRenderBufferManager* m_p_vertex;
 	ktkRenderBufferManager* m_p_index;
 
+	ktk::vector<ktkGeometry> m_for_upload;
+
 	// stores offsets for unloading/freeing
-	ktk::unordered_map<ktk::entity_t, ktk::size_t> m_storage;
+	ktk::unordered_map<ktk::entity_t, OffsetAllocator::Allocation> m_storage;
 };
 
 KOTEK_END_NAMESPACE_RENDER

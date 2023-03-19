@@ -6,6 +6,16 @@
 #include "kotek_render_data_types.h"
 #include "kotek_render_format.h"
 
+#ifdef KOTEK_DEBUG
+	#define KOTEK_GL_ASSERT()                                            \
+		{                                                                \
+			auto stat = glGetError();                                    \
+			KOTEK_ASSERT(stat == GL_NO_ERROR, "[ERROR]: {}", (int)stat); \
+		}
+#else
+	#define KOTEK_GL_ASSERT()
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 

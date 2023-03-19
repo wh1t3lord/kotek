@@ -4,7 +4,8 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
 ktkRenderBufferManager::ktkRenderBufferManager() :
-	m_is_reallocation{}, m_memory_size{}, m_used_memory{}, m_available_memory{}
+	m_is_reallocation{}, m_memory_size{}, m_used_memory{},
+	m_available_memory{}, m_target{}, m_p_allocator{}
 {
 }
 
@@ -24,11 +25,19 @@ void ktkRenderBufferManager::Initialize(ktk::size_t memory_size,
 	{
 		GLuint id;
 		glGenBuffers(1, &id);
-		glBindBuffer(target, id);
-		glBufferData(target, memory_size, nullptr, GL_STATIC_DRAW); 
+		KOTEK_GL_ASSERT();
 
+		glBindBuffer(target, id);
+		KOTEK_GL_ASSERT();
+
+		glBufferData(target, memory_size, nullptr, GL_STATIC_DRAW);
+		KOTEK_GL_ASSERT();
+
+		this->m_target = target;
 		this->m_handles.push_back(id);
 	}
+
+	this->m_p_allocator = new OffsetAllocator::Allocator(memory_size);
 
 #ifdef KOTEK_DEBUG
 	KOTEK_MESSAGE("Initialized {} with: {} Mb", this->m_description_name,
@@ -41,13 +50,39 @@ void ktkRenderBufferManager::Shutdown(void)
 	for (auto id : this->m_handles)
 	{
 		glDeleteBuffers(1, &id);
+		KOTEK_GL_ASSERT();
+
 	}
+}
+
+OffsetAllocator::Allocation ktkRenderBufferManager::AllocateOffset(
+	ktk::size_t mem)
+{
+	this->m_available_memory = this->m_memory_size - mem;
+	return this->m_p_allocator->allocate(mem);
+}
+
+void ktkRenderBufferManager::FreeOffset(const OffsetAllocator::Allocation& info)
+{
+	this->m_available_memory += info.offset;
+	this->m_p_allocator->free(info);
 }
 
 const ktk::cstring& ktkRenderBufferManager::Get_DescriptionName(
 	void) const noexcept
 {
 	return this->m_description_name;
+}
+
+const ktk::vector<GLuint>& ktkRenderBufferManager::Get_Handles(
+	void) const noexcept
+{
+	return this->m_handles;
+}
+
+GLenum ktkRenderBufferManager::Get_Target(void) const noexcept
+{
+	return this->m_target;
 }
 
 KOTEK_END_NAMESPACE_RENDER

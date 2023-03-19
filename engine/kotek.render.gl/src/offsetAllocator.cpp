@@ -1,7 +1,7 @@
 // (C) Sebastian Aaltonen 2023
 // MIT License (see file: LICENSE)
 
-#include "offsetAllocator.hpp"
+#include "../include/offsetAllocator.hpp"
 
 #ifdef DEBUG
 #include <assert.h>

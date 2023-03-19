@@ -91,12 +91,43 @@ namespace gl
 	void ktkRenderResourceManager::LoadGeometry(
 		ktk::enum_base_t resource_loading_type, ktk::entity_t id)
 	{
+		Kotek::Core::eResourceLoadingType type =
+			static_cast<Kotek::Core::eResourceLoadingType>(
+				resource_loading_type);
+
+		switch (type)
+		{
+		case Kotek::Core::eResourceLoadingType::kModelStatic_Triangle:
+		{
+			if (this->m_p_render_manager_geometry)
+			{
+				this->m_p_render_manager_geometry->AddForUpload(
+					{{-0.5f, -0.5f, 0.0f}, {0.5f, -0.5f, 0.0f},
+						{0.0f, 0.5f, 0.0f}},
+					{}, id);
+			}
+
+			break;
+		}
+		default:
+		{
+			KOTEK_ASSERT(false, "not implemented");
+		}
+		}
 	}
 
 	void ktkRenderResourceManager::LoadGeometry(
 		ktk::enum_base_t resource_loading_type,
 		const ktk::filesystem::path& path_to_file, ktk::entity_t id)
 	{
+	}
+
+	void ktkRenderResourceManager::Update(void) noexcept
+	{
+		if (this->m_p_render_manager_geometry)
+		{
+			this->m_p_render_manager_geometry->Update();
+		}
 	}
 
 	ktkRenderTextureManager* ktkRenderResourceManager::Get_ManagerTexture(
