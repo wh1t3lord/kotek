@@ -71,17 +71,23 @@ void ktkRenderGeometryManager::AddForUpload(
 	const ktk::vector<ktkVertex>& data_v,
 	const ktk::vector<ktk::uint32_t>& data_i, ktk::entity_t id) noexcept
 {
-	this->m_for_upload.push_back({id, data_v, data_i});
+	KOTEK_ASSERT(
+		data_v.empty() == false, "you can't pass an empty vertex buffer");
+	KOTEK_ASSERT(
+		data_i.empty() == false, "you can't pass an empty index buffer");
+
+	this->m_for_upload.push({id, data_v, data_i});
 }
 
 void ktkRenderGeometryManager::Update(void) noexcept
 {
-	for (const auto& entity : this->m_for_upload)
+	while (!this->m_for_upload.empty())
 	{
+		ktkGeometry entity;
+
+		this->m_for_upload.pop(entity);
 		this->Upload(entity.m_v, entity.m_i, entity.m_id);
 	}
-
-	this->m_for_upload.clear();
 }
 
 void ktkRenderGeometryManager::Upload(const ktk::vector<ktkVertex>& data_v,

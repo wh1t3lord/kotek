@@ -34,7 +34,7 @@ public:
 		float m_position[3];
 	};
 
-private:
+public:
 	struct ktkGeometry
 	{
 		ktk::entity_t m_id;
@@ -66,8 +66,8 @@ private:
 	GLuint m_vao_handle;
 	ktkRenderBufferManager* m_p_vertex;
 	ktkRenderBufferManager* m_p_index;
-
-	ktk::vector<ktkGeometry> m_for_upload;
+	ktk::vector<gl::ktkDrawIndexIndirectCommand> m_indirect_commands;
+	ktk::mt::queue<ktkGeometry> m_for_upload;
 
 	// stores offsets for unloading/freeing
 	ktk::unordered_map<ktk::entity_t, OffsetAllocator::Allocation> m_storage;

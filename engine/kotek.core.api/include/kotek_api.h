@@ -120,8 +120,6 @@ public:
 	virtual void LoadGeometry(ktk::enum_base_t resource_loading_type,
 		const ktk::filesystem::path& path_to_file, ktk::entity_t id) = 0;
 
-
-
 	virtual void Resize(ktkIRenderDevice* p_raw_device,
 		ktkIRenderSwapchain* p_raw_swapchain) = 0;
 };
@@ -523,62 +521,56 @@ public:
 	{
 	}
 
-	virtual ~ktkLoadingRequest() = default;
+	~ktkLoadingRequest() = default;
 
-	virtual ktkLoadingRequest& Set_LoadingPolicy(
-		eResourceLoadingPolicy policy) noexcept
+	ktkLoadingRequest& Set_LoadingPolicy(eResourceLoadingPolicy policy) noexcept
 	{
 		this->m_policy_loading = policy;
 		return *this;
 	}
 
-	virtual eResourceLoadingPolicy Get_LoadingPolicy(void) const noexcept
+	eResourceLoadingPolicy Get_LoadingPolicy(void) const noexcept
 	{
 		return this->m_policy_loading;
 	}
 
-	virtual ktkLoadingRequest& Set_CachingPolicy(
-		eResourceCachingPolicy policy) noexcept
+	ktkLoadingRequest& Set_CachingPolicy(eResourceCachingPolicy policy) noexcept
 	{
 		this->m_policy_caching = policy;
 		return *this;
 	}
 
-	virtual eResourceCachingPolicy Get_CachingPolicy(void) const noexcept
+	eResourceCachingPolicy Get_CachingPolicy(void) const noexcept
 	{
 		return this->m_policy_caching;
 	}
 
-	virtual ktkLoadingRequest& Set_ResourceType(
-		eResourceLoadingType type) noexcept
+	ktkLoadingRequest& Set_ResourceType(eResourceLoadingType type) noexcept
 	{
 		this->m_resource_type = type;
 		return *this;
 	}
 
-	virtual eResourceLoadingType Get_ResourceType() const noexcept
+	eResourceLoadingType Get_ResourceType() const noexcept
 	{
 		return this->m_resource_type;
 	}
 
-	virtual ktkLoadingRequest& Set_ResourcePath(
+	ktkLoadingRequest& Set_ResourcePath(
 		const ktk::filesystem::path& path) noexcept
 	{
 		this->m_resource_path = path;
 		return *this;
 	}
 
-	virtual const ktk::filesystem::path& Get_ResourcePath(void) const noexcept
+	const ktk::filesystem::path& Get_ResourcePath(void) const noexcept
 	{
 		return this->m_resource_path;
 	}
 
-	virtual bool Is_ForEntity(void) const noexcept
-	{
-		return this->m_is_for_entity;
-	}
+	bool Is_ForEntity(void) const noexcept { return this->m_is_for_entity; }
 
-	virtual Kotek::ktk::entity_t Get_EntityID(void) const noexcept
+	Kotek::ktk::entity_t Get_EntityID(void) const noexcept
 	{
 		return this->m_id;
 	}

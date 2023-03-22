@@ -17,6 +17,11 @@ namespace mt
 
 	template <typename Mutex>
 	using lock_guard = std::lock_guard<Mutex>;
+
+	using condition_variable = std::condition_variable;
+
+	template<typename Mutex>
+	using unique_lock = std::unique_lock<Mutex>;
 #else
 #endif
 } // namespace mt
