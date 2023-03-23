@@ -102,9 +102,18 @@ namespace gl
 			if (this->m_p_render_manager_geometry)
 			{
 				this->m_p_render_manager_geometry->AddForUpload(
-					{{-0.5f, -0.5f, 0.0f}, {0.5f, -0.5f, 0.0f},
-						{0.0f, 0.5f, 0.0f}},
-					{}, id);
+					{{0.5f, 0.5f, 0.0f}, {0.5f, -0.5f, 0.0f},
+						{-0.5f, -0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}},
+					{0, 1, 3, 1, 2, 3}, id);
+			}
+
+			break;
+		}
+		case Kotek::Core::eResourceLoadingType::kModelStatic_Box:
+		{
+			if (this->m_p_render_manager_geometry)
+			{
+
 			}
 
 			break;

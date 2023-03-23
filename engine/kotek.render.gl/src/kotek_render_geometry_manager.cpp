@@ -69,14 +69,28 @@ void ktkRenderGeometryManager::Shutdown(void)
 
 void ktkRenderGeometryManager::AddForUpload(
 	const ktk::vector<ktkVertex>& data_v,
-	const ktk::vector<ktk::uint32_t>& data_i, ktk::entity_t id) noexcept
+	const ktk::vector<ktk::uint32_t>& data_i,
+	ktk::enum_base_t static_geometry_type) noexcept
 {
 	KOTEK_ASSERT(
 		data_v.empty() == false, "you can't pass an empty vertex buffer");
 	KOTEK_ASSERT(
 		data_i.empty() == false, "you can't pass an empty index buffer");
 
-	this->m_for_upload.push({id, data_v, data_i});
+	this->m_for_upload.push({static_geometry_type, data_v, data_i});
+}
+
+void ktkRenderGeometryManager::AddForUpload(
+	const ktk::vector<ktkVertex>& data_v,
+	const ktk::vector<ktk::uint32_t>& data_i,
+	const ktk::cstring& string_path_to_file_name) noexcept
+{
+	KOTEK_ASSERT(
+		data_v.empty() == false, "you can't pass an empty vertex buffer");
+	KOTEK_ASSERT(
+		data_i.empty() == false, "you can't pass an empty index buffer");
+
+	this->m_for_upload.push({string_path_to_file_name, data_v, data_i});
 }
 
 void ktkRenderGeometryManager::Update(void) noexcept
@@ -86,40 +100,76 @@ void ktkRenderGeometryManager::Update(void) noexcept
 		ktkGeometry entity;
 
 		this->m_for_upload.pop(entity);
-		this->Upload(entity.m_v, entity.m_i, entity.m_id);
+
+		const auto* p_enum =
+			std::get_if<ktk::enum_base_t>(&entity.m_geometry_type);
+
+		if (p_enum)
+		{
+			this->Upload(entity.m_vertex_data, entity.m_index_data, *p_enum);
+		}
+		else
+		{
+			const auto* p_string =
+				std::get_if<ktk::cstring>(&entity.m_geometry_type);
+
+			KOTEK_ASSERT(p_string,
+				"something is really terrible, it accepts only two variants "
+				"enum of static geometry or string to file path");
+
+			this->Upload(entity.m_vertex_data, entity.m_index_data, *p_string);
+		}
 	}
 }
 
 void ktkRenderGeometryManager::Upload(const ktk::vector<ktkVertex>& data_v,
-	const ktk::vector<ktk::uint32_t>& data_i, ktk::entity_t id) noexcept
+	const ktk::vector<ktk::uint32_t>& data_i,
+	ktk::enum_base_t static_geometry_type) noexcept
 {
-	if (data_v.empty())
-		return;
+	KOTEK_ASSERT(data_v.empty() == false, "can't bind empty vertex buffer");
+	KOTEK_ASSERT(data_i.empty() == false, "can't bind empty index buffer");
+	KOTEK_ASSERT(static_geometry_type !=
+			static_cast<ktk::enum_base_t>(Core::eStaticGeometryType::kUnknown),
+		"you can't pass an invalid geometry type");
 
+
+
+	/*
 	if (this->m_storage.find(id) == this->m_storage.end())
 	{
-		this->m_storage[id] =
-			this->m_p_vertex->AllocateOffset(sizeof(ktkVertex) * data_v.size());
+	    this->m_storage[id] =
+	        this->m_p_vertex->AllocateOffset(sizeof(ktkVertex) * data_v.size());
 	}
 	else
 	{
-		this->FreeOffset(id);
-		this->m_storage[id] =
-			this->m_p_vertex->AllocateOffset(sizeof(ktkVertex) * data_v.size());
+	    this->FreeOffset(id);
+	    this->m_storage[id] =
+	        this->m_p_vertex->AllocateOffset(sizeof(ktkVertex) * data_v.size());
 	}
 
 	const auto& info = this->m_storage.at(id);
 
 	glBindBuffer(
-		this->m_p_vertex->Get_Target(), this->m_p_vertex->Get_Handles()[0]);
+	    this->m_p_vertex->Get_Target(), this->m_p_vertex->Get_Handles()[0]);
 	KOTEK_GL_ASSERT();
 
 	glBufferSubData(this->m_p_vertex->Get_Target(), info.offset,
-		sizeof(ktkVertex) * data_v.size(), data_v.data());
+	    sizeof(ktkVertex) * data_v.size(), data_v.data());
 	KOTEK_GL_ASSERT();
 
 	glBindBuffer(this->m_p_vertex->Get_Target(), 0);
 	KOTEK_GL_ASSERT();
+	*/
+}
+
+void ktkRenderGeometryManager::Upload(const ktk::vector<ktkVertex>& data_v,
+	const ktk::vector<ktk::uint32_t>& data_i,
+	const ktk::cstring& string_path_to_file_name) noexcept
+{
+	KOTEK_ASSERT(data_v.empty() == false, "can't bind empty vertex buffer");
+	KOTEK_ASSERT(data_i.empty() == false, "can't bind empty index buffer");
+	KOTEK_ASSERT(string_path_to_file_name.empty() == false,
+		"can't register geometry without string to file path");
 }
 
 GLuint ktkRenderGeometryManager::Get_VAO(void) const noexcept
@@ -127,10 +177,7 @@ GLuint ktkRenderGeometryManager::Get_VAO(void) const noexcept
 	return this->m_vao_handle;
 }
 
-void ktkRenderGeometryManager::FreeOffset(ktk::entity_t id)
-{
-	this->m_p_vertex->FreeOffset(this->m_storage.at(id));
-}
+void ktkRenderGeometryManager::FreeOffset(ktk::entity_t id) {}
 
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK

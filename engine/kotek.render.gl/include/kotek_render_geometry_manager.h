@@ -37,9 +37,9 @@ public:
 public:
 	struct ktkGeometry
 	{
-		ktk::entity_t m_id;
-		ktk::vector<ktkVertex> m_v;
-		ktk::vector<ktk::uint32_t> m_i;
+		ktk::variant<ktk::enum_base_t, ktk::cstring> m_geometry_type;
+		ktk::vector<ktkVertex> m_vertex_data;
+		ktk::vector<ktk::uint32_t> m_index_data;
 	};
 
 public:
@@ -50,12 +50,20 @@ public:
 	void Shutdown(void);
 
 	void AddForUpload(const ktk::vector<ktkVertex>& data_v,
-		const ktk::vector<ktk::uint32_t>& data_i, ktk::entity_t id) noexcept;
+		const ktk::vector<ktk::uint32_t>& data_i,
+		ktk::enum_base_t static_geometry_type) noexcept;
+	void AddForUpload(const ktk::vector<ktkVertex>& data_v,
+		const ktk::vector<ktk::uint32_t>& data_i,
+		const ktk::cstring& string_path_to_file_name) noexcept;
 
 	void Update(void) noexcept;
 
 	void Upload(const ktk::vector<ktkVertex>& data_v,
-		const ktk::vector<ktk::uint32_t>& data_i, ktk::entity_t id) noexcept;
+		const ktk::vector<ktk::uint32_t>& data_i,
+		ktk::enum_base_t static_geometry_type) noexcept;
+	void Upload(const ktk::vector<ktkVertex>& data_v,
+		const ktk::vector<ktk::uint32_t>& data_i,
+		const ktk::cstring& string_path_to_file_name) noexcept;
 
 	GLuint Get_VAO(void) const noexcept;
 
@@ -70,7 +78,11 @@ private:
 	ktk::mt::queue<ktkGeometry> m_for_upload;
 
 	// stores offsets for unloading/freeing
-	ktk::unordered_map<ktk::entity_t, OffsetAllocator::Allocation> m_storage;
+	ktk::unordered_map<ktk::enum_base_t, OffsetAllocator::Allocation>
+		m_vertex_buffer_offsets;
+	ktk::unordered_map<ktk::enum_base_t, OffsetAllocator::Allocation>
+		m_index_buffer_offsets;
+	ktk::unordered_map<ktk::enum_base_t, ktk::size_t> m_geometry_type;
 };
 
 KOTEK_END_NAMESPACE_RENDER
