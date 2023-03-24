@@ -12,7 +12,8 @@ ktkRenderBufferManager::ktkRenderBufferManager() :
 ktkRenderBufferManager::~ktkRenderBufferManager() {}
 
 void ktkRenderBufferManager::Initialize(ktk::size_t memory_size,
-	const ktk::cstring& debug_name, GLenum target) noexcept
+	const ktk::cstring& debug_name, GLenum target,
+	GLuint index_binding_in_shader) noexcept
 {
 	KOTEK_ASSERT(memory_size > 0, "you must pass a valid amount of memory");
 	KOTEK_ASSERT(
@@ -21,6 +22,7 @@ void ktkRenderBufferManager::Initialize(ktk::size_t memory_size,
 	this->m_description_name = debug_name;
 	this->m_memory_size = memory_size;
 
+	// TODO: implement reallocation
 	if (this->m_is_reallocation == false)
 	{
 		GLuint id;
@@ -32,6 +34,15 @@ void ktkRenderBufferManager::Initialize(ktk::size_t memory_size,
 
 		glBufferData(target, memory_size, nullptr, GL_STATIC_DRAW);
 		KOTEK_GL_ASSERT();
+
+		if (index_binding_in_shader != -1)
+		{
+			glBindBufferBase(target, index_binding_in_shader, id);
+
+#ifdef KOTEK_DEBUG
+			KOTEK_MESSAGE("binding index: {}", index_binding_in_shader);
+#endif
+		}
 
 		this->m_target = target;
 		this->m_handles.push_back(id);
@@ -47,11 +58,15 @@ void ktkRenderBufferManager::Initialize(ktk::size_t memory_size,
 
 void ktkRenderBufferManager::Shutdown(void)
 {
+#ifdef KOTEK_DEBUG
+	KOTEK_MESSAGE("Destroying: {} [{}]", this->m_description_name,
+		static_cast<double>(this->m_memory_size) / (1024.0 * 1024.0));
+#endif
+
 	for (auto id : this->m_handles)
 	{
 		glDeleteBuffers(1, &id);
 		KOTEK_GL_ASSERT();
-
 	}
 }
 

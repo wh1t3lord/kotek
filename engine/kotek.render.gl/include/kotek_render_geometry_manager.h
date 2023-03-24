@@ -72,10 +72,13 @@ private:
 
 private:
 	GLuint m_vao_handle;
-	ktkRenderBufferManager* m_p_vertex;
-	ktkRenderBufferManager* m_p_index;
+	ktkRenderBufferManager* m_p_vertex_buffer;
+	ktkRenderBufferManager* m_p_index_buffer;
+	ktkRenderBufferManager* m_p_ssbo_instance_matricies_buffer;
+
 	ktk::vector<gl::ktkDrawIndexIndirectCommand> m_indirect_commands;
-	ktk::mt::queue<ktkGeometry> m_for_upload;
+	
+	ktk::vector<ktk::uint32_t> m_ssbo_instance_matricies_indexes;
 
 	// stores offsets for unloading/freeing
 	ktk::unordered_map<ktk::enum_base_t, OffsetAllocator::Allocation>
@@ -83,6 +86,8 @@ private:
 	ktk::unordered_map<ktk::enum_base_t, OffsetAllocator::Allocation>
 		m_index_buffer_offsets;
 	ktk::unordered_map<ktk::enum_base_t, ktk::size_t> m_geometry_type;
+	
+	ktk::mt::queue<ktkGeometry> m_queue_for_upload;
 };
 
 KOTEK_END_NAMESPACE_RENDER

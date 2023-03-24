@@ -3,34 +3,49 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
-ktkRenderGeometryManager::ktkRenderGeometryManager() : m_vao_handle{}
+ktkRenderGeometryManager::ktkRenderGeometryManager() :
+	m_vao_handle{}, m_p_vertex_buffer{}, m_p_index_buffer{},
+	m_p_ssbo_instance_matricies_buffer{}
 {
-	this->m_p_index = new ktkRenderBufferManager();
-	this->m_p_vertex = new ktkRenderBufferManager();
+	this->m_p_index_buffer = new ktkRenderBufferManager();
+	this->m_p_vertex_buffer = new ktkRenderBufferManager();
+	this->m_p_ssbo_instance_matricies_buffer = new ktkRenderBufferManager();
 }
 
 ktkRenderGeometryManager::~ktkRenderGeometryManager()
 {
-	if (this->m_p_index)
+	if (this->m_p_index_buffer)
 	{
-		delete this->m_p_index;
-		this->m_p_index = nullptr;
+		delete this->m_p_index_buffer;
+		this->m_p_index_buffer = nullptr;
 	}
 
-	if (this->m_p_vertex)
+	if (this->m_p_vertex_buffer)
 	{
-		delete this->m_p_vertex;
-		this->m_p_vertex = nullptr;
+		delete this->m_p_vertex_buffer;
+		this->m_p_vertex_buffer = nullptr;
+	}
+
+	if (this->m_p_ssbo_instance_matricies_buffer)
+	{
+		delete this->m_p_ssbo_instance_matricies_buffer;
+		this->m_p_ssbo_instance_matricies_buffer = nullptr;
 	}
 }
 
 void ktkRenderGeometryManager::Initialize(ktk::size_t memory_size)
 {
+#ifdef KOTEK_DEBUG
+	KOTEK_MESSAGE("Geometry manager allocated memeory: {} Mb",
+		memory_size / (1024 * 1024));
+#endif
+
 	auto total_memory = memory_size;
 
-	auto index_mem = ktk::align_down<ktk::size_t>((memory_size / 100) * 35, 2);
+	auto vertex_buffer_memory =
+		ktk::align_down<ktk::size_t>((memory_size / 100) * 40, 2);
 
-	total_memory -= index_mem;
+	total_memory -= vertex_buffer_memory;
 
 	glGenVertexArrays(1, &this->m_vao_handle);
 	KOTEK_GL_ASSERT();
@@ -38,10 +53,13 @@ void ktkRenderGeometryManager::Initialize(ktk::size_t memory_size)
 	glBindVertexArray(this->m_vao_handle);
 	KOTEK_GL_ASSERT();
 
-	this->m_p_vertex->Initialize(index_mem, "vertex manager", GL_ARRAY_BUFFER);
+	this->m_p_vertex_buffer->Initialize(
+		vertex_buffer_memory, "single vertex buffer", GL_ARRAY_BUFFER);
 
-	this->m_p_index->Initialize(
-		total_memory, "index manager", GL_ELEMENT_ARRAY_BUFFER);
+	total_memory -= vertex_buffer_memory;
+
+	this->m_p_index_buffer->Initialize(
+		vertex_buffer_memory, "single index buffer", GL_ELEMENT_ARRAY_BUFFER);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(ktkVertex), 0);
 	KOTEK_GL_ASSERT();
@@ -52,19 +70,46 @@ void ktkRenderGeometryManager::Initialize(ktk::size_t memory_size)
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	KOTEK_GL_ASSERT();
 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	KOTEK_GL_ASSERT();
+
 	glBindVertexArray(0);
 	KOTEK_GL_ASSERT();
+
+	// TODO: read from render settings file about total instance buffer
+	auto ssbo_matrix_memory = ktk::align_down<ktk::size_t>(
+		(memory_size / 100) * 20, sizeof(ktk::math::mat4x4f_t));
+
+	this->m_p_ssbo_instance_matricies_buffer->Initialize(ssbo_matrix_memory,
+		"SSBO Instancing matricies", GL_SHADER_STORAGE_BUFFER);
+
+	total_memory -= ssbo_matrix_memory;
+
+	this->m_ssbo_instance_matricies_indexes.reserve(
+		ssbo_matrix_memory / sizeof(ktk::math::mat4x4f_t));
+
+#ifdef KOTEK_DEBUG
+	KOTEK_MESSAGE("Instancing total count objects: {}",
+		ssbo_matrix_memory / sizeof(ktk::math::mat4x4f_t));
+#endif
+
+#ifdef KOTEK_DEBUG
+	KOTEK_MESSAGE("Remainder: {}", total_memory);
+#endif
 }
 
 void ktkRenderGeometryManager::Shutdown(void)
 {
 	glDeleteVertexArrays(1, &this->m_vao_handle);
 
-	if (this->m_p_index)
-		this->m_p_index->Shutdown();
+	if (this->m_p_index_buffer)
+		this->m_p_index_buffer->Shutdown();
 
-	if (this->m_p_vertex)
-		this->m_p_vertex->Shutdown();
+	if (this->m_p_vertex_buffer)
+		this->m_p_vertex_buffer->Shutdown();
+
+	if (this->m_p_ssbo_instance_matricies_buffer)
+		this->m_p_ssbo_instance_matricies_buffer->Shutdown();
 }
 
 void ktkRenderGeometryManager::AddForUpload(
@@ -77,7 +122,7 @@ void ktkRenderGeometryManager::AddForUpload(
 	KOTEK_ASSERT(
 		data_i.empty() == false, "you can't pass an empty index buffer");
 
-	this->m_for_upload.push({static_geometry_type, data_v, data_i});
+	this->m_queue_for_upload.push({static_geometry_type, data_v, data_i});
 }
 
 void ktkRenderGeometryManager::AddForUpload(
@@ -90,16 +135,16 @@ void ktkRenderGeometryManager::AddForUpload(
 	KOTEK_ASSERT(
 		data_i.empty() == false, "you can't pass an empty index buffer");
 
-	this->m_for_upload.push({string_path_to_file_name, data_v, data_i});
+	this->m_queue_for_upload.push({string_path_to_file_name, data_v, data_i});
 }
 
 void ktkRenderGeometryManager::Update(void) noexcept
 {
-	while (!this->m_for_upload.empty())
+	while (!this->m_queue_for_upload.empty())
 	{
 		ktkGeometry entity;
 
-		this->m_for_upload.pop(entity);
+		this->m_queue_for_upload.pop(entity);
 
 		const auto* p_enum =
 			std::get_if<ktk::enum_base_t>(&entity.m_geometry_type);
@@ -131,8 +176,6 @@ void ktkRenderGeometryManager::Upload(const ktk::vector<ktkVertex>& data_v,
 	KOTEK_ASSERT(static_geometry_type !=
 			static_cast<ktk::enum_base_t>(Core::eStaticGeometryType::kUnknown),
 		"you can't pass an invalid geometry type");
-
-
 
 	/*
 	if (this->m_storage.find(id) == this->m_storage.end())
