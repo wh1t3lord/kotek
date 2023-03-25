@@ -121,6 +121,9 @@ namespace Kotek
 				VkImage GetSwapchainImage(
 					ktk::uint32_t acquired_index) const noexcept;
 
+				ktkRenderStats* Get_Statistic(
+					Core::eRenderStatistics type) noexcept override;
+
 			private:
 				void createStaticAllocators(
 					ktkRenderDevice* p_render_device) noexcept;

@@ -27,7 +27,7 @@ public:
 	/// general index, vertex buffer just don't pass any variable to this
 	/// argument. By default it accepts -1.
 	void Initialize(ktk::size_t memory_size, const ktk::cstring& debug_name,
-		GLenum target, GLuint index_binding_in_shader = -1) noexcept;
+		GLenum target, Core::eRenderStatistics stat_type, GLuint index_binding_in_shader = -1) noexcept;
 
 	void Shutdown(void);
 
@@ -40,13 +40,13 @@ public:
 
 	GLenum Get_Target(void) const noexcept;
 
+	ktkRenderStats* Get_Stat(void) noexcept;
+
 private:
 	bool m_is_reallocation;
-	ktk::size_t m_memory_size;
-	ktk::size_t m_used_memory;
-	ktk::size_t m_available_memory;
 	GLenum m_target;
 	OffsetAllocator::Allocator* m_p_allocator;
+	ktkRenderStats m_stats;
 	ktk::vector<GLuint> m_handles;
 	ktk::cstring m_description_name;
 };

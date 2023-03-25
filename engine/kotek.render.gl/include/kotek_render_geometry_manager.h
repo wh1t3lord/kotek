@@ -67,6 +67,10 @@ public:
 
 	GLuint Get_VAO(void) const noexcept;
 
+	ktkRenderStats* Get_StatIndexBuffer(void) noexcept;
+	ktkRenderStats* Get_StatVertexBuffer(void) noexcept;
+	ktkRenderStats* Get_StatSSBOBufferMatrix(void) noexcept;
+
 private:
 	void FreeOffset(ktk::entity_t id);
 
@@ -77,7 +81,7 @@ private:
 	ktkRenderBufferManager* m_p_ssbo_instance_matricies_buffer;
 
 	ktk::vector<gl::ktkDrawIndexIndirectCommand> m_indirect_commands;
-	
+
 	ktk::vector<ktk::uint32_t> m_ssbo_instance_matricies_indexes;
 
 	// stores offsets for unloading/freeing
@@ -86,7 +90,7 @@ private:
 	ktk::unordered_map<ktk::enum_base_t, OffsetAllocator::Allocation>
 		m_index_buffer_offsets;
 	ktk::unordered_map<ktk::enum_base_t, ktk::size_t> m_geometry_type;
-	
+
 	ktk::mt::queue<ktkGeometry> m_queue_for_upload;
 };
 

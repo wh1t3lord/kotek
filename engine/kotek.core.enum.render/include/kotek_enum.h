@@ -13,5 +13,15 @@ enum class eStaticGeometryType : ktk::enum_base_t
 	kUnknown = -1
 };
 
+enum class eRenderStatistics : ktk::enum_base_t
+{
+	kStat_Buffer_SSBO_Matrix,
+	kStat_Buffer_Vertex,
+	kStat_Buffer_Index,
+	kStat_Buffer_Uniform,
+	kEndOfEnum,
+	kStat_Unknown = -1
+};
+
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

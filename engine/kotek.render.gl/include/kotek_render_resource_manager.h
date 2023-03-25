@@ -58,6 +58,9 @@ namespace gl
 		ktkRenderShaderManager* Get_ManagerShader(void) const noexcept;
 		ktkRenderGeometryManager* Get_ManagerGeometry(void) const noexcept;
 
+		ktkRenderStats* Get_Statistic(
+			Core::eRenderStatistics type) noexcept override;
+
 	private:
 		Core::ktkIRenderDevice* m_p_render_device;
 		ktkRenderTextureManager* m_p_render_manager_texture;

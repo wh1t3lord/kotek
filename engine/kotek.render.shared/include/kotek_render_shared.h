@@ -12,6 +12,8 @@
 	#include <kotek.render.shared.dx/include/kotek_render_shared_dx.h>
 #endif
 
+#include "kotek_render_data_types.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 class ktkMainManager;

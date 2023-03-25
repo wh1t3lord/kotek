@@ -113,7 +113,6 @@ namespace gl
 		{
 			if (this->m_p_render_manager_geometry)
 			{
-
 			}
 
 			break;
@@ -154,6 +153,53 @@ namespace gl
 		void) const noexcept
 	{
 		return this->m_p_render_manager_geometry;
+	}
+
+	ktkRenderStats* ktkRenderResourceManager::Get_Statistic(
+		Core::eRenderStatistics type) noexcept
+	{
+		ktkRenderStats* p_result{};
+
+		switch (type)
+		{
+		case Core::eRenderStatistics::kStat_Buffer_Index:
+		{
+			if (this->m_p_render_manager_geometry)
+			{
+				p_result =
+					this->m_p_render_manager_geometry->Get_StatIndexBuffer();
+			}
+
+			break;
+		}
+		case Core::eRenderStatistics::kStat_Buffer_SSBO_Matrix:
+		{
+			if (this->m_p_render_manager_geometry)
+			{
+				p_result = this->m_p_render_manager_geometry
+							   ->Get_StatSSBOBufferMatrix();
+			}
+
+			break;
+		}
+		case Core::eRenderStatistics::kStat_Buffer_Vertex:
+		{
+			if (this->m_p_render_manager_geometry)
+			{
+				p_result =
+					this->m_p_render_manager_geometry->Get_StatVertexBuffer();
+			}
+
+			break;
+		}
+		default:
+		{
+			KOTEK_ASSERT(false, "can't obtain render stat");
+			break;
+		}
+		}
+
+		return p_result;
 	}
 } // namespace gl
 KOTEK_END_NAMESPACE_RENDER

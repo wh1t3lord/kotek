@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 add_library(${PROJECT_NAME} STATIC
+	"include/kotek_render_data_types.h"
+	"src/kotek_render_data_types.cpp"
 	"include/kotek_render_shared.h"
 	"src/main_render_shared_dll.cpp"
 )

@@ -53,13 +53,15 @@ void ktkRenderGeometryManager::Initialize(ktk::size_t memory_size)
 	glBindVertexArray(this->m_vao_handle);
 	KOTEK_GL_ASSERT();
 
-	this->m_p_vertex_buffer->Initialize(
-		vertex_buffer_memory, "single vertex buffer", GL_ARRAY_BUFFER);
+	this->m_p_vertex_buffer->Initialize(vertex_buffer_memory,
+		"single vertex buffer", GL_ARRAY_BUFFER,
+		Core::eRenderStatistics::kStat_Buffer_Vertex);
 
 	total_memory -= vertex_buffer_memory;
 
-	this->m_p_index_buffer->Initialize(
-		vertex_buffer_memory, "single index buffer", GL_ELEMENT_ARRAY_BUFFER);
+	this->m_p_index_buffer->Initialize(vertex_buffer_memory,
+		"single index buffer", GL_ELEMENT_ARRAY_BUFFER,
+		Core::eRenderStatistics::kStat_Buffer_Index);
 
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(ktkVertex), 0);
 	KOTEK_GL_ASSERT();
@@ -81,7 +83,8 @@ void ktkRenderGeometryManager::Initialize(ktk::size_t memory_size)
 		(memory_size / 100) * 20, sizeof(ktk::math::mat4x4f_t));
 
 	this->m_p_ssbo_instance_matricies_buffer->Initialize(ssbo_matrix_memory,
-		"SSBO Instancing matricies", GL_SHADER_STORAGE_BUFFER);
+		"SSBO Instancing matricies", GL_SHADER_STORAGE_BUFFER,
+		Core::eRenderStatistics::kStat_Buffer_SSBO_Matrix, 3);
 
 	total_memory -= ssbo_matrix_memory;
 
@@ -218,6 +221,37 @@ void ktkRenderGeometryManager::Upload(const ktk::vector<ktkVertex>& data_v,
 GLuint ktkRenderGeometryManager::Get_VAO(void) const noexcept
 {
 	return this->m_vao_handle;
+}
+
+ktkRenderStats* ktkRenderGeometryManager::Get_StatIndexBuffer(void) noexcept
+{
+	ktkRenderStats* p_result{};
+
+	if (this->m_p_index_buffer)
+		p_result = this->m_p_index_buffer->Get_Stat();
+
+	return p_result;
+}
+
+ktkRenderStats* ktkRenderGeometryManager::Get_StatVertexBuffer(void) noexcept
+{
+	ktkRenderStats* p_result{};
+
+	if (this->m_p_vertex_buffer)
+		p_result = this->m_p_vertex_buffer->Get_Stat();
+
+	return p_result;
+}
+
+ktkRenderStats* ktkRenderGeometryManager::Get_StatSSBOBufferMatrix(
+	void) noexcept
+{
+	ktkRenderStats* p_result{};
+
+	if (this->m_p_ssbo_instance_matricies_buffer)
+		p_result = this->m_p_ssbo_instance_matricies_buffer->Get_Stat();
+
+	return p_result;
 }
 
 void ktkRenderGeometryManager::FreeOffset(ktk::entity_t id) {}

@@ -32,7 +32,7 @@ class ktkIRenderResourceManager;
 class kotek_i_renderer;
 class ktkProfiler;
 class ktkConsole;
-} // namespace Core
+KOTEK_END_NAMESPACE_CORE
 
 namespace Engine
 {
@@ -54,6 +54,10 @@ namespace math
 }
 
 KOTEK_END_NAMESPACE_KTK
+
+KOTEK_BEGIN_NAMESPACE_RENDER
+class ktkRenderStats;
+KOTEK_END_NAMESPACE_RENDER
 
 KOTEK_END_NAMESPACE_KOTEK
 
@@ -122,6 +126,9 @@ public:
 
 	virtual void Resize(ktkIRenderDevice* p_raw_device,
 		ktkIRenderSwapchain* p_raw_swapchain) = 0;
+
+	virtual Render::ktkRenderStats* Get_Statistic(
+		Core::eRenderStatistics type) noexcept = 0;
 };
 
 class ktkIRenderGraphResourceManager

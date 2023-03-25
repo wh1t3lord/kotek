@@ -238,6 +238,14 @@ namespace Kotek
 				return this->m_swapchain_images.at(acquired_index);
 			}
 
+			ktkRenderStats* ktkRenderResourceManager::Get_Statistic(
+				Core::eRenderStatistics type) noexcept
+
+			{
+				KOTEK_ASSERT(false, "not implemented!");
+				return nullptr;
+			}
+
 			void ktkRenderResourceManager::createStaticAllocators(
 				ktkRenderDevice* p_render_device) noexcept
 			{
@@ -409,13 +417,13 @@ namespace Kotek
 				ktk::uint32_t index = 1;
 				for (auto p_image : this->m_swapchain_images)
 				{
-                    auto formatted = ktk::format("Swapchain Image #{}", index);
+					auto formatted = ktk::format("Swapchain Image #{}", index);
 
 					this->m_p_device->GetHelper()
 						.getDebug()
 						.setDebugNameToResource(this->m_p_device->GetDevice(),
 							VkObjectType::VK_OBJECT_TYPE_IMAGE, p_image,
-                            formatted.c_str());
+							formatted.c_str());
 
 					++index;
 				}

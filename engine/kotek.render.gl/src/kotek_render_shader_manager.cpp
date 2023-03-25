@@ -24,16 +24,17 @@ namespace gl
 		}
 	}
 
-	void ktkRenderShaderManager::Initialize(ktk::size_t memory_size_uniform) 
+	void ktkRenderShaderManager::Initialize(ktk::size_t memory_size_uniform)
 	{
 		if (this->m_p_render_uniform_manager)
 		{
-			this->m_p_render_uniform_manager->Initialize(
-				memory_size_uniform, "uniform manager", GL_UNIFORM_BUFFER);
+			this->m_p_render_uniform_manager->Initialize(memory_size_uniform,
+				"uniform manager", GL_UNIFORM_BUFFER,
+				Core::eRenderStatistics::kStat_Buffer_Uniform);
 		}
 	}
 
-	void ktkRenderShaderManager::Shutdown(void) 
+	void ktkRenderShaderManager::Shutdown(void)
 	{
 		if (this->m_p_render_uniform_manager)
 		{
