@@ -33,7 +33,7 @@ void ktkRenderBufferManager::Initialize(ktk::size_t memory_size,
 		glBufferData(target, memory_size, nullptr, GL_STATIC_DRAW);
 		KOTEK_GL_ASSERT();
 
-		if (index_binding_in_shader != -1)
+		if (index_binding_in_shader != GLuint(-1))
 		{
 			glBindBufferBase(target, index_binding_in_shader, id);
 			KOTEK_GL_ASSERT();

@@ -19,6 +19,7 @@ enum class eRenderStatistics : ktk::enum_base_t
 	kStat_Buffer_Vertex,
 	kStat_Buffer_Index,
 	kStat_Buffer_Uniform,
+	kStat_Buffer_Indirect_Indexed,
 	kEndOfEnum,
 	kStat_Unknown = -1
 };
