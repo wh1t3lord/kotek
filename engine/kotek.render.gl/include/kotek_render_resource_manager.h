@@ -2,12 +2,12 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
-class ktkRenderGeometryManager;
 namespace gl
 {
 	class ktkRenderDevice;
 	class ktkRenderTextureManager;
 	class ktkRenderShaderManager;
+	class ktkRenderGeometryManager;
 } // namespace gl
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK
