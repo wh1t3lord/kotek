@@ -51,7 +51,7 @@ namespace math
 	class matrix3x3f;
 	class matrix4x4f;
 	class quaternionf;
-}
+} // namespace math
 
 KOTEK_END_NAMESPACE_KTK
 

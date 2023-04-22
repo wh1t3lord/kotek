@@ -503,6 +503,13 @@ enum class eEngineFeatureRender : ktk::enum_base_t
 	kNone = 0
 };
 
+/**
+ * \~english @brief This is used for console manager class ktkConsole. And it
+ * uses for define callback functions when we want to issue some command by
+ * enum. For that case you use ktkConsole::Execute or ktkConsole::PushCommand.
+ * The difference between two that one executes right now the second just pushes
+ * to queue and executes on next tick.
+ */
 enum class eConsoleCommandIndex : ktk::enum_base_t
 {
 	// (int width, int height)
@@ -531,13 +538,75 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_SDK_CreateComponentForEntity,
 	kConsoleCommand_SDK_CreateEntity,
 	kConsoleCommand_SDK_DeleteEntity,
+
+	/**
+	 * \~english @brief Defines functionality to your log window when issued it
+	 * must send message to log
+	 */
 	kConsoleCommand_SDK_SendMessageToLogWindow,
+
+	/**
+	 * \~english @brief Sends warning message (in my opinion it could be yellow
+	 * color) to log window so it depends on your implementation how you will do
+	 * that in your 'business logic'
+	 */
 	kConsoleCommand_SDK_SendMessageWarningToLogWindow,
+
+	/**
+	 * \~english @brief Sends error message (in my opinion it could be red
+	 * color) to log window so it depends on your implementation how you will do
+	 * that in your 'business logic'
+	 */
 	kConsoleCommand_SDK_SendMessageErrorToLogWindow,
+
+	/**
+	 * \~english @brief Sends info message (in my opinion it could be blue
+	 * color) to log window so it depends on your implementation how you will do
+	 * that in your 'business logic'
+	 */
 	kConsoleCommand_SDK_SendMessageInfoToLogWindow,
+
+	/**
+	 * \~english @brief Sends grey message to log window so it depends on your
+	 * implementation how you will do that in your 'business logic'. Of course
+	 * we could define a such enum like SendNotImportantMessageToLogWindow but
+	 * you know it is really hard to define from that perspective it is just
+	 * grey and user can define in his engine what he wants to see it could be
+	 * not important or message from physics or anything else
+	 */
 	kConsoleCommand_SDK_SendMessageGreyToLogWindow,
 
+	/**
+	 * \~english @brief As you see it means we want to show modal window that
+	 * define that window that asks us about what we want to do with current
+	 * scene save and close or just close scene without saving what we have in
+	 * all editors about editing something we can save and close our application
+	 * or we can close our application without saving our editing instance
+	 */
 	kConsoleCommand_SDK_ShowModalWindow_SaveAndCloseOrCloseScene,
+
+	/**
+	 * \~english @brief it means that we have some component like
+	 * component_camera, but we say that component_camera can't exist without
+	 * component_input because it is pointless to have camera input especially
+	 * in your editor, so for that case define components that are required for
+	 * creation of component_camera in our case it is component_input. So when
+	 * we want to add component_camera have two ways like we just print warning
+	 * message that we can't create that component because you don't have the
+	 * required one (e.g. component_input) or we can automatically can
+	 * components that are required for creation so it means when we add
+	 * component_camera we automatically create component_input without any
+	 * notifications so sometimes it could be useful, but user doesn't to enable
+	 * a such feature like we provide a such thing that he always must see what
+	 * components are required. But I guess it is pointless to have a such thing
+	 * like you need always manually add required components instead of
+	 * 'automatization', but who knows who wants to add a such things through
+	 * this way... 
+	 * 
+	 * @warning You need to interpret that like you enable or disable feature so it doesn't mean that it issues some code that adds components to entity, no it is about some flag enable/disable state.
+	 */
+	kConsoleCommand_SDK_SetFeature_AddComponentsToEntity_ThatRequiredForCreation,
+
 	kEndOfEnum
 };
 

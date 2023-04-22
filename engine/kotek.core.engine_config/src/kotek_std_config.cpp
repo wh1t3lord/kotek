@@ -152,7 +152,7 @@ void ktkEngineConfig::SetFeatureStatus(
 }
 
 void ktkEngineConfig::SetFeatureStatus(
-	const ktk::vector<eEngineSupportedRenderer>& fallback_versions) noexcept 
+	const ktk::vector<eEngineSupportedRenderer>& fallback_versions) noexcept
 {
 	this->m_fallback_renderers_versions = fallback_versions;
 }
@@ -340,7 +340,7 @@ bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 	{
 		if (this->GetRendererVersionEnum() ==
 			eEngineSupportedRenderer::kDirectX_Latest)
-            status = true;
+			status = true;
 	}
 	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest:
 	{
@@ -384,15 +384,19 @@ void ktkEngineConfig::SetARGV(char** p_char) noexcept
 }
 
 bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(
-    const ktk::cstring& your_argument) const noexcept
+	const ktk::cstring& your_argument) const noexcept
 {
+	/* TODO: delete this because it was for vector
 	return std::find_if(this->m_parsed_command_line_arguments.begin(),
-			   this->m_parsed_command_line_arguments.end(),
-               [your_argument](const ktk::cstring& argument) -> bool
-               {
-                   ktk::cstring_view wrapped_argument = your_argument.c_str();
-                   return argument == wrapped_argument;
-			   }) != this->m_parsed_command_line_arguments.end();
+	           this->m_parsed_command_line_arguments.end(),
+	           [your_argument](const ktk::cstring& argument) -> bool
+	           {
+	               ktk::cstring_view wrapped_argument = your_argument.c_str();
+	               return argument == wrapped_argument;
+	           }) != this->m_parsed_command_line_arguments.end();*/
+
+	return this->m_parsed_command_line_arguments.find(your_argument) !=
+		this->m_parsed_command_line_arguments.end();
 }
 
 bool ktkEngineConfig::IsUserSpecifiedValidRenderer(void) const noexcept
@@ -400,7 +404,7 @@ bool ktkEngineConfig::IsUserSpecifiedValidRenderer(void) const noexcept
 	ktk::size_t validation{0};
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-        if (argument.starts_with(KOTEK_TEXT("--render_")))
+		if (argument.starts_with(KOTEK_TEXT("--render_")))
 		{
 			++validation;
 		}
@@ -423,7 +427,7 @@ bool ktkEngineConfig::IsUserSpecifiedRendererOpenGLInCommandLine(
 
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-        if (argument.starts_with(KOTEK_TEXT("--render_gl")))
+		if (argument.starts_with(KOTEK_TEXT("--render_gl")))
 		{
 			result = true;
 			break;
@@ -442,7 +446,7 @@ bool ktkEngineConfig::IsUserSpecifiedRendererDirectXInCommandLine(
 
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-        if (argument.starts_with(KOTEK_TEXT("--render_dx")))
+		if (argument.starts_with(KOTEK_TEXT("--render_dx")))
 		{
 			result = true;
 			break;
@@ -461,7 +465,7 @@ bool ktkEngineConfig::IsUserSpecifiedRendererVulkanInCommandLine(
 
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-        if (argument.starts_with(KOTEK_TEXT("--render_vk")))
+		if (argument.starts_with(KOTEK_TEXT("--render_vk")))
 		{
 			result = true;
 			break;
@@ -518,7 +522,7 @@ eEngineSupportedRenderer ktkEngineConfig::GetRendererVersionFromCommandLine(
 		result = eEngineSupportedRenderer::kVulkan_Latest;
 	}
 	else if (this->m_parsed_command_line_arguments.find(
-			kConsoleCommandArg_Render_OpenGL3_3) !=
+				 kConsoleCommandArg_Render_OpenGL3_3) !=
 		this->m_parsed_command_line_arguments.end())
 	{
 		++validation;
@@ -539,7 +543,7 @@ eEngineSupportedRenderer ktkEngineConfig::GetRendererVersionFromCommandLine(
 		result = eEngineSupportedRenderer::kOpenGL_Latest;
 	}
 	else if (this->m_parsed_command_line_arguments.find(
-			kConsoleCommandArg_Render_DirectX12) !=
+				 kConsoleCommandArg_Render_DirectX12) !=
 		this->m_parsed_command_line_arguments.end())
 	{
 		++validation;
@@ -619,14 +623,14 @@ eEngineSupportedRenderer ktkEngineConfig::GetRendererVersionFromCommandLine(
 				 kConsoleCommandArg_Render_OpenGLES3_2) !=
 		this->m_parsed_command_line_arguments.end())
 	{
-			++validation;
+		++validation;
 		result = eEngineSupportedRenderer::kOpenGLES_3_2;
 	}
 	else if (this->m_parsed_command_line_arguments.find(
 				 kConsoleCommandArg_Render_OpenGLES_Latest) !=
 		this->m_parsed_command_line_arguments.end())
 	{
-			++validation;
+		++validation;
 		result = eEngineSupportedRenderer::kOpenGLES_Latest;
 	}
 
@@ -679,7 +683,7 @@ void ktkEngineConfig::Parse_CommandLine(void) noexcept
 	KOTEK_ASSERT(this->m_argc != -1,
 		"you must set argc before calling set argv method!");
 
-    this->m_parsed_command_line_arguments = ktk::unordered_set<ktk::cstring>(
+	this->m_parsed_command_line_arguments = ktk::unordered_set<ktk::cstring>(
 		this->m_argv, this->m_argv + this->m_argc);
 }
 
