@@ -25,7 +25,6 @@ bool InitializeModule_Core(ktkMainManager* p_manager)
 	InitializeModule_Core_Enum(p_manager);
 	InitializeModule_Core_API(p_manager);
 	InitializeModule_Core_Memory(p_manager);
-	InitializeModule_Core_Log(p_manager);
 	InitializeModule_Core_Math(p_manager);
 	InitializeModule_Core_Casting(p_manager);
 	InitializeModule_Core_Constants(p_manager);
@@ -33,6 +32,7 @@ bool InitializeModule_Core(ktkMainManager* p_manager)
 	InitializeModule_Core_Console(p_manager);
 	InitializeModule_Core_Containers(p_manager);
 	InitializeModule_Core_FileSystem(p_manager);
+	InitializeModule_Core_Log(p_manager);
 	InitializeModule_Core_Format(p_manager);
 	InitializeModule_Core_Profilers(p_manager);
 	InitializeModule_Core_OS(p_manager);
