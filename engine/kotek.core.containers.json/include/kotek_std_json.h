@@ -14,9 +14,7 @@ class ktkJson
 {
 public:
 	ktkJson(void);
-#ifdef KOTEK_USE_BOOST_LIBRARY
 	ktkJson(const ktk::json::object& text);
-#endif
 	ktkJson(const ktkJson& instance);
 
 	ktkJson& operator=(const ktkJson& instance);
