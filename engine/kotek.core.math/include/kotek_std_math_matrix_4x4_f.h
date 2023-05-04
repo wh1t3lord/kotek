@@ -19,6 +19,14 @@ namespace math
 		}
 		matrix4x4f(const base_mat4x4_t& data) : m_base(data) {}
 		matrix4x4f(const matrix4x4f& data) : m_base(data.m_base) {}
+
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		matrix4x4f(const DirectX::XMMATRIX& data) 
+		{
+			DirectX::XMStoreFloat4x4(&this->m_base, data);
+		}
+#endif
+
 		matrix4x4f(void) : m_base{} {}
 
 		~matrix4x4f(void) = default;
@@ -72,7 +80,7 @@ namespace math
 				reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base._41),
 				row_original_3);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base += data.m_base;
+			this->m_base += data.m_base;
 #endif
 			return *this;
 		}
@@ -120,7 +128,7 @@ namespace math
 				reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base._41),
 				row_original_3);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base -= data.m_base;
+			this->m_base -= data.m_base;
 #endif
 			return *this;
 		}
@@ -135,7 +143,7 @@ namespace math
 
 			DirectX::XMStoreFloat4x4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base *= data.m_base;
+			this->m_base *= data.m_base;
 #endif
 
 			return *this;
@@ -171,7 +179,7 @@ namespace math
 				reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base._41),
 				row_original_3);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base *= value;
+			this->m_base *= value;
 #endif
 			return *this;
 		}
@@ -219,7 +227,7 @@ namespace math
 				reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base._41),
 				row_original_3);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base /= data.m_base;
+			this->m_base /= data.m_base;
 #endif
 			return *this;
 		}
@@ -256,20 +264,17 @@ namespace math
 				reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base._41),
 				row_original_3);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base /= value;
+			this->m_base /= value;
 #endif
 
 			return *this;
 		}
 
-		matrix4x4f operator+() const noexcept
-		{
-			return *this;
-		}
+		matrix4x4f operator+() const noexcept { return *this; }
 
 		matrix4x4f operator-() const noexcept
 		{
-            matrix4x4f result;
+			matrix4x4f result;
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat4(
 				reinterpret_cast<const DirectX::XMFLOAT4*>(&this->m_base._11));
@@ -301,9 +306,9 @@ namespace math
 				reinterpret_cast<DirectX::XMFLOAT4*>(&result.m_base._41),
 				row_original_3);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            result = -this->m_base;
+			result = -this->m_base;
 #endif
-            return result;
+			return result;
 		}
 
 		bool operator==(const matrix4x4f& data) const noexcept
@@ -338,7 +343,7 @@ namespace math
 
 			return (is_equal_0 && is_equal_1 && is_equal_2 && is_equal_3);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base == data.m_base;
+			return this->m_base == data.m_base;
 #endif
 		}
 
@@ -374,7 +379,7 @@ namespace math
 
 			return (is_equal_0 || is_equal_1 || is_equal_2 || is_equal_3);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base != data.m_base;
+			return this->m_base != data.m_base;
 #endif
 		}
 
@@ -392,7 +397,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base.operator()(row, column);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[row][column];
+			return this->m_base[row][column];
 #endif
 		}
 
@@ -401,7 +406,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base.operator()(row, column);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[row][column];
+			return this->m_base[row][column];
 #endif
 		}
 
@@ -410,7 +415,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._11;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[0][0];
+			return this->m_base[0][0];
 #endif
 		}
 
@@ -419,7 +424,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._12;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[0][1];
+			return this->m_base[0][1];
 #endif
 		}
 
@@ -428,7 +433,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._13;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[0][2];
+			return this->m_base[0][2];
 #endif
 		}
 
@@ -437,7 +442,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._14;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[0][3];
+			return this->m_base[0][3];
 #endif
 		}
 
@@ -446,7 +451,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._21;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[1][0];
+			return this->m_base[1][0];
 #endif
 		}
 
@@ -455,7 +460,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._22;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[1][1];
+			return this->m_base[1][1];
 #endif
 		}
 
@@ -464,7 +469,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._23;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[1][2];
+			return this->m_base[1][2];
 #endif
 		}
 
@@ -473,7 +478,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._24;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[1][3];
+			return this->m_base[1][3];
 #endif
 		}
 
@@ -482,7 +487,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._31;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[2][0];
+			return this->m_base[2][0];
 #endif
 		}
 
@@ -491,7 +496,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._32;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[2][1];
+			return this->m_base[2][1];
 #endif
 		}
 
@@ -500,7 +505,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._33;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[2][2];
+			return this->m_base[2][2];
 #endif
 		}
 
@@ -509,7 +514,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._34;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[2][3];
+			return this->m_base[2][3];
 #endif
 		}
 
@@ -518,7 +523,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._41;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[3][0];
+			return this->m_base[3][0];
 #endif
 		}
 
@@ -527,7 +532,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._42;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[3][1];
+			return this->m_base[3][1];
 #endif
 		}
 
@@ -536,7 +541,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._43;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[3][2];
+			return this->m_base[3][2];
 #endif
 		}
 
@@ -545,7 +550,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			return this->m_base._44;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            return this->m_base[3][3];
+			return this->m_base[3][3];
 #endif
 		}
 
@@ -554,7 +559,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._11 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[0][0] = value;
+			this->m_base[0][0] = value;
 #endif
 			return *this;
 		}
@@ -564,7 +569,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._12 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[0][1] = value;
+			this->m_base[0][1] = value;
 #endif
 			return *this;
 		}
@@ -574,7 +579,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._13 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[0][2] = value;
+			this->m_base[0][2] = value;
 #endif
 			return *this;
 		}
@@ -584,7 +589,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._14 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[0][3] = value;
+			this->m_base[0][3] = value;
 #endif
 			return *this;
 		}
@@ -594,7 +599,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._21 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[1][0] = value;
+			this->m_base[1][0] = value;
 #endif
 			return *this;
 		}
@@ -604,7 +609,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._22 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[1][1] = value;
+			this->m_base[1][1] = value;
 #endif
 			return *this;
 		}
@@ -614,7 +619,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._23 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[1][2] = value;
+			this->m_base[1][2] = value;
 #endif
 			return *this;
 		}
@@ -624,7 +629,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._24 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[1][3] = value;
+			this->m_base[1][3] = value;
 #endif
 			return *this;
 		}
@@ -634,7 +639,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._31 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[2][0] = value;
+			this->m_base[2][0] = value;
 #endif
 			return *this;
 		}
@@ -644,7 +649,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._32 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[2][1] = value;
+			this->m_base[2][1] = value;
 #endif
 			return *this;
 		}
@@ -654,7 +659,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._33 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[2][2] = value;
+			this->m_base[2][2] = value;
 #endif
 			return *this;
 		}
@@ -664,7 +669,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._34 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[2][3] = value;
+			this->m_base[2][3] = value;
 #endif
 			return *this;
 		}
@@ -674,7 +679,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._41 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[3][0] = value;
+			this->m_base[3][0] = value;
 #endif
 			return *this;
 		}
@@ -684,7 +689,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._42 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[3][1] = value;
+			this->m_base[3][1] = value;
 #endif
 			return *this;
 		}
@@ -694,7 +699,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._43 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[3][2] = value;
+			this->m_base[3][2] = value;
 #endif
 			return *this;
 		}
@@ -704,7 +709,7 @@ namespace math
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			this->m_base._44 = value;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-            this->m_base[3][3] = value;
+			this->m_base[3][3] = value;
 #endif
 			return *this;
 		}
@@ -715,10 +720,7 @@ namespace math
 			return *this;
 		}
 
-		base_mat4x4_t& Get_Base(void) noexcept
-		{
-			return this->m_base;
-		}
+		base_mat4x4_t& Get_Base(void) noexcept { return this->m_base; }
 		const base_mat4x4_t& Get_Base(void) const noexcept
 		{
 			return this->m_base;
@@ -782,7 +784,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-        return (left.Get_Base() + right.Get_Base());
+		return (left.Get_Base() + right.Get_Base());
 #endif
 	}
 
@@ -844,7 +846,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-        return (left.Get_Base() - right.Get_Base());
+		return (left.Get_Base() - right.Get_Base());
 #endif
 	}
 
@@ -864,7 +866,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-        return (left.Get_Base() * right.Get_Base());
+		return (left.Get_Base() * right.Get_Base());
 #endif
 	}
 
@@ -907,7 +909,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-        return (left.Get_Base() * value);
+		return (left.Get_Base() * value);
 #endif
 	}
 
@@ -957,7 +959,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-        return (left.Get_Base() / value);
+		return (left.Get_Base() / value);
 #endif
 	}
 
@@ -1019,7 +1021,7 @@ namespace math
 
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-        return (left.Get_Base() / right.Get_Base());
+		return (left.Get_Base() / right.Get_Base());
 #endif
 	}
 } // namespace math
