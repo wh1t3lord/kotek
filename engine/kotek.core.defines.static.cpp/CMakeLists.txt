@@ -542,42 +542,133 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 	"
 		#ifdef KOTEK_NAMESPACE_KOTEK
 			#define KOTEK_USE_NAMESPACE_KOTEK ${KOTEK_USE_NAMESPACE_KOTEK}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_kotek ${KOTEK_USE_NAMESPACE_KOTEK}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_kotek is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek:: and in comparison kun_kotek
+			/// Their equivalent is kotek::
+			#define kn_kotek ${KOTEK_BEGIN_NAMESPACE_KOTEK}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_KOTEK ${KOTEK_USE_NAMESPACE_KOTEK}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_KOTEK ${KOTEK_BEGIN_NAMESPACE_KOTEK}
 			#define KOTEK_BEGIN_NAMESPACE_KOTEK namespace ${KOTEK_BEGIN_NAMESPACE_KOTEK} {
 			#define KOTEK_END_NAMESPACE_KOTEK ${KOTEK_END_NAMESPACE_KOTEK}
 		#endif
 
 		#ifdef KOTEK_NAMESPACE_CORE
 			#define KOTEK_USE_NAMESPACE_CORE ${KOTEK_USE_NAMESPACE_CORE}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_core ${KOTEK_USE_NAMESPACE_CORE}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_core is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek::kn_core:: and in comparison kun_kotek kun_core
+			/// Their equivalent is kotek::core::
+			#define kn_core ${KOTEK_BEGIN_NAMESPACE_CORE}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_CORE ${KOTEK_USE_NAMESPACE_CORE}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_CORE ${KOTEK_BEGIN_NAMESPACE_CORE}
 			#define KOTEK_BEGIN_NAMESPACE_CORE namespace ${KOTEK_BEGIN_NAMESPACE_CORE} {
 			#define KOTEK_END_NAMESPACE_CORE ${KOTEK_END_NAMESPACE_CORE}
 		#endif
 
 		#ifdef KOTEK_NAMESPACE_KTK
 			#define KOTEK_USE_NAMESPACE_KTK ${KOTEK_USE_NAMESPACE_KTK}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_ktk ${KOTEK_USE_NAMESPACE_KTK}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_ktk is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek::kn_ktk:: and in comparison kun_kotek kun_ktk
+			/// Their equivalent is kotek::ktk::
+			#define kn_ktk ${KOTEK_BEGIN_NAMESPACE_KTK}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_KTK ${KOTEK_USE_NAMESPACE_KTK}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_KTK ${KOTEK_BEGIN_NAMESPACE_KTK}
 			#define KOTEK_BEGIN_NAMESPACE_KTK namespace ${KOTEK_BEGIN_NAMESPACE_KTK} {
 			#define KOTEK_END_NAMESPACE_KTK ${KOTEK_END_NAMESPACE_KTK}
 		#endif
 
 		#ifdef KOTEK_NAMESPACE_RENDER
 			#define KOTEK_USE_NAMESPACE_RENDER ${KOTEK_USE_NAMESPACE_RENDER}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_render ${KOTEK_USE_NAMESPACE_RENDER}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_render is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek::kn_render:: and in comparison kun_kotek kun_render
+			/// Their equivalent is kotek::render::
+			#define kn_render ${KOTEK_BEGIN_NAMESPACE_RENDER}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_RENDER ${KOTEK_USE_NAMESPACE_RENDER}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_RENDER ${KOTEK_BEGIN_NAMESPACE_RENDER}
 			#define KOTEK_BEGIN_NAMESPACE_RENDER namespace ${KOTEK_BEGIN_NAMESPACE_RENDER} {
 			#define KOTEK_END_NAMESPACE_RENDER ${KOTEK_END_NAMESPACE_RENDER}
 		#endif
 
 		#ifdef KOTEK_NAMESPACE_UI
 			#define KOTEK_USE_NAMESPACE_UI ${KOTEK_USE_NAMESPACE_UI}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_ui ${KOTEK_USE_NAMESPACE_UI}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_ui is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek::kn_ui:: and in comparison kun_kotek kun_ui
+			/// Their equivalent is kotek::ui::
+			#define kn_ui ${KOTEK_BEGIN_NAMESPACE_UI}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_UI ${KOTEK_USE_NAMESPACE_UI}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_UI ${KOTEK_BEGIN_NAMESPACE_UI}
 			#define KOTEK_BEGIN_NAMESPACE_UI namespace ${KOTEK_BEGIN_NAMESPACE_UI} {
 			#define KOTEK_END_NAMESPACE_UI ${KOTEK_END_NAMESPACE_UI}
 		#endif
 
 		#ifdef KOTEK_NAMESPACE_MATH
 			#define KOTEK_USE_NAMESPACE_MATH ${KOTEK_USE_NAMESPACE_MATH}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_math ${KOTEK_USE_NAMESPACE_MATH}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_math is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek::kn_core::kn_math:: and in comparison kun_kotek kun_core kun_math
+			/// Their equivalent is kotek::core::math::
+			#define kn_math ${KOTEK_BEGIN_NAMESPACE_MATH}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_MATH ${KOTEK_USE_NAMESPACE_MATH}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_MATH ${KOTEK_BEGIN_NAMESPACE_MATH}
 			#define KOTEK_BEGIN_NAMESPACE_MATH namespace ${KOTEK_BEGIN_NAMESPACE_MATH} {
 			#define KOTEK_END_NAMESPACE_MATH ${KOTEK_END_NAMESPACE_MATH}
 		#endif
 
 		#ifdef KOTEK_NAMESPACE_GAME
 			#define KOTEK_USE_NAMESPACE_GAME ${KOTEK_USE_NAMESPACE_GAME}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_game ${KOTEK_USE_NAMESPACE_GAME}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_game is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek::kn_game:: and in comparison kun_kotek kun_game
+			/// Their equivalent is kotek::game::
+			#define kn_game ${KOTEK_BEGIN_NAMESPACE_GAME}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_GAME ${KOTEK_USE_NAMESPACE_GAME}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_GAME ${KOTEK_BEGIN_NAMESPACE_GAME}
 			#define KOTEK_BEGIN_NAMESPACE_GAME namespace ${KOTEK_BEGIN_NAMESPACE_GAME} {
 			#define KOTEK_END_NAMESPACE_GAME ${KOTEK_END_NAMESPACE_GAME}
 		#endif
@@ -602,24 +693,76 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 
 		#ifdef KOTEK_NAMESPACE_RENDER_GL
 			#define KOTEK_USE_NAMESPACE_RENDER_GL ${KOTEK_USE_NAMESPACE_RENDER_GL}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_render_gl ${KOTEK_USE_NAMESPACE_RENDER_GL}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_render_gl is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek::kn_render::kn_render_gl:: and in comparison kun_kotek kun_render kun_render_gl
+			/// Their equivalent is kotek::render::gl::
+			#define kn_render_gl ${KOTEK_BEGIN_NAMESPACE_RENDER_GL}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_RENDER_GL ${KOTEK_USE_NAMESPACE_RENDER_GL}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_RENDER_GL ${KOTEK_BEGIN_NAMESPACE_RENDER_GL}
 			#define KOTEK_BEGIN_NAMESPACE_RENDER_GL namespace ${KOTEK_BEGIN_NAMESPACE_RENDER_GL} {
 			#define KOTEK_END_NAMESPACE_RENDER_GL ${KOTEK_END_NAMESPACE_RENDER_GL}
 		#endif
 
 		#ifdef KOTEK_NAMESPACE_RENDER_VK
 			#define KOTEK_USE_NAMESPACE_RENDER_VK ${KOTEK_USE_NAMESPACE_RENDER_VK}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_render_vk ${KOTEK_USE_NAMESPACE_RENDER_VK}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_render_vk is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek::kn_render::kn_render_vk:: and in comparison kun_kotek kun_render kun_render_vk
+			/// Their equivalent is kotek::render::vk::
+			#define kn_render_vk ${KOTEK_BEGIN_NAMESPACE_RENDER_VK}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_RENDER_VK ${KOTEK_USE_NAMESPACE_RENDER_VK}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_RENDER_VK ${KOTEK_BEGIN_NAMESPACE_RENDER_VK}
 			#define KOTEK_BEGIN_NAMESPACE_RENDER_VK namespace ${KOTEK_BEGIN_NAMESPACE_RENDER_VK} {
 			#define KOTEK_END_NAMESPACE_RENDER_VK ${KOTEK_END_NAMESPACE_RENDER_VK}
 		#endif
 
 		#ifdef KOTEK_NAMESPACE_RENDER_DX
 			#define KOTEK_USE_NAMESPACE_RENDER_DX ${KOTEK_USE_NAMESPACE_RENDER_DX}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_render_dx ${KOTEK_USE_NAMESPACE_RENDER_DX}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_render_dx is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek::kn_render::kn_render_dx:: and in comparison kun_kotek kun_render kun_render_dx
+			/// Their equivalent is kotek::render::dx::
+			#define kn_render_dx ${KOTEK_BEGIN_NAMESPACE_RENDER_DX}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_RENDER_DX ${KOTEK_USE_NAMESPACE_RENDER_DX}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_RENDER_DX ${KOTEK_BEGIN_NAMESPACE_RENDER_DX}
 			#define KOTEK_BEGIN_NAMESPACE_RENDER_DX namespace ${KOTEK_BEGIN_NAMESPACE_RENDER_DX} {
 			#define KOTEK_END_NAMESPACE_RENDER_DX ${KOTEK_END_NAMESPACE_RENDER_DX}
 		#endif
 
 		#ifdef KOTEK_NAMESPACE_SOUND
 			#define KOTEK_USE_NAMESPACE_SOUND ${KOTEK_USE_NAMESPACE_SOUND}
+			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			#define kun_sound ${KOTEK_USE_NAMESPACE_SOUND}
+			/// \~english @brief kn stands for kotek_namespace it is reduced version
+			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
+			/// the difference between this preprocessor and kun_sound is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
+			/// kn_kotek::kn_sound:: and in comparison kun_kotek kun_sound
+			/// Their equivalent is kotek::sound::
+			#define kn_sound ${KOTEK_BEGIN_NAMESPACE_SOUND}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KUN_SOUND ${KOTEK_USE_NAMESPACE_SOUND}
+			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
+			#define KN_SOUND ${KOTEK_BEGIN_NAMESPACE_SOUND}
 			#define KOTEK_BEGIN_NAMESPACE_SOUND namespace ${KOTEK_BEGIN_NAMESPACE_SOUND} {
 			#define KOTEK_END_NAMESPACE_SOUND ${KOTEK_END_NAMESPACE_SOUND}
 		#endif
@@ -730,7 +873,7 @@ if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
 	if (WIN32)
 		# There's no package so we need to use our pre-compiled solution
 		if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
-			message("[Engine]: CEF is found!")
+			message("[${PROJECT_NAME}]: CEF is found!")
 			target_include_directories(${PROJECT_NAME} PUBLIC ${PATH_TO_CEF})
 			target_link_directories(${PROJECT_NAME} PUBLIC ${PATH_TO_CEF_LIB})
 		else()

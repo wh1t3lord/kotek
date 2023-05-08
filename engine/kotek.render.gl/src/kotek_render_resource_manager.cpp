@@ -52,16 +52,16 @@ namespace gl
 		ktk::size_t total_memory = memory_size;
 
 		auto tex_mem =
-			ktk::align_down<ktk::size_t>((((memory_size / 100) * 75)), 2);
+			ktk::align_down<ktk::size_t>((((memory_size / 100) * 70)), 2);
 		this->m_p_render_manager_texture->Initialize(tex_mem);
 
 		total_memory -= tex_mem;
 
-		auto uniform_mem =
-			ktk::align_down<ktk::size_t>((((memory_size / 100) * 5)), 2);
-		this->m_p_render_manager_shader->Initialize(uniform_mem);
+		auto shader_manager_memory =
+			ktk::align_down<ktk::size_t>((((memory_size / 100) * 10)), 2);
+		this->m_p_render_manager_shader->Initialize(shader_manager_memory);
 
-		total_memory -= uniform_mem;
+		total_memory -= shader_manager_memory;
 
 		this->m_p_render_manager_geometry->Initialize(total_memory);
 	}

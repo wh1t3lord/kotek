@@ -67,6 +67,7 @@ namespace gl
 	void ktkRenderGraphSimplifiedResourceManager::Shutdown(void)
 	{
 		this->Destroy_Shaders();
+		this->Destroy_Buffers();
 	}
 
 	void ktkRenderGraphSimplifiedResourceManager::Create_Shaders(
@@ -84,11 +85,103 @@ namespace gl
 		this->Create_Programs();
 	}
 
+	void ktkRenderGraphSimplifiedResourceManager::Create_Buffer(
+		const gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>&
+			info_create)
+	{
+		KOTEK_ASSERT(this->m_p_manager_resource, "must be initilized");
+		KOTEK_ASSERT(
+			this->m_p_render_resource_manager, "must be valid and initialized");
+
+		KOTEK_ASSERT(info_create.Get_RenderPassName().empty() == false,
+			"it must have a valid render pass name");
+		KOTEK_ASSERT(info_create.Get_ResourceName().empty() == false,
+			"it must have a valid name");
+
+		const auto& info_buffer = info_create.Get_Info();
+
+		KOTEK_ASSERT(info_buffer.Get_Memory() != 0,
+			"something is wrong you forgot to initialize memory or passed 0 to "
+			"it");
+		KOTEK_ASSERT(info_buffer.Get_AlignOfMemory() != 0,
+			"you have to initialize align memory value! It equals to 0, you "
+			"forgot to do that or you passed 0");
+		KOTEK_ASSERT(info_buffer.Get_UniformBlockName().empty() == false,
+			"you can't pass an empty string of uniform block name, because you "
+			"create buffer for shader and that buffer describes data of "
+			"shader, so think about it...");
+
+		ktk::size_t memory_for_allocation_in_bytes =
+			ktk::align_down<ktk::size_t>(
+				info_buffer.Get_Memory(), info_buffer.Get_AlignOfMemory());
+
+		auto& map_buffer_name_and_buffer_module =
+			this->m_render_passes_and_their_buffers[info_create
+														.Get_RenderPassName()];
+
+		KOTEK_ASSERT(map_buffer_name_and_buffer_module.find(
+						 info_buffer.Get_BufferName()) ==
+				map_buffer_name_and_buffer_module.end(),
+			"something is wrong and you have collision in names!");
+
+		map_buffer_name_and_buffer_module[info_buffer.Get_BufferName()] =
+			this->m_p_render_resource_manager->Get_ManagerShader()
+				->Create_Buffer(memory_for_allocation_in_bytes,
+					info_buffer.Get_BufferObject(), info_buffer.Get_Usage());
+
+#ifdef KOTEK_DEBUG
+		KOTEK_MESSAGE("create buffer [{}] with size {} Kb ({} Mb) for render "
+					  "pass [{}] in shader [{}]",
+			info_buffer.Get_BufferName(),
+			memory_for_allocation_in_bytes /
+				(ktk::kMemoryConvertValueDenominator_Kilobytes),
+			memory_for_allocation_in_bytes /
+				(ktk::kMemoryConvertValueDenominator_Megabytes),
+			reinterpret_cast<const char*>(
+				info_create.Get_RenderPassName().c_str()),
+			reinterpret_cast<const char*>(
+				info_buffer.Get_ShaderName().c_str()));
+#endif
+	}
+
 	const ktk::unordered_map<ktk::string, GLuint>*
 	ktkRenderGraphSimplifiedResourceManager::Get_Storage_Programs(
 		void) const noexcept
 	{
 		return &this->m_render_passes_and_its_programs;
+	}
+
+	const ktk::unordered_map<ktk::cstring, ktkBufferModule>*
+	ktkRenderGraphSimplifiedResourceManager::Get_Storage_Buffers(
+		const ktk::string& render_pass_name) const noexcept
+	{
+		KOTEK_ASSERT(render_pass_name.empty() == false,
+			"you can't pass an empty render pass name, because we can't find "
+			"information about that pass");
+
+		const ktk::unordered_map<ktk::cstring, ktkBufferModule>* p_result{};
+
+		if (render_pass_name.empty())
+			return p_result;
+
+		if (this->m_render_passes_and_their_buffers.empty())
+			return p_result;
+
+		if (this->m_render_passes_and_their_buffers.find(render_pass_name) ==
+			this->m_render_passes_and_their_buffers.end())
+		{
+#ifdef KOTEK_DEBUG
+			KOTEK_MESSAGE_WARNING(
+				"render_pass_name [{}] doesn't exist for buffers",
+				render_pass_name);
+#endif
+			return p_result;
+		}
+
+		p_result =
+			&this->m_render_passes_and_their_buffers.at(render_pass_name);
+
+		return p_result;
 	}
 
 	void ktkRenderGraphSimplifiedResourceManager::Create_Shaders(
@@ -205,6 +298,30 @@ namespace gl
 #endif
 
 			glDeleteProgram(program_handle_id);
+		}
+	}
+
+	void ktkRenderGraphSimplifiedResourceManager::Destroy_Buffers(void)
+	{
+		KOTEK_ASSERT(
+			this->m_p_manager_resource, "you must initialize resource manager");
+		KOTEK_ASSERT(this->m_p_render_resource_manager,
+			"you must intiialzie render resource manager");
+
+		for (const auto& [render_pass_name, map_buffer_name_and_buffer_module] :
+			this->m_render_passes_and_their_buffers)
+		{
+			for (const auto& [buffer_name, buffer_module] :
+				map_buffer_name_and_buffer_module)
+			{
+				this->m_p_render_resource_manager->Get_ManagerShader()
+					->Destroy_Buffer(buffer_module);
+
+#ifdef KOTEK_DEBUG
+				KOTEK_MESSAGE("destroy buffer [{}] in render pass [{}]",
+					buffer_name, render_pass_name);
+#endif
+			}
 		}
 	}
 

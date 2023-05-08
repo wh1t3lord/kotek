@@ -28,6 +28,7 @@ bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 
 	boost::log::add_file_log(
 		reinterpret_cast<const char*>(path_to_folder.u8string().c_str()));
+	boost::log::add_console_log();
 #endif
 
 	return true;

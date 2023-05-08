@@ -187,7 +187,7 @@ namespace Kotek
 
 				KOTEK_MESSAGE("allocated static buffer {} pool with {} Mbs",
                     vma_name_allocation,
-                    total_memory_size / ktk::kMemoryConvertValue_Megabytes);
+                    total_memory_size / ktk::kMemoryConvertValueDenominator_Megabytes);
 			}
 
 			void kotek_render_static_buffer_pool::shutdown(

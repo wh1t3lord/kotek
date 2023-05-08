@@ -35,7 +35,7 @@ namespace gl
 
 		void initialize(Core::ktkIRenderDevice* p_raw_device,
 			Core::ktkIRenderSwapchain* p_raw_swapchain,
-			ktk::size_t memory_size = ktk::kMemoryConvertValue_Megabytes *
+			ktk::size_t memory_size = ktk::kMemoryConvertValueDenominator_Megabytes *
 				32) override;
 
 		void shutdown(Core::ktkIRenderDevice* p_raw_device) override;

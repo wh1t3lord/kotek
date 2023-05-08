@@ -26,7 +26,7 @@ namespace gl
 
 	void ktkRenderGraphSimplifiedBuilder::Initialize(
 		Core::ktkIRenderGraphResourceManager* p_resource_manager,
-        const ktk::cstring& backbuffer_name,
+		const ktk::cstring& backbuffer_name,
 		const gl::eRenderGraphBuilderType& render_graph_type_id,
 		const gl::eRenderGraphBuilderPipelineRenderingType&
 			rendering_pipeline_type)
@@ -61,7 +61,7 @@ namespace gl
 	}
 
 	bool ktkRenderGraphSimplifiedBuilder::Register_RenderPass(
-        const ktk::cstring& render_pass_name,
+		const ktk::cstring& render_pass_name,
 		ktkRenderGraphSimplifiedRenderPass* p_pass) noexcept
 	{
 		KOTEK_ASSERT(
@@ -76,8 +76,8 @@ namespace gl
 
 		if (p_pass)
 		{
-            p_pass->Set_Name(
-                ktk::string(render_pass_name.begin(), render_pass_name.end()));
+			p_pass->Set_Name(
+				ktk::string(render_pass_name.begin(), render_pass_name.end()));
 		}
 
 		if (std::find_if(this->m_passes.begin(), this->m_passes.end(),
@@ -87,7 +87,7 @@ namespace gl
 			std::end(this->m_passes))
 		{
 			KOTEK_ASSERT(false, "render pass is already existed in storage! {}",
-                reinterpret_cast<const char*>(render_pass_name.c_str()));
+				reinterpret_cast<const char*>(render_pass_name.c_str()));
 
 			this->m_failed_passes_for_adding.push_back(p_pass);
 
@@ -102,7 +102,7 @@ namespace gl
 		return true;
 	}
 
-    const ktk::cstring& ktkRenderGraphSimplifiedBuilder::Get_BackBufferName(
+	const ktk::cstring& ktkRenderGraphSimplifiedBuilder::Get_BackBufferName(
 		void) const noexcept
 	{
 		return this->m_backbuffer_name;
@@ -196,6 +196,10 @@ namespace gl
 			is_current_output_has_inputs_buffer =
 				!(storage_inputs.at(render_pass_name).Get_Buffers().empty());
 
+			is_current_output_has_inputs =
+				is_current_output_has_inputs_buffer ||
+				is_current_output_has_inputs_image;
+
 			if (this->m_render_graph_type ==
 				gl::eRenderGraphBuilderType::kRenderBuilderFor_Forward_Only)
 			{
@@ -205,7 +209,7 @@ namespace gl
 					"buffer) because you have: {} and render pass[{}]",
 					gl::helper::Translate_RenderGraphBuilderTypeToString(
 						this->m_render_graph_type),
-                    reinterpret_cast<const char*>(render_pass_name.c_str()));
+					reinterpret_cast<const char*>(render_pass_name.c_str()));
 			}
 
 			for (const auto& [texture_name, info_create] :
@@ -215,7 +219,7 @@ namespace gl
 						images_to_create.end(),
 					"you want ot create a texture which is already "
 					"added: {}",
-                    reinterpret_cast<const char*>(texture_name.c_str()));
+					reinterpret_cast<const char*>(texture_name.c_str()));
 
 				images_to_create[texture_name] = {
 					render_pass_name, texture_name, info_create};
@@ -272,7 +276,7 @@ namespace gl
 
 				if (is_current_output_has_inputs_buffer)
 				{
-					for (const auto& [buffer_name, info_create] :
+					for (auto& [buffer_name, info_create] :
 						storage_inputs.at(render_pass_name).Get_Buffers())
 					{
 						if (buffers_to_create.find(buffer_name) ==
@@ -326,7 +330,7 @@ namespace gl
 		this->Compile_BuffersAndImagesForCreation(storage_inputs,
 			storage_outputs, images_to_create, buffers_to_create);
 
-		this->Create_Resources(storage_inputs);
+		this->Create_Resources(storage_inputs, buffers_to_create);
 
 		for (const auto& p_render_pass : this->m_passes)
 		{
@@ -349,10 +353,14 @@ namespace gl
 
 	void ktkRenderGraphSimplifiedBuilder::Create_Resources(
 		const ktk::unordered_map<ktk::string,
-			gl::ktkRenderGraphSimplifiedStorageInput>& all_inputs) noexcept
+			gl::ktkRenderGraphSimplifiedStorageInput>& all_inputs,
+		const ktk::unordered_map<ktk::string,
+			gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>>&
+			buffers_to_create) noexcept
 	{
 		this->Create_BackBuffer();
 		this->Create_Shaders(all_inputs);
+		this->Create_Buffers(buffers_to_create);
 	}
 
 	void ktkRenderGraphSimplifiedBuilder::Create_BackBuffer(void) noexcept
@@ -376,6 +384,31 @@ namespace gl
 				storage_input);
 		}
 	}
+
+	void ktkRenderGraphSimplifiedBuilder::Create_Buffers(
+		const const ktk::unordered_map<ktk::string,
+			gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>>&
+			buffers_to_create) noexcept
+	{
+		KOTEK_ASSERT(this->m_p_render_graph_simplified_resource_manager,
+			"you must have a valid simplified resource manager. Maybe early "
+			"calling!");
+
+		// it is possible to have not any buffer at all
+		if (buffers_to_create.empty())
+			return;
+
+		for (const auto& [buffer_name, resource_info_creation] :
+			buffers_to_create)
+		{
+			if (this->m_p_render_graph_simplified_resource_manager)
+			{
+				this->m_p_render_graph_simplified_resource_manager
+					->Create_Buffer(resource_info_creation);
+			}
+		}
+	}
+
 } // namespace gl
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK

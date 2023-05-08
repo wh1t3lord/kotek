@@ -40,12 +40,11 @@ constexpr ktk::long_double_t kMin_Long_Double =
 constexpr ktk::long_double_t kMax_Long_Double =
 	std::numeric_limits<ktk::long_double_t>::max();
 
-constexpr uint32_t kMemoryConvertValue_Gigabytes = 1073741824;
+constexpr uint32_t kMemoryConvertValueDenominator_Gigabytes = 1073741824;
 
 
-constexpr uint32_t kMemoryConvertValue_Megabytes = 1048576;
+constexpr uint32_t kMemoryConvertValueDenominator_Megabytes = 1048576;
 
-
-constexpr uint32_t kMemoryConvertValue_Kilobytes = 1024;
+constexpr uint32_t kMemoryConvertValueDenominator_Kilobytes = 1024;
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK

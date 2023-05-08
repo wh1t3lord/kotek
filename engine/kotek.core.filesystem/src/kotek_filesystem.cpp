@@ -12,10 +12,7 @@ void ktkFileSystem::Initialize(void)
 		ktk::filesystem::current_path();
 
 	KOTEK_MESSAGE("root path: {}",
-		reinterpret_cast<const char*>(
-			this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root)
-				.u8string()
-				.c_str()));
+			this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root));
 
 	KOTEK_ASSERT(this->IsValidPath(
 					 this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root)),

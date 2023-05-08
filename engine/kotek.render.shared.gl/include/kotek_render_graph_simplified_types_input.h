@@ -20,7 +20,12 @@ namespace gl
 		const ktk::unordered_map<ktk::string, gl::ktkRenderGraphTextureInfo>&
 		Get_Images(void) const noexcept;
 
-		void Add_Buffer(const ktk::string& buffer_name,
+		/// \~english @brief use this when you want to allocate some buffer for
+		/// shader that you allocate through Add_Shader method
+		/// @param shader_name to what shader we need to allocate the buffer
+		/// @param info_buffer data about your buffer see
+		/// ktkRenderGraphBufferInfo class
+		void Add_Buffer(const ktk::string& shader_name,
 			const gl::ktkRenderGraphBufferInfo& info_buffer) noexcept;
 
 		const ktk::unordered_map<ktk::string, gl::ktkRenderGraphBufferInfo>&

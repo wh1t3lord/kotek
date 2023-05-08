@@ -14,42 +14,54 @@ KOTEK_END_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
-namespace gl
+KOTEK_BEGIN_NAMESPACE_RENDER_GL
+
+constexpr const char* _kShaderPrefix_Vertex = "vert";
+constexpr const char* _kShaderPrefix_Fragment = "frag";
+constexpr const char* _kShaderPrefix_Compute = "comp";
+constexpr const char* _kShaderPrefix_Task = "task";
+constexpr const char* _kShaderPrefix_Mesh = "mesh";
+constexpr const char* _kShaderPrefix_Geometry = "geom";
+constexpr const char* _kShaderPrefix_TessellationEvaluation = "tese";
+constexpr const char* _kShaderPrefix_TessellationControl = "tesc";
+
+class ktkRenderShaderManager
 {
-	constexpr const char* _kShaderPrefix_Vertex = "vert";
-	constexpr const char* _kShaderPrefix_Fragment = "frag";
-	constexpr const char* _kShaderPrefix_Compute = "comp";
-	constexpr const char* _kShaderPrefix_Task = "task";
-	constexpr const char* _kShaderPrefix_Mesh = "mesh";
-	constexpr const char* _kShaderPrefix_Geometry = "geom";
-	constexpr const char* _kShaderPrefix_TessellationEvaluation = "tese";
-	constexpr const char* _kShaderPrefix_TessellationControl = "tesc";
+public:
+	ktkRenderShaderManager(Core::ktkMainManager* p_main_manager);
+	~ktkRenderShaderManager(void);
 
-	class ktkRenderShaderManager
-	{
-	public:
-		ktkRenderShaderManager(Core::ktkMainManager* p_main_manager);
-		~ktkRenderShaderManager(void);
+	void Initialize(ktk::size_t value_in_bytes,
+		bool is_support_reallocation_feature = false);
+	void Shutdown(void);
 
-		void Initialize(ktk::size_t memory_size_uniform);
-		void Shutdown(void);
+	ktkShaderModule LoadShader(const ktk::filesystem::path& path,
+		gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT;
+	ktkShaderModule LoadShader(
+		const ktk::filesystem::path& path) KOTEK_CPP_KEYWORD_NOEXCEPT;
+	ktkShaderModule LoadShaderAsString(const ktk::string& code_as_string,
+		gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
-		ktkShaderModule LoadShader(
-			const ktk::filesystem::path& path, gl::eShaderType type) noexcept;
-		ktkShaderModule LoadShader(const ktk::filesystem::path& path) noexcept;
-		ktkShaderModule LoadShaderAsString(
-			const ktk::string& code_as_string, gl::eShaderType type) noexcept;
+	void DestroyShader(
+		const ktkShaderModule& instance) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
-		void DestroyShader(const ktkShaderModule& instance) noexcept;
+	ktkBufferModule Create_Buffer(ktk::size_t memory_in_bytes,
+		GLenum buffer_object_type, GLenum usage) KOTEK_CPP_KEYWORD_NOEXCEPT;
+	void Destroy_Buffer(
+		const ktkBufferModule& instance) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
-	private:
-		gl::eShaderType DetectType(const ktk::cstring& path_to_file) noexcept;
+private:
+	gl::eShaderType DetectType(
+		const ktk::cstring& path_to_file) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
-	private:
-		ktkRenderBufferManager* m_p_render_uniform_manager;
-		Core::ktkMainManager* m_p_main_manager;
-		Core::ktkIFileSystem* m_p_filesystem;
-	};
-} // namespace gl
+private:
+	bool m_is_reallocation_feature_supported;
+	ktk::size_t m_total_memory;
+	ktk::size_t m_current_memory;
+	Core::ktkMainManager* m_p_main_manager;
+	Core::ktkIFileSystem* m_p_filesystem;
+};
+
+KOTEK_END_NAMESPACE_RENDER_GL
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK

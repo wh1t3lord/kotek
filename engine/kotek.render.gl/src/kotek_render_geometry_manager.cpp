@@ -7,11 +7,10 @@ namespace gl
 {
 	ktkRenderGeometryManager::ktkRenderGeometryManager() :
 		m_vao_handle{}, m_p_vertex_buffer{}, m_p_index_buffer{},
-		m_p_ssbo_instance_matricies_buffer{}, m_p_draw_indirect_commands{}
+		m_p_draw_indirect_commands{}
 	{
 		this->m_p_index_buffer = new ktkRenderBufferManager();
 		this->m_p_vertex_buffer = new ktkRenderBufferManager();
-		this->m_p_ssbo_instance_matricies_buffer = new ktkRenderBufferManager();
 		this->m_p_draw_indirect_commands = new ktkRenderBufferManager();
 	}
 
@@ -27,12 +26,6 @@ namespace gl
 		{
 			delete this->m_p_vertex_buffer;
 			this->m_p_vertex_buffer = nullptr;
-		}
-
-		if (this->m_p_ssbo_instance_matricies_buffer)
-		{
-			delete this->m_p_ssbo_instance_matricies_buffer;
-			this->m_p_ssbo_instance_matricies_buffer = nullptr;
 		}
 
 		if (this->m_p_draw_indirect_commands)
@@ -90,16 +83,6 @@ namespace gl
 		glBindVertexArray(0);
 		KOTEK_GL_ASSERT();
 
-		// TODO: read from render settings file about total instance buffer
-		auto ssbo_matrix_memory = ktk::align_down<ktk::size_t>(
-			total_memory, sizeof(ktk::math::mat4x4f_t));
-
-		this->m_p_ssbo_instance_matricies_buffer->Initialize(ssbo_matrix_memory,
-			"SSBO Instancing matricies", GL_SHADER_STORAGE_BUFFER,
-			Core::eRenderStatistics::kStat_Buffer_SSBO_Matrix, 3);
-
-		total_memory -= ssbo_matrix_memory;
-
 		this->m_p_draw_indirect_commands->Initialize(draw_commands_memory,
 			"draw indexed (elements) indirect commands buffer",
 			GL_DRAW_INDIRECT_BUFFER,
@@ -107,9 +90,6 @@ namespace gl
 
 #ifdef KOTEK_DEBUG
 		KOTEK_MESSAGE("Remainder: {}", total_memory);
-
-		KOTEK_MESSAGE("Instancing total count objects: {}",
-			ssbo_matrix_memory / sizeof(ktk::math::mat4x4f_t));
 
 		KOTEK_MESSAGE("Draw commands count: {}",
 			draw_commands_memory / sizeof(ktkDrawIndexIndirectCommand));
@@ -125,9 +105,6 @@ namespace gl
 
 		if (this->m_p_vertex_buffer)
 			this->m_p_vertex_buffer->Shutdown();
-
-		if (this->m_p_ssbo_instance_matricies_buffer)
-			this->m_p_ssbo_instance_matricies_buffer->Shutdown();
 
 		if (this->m_p_draw_indirect_commands)
 			this->m_p_draw_indirect_commands->Shutdown();
@@ -362,9 +339,6 @@ namespace gl
 		void) noexcept
 	{
 		ktkRenderStats* p_result{};
-
-		if (this->m_p_ssbo_instance_matricies_buffer)
-			p_result = this->m_p_ssbo_instance_matricies_buffer->Get_Stat();
 
 		return p_result;
 	}

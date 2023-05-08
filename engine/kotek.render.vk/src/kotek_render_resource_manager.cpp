@@ -20,16 +20,16 @@ namespace Kotek
 
 #pragma region Video Memory
 			constexpr ktk::uint32_t _kVidMemoryFor_StaticGeometry =
-				24 * ktk::kMemoryConvertValue_Megabytes;
+				24 * ktk::kMemoryConvertValueDenominator_Megabytes;
 			constexpr ktk::uint32_t _kVidMemoryFor_ConstantBuffers =
-				8 * ktk::kMemoryConvertValue_Megabytes;
+				8 * ktk::kMemoryConvertValueDenominator_Megabytes;
 			constexpr ktk::uint32_t _kMemoryFor_UploadHeap =
-				32 * ktk::kMemoryConvertValue_Megabytes;
+				32 * ktk::kMemoryConvertValueDenominator_Megabytes;
 #pragma endregion
 
 #pragma region Computer RAM
 			constexpr ktk::uint32_t _kCPUMemoryFor_StaticGeometry =
-				32 * ktk::kMemoryConvertValue_Megabytes;
+				32 * ktk::kMemoryConvertValueDenominator_Megabytes;
 #pragma endregion
 
 			ktkRenderResourceManager::ktkRenderResourceManager(

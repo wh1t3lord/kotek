@@ -87,7 +87,6 @@ namespace gl
 		GLuint m_vao_handle;
 		ktkRenderBufferManager* m_p_vertex_buffer;
 		ktkRenderBufferManager* m_p_index_buffer;
-		ktkRenderBufferManager* m_p_ssbo_instance_matricies_buffer;
 		ktkRenderBufferManager* m_p_draw_indirect_commands;
 
 		ktk::unordered_map<ktk::enum_base_t, gl::ktkDrawIndexIndirectCommand>

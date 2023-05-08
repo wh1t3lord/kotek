@@ -55,7 +55,7 @@ namespace Kotek
 				void initialize(Core::ktkIRenderDevice* p_raw_device,
 					Core::ktkIRenderSwapchain* p_raw_swapchain,
 					ktk::size_t memory_size =
-						ktk::kMemoryConvertValue_Megabytes * 32) override;
+						ktk::kMemoryConvertValueDenominator_Megabytes * 32) override;
 
 				void shutdown(Core::ktkIRenderDevice* p_raw_device) override;
 

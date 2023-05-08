@@ -6,7 +6,7 @@ namespace gl
 {
 	ktkRenderGraphShaderTextInfo::ktkRenderGraphShaderTextInfo(
 		eShaderLoadingDataType type_loading_data,
-        const ktk::string& path_to_file_or_source_code_string) :
+		const ktk::string& path_to_file_or_source_code_string) :
 		m_type{type_loading_data},
 		m_data{path_to_file_or_source_code_string}
 	{
@@ -89,9 +89,70 @@ namespace gl
 		return result;
 	}
 
-	ktkRenderGraphBufferInfo::ktkRenderGraphBufferInfo(void) {}
+	ktkRenderGraphBufferInfo::ktkRenderGraphBufferInfo(GLenum type,
+		GLenum usage, const ktk::cstring& uniform_block_name,
+		ktk::size_t memory_for_allocation, ktk::size_t align_of_memory,
+		const ktk::string& shader_name, const ktk::cstring& buffer_name) :
+		m_buffer_object{type},
+		m_usage{usage}, m_memory{memory_for_allocation},
+		m_memory_align_value{align_of_memory},
+		m_uniform_block_in_your_shader{uniform_block_name},
+		m_buffer_name{buffer_name}
+#ifdef KOTEK_DEBUG
+		,
+		m_shader_name{shader_name}
+#endif
+	{
+	}
+
+	ktkRenderGraphBufferInfo::ktkRenderGraphBufferInfo(void) :
+		m_buffer_object{GL_UNIFORM_BUFFER}, m_usage{GL_STATIC_DRAW}
+	{
+	}
 
 	ktkRenderGraphBufferInfo::~ktkRenderGraphBufferInfo(void) {}
+
+	GLenum ktkRenderGraphBufferInfo::Get_BufferObject(void) const noexcept
+	{
+		return this->m_buffer_object;
+	}
+
+	GLenum ktkRenderGraphBufferInfo::Get_Usage(void) const noexcept
+	{
+		return this->m_usage;
+	}
+
+	ktk::size_t ktkRenderGraphBufferInfo::Get_Memory(void) const noexcept
+	{
+		return this->m_memory;
+	}
+
+	ktk::size_t ktkRenderGraphBufferInfo::Get_AlignOfMemory(void) const noexcept
+	{
+		return this->m_memory_align_value;
+	}
+
+	const ktk::cstring& ktkRenderGraphBufferInfo::Get_UniformBlockName(
+		void) const noexcept
+	{
+		return this->m_uniform_block_in_your_shader;
+	}
+
+	const ktk::string& ktkRenderGraphBufferInfo::Get_ShaderName(
+		void) const noexcept
+	{
+#ifdef KOTEK_DEBUG
+		return this->m_shader_name;
+#else
+		return ktk::string();
+#endif
+	}
+
+	const ktk::cstring& ktkRenderGraphBufferInfo::Get_BufferName(
+		void) const noexcept
+	{
+		return this->m_buffer_name;
+	}
 
 	ktkRenderGraphTextureInfo::ktkRenderGraphTextureInfo(void) :
 		m_target{}, m_level{}, m_internalformat{}, m_width{}, m_height{},
@@ -121,8 +182,8 @@ namespace gl
 		this->m_level = value;
 	}
 
-    ktk::int32_t ktkRenderGraphTextureInfo::Get_InternalFormat(
-        void) const noexcept
+	ktk::int32_t ktkRenderGraphTextureInfo::Get_InternalFormat(
+		void) const noexcept
 	{
 		return this->m_internalformat;
 	}

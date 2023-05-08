@@ -177,7 +177,7 @@ namespace Kotek
                         texture.GetTextureName().c_str()),
 					static_cast<float>(static_cast<float>(info_gpu.size) /
 						static_cast<float>(
-							ktk::kMemoryConvertValue_Megabytes)));
+							ktk::kMemoryConvertValueDenominator_Megabytes)));
 
 				this->m_p_device->GetHelper().getDebug().setDebugNameToResource(
 					this->m_p_device->GetDevice(),
