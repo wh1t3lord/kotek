@@ -77,17 +77,65 @@ if ("${KOTEK_HIDE_CPP_KEYWORD_PREPROCESSOR}" STREQUAL "ON")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_HIDE_CPP_KEYWORD_PREPROCESSOR)
 endif()
 
+### C++ NEW KEYWORDS SINCE 11 standard ###
 if ("${KOTEK_CPP_KEYWORD_NOEXCEPT}" STREQUAL "")
 	set(KOTEK_CPP_KEYWORD_NOEXCEPT "noexcept")
 endif()
 
-if ("${KOTEK_CPP_KEYWORD_INLINE}" STREQUAL "")
-	set(KOTEK_CPP_KEYWORD_INLINE "inline")
-endif()
 
+## C++11 ##
 if ("${KOTEK_CPP_KEYWORD_CONSTEXPR}" STREQUAL "")
 	set(KOTEK_CPP_KEYWORD_CONSTEXPR "constexpr")
 endif()
+
+if ("${KOTEK_CPP_KEYWORD_ALIGNAS}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_ALIGNAS "alignas")
+endif()
+
+if ("${KOTEK_CPP_KEYWORD_ALIGNOF}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_ALIGNOF "alignof")
+endif()
+
+if ("${KOTEK_CPP_KEYWORD_DECLTYPE}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_DECLTYPE "decltype")
+endif()
+
+if ("${KOTEK_CPP_KEYWORD_STATIC_ASSERT}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_STATIC_ASSERT "static_assert")
+endif()
+
+if ("${KOTEK_CPP_KEYWORD_THREAD_LOCAL}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_THREAD_LOCAL "thread_local")
+endif()
+
+if ("${KOTEK_CPP_KEYWORD_NULLPTR}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_NULLPTR "nullptr")
+endif()
+
+if ("${KOTEK_CPP_KEYWORD_CHAR_16_T}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_CHAR_16_T "char16_t")
+endif()
+
+if ("${KOTEK_CPP_KEYWORD_CHAR_8_T}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_CHAR_8_T "char8_t")
+endif()
+## C++11 ##
+
+## C++14 ##
+
+## C++14 ##
+
+## C++17 ##
+
+## C++17 ##
+
+## C++20 ##
+if ("${KOTEK_CPP_KEYWORD_REFLEXPR}" STREQUAL "")
+	set(KOTEK_CPP_KEYWORD_REFLEXPR "reflexpr")
+endif()
+## C++20 ##
+
+### C++ NEW KEYWORDS SINCE 11 standard ###
 
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
 	if ("${KOTEK_MEMORY_LEAK_DETECTION}" STREQUAL "")
@@ -494,12 +542,26 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
 	#ifndef KOTEK_HIDE_CPP_KEYWORD_PREPROCESSOR
 		#define KOTEK_CPP_KEYWORD_CONSTEXPR ${KOTEK_CPP_KEYWORD_CONSTEXPR}
-		#define KOTEK_CPP_KEYWORD_INLINE ${KOTEK_CPP_KEYWORD_INLINE}
 		#define KOTEK_CPP_KEYWORD_NOEXCEPT ${KOTEK_CPP_KEYWORD_NOEXCEPT} 
+		#define KOTEK_CPP_KEYWORD_ALIGNAS(your_code_string) ${KOTEK_CPP_KEYWORD_ALIGNAS}(your_code_string)
+		#define KOTEK_CPP_KEYWORD_ALIGNOF(your_code_string) ${KOTEK_CPP_KEYWORD_ALIGNOF}(your_code_string)
+		#define KOTEK_CPP_KEYWORD_DECLTYPE(expression) ${KOTEK_CPP_KEYWORD_DECLTYPE}(expression)
+		#define KOTEK_CPP_KEYWORD_STATIC_ASSERT(expression, comment) ${KOTEK_CPP_KEYWORD_STATIC_ASSERT}(expression, comment)
+		#define KOTEK_CPP_KEYWORD_THREAD_LOCAL ${KOTEK_CPP_KEYWORD_THREAD_LOCAL}
+		#define KOTEK_CPP_KEYWORD_NULLPTR ${KOTEK_CPP_KEYWORD_NULLPTR}
+		#define KOTEK_CPP_KEYWORD_CHAR_16_T ${KOTEK_CPP_KEYWORD_CHAR_16_T}
+		#define KOTEK_CPP_KEYWORD_CHAR_8_T ${KOTEK_CPP_KEYWORD_CHAR_8_T}
 	#else
 		#define KOTEK_CPP_KEYWORD_CONSTEXPR
-		#define KOTEK_CPP_KEYWORD_INLINE
-		#define KOTEK_CPP_KEYWORD_NOEXCEPT
+		#define KOTEK_CPP_KEYWORD_NOEXCEPT 
+		#define KOTEK_CPP_KEYWORD_ALIGNAS(your_code_string)
+		#define KOTEK_CPP_KEYWORD_ALIGNOF(your_code_string)
+		#define KOTEK_CPP_KEYWORD_DECLTYPE(expression)
+		#define KOTEK_CPP_KEYWORD_STATIC_ASSERT(expression, comment)
+		#define KOTEK_CPP_KEYWORD_THREAD_LOCAL
+		#define KOTEK_CPP_KEYWORD_NULLPTR
+		#define KOTEK_CPP_KEYWORD_CHAR_16_T
+		#define KOTEK_CPP_KEYWORD_CHAR_8_T
 	#endif
 	")
 
@@ -542,14 +604,7 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 	"
 		#ifdef KOTEK_NAMESPACE_KOTEK
 			#define KOTEK_USE_NAMESPACE_KOTEK ${KOTEK_USE_NAMESPACE_KOTEK}
-			/// \~english @brief kun stands for kotek_use_namespace it is reduced version of KOTEK_USE_NAMESPACE_***
-			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
 			#define kun_kotek ${KOTEK_USE_NAMESPACE_KOTEK}
-			/// \~english @brief kn stands for kotek_namespace it is reduced version
-			/// you can use it for your 'business' logic when you want to keep feature for renaming namespace through cmake
-			/// the difference between this preprocessor and kun_kotek is that in first version you don't need to write :: but in this version you have to write :: so it means when I use this preprocessor it will look like this
-			/// kn_kotek:: and in comparison kun_kotek
-			/// Their equivalent is kotek::
 			#define kn_kotek ${KOTEK_BEGIN_NAMESPACE_KOTEK}
 			/// \~english @brief just upper case version for users which code style in their codebase for preprocessors is upper case
 			#define KUN_KOTEK ${KOTEK_USE_NAMESPACE_KOTEK}

@@ -127,7 +127,8 @@ namespace gl
 		map_buffer_name_and_buffer_module[info_buffer.Get_BufferName()] =
 			this->m_p_render_resource_manager->Get_ManagerShader()
 				->Create_Buffer(memory_for_allocation_in_bytes,
-					info_buffer.Get_BufferObject(), info_buffer.Get_Usage());
+					info_buffer.Get_BufferObject(), info_buffer.Get_Usage(),
+					info_buffer);
 
 #ifdef KOTEK_DEBUG
 		KOTEK_MESSAGE("create buffer [{}] with size {} Kb ({} Mb) for render "
@@ -318,8 +319,31 @@ namespace gl
 					->Destroy_Buffer(buffer_module);
 
 #ifdef KOTEK_DEBUG
-				KOTEK_MESSAGE("destroy buffer [{}] in render pass [{}]",
-					buffer_name, render_pass_name);
+				KOTEK_MESSAGE("destroy buffer [{}] final memory={} Kb ({} Mb) "
+							  "initial memory={} Kb ({} Mb) alignment={} bytes "
+							  "in render pass [{}]",
+					buffer_name,
+
+					(static_cast<float>(
+						 buffer_module.Get_AlignedMemoryForAllocation()) /
+						static_cast<float>(
+							ktk::kMemoryConvertValueDenominator_Kilobytes)),
+					(static_cast<float>(
+						 buffer_module.Get_AlignedMemoryForAllocation()) /
+						static_cast<float>(
+							ktk::kMemoryConvertValueDenominator_Megabytes)),
+
+					(static_cast<float>(
+						 buffer_module.Get_NotAlignedMemoryForAllocation()) /
+						static_cast<float>(
+							ktk::kMemoryConvertValueDenominator_Kilobytes)),
+					(static_cast<float>(
+						buffer_module.Get_NotAlignedMemoryForAllocation() /
+						static_cast<float>(
+							ktk::kMemoryConvertValueDenominator_Megabytes))),
+
+					(static_cast<float>(buffer_module.Get_MemoryAlign())),
+					render_pass_name);
 #endif
 			}
 		}

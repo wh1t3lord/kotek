@@ -16,14 +16,16 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 KOTEK_BEGIN_NAMESPACE_RENDER_GL
 
-constexpr const char* _kShaderPrefix_Vertex = "vert";
-constexpr const char* _kShaderPrefix_Fragment = "frag";
-constexpr const char* _kShaderPrefix_Compute = "comp";
-constexpr const char* _kShaderPrefix_Task = "task";
-constexpr const char* _kShaderPrefix_Mesh = "mesh";
-constexpr const char* _kShaderPrefix_Geometry = "geom";
-constexpr const char* _kShaderPrefix_TessellationEvaluation = "tese";
-constexpr const char* _kShaderPrefix_TessellationControl = "tesc";
+KOTEK_CPP_KEYWORD_CONSTEXPR const char* _kShaderPrefix_Vertex = "vert";
+KOTEK_CPP_KEYWORD_CONSTEXPR const char* _kShaderPrefix_Fragment = "frag";
+KOTEK_CPP_KEYWORD_CONSTEXPR const char* _kShaderPrefix_Compute = "comp";
+KOTEK_CPP_KEYWORD_CONSTEXPR const char* _kShaderPrefix_Task = "task";
+KOTEK_CPP_KEYWORD_CONSTEXPR const char* _kShaderPrefix_Mesh = "mesh";
+KOTEK_CPP_KEYWORD_CONSTEXPR const char* _kShaderPrefix_Geometry = "geom";
+KOTEK_CPP_KEYWORD_CONSTEXPR const char* _kShaderPrefix_TessellationEvaluation =
+	"tese";
+KOTEK_CPP_KEYWORD_CONSTEXPR const char* _kShaderPrefix_TessellationControl =
+	"tesc";
 
 class ktkRenderShaderManager
 {
@@ -45,8 +47,13 @@ public:
 	void DestroyShader(
 		const ktkShaderModule& instance) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
-	ktkBufferModule Create_Buffer(ktk::size_t memory_in_bytes,
-		GLenum buffer_object_type, GLenum usage) KOTEK_CPP_KEYWORD_NOEXCEPT;
+	ktkBufferModule Create_Buffer(
+		ktk::size_t memory_in_bytes, GLenum buffer_object_type, GLenum usage
+#ifdef KOTEK_DEBUG
+		,
+		const ktkRenderGraphBufferInfo& info
+#endif
+		) KOTEK_CPP_KEYWORD_NOEXCEPT;
 	void Destroy_Buffer(
 		const ktkBufferModule& instance) KOTEK_CPP_KEYWORD_NOEXCEPT;
 

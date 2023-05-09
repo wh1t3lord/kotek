@@ -341,11 +341,17 @@ namespace gl
 
 		for (const auto* p_render_pass : this->m_passes)
 		{
-			const ktk::string& render_pass_name = p_render_pass->Get_Name();
+			const auto& render_pass_name = p_render_pass->Get_Name();
 
-			result.push_back({render_pass_name,
+			const auto* const p_programs =
 				this->m_p_render_graph_simplified_resource_manager
-					->Get_Storage_Programs()});
+					->Get_Storage_Programs();
+
+			const auto* const p_buffers =
+				this->m_p_render_graph_simplified_resource_manager
+					->Get_Storage_Buffers(render_pass_name);
+
+			result.push_back({render_pass_name, p_programs, p_buffers});
 		}
 
 		return result;

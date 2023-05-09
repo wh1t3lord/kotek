@@ -70,6 +70,8 @@ ktkShaderModule ktkRenderShaderManager::LoadShader(
 	{
 		// so you passed a name with extension
 
+		// TODO: implement changing subfolder to any other custom, but does it
+		// make any sense?
 		auto path_to_folder = this->m_p_filesystem->GetFolderByEnum(
 			Core::eFolderIndex::kFolderIndex_Shaders_GLSL);
 
@@ -260,8 +262,12 @@ gl::eShaderType ktkRenderShaderManager::DetectType(
 }
 
 ktkBufferModule ktkRenderShaderManager::Create_Buffer(
-	ktk::size_t memory_in_bytes, GLenum buffer_object_type,
-	GLenum usage) KOTEK_CPP_KEYWORD_NOEXCEPT
+	ktk::size_t memory_in_bytes, GLenum buffer_object_type, GLenum usage
+#ifdef KOTEK_DEBUG
+	,
+	const ktkRenderGraphBufferInfo& info
+#endif
+	) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	KOTEK_ASSERT(memory_in_bytes != 0,
 		"you can't pass 0 as memory count for allocation!");
@@ -294,6 +300,10 @@ ktkBufferModule ktkRenderShaderManager::Create_Buffer(
 	result.Set_Buffer(buffer_object_type, handle_id);
 
 #ifdef KOTEK_DEBUG
+	result.Set_MemoryAlign(info.Get_AlignOfMemory());
+	result.Set_AlignedMemoryForAllocation(memory_in_bytes);
+	result.Set_NotAlignedMemoryForAllocation(info.Get_Memory());
+
 	KOTEK_MESSAGE("allocated buffer: {} Kb ({} Mb) memory left: {} Mb ({} Kb)",
 		(static_cast<float>(memory_in_bytes) /
 			static_cast<float>(ktk::kMemoryConvertValueDenominator_Kilobytes)),

@@ -6,7 +6,7 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
 
-KOTEK_CPP_KEYWORD_INLINE ktk::float_t convert_to_radians(
+inline ktk::float_t convert_to_radians(
 	ktk::float_t degrees) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -15,7 +15,7 @@ KOTEK_CPP_KEYWORD_INLINE ktk::float_t convert_to_radians(
 #endif
 }
 
-KOTEK_CPP_KEYWORD_INLINE ktk::float_t convert_to_degrees(
+inline ktk::float_t convert_to_degrees(
 	ktk::float_t radians) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -24,7 +24,7 @@ KOTEK_CPP_KEYWORD_INLINE ktk::float_t convert_to_degrees(
 #endif
 }
 
-KOTEK_CPP_KEYWORD_INLINE ktk::double_t convert_to_radians(
+inline ktk::double_t convert_to_radians(
 	ktk::double_t degrees) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	KOTEK_CPP_KEYWORD_CONSTEXPR ktk::double_t converter =
@@ -36,7 +36,7 @@ KOTEK_CPP_KEYWORD_INLINE ktk::double_t convert_to_radians(
 #endif
 }
 
-KOTEK_CPP_KEYWORD_INLINE ktk::double_t convert_to_degrees(
+inline ktk::double_t convert_to_degrees(
 	ktk::double_t radians) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	KOTEK_CPP_KEYWORD_CONSTEXPR ktk::double_t converter =
@@ -48,7 +48,7 @@ KOTEK_CPP_KEYWORD_INLINE ktk::double_t convert_to_degrees(
 #endif
 }
 
-KOTEK_CPP_KEYWORD_INLINE ktk::long_double_t convert_to_radians(
+inline ktk::long_double_t convert_to_radians(
 	ktk::long_double_t degrees) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	KOTEK_CPP_KEYWORD_CONSTEXPR ktk::long_double_t converter =
@@ -61,7 +61,7 @@ KOTEK_CPP_KEYWORD_INLINE ktk::long_double_t convert_to_radians(
 #endif
 }
 
-KOTEK_CPP_KEYWORD_INLINE ktk::long_double_t convert_to_degrees(
+inline ktk::long_double_t convert_to_degrees(
 	ktk::long_double_t radians) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	KOTEK_CPP_KEYWORD_CONSTEXPR ktk::long_double_t converter =

@@ -23,13 +23,19 @@ GLuint ktkShaderModule::Get_Shader(void) const KOTEK_CPP_KEYWORD_NOEXCEPT
 	return this->m_shader_handle;
 }
 
-gl::eShaderType ktkShaderModule::Get_ShaderType(void) const KOTEK_CPP_KEYWORD_NOEXCEPT
+gl::eShaderType ktkShaderModule::Get_ShaderType(
+	void) const KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	return this->m_shader_type;
 }
 
 ktkBufferModule::ktkBufferModule(void) :
 	m_buffer_handle{}, m_buffer_object_type{}
+#ifdef KOTEK_DEBUG
+	,
+	m_aligned_memory_for_allocation{}, m_memory_align{},
+	m_not_aligned_memory_for_allocation{}
+#endif
 {
 }
 
@@ -40,16 +46,67 @@ GLuint ktkBufferModule::Get_Buffer(void) const KOTEK_CPP_KEYWORD_NOEXCEPT
 	return this->m_buffer_handle;
 }
 
-GLenum ktkBufferModule::Get_BufferObjectType(void) const KOTEK_CPP_KEYWORD_NOEXCEPT
+GLenum ktkBufferModule::Get_BufferObjectType(
+	void) const KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	return this->m_buffer_object_type;
 }
 
-void ktkBufferModule::Set_Buffer(
-	GLenum buffer_object_type, GLuint handle_from_gl_gen_buffers) KOTEK_CPP_KEYWORD_NOEXCEPT
+void ktkBufferModule::Set_Buffer(GLenum buffer_object_type,
+	GLuint handle_from_gl_gen_buffers) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	this->m_buffer_handle = handle_from_gl_gen_buffers;
 	this->m_buffer_object_type = buffer_object_type;
+}
+
+ktk::size_t ktkBufferModule::Get_AlignedMemoryForAllocation(
+	void) const KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+	return this->m_aligned_memory_for_allocation;
+}
+
+void ktkBufferModule::Set_AlignedMemoryForAllocation(
+	ktk::size_t value) KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+#ifdef KOTEK_DEBUG
+	this->m_aligned_memory_for_allocation = value;
+#endif
+}
+
+ktk::size_t ktkBufferModule::Get_MemoryAlign(
+	void) const KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+#ifdef KOTEK_DEBUG
+	return this->m_memory_align;
+#else
+	return 0;
+#endif
+}
+
+void ktkBufferModule::Set_MemoryAlign(
+	ktk::size_t value) KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+#ifdef KOTEK_DEBUG
+	this->m_memory_align = value;
+#endif
+}
+
+ktk::size_t ktkBufferModule::Get_NotAlignedMemoryForAllocation(
+	void) const KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+#ifdef KOTEK_DEBUG
+	return this->m_not_aligned_memory_for_allocation;
+#else
+	return 0;
+#endif
+}
+
+void ktkBufferModule::Set_NotAlignedMemoryForAllocation(
+	ktk::size_t value) KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+#ifdef KOTEK_DEBUG
+	this->m_not_aligned_memory_for_allocation = value;
+#endif
 }
 
 KOTEK_END_NAMESPACE_RENDER_GL
