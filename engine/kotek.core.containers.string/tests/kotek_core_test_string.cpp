@@ -12,32 +12,32 @@ void string_plus_one_char_symbol()
 {
     ktk::cstring instance;
 
-    instance += KOTEK_TEXT("a");
+    instance += KOTEK_TEXTU("a");
 
-    BOOST_REQUIRE(instance == KOTEK_TEXT("a"));
+    BOOST_REQUIRE(instance == KOTEK_TEXTU("a"));
 }
 
 void string_plus_one_tchar_symbol()
 {
     ktk::cstring instance;
 
-	instance += KOTEK_TEXT("x");
+	instance += KOTEK_TEXTU("x");
 
-	BOOST_REQUIRE(instance == KOTEK_TEXT("x"));
+	BOOST_REQUIRE(instance == KOTEK_TEXTU("x"));
 }
 
 void string_equality_by_char_string()
 {
-    ktk::cstring instance(KOTEK_TEXT("test"));
+    ktk::cstring instance(KOTEK_TEXTU("test"));
 
-    BOOST_REQUIRE(instance == KOTEK_TEXT("test"));
+    BOOST_REQUIRE(instance == KOTEK_TEXTU("test"));
 }
 
 void string_equality_by_tchar_string()
 {
-    ktk::cstring instance(KOTEK_TEXT("test_tchar"));
+    ktk::cstring instance(KOTEK_TEXTU("test_tchar"));
 
-	BOOST_REQUIRE(instance == KOTEK_TEXT("test_tchar"));
+	BOOST_REQUIRE(instance == KOTEK_TEXTU("test_tchar"));
 }
 	#endif
 #endif
@@ -45,7 +45,7 @@ void string_equality_by_tchar_string()
 void RegisterTests_String_ForModule_Core()
 {
 #ifdef KOTEK_USE_TESTS
-	boost::unit_test::test_suite* p_suite = BOOST_TEST_SUITE("ktk::string");
+	boost::unit_test::test_suite* p_suite = BOOST_TEST_SUITE("ktk::ustring");
 
 	p_suite->add(BOOST_TEST_CASE(&string_equality_by_char_string));
 	p_suite->add(BOOST_TEST_CASE(&string_equality_by_tchar_string));

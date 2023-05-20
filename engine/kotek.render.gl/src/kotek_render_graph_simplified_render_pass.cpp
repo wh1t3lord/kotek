@@ -31,7 +31,7 @@ void ktkRenderGraphSimplifiedRenderPass::OnRender(
 }
 
 void ktkRenderGraphSimplifiedRenderPass::Set_Name(
-	const ktk::string& name) noexcept
+	const ktk::ustring& name) noexcept
 {
 	KOTEK_ASSERT(name.empty() == false,
 		"you can't set an empty name for this structure, you "
@@ -41,7 +41,7 @@ void ktkRenderGraphSimplifiedRenderPass::Set_Name(
 	this->m_name = name;
 }
 
-const ktk::string& ktkRenderGraphSimplifiedRenderPass::Get_Name(
+const ktk::ustring& ktkRenderGraphSimplifiedRenderPass::Get_Name(
 	void) const noexcept
 {
 	return this->m_name;

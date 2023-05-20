@@ -76,7 +76,7 @@ bool ktkRenderGraphSimplifiedBuilder::Register_RenderPass(
 	if (p_pass)
 	{
 		p_pass->Set_Name(
-			ktk::string(render_pass_name.begin(), render_pass_name.end()));
+			ktk::ustring(render_pass_name.begin(), render_pass_name.end()));
 	}
 
 	if (std::find_if(this->m_passes.begin(), this->m_passes.end(),
@@ -120,10 +120,10 @@ ktkRenderGraphSimplifiedBuilder::Get_RenderGraphPipelineRenderingType(
 	return this->m_rendering_pipeline_type;
 }
 
-ktk::unordered_map<ktk::string, gl::ktkRenderGraphSimplifiedStorageInput>
+ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphSimplifiedStorageInput>
 ktkRenderGraphSimplifiedBuilder::Compile_Inputs(void) noexcept
 {
-	ktk::unordered_map<ktk::string, gl::ktkRenderGraphSimplifiedStorageInput>
+	ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphSimplifiedStorageInput>
 		result;
 
 	for (const auto& pass : this->m_passes)
@@ -139,10 +139,10 @@ ktkRenderGraphSimplifiedBuilder::Compile_Inputs(void) noexcept
 	return result;
 }
 
-ktk::unordered_map<ktk::string, gl::ktkRenderGraphSimplifiedStorageOutput>
+ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphSimplifiedStorageOutput>
 ktkRenderGraphSimplifiedBuilder::Compile_Outputs(void) noexcept
 {
-	ktk::unordered_map<ktk::string, gl::ktkRenderGraphSimplifiedStorageOutput>
+	ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphSimplifiedStorageOutput>
 		result;
 
 	for (const auto& pass : this->m_passes)
@@ -157,14 +157,14 @@ ktkRenderGraphSimplifiedBuilder::Compile_Outputs(void) noexcept
 }
 
 void ktkRenderGraphSimplifiedBuilder::Compile_BuffersAndImagesForCreation(
-	const ktk::unordered_map<ktk::string,
+	const ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphSimplifiedStorageInput>& storage_inputs,
-	const ktk::unordered_map<ktk::string,
+	const ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphSimplifiedStorageOutput>& storage_outputs,
-	ktk::unordered_map<ktk::string,
+	ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphTextureInfo>>&
 		images_to_create,
-	ktk::unordered_map<ktk::string,
+	ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>>&
 		buffers_to_create) noexcept
 {
@@ -179,7 +179,7 @@ void ktkRenderGraphSimplifiedBuilder::Compile_BuffersAndImagesForCreation(
 
 	for (const auto& p_pass : this->m_passes)
 	{
-		const ktk::string& render_pass_name = p_pass->Get_Name();
+		const ktk::ustring& render_pass_name = p_pass->Get_Name();
 
 		const gl::ktkRenderGraphSimplifiedStorageOutput& storage_output =
 			storage_outputs.at(render_pass_name);
@@ -234,34 +234,38 @@ void ktkRenderGraphSimplifiedBuilder::Compile_BuffersAndImagesForCreation(
 		{
 			if (is_current_output_has_inputs_image)
 			{
-				for (const auto& [texture_name, info_create] :
+				for (const auto& [shader_name, map_texturename_and_info] :
 					storage_inputs.at(render_pass_name).Get_Images())
 				{
-					if (images_to_create.find(texture_name) ==
-						images_to_create.end())
+					for (const auto& [texture_name, info_create] :
+						map_texturename_and_info)
 					{
-						images_to_create[texture_name] = {
-							render_pass_name, texture_name, info_create};
-
-						// TODO: I guess we don't need
-						// synchronization status here but anyway...
-					}
-					else
-					{
-						if (render_pass_name !=
-							images_to_create.at(texture_name)
-								.Get_RenderPassName())
+						if (images_to_create.find(texture_name) ==
+							images_to_create.end())
 						{
+							images_to_create[texture_name] = {
+								render_pass_name, texture_name, info_create};
+
 							// TODO: I guess we don't need
-							// synchronization status here but
-							// anyway...
+							// synchronization status here but anyway...
 						}
 						else
 						{
-							KOTEK_ASSERT(false,
-								"you can't use the same resource "
-								"in both variant as input and "
-								"output");
+							if (render_pass_name !=
+								images_to_create.at(texture_name)
+									.Get_RenderPassName())
+							{
+								// TODO: I guess we don't need
+								// synchronization status here but
+								// anyway...
+							}
+							else
+							{
+								KOTEK_ASSERT(false,
+									"you can't use the same resource "
+									"in both variant as input and "
+									"output");
+							}
 						}
 					}
 				}
@@ -269,34 +273,38 @@ void ktkRenderGraphSimplifiedBuilder::Compile_BuffersAndImagesForCreation(
 
 			if (is_current_output_has_inputs_buffer)
 			{
-				for (auto& [buffer_name, info_create] :
+				for (auto& [shader_name, map_buffername_and_info] :
 					storage_inputs.at(render_pass_name).Get_Buffers())
 				{
-					if (buffers_to_create.find(buffer_name) ==
-						buffers_to_create.end())
+					for (const auto& [buffer_name, info_create] :
+						map_buffername_and_info)
 					{
-						buffers_to_create[buffer_name] = {
-							render_pass_name, buffer_name, info_create};
-
-						// TODO: I guess we don't need
-						// synchronization status here but anyway...
-					}
-					else
-					{
-						if (render_pass_name !=
-							buffers_to_create.at(buffer_name)
-								.Get_RenderPassName())
+						if (buffers_to_create.find(buffer_name) ==
+							buffers_to_create.end())
 						{
+							buffers_to_create[buffer_name] = {
+								render_pass_name, buffer_name, info_create};
+
 							// TODO: I guess we don't need
-							// synchronization status here but
-							// anyway...
+							// synchronization status here but anyway...
 						}
 						else
 						{
-							KOTEK_ASSERT(false,
-								"you can't use the same resource "
-								"in both variant as input and "
-								"output");
+							if (render_pass_name !=
+								buffers_to_create.at(buffer_name)
+									.Get_RenderPassName())
+							{
+								// TODO: I guess we don't need
+								// synchronization status here but
+								// anyway...
+							}
+							else
+							{
+								KOTEK_ASSERT(false,
+									"you can't use the same resource "
+									"in both variant as input and "
+									"output");
+							}
 						}
 					}
 				}
@@ -307,16 +315,16 @@ void ktkRenderGraphSimplifiedBuilder::Compile_BuffersAndImagesForCreation(
 
 ktk::vector<ktkRenderGraphSimplifiedNode>
 ktkRenderGraphSimplifiedBuilder::Analyze(
-	const ktk::unordered_map<ktk::string,
+	const ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphSimplifiedStorageInput>& storage_inputs,
-	const ktk::unordered_map<ktk::string,
+	const ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphSimplifiedStorageOutput>& storage_outputs)
 {
-	ktk::unordered_map<ktk::string,
+	ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphTextureInfo>>
 		images_to_create;
 
-	ktk::unordered_map<ktk::string,
+	ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>>
 		buffers_to_create;
 
@@ -351,9 +359,9 @@ ktkRenderGraphSimplifiedBuilder::Analyze(
 }
 
 void ktkRenderGraphSimplifiedBuilder::Create_Resources(
-	const ktk::unordered_map<ktk::string,
+	const ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphSimplifiedStorageInput>& all_inputs,
-	const ktk::unordered_map<ktk::string,
+	const ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>>&
 		buffers_to_create) noexcept
 {
@@ -370,7 +378,7 @@ void ktkRenderGraphSimplifiedBuilder::Create_BackBuffer(void) noexcept
 }
 
 void ktkRenderGraphSimplifiedBuilder::Create_Shaders(
-	const ktk::unordered_map<ktk::string,
+	const ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphSimplifiedStorageInput>& all_inputs) noexcept
 {
 	KOTEK_ASSERT(this->m_p_render_graph_simplified_resource_manager,
@@ -385,7 +393,7 @@ void ktkRenderGraphSimplifiedBuilder::Create_Shaders(
 }
 
 void ktkRenderGraphSimplifiedBuilder::Create_Buffers(
-	const const ktk::unordered_map<ktk::string,
+	const const ktk::unordered_map<ktk::ustring,
 		gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>>&
 		buffers_to_create) noexcept
 {

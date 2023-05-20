@@ -80,6 +80,12 @@ namespace gl
 		void Rebuild_DrawIndirectCommands(void) noexcept;
 		void Rebuild_SSBO_Instancing_Matricies(void) noexcept;
 
+		ktkRenderBufferManager* Get_Buffer_DrawIndirectCommands(void) const;
+
+		const ktk::unordered_map<ktk::enum_base_t,
+			gl::ktkDrawIndexIndirectCommand>&
+		Get_IndirectCommands_PredefinedModels(void) const;
+
 	private:
 		void FreeOffset(ktk::entity_t id);
 

@@ -51,9 +51,9 @@ public:
 	/// value and that means for human being it's hard to understand
 	/// what is written in hash instead of reading rational
 	/// string</param> <returns>nothing</returns>
-	void Set_Name(const ktk::string& name) noexcept;
+	void Set_Name(const ktk::ustring& name) noexcept;
 
-	const ktk::string& Get_Name(void) const noexcept;
+	const ktk::ustring& Get_Name(void) const noexcept;
 
 private:
 	void Initialize(Core::ktkMainManager* p_manager_main,
@@ -67,7 +67,7 @@ protected:
 	Core::ktkIRenderGraphResourceManager* m_p_manager_resource_graph;
 
 private:
-	ktk::string m_name;
+	ktk::ustring m_name;
 };
 KOTEK_END_NAMESPACE_RENDER_GL
 KOTEK_END_NAMESPACE_RENDER

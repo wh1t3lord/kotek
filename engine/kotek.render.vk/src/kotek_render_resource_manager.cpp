@@ -255,16 +255,16 @@ namespace Kotek
 
 				this->m_dynamic_buffer_ring.initialize(p_render_device,
 					_kSwapchainBackBuffers, _kVidMemoryFor_ConstantBuffers,
-					KOTEK_TEXT("Uniforms"));
+					KOTEK_TEXTU("Uniforms"));
 
 				// TODO: write more informative description string
 				this->m_static_buffer_cpu_access.initialize(p_render_device,
 					_kCPUMemoryFor_StaticGeometry, false,
-					KOTEK_TEXT("Post processing geometry"));
+					KOTEK_TEXTU("Post processing geometry"));
 
 				this->m_static_buffer_gpu_access_only.initialize(
 					p_render_device, _kVidMemoryFor_StaticGeometry, true,
-					KOTEK_TEXT("Static Geometry"));
+					KOTEK_TEXTU("Static Geometry"));
 
 				this->m_upload_heap.initialize(
 					p_render_device, _kMemoryFor_UploadHeap);

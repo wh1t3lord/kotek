@@ -61,7 +61,7 @@ bool ktkResourceLoaderFile_Text::Load(
 
 ktk::cstring ktkResourceLoaderFile_Text::Get_UserDescription(void) const noexcept
 {
-	return KOTEK_TEXT("this is loader for Text files");
+	return KOTEK_TEXTU("this is loader for Text files");
 }
 
 Core::eResourceLoadingType ktkResourceLoaderFile_Text::Get_Type(void) const noexcept
@@ -109,7 +109,7 @@ ktk::cstring ktkResourceLoaderFile_Text::Get_AllSupportedFormats(void) const noe
 	for (const auto& [format_name, p_loader] : this->m_loaders)
 	{
 		result += format_name;
-        result += KOTEK_TEXT(" ; ");
+        result += KOTEK_TEXTU(" ; ");
 	}
 
     result.pop_back();
@@ -121,7 +121,7 @@ ktk::cstring ktkResourceLoaderFile_Text::Get_AllSupportedFormats(void) const noe
 
 void ktkResourceLoaderFile_Text::Register_Loaders(void) noexcept 
 {
-    this->m_loaders[KOTEK_TEXT(".json")] = new ktkLoaderFile_JSON(this->m_p_main_manager);
+    this->m_loaders[KOTEK_TEXTU(".json")] = new ktkLoaderFile_JSON(this->m_p_main_manager);
 }
 
 void ktkResourceLoaderFile_Text::Delete_Loaders(void) noexcept 

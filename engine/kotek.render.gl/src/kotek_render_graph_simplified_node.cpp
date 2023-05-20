@@ -5,8 +5,8 @@ KOTEK_BEGIN_NAMESPACE_RENDER
 namespace gl
 {
 	ktkRenderGraphSimplifiedNode::ktkRenderGraphSimplifiedNode(
-		const ktk::string& render_pass_name,
-		const ktk::unordered_map<ktk::string, GLuint>* const programs,
+		const ktk::ustring& render_pass_name,
+		const ktk::unordered_map<ktk::ustring, GLuint>* const programs,
 		const ktk::unordered_map<ktk::cstring, ktkBufferModule>* const
 			buffers) :
 		m_p_programs{programs},
@@ -24,7 +24,7 @@ namespace gl
 	ktkRenderGraphSimplifiedNode::~ktkRenderGraphSimplifiedNode(void) {}
 
 	GLuint ktkRenderGraphSimplifiedNode::Get_Program(
-		const ktk::string& program_name) const KOTEK_CPP_KEYWORD_NOEXCEPT
+		const ktk::ustring& program_name) const KOTEK_CPP_KEYWORD_NOEXCEPT
 	{
 		KOTEK_ASSERT(
 			program_name.empty() == false, "you can't pass an empty string");
@@ -59,7 +59,7 @@ namespace gl
 		return this->m_p_buffers->at(buffer_name);
 	}
 
-	const ktk::string& ktkRenderGraphSimplifiedNode::Get_RenderPassName(
+	const ktk::ustring& ktkRenderGraphSimplifiedNode::Get_RenderPassName(
 		void) const KOTEK_CPP_KEYWORD_NOEXCEPT
 	{
 		return this->m_render_pass_name;

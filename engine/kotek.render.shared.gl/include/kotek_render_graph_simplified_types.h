@@ -60,7 +60,7 @@ namespace gl
 		ktkRenderGraphBufferInfo(GLenum type, GLenum usage,
 			const ktk::cstring& uniform_block_name,
 			ktk::size_t memory_for_allocation, ktk::size_t align_of_memory,
-			const ktk::string& shader_name, const ktk::cstring& buffer_name);
+			const ktk::ustring& shader_name, const ktk::cstring& buffer_name);
 
 		ktkRenderGraphBufferInfo(void);
 		~ktkRenderGraphBufferInfo(void);
@@ -71,7 +71,7 @@ namespace gl
 		ktk::size_t Get_AlignOfMemory(void) const noexcept;
 
 		const ktk::cstring& Get_UniformBlockName(void) const noexcept;
-		const ktk::string& Get_ShaderName(void) const noexcept;
+		const ktk::ustring& Get_ShaderName(void) const noexcept;
 		const ktk::cstring& Get_BufferName(void) const noexcept;
 
 	private:
@@ -100,7 +100,7 @@ namespace gl
 #ifdef KOTEK_DEBUG
 		/// \~english @brief When the development build is DEBUG it means that
 		/// you can see to what shader this buffer is attached by its name
-		ktk::string m_shader_name;
+		ktk::ustring m_shader_name;
 #endif
 	};
 
@@ -109,7 +109,7 @@ namespace gl
 	public:
 		explicit ktkRenderGraphShaderTextInfo(
 			eShaderLoadingDataType type_loading_data,
-			const ktk::string& path_to_file_or_source_code_string);
+			const ktk::ustring& path_to_file_or_source_code_string);
 
 		explicit ktkRenderGraphShaderTextInfo(
 			eShaderLoadingDataType type_loading_data, void* p_data);
@@ -121,22 +121,22 @@ namespace gl
 		eShaderLoadingDataType Get_Type(void) const noexcept;
 		void Set_Type(eShaderLoadingDataType type) noexcept;
 
-		const ktk::variant<void*, ktk::string>& Get_Data(void) const noexcept;
-		void Set_Data(const ktk::variant<void*, ktk::string>& data) noexcept;
+		const ktk::variant<void*, ktk::ustring>& Get_Data(void) const noexcept;
+		void Set_Data(const ktk::variant<void*, ktk::ustring>& data) noexcept;
 
 		bool Is_DataValid(void) const noexcept;
 
 	private:
 		eShaderLoadingDataType m_type;
-		ktk::variant<void*, ktk::string> m_data;
+		ktk::variant<void*, ktk::ustring> m_data;
 	};
 
 	template <typename CreateInfoType>
 	class ktkRenderGraphResourceInfo
 	{
 	public:
-		ktkRenderGraphResourceInfo(const ktk::string& render_pass_name,
-			const ktk::string& resource_name, const CreateInfoType& info) :
+		ktkRenderGraphResourceInfo(const ktk::ustring& render_pass_name,
+			const ktk::ustring& resource_name, const CreateInfoType& info) :
 			m_info{info},
 			m_render_pass_name{render_pass_name}, m_resource_name{resource_name}
 		{
@@ -168,22 +168,22 @@ namespace gl
 			return this->m_info;
 		}
 
-		const ktk::string& Get_ResourceName(void) const noexcept
+		const ktk::ustring& Get_ResourceName(void) const noexcept
 		{
 			return this->m_resource_name;
 		}
 
-		void Set_ResourceName(const ktk::string& resource_name) noexcept
+		void Set_ResourceName(const ktk::ustring& resource_name) noexcept
 		{
 			this->m_resource_name = resource_name;
 		}
 
-		const ktk::string& Get_RenderPassName(void) const noexcept
+		const ktk::ustring& Get_RenderPassName(void) const noexcept
 		{
 			return this->m_render_pass_name;
 		}
 
-		void Set_RenderPassName(const ktk::string& render_pass_name) noexcept
+		void Set_RenderPassName(const ktk::ustring& render_pass_name) noexcept
 		{
 			this->m_render_pass_name = render_pass_name;
 		}
@@ -191,8 +191,8 @@ namespace gl
 	private:
 		bool m_is_created_from_output;
 		CreateInfoType m_info;
-		ktk::string m_render_pass_name;
-		ktk::string m_resource_name;
+		ktk::ustring m_render_pass_name;
+		ktk::ustring m_resource_name;
 	};
 } // namespace gl
 KOTEK_END_NAMESPACE_RENDER

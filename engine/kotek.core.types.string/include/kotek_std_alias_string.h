@@ -27,19 +27,28 @@ using wstring_view = std::wstring_view;
 
 using cstring = std::string;
 using cstring_view = std::string_view;
+
+	#ifdef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
+using ustring = cstring;
+using ustring_view = cstring_view;
+	#else
+using ustring = string;
+using ustring_view = string_view;
+	#endif
+
 #else
 using string = std::basic_string<tchar, std::char_traits<tchar>,
-    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<tchar>>;
+	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<tchar>>;
 using u8string = std::basic_string<char8_t, std::char_traits<char8_t>,
-    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char8_t>>;
+	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char8_t>>;
 using u16string = std::basic_string<char16_t, std::char_traits<char16_t>,
-    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char16_t>>;
+	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char16_t>>;
 using u32string = std::basic_string<char32_t, std::char_traits<char32_t>,
-    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char32_t>>;
+	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char32_t>>;
 using wstring = std::basic_string<wchar_t, std::char_traits<wchar_t>,
-    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<wchar_t>>;
+	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<wchar_t>>;
 using cstring = std::basic_string<char, std::char_traits<char>,
-    KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char>>;
+	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char>>;
 #endif
 
 namespace helper
@@ -51,7 +60,7 @@ namespace helper
 		auto id_char32_t = typeid(char32_t).hash_code();
 		auto id_wchar_t = typeid(wchar_t).hash_code();
 
-        auto id_current_type = typeid(string::value_type).hash_code();
+		auto id_current_type = typeid(ustring::value_type).hash_code();
 
 		if (id_current_type == id_char8_t)
 		{

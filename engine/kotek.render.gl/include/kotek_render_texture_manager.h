@@ -13,10 +13,10 @@ namespace gl
 		void Initialize(ktk::size_t memory_size);
 		void Shutdown(void);
 
-		bool Create_Texture(const ktk::string& texture_name,
+		bool Create_Texture(const ktk::ustring& texture_name,
 			const gl::ktkRenderGraphTextureInfo& info_create) noexcept;
 
-		void Destroy_Texture(const ktk::string& texture_name) noexcept;
+		void Destroy_Texture(const ktk::ustring& texture_name) noexcept;
 
 	private:
 		// we just collect stats for validating

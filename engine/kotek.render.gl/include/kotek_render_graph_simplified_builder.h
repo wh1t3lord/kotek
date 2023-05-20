@@ -64,44 +64,44 @@ namespace gl
 		Get_RenderGraphPipelineRenderingType(void) const noexcept;
 
 	private:
-		ktk::unordered_map<ktk::string,
+		ktk::unordered_map<ktk::ustring,
 			gl::ktkRenderGraphSimplifiedStorageInput>
 		Compile_Inputs(void) noexcept;
-		ktk::unordered_map<ktk::string,
+		ktk::unordered_map<ktk::ustring,
 			gl::ktkRenderGraphSimplifiedStorageOutput>
 		Compile_Outputs(void) noexcept;
 
 		// just collects all necessary stuff about whole creation
 		// but after we create it in Create_Resources method
 		void Compile_BuffersAndImagesForCreation(
-			const ktk::unordered_map<ktk::string,
+			const ktk::unordered_map<ktk::ustring,
 				gl::ktkRenderGraphSimplifiedStorageInput>& storage_inputs,
-			const ktk::unordered_map<ktk::string,
+			const ktk::unordered_map<ktk::ustring,
 				gl::ktkRenderGraphSimplifiedStorageOutput>& storage_outputs,
-			ktk::unordered_map<ktk::string,
+			ktk::unordered_map<ktk::ustring,
 				gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphTextureInfo>>&
 				images_to_create,
-			ktk::unordered_map<ktk::string,
+			ktk::unordered_map<ktk::ustring,
 				gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>>&
 				buffers_to_create) noexcept;
 
 		ktk::vector<ktkRenderGraphSimplifiedNode> Analyze(
-			const ktk::unordered_map<ktk::string,
+			const ktk::unordered_map<ktk::ustring,
 				gl::ktkRenderGraphSimplifiedStorageInput>& storage_inputs,
-			const ktk::unordered_map<ktk::string,
+			const ktk::unordered_map<ktk::ustring,
 				gl::ktkRenderGraphSimplifiedStorageOutput>& storage_outputs);
 
 	private:
 		void Create_Resources(
-			const ktk::unordered_map<ktk::string,
+			const ktk::unordered_map<ktk::ustring,
 				gl::ktkRenderGraphSimplifiedStorageInput>& all_inputs,
-			const ktk::unordered_map<ktk::string,
+			const ktk::unordered_map<ktk::ustring,
 				gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>>&
 				buffers_to_create) noexcept;
 		void Create_BackBuffer(void) noexcept;
-		void Create_Shaders(const ktk::unordered_map<ktk::string,
+		void Create_Shaders(const ktk::unordered_map<ktk::ustring,
 			gl::ktkRenderGraphSimplifiedStorageInput>& all_inputs) noexcept;
-		void Create_Buffers(const const ktk::unordered_map<ktk::string,
+		void Create_Buffers(const const ktk::unordered_map<ktk::ustring,
 			gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>>&
 				buffers_to_create) noexcept;
 

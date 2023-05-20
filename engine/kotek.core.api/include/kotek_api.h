@@ -186,7 +186,7 @@ public:
 
 	// TODO: check todo in implementation class ktkFileSystem and it is
 	// a temporary virtual function delete it
-	virtual ktk::string ReadFile(
+	virtual ktk::ustring ReadFile(
 		const ktk::filesystem::path& path_to_file) const noexcept = 0;
 
 	virtual const ktk::filesystem::path& GetFolderByEnum(
@@ -307,10 +307,10 @@ public:
 
 	/// \~english @brief This is only for user. You just provide your
 	/// description of loader's implementation and access it through interface.
-	/// @return Returns ktk::string instance by const&
+	/// @return Returns ktk::ustring instance by const&
 	virtual ktk::cstring Get_UserDescription() const noexcept
 	{
-		return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION_FOR_LOADER");
+		return KOTEK_TEXTU("USER_DIDNT_PROVIDE_DESCRIPTION_FOR_LOADER");
 	}
 
 	/// \~english @brief This method is for validation purpose and for
@@ -384,7 +384,7 @@ public:
 	///			}
 	///
 	/// private:
-	///		ktk::unordered_map<ktk::string, Kotek::Core::ktkIResourceLoader*>
+	///		ktk::unordered_map<ktk::ustring, Kotek::Core::ktkIResourceLoader*>
 	/// m_loaders;
 	/// };
 	/// @endcode
@@ -452,7 +452,7 @@ public:
 
 	virtual ktk::cstring Get_UserDescription() const noexcept
 	{
-		return KOTEK_TEXT("USER_DIDNT_PROVIDE_DESCRIPTION_FOR_SAVER");
+		return KOTEK_TEXTU("USER_DIDNT_PROVIDE_DESCRIPTION_FOR_SAVER");
 	}
 
 	virtual eResourceLoadingType Get_Type() const noexcept
@@ -774,7 +774,7 @@ public:
 	virtual void* Get(ktk::entity_t id) noexcept = 0;
 	virtual bool Remove(ktk::entity_t id) noexcept = 0;
 	virtual ktk::cstring GetDebugName(void) const noexcept = 0;
-	virtual ktk::string GetComponentName(void) const noexcept = 0;
+	virtual ktk::ustring GetComponentName(void) const noexcept = 0;
 	virtual void DrawImGui(Kotek::Core::ktkMainManager* main_manager,
 		Kotek::ktk::entity_t entity_id) noexcept = 0;
 };
@@ -847,7 +847,7 @@ public:
 	virtual void Initialize(void) noexcept = 0;
 	virtual void Shutdown(void) noexcept = 0;
 
-	virtual void AddText(const ktk::string& message) noexcept = 0;
+	virtual void AddText(const ktk::ustring& message) noexcept = 0;
 };
 
 class ktkIVideoPlayerManager

@@ -27,7 +27,7 @@ namespace gl
 	void ktkRenderTextureManager::Shutdown(void) {}
 
 	bool ktkRenderTextureManager::Create_Texture(
-		const ktk::string& texture_name,
+		const ktk::ustring& texture_name,
 		const gl::ktkRenderGraphTextureInfo& info_create) noexcept
 	{
 		KOTEK_ASSERT(texture_name.empty() == false,
@@ -37,7 +37,7 @@ namespace gl
 	}
 
 	void ktkRenderTextureManager::Destroy_Texture(
-		const ktk::string& texture_name) noexcept
+		const ktk::ustring& texture_name) noexcept
 	{
 		KOTEK_ASSERT(texture_name.empty() == false,
 			"you can't pass an empty texture name");

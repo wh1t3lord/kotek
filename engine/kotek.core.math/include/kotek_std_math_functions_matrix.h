@@ -37,4 +37,31 @@ inline matrix4x4f perspective(float_t field_of_view_angle_in_radians,
 #endif
 }
 
+inline float const* value_ptr(const matrix2x2f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return &data.Get_Base().m[0][0];
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::value_ptr(data.Get_Base());
+#endif
+}
+
+inline float const* value_ptr(const matrix3x3f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return &data.Get_Base().m[0][0];
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::value_ptr(data.Get_Base());
+#endif
+}
+
+inline float const* value_ptr(const matrix4x4f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return &data.Get_Base().m[0][0];
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::value_ptr(data.Get_Base());
+#endif
+}
+
 KOTEK_END_NAMESPACE_MATH KOTEK_END_NAMESPACE_KTK KOTEK_END_NAMESPACE_KOTEK

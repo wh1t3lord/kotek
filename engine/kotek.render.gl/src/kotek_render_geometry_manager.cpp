@@ -74,12 +74,6 @@ namespace gl
 		glEnableVertexAttribArray(0);
 		KOTEK_GL_ASSERT();
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		KOTEK_GL_ASSERT();
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		KOTEK_GL_ASSERT();
-
 		glBindVertexArray(0);
 		KOTEK_GL_ASSERT();
 
@@ -358,6 +352,18 @@ namespace gl
 		void) noexcept
 	{
 		// TODO: finish this
+	}
+
+	ktkRenderBufferManager*
+	ktkRenderGeometryManager::Get_Buffer_DrawIndirectCommands(void) const
+	{
+		return this->m_p_draw_indirect_commands;
+	}
+
+	const ktk::unordered_map<ktk::enum_base_t, gl::ktkDrawIndexIndirectCommand>&
+	ktkRenderGeometryManager::Get_IndirectCommands_PredefinedModels(void) const
+	{
+		return this->m_indirect_commands_models_by_enum;
 	}
 
 	void ktkRenderGeometryManager::FreeOffset(ktk::entity_t id) {}

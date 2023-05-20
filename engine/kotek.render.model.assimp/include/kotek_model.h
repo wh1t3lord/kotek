@@ -11,11 +11,11 @@ public:
 	ktkModel(void);
 	~ktkModel(void);
 
-	bool Load(Core::ktkMainManager& main_manager, const ktk::string& path);
+	bool Load(Core::ktkMainManager& main_manager, const ktk::ustring& path);
 
 private:
-	ktk::string m_path;
-	ktk::string m_filename;
+	ktk::ustring m_path;
+	ktk::ustring m_filename;
 	Core::ktkFileText m_file;
 };
 

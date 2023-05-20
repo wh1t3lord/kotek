@@ -11,22 +11,9 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
 inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-	Kotek::ktk::json::value& write_to, const Kotek::ktk::cstring& str)
+	Kotek::ktk::json::value& write_to, const Kotek::ktk::ustring& data)
 {
-	Kotek::ktk::json::object result;
-
-	Kotek::ktk::json::array raw_string(str.begin(), str.end());
-
-	result["type"] = "char";
-
-	result["raw_string"] = raw_string;
-
-	write_to = result;
-}
-
-inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
-	Kotek::ktk::json::value& write_to, const Kotek::ktk::string& data)
-{
+	#ifndef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
 	Kotek::ktk::cstring type =
 		Kotek::ktk::helper::ObtainCharTypeName_FromString();
 
@@ -40,24 +27,25 @@ inline void tag_invoke(const Kotek::ktk::json::value_from_tag&,
 		write_to = str;
 	}
 	else
+	#endif
 	{
 		Kotek::ktk::json::string str;
 
-		str = reinterpret_cast<const char*>(data.c_str());
+		str = data.c_str();
 
 		write_to = str;
 	}
 }
 
-inline Kotek::ktk::string tag_invoke(
-	const Kotek::ktk::json::value_to_tag<Kotek::ktk::string>&,
+inline Kotek::ktk::ustring tag_invoke(
+	const Kotek::ktk::json::value_to_tag<Kotek::ktk::ustring>&,
 	const Kotek::ktk::json::value& read_from)
 {
 	if (read_from.is_object())
 	{
 		const Kotek::ktk::json::object& str = read_from.as_object();
 
-		Kotek::ktk::string result;
+		Kotek::ktk::ustring result;
 		const auto& char_name = str.at("type").as_string();
 
 		if (char_name == "char8_t")
@@ -72,7 +60,7 @@ inline Kotek::ktk::string tag_invoke(
 				buffer += number.as_int64();
 			}
 
-			result = Kotek::ktk::string(buffer.begin(), buffer.end());
+			result = Kotek::ktk::ustring(buffer.begin(), buffer.end());
 		}
 		else if (char_name == "char16_t")
 		{
@@ -86,7 +74,7 @@ inline Kotek::ktk::string tag_invoke(
 				buffer += number.as_int64();
 			}
 
-			result = Kotek::ktk::string(buffer.begin(), buffer.end());
+			result = Kotek::ktk::ustring(buffer.begin(), buffer.end());
 		}
 		else if (char_name == "char32_t")
 		{
@@ -100,7 +88,7 @@ inline Kotek::ktk::string tag_invoke(
 				buffer += number.as_int64();
 			}
 
-			result = Kotek::ktk::string(buffer.begin(), buffer.end());
+			result = Kotek::ktk::ustring(buffer.begin(), buffer.end());
 		}
 		else if (char_name == "wchar_t")
 		{
@@ -114,7 +102,7 @@ inline Kotek::ktk::string tag_invoke(
 				buffer += number.as_int64();
 			}
 
-			result = Kotek::ktk::string(buffer.begin(), buffer.end());
+			result = Kotek::ktk::ustring(buffer.begin(), buffer.end());
 		}
 		else
 		{
@@ -128,7 +116,7 @@ inline Kotek::ktk::string tag_invoke(
 	else
 	{
 		const auto& char_string = read_from.as_string();
-		return Kotek::ktk::string(char_string.begin(), char_string.end());
+		return Kotek::ktk::ustring(char_string.begin(), char_string.end());
 	}
 }
 
@@ -192,8 +180,8 @@ KOTEK_END_NAMESPACE_KOTEK
 
 namespace std
 {
-	inline Kotek::ktk::string tag_invoke(
-		const Kotek::ktk::json::value_to_tag<Kotek::ktk::string>& tag,
+	inline Kotek::ktk::ustring tag_invoke(
+		const Kotek::ktk::json::value_to_tag<Kotek::ktk::ustring>& tag,
 		const Kotek::ktk::json::value& read_from)
 	{
 		return Kotek::ktk::tag_invoke(tag, read_from);

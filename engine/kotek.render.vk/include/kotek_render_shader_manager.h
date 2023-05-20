@@ -309,7 +309,7 @@ namespace Kotek
 			{
 			public:
 				explicit shader_loading_data_t(shader_loading_data_type_t type,
-					const ktk::string& path_to_file_or_source_code_string);
+					const ktk::ustring& path_to_file_or_source_code_string);
 
 				explicit shader_loading_data_t(
 					shader_loading_data_type_t type, void* p_data);
@@ -318,17 +318,17 @@ namespace Kotek
 
 				~shader_loading_data_t(void);
 
-				const ktk::variant<void*, ktk::string>& getData(
+				const ktk::variant<void*, ktk::ustring>& getData(
 					void) const noexcept;
 				void setData(
-					const ktk::variant<void*, ktk::string>& data) noexcept;
+					const ktk::variant<void*, ktk::ustring>& data) noexcept;
 
 				shader_loading_data_type_t getType(void) const noexcept;
 				void setType(shader_loading_data_type_t type) noexcept;
 
 			private:
 				shader_loading_data_type_t m_type;
-				ktk::variant<void*, ktk::string> m_data;
+				ktk::variant<void*, ktk::ustring> m_data;
 			};
 
 			// TODO: add support for arrays data like array of textures in
@@ -336,13 +336,13 @@ namespace Kotek
 			class shader_input_data_t
 			{
 			public:
-				shader_input_data_t(const ktk::string& render_pass_name,
+				shader_input_data_t(const ktk::ustring& render_pass_name,
 					ktk::uint32_t binding_index, VkDescriptorType type,
 					ktk::size_t buffer_size);
 
-				shader_input_data_t(const ktk::string& render_pass_name,
+				shader_input_data_t(const ktk::ustring& render_pass_name,
 					ktk::uint32_t binding_index, VkDescriptorType type,
-					const ktk::string& texture_name);
+					const ktk::ustring& texture_name);
 
 				shader_input_data_t(void);
 
@@ -356,9 +356,9 @@ namespace Kotek
 				VkDescriptorType getDescriptorType(void) const noexcept;
 
 				ktk::size_t GetData_BufferSize(void) const noexcept;
-				ktk::string GetData_RenderGraphTextureName(void) const noexcept;
+				ktk::ustring GetData_RenderGraphTextureName(void) const noexcept;
 
-				const ktk::string& GetRenderPassName(void) const noexcept;
+				const ktk::ustring& GetRenderPassName(void) const noexcept;
 
 				/// <summary>
 				/// If true means for buffer otherwise it's image
@@ -372,14 +372,14 @@ namespace Kotek
 
 			private:
 				void SetData(ktk::size_t buffer_size) noexcept;
-				void SetData(const ktk::string& texture_name) noexcept;
+				void SetData(const ktk::ustring& texture_name) noexcept;
 
 			private:
 				ktk::uint32_t m_descriptor_set_index;
 				ktk::uint32_t m_binding_index;
 				VkDescriptorType m_descriptor_type;
-				ktk::string m_render_pass_name;
-				ktk::variant<ktk::size_t, ktk::string> m_data;
+				ktk::ustring m_render_pass_name;
+				ktk::variant<ktk::size_t, ktk::ustring> m_data;
 			};
 
 			class descriptor_set_info_t
@@ -450,9 +450,9 @@ namespace Kotek
 				void shutdown(void) noexcept;
 
 				shader_module_t loadShader(
-					const ktk::string& path, shader_type_t type) noexcept;
+					const ktk::ustring& path, shader_type_t type) noexcept;
 
-				shader_module_t loadShader(const ktk::string& path) noexcept;
+				shader_module_t loadShader(const ktk::ustring& path) noexcept;
 
 				shader_module_t loadShaderAsString(
                     const ktk::cstring& code_as_string,
@@ -481,7 +481,7 @@ namespace Kotek
                         ktk::map<ktk::cstring, ktk::cstring>()) noexcept;
 
 				shader_type_t detectType(
-					const ktk::string& path_to_file) noexcept;
+					const ktk::ustring& path_to_file) noexcept;
 
 			private:
 				Core::ktkIFileSystem* m_p_filesystem;

@@ -41,7 +41,7 @@ public:
 		gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT;
 	ktkShaderModule LoadShader(
 		const ktk::filesystem::path& path) KOTEK_CPP_KEYWORD_NOEXCEPT;
-	ktkShaderModule LoadShaderAsString(const ktk::string& code_as_string,
+	ktkShaderModule LoadShaderAsString(const ktk::ustring& code_as_string,
 		gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
 	void DestroyShader(

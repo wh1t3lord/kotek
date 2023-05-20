@@ -404,7 +404,7 @@ bool ktkEngineConfig::IsUserSpecifiedValidRenderer(void) const noexcept
 	ktk::size_t validation{0};
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-		if (argument.starts_with(KOTEK_TEXT("--render_")))
+		if (argument.starts_with(KOTEK_TEXTU("--render_")))
 		{
 			++validation;
 		}
@@ -427,7 +427,7 @@ bool ktkEngineConfig::IsUserSpecifiedRendererOpenGLInCommandLine(
 
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-		if (argument.starts_with(KOTEK_TEXT("--render_gl")))
+		if (argument.starts_with(KOTEK_TEXTU("--render_gl")))
 		{
 			result = true;
 			break;
@@ -446,7 +446,7 @@ bool ktkEngineConfig::IsUserSpecifiedRendererDirectXInCommandLine(
 
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-		if (argument.starts_with(KOTEK_TEXT("--render_dx")))
+		if (argument.starts_with(KOTEK_TEXTU("--render_dx")))
 		{
 			result = true;
 			break;
@@ -465,7 +465,7 @@ bool ktkEngineConfig::IsUserSpecifiedRendererVulkanInCommandLine(
 
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
-		if (argument.starts_with(KOTEK_TEXT("--render_vk")))
+		if (argument.starts_with(KOTEK_TEXTU("--render_vk")))
 		{
 			result = true;
 			break;

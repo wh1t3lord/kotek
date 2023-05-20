@@ -24,7 +24,7 @@ class ktkWindow : public ktkIWindow
 {
 public:
 	ktkWindow(void);
-	ktkWindow(const ktk::string& title_name);
+	ktkWindow(const ktk::ustring& title_name);
 	~ktkWindow(void);
 
 	/// <summary>

@@ -79,17 +79,17 @@ public:
 		return this->m_json[key];
 	}
 
-	ktk::string Serialize(void) const noexcept
+	ktk::ustring Serialize(void) const noexcept
 	{
 #ifdef KOTEK_USE_BOOST_LIBRARY
-        ktk::string result;
+        ktk::ustring result;
 
 		if (this->m_json.empty())
             return result;
 
         const auto& string = ktk::json::serialize(this->m_json);
 
-        result = ktk::string(string.begin(), string.end());
+        result = ktk::ustring(string.begin(), string.end());
 
         return result;
 #else

@@ -18,22 +18,22 @@ void test_translation_to_enum_invalid_cases()
 	eEngineSupportedRenderer result{};
 
 	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
-		KOTEK_TEXT("GL"), KOTEK_TEXT("0.0"));
+		KOTEK_TEXTU("GL"), KOTEK_TEXTU("0.0"));
 
 	BOOST_CHECK(result == eEngineSupportedRenderer::kUnknown);
 
 	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
-		KOTEK_TEXT("GL"), KOTEK_TEXT("1.9"));
+		KOTEK_TEXTU("GL"), KOTEK_TEXTU("1.9"));
 
 	BOOST_CHECK(result == eEngineSupportedRenderer::kUnknown);
 
 	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
-		KOTEK_TEXT("GL"), KOTEK_TEXT("2.9"));
+		KOTEK_TEXTU("GL"), KOTEK_TEXTU("2.9"));
 
 	BOOST_CHECK(result == eEngineSupportedRenderer::kUnknown);
 
 	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
-		KOTEK_TEXT("GL"), KOTEK_TEXT("3.9"));
+		KOTEK_TEXTU("GL"), KOTEK_TEXTU("3.9"));
 
 	BOOST_CHECK(result == eEngineSupportedRenderer::kUnknown);
 }
@@ -43,22 +43,22 @@ void test_translation_to_enum_valid_cases()
 	eEngineSupportedRenderer result{};
 
 	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
-		KOTEK_TEXT("GL"), KOTEK_TEXT("1.0"));
+		KOTEK_TEXTU("GL"), KOTEK_TEXTU("1.0"));
 
 	BOOST_CHECK(result == eEngineSupportedRenderer::kOpenGL_1_0);
 
 	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
-		KOTEK_TEXT("GL"), KOTEK_TEXT("2.1"));
+		KOTEK_TEXTU("GL"), KOTEK_TEXTU("2.1"));
 
 	BOOST_CHECK(result == eEngineSupportedRenderer::kOpenGL_2_1);
 
 	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
-		KOTEK_TEXT("GL"), KOTEK_TEXT("3.2"));
+		KOTEK_TEXTU("GL"), KOTEK_TEXTU("3.2"));
 
 	BOOST_CHECK(result == eEngineSupportedRenderer::kOpenGL_3_2);
 
 	result = helper::TranslateFromStringToEnum_EngineSupportedRenderer(
-		KOTEK_TEXT("GL"), KOTEK_TEXT("4.6"));
+		KOTEK_TEXTU("GL"), KOTEK_TEXTU("4.6"));
 
 	BOOST_CHECK(result == eEngineSupportedRenderer::kOpenGL_4_6);
 }

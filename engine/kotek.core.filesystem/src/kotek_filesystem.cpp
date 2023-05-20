@@ -70,10 +70,10 @@ bool ktkFileSystem::CreateDirectory(
 	return ktk::filesystem::create_directory(path);
 }
 
-ktk::string ktkFileSystem::ReadFile(
+ktk::ustring ktkFileSystem::ReadFile(
 	const ktk::filesystem::path& path_to_file) const noexcept
 {
-	ktk::string result;
+	ktk::ustring result;
 
 	if (this->IsValidPath(path_to_file) == false)
 	{
@@ -123,7 +123,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root);
 
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata] /=
-		KOTEK_TEXT("gamedata");
+		KOTEK_TEXTU("gamedata");
 
 	bool status = this->IsValidPath(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata));
@@ -137,7 +137,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
-		eFolderIndex::kFolderIndex_Configs, KOTEK_TEXT("configs"));
+		eFolderIndex::kFolderIndex_Configs, KOTEK_TEXTU("configs"));
 
 	if (status == false)
 	{
@@ -148,7 +148,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
-		eFolderIndex::kFolderIndex_Models, KOTEK_TEXT("models"));
+		eFolderIndex::kFolderIndex_Models, KOTEK_TEXTU("models"));
 
 	if (status == false)
 	{
@@ -159,7 +159,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
-		eFolderIndex::kFolderIndex_Textures, KOTEK_TEXT("textures"));
+		eFolderIndex::kFolderIndex_Textures, KOTEK_TEXTU("textures"));
 
 	if (status == false)
 	{
@@ -170,7 +170,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
-		eFolderIndex::kFolderIndex_Shaders, KOTEK_TEXT("shaders"));
+		eFolderIndex::kFolderIndex_Shaders, KOTEK_TEXTU("shaders"));
 
 	if (status == false)
 	{
@@ -181,7 +181,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
-		eFolderIndex::kFolderIndex_AI, KOTEK_TEXT("ai"));
+		eFolderIndex::kFolderIndex_AI, KOTEK_TEXTU("ai"));
 
 	if (status == false)
 	{
@@ -192,7 +192,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
-		eFolderIndex::kFolderIndex_Levels, KOTEK_TEXT("levels"));
+		eFolderIndex::kFolderIndex_Levels, KOTEK_TEXTU("levels"));
 
 	if (status == false)
 	{
@@ -203,7 +203,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
-		eFolderIndex::kFolderIndex_Shaders_GLSL, KOTEK_TEXT("glsl"));
+		eFolderIndex::kFolderIndex_Shaders_GLSL, KOTEK_TEXTU("glsl"));
 
 	if (status == false)
 	{
@@ -214,7 +214,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
-		eFolderIndex::kFolderIndex_Shaders_HLSL, KOTEK_TEXT("hlsl"));
+		eFolderIndex::kFolderIndex_Shaders_HLSL, KOTEK_TEXTU("hlsl"));
 
 	if (status == false)
 	{
@@ -225,7 +225,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
-		eFolderIndex::kFolderindex_Shaders_SPV, KOTEK_TEXT("spv"));
+		eFolderIndex::kFolderindex_Shaders_SPV, KOTEK_TEXTU("spv"));
 
 	if (status == false)
 	{
@@ -236,7 +236,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
-		eFolderIndex::kFolderIndex_Shaders_WEBGPU, KOTEK_TEXT("webgpu"));
+		eFolderIndex::kFolderIndex_Shaders_WEBGPU, KOTEK_TEXTU("webgpu"));
 
 	if (status == false)
 	{
@@ -247,7 +247,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root),
-		eFolderIndex::kFolderIndex_UserData, KOTEK_TEXT("user_data"));
+		eFolderIndex::kFolderIndex_UserData, KOTEK_TEXTU("user_data"));
 
 	if (status == false)
 	{
@@ -259,7 +259,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_UserData),
 		eFolderIndex::kFolderIndex_UserData_ShaderCache,
-		KOTEK_TEXT("shader_cache"));
+		KOTEK_TEXTU("shader_cache"));
 
 	if (status == false)
 	{
@@ -271,7 +271,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 #ifdef KOTEK_DEBUG
 	status = this->AddGamedataFolderToStorage(
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_UserData),
-		eFolderIndex::kFolderIndex_UserTests, KOTEK_TEXT("tests"));
+		eFolderIndex::kFolderIndex_UserTests, KOTEK_TEXTU("tests"));
 
 	if (status == false)
 	{

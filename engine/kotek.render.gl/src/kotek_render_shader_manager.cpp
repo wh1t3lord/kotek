@@ -101,7 +101,7 @@ ktkShaderModule ktkRenderShaderManager::LoadShader(
 }
 
 ktkShaderModule ktkRenderShaderManager::LoadShaderAsString(
-	const ktk::string& code_as_string,
+	const ktk::ustring& code_as_string,
 	gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	KOTEK_ASSERT(
@@ -208,7 +208,7 @@ gl::eShaderType ktkRenderShaderManager::DetectType(
 
 		ktk::cstring temp_filename(filename.string());
 
-		if (temp_filename.find(_kShaderPrefix_Vertex) != ktk::string::npos)
+		if (temp_filename.find(_kShaderPrefix_Vertex) != ktk::ustring::npos)
 		{
 #ifdef KOTEK_DEBUG
 			KOTEK_MESSAGE("detected: Vertex [{}]",
@@ -218,7 +218,7 @@ gl::eShaderType ktkRenderShaderManager::DetectType(
 			return eShaderType::kShaderType_Vertex;
 		}
 		else if (temp_filename.find(_kShaderPrefix_Fragment) !=
-			ktk::string::npos)
+			ktk::ustring::npos)
 		{
 #ifdef KOTEK_DEBUG
 			KOTEK_MESSAGE("detected: Pixel [{}]",
@@ -229,7 +229,7 @@ gl::eShaderType ktkRenderShaderManager::DetectType(
 			return eShaderType::kShaderType_Fragment;
 		}
 		else if (temp_filename.find(_kShaderPrefix_Compute) !=
-			ktk::string::npos)
+			ktk::ustring::npos)
 		{
 #ifdef KOTEK_DEBUG
 			KOTEK_MESSAGE("detected: Compute [{}]",

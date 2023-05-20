@@ -99,7 +99,7 @@ public:
 		return this->m_hashed_type;
 	}
 
-	ktk::string GetComponentName(void) const noexcept override
+	ktk::ustring GetComponentName(void) const noexcept override
 	{
 		return ComponentType::GetComponentName();
 	}

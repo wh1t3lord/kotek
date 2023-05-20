@@ -6,7 +6,7 @@ ktkModel::ktkModel(void) {}
 
 ktkModel::~ktkModel(void) {}
 
-bool ktkModel::Load(Core::ktkMainManager& main_manager, const ktk::string& path)
+bool ktkModel::Load(Core::ktkMainManager& main_manager, const ktk::ustring& path)
 {
 	if (path.empty())
 	{
@@ -27,9 +27,9 @@ bool ktkModel::Load(Core::ktkMainManager& main_manager, const ktk::string& path)
 		return false;
 	}
 
-	if (this->m_file.IsKeyExist(KOTEK_TEXT("buffers")))
+	if (this->m_file.IsKeyExist(KOTEK_TEXTU("buffers")))
 	{
-		const Core::ktkJson& json = this->m_file.Get(KOTEK_TEXT("buffers"));
+		const Core::ktkJson& json = this->m_file.Get(KOTEK_TEXTU("buffers"));
 
 		KOTEK_MESSAGE("size of buffers: {}", json.GetObject().size());
 	}

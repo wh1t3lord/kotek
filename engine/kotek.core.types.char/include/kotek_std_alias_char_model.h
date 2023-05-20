@@ -7,7 +7,7 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
 #ifdef KOTEK_USE_UNICODE
-using tchar = char8_t;
+using tchar = KOTEK_USE_STRING_CONFIGURATION_CHAR_TYPE;
 #else
 using tchar = char;
 #endif

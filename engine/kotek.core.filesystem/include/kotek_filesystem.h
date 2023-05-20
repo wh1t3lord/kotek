@@ -51,7 +51,7 @@ public:
 	// TODO: think about multithreading and probably it is better to move to
 	// resource manager loader/saver
 	/*!
-	 * \brief readFile reads to ktk::string all content of file
+	 * \brief readFile reads to ktk::ustring all content of file
 	 * \param path_to_file your valid path to file, you should use file
 	 * system to navigate file by calling getFolderByEnum
 	 *
@@ -59,9 +59,9 @@ public:
 	 * std::basic_string<char>) you should cast to
 	 * ktk::cast::to_string_legacy otherwise it stands for unicode files
 	 *
-	 * \return ktk::string
+	 * \return ktk::ustring
 	 */
-	ktk::string ReadFile(
+	ktk::ustring ReadFile(
 		const ktk::filesystem::path& path_to_file) const noexcept override;
 
 private:

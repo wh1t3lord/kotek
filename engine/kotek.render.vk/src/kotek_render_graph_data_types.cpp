@@ -7,12 +7,12 @@ namespace Kotek
 		namespace vk
 		{
 			ktkRenderGraphNode::ktkRenderGraphNode(
-				const ktk::string& render_pass_name, VkRenderPass p_pass,
+				const ktk::ustring& render_pass_name, VkRenderPass p_pass,
 				VkFramebuffer p_frame_buffer,
-				const ktk::unordered_map<ktk::string, VkPipeline>& pipelines,
-				const ktk::unordered_map<ktk::string,
+				const ktk::unordered_map<ktk::ustring, VkPipeline>& pipelines,
+				const ktk::unordered_map<ktk::ustring,
 					ktk::vector<VkDescriptorSet>>& pipelines_descriptor_sets,
-				const ktk::unordered_map<ktk::string, VkPipelineLayout>&
+				const ktk::unordered_map<ktk::ustring, VkPipelineLayout>&
 					pipelines_layout) :
 				m_p_render_pass(p_pass),
 				m_p_frame_buffer(p_frame_buffer),
@@ -30,7 +30,7 @@ namespace Kotek
 			ktkRenderGraphNode::~ktkRenderGraphNode(void) {}
 
 			VkPipeline ktkRenderGraphNode::GetPipeline(
-				const ktk::string& pipeline_name) const noexcept
+				const ktk::ustring& pipeline_name) const noexcept
 			{
 				KOTEK_ASSERT(pipeline_name.empty() == false,
 					"you can't pass an empty string");
@@ -44,7 +44,7 @@ namespace Kotek
 			}
 
 			VkPipelineLayout ktkRenderGraphNode::GetPipelineLayout(
-				const ktk::string& pipeline_name) const noexcept
+				const ktk::ustring& pipeline_name) const noexcept
 			{
 				KOTEK_ASSERT(pipeline_name.empty() == false,
 					"you can't pass an empty string here, can't find by empty "
@@ -61,7 +61,7 @@ namespace Kotek
 
 			const ktk::vector<VkDescriptorSet>&
 			ktkRenderGraphNode::GetDescriptorSets(
-				const ktk::string& pipeline_name) const noexcept
+				const ktk::ustring& pipeline_name) const noexcept
 			{
 				KOTEK_ASSERT(pipeline_name.empty() == false,
 					"you can't pass an empty string");
@@ -86,7 +86,7 @@ namespace Kotek
 				return this->m_p_frame_buffer;
 			}
 
-			const ktk::string& ktkRenderGraphNode::GetRenderPassName(
+			const ktk::ustring& ktkRenderGraphNode::GetRenderPassName(
 				void) const noexcept
 			{
 				return this->m_render_pass_name;

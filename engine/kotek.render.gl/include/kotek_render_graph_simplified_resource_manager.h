@@ -49,10 +49,10 @@ public:
 	/// m_render_passes_and_its_programs. It uses for building
 	/// Kotek::Render::gl::ktkRenderGraphSimplifiedNode instance.
 	/// @param void, as input it doesn't take anything
-	/// @return const ktk::unordered_map<ktk::string, GLuint>* const
+	/// @return const ktk::unordered_map<ktk::ustring, GLuint>* const
 	/// it means that pointer and the map can't be changed at all.
 	/// It uses only for reading.
-	const ktk::unordered_map<ktk::string, GLuint>* Get_Storage_Programs(
+	const ktk::unordered_map<ktk::ustring, GLuint>* Get_Storage_Programs(
 		void) const KOTEK_CPP_KEYWORD_NOEXCEPT;
 
 	/// \~english @brief It returns the storage of buffers for required
@@ -64,10 +64,10 @@ public:
 	/// value is information about buffer gl::ktkBufferModule.
 	const ktk::unordered_map<ktk::cstring, ktkBufferModule>*
 	Get_Storage_Buffers(
-		const ktk::string& render_pass_name) const KOTEK_CPP_KEYWORD_NOEXCEPT;
+		const ktk::ustring& render_pass_name) const KOTEK_CPP_KEYWORD_NOEXCEPT;
 
 private:
-	void Create_Shaders(const ktk::unordered_map<ktk::string,
+	void Create_Shaders(const ktk::unordered_map<ktk::ustring,
 		ktk::unordered_map<gl::eShaderType, gl::ktkRenderGraphShaderTextInfo>>&
 			shaders_for_current_render_pass);
 
@@ -86,15 +86,15 @@ private:
 	Core::ktkMainManager* m_p_main_manager;
 
 	// shaders
-	ktk::unordered_map<ktk::string,
+	ktk::unordered_map<ktk::ustring,
 		ktk::unordered_map<gl::eShaderType, ktkShaderModule>>
 		m_render_passes_and_its_shaders;
 
-	ktk::unordered_map<ktk::string, GLuint> m_render_passes_and_its_programs;
+	ktk::unordered_map<ktk::ustring, GLuint> m_render_passes_and_its_programs;
 	// shaders
 
 	// buffers
-	ktk::unordered_map<ktk::string,
+	ktk::unordered_map<ktk::ustring,
 		ktk::unordered_map<ktk::cstring, ktkBufferModule>>
 		m_render_passes_and_their_buffers;
 	// buffers

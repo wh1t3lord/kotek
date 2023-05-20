@@ -145,7 +145,7 @@ namespace gl
 #endif
 	}
 
-	const ktk::unordered_map<ktk::string, GLuint>*
+	const ktk::unordered_map<ktk::ustring, GLuint>*
 	ktkRenderGraphSimplifiedResourceManager::Get_Storage_Programs(
 		void) const noexcept
 	{
@@ -154,7 +154,7 @@ namespace gl
 
 	const ktk::unordered_map<ktk::cstring, ktkBufferModule>*
 	ktkRenderGraphSimplifiedResourceManager::Get_Storage_Buffers(
-		const ktk::string& render_pass_name) const noexcept
+		const ktk::ustring& render_pass_name) const noexcept
 	{
 		KOTEK_ASSERT(render_pass_name.empty() == false,
 			"you can't pass an empty render pass name, because we can't find "
@@ -186,7 +186,7 @@ namespace gl
 	}
 
 	void ktkRenderGraphSimplifiedResourceManager::Create_Shaders(
-		const ktk::unordered_map<ktk::string,
+		const ktk::unordered_map<ktk::ustring,
 			ktk::unordered_map<gl::eShaderType,
 				gl::ktkRenderGraphShaderTextInfo>>&
 			shaders_for_current_render_pass)
@@ -236,7 +236,7 @@ namespace gl
 		case gl::eShaderLoadingDataType::kShaderLoadingDataType_FilePathString:
 		{
 			result = p_manager->LoadShader(
-				std::get<Kotek::ktk::string>(info_creation.Get_Data()));
+				std::get<Kotek::ktk::ustring>(info_creation.Get_Data()));
 			break;
 		}
 		case gl::eShaderLoadingDataType::kShaderLoadingDataType_NotInitialized:
@@ -248,7 +248,7 @@ namespace gl
 			kShaderLoadingDataType_SourceCode_TextString:
 		{
 			result = p_manager->LoadShaderAsString(
-				std::get<Kotek::ktk::string>(info_creation.Get_Data()),
+				std::get<Kotek::ktk::ustring>(info_creation.Get_Data()),
 				shader_type);
 			break;
 		}

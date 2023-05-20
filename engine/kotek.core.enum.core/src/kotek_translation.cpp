@@ -14,75 +14,75 @@ namespace helper
 		{
 		case eFolderIndex::kFolderIndex_Root:
 		{
-			return KOTEK_TEXT("Root");
+			return KOTEK_TEXTU("Root");
 		}
 		case eFolderIndex::kFolderIndex_Gamedata:
 		{
-			return KOTEK_TEXT("Gamedata");
+			return KOTEK_TEXTU("Gamedata");
 		}
 		case eFolderIndex::kFolderIndex_Configs:
 		{
-			return KOTEK_TEXT("Configs");
+			return KOTEK_TEXTU("Configs");
 		}
 		case eFolderIndex::kFolderIndex_Models:
 		{
-			return KOTEK_TEXT("Models");
+			return KOTEK_TEXTU("Models");
 		}
 		case eFolderIndex::kFolderIndex_Scripts:
 		{
-			return KOTEK_TEXT("Scripts");
+			return KOTEK_TEXTU("Scripts");
 		}
 		case eFolderIndex::kFolderIndex_Shaders:
 		{
-			return KOTEK_TEXT("Shaders");
+			return KOTEK_TEXTU("Shaders");
 		}
 		case eFolderIndex::kFolderIndex_Sounds:
 		{
-			return KOTEK_TEXT("Sounds");
+			return KOTEK_TEXTU("Sounds");
 		}
 		case eFolderIndex::kFolderIndex_Textures:
 		{
-			return KOTEK_TEXT("Textures");
+			return KOTEK_TEXTU("Textures");
 		}
 		case eFolderIndex::kFolderIndex_Levels:
 		{
-			return KOTEK_TEXT("Levels");
+			return KOTEK_TEXTU("Levels");
 		}
 		case eFolderIndex::kFolderIndex_AI:
 		{
-			return KOTEK_TEXT("AI");
+			return KOTEK_TEXTU("AI");
 		}
 		case eFolderIndex::kFolderIndex_UserData:
 		{
-			return KOTEK_TEXT("UserData");
+			return KOTEK_TEXTU("UserData");
 		}
 		case eFolderIndex::kFolderIndex_UserTests:
 		{
-			return KOTEK_TEXT("UserTests");
+			return KOTEK_TEXTU("UserTests");
 		}
 		case eFolderIndex::kFolderIndex_UserData_ShaderCache:
 		{
-			return KOTEK_TEXT("UserData_ShaderCache");
+			return KOTEK_TEXTU("UserData_ShaderCache");
 		}
 		case eFolderIndex::kFolderIndex_Shaders_GLSL:
 		{
-			return KOTEK_TEXT("Shaders_GLSL");
+			return KOTEK_TEXTU("Shaders_GLSL");
 		}
 		case eFolderIndex::kFolderIndex_Shaders_HLSL:
 		{
-			return KOTEK_TEXT("Shaders_HLSL");
+			return KOTEK_TEXTU("Shaders_HLSL");
 		}
 		case eFolderIndex::kFolderindex_Shaders_SPV:
 		{
-			return KOTEK_TEXT("Shaders_SPV");
+			return KOTEK_TEXTU("Shaders_SPV");
 		}
 		case eFolderIndex::kFolderIndex_Shaders_WEBGPU:
 		{
-			return KOTEK_TEXT("Shaders_WEBGPU");
+			return KOTEK_TEXTU("Shaders_WEBGPU");
 		}
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_FOLDER_INDEX");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_FOLDER_INDEX");
 		}
 		}
 	}
@@ -93,7 +93,7 @@ namespace helper
 		{
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_ENGINE_FEATURE");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_ENGINE_FEATURE");
 		}
 		}
 	}
@@ -104,15 +104,15 @@ namespace helper
 		{
 		case eEngineFeatureRender::kEngine_Render_Feature_MSAA:
 		{
-			return KOTEK_TEXT("MSAA");
+			return KOTEK_TEXTU("MSAA");
 		}
 		case eEngineFeatureRender::kEngine_Render_Feature_VSYNC:
 		{
-			return KOTEK_TEXT("VSYNC");
+			return KOTEK_TEXTU("VSYNC");
 		}
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_ENGINE_FEATURE_RENDER");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_ENGINE_FEATURE_RENDER");
 		}
 		}
 	}
@@ -124,127 +124,127 @@ namespace helper
 		{
 		case eEngineSupportedRenderer::kDirectX_7:
 		{
-			return KOTEK_TEXT("DirectX 7");
+			return KOTEK_TEXTU("DirectX 7");
 		}
 		case eEngineSupportedRenderer::kDirectX_8:
 		{
-			return KOTEK_TEXT("DirectX 8");
+			return KOTEK_TEXTU("DirectX 8");
 		}
 		case eEngineSupportedRenderer::kDirectX_9:
 		{
-			return KOTEK_TEXT("DirectX 9");
+			return KOTEK_TEXTU("DirectX 9");
 		}
 		case eEngineSupportedRenderer::kDirectX_10:
 		{
-			return KOTEK_TEXT("DirectX 10");
+			return KOTEK_TEXTU("DirectX 10");
 		}
 		case eEngineSupportedRenderer::kDirectX_11:
 		{
-			return KOTEK_TEXT("DirectX 11");
+			return KOTEK_TEXTU("DirectX 11");
 		}
 		case eEngineSupportedRenderer::kDirectX_12:
 		{
-			return KOTEK_TEXT("DirectX 12");
+			return KOTEK_TEXTU("DirectX 12");
 		}
 		case eEngineSupportedRenderer::kOpenGL_1_0:
 		{
-			return KOTEK_TEXT("OpenGL 1.0");
+			return KOTEK_TEXTU("OpenGL 1.0");
 		}
 		case eEngineSupportedRenderer::kOpenGL_1_1:
 		{
-			return KOTEK_TEXT("OpenGL 1.1");
+			return KOTEK_TEXTU("OpenGL 1.1");
 		}
 		case eEngineSupportedRenderer::kOpenGL_1_2:
 		{
-			return KOTEK_TEXT("OpenGL 1.2");
+			return KOTEK_TEXTU("OpenGL 1.2");
 		}
 		case eEngineSupportedRenderer::kOpenGL_1_3:
 		{
-			return KOTEK_TEXT("OpenGL 1.3");
+			return KOTEK_TEXTU("OpenGL 1.3");
 		}
 		case eEngineSupportedRenderer::kOpenGL_1_4:
 		{
-			return KOTEK_TEXT("OpenGL 1.4");
+			return KOTEK_TEXTU("OpenGL 1.4");
 		}
 		case eEngineSupportedRenderer::kOpenGL_1_5:
 		{
-			return KOTEK_TEXT("OpenGL 1.5");
+			return KOTEK_TEXTU("OpenGL 1.5");
 		}
 		case eEngineSupportedRenderer::kOpenGL_2_0:
 		{
-			return KOTEK_TEXT("OpenGL 2.0");
+			return KOTEK_TEXTU("OpenGL 2.0");
 		}
 		case eEngineSupportedRenderer::kOpenGL_2_1:
 		{
-			return KOTEK_TEXT("OpenGL 2.1");
+			return KOTEK_TEXTU("OpenGL 2.1");
 		}
 		case eEngineSupportedRenderer::kOpenGL_3_0:
 		{
-			return KOTEK_TEXT("OpenGL 3.0");
+			return KOTEK_TEXTU("OpenGL 3.0");
 		}
 		case eEngineSupportedRenderer::kOpenGL_3_1:
 		{
-			return KOTEK_TEXT("OpenGL 3.1");
+			return KOTEK_TEXTU("OpenGL 3.1");
 		}
 		case eEngineSupportedRenderer::kOpenGL_3_2:
 		{
-			return KOTEK_TEXT("OpenGL 3.2");
+			return KOTEK_TEXTU("OpenGL 3.2");
 		}
 		case eEngineSupportedRenderer::kOpenGL_3_3:
 		{
-			return KOTEK_TEXT("OpenGL 3.3");
+			return KOTEK_TEXTU("OpenGL 3.3");
 		}
 		case eEngineSupportedRenderer::kOpenGL_4_0:
 		{
-			return KOTEK_TEXT("OpenGL 4.0");
+			return KOTEK_TEXTU("OpenGL 4.0");
 		}
 		case eEngineSupportedRenderer::kOpenGL_4_1:
 		{
-			return KOTEK_TEXT("OpenGL 4.1");
+			return KOTEK_TEXTU("OpenGL 4.1");
 		}
 		case eEngineSupportedRenderer::kOpenGL_4_2:
 		{
-			return KOTEK_TEXT("OpenGL 4.2");
+			return KOTEK_TEXTU("OpenGL 4.2");
 		}
 		case eEngineSupportedRenderer::kOpenGL_4_3:
 		{
-			return KOTEK_TEXT("OpenGL 4.3");
+			return KOTEK_TEXTU("OpenGL 4.3");
 		}
 		case eEngineSupportedRenderer::kOpenGL_4_4:
 		{
-			return KOTEK_TEXT("OpenGL 4.4");
+			return KOTEK_TEXTU("OpenGL 4.4");
 		}
 		case eEngineSupportedRenderer::kOpenGL_4_5:
 		{
-			return KOTEK_TEXT("OpenGL 4.5");
+			return KOTEK_TEXTU("OpenGL 4.5");
 		}
 		case eEngineSupportedRenderer::kOpenGL_4_6:
 		{
-			return KOTEK_TEXT("OpenGL 4.6");
+			return KOTEK_TEXTU("OpenGL 4.6");
 		}
 		case eEngineSupportedRenderer::kVulkan_1_0:
 		{
-			return KOTEK_TEXT("Vulkan 1.0");
+			return KOTEK_TEXTU("Vulkan 1.0");
 		}
 		case eEngineSupportedRenderer::kVulkan_1_1:
 		{
-			return KOTEK_TEXT("Vulkan 1.1");
+			return KOTEK_TEXTU("Vulkan 1.1");
 		}
 		case eEngineSupportedRenderer::kVulkan_1_2:
 		{
-			return KOTEK_TEXT("Vulkan 1.2");
+			return KOTEK_TEXTU("Vulkan 1.2");
 		}
 		case eEngineSupportedRenderer::kVulkan_1_3:
 		{
-			return KOTEK_TEXT("Vulkan 1.3");
+			return KOTEK_TEXTU("Vulkan 1.3");
 		}
 		case eEngineSupportedRenderer::kUnknown:
 		{
-			return KOTEK_TEXT("Unknown");
+			return KOTEK_TEXTU("Unknown");
 		}
 		default:
 		{
-			return KOTEK_TEXT(
+			return KOTEK_TEXTU(
 				"UNDEFINED_ENUM_OF_ENGINE_SUPPORTED_DIRECTX_VERSION");
 		}
 		}
@@ -277,30 +277,30 @@ namespace helper
 		case eEngineFeatureRenderer::
 			kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
 		{
-			return KOTEK_TEXT("OpenGL version is specified by user");
+			return KOTEK_TEXTU("OpenGL version is specified by user");
 		}
 		case eEngineFeatureRenderer::
 			kEngine_Render_Renderer_DirectX_SpecifiedByUser:
 		{
-			return KOTEK_TEXT("DirectX version is specified by user");
+			return KOTEK_TEXTU("DirectX version is specified by user");
 		}
 		case eEngineFeatureRenderer::
 			kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
 		{
-			return KOTEK_TEXT("Vulkan version is specified by user");
+			return KOTEK_TEXTU("Vulkan version is specified by user");
 		}
 		case eEngineFeatureRenderer::
 			kEngine_Render_Renderer_OpenGLES_SpecifiedByUser:
 		{
-			return KOTEK_TEXT("OpenGL ES version is specified by user");
+			return KOTEK_TEXTU("OpenGL ES version is specified by user");
 		}
 		case eEngineFeatureRenderer::kEngine_Render_Renderer_Software:
 		{
-			return KOTEK_TEXT("Software");
+			return KOTEK_TEXTU("Software");
 		}
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_ENGINE_FEATURE_RENDERER");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_ENGINE_FEATURE_RENDERER");
 		}
 		}
 	}
@@ -313,36 +313,36 @@ namespace helper
 		case eEngineFeatureRendererANGLE::
 			kEngine_Render_Renderer_ANGLE_Feature_Desktop_GL:
 		{
-			return KOTEK_TEXT("Desktop GL");
+			return KOTEK_TEXTU("Desktop GL");
 		}
 		case eEngineFeatureRendererANGLE::
 			kEngine_Render_Renderer_ANGLE_Feature_DirectX_9:
 		{
-			return KOTEK_TEXT("DirectX 9");
+			return KOTEK_TEXTU("DirectX 9");
 		}
 		case eEngineFeatureRendererANGLE::
 			kEngine_Render_Renderer_ANGLE_Feature_DirectX_11:
 		{
-			return KOTEK_TEXT("DirectX 11");
+			return KOTEK_TEXTU("DirectX 11");
 		}
 		case eEngineFeatureRendererANGLE::
 			kEngine_Render_Renderer_ANGLE_Feature_Vulkan:
 		{
-			return KOTEK_TEXT("Vulkan");
+			return KOTEK_TEXTU("Vulkan");
 		}
 		case eEngineFeatureRendererANGLE::
 			kEngine_Render_Renderer_ANGLE_Feature_GL_ES:
 		{
-			return KOTEK_TEXT("GL ES");
+			return KOTEK_TEXTU("GL ES");
 		}
 		case eEngineFeatureRendererANGLE::
 			kEngine_Render_Renderer_ANGLE_Feature_Metal:
 		{
-			return KOTEK_TEXT("Metal");
+			return KOTEK_TEXTU("Metal");
 		}
 		default:
 		{
-			return KOTEK_TEXT(
+			return KOTEK_TEXTU(
 				"UNDEFINED_ENUM_OF_ENGINE_FEATURE_RENDERER_ANGLE");
 		}
 		}
@@ -356,15 +356,15 @@ namespace helper
 		{
 			// TODO: add determing what GUI kit is used like wxWidgets, Qt, MFC
 			// and etc
-			return KOTEK_TEXT("SDK (not ImGui Mode)");
+			return KOTEK_TEXTU("SDK (not ImGui Mode)");
 		}
 		case eEngineFeatureSDK::kEngine_Feature_SDK_ImGui:
 		{
-			return KOTEK_TEXT("SDK (ImGui Mode)");
+			return KOTEK_TEXTU("SDK (ImGui Mode)");
 		}
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_ENGINE_FEATURE_SDK");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_ENGINE_FEATURE_SDK");
 		}
 		}
 	}
@@ -375,23 +375,23 @@ namespace helper
 		{
 		case eEngineFeatureWindow::kEngine_Window_Borderless:
 		{
-			return KOTEK_TEXT("Borderless");
+			return KOTEK_TEXTU("Borderless");
 		}
 		case eEngineFeatureWindow::kEngine_Window_FullScreen:
 		{
-			return KOTEK_TEXT("FullScreen");
+			return KOTEK_TEXTU("FullScreen");
 		}
 		case eEngineFeatureWindow::kEngine_Window_Windowed:
 		{
-			return KOTEK_TEXT("Windowed");
+			return KOTEK_TEXTU("Windowed");
 		}
 		case eEngineFeatureWindow::kNone:
 		{
-			return KOTEK_TEXT("None");
+			return KOTEK_TEXTU("None");
 		}
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_ENGINE_FEATURE_WINDOW");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_ENGINE_FEATURE_WINDOW");
 		}
 		}
 	}
@@ -402,39 +402,39 @@ namespace helper
 		{
 		case eResourceLoadingType::kAutoDetect:
 		{
-			return KOTEK_TEXT("AutoDetect");
+			return KOTEK_TEXTU("AutoDetect");
 		}
 		case eResourceLoadingType::kDLL:
 		{
-			return KOTEK_TEXT("DLL (some programming module)");
+			return KOTEK_TEXTU("DLL (some programming module)");
 		}
 		case eResourceLoadingType::kModel:
 		{
-			return KOTEK_TEXT("Model");
+			return KOTEK_TEXTU("Model");
 		}
 		case eResourceLoadingType::kSound:
 		{
-			return KOTEK_TEXT("Sound");
+			return KOTEK_TEXTU("Sound");
 		}
 		case eResourceLoadingType::kText:
 		{
-			return KOTEK_TEXT("Text");
+			return KOTEK_TEXTU("Text");
 		}
 		case eResourceLoadingType::kTexture:
 		{
-			return KOTEK_TEXT("Texture");
+			return KOTEK_TEXTU("Texture");
 		}
 		case eResourceLoadingType::kUnknown:
 		{
-			return KOTEK_TEXT("Unknown");
+			return KOTEK_TEXTU("Unknown");
 		}
 		case eResourceLoadingType::kVideo:
 		{
-			return KOTEK_TEXT("Video");
+			return KOTEK_TEXTU("Video");
 		}
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_RESOURCE_LOADING_TYPE");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_RESOURCE_LOADING_TYPE");
 		}
 		}
 	}
@@ -445,15 +445,15 @@ namespace helper
 		{
 		case eResourceLoadingPolicy::kAsync:
 		{
-			return KOTEK_TEXT("Async");
+			return KOTEK_TEXTU("Async");
 		}
 		case eResourceLoadingPolicy::kSync:
 		{
-			return KOTEK_TEXT("Sync");
+			return KOTEK_TEXTU("Sync");
 		}
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_RESOURCE_LOADING_POLICY");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_RESOURCE_LOADING_POLICY");
 		}
 		}
 	}
@@ -464,15 +464,15 @@ namespace helper
 		{
 		case eResourceCachingPolicy::kCache:
 		{
-			return KOTEK_TEXT("Cache");
+			return KOTEK_TEXTU("Cache");
 		}
 		case eResourceCachingPolicy::kWithoutCache:
 		{
-			return KOTEK_TEXT("WithoutCache");
+			return KOTEK_TEXTU("WithoutCache");
 		}
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_RESOURCE_CACHING_POLICY");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_RESOURCE_CACHING_POLICY");
 		}
 		}
 	}
@@ -483,28 +483,28 @@ namespace helper
 		{
 		case eConsoleCommandIndex::kConsoleCommand_App_Close:
 		{
-			return KOTEK_TEXT("App_Close");
+			return KOTEK_TEXTU("App_Close");
 		}
 		case eConsoleCommandIndex::kConsoleCommand_App_Hide:
 		{
-			return KOTEK_TEXT("App_Hide");
+			return KOTEK_TEXTU("App_Hide");
 		}
 		case eConsoleCommandIndex::kConsoleCommand_App_Show:
 		{
-			return KOTEK_TEXT("App_Show");
+			return KOTEK_TEXTU("App_Show");
 		}
 		case eConsoleCommandIndex::
 			kConsoleCommand_Render_UploadAllResourcesToGPU:
 		{
-			return KOTEK_TEXT("Render_UploadAllResourcesToGPU");
+			return KOTEK_TEXTU("Render_UploadAllResourcesToGPU");
 		}
 		case eConsoleCommandIndex::kConsoleCommand_Resize:
 		{
-			return KOTEK_TEXT("Resize");
+			return KOTEK_TEXTU("Resize");
 		}
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_CONSOLE_COMMAND_INDEX");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_CONSOLE_COMMAND_INDEX");
 		}
 		}
 	}
@@ -515,19 +515,19 @@ namespace helper
 		{
 		case eInputType::kInputType_Cursor:
 		{
-			return KOTEK_TEXT("InputType_Cursor");
+			return KOTEK_TEXTU("InputType_Cursor");
 		}
 		case eInputType::kInputType_DisabledCursor:
 		{
-			return KOTEK_TEXT("InputType_DisabledCursor");
+			return KOTEK_TEXTU("InputType_DisabledCursor");
 		}
 		case eInputType::kInputType_HiddenCursor:
 		{
-			return KOTEK_TEXT("InputType_HiddenCursor");
+			return KOTEK_TEXTU("InputType_HiddenCursor");
 		}
 		default:
 		{
-			return KOTEK_TEXT("UNDEFINED_ENUM_OF_INPUT_TYPE");
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_INPUT_TYPE");
 		}
 		}
 	}
@@ -543,12 +543,12 @@ namespace helper
 		if (renderer_name.empty())
 			return result;
 
-		bool is_latest = ktk::to_lower(version_name) == KOTEK_TEXT("latest");
+		bool is_latest = ktk::to_lower(version_name) == KOTEK_TEXTU("latest");
 
 		int major_version{};
 		int minor_version{};
 
-		if (renderer_name == KOTEK_TEXT("GL"))
+		if (renderer_name == KOTEK_TEXTU("GL"))
 		{
 			major_version = ktk::lexical_cast<int>(version_name[0]);
 			minor_version = ktk::lexical_cast<int>(version_name[2]);
@@ -715,7 +715,7 @@ namespace helper
 
 			return result;
 		}
-		else if (renderer_name == KOTEK_TEXT("GLES"))
+		else if (renderer_name == KOTEK_TEXTU("GLES"))
 		{
 			major_version = ktk::lexical_cast<int>(version_name[0]);
 			minor_version = ktk::lexical_cast<int>(version_name[2]);
@@ -770,7 +770,7 @@ namespace helper
 
 			return result;
 		}
-		else if (renderer_name == KOTEK_TEXT("DX"))
+		else if (renderer_name == KOTEK_TEXTU("DX"))
 		{
 			major_version = ktk::lexical_cast<int>(version_name.c_str());
 
@@ -815,7 +815,7 @@ namespace helper
 
 			return result;
 		}
-		else if (renderer_name == KOTEK_TEXT("VK"))
+		else if (renderer_name == KOTEK_TEXTU("VK"))
 		{
 			major_version = ktk::lexical_cast<int>(version_name[0]);
 			minor_version = ktk::lexical_cast<int>(version_name[2]);
@@ -879,34 +879,34 @@ namespace helper
 
 		auto renderer_name = ktk::to_lower(name);
 
-		if (renderer_name == KOTEK_TEXT("angle") ||
-			renderer_name == KOTEK_TEXT("opengl es") ||
-			renderer_name == KOTEK_TEXT("opengles") ||
-			renderer_name == KOTEK_TEXT("gles") ||
-			renderer_name == KOTEK_TEXT("gl es"))
+		if (renderer_name == KOTEK_TEXTU("angle") ||
+			renderer_name == KOTEK_TEXTU("opengl es") ||
+			renderer_name == KOTEK_TEXTU("opengles") ||
+			renderer_name == KOTEK_TEXTU("gles") ||
+			renderer_name == KOTEK_TEXTU("gl es"))
 		{
 			result = eEngineFeatureRenderer::
 				kEngine_Render_Renderer_OpenGLES_SpecifiedByUser;
 		}
-		else if (renderer_name == KOTEK_TEXT("software") ||
-			renderer_name == KOTEK_TEXT("sw"))
+		else if (renderer_name == KOTEK_TEXTU("software") ||
+			renderer_name == KOTEK_TEXTU("sw"))
 		{
 			result = eEngineFeatureRenderer::kEngine_Render_Renderer_Software;
 		}
-		else if (renderer_name == KOTEK_TEXT("directx") ||
-			renderer_name == KOTEK_TEXT("dx"))
+		else if (renderer_name == KOTEK_TEXTU("directx") ||
+			renderer_name == KOTEK_TEXTU("dx"))
 		{
 			result = eEngineFeatureRenderer::
 				kEngine_Render_Renderer_DirectX_SpecifiedByUser;
 		}
-		else if (renderer_name == KOTEK_TEXT("vulkan") ||
-			renderer_name == KOTEK_TEXT("vk"))
+		else if (renderer_name == KOTEK_TEXTU("vulkan") ||
+			renderer_name == KOTEK_TEXTU("vk"))
 		{
 			result = eEngineFeatureRenderer::
 				kEngine_Render_Renderer_Vulkan_SpecifiedByUser;
 		}
-		else if (renderer_name == KOTEK_TEXT("opengl") ||
-			renderer_name == KOTEK_TEXT("gl"))
+		else if (renderer_name == KOTEK_TEXTU("opengl") ||
+			renderer_name == KOTEK_TEXTU("gl"))
 		{
 			result = eEngineFeatureRenderer::
 				kEngine_Render_Renderer_OpenGL_SpecifiedByUser;

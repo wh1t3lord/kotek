@@ -64,7 +64,7 @@ bool ktkSaverFile_JSON::DetectTypeByFullPath(
 
 ktk::cstring ktkSaverFile_JSON::Get_UserDescription() const noexcept
 {
-	return KOTEK_TEXT("JSON saver (not GeoJSON)");
+	return KOTEK_TEXTU("JSON saver (not GeoJSON)");
 }
 
 eResourceLoadingType ktkSaverFile_JSON::Get_Type() const noexcept

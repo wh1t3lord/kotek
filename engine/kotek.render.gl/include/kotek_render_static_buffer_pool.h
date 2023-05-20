@@ -11,7 +11,7 @@ namespace gl
 		~kotek_render_static_buffer_pool(void);
 
 		void initialize(ktk::uint32_t total_memory_size, bool is_use_gpu_memory,
-			const ktk::string& vma_name_allocation);
+			const ktk::ustring& vma_name_allocation);
 
 		void shutdown();
 

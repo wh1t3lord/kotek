@@ -88,7 +88,7 @@ namespace Kotek
 
 				/*
 				  VkShaderModule loadShader(Core::ktkMainManager& main_manager,
-				                                   const ktk::string& path,
+				                                   const ktk::ustring& path,
 				                                   shader_type_t type) noexcept
 				  {
 				    return this->m_manager_shader.loadShader(main_manager, path,
@@ -96,7 +96,7 @@ namespace Kotek
 				  }
 
 				  VkShaderModule loadShader(Core::ktkMainManager& main_manager,
-				                                   const ktk::string& path)
+				                                   const ktk::ustring& path)
 				  noexcept
 				  {
 				    return this->m_manager_shader.loadShader(main_manager,
@@ -104,7 +104,7 @@ namespace Kotek
 				  }
 
 				  VkShaderModule loadShaderAsString(ktkRenderDevice*
-				  p_render_device, const ktk::string& code_as_string,
+				  p_render_device, const ktk::ustring& code_as_string,
 				  shader_type_t type) noexcept
 				  {
 				    return

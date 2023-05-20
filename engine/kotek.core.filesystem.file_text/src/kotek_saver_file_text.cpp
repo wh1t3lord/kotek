@@ -53,7 +53,7 @@ bool ktkResourceSaverFile_Text::DetectTypeByFullPath(
 
 ktk::cstring ktkResourceSaverFile_Text::Get_UserDescription() const noexcept
 {
-	return KOTEK_TEXT("this is saver for Text files");
+	return KOTEK_TEXTU("this is saver for Text files");
 }
 
 eResourceLoadingType ktkResourceSaverFile_Text::Get_Type() const noexcept

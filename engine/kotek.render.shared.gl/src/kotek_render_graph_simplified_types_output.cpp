@@ -17,7 +17,7 @@ namespace gl
 	}
 
 	void ktkRenderGraphSimplifiedStorageOutput::Add_Buffer(
-		const ktk::string& buffer_name,
+		const ktk::ustring& buffer_name,
 		const gl::ktkRenderGraphBufferInfo& info) noexcept
 	{
 		KOTEK_ASSERT(buffer_name.empty() == false,
@@ -31,14 +31,14 @@ namespace gl
         this->m_output_buffers[buffer_name] = info;
 	}
 
-	const ktk::unordered_map<ktk::string, gl::ktkRenderGraphBufferInfo>&
+	const ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphBufferInfo>&
 	ktkRenderGraphSimplifiedStorageOutput::Get_Buffers(void) const noexcept
 	{
 		return this->m_output_buffers;
 	}
 
 	void ktkRenderGraphSimplifiedStorageOutput::Add_Image(
-		const ktk::string& image_name,
+		const ktk::ustring& image_name,
 		const gl::ktkRenderGraphTextureInfo& info) noexcept
 	{
 		KOTEK_ASSERT(
@@ -51,7 +51,7 @@ namespace gl
         this->m_output_textures[image_name] = info;
 	}
 
-	const ktk::unordered_map<ktk::string, gl::ktkRenderGraphTextureInfo>&
+	const ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphTextureInfo>&
 	ktkRenderGraphSimplifiedStorageOutput::Get_Images(void) const noexcept
 	{
 		return this->m_output_textures;

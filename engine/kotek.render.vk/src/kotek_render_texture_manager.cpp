@@ -50,7 +50,7 @@ namespace Kotek
 				}
 
                 result.SetTextureName(
-                    ktk::string(texture_name.begin(), texture_name.end()));
+                    ktk::ustring(texture_name.begin(), texture_name.end()));
 				result.SetCreateInfoImage(info.getImageCreateInfo());
 				result.SetCreateInfoSampler(info.getSamplerCreateInfo());
 				result.SetTextureType(type);

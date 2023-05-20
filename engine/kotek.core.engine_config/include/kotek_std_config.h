@@ -86,7 +86,7 @@ public:
 	/**
 	 * Get current renderer name in human-readable form.
 	 *
-	 * \return ktk::string
+	 * \return ktk::ustring
 	 */
 	ktk::cstring GetRenderName(void) const noexcept override;
 

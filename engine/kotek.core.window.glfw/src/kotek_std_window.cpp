@@ -12,7 +12,7 @@ ktkWindow::ktkWindow(void) :
 		"Kotek Engine");
 }
 
-ktkWindow::ktkWindow(const ktk::string& title_name) :
+ktkWindow::ktkWindow(const ktk::ustring& title_name) :
 	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr}
 {
 	this->SetStringToTitle(
@@ -318,7 +318,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 		{
 			const char* p_test{};
 			glfwGetError(&p_test);
-			KOTEK_ASSERT(false, "can't create GLFW window, reason: {}", p_test);
+			KOTEK_ASSERT(false, "can't create GLFW window, reason: {} (probably your forgot to put libEGL.dll into folder)", p_test);
 			glfwTerminate();
 			return;
 		}

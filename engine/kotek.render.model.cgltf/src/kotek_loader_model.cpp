@@ -75,7 +75,7 @@ bool ktkLoaderModel_CGLTF::Load(
 
 ktk::cstring ktkLoaderModel_CGLTF::Get_UserDescription(void) const noexcept
 {
-	return KOTEK_TEXT("this is loader based on cgltf library for "
+	return KOTEK_TEXTU("this is loader based on cgltf library for "
 					  "loading glTF 2.0 models (.glb, .gltf)");
 }
 

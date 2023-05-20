@@ -58,7 +58,7 @@ namespace Kotek
 
 			void ktkRenderGraphBuilder::Initialize(
 				ktkRenderGraphResourceManager* p_resource_manager,
-				const ktk::string& backbuffer_name,
+				const ktk::ustring& backbuffer_name,
 				const eRenderGraphBuilderType& render_graph_type_id,
 				const eRenderGraphBuilderPipelineRenderingType&
 					rendering_pipeline_type)
@@ -83,10 +83,10 @@ namespace Kotek
 
 			void ktkRenderGraphBuilder::Shutdown(void) {}
 
-			ktk::unordered_map<ktk::string, ktkRenderGraphStorageInput>
+			ktk::unordered_map<ktk::ustring, ktkRenderGraphStorageInput>
 			ktkRenderGraphBuilder::CompileInputs(void) noexcept
 			{
-                ktk::unordered_map<ktk::string, ktkRenderGraphStorageInput>
+                ktk::unordered_map<ktk::ustring, ktkRenderGraphStorageInput>
 					result;
 
 				for (const auto& pass : this->m_temporary_storage_render_passes)
@@ -101,10 +101,10 @@ namespace Kotek
 				return result;
 			}
 
-			ktk::unordered_map<ktk::string, ktkRenderGraphStorageOutput>
+			ktk::unordered_map<ktk::ustring, ktkRenderGraphStorageOutput>
 			ktkRenderGraphBuilder::CompileOutputs(void) noexcept
 			{
-                ktk::unordered_map<ktk::string, ktkRenderGraphStorageOutput>
+                ktk::unordered_map<ktk::ustring, ktkRenderGraphStorageOutput>
 					result;
 
 				for (const auto& pass : this->m_temporary_storage_render_passes)
@@ -124,9 +124,9 @@ namespace Kotek
 			}
 
 			ktk::vector<ktkRenderGraphNode> ktkRenderGraphBuilder::Analyze(
-				const ktk::unordered_map<ktk::string,
+				const ktk::unordered_map<ktk::ustring,
 					ktkRenderGraphStorageInput>& input_storage,
-				const ktk::unordered_map<ktk::string,
+				const ktk::unordered_map<ktk::ustring,
 					ktkRenderGraphStorageOutput>& output_storage) noexcept
 			{
 				KOTEK_CPU_PROFILE();
@@ -137,11 +137,11 @@ namespace Kotek
 					(is_current_output_has_inputs_buffer ||
 						is_current_output_has_inputs_image);
 
-				ktk::unordered_map<ktk::string,
+				ktk::unordered_map<ktk::ustring,
                     ktkRenderGraphResourceInfo<ktkRenderTextureInfo>>
 					image_to_create;
 
-				ktk::unordered_map<ktk::string,
+				ktk::unordered_map<ktk::ustring,
 					ktkRenderGraphResourceInfo<VkBufferCreateInfo>>
 					buffer_to_create;
 
@@ -333,7 +333,7 @@ namespace Kotek
 				for (const auto* p_render_pass :
 					this->m_temporary_storage_render_passes)
 				{
-					const ktk::string& render_pass_name =
+					const ktk::ustring& render_pass_name =
 						p_render_pass->GetName();
 
 					const auto& storage_input =
@@ -363,11 +363,11 @@ namespace Kotek
 							"Can't be");
 					}
 
-					ktk::unordered_map<ktk::string, VkPipeline> pipelines;
-					ktk::unordered_map<ktk::string,
+					ktk::unordered_map<ktk::ustring, VkPipeline> pipelines;
+					ktk::unordered_map<ktk::ustring,
 						ktk::vector<VkDescriptorSet>>
 						descriptor_sets;
-					ktk::unordered_map<ktk::string, VkPipelineLayout>
+					ktk::unordered_map<ktk::ustring, VkPipelineLayout>
 						pipelines_layout;
 
 					for (const auto& [pipeline_name, info] :
@@ -416,9 +416,9 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphBuilder::CreateTexturesAndBuffers(
-				const ktk::unordered_map<ktk::string,
+				const ktk::unordered_map<ktk::ustring,
                     ktkRenderGraphResourceInfo<ktkRenderTextureInfo>>& images,
-				const ktk::unordered_map<ktk::string,
+				const ktk::unordered_map<ktk::ustring,
 					ktkRenderGraphResourceInfo<VkBufferCreateInfo>>&
 					buffers) noexcept
 			{
@@ -441,7 +441,7 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphBuilder::CreateShadersAndLayouts(
-				const ktk::unordered_map<ktk::string,
+				const ktk::unordered_map<ktk::ustring,
 					ktkRenderGraphStorageInput>& storages) noexcept
 			{
 				KOTEK_ASSERT(storages.empty() == false,
@@ -473,9 +473,9 @@ namespace Kotek
                     ktkRenderGraphStorageInput>& input_storage,
                 const ktk::unordered_map<ktk::render_pass_id_t,
                     ktkRenderGraphStorageOutput>& output_storage,
-                const ktk::unordered_map<ktk::string,
+                const ktk::unordered_map<ktk::ustring,
                     ktkRenderGraphResourceInfo<ktkRenderTextureInfo>>& images,
-                const ktk::unordered_map<ktk::string,
+                const ktk::unordered_map<ktk::ustring,
                     ktkRenderGraphResourceInfo<VkBufferCreateInfo>>&
                     buffers) noexcept
 			{
@@ -491,7 +491,7 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphBuilder::ValidateShaders(
-				const ktk::unordered_map<ktk::string,
+				const ktk::unordered_map<ktk::ustring,
 					ktk::unordered_map<shader_type_t, shader_loading_data_t>>&
 					input_shaders) noexcept
 			{
@@ -579,7 +579,7 @@ namespace Kotek
 			}
 
 			bool ktkRenderGraphBuilder::RegisterRenderPass(
-				const ktk::string& render_pass_name,
+				const ktk::ustring& render_pass_name,
 				ktkRenderGraphRenderPass* p_pass) noexcept
 			{
 				KOTEK_ASSERT(p_pass != nullptr, "you must pass a valid object");
@@ -613,7 +613,7 @@ namespace Kotek
 				return true;
 			}
 
-			const ktk::string& ktkRenderGraphBuilder::GetBackBufferName(
+			const ktk::ustring& ktkRenderGraphBuilder::GetBackBufferName(
 				void) const noexcept
 			{
 				return this->m_backbuffer_name;

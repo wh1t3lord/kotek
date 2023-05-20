@@ -18,8 +18,10 @@
 #endif
 
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
+
+	#ifdef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
 template <>
-struct std::formatter<Kotek::ktk::string, char>
+struct std::formatter<Kotek::ktk::ustring, char>
 {
 	template <typename ParseContext>
 	constexpr inline auto parse(ParseContext& ctx)
@@ -28,14 +30,14 @@ struct std::formatter<Kotek::ktk::string, char>
 	}
 
 	template <typename FormatContext>
-	inline auto format(Kotek::ktk::string const& str, FormatContext& ctx)
+	inline auto format(Kotek::ktk::ustring const& str, FormatContext& ctx)
 	{
-	#ifdef KOTEK_USE_UNICODE
+		#ifdef KOTEK_USE_UNICODE
 		return std::format_to(
 			ctx.out(), "{}", reinterpret_cast<const char*>(str.c_str()));
-	#else
+		#else
 		return std::format_to(ctx.out(), "{}", str.c_str());
-	#endif
+		#endif
 	}
 };
 
@@ -56,9 +58,10 @@ struct std::formatter<Kotek::ktk::filesystem::path, char>
 			reinterpret_cast<const char*>(str.u8string().c_str()));
 	}
 };
+	#endif
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 template <>
-struct fmt::formatter<Kotek::ktk::string, char>
+struct fmt::formatter<Kotek::ktk::ustring, char>
 {
 	template <typename ParseContext>
 	constexpr inline auto parse(ParseContext& ctx)
@@ -67,7 +70,7 @@ struct fmt::formatter<Kotek::ktk::string, char>
 	}
 
 	template <typename FormatContext>
-	inline auto format(Kotek::ktk::string const& str, FormatContext& ctx)
+	inline auto format(Kotek::ktk::ustring const& str, FormatContext& ctx)
 	{
 	#ifdef KOTEK_USE_UNICODE
 		return fmt::format_to(
@@ -92,7 +95,7 @@ struct fmt::formatter<Kotek::ktk::filesystem::path, char>
 		Kotek::ktk::filesystem::path const& str, FormatContext& ctx)
 	{
 		return fmt::format_to(
-			ctx.out(), u8"{}", Kotek::ktk::string(str.u8string().c_str()));
+			ctx.out(), u8"{}", Kotek::ktk::ustring(str.u8string().c_str()));
 	}
 };
 #else
@@ -114,7 +117,7 @@ struct std::formatter<shaderc_compilation_status, char>
 		shaderc_compilation_status const& result_id, FormatContext& ctx)
 	{
 		return std::format_to(
-			ctx.out(), KOTEK_TEXT("{}"), static_cast<int>(result_id));
+			ctx.out(), KOTEK_TEXTU("{}"), static_cast<int>(result_id));
 	}
 };
 #endif
@@ -122,19 +125,23 @@ struct std::formatter<shaderc_compilation_status, char>
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
+#ifndef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
+	#if KOTEK_USE_STRING_CONFIGURATION_CHAR_TYPE != 1
 template <typename... Args>
-ktk::cstring format(const ktk::string& text, Args&&... args) noexcept
+ktk::cstring format(const ktk::ustring& text, Args&&... args) noexcept
 {
-#ifdef KOTEK_USE_PLATFORM_WINDOWS
-	const auto& data =
-		std::vformat(reinterpret_cast<const char*>(text.c_str()), std::make_format_args(args...));
-#elif defined(KOTEK_USE_PLATFORM_LINUX)
+		#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	const auto& data = std::vformat(reinterpret_cast<const char*>(text.c_str()),
+		std::make_format_args(args...));
+		#elif defined(KOTEK_USE_PLATFORM_LINUX)
 	const auto& data = fmt::vformat(reinterpret_cast<const char*>(text.c_str()),
 		fmt::make_format_args(args...));
-#endif
+		#endif
 
 	return ktk::cstring(data.begin(), data.end());
 }
+	#endif
+#endif
 
 template <typename... Args>
 ktk::cstring format(const ktk::cstring& text, Args&&... args) noexcept

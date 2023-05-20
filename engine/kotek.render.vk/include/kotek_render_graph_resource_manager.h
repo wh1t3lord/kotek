@@ -39,7 +39,7 @@ namespace Kotek
 						render_graph_builder_data) noexcept;
 
 				void CreateSynchronizationPrimitivesAndRenderPass(
-					const ktk::string& render_pass_name,
+					const ktk::ustring& render_pass_name,
 					const ktkRenderGraphStorageInput&
 						storage_of_render_pass_input,
 					const ktkRenderGraphStorageOutput&
@@ -47,7 +47,7 @@ namespace Kotek
 					const ktk::unordered_map<ktk::texture_id_t,
 						ktkRenderGraphResourceInfo<ktkRenderTextureInfo>>&
 						texture_to_create,
-					const ktk::unordered_map<ktk::string,
+					const ktk::unordered_map<ktk::ustring,
 						ktkRenderGraphResourceInfo<VkBufferCreateInfo>>&
 						buffer_to_create) noexcept;
 
@@ -56,11 +56,11 @@ namespace Kotek
 						info) noexcept;
 
 				void CreateBackBuffer(
-					const ktk::string& backbuffer_name) noexcept;
+					const ktk::ustring& backbuffer_name) noexcept;
 
 				const ktkRenderTexture* GetTexture(
-					const ktk::string& render_pass_name,
-					const ktk::string& texture_name) const noexcept;
+					const ktk::ustring& render_pass_name,
+					const ktk::ustring& texture_name) const noexcept;
 
 				const ktk::unordered_map<ktk::render_pass_id_t,
 					ktk::unordered_map<ktk::texture_id_t,
@@ -68,22 +68,22 @@ namespace Kotek
 				GetRenderGraph_RenderPasses_Textures(void) const noexcept;
 
 				void UploadTextureWithData(
-					const ktk::string& texture_name, void* p_data) noexcept;
+					const ktk::ustring& texture_name, void* p_data) noexcept;
 
 				ktk::vector<VkDescriptorSet> GetDescriptorSets(
-					const ktk::string& pipeline_name) const noexcept;
+					const ktk::ustring& pipeline_name) const noexcept;
 
 				VkRenderPass GetRenderPass(
-					const ktk::string& render_pass_name) const noexcept;
+					const ktk::ustring& render_pass_name) const noexcept;
 
 				VkFramebuffer GetFrameBuffer(
-					const ktk::string& render_pass_name) const noexcept;
+					const ktk::ustring& render_pass_name) const noexcept;
 
 				VkPipeline GetPipeline(
-					const ktk::string& pipeline_name) const noexcept;
+					const ktk::ustring& pipeline_name) const noexcept;
 
 				VkPipelineLayout GetPipelineLayout(
-					const ktk::string& pipeline_name) const noexcept;
+					const ktk::ustring& pipeline_name) const noexcept;
 
 				const ktkRenderTexture* GetBackBufferTexture(
 					void) const noexcept;
@@ -115,12 +115,12 @@ namespace Kotek
 					const ktkRenderGraphStorageInput& storage) noexcept;
 				void CreateDescriptorSets(
 					const ktkRenderGraphStorageInput& storage) noexcept;
-				void CreateFrameBuffers(const ktk::string& render_pass_name,
+				void CreateFrameBuffers(const ktk::ustring& render_pass_name,
 					const ktkRenderGraphStorageOutput& storage) noexcept;
-				void CreateRenderPass(const ktk::string& render_pass_name,
+				void CreateRenderPass(const ktk::ustring& render_pass_name,
 					const ktk::vector<VkSubpassDependency>& dependencies,
 					const ktkRenderGraphStorageOutput& storage_output) noexcept;
-				void CreatePipelines(const ktk::string& render_pass_name,
+				void CreatePipelines(const ktk::ustring& render_pass_name,
 					const ktkRenderGraphStorageInput& storage) noexcept;
 
 				ktk::vector<VkAttachmentReference>
@@ -152,16 +152,16 @@ namespace Kotek
 						your_module) noexcept;
 
 				void ValidateInputDataForShaders(
-					const ktk::unordered_map<ktk::string,
+					const ktk::unordered_map<ktk::ustring,
 						ktk::unordered_map<ktk::uint32_t,
 							ktk::vector<shader_input_data_t>>>& storage,
-					const ktk::unordered_map<ktk::string,
+					const ktk::unordered_map<ktk::ustring,
 						ktk::unordered_map<ktk::uint32_t,
 							ktk::vector<descriptor_set_info_t>>>&
 						bindings_for_whole_pipeline) noexcept;
 
 				bool IsUseTesselationInPipeline(
-					const ktk::string& pipeline_name) const noexcept;
+					const ktk::ustring& pipeline_name) const noexcept;
 
 			private:
 				ktkRenderDevice* m_p_render_device;

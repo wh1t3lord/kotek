@@ -27,12 +27,12 @@ namespace Kotek
 
 		            instance.initialize();
 
-		            ktk::string path_to_file =
+		            ktk::ustring path_to_file =
 		                main_manager.GetFileSystem()->GetFolderByEnum(
 		                    Core::folder_index_t::kFolderIndex_Shaders);
 
 		            path_to_file += ktk::kPathSeparator;
-		            path_to_file += KOTEK_TEXT("test.glsl");
+		            path_to_file += KOTEK_TEXTU("test.glsl");
 
 		            auto shader_module = instance.loadShader(path_to_file);
 
@@ -59,12 +59,12 @@ namespace Kotek
 
 		            instance.initialize();
 
-		            ktk::string path_to_file =
+		            ktk::ustring path_to_file =
 		                main_manager.GetFileSystem()->GetFolderByEnum(
 		                    Core::folder_index_t::kFolderIndex_Shaders);
 
 		            path_to_file += ktk::kPathSeparator;
-		            path_to_file += KOTEK_TEXT("test.vert");
+		            path_to_file += KOTEK_TEXTU("test.vert");
 
 		            auto shader_module = instance.loadShader(path_to_file);
 

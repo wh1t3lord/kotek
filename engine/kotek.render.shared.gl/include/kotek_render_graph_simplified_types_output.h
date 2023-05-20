@@ -13,14 +13,14 @@ namespace gl
 		ktkRenderGraphSimplifiedStorageOutput(void);
 		~ktkRenderGraphSimplifiedStorageOutput(void);
 
-		void Add_Buffer(const ktk::string& buffer_name,
+		void Add_Buffer(const ktk::ustring& buffer_name,
 			const gl::ktkRenderGraphBufferInfo& info) noexcept;
-		const ktk::unordered_map<ktk::string, gl::ktkRenderGraphBufferInfo>&
+		const ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphBufferInfo>&
 		Get_Buffers(void) const noexcept;
 
-		void Add_Image(const ktk::string& image_name,
+		void Add_Image(const ktk::ustring& image_name,
 			const gl::ktkRenderGraphTextureInfo& info) noexcept;
-		const ktk::unordered_map<ktk::string, gl::ktkRenderGraphTextureInfo>&
+		const ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphTextureInfo>&
 		Get_Images(void) const noexcept;
 
 		void Set_UseBackBuffer(bool status) noexcept;
@@ -30,9 +30,9 @@ namespace gl
 
 	private:
 		bool m_is_use_backbuffer_by_default;
-		ktk::unordered_map<ktk::string, gl::ktkRenderGraphTextureInfo>
+		ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphTextureInfo>
 			m_output_textures;
-		ktk::unordered_map<ktk::string, gl::ktkRenderGraphBufferInfo>
+		ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphBufferInfo>
 			m_output_buffers;
 	};
 } // namespace gl

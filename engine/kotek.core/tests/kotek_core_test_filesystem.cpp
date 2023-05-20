@@ -37,17 +37,17 @@ void test_file_create_pretty_output()
 	path /= instance.Get_FileName().c_str();
 
 		#ifdef KOTEK_USE_UNICODE
-	ktk::string test(u8"いくつか");
+	ktk::ustring test(KOTEK_TEXTU("いくつか"));
 		#else
-	ktk::string test("いくつか");
+	ktk::ustring test("いくつか");
 		#endif
 
 	instance.Write("test_field1", "data");
 	instance.Write("test_field2", "data2");
-	instance.Write<ktk::string>("ktk::string", test);
+	instance.Write<ktk::ustring>("ktk::ustring", test);
 
 		#ifdef KOTEK_USE_UNICODE
-	instance.Write<ktk::string>("KOTEK_TEXT", u8"いくつか");
+	instance.Write<ktk::ustring>("KOTEK_TEXT", KOTEK_TEXTU("いくつか"));
 	instance.Write<ktk::wstring>("wchar_t", L"いくつか");
 	instance.Write<ktk::u8string>("char8_t", u8"いくつか");
 	instance.Write<ktk::u16string>("char16_t", u"いくつか");

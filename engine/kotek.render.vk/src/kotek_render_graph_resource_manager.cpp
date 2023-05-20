@@ -56,7 +56,7 @@ namespace Kotek
 
 			void ktkRenderGraphResourceManager::
 				CreateSynchronizationPrimitivesAndRenderPass(
-					const ktk::string& render_pass_name,
+					const ktk::ustring& render_pass_name,
 					const ktkRenderGraphStorageInput&
 						storage_of_render_pass_input,
 					const ktkRenderGraphStorageOutput&
@@ -64,7 +64,7 @@ namespace Kotek
 					const ktk::unordered_map<ktk::texture_id_t,
                         ktkRenderGraphResourceInfo<ktkRenderTextureInfo>>&
                         texture_to_create,
-					const ktk::unordered_map<ktk::string,
+					const ktk::unordered_map<ktk::ustring,
 						ktkRenderGraphResourceInfo<VkBufferCreateInfo>>&
 						buffer_to_create) noexcept
 			{
@@ -86,8 +86,8 @@ namespace Kotek
 			{
 				KOTEK_CPU_PROFILE();
 
-				const ktk::string& texture_name = info.GetResourceName();
-				const ktk::string& render_pass_name = info.GetRenderPassName();
+				const ktk::ustring& texture_name = info.GetResourceName();
+				const ktk::ustring& render_pass_name = info.GetRenderPassName();
 
 				if (this->m_all_render_graph_textures.find(texture_name) !=
 					this->m_all_render_graph_textures.end())
@@ -107,7 +107,7 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphResourceManager::CreateBackBuffer(
-				const ktk::string& backbuffer_name) noexcept
+				const ktk::ustring& backbuffer_name) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -125,8 +125,8 @@ namespace Kotek
 			}
 
             const ktkRenderTexture* ktkRenderGraphResourceManager::GetTexture(
-				const ktk::string& render_pass_name,
-				const ktk::string& texture_name) const noexcept
+				const ktk::ustring& render_pass_name,
+				const ktk::ustring& texture_name) const noexcept
 			{
 				const ktkRenderTexture* p_result = nullptr;
 
@@ -181,7 +181,7 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphResourceManager::UploadTextureWithData(
-				const ktk::string& texture_name, void* p_data) noexcept
+				const ktk::ustring& texture_name, void* p_data) noexcept
 			{
 				KOTEK_ASSERT(texture_name.empty() == false,
 					"can't find texture with empty name");
@@ -207,7 +207,7 @@ namespace Kotek
 
 			ktk::vector<VkDescriptorSet>
 			ktkRenderGraphResourceManager::GetDescriptorSets(
-				const ktk::string& pipeline_name) const noexcept
+				const ktk::ustring& pipeline_name) const noexcept
 			{
 				if (pipeline_name.empty())
 				{
@@ -244,7 +244,7 @@ namespace Kotek
 			}
 
 			VkRenderPass ktkRenderGraphResourceManager::GetRenderPass(
-				const ktk::string& render_pass_name) const noexcept
+				const ktk::ustring& render_pass_name) const noexcept
 			{
 				if (render_pass_name.empty())
 				{
@@ -268,7 +268,7 @@ namespace Kotek
 			}
 
 			VkFramebuffer ktkRenderGraphResourceManager::GetFrameBuffer(
-				const ktk::string& render_pass_name) const noexcept
+				const ktk::ustring& render_pass_name) const noexcept
 			{
 				if (render_pass_name.empty())
 				{
@@ -294,7 +294,7 @@ namespace Kotek
 			}
 
 			VkPipeline ktkRenderGraphResourceManager::GetPipeline(
-				const ktk::string& pipeline_name) const noexcept
+				const ktk::ustring& pipeline_name) const noexcept
 			{
 				if (pipeline_name.empty())
 				{
@@ -317,7 +317,7 @@ namespace Kotek
 			}
 
 			VkPipelineLayout ktkRenderGraphResourceManager::GetPipelineLayout(
-				const ktk::string& pipeline_name) const noexcept
+				const ktk::ustring& pipeline_name) const noexcept
 			{
 				if (pipeline_name.empty())
 				{
@@ -475,8 +475,8 @@ namespace Kotek
 
 				bool is_file = true;
 
-                if (string_to_analyze.find(KOTEK_TEXT("main")) !=
-					ktk::string::npos)
+                if (string_to_analyze.find(KOTEK_TEXTU("main")) !=
+					ktk::ustring::npos)
 				{
 					// it's source code, because it's direct text of shader
 					return false;
@@ -496,7 +496,7 @@ namespace Kotek
 					return false;
 				}
 
-                if (path_name.find(KOTEK_TEXT(".")) == ktk::string::npos)
+                if (path_name.find(KOTEK_TEXTU(".")) == ktk::ustring::npos)
 				{
 					return false;
 				}
@@ -557,8 +557,8 @@ namespace Kotek
 								}
 							}
 
-							ktk::string shader_string_copy =
-								std::get<ktk::string>(shader_data.getData());
+							ktk::ustring shader_string_copy =
+								std::get<ktk::ustring>(shader_data.getData());
 
                             if (this->IsFileWithFormat(
                                     reinterpret_cast<const char*>(
@@ -570,7 +570,7 @@ namespace Kotek
                                     helper::translateShaderTypeToStringFormat(
                                         shader_type);
                                 shader_string_copy +=
-                                    ktk::string(shader_type_string.begin(),
+                                    ktk::ustring(shader_type_string.begin(),
                                         shader_type_string.end());
 #else
                                 shader_string_copy +=
@@ -593,7 +593,7 @@ namespace Kotek
 												   [shader_type] =
 								p_shader_manager->loadShaderAsString(
                                     reinterpret_cast<const char*>(
-                                        std::get<ktk::string>(
+                                        std::get<ktk::ustring>(
                                             shader_data.getData())
                                             .c_str()),
 									shader_type);
@@ -658,7 +658,7 @@ namespace Kotek
 			{
 				ktk::vector<VkDescriptorSetLayoutBinding>
 					all_bindings_for_whole_pipeline;
-				ktk::unordered_map<ktk::string,
+				ktk::unordered_map<ktk::ustring,
 					ktk::unordered_map<ktk::uint32_t,
 						ktk::vector<descriptor_set_info_t>>>
 					validate_info_from_spirv_reflect;
@@ -805,7 +805,7 @@ namespace Kotek
 							}
 							else
 							{
-								const ktk::string& texture_name =
+								const ktk::ustring& texture_name =
 									data.GetData_RenderGraphTextureName();
 
 								const auto* p_texture = this->GetTexture(
@@ -840,7 +840,7 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphResourceManager::CreateFrameBuffers(
-				const ktk::string& render_pass_name,
+				const ktk::ustring& render_pass_name,
 				const ktkRenderGraphStorageOutput& storage) noexcept
 			{
 				if (this->m_storage_render_passes_framebuffers.find(
@@ -934,7 +934,7 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphResourceManager::CreateRenderPass(
-				const ktk::string& render_pass_name,
+				const ktk::ustring& render_pass_name,
 				const ktk::vector<VkSubpassDependency>& dependencies,
                 const ktkRenderGraphStorageOutput& storage_output) noexcept
 			{
@@ -1079,7 +1079,7 @@ namespace Kotek
 			// TODO: make all validations by physical device limits of current
 			// physical device, so you need create a wrapper for physical device
 			void ktkRenderGraphResourceManager::CreatePipelines(
-				const ktk::string& render_pass_name,
+				const ktk::ustring& render_pass_name,
 				const ktkRenderGraphStorageInput& storage) noexcept
 			{
 				if (storage.GetPipelinesInfo().empty() &&
@@ -1325,10 +1325,10 @@ namespace Kotek
 			}
 
 			void ktkRenderGraphResourceManager::ValidateInputDataForShaders(
-				const ktk::unordered_map<ktk::string,
+				const ktk::unordered_map<ktk::ustring,
 					ktk::unordered_map<ktk::uint32_t,
 						ktk::vector<shader_input_data_t>>>& storage,
-				const ktk::unordered_map<ktk::string,
+				const ktk::unordered_map<ktk::ustring,
 					ktk::unordered_map<ktk::uint32_t,
 						ktk::vector<descriptor_set_info_t>>>&
 					validation_data) noexcept
@@ -1396,7 +1396,7 @@ namespace Kotek
 			}
 
 			bool ktkRenderGraphResourceManager::IsUseTesselationInPipeline(
-				const ktk::string& pipeline_name) const noexcept
+				const ktk::ustring& pipeline_name) const noexcept
 			{
 				bool result = false;
 

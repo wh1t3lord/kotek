@@ -24,7 +24,7 @@ ktkFileText::~ktkFileText(void) {}
 
 /* TODO: implement separated loader and saver classes
 bool ktkFileText::Load(
-    Core::ktkMainManager& main_manager, const ktk::string& path)
+    Core::ktkMainManager& main_manager, const ktk::ustring& path)
 {
     if (path.empty())
     {
@@ -68,7 +68,7 @@ bool ktkFileText::Load(
 
         if (code)
         {
-            ktk::string msg(code.message());
+            ktk::ustring msg(code.message());
             KOTEK_MESSAGE(
                 "can't parse file status[{}]", msg.get_as_is());
         }
@@ -99,22 +99,22 @@ bool ktkFileText::Load(
 }
 
 bool ktkFileText::Save(Core::ktkMainManager& main_manager,
-    const ktk::string& full_path_to_folder,
-    const ktk::string& full_path_to_file, bool is_format)
+    const ktk::ustring& full_path_to_folder,
+    const ktk::ustring& full_path_to_file, bool is_format)
 {
     return this->Save(main_manager.GetFileSystem(), full_path_to_folder,
         full_path_to_file, is_format);
 }
 
 bool ktkFileText::Save(
-    Core::ktkMainManager& main_manager, const ktk::string& path)
+    Core::ktkMainManager& main_manager, const ktk::ustring& path)
 {
     return this->Save(main_manager.GetFileSystem(), path);
 }
 
 bool ktkFileText::Save(Core::ktkFileTextSystem* p_file_system,
-    const ktk::string& full_path_to_folder,
-    const ktk::string& full_path_to_file, bool is_format)
+    const ktk::ustring& full_path_to_folder,
+    const ktk::ustring& full_path_to_file, bool is_format)
 {
     KOTEK_ASSERT(
         p_file_system, "you passed an invalid file system manager");
@@ -160,9 +160,9 @@ bool ktkFileText::Save(Core::ktkFileTextSystem* p_file_system,
 }
 
 bool ktkFileText::Save(
-    Core::ktkFileSystem* p_file_system, const ktk::string& path)
+    Core::ktkFileSystem* p_file_system, const ktk::ustring& path)
 {
-    ktk::string full_path_with_file_and_its_format = path;
+    ktk::ustring full_path_with_file_and_its_format = path;
 
     KOTEK_ASSERT(this->m_file_name.empty() == false,
         "can't save file without a name!");
@@ -198,7 +198,7 @@ const ktk::cstring& ktkFileText::Get_FileName(void) const noexcept
 }
 
 void ktkFileText::Set_FileName(
-    const ktk::string& file_name, bool is_apply_format) noexcept
+    const ktk::ustring& file_name, bool is_apply_format) noexcept
 {
     this->m_file_name = reinterpret_cast<const char*>(file_name.c_str());
 
@@ -211,7 +211,7 @@ void ktkFileText::Set_Json(const ktkJson& data) noexcept
 	this->m_json = data;
 }
 
-ktk::string ktkFileText::Get_FileAsSerializedString(void) const noexcept
+ktk::ustring ktkFileText::Get_FileAsSerializedString(void) const noexcept
 {
 	return this->m_json.Serialize();
 }

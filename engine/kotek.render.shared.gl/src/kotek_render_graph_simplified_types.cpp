@@ -6,7 +6,7 @@ namespace gl
 {
 	ktkRenderGraphShaderTextInfo::ktkRenderGraphShaderTextInfo(
 		eShaderLoadingDataType type_loading_data,
-		const ktk::string& path_to_file_or_source_code_string) :
+		const ktk::ustring& path_to_file_or_source_code_string) :
 		m_type{type_loading_data},
 		m_data{path_to_file_or_source_code_string}
 	{
@@ -39,14 +39,14 @@ namespace gl
 		this->m_type = type;
 	}
 
-	const ktk::variant<void*, ktk::string>&
+	const ktk::variant<void*, ktk::ustring>&
 	ktkRenderGraphShaderTextInfo::Get_Data(void) const noexcept
 	{
 		return this->m_data;
 	}
 
 	void ktkRenderGraphShaderTextInfo::Set_Data(
-		const ktk::variant<void*, ktk::string>& data) noexcept
+		const ktk::variant<void*, ktk::ustring>& data) noexcept
 	{
 		this->m_data = data;
 	}
@@ -65,7 +65,7 @@ namespace gl
 				eShaderLoadingDataType::
 					kShaderLoadingDataType_SourceCode_TextString)
 		{
-			if (std::get<ktk::string>(this->m_data).empty() == false)
+			if (std::get<ktk::ustring>(this->m_data).empty() == false)
 			{
 				result = true;
 			}
@@ -92,7 +92,7 @@ namespace gl
 	ktkRenderGraphBufferInfo::ktkRenderGraphBufferInfo(GLenum type,
 		GLenum usage, const ktk::cstring& uniform_block_name,
 		ktk::size_t memory_for_allocation, ktk::size_t align_of_memory,
-		const ktk::string& shader_name, const ktk::cstring& buffer_name) :
+		const ktk::ustring& shader_name, const ktk::cstring& buffer_name) :
 		m_buffer_object{type},
 		m_usage{usage}, m_memory{memory_for_allocation},
 		m_memory_align_value{align_of_memory},
@@ -138,13 +138,13 @@ namespace gl
 		return this->m_uniform_block_in_your_shader;
 	}
 
-	const ktk::string& ktkRenderGraphBufferInfo::Get_ShaderName(
+	const ktk::ustring& ktkRenderGraphBufferInfo::Get_ShaderName(
 		void) const noexcept
 	{
 #ifdef KOTEK_DEBUG
 		return this->m_shader_name;
 #else
-		return ktk::string();
+		return ktk::ustring();
 #endif
 	}
 

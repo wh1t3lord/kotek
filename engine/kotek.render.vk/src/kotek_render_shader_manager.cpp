@@ -27,7 +27,7 @@ namespace Kotek
 
 			kotek_render_shader_manager::shader_module_t
 			kotek_render_shader_manager::loadShader(
-				const ktk::string& path, shader_type_t type) noexcept
+				const ktk::ustring& path, shader_type_t type) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -119,7 +119,7 @@ namespace Kotek
 
 			kotek_render_shader_manager::shader_module_t
 			kotek_render_shader_manager::loadShader(
-				const ktk::string& path) noexcept
+				const ktk::ustring& path) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -270,7 +270,7 @@ namespace Kotek
 					shaderc_optimization_level_size);
 #endif
 
-                ktk::string temp = this->m_p_filesystem->ReadFile(path_to_file);
+                ktk::ustring temp = this->m_p_filesystem->ReadFile(path_to_file);
 
 				if (temp.empty() == true)
 				{
@@ -358,7 +358,7 @@ namespace Kotek
 
 			shader_type_t kotek_render_shader_manager::detectType(
 
-				const ktk::string& path_to_file) noexcept
+				const ktk::ustring& path_to_file) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -392,7 +392,7 @@ namespace Kotek
                     ktk::cstring temp_filename(filename.string());
 
                     if (temp_filename.find(_kShaderPrefix_Vertex) !=
-						ktk::string::npos)
+						ktk::ustring::npos)
 					{
 #ifdef KOTEK_DEBUG
 						KOTEK_MESSAGE("detected: Vertex [{}]",
@@ -403,7 +403,7 @@ namespace Kotek
 						return shader_type_t::kShaderType_Vertex;
 					}
                     else if (temp_filename.find(_kShaderPrefix_Fragment) !=
-                        ktk::string::npos)
+                        ktk::ustring::npos)
 					{
 #ifdef KOTEK_DEBUG
 						KOTEK_MESSAGE("detected: Pixel [{}]",
@@ -414,7 +414,7 @@ namespace Kotek
 						return shader_type_t::kShaderType_Pixel;
 					}
                     else if (temp_filename.find(_kShaderPrefix_Compute) !=
-                        ktk::string::npos)
+                        ktk::ustring::npos)
 					{
 #ifdef KOTEK_DEBUG
 						KOTEK_MESSAGE("detected: Compute [{}]",
@@ -1238,7 +1238,7 @@ namespace Kotek
 
 			shader_loading_data_t::shader_loading_data_t(
 				shader_loading_data_type_t type,
-				const ktk::string& path_to_file_or_source_code_string) :
+				const ktk::ustring& path_to_file_or_source_code_string) :
 				m_type(type),
 				m_data(path_to_file_or_source_code_string)
 			{
@@ -1259,14 +1259,14 @@ namespace Kotek
 
 			shader_loading_data_t::~shader_loading_data_t(void) {}
 
-			const ktk::variant<void*, ktk::string>&
+			const ktk::variant<void*, ktk::ustring>&
 			shader_loading_data_t::getData(void) const noexcept
 			{
 				return this->m_data;
 			}
 
 			void shader_loading_data_t::setData(
-				const ktk::variant<void*, ktk::string>& data) noexcept
+				const ktk::variant<void*, ktk::ustring>& data) noexcept
 			{
 				this->m_data = data;
 			}
@@ -1284,7 +1284,7 @@ namespace Kotek
 			}
 
 			shader_input_data_t::shader_input_data_t(
-				const ktk::string& render_pass_name,
+				const ktk::ustring& render_pass_name,
 				ktk::uint32_t binding_index, VkDescriptorType type,
 				ktk::size_t buffer_size) :
 				m_render_pass_name(render_pass_name),
@@ -1295,9 +1295,9 @@ namespace Kotek
 			}
 
 			shader_input_data_t::shader_input_data_t(
-				const ktk::string& render_pass_name,
+				const ktk::ustring& render_pass_name,
 				ktk::uint32_t binding_index, VkDescriptorType type,
-				const ktk::string& texture_name) :
+				const ktk::ustring& texture_name) :
 				m_render_pass_name(render_pass_name),
 				m_binding_index(binding_index), m_descriptor_type(type),
 				m_descriptor_set_index(-1)
@@ -1343,7 +1343,7 @@ namespace Kotek
 				return std::get<0>(this->m_data);
 			}
 
-			ktk::string shader_input_data_t::GetData_RenderGraphTextureName(
+			ktk::ustring shader_input_data_t::GetData_RenderGraphTextureName(
 				void) const noexcept
 			{
 				KOTEK_ASSERT(helper::isBufferByDescriptorType(
@@ -1353,7 +1353,7 @@ namespace Kotek
 				return std::get<1>(this->m_data);
 			}
 
-			const ktk::string& shader_input_data_t::GetRenderPassName(
+			const ktk::ustring& shader_input_data_t::GetRenderPassName(
 				void) const noexcept
 			{
 				return this->m_render_pass_name;
@@ -1375,7 +1375,7 @@ namespace Kotek
 			}
 
 			void shader_input_data_t::SetData(
-				const ktk::string& texture_name) noexcept
+				const ktk::ustring& texture_name) noexcept
 			{
 				KOTEK_ASSERT(helper::isBufferByDescriptorType(
 								 this->m_descriptor_type) == false,

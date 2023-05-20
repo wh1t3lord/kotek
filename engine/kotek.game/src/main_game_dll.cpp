@@ -58,16 +58,16 @@ namespace Game
 				path_to_system_json.u8string().c_str()));
 
 		const auto& field_initialize_callback_name =
-			file.Get<ktk::string>(Core::kSysInfoFieldName_InitializeCallback);
+			file.Get<ktk::ustring>(Core::kSysInfoFieldName_InitializeCallback);
 		const auto& field_shutdown_callback_name =
-			file.Get<ktk::string>(Core::kSysInfoFieldName_ShutdownCallback);
+			file.Get<ktk::ustring>(Core::kSysInfoFieldName_ShutdownCallback);
 		const auto& field_update_callback_name =
-			file.Get<ktk::string>(Core::kSysInfoFieldName_UpdateCallback);
+			file.Get<ktk::ustring>(Core::kSysInfoFieldName_UpdateCallback);
 
 		const auto& field_library_name =
-			file.Get<ktk::string>(Core::kSysInfoFieldName_UserLibraryName);
+			file.Get<ktk::ustring>(Core::kSysInfoFieldName_UserLibraryName);
 		const auto& field_initialize_render_callback_name =
-			file.Get<ktk::string>(
+			file.Get<ktk::ustring>(
 				Core::kSysInfoFieldName_InitializeCallback_Render);
 
 		KOTEK_ASSERT(field_library_name.empty() == false,

@@ -29,7 +29,7 @@ public:
 
 	/* TODO: implement separated loader and saver classes
 	bool Load(
-	    Core::ktkMainManager& main_manager, const ktk::string& path);
+	    Core::ktkMainManager& main_manager, const ktk::ustring& path);
 
 	/// <summary>
 	/// creates file from ktk::ofstream class
@@ -39,19 +39,19 @@ public:
 	/// your valid json which serialize by boost library and serialize
 	/// function of that library</param> <returns></returns>
 	bool Save(Core::ktkMainManager& main_manager,
-	    const ktk::string& full_path_to_folder,
-	    const ktk::string& full_path_to_file, bool is_format = true);
+	    const ktk::ustring& full_path_to_folder,
+	    const ktk::ustring& full_path_to_file, bool is_format = true);
 
 	// file_name without format!!
 	bool Save(
-	    Core::ktkMainManager& main_manager, const ktk::string& path);
+	    Core::ktkMainManager& main_manager, const ktk::ustring& path);
 
 	bool Save(Core::ktkFileSystem* p_file_system,
-	    const ktk::string& full_path_to_folder,
-	    const ktk::string& full_path_to_file, bool is_format = true);
+	    const ktk::ustring& full_path_to_folder,
+	    const ktk::ustring& full_path_to_file, bool is_format = true);
 
 	bool Save(
-	    Core::ktkFileSystem* p_file_system, const ktk::string& path);
+	    Core::ktkFileSystem* p_file_system, const ktk::ustring& path);
 	*/
 
 	template <typename ReturnType = ktkJson>
@@ -103,7 +103,7 @@ public:
 	 * final name will be kek.json if is_apply_format=true \return void
 	 */
 	void Set_FileName(
-		const ktk::string& file_name, bool is_apply_format = true) noexcept;
+		const ktk::ustring& file_name, bool is_apply_format = true) noexcept;
 
 	/**
 	 * Setter for m_json field in class.
@@ -123,11 +123,11 @@ file. It means you will get the file as string like
 	        "married": true.
 	        }
 	   }
-	 * So all that thing will be as ktk::string. It needs for
+	 * So all that thing will be as ktk::ustring. It needs for
 serializing when you save your file through Saver of Resource Manager.
 	 * \return
 	 */
-	ktk::string Get_FileAsSerializedString(void) const noexcept;
+	ktk::ustring Get_FileAsSerializedString(void) const noexcept;
 
 private:
 	ktkJson m_json;
