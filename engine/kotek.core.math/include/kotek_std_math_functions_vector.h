@@ -45,4 +45,188 @@ inline float const* value_ptr(const vector4f& data)
 #endif
 }
 
+inline float length(const vector1f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return sqrt(data.Get_X() * data.Get_X());
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline float length(const vector2f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	float result{};
+
+	auto length = DirectX::XMVector2Length(data);
+
+	DirectX::XMStoreFloat(&result, length);
+
+	return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+}
+
+inline float length(const vector3f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	float result{};
+
+	auto length = DirectX::XMVector3Length(data);
+
+	DirectX::XMStoreFloat(&result, length);
+
+	return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+}
+
+inline float length(const vector4f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	float result{};
+
+	auto length = DirectX::XMVector4Length(data);
+
+	DirectX::XMStoreFloat(&result, length);
+
+	return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+}
+
+inline float length_squared(const vector1f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return data.Get_X() * data.Get_X();
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+}
+
+inline float length_squared(const vector2f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	float result{};
+	auto length_sq = DirectX::XMVector2LengthSq(data);
+	DirectX::XMStoreFloat(&result, length_sq);
+	return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+}
+
+inline float length_squared(const vector3f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	float result{};
+	auto length_sq = DirectX::XMVector3LengthSq(data);
+	DirectX::XMStoreFloat(&result, length_sq);
+	return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline float length_squared(const vector4f& data)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	float result{};
+	auto length_sq = DirectX::XMVector4LengthSq(data);
+	DirectX::XMStoreFloat(&result, length_sq);
+	return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline float distance_squared(const vector1f& from, const vector1f& to)
+{
+	return length_squared((from - to));
+}
+
+inline float distance_squared(const vector2f& from, const vector2f& to)
+{
+	return length_squared((from - to));
+}
+
+inline float distance_squared(const vector3f& from, const vector2f& to)
+{
+	vector3f result(
+		(from.Get_X() - to.Get_X()), (from.Get_Y() - to.Get_Y()), from.Get_Z());
+	return length_squared(result);
+}
+
+inline float distance_squared(const vector3f& from, const vector3f& to)
+{
+	return length_squared((from - to));
+}
+
+inline float distance_squared(const vector4f& from, const vector2f& to)
+{
+	vector4f result((from.Get_X() - to.Get_X()), (from.Get_Y() - to.Get_Y()),
+		from.Get_Z(), from.Get_W());
+	return length_squared(result);
+}
+
+inline float distance_squared(const vector4f& from, const vector3f& to)
+{
+	vector4f result((from.Get_X() - to.Get_X()), (from.Get_Y() - from.Get_Y()),
+		(from.Get_Z() - to.Get_Z()), from.Get_W());
+
+	return length_squared(result);
+}
+
+inline float distance_squared(const vector4f& from, const vector4f& to)
+{
+	return length_squared((from - to));
+}
+
+inline float dot(const vector1f& left, const vector1f& right)
+{
+	return left.Get_X() * left.Get_X();
+}
+
+inline float dot(const vector2f& left, const vector2f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	auto dot = DirectX::XMVector2Dot(left, right);
+	float result{};
+	DirectX::XMStoreFloat(&result, dot);
+
+	return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+}
+
+inline float dot(const vector3f& left, const vector3f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	auto dot = DirectX::XMVector3Dot(left, right);
+	float result{};
+	DirectX::XMStoreFloat(&result, dot);
+
+	return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+}
+
+inline float dot(const vector4f& left, const vector4f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	auto dot = DirectX::XMVector4Dot(left, right);
+	float result{};
+	DirectX::XMStoreFloat(&result, dot);
+
+	return result;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+}
+
+// double
+
 KOTEK_END_NAMESPACE_MATH KOTEK_END_NAMESPACE_KTK KOTEK_END_NAMESPACE_KOTEK

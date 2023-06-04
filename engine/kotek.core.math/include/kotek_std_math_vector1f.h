@@ -238,6 +238,30 @@ namespace math
 #endif
 		}
 
+		float operator[](unsigned int index) const
+		{
+			KOTEK_ASSERT(index == 0, "out of range");
+
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+			float const* p_array =
+				reinterpret_cast<float const*>(&this->m_base);
+
+			return p_array[index];
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+		}
+
+		float& operator[](unsigned int index)
+		{
+			KOTEK_ASSERT(index == 0, "out of range");
+
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+			float* p_array = reinterpret_cast<float*>(&this->m_base);
+			return p_array[index];
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+		}
+
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		operator DirectX::XMVECTOR() const noexcept
 		{

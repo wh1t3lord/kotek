@@ -64,4 +64,6 @@ inline float const* value_ptr(const matrix4x4f& data)
 #endif
 }
 
+// double
+
 KOTEK_END_NAMESPACE_MATH KOTEK_END_NAMESPACE_KTK KOTEK_END_NAMESPACE_KOTEK

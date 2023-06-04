@@ -25,6 +25,7 @@ bool InitializeModule_Core_Containers(ktkMainManager* p_manager)
 	InitializeModule_Core_Containers_Unordered_Set(p_manager);
 	InitializeModule_Core_Containers_Variant(p_manager);
 	InitializeModule_Core_Containers_Vector(p_manager);
+	InitializeModule_Core_Containers_List(p_manager);
 
 	return true;
 }
@@ -52,6 +53,7 @@ bool SerializeModule_Core_Containers(ktkMainManager* p_manager)
 	SerializeModule_Core_Containers_Unordered_Set(p_manager);
 	SerializeModule_Core_Containers_Variant(p_manager);
 	SerializeModule_Core_Containers_Vector(p_manager);
+	SerializeModule_Core_Containers_List(p_manager);
 
 	return true;
 }
@@ -79,6 +81,7 @@ bool DeserializeModule_Core_Containers(ktkMainManager* p_manager)
 	DeserializeModule_Core_Containers_Unordered_Set(p_manager);
 	DeserializeModule_Core_Containers_Variant(p_manager);
 	DeserializeModule_Core_Containers_Vector(p_manager);
+	DeserializeModule_Core_Containers_List(p_manager);
 
 	return true;
 }
@@ -106,6 +109,7 @@ bool ShutdownModule_Core_Containers(ktkMainManager* p_manager)
 	ShutdownModule_Core_Containers_Unordered_Set(p_manager);
 	ShutdownModule_Core_Containers_Variant(p_manager);
 	ShutdownModule_Core_Containers_Vector(p_manager);
+	ShutdownModule_Core_Containers_List(p_manager);
 
 	return true;
 }

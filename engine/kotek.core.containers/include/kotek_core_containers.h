@@ -21,6 +21,7 @@
 #include <kotek.core.containers.unordered_set/include/kotek_core_containers_unordered_set.h>
 #include <kotek.core.containers.variant/include/kotek_core_containers_variant.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
+#include <kotek.core.containers.list/include/kotek_core_containers_list.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE

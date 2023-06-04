@@ -30,3 +30,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_set)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.variant)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.list)
