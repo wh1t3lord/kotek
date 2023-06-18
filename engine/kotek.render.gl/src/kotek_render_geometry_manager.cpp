@@ -140,17 +140,17 @@ namespace gl
 			this->m_queue_for_upload.pop(entity);
 
 			const auto* p_enum =
-				std::get_if<ktk::enum_base_t>(&entity.m_geometry_type);
+				std::get_if<ktk::enum_base_t>(&entity.Get_GeometryType());
 
 			if (p_enum)
 			{
 				this->Upload(
-					entity.m_vertex_data, entity.m_index_data, *p_enum);
+					entity.Get_VertexData(), entity.Get_IndexData(), *p_enum);
 			}
 			else
 			{
 				const auto* p_string =
-					std::get_if<ktk::cstring>(&entity.m_geometry_type);
+					std::get_if<ktk::cstring>(&entity.Get_GeometryType());
 
 				KOTEK_ASSERT(p_string,
 					"something is really terrible, it accepts only two "
@@ -158,7 +158,7 @@ namespace gl
 					"enum of static geometry or string to file path");
 
 				this->Upload(
-					entity.m_vertex_data, entity.m_index_data, *p_string);
+					entity.Get_VertexData(), entity.Get_IndexData(), *p_string);
 			}
 		}
 	}

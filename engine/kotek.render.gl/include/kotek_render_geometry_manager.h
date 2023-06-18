@@ -9,44 +9,6 @@ namespace gl
 	class ktkRenderGeometryManager
 	{
 	public:
-		struct ktkVertex
-		{
-			ktkVertex()
-			{
-				this->m_position[0] = 0.0f;
-				this->m_position[1] = 0.0f;
-				this->m_position[2] = 0.0f;
-			}
-
-			ktkVertex(float x, float y, float z)
-			{
-				this->Set_Position(x, y, z);
-			}
-
-			~ktkVertex() {}
-
-			void Set_Position(float x, float y, float z) noexcept
-			{
-				this->m_position[0] = x;
-				this->m_position[1] = y;
-				this->m_position[2] = z;
-			}
-
-			void* Get_Data() noexcept { return this->m_position; }
-
-		private:
-			float m_position[3];
-		};
-
-	public:
-		struct ktkGeometry
-		{
-			ktk::variant<ktk::enum_base_t, ktk::cstring> m_geometry_type;
-			ktk::vector<ktkVertex> m_vertex_data;
-			ktk::vector<ktk::uint32_t> m_index_data;
-		};
-
-	public:
 		ktkRenderGeometryManager();
 		~ktkRenderGeometryManager();
 

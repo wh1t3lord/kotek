@@ -86,8 +86,8 @@ public:
 	/// class. (e.g. Add_Buffer calling)
 	/// @param void, nothing
 	/// @return returns 0 when development build IS NOT KOTEK_DEBUG otherwise
-	/// returns value (in bytes!) that user passed for constructor. So use it only when
-	/// development build is KOTEK_DEBUG!
+	/// returns value (in bytes!) that user passed for constructor. So use it
+	/// only when development build is KOTEK_DEBUG!
 	ktk::size_t Get_AlignedMemoryForAllocation(void) const noexcept;
 
 	/// \~english @brief it has implementation when development build is
@@ -107,8 +107,8 @@ public:
 	/// align_up result will be 60
 	/// @param void, nothing to pass
 	/// @return returns 0 when development build IS NOT KOTEK_DEBUG otherwise
-	/// returns value (in bytes!) that user passed for constructor. So use it only when
-	/// development build is KOTEK_DEBUG
+	/// returns value (in bytes!) that user passed for constructor. So use it
+	/// only when development build is KOTEK_DEBUG
 	ktk::size_t Get_MemoryAlign(void) const noexcept;
 
 	/// \~english @brief it has implementation when development build is
@@ -126,8 +126,8 @@ public:
 	/// ktk::align_down function.
 	/// @param void, nothing to pass
 	/// @return returns 0 when development build IS NOT KOTEK_DEBUG otherwise
-	/// returns value (in bytes!) that user passed for constructor. So use it only when
-	/// development build is KOTEK_DEBUG
+	/// returns value (in bytes!) that user passed for constructor. So use it
+	/// only when development build is KOTEK_DEBUG
 	ktk::size_t Get_NotAlignedMemoryForAllocation(void) const noexcept;
 
 	/// \~english @brief it has implementation when development build is
@@ -171,6 +171,97 @@ struct ktkDrawIndexIndirectCommand
 	GLuint m_first_index;
 	GLuint m_base_vertex;
 	GLuint m_reserved_must_be_zero;
+};
+
+class ktkVertex
+{
+public:
+	ktkVertex()
+	{
+		this->m_position[0] = 0.0f;
+		this->m_position[1] = 0.0f;
+		this->m_position[2] = 0.0f;
+	}
+
+	ktkVertex(float x, float y, float z) { this->Set_Position(x, y, z); }
+
+	~ktkVertex() {}
+
+	void Set_Position(float x, float y, float z) noexcept
+	{
+		this->m_position[0] = x;
+		this->m_position[1] = y;
+		this->m_position[2] = z;
+	}
+
+	void* Get_Data() noexcept { return this->m_position; }
+
+private:
+	float m_position[3];
+};
+
+class ktkGeometry
+{
+public:
+	ktkGeometry() {}
+	ktkGeometry(kun_ktk enum_base_t geometry_type,
+		const kun_ktk vector<ktkVertex>& vertex_data,
+		const kun_ktk vector<kun_ktk uint32_t>& index_data) :
+		m_geometry_type{geometry_type},
+		m_vertex_data{vertex_data}, m_index_data{index_data}
+	{
+	}
+
+	ktkGeometry(kun_ktk cstring geometry_type,
+		const kun_ktk vector<ktkVertex>& vertex_data,
+		const kun_ktk vector<kun_ktk uint32_t>& index_data) :
+		m_geometry_type{geometry_type},
+		m_vertex_data{vertex_data}, m_index_data{index_data}
+	{
+	}
+
+	~ktkGeometry() {}
+
+	void Set_GeometryType(kun_ktk enum_base_t value)
+	{
+		this->m_geometry_type = value;
+	}
+
+	void Set_GeometryType(const kun_ktk cstring& value)
+	{
+		this->m_geometry_type = value;
+	}
+
+	const kun_ktk variant<kun_ktk enum_base_t, kun_ktk cstring>&
+	Get_GeometryType(void) const
+	{
+		return this->m_geometry_type;
+	}
+
+	const kun_ktk vector<ktkVertex>& Get_VertexData() const
+	{
+		return this->m_vertex_data;
+	}
+
+	void Set_VertexData(const kun_ktk vector<ktkVertex>& data)
+	{
+		this->m_vertex_data = data;
+	}
+
+	const kun_ktk vector<kun_ktk uint32_t>& Get_IndexData() const
+	{
+		return this->m_index_data;
+	}
+
+	void Set_IndexData(const kun_ktk vector<kun_ktk uint32_t>& data)
+	{
+		this->m_index_data = data;
+	}
+
+private:
+	kun_ktk variant<kun_ktk enum_base_t, kun_ktk cstring> m_geometry_type;
+	kun_ktk vector<ktkVertex> m_vertex_data;
+	kun_ktk vector<kun_ktk uint32_t> m_index_data;
 };
 
 KOTEK_END_NAMESPACE_RENDER_GL
