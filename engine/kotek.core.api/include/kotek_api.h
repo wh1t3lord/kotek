@@ -119,9 +119,9 @@ public:
 	// TODO: change signature on void
 	virtual void shutdown(ktkIRenderDevice* p_raw_device) = 0;
 
-	virtual void LoadGeometry(
+	virtual ktk::shared_ptr<ktk::any> LoadGeometry(
 		ktk::enum_base_t resource_loading_type, ktk::entity_t id) = 0;
-	virtual void LoadGeometry(ktk::enum_base_t resource_loading_type,
+	virtual ktk::shared_ptr<ktk::any> LoadGeometry(ktk::enum_base_t resource_loading_type,
 		const ktk::filesystem::path& path_to_file, ktk::entity_t id) = 0;
 
 	virtual void Resize(ktkIRenderDevice* p_raw_device,

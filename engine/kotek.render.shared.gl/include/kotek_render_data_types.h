@@ -205,7 +205,7 @@ class ktkGeometry
 public:
 	ktkGeometry() {}
 	ktkGeometry(kun_ktk enum_base_t geometry_type,
-		const kun_ktk vector<ktkVertex>& vertex_data,
+		const kun_ktk vector<kun_ktk kun_math vec3f_t>& vertex_data,
 		const kun_ktk vector<kun_ktk uint32_t>& index_data) :
 		m_geometry_type{geometry_type},
 		m_vertex_data{vertex_data}, m_index_data{index_data}
@@ -213,7 +213,7 @@ public:
 	}
 
 	ktkGeometry(kun_ktk cstring geometry_type,
-		const kun_ktk vector<ktkVertex>& vertex_data,
+		const kun_ktk vector<kun_ktk kun_math vec3f_t>& vertex_data,
 		const kun_ktk vector<kun_ktk uint32_t>& index_data) :
 		m_geometry_type{geometry_type},
 		m_vertex_data{vertex_data}, m_index_data{index_data}
@@ -238,12 +238,12 @@ public:
 		return this->m_geometry_type;
 	}
 
-	const kun_ktk vector<ktkVertex>& Get_VertexData() const
+	const kun_ktk vector<kun_ktk kun_math vec3f_t>& Get_VertexData() const
 	{
 		return this->m_vertex_data;
 	}
 
-	void Set_VertexData(const kun_ktk vector<ktkVertex>& data)
+	void Set_VertexData(const kun_ktk vector<kun_ktk kun_math vec3f_t>& data)
 	{
 		this->m_vertex_data = data;
 	}
@@ -259,8 +259,10 @@ public:
 	}
 
 private:
+	/// \~english @brief If it is enum_base_t type it means it is
+	/// eStaticGeometryType
 	kun_ktk variant<kun_ktk enum_base_t, kun_ktk cstring> m_geometry_type;
-	kun_ktk vector<ktkVertex> m_vertex_data;
+	kun_ktk vector<kun_ktk kun_math vec3f_t> m_vertex_data;
 	kun_ktk vector<kun_ktk uint32_t> m_index_data;
 };
 

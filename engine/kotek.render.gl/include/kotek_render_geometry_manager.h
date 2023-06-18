@@ -15,19 +15,19 @@ namespace gl
 		void Initialize(ktk::size_t memory_size);
 		void Shutdown(void);
 
-		void AddForUpload(const ktk::vector<ktkVertex>& data_v,
+		void AddForUpload(const ktk::vector<ktk::math::vec3f_t>& data_v,
 			const ktk::vector<ktk::uint32_t>& data_i,
 			ktk::enum_base_t static_geometry_type) noexcept;
-		void AddForUpload(const ktk::vector<ktkVertex>& data_v,
+		void AddForUpload(const ktk::vector<ktk::math::vec3f_t>& data_v,
 			const ktk::vector<ktk::uint32_t>& data_i,
 			const ktk::cstring& string_path_to_file_name) noexcept;
 
 		void Update(void) noexcept;
 
-		void Upload(const ktk::vector<ktkVertex>& data_v,
+		void Upload(const ktk::vector<ktk::math::vec3f_t>& data_v,
 			const ktk::vector<ktk::uint32_t>& data_i,
 			ktk::enum_base_t static_geometry_type) noexcept;
-		void Upload(const ktk::vector<ktkVertex>& data_v,
+		void Upload(const ktk::vector<ktk::math::vec3f_t>& data_v,
 			const ktk::vector<ktk::uint32_t>& data_i,
 			const ktk::cstring& string_path_to_file_name) noexcept;
 

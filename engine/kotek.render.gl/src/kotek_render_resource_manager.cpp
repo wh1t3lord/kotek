@@ -88,9 +88,11 @@ namespace gl
 		KOTEK_ASSERT(p_raw_swapchain, "you can't pass an invalid interface");
 	}
 
-	void ktkRenderResourceManager::LoadGeometry(
+	ktk::shared_ptr<ktk::any> ktkRenderResourceManager::LoadGeometry(
 		ktk::enum_base_t resource_loading_type, ktk::entity_t id)
 	{
+		ktk::shared_ptr<ktk::any> p_result;
+
 		Kotek::Core::eResourceLoadingType type =
 			static_cast<Kotek::Core::eResourceLoadingType>(
 				resource_loading_type);
@@ -101,10 +103,16 @@ namespace gl
 		{
 			if (this->m_p_render_manager_geometry)
 			{
-				this->m_p_render_manager_geometry->AddForUpload(
+				ktkGeometry geometry(id,
 					{{0.5f, 0.5f, 0.0f}, {0.5f, -0.5f, 0.0f},
 						{-0.5f, -0.5f, 0.0f}, {-0.5f, 0.5f, 0.0f}},
-					{0, 1, 3, 1, 2, 3}, id);
+					{0, 1, 3, 1, 2, 3});
+
+				this->m_p_render_manager_geometry->AddForUpload(
+					geometry.Get_VertexData(), geometry.Get_IndexData(), id);
+
+				std::any wrapper = geometry;
+				p_result = std::make_shared<std::any>(wrapper);
 			}
 
 			break;
@@ -122,12 +130,15 @@ namespace gl
 			KOTEK_ASSERT(false, "not implemented");
 		}
 		}
+
+		return p_result;
 	}
 
-	void ktkRenderResourceManager::LoadGeometry(
+	ktk::shared_ptr<ktk::any> ktkRenderResourceManager::LoadGeometry(
 		ktk::enum_base_t resource_loading_type,
 		const ktk::filesystem::path& path_to_file, ktk::entity_t id)
 	{
+		return nullptr;
 	}
 
 	void ktkRenderResourceManager::Update(void) noexcept

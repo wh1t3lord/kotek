@@ -105,7 +105,7 @@ namespace gl
 	}
 
 	void ktkRenderGeometryManager::AddForUpload(
-		const ktk::vector<ktkVertex>& data_v,
+		const ktk::vector<ktk::math::vec3f_t>& data_v,
 		const ktk::vector<ktk::uint32_t>& data_i,
 		ktk::enum_base_t static_geometry_type) noexcept
 	{
@@ -118,7 +118,7 @@ namespace gl
 	}
 
 	void ktkRenderGeometryManager::AddForUpload(
-		const ktk::vector<ktkVertex>& data_v,
+		const ktk::vector<ktk::math::vec3f_t>& data_v,
 		const ktk::vector<ktk::uint32_t>& data_i,
 		const ktk::cstring& string_path_to_file_name) noexcept
 	{
@@ -163,7 +163,7 @@ namespace gl
 		}
 	}
 
-	void ktkRenderGeometryManager::Upload(const ktk::vector<ktkVertex>& data_v,
+	void ktkRenderGeometryManager::Upload(const ktk::vector<ktk::math::vec3f_t>& data_v,
 		const ktk::vector<ktk::uint32_t>& data_i,
 		ktk::enum_base_t static_geometry_type) noexcept
 	{
@@ -293,7 +293,8 @@ namespace gl
 		*/
 	}
 
-	void ktkRenderGeometryManager::Upload(const ktk::vector<ktkVertex>& data_v,
+	void ktkRenderGeometryManager::Upload(
+		const ktk::vector<ktk::math::vec3f_t>& data_v,
 		const ktk::vector<ktk::uint32_t>& data_i,
 		const ktk::cstring& string_path_to_file_name) noexcept
 	{

@@ -524,6 +524,9 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 
 	kConsoleCommand_Render_UploadAllResourcesToGPU,
 
+	// arg1=vertex_data, arg2=index_data, arg3=bounding_primitive_type
+	kConsoleCommand_Render_CalculateBoundingPrimitive,
+
 	kConsoleCommand_ResourceManager_Load,
 
 	kConsoleCommand_SDK_LoadScene,
@@ -601,9 +604,11 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	 * components are required. But I guess it is pointless to have a such thing
 	 * like you need always manually add required components instead of
 	 * 'automatization', but who knows who wants to add a such things through
-	 * this way... 
-	 * 
-	 * @warning You need to interpret that like you enable or disable feature so it doesn't mean that it issues some code that adds components to entity, no it is about some flag enable/disable state.
+	 * this way...
+	 *
+	 * @warning You need to interpret that like you enable or disable feature so
+	 * it doesn't mean that it issues some code that adds components to entity,
+	 * no it is about some flag enable/disable state.
 	 */
 	kConsoleCommand_SDK_SetFeature_AddComponentsToEntity_ThatRequiredForCreation,
 
