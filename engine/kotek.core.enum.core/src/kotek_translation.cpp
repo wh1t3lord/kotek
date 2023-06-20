@@ -238,6 +238,26 @@ namespace helper
 		{
 			return KOTEK_TEXTU("Vulkan 1.3");
 		}
+		case eEngineSupportedRenderer::kOpenGLES_1:
+		{
+			return KOTEK_TEXTU("OpenGL ES 1");
+		}
+		case eEngineSupportedRenderer::kOpenGLES_2:
+		{
+			return KOTEK_TEXTU("OpenGL ES 2");
+		}
+		case eEngineSupportedRenderer::kOpenGLES_3_0:
+		{
+			return KOTEK_TEXTU("OpenGL ES 3.0");
+		}
+		case eEngineSupportedRenderer::kOpenGLES_3_1:
+		{
+			return KOTEK_TEXTU("OpenGL ES 3.1");
+		}
+		case eEngineSupportedRenderer::kOpenGLES_3_2:
+		{
+			return KOTEK_TEXTU("OpenGL ES 3.2");
+		}
 		case eEngineSupportedRenderer::kUnknown:
 		{
 			return KOTEK_TEXTU("Unknown");

@@ -13,7 +13,7 @@ enum class eRenderStatistics : kun_ktk enum_base_t{kStat_Buffer_SSBO_Matrix,
 	kStat_Buffer_Indirect_Indexed, kEndOfEnum, kStat_Unknown = -1};
 
 enum class eRenderBoundingPrimitiveType : kun_ktk enum_base_t{
-	kBoundingBox,
+	kBoundingAABB,
 	kBoundingSphere,
 	kEndOfEnum,
 	kUnknown = -1,
