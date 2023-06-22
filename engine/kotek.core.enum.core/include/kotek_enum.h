@@ -523,8 +523,6 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_Input_Type,
 
 	kConsoleCommand_Render_UploadAllResourcesToGPU,
-
-	// arg1=vertex_data, arg2=index_data, arg3=bounding_primitive_type
 	kConsoleCommand_Render_CalculateBoundingPrimitive,
 
 	kConsoleCommand_ResourceManager_Load,
