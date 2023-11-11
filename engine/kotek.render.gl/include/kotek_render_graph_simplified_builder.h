@@ -105,6 +105,8 @@ namespace gl
 			gl::ktkRenderGraphResourceInfo<gl::ktkRenderGraphBufferInfo>>&
 				buffers_to_create) noexcept;
 
+		void LinkBuffersToShaders(void) noexcept;
+
 	private:
 		gl::eRenderGraphBuilderType m_render_graph_type;
 		gl::eRenderGraphBuilderPipelineRenderingType m_rendering_pipeline_type;

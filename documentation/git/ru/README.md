@@ -65,6 +65,7 @@
 
 .\vcpkg\vcpkg install shader-slang:x64-windows
 .\vcpkg\vcpkg.exe install entt:x64-windows
+.\vcpkg\vcpkg.exe install etl::x64-windows
 
 # for shared configuration
 .\vcpkg\vcpkg install boost:x64-windows bullet3:x64-windows directxmath:x64-windows glfw3:x64-windows eigen3:x64-windows glm:x64-windows ktx:x64-windows mimalloc:x64-windows tracy:x64-windows shaderc:x64-windows spirv-reflect:x64-windows tbb:x64-windows wxwidgets:x64-windows wxwidgets:x64-windows angle:x64-windows assimp:x64-windows cgltf:x64-windows rmlui[freetype]:x64-windows shader-slang:x64-windows entt:x64-windows
@@ -99,7 +100,7 @@
 ./vcpkg/vcpkg install shader-slang:x64-linux-dynamic
 ./vcpkg/vcpkg install entt:x64-linux
 ./vcpkg/vcpkg install fmt:x64-linux
-
+./vcpkg/vcpkg install etl:x64-linux
 
 ## If you want to build for Windows XP
 
@@ -146,7 +147,7 @@ You need to install mingw for appropriate architecture
 
 Сейчас vcpkg имеет некоторые нестабильные зависимости это:
 
-- shaderc, оно при генерации решения добавляет не действительный путь до SPIRV-Tools.lib из-за чего вам надо добавлять вручную или удалять лишнее поле. Проблема [здесь](https://github.com/microsoft/vcpkg/issues/28144)
+- shaderc, оно при генерации решения добавляет не действительный путь до SPIRV-Tools.lib из-за чего вам надо добавлять вручную или удалять лишнее поле. Проблема [здесь](https://github.com/microsoft/vcpkg/issues/28144) (исправлено)
 - mimalloc, оно просто не корректно собирает решение, требуется версия с override но vcpkg не собирает, проблема адресована [здесь](https://github.com/microsoft/vcpkg/pull/25069)
 
 Поэтому предлагается такая команда:
@@ -255,6 +256,10 @@ P.S. стоит учитывать что это временное решени
 Чтобы сменить имя файла для сохранения пользовательских настрок то:
 
 > -DKOTEK_USER_DATA_CONFIG_NAME=somenamehere
+
+По умолчанию (если ничего не передавать при генерации в cmake) статические версии контейнеров для разработки встраиваемых систем используются по умолчанию (основываются на библиотеке etl), то есть такая опция включена.
+
+> -DKOTEK_STD_LIBRARY_STATIC_CONTAINERS=ON/OFF
 
 ### Работа с проектами
 

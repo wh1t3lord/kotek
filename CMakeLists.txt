@@ -42,6 +42,11 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
+if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "")
+	set(KOTEK_STD_LIBRARY_STATIC_CONTAINERS "ON" CACHE INTERNAL "")
+	message("[${PROJECT_NAME}]: static containers are enabled by default!")
+endif()
+
 include_directories("engine")
 
 add_subdirectory("engine/kotek.core.defines.static.cpp")

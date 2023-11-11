@@ -109,6 +109,27 @@ void ktkBufferModule::Set_NotAlignedMemoryForAllocation(
 #endif
 }
 
+GLuint ktkBufferModule::Get_BindingPointIndex(void) const noexcept
+{
+	return this->m_binding_point_index;
+}
+
+void ktkBufferModule::Set_BindingPointIndex(GLuint id) noexcept
+{
+	this->m_binding_point_index = id;
+}
+
+const ktk::ustring& ktkBufferModule::Get_UniformBlockName(void) const noexcept
+{
+	return this->m_uniform_block_name;
+}
+
+void ktkBufferModule::Set_UniformBlockName(
+	const ktk::ustring& block_name) noexcept
+{
+	this->m_uniform_block_name = block_name;
+}
+
 KOTEK_END_NAMESPACE_RENDER_GL
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK

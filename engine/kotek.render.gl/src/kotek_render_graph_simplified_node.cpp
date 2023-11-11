@@ -12,8 +12,6 @@ namespace gl
 		m_p_programs{programs},
 		m_p_buffers{buffers}, m_render_pass_name{render_pass_name}
 	{
-		KOTEK_ASSERT(this->m_p_programs,
-			"you have to initialize this field with valid pointer");
 	}
 
 	ktkRenderGraphSimplifiedNode::ktkRenderGraphSimplifiedNode(void) :
@@ -29,17 +27,19 @@ namespace gl
 		KOTEK_ASSERT(
 			program_name.empty() == false, "you can't pass an empty string");
 
-		KOTEK_ASSERT(this->m_p_programs,
-			"you must initialize programs map! Probably you don't use any "
-			"shaders in render graph pass and it is pointless to create a such "
-			"pass!");
+		GLuint result{};
 
-		KOTEK_ASSERT(
-			this->m_p_programs->find(program_name) != this->m_p_programs->end(),
-			"can't find program by name: [{}]",
-			reinterpret_cast<const char*>(program_name.c_str()));
+		if (this->m_p_programs)
+		{
+			KOTEK_ASSERT(this->m_p_programs->find(program_name) !=
+					this->m_p_programs->end(),
+				"can't find program by name: [{}]",
+				reinterpret_cast<const char*>(program_name.c_str()));
 
-		return this->m_p_programs->at(program_name);
+			result = this->m_p_programs->at(program_name);
+		}
+
+		return result;
 	}
 
 	const ktkBufferModule& ktkRenderGraphSimplifiedNode::Get_Buffer(

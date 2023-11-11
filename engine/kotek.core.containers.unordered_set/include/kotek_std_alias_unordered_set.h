@@ -11,6 +11,10 @@
 #else
 #endif
 
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	#include <etl/unordered_set.h>
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
@@ -25,6 +29,11 @@ template <class Key, class Hash = hash<Key>,
 	class Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Key>>
 using unordered_set = std::unordered_set<Key, Hash, Predicate, Allocator>;
 #else
+#endif
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+template <class Key, size_t Size>
+using static_unordered_set = etl::unordered_set<Key, Size>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK

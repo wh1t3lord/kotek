@@ -10,6 +10,11 @@
 #else
 #endif
 
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	#include <etl/deque.h>
+#else
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
@@ -21,6 +26,12 @@ using deque = boost::container::deque<Type, Allocator>;
 template <typename Type,
 	typename Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>
 using deque = std::deque<Type, Allocator>;
+#else
+#endif
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+template <typename Type, size_t Size>
+using static_deque = etl::deque<Type, Size>;
 #else
 #endif
 

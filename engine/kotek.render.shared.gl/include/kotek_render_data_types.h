@@ -138,10 +138,20 @@ public:
 	/// issued and its first parameter.
 	void Set_NotAlignedMemoryForAllocation(ktk::size_t value) noexcept;
 
+	GLuint Get_BindingPointIndex(void) const noexcept;
+	void Set_BindingPointIndex(GLuint id) noexcept;
+
+	const ktk::ustring& Get_UniformBlockName(void) const noexcept;
+	void Set_UniformBlockName(const ktk::ustring& block_name) noexcept;
+
 private:
 	/// \~english @brief this field contains data from glGenBuffers result
 	/// handle
 	GLuint m_buffer_handle;
+
+	/// \~english @brief this is what you write in layout(std140, binding=index)
+	/// where index is represented by this field (m_binding_point_index)
+	GLuint m_binding_point_index;
 
 	/// \~english @brief this field contains data that represent what type the
 	/// buffer is like GL_UNIFORM_BUFFER, GL_SHADER_STORAGE_BUFFER and etc
@@ -152,6 +162,8 @@ private:
 	ktk::size_t m_memory_align;
 	ktk::size_t m_not_aligned_memory_for_allocation;
 #endif
+
+	ktk::ustring m_uniform_block_name;
 };
 
 // for indirect rendering

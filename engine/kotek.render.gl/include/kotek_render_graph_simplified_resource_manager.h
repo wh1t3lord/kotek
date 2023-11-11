@@ -52,8 +52,9 @@ public:
 	/// @return const ktk::unordered_map<ktk::ustring, GLuint>* const
 	/// it means that pointer and the map can't be changed at all.
 	/// It uses only for reading.
-	const ktk::unordered_map<ktk::ustring, GLuint>* Get_Storage_Programs(
-		void) const KOTEK_CPP_KEYWORD_NOEXCEPT;
+	const ktk::unordered_map<ktk::ustring,
+		ktk::unordered_map<ktk::ustring, GLuint>>*
+	Get_Storage_Programs(void) const KOTEK_CPP_KEYWORD_NOEXCEPT;
 
 	/// \~english @brief It returns the storage of buffers for required
 	/// render pass by its name. The return data uses for building
@@ -63,12 +64,18 @@ public:
 	/// @return ktk::unordered_map that key is buffer name ktk::cstring and
 	/// value is information about buffer gl::ktkBufferModule.
 	const ktk::unordered_map<ktk::cstring, ktkBufferModule>*
-	Get_Storage_Buffers(
+	Get_Storage_Buffers_By_RenderPassName(
 		const ktk::ustring& render_pass_name) const KOTEK_CPP_KEYWORD_NOEXCEPT;
+
+	const ktk::unordered_map<ktk::ustring,
+		ktk::unordered_map<ktk::cstring, ktkBufferModule>>*
+	Get_Storage_Buffers(void) const KOTEK_CPP_KEYWORD_NOEXCEPT;
 
 private:
 	void Create_Shaders(const ktk::unordered_map<ktk::ustring,
-		ktk::unordered_map<gl::eShaderType, gl::ktkRenderGraphShaderTextInfo>>&
+		ktk::unordered_map<ktk::ustring,
+			ktk::unordered_map<gl::eShaderType,
+				gl::ktkRenderGraphShaderTextInfo>>>&
 			shaders_for_current_render_pass);
 
 	ktkShaderModule Create_Shader(gl::eShaderType shader_type,
@@ -86,11 +93,15 @@ private:
 	Core::ktkMainManager* m_p_main_manager;
 
 	// shaders
+	// <render_pass_name, <shader_name, <shader_type, shader_module>>
 	ktk::unordered_map<ktk::ustring,
-		ktk::unordered_map<gl::eShaderType, ktkShaderModule>>
+		ktk::unordered_map<ktk::ustring,
+			ktk::unordered_map<gl::eShaderType, ktkShaderModule>>>
 		m_render_passes_and_its_shaders;
 
-	ktk::unordered_map<ktk::ustring, GLuint> m_render_passes_and_its_programs;
+	// <render_pass_name, <shader_name, program_id>>
+	ktk::unordered_map<ktk::ustring, ktk::unordered_map<ktk::ustring, GLuint>>
+		m_render_passes_and_its_programs;
 	// shaders
 
 	// buffers

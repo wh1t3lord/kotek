@@ -10,6 +10,10 @@
 #else
 #endif
 
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	#include <etl/vector.h>
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
@@ -21,6 +25,11 @@ using vector =
 template <typename Type>
 using vector = std::vector<Type, KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>;
 #else
+#endif
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+template<typename Type, size_t Size>
+using static_vector = etl::vector<Type, Size>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK

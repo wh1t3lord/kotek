@@ -10,6 +10,11 @@
 #else
 #endif
 
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	#include <etl/map.h>
+#else
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
@@ -23,6 +28,12 @@ template <class K, class V, class P = std::less<K>,
 	typename allocator =
 		KOTEK_USE_MEMORY_ALLOCATOR_CLASS<std::pair<const K, V>>>
 using map = std::map<K, V, P, allocator>;
+#else
+#endif
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+template <class K, class V, size_t Size>
+using static_map = etl::map<K, V, Size>;
 #else
 #endif
 

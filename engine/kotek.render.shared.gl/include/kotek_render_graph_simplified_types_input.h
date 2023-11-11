@@ -34,17 +34,20 @@ public:
 		eShaderType shader_type,
 		const gl::ktkRenderGraphShaderTextInfo& info) noexcept;
 
-	const ktk::unordered_map<eShaderType, gl::ktkRenderGraphShaderTextInfo>&
+	const ktk::unordered_map<ktk::ustring,
+		ktk::unordered_map<eShaderType, gl::ktkRenderGraphShaderTextInfo>>&
 	Get_Shader(
 		const ktk::ustring& user_name_for_access_in_the_code) const noexcept;
 
 	const ktk::unordered_map<ktk::ustring,
-		ktk::unordered_map<eShaderType, gl::ktkRenderGraphShaderTextInfo>>&
+		ktk::unordered_map<ktk::ustring,
+			ktk::unordered_map<eShaderType, gl::ktkRenderGraphShaderTextInfo>>>&
 	Get_Shaders(void) const noexcept;
 
 private:
 	ktk::unordered_map<ktk::ustring,
-		ktk::unordered_map<eShaderType, gl::ktkRenderGraphShaderTextInfo>>
+		ktk::unordered_map<ktk::ustring,
+			ktk::unordered_map<eShaderType, gl::ktkRenderGraphShaderTextInfo>>>
 		m_input_shaders;
 
 	ktk::unordered_map<ktk::ustring,

@@ -110,21 +110,36 @@ void ktkRenderGraphSimplifiedStorageInput::Add_Shader(
 		"class is {}",
 		helper::Translate_ShaderLoadingDataType(info.Get_Type()));
 
+	KOTEK_ASSERT(info.Get_ShaderName().empty() == false,
+		"shader name must be valid (not empty)!");
+
+#ifdef KOTEK_DEBUG
 	if (this->m_input_shaders.find(user_name_for_access_in_the_code) !=
 		this->m_input_shaders.end())
 	{
-		KOTEK_ASSERT(this->m_input_shaders.at(user_name_for_access_in_the_code)
-						 .find(shader_type) ==
+		if (this->m_input_shaders.at(user_name_for_access_in_the_code)
+				.find(info.Get_ShaderName()) !=
+			this->m_input_shaders.at(user_name_for_access_in_the_code).end())
+		{
+			KOTEK_ASSERT(
 				this->m_input_shaders.at(user_name_for_access_in_the_code)
-					.end(),
-			"found duplicate by shader type: {}",
-			helper::Translate_ShaderType(shader_type));
+						.at(info.Get_ShaderName())
+						.find(shader_type) ==
+					this->m_input_shaders.at(user_name_for_access_in_the_code)
+						.at(info.Get_ShaderName())
+						.end(),
+				"found duplicate by shader type: {}",
+				helper::Translate_ShaderType(shader_type));
+		}
 	}
+#endif
 
-	this->m_input_shaders[user_name_for_access_in_the_code][shader_type] = info;
+	this->m_input_shaders[user_name_for_access_in_the_code]
+						 [info.Get_ShaderName()][shader_type] = info;
 }
 
-const ktk::unordered_map<eShaderType, gl::ktkRenderGraphShaderTextInfo>&
+const ktk::unordered_map<ktk::ustring,
+	ktk::unordered_map<eShaderType, gl::ktkRenderGraphShaderTextInfo>>&
 ktkRenderGraphSimplifiedStorageInput::Get_Shader(
 	const ktk::ustring& user_name_for_access_in_the_code) const noexcept
 {
@@ -141,7 +156,8 @@ ktkRenderGraphSimplifiedStorageInput::Get_Shader(
 }
 
 const ktk::unordered_map<ktk::ustring,
-	ktk::unordered_map<eShaderType, gl::ktkRenderGraphShaderTextInfo>>&
+	ktk::unordered_map<ktk::ustring,
+		ktk::unordered_map<eShaderType, gl::ktkRenderGraphShaderTextInfo>>>&
 ktkRenderGraphSimplifiedStorageInput::Get_Shaders(void) const noexcept
 {
 	return this->m_input_shaders;

@@ -10,6 +10,11 @@
 #else
 #endif
 
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	#include <etl/list.h>
+#else
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
@@ -20,6 +25,12 @@ using list =
 #elif defined(KOTEK_USE_STD_LIBRARY)
 template <typename Type>
 using list = std::list<Type, KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>;
+#else
+#endif
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+template<typename Type, size_t Size>
+using static_list = etl::list<Type, Size>;
 #else
 #endif
 

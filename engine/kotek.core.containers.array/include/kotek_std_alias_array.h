@@ -10,6 +10,11 @@
 #else
 #endif
 
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	#include <etl/array.h>
+#else
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 #ifdef KOTEK_USE_BOOST_LIBRARY
@@ -19,6 +24,12 @@ using array = boost::array<T, N>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
 template <class T, ktk::size_t N>
 using array = std::array<T, N>;
+#else
+#endif
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+template <typename Type, size_t Size>
+using static_array = etl::array<Type, Size>;
 #else
 #endif
 

@@ -15,6 +15,10 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
+if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
+	find_path(ETL_INCLUDE_DIRS "etl/.vscode/settings.json")
+endif()
+
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_vector.h"
 	"include/kotek_core_containers_vector.h"
@@ -29,3 +33,9 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
+
+if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
+	message("vector vector vector vector vector")
+	message("${ETL_INCLUDE_DIRS}")
+	target_include_directories(${PROJECT_NAME} PUBLIC ${ETL_INCLUDE_DIRS})
+endif()

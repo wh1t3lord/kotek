@@ -298,7 +298,8 @@ ktkBufferModule ktkRenderShaderManager::Create_Buffer(
 	KOTEK_GL_ASSERT();
 
 	result.Set_Buffer(buffer_object_type, handle_id);
-
+	result.Set_BindingPointIndex(info.Get_BindingPointIndex());
+	result.Set_UniformBlockName(info.Get_UniformBlockName());
 #ifdef KOTEK_DEBUG
 	result.Set_MemoryAlign(info.Get_AlignOfMemory());
 	result.Set_AlignedMemoryForAllocation(memory_in_bytes);

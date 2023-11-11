@@ -332,6 +332,7 @@ ktkRenderGraphSimplifiedBuilder::Analyze(
 		storage_inputs, storage_outputs, images_to_create, buffers_to_create);
 
 	this->Create_Resources(storage_inputs, buffers_to_create);
+	this->LinkBuffersToShaders();
 
 	for (const auto& p_render_pass : this->m_passes)
 	{
@@ -350,9 +351,15 @@ ktkRenderGraphSimplifiedBuilder::Analyze(
 
 		const auto* const p_buffers =
 			this->m_p_render_graph_simplified_resource_manager
-				->Get_Storage_Buffers(render_pass_name);
+				->Get_Storage_Buffers_By_RenderPassName(render_pass_name);
 
-		result.push_back({render_pass_name, p_programs, p_buffers});
+		const ktk::unordered_map<ktk::ustring, GLuint>* p_final_programs{};
+		if (p_programs->find(render_pass_name) != p_programs->end())
+		{
+			p_final_programs = &p_programs->at(render_pass_name);
+		}
+
+		result.push_back({render_pass_name, p_final_programs, p_buffers});
 	}
 
 	return result;
@@ -411,6 +418,58 @@ void ktkRenderGraphSimplifiedBuilder::Create_Buffers(
 		{
 			this->m_p_render_graph_simplified_resource_manager->Create_Buffer(
 				resource_info_creation);
+		}
+	}
+}
+
+void gl::ktkRenderGraphSimplifiedBuilder::LinkBuffersToShaders(void) noexcept
+{
+	KOTEK_ASSERT(this->m_p_render_graph_simplified_resource_manager,
+		"you must have it valid!");
+
+	if (this->m_p_render_graph_simplified_resource_manager)
+	{
+		const auto& map_buffers =
+			*this->m_p_render_graph_simplified_resource_manager
+				 ->Get_Storage_Buffers();
+
+		const auto& map_programs =
+			*this->m_p_render_graph_simplified_resource_manager
+				 ->Get_Storage_Programs();
+
+		for (const auto& [render_pass_name, map_shader_name_and_program_id] :
+			map_programs)
+		{
+			for (const auto& [shader_name, program_handle_id] :
+				map_shader_name_and_program_id)
+			{
+				if (map_buffers.find(render_pass_name) != map_buffers.end())
+				{
+					const auto& map_buffer = map_buffers.at(render_pass_name);
+					for (const auto& [buffer_name, buffer_module] : map_buffer)
+					{
+						if (buffer_module.Get_BufferObjectType() ==
+							GL_UNIFORM_BUFFER)
+						{
+							auto block_index =
+								glGetUniformBlockIndex(program_handle_id,
+									reinterpret_cast<const char*>(
+										buffer_module.Get_UniformBlockName()
+											.c_str()));
+							KOTEK_GL_ASSERT();
+
+							glUniformBlockBinding(program_handle_id,
+								block_index,
+								buffer_module.Get_BindingPointIndex());
+							KOTEK_GL_ASSERT();
+						}
+						else if (buffer_module.Get_BufferObjectType() ==
+							GL_SHADER_STORAGE_BUFFER)
+						{
+						}
+					}
+				}
+			}
 		}
 	}
 }
