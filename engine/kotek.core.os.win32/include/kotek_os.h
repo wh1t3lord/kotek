@@ -54,4 +54,6 @@
 	// glad uses only in private form, like you initialize in appropriate
 	// kotek.render.glx.x version
 	#endif
+
+	constexpr unsigned int kFileSystemPathLengthMax = MAX_PATH;
 #endif

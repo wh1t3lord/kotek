@@ -44,7 +44,22 @@ enum class eResourceLoadingType : ktk::enum_base_t
 	kUnknown = -1
 };
 
+enum class eResourceWritingType : ktk::enum_base_t
+{
+	kText,
+	kTexture,
+	kEndOfEnum,
+	kUnknown = -1
+};
+
 enum class eResourceLoadingPolicy : ktk::enum_base_t
+{
+	kAsync,
+	kSync,
+	kEndOfEnum
+};
+
+enum class eResourceWritingPolicy : ktk::enum_base_t
 {
 	kAsync,
 	kSync,
@@ -55,6 +70,13 @@ enum class eResourceCachingPolicy : ktk::enum_base_t
 {
 	kCache,
 	kWithoutCache,
+	kEndOfEnum
+};
+
+enum class eResourceWritingMode : ktk::enum_base_t
+{
+	kAppend,
+	kNew,
 	kEndOfEnum
 };
 
@@ -526,6 +548,9 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kConsoleCommand_Render_CalculateBoundingPrimitive,
 
 	kConsoleCommand_ResourceManager_Load,
+	kConsoleCommand_ResourceManager_OpenForWriting,
+	kConsoleCommand_ResourceManager_Write,
+	kConsoleCommand_ResourceManager_FinishWriting,
 
 	kConsoleCommand_SDK_LoadScene,
 	kConsoleCommand_SDK_SaveScene,
@@ -620,6 +645,43 @@ enum class eInputType : ktk::enum_base_t
 	kInputType_DisabledCursor,
 
 	kEndOfEnum
+};
+
+enum class eResourceWritingDataType : ktk::enum_base_t
+{
+	kInt8_t,
+	kInt16_t,
+	kInt32_t,
+	kInt64_t,
+	kInt128_t,
+	kUInt8_t,
+	kUInt16_t,
+	kUInt32_t,
+	kUInt64_t,
+	kUInt128_t,
+	kSize_t,
+	kFloat_t,
+	kDouble_t,
+	kPIntWithSize_t,
+	kPUIntWithSize_t,
+	kPFloatWithSize_t,
+	kPDoubleWithSize_t,
+	kPChar_t,
+	kPUChar_t,
+	kPUCharWithSize_t,
+	kPCharWithSize_t,
+	kEndOfEnum,
+	kUnknown = -1
+};
+
+enum class eResourceHowToWriteData : ktk::enum_base_t
+{
+	kNone,
+	kUseEndlAfterWrite,
+	kUseSpaceAfterWrite,
+	kUseSpaceAndEndlAfterWrite,
+	kEndOfEnum,
+	kUnknown = -1
 };
 
 KOTEK_END_NAMESPACE_CORE

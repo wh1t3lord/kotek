@@ -34,6 +34,7 @@ class ktkProfiler;
 class ktkConsole;
 KOTEK_END_NAMESPACE_CORE
 
+// TODO: replace namespace to preprocessor
 namespace Engine
 {
 	class ktkWindow;
@@ -41,17 +42,15 @@ namespace Engine
 
 KOTEK_BEGIN_NAMESPACE_KTK
 
-// TODO: replace namespace to preprocessor
-namespace math
-{
-	class vector2f;
-	class vector3f;
-	class vector4f;
-	class matrix2x2f;
-	class matrix3x3f;
-	class matrix4x4f;
-	class quaternionf;
-} // namespace math
+KOTEK_BEGIN_NAMESPACE_MATH
+class vector2f;
+class vector3f;
+class vector4f;
+class matrix2x2f;
+class matrix3x3f;
+class matrix4x4f;
+class quaternionf;
+KOTEK_END_NAMESPACE_MATH
 
 KOTEK_END_NAMESPACE_KTK
 
@@ -121,7 +120,8 @@ public:
 
 	virtual ktk::shared_ptr<ktk::any> LoadGeometry(
 		ktk::enum_base_t resource_loading_type, ktk::entity_t id) = 0;
-	virtual ktk::shared_ptr<ktk::any> LoadGeometry(ktk::enum_base_t resource_loading_type,
+	virtual ktk::shared_ptr<ktk::any> LoadGeometry(
+		ktk::enum_base_t resource_loading_type,
 		const ktk::filesystem::path& path_to_file, ktk::entity_t id) = 0;
 
 	virtual void Resize(ktkIRenderDevice* p_raw_device,
@@ -489,6 +489,41 @@ public:
 	virtual bool Save(
 		const ktk::filesystem::path& path, ktk::any data) noexcept = 0;
 
+	virtual bool Open(const ktk::filesystem::path& path,
+		eResourceWritingType resource_type, eResourceWritingPolicy policy,
+		eResourceWritingMode mode, ktk::uint32_t id) noexcept = 0;
+	virtual void Write(
+		ktk::uint32_t resource_id, const char* p_string) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const char* p_string,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id,
+		const unsigned char* p_raw_memory) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id,
+		const unsigned char* p_raw_memory, ktk::size_t size) noexcept = 0;
+	virtual void Write(
+		ktk::uint32_t resource_id, ktk::int32_t value) noexcept = 0;
+	virtual void Write(
+		ktk::uint32_t resource_id, ktk::float_t value) noexcept = 0;
+	virtual void Write(
+		ktk::uint32_t resource_id, ktk::double_t value) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::int32_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::uint32_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::float_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::double_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::int8_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::uint8_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::int16_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual bool Close(ktk::uint32_t id) noexcept = 0;
+
 protected:
 	virtual eResourceLoadingType DetectResourceTypeByFileFormat(
 		const ktk::filesystem::path& path) noexcept = 0;
@@ -503,10 +538,10 @@ public:
 		eResourceCachingPolicy type_policy_caching,
 		eResourceLoadingType type_of_loading_resource,
 		const ktk::filesystem::path& resource_path) :
-		m_is_for_entity{},
-		m_policy_loading{type_loading}, m_policy_caching{type_policy_caching},
-		m_resource_type{type_of_loading_resource}, m_id{}, m_resource_path{
-															   resource_path}
+		m_policy_loading{type_loading},
+		m_policy_caching{type_policy_caching},
+		m_resource_type{type_of_loading_resource}, m_id{ktk::entity_t(-1)},
+		m_resource_path{resource_path}
 	{
 	}
 
@@ -514,16 +549,15 @@ public:
 		eResourceCachingPolicy type_policy_caching,
 		eResourceLoadingType type_of_loading_resource,
 		const ktk::filesystem::path& resource_path, Kotek::ktk::entity_t id) :
-		m_is_for_entity{true},
-		m_policy_loading{type_loading}, m_policy_caching{type_policy_caching},
-		m_resource_type{type_of_loading_resource}, m_id{id}, m_resource_path{
-																 resource_path}
+		m_policy_loading{type_loading},
+		m_policy_caching{type_policy_caching},
+		m_resource_type{type_of_loading_resource}, m_id{id},
+		m_resource_path{resource_path}
 	{
 	}
 
 	ktkLoadingRequest(void) :
-		m_is_for_entity{}, m_policy_caching{},
-		m_policy_loading{eResourceLoadingPolicy::kAsync},
+		m_policy_caching{}, m_policy_loading{eResourceLoadingPolicy::kAsync},
 		m_resource_type{eResourceLoadingType::kAutoDetect}, m_id{}
 	{
 	}
@@ -575,7 +609,10 @@ public:
 		return this->m_resource_path;
 	}
 
-	bool Is_ForEntity(void) const noexcept { return this->m_is_for_entity; }
+	bool Is_ForEntity(void) const noexcept
+	{
+		return this->m_id != ktk::entity_t(-1);
+	}
 
 	Kotek::ktk::entity_t Get_EntityID(void) const noexcept
 	{
@@ -583,12 +620,139 @@ public:
 	}
 
 private:
-	bool m_is_for_entity;
 	eResourceLoadingPolicy m_policy_loading;
 	eResourceCachingPolicy m_policy_caching;
 	eResourceLoadingType m_resource_type;
 	Kotek::ktk::entity_t m_id;
 	ktk::filesystem::path m_resource_path;
+};
+
+class ktkResourceWritingRequest
+{
+public:
+	ktkResourceWritingRequest() :
+		m_id{}, m_writing_mode{Kotek::Core::eResourceWritingMode::kNew},
+		m_resource_type{Kotek::Core::eResourceWritingType::kUnknown},
+		m_policy{Kotek::Core::eResourceWritingPolicy::kSync}
+	{
+	}
+
+	ktkResourceWritingRequest(ktk::uint32_t id, eResourceWritingMode mode,
+		eResourceWritingType type, eResourceWritingPolicy policy,
+		const ktk::filesystem::path& path) :
+		m_id{id},
+		m_writing_mode{mode}, m_resource_type{type},
+		m_filepath_for_writing{path}, m_policy{policy}
+	{
+	}
+	~ktkResourceWritingRequest() = default;
+
+	eResourceWritingType Get_ResourceType(void) const noexcept
+	{
+		return this->m_resource_type;
+	}
+
+	ktkResourceWritingRequest& Set_ResourceType(
+		eResourceWritingType type) noexcept
+	{
+		this->m_resource_type = type;
+		return *this;
+	}
+
+	eResourceWritingMode Get_WritingMode(void) const noexcept
+	{
+		return this->m_writing_mode;
+	}
+
+	ktkResourceWritingRequest& Set_WritingMode(
+		eResourceWritingMode mode) noexcept
+	{
+		this->m_writing_mode = mode;
+		return *this;
+	}
+
+	ktk::uint32_t Get_ID(void) const noexcept { return this->m_id; }
+
+	const ktk::filesystem::path& Get_Path(void) const noexcept
+	{
+		return this->m_filepath_for_writing;
+	}
+
+	ktkResourceWritingRequest& Set_Path(
+		const ktk::filesystem::path& path) noexcept
+	{
+		this->m_filepath_for_writing = path;
+		return *this;
+	}
+
+	eResourceWritingPolicy Get_Policy(void) const noexcept
+	{
+		return this->m_policy;
+	}
+
+private:
+	ktk::uint32_t m_id;
+	eResourceWritingMode m_writing_mode;
+	eResourceWritingType m_resource_type;
+	eResourceWritingPolicy m_policy;
+	ktk::filesystem::path m_filepath_for_writing;
+};
+
+class ktkResourceWritingStatus
+{
+public:
+	ktkResourceWritingStatus() : m_can_be_closed{}, m_is_writing{} {}
+	~ktkResourceWritingStatus() {}
+
+	bool Is_Writing(void) const noexcept { return this->m_is_writing; }
+	bool Is_CanBeClosed(void) const noexcept { return this->m_can_be_closed; }
+
+	void Set_Writing(bool status) { this->m_is_writing = status; }
+	void Set_CanBeClosed(bool status) { this->m_can_be_closed = status; }
+
+private:
+	bool m_can_be_closed;
+	bool m_is_writing;
+};
+
+class ktkResourceWritingData
+{
+public:
+	ktkResourceWritingData() :
+		m_type{eResourceWritingDataType::kUnknown}, m_resource_id{}, m_size{},
+		m_data{}
+	{
+	}
+	~ktkResourceWritingData() {}
+
+	eResourceWritingDataType Get_Type(void) const noexcept
+	{
+		return this->m_type;
+	}
+
+	void Set_Type(eResourceWritingDataType type) { this->m_type = type; }
+
+	ktk::any Get_Data(void) const noexcept { return this->m_data; }
+
+	void Set_Data(ktk::any data) { this->m_data = data; }
+
+	ktk::size_t Get_ElementCount(void) const noexcept { return this->m_size; }
+
+	void Set_ElementCount(ktk::size_t size) { this->m_size = size; }
+
+	void Set_ResourceID(ktk::uint32_t id) { this->m_resource_id = id; }
+
+	ktk::uint32_t Get_ResourceID(void) const noexcept
+	{
+		return this->m_resource_id;
+	}
+
+private:
+	/// \~english @brief for casting
+	eResourceWritingDataType m_type;
+	ktk::uint32_t m_resource_id;
+	ktk::size_t m_size;
+	ktk::any m_data;
 };
 
 class ktkIResourceManager
@@ -600,6 +764,41 @@ public:
 	virtual void Shutdown(void) = 0;
 
 	virtual ktk::any Load(const ktkLoadingRequest& request) noexcept = 0;
+
+	virtual void Open(const ktkResourceWritingRequest& request) noexcept = 0;
+
+	virtual void Write(
+		ktk::uint32_t resource_id, const char* p_string) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const char* p_string,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id,
+		const unsigned char* p_raw_memory) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id,
+		const unsigned char* p_raw_memory, ktk::size_t size) noexcept = 0;
+	virtual void Write(
+		ktk::uint32_t resource_id, ktk::int32_t value) noexcept = 0;
+	virtual void Write(
+		ktk::uint32_t resource_id, ktk::float_t value) noexcept = 0;
+	virtual void Write(
+		ktk::uint32_t resource_id, ktk::double_t value) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::int32_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::uint32_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::float_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::double_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::int8_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::uint8_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::int16_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
+		ktk::size_t size) noexcept = 0;
+
+	virtual void Close(ktk::uint32_t resource_id) noexcept = 0;
 
 	virtual void Set_ResourceLoader(
 		ktkIResourceLoaderManager* p_instance) noexcept = 0;

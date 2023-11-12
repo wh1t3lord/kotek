@@ -19,4 +19,6 @@
 
     #undef None
     #undef Always
+
+	constexpr unsigned int kFileSystemPathLengthMax = PATH_MAX;
 #endif
