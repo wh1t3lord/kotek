@@ -40,7 +40,7 @@
 		#endif
 	#endif
 
-	#include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>	
+	#include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
 
 	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
 		#define GLFW_INCLUDE_NONE
@@ -54,6 +54,4 @@
 	// glad uses only in private form, like you initialize in appropriate
 	// kotek.render.glx.x version
 	#endif
-
-	constexpr unsigned int kFileSystemPathLengthMax = MAX_PATH;
 #endif

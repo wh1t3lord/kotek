@@ -189,7 +189,7 @@ public:
 	virtual ktk::ustring ReadFile(
 		const ktk::filesystem::path& path_to_file) const noexcept = 0;
 
-	virtual const ktk::filesystem::path& GetFolderByEnum(
+	virtual ktk::filesystem::path GetFolderByEnum(
 		eFolderIndex id) const noexcept = 0;
 };
 
@@ -516,13 +516,16 @@ public:
 		ktk::size_t size) noexcept = 0;
 	virtual void Write(ktk::uint32_t resource_id, const ktk::int8_t* p_arr,
 		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::uint8_t* p_arr,
-		ktk::size_t size) noexcept = 0;
 	virtual void Write(ktk::uint32_t resource_id, const ktk::int16_t* p_arr,
 		ktk::size_t size) noexcept = 0;
 	virtual void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
 		ktk::size_t size) noexcept = 0;
 	virtual bool Close(ktk::uint32_t id) noexcept = 0;
+
+	/// \~english @brief seeks for available instance of ofstream and returns its id 
+	/// @param  
+	/// @return 
+	virtual ktk::uint32_t GenerateFileID(void) noexcept = 0;
 
 protected:
 	virtual eResourceLoadingType DetectResourceTypeByFileFormat(
@@ -791,8 +794,6 @@ public:
 		ktk::size_t size) noexcept = 0;
 	virtual void Write(ktk::uint32_t resource_id, const ktk::int8_t* p_arr,
 		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::uint8_t* p_arr,
-		ktk::size_t size) noexcept = 0;
 	virtual void Write(ktk::uint32_t resource_id, const ktk::int16_t* p_arr,
 		ktk::size_t size) noexcept = 0;
 	virtual void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
@@ -820,8 +821,6 @@ public:
 
 	virtual void Set_MainManager(ktkMainManager* p_instance) noexcept = 0;
 	virtual ktkMainManager* Get_MainManager(void) const noexcept = 0;
-
-	virtual void Update_WorkerQueue(void) noexcept = 0;
 
 	// TODO: saving implement
 };

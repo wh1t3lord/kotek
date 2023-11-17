@@ -4,26 +4,15 @@
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 #include <kotek.core.filesystem.file_text/include/kotek_core_filesystem_file_text.h>
+#include <kotek.core.containers.multithreading.mutex/include/kotek_core_containers_multithreading_mutex.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+#define KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL 10
+
 class ktkResourceSaverManager : public ktkIResourceSaverManager
 {
-private:
-	class ktkWritingFile
-	{
-	public:
-		ktkWritingFile();
-		~ktkWritingFile();
-
-
-	private:
-		ktk::cofstream m_file;
-		eResourceWritingPolicy m_policy;
-		eResourceWritingMode m_mode;
-	};
-
 public:
 	ktkResourceSaverManager(void);
 	~ktkResourceSaverManager(void);
@@ -32,6 +21,9 @@ public:
 		ktkIFileSystem* p_filesystem, ktkMainManager* p_main_manager) override;
 	void Shutdown(void) override;
 
+	// warning never use a variable on stack to add/replace saver only created
+	// saver with new and without handling by your own delete, this class
+	// manages delete thing!
 	void Set_Saver(eResourceLoadingType resource_type,
 		ktkIResourceSaver* p_saver) override;
 
@@ -66,30 +58,31 @@ public:
 		ktk::size_t size) noexcept override;
 	void Write(ktk::uint32_t resource_id, const ktk::int8_t* p_arr,
 		ktk::size_t size) noexcept override;
-	void Write(ktk::uint32_t resource_id, const ktk::uint8_t* p_arr,
-		ktk::size_t size) noexcept override;
 	void Write(ktk::uint32_t resource_id, const ktk::int16_t* p_arr,
 		ktk::size_t size) noexcept override;
 	void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
 		ktk::size_t size) noexcept override;
 	bool Close(ktk::uint32_t id) noexcept override;
 
+	ktk::uint32_t GenerateFileID(void) noexcept override;
+
 protected:
 	eResourceLoadingType DetectResourceTypeByFileFormat(
 		const ktk::filesystem::path& path) noexcept override;
 
 private:
-	bool CreateWriter(
-		const ktk::filesystem::path& path, ktk::uint32_t id) noexcept;
-
-private:
-	ktk::unordered_map<eResourceLoadingType, ktkIResourceSaver*> m_savers;
-
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	ktk::static_unordered_map<ktk::uint32_t, ktk::cofstream, 10> m_writers;
+	ktk::static_unordered_map<ktk::uint32_t, std::pair<ktk::cofstream, bool>,
+		KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL>
+		m_writers;
 #else
-	ktk::unordered_map<ktk::uint32_t, ktk::cofstream> m_writers;
+	ktk::unordered_map<ktk::uint32_t, std::pair<ktk::cofstream, bool>>
+		m_writers;
 #endif
+
+	// TODO: think how to replace for placement new and make it more useful
+	ktk::unordered_map<eResourceLoadingType, ktkIResourceSaver*> m_savers;
+	ktk::mt::mutex m_mutex;
 };
 
 KOTEK_END_NAMESPACE_CORE

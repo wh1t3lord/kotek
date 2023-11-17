@@ -3,6 +3,7 @@
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 #include <kotek.core.containers.queue/include/kotek_core_containers_queue.h>
 #include <kotek.core.containers.multithreading.mutex/include/kotek_core_containers_multithreading_mutex.h>
+#include <etl/queue_mpmc_mutex.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
@@ -16,15 +17,15 @@ namespace mt
 		queue() {}
 		~queue() {}
 
-		void push(const Type& data) 
+		void push(const Type& data)
 		{
 			unique_lock<mutex> lock(this->m_mutex);
 			this->m_queue.push(data);
 			lock.unlock();
 			this->m_variable.notify_one();
 		}
-		
-		void push(Type&& data) 
+
+		void push(Type&& data)
 		{
 			unique_lock<mutex> lock(this->m_mutex);
 			this->m_queue.push(std::move(data));
@@ -52,6 +53,11 @@ namespace mt
 		mutex m_mutex;
 		condition_variable m_variable;
 	};
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	template <typename Type, size_t Size>
+	using static_queue = etl::queue_mpmc_mutex<Type, Size>;
+#endif
 } // namespace mt
 
 KOTEK_END_NAMESPACE_KTK

@@ -15,8 +15,7 @@ constexpr const char* kSysInfoFieldName_ShutdownCallback =
 	"UserCallbackForGameLibrary_Shutdown";
 constexpr const char* kSysInfoFieldName_UpdateCallback =
 	"UserCallbackForGameLibrary_Update";
-constexpr const char* kSysInfoFieldName_UserLibraryName =
-	"UserGameLibraryName";
+constexpr const char* kSysInfoFieldName_UserLibraryName = "UserGameLibraryName";
 
 constexpr const char* kSysInfoFieldName_UpdateCallbackContainsLoop =
 	"UserCallbackForGameLibrary_Update_Contains_Loop";
@@ -28,6 +27,16 @@ constexpr const char* kUserCallbackName_Shutdown = "ShutdownModule_Game";
 constexpr const char* kUserCallbackName_Update = "UpdateModule_Game";
 constexpr const char* kUserCallbackName_Initialize_Render =
 	"InitializeModule_Render";
+
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	#define KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH 260
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+	#define KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH 1024
+#elif defined(KOTEK_USE_PLATFORM_MAC)
+	#define KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH 1024
+#else
+	#error undefined platform
+#endif
 
 class ktkFileSystem : public ktkIFileSystem
 {
@@ -41,7 +50,7 @@ public:
 	/*
 	 * For Win32 returns without slash
 	 */
-	const ktk::filesystem::path& GetFolderByEnum(
+	ktk::filesystem::path GetFolderByEnum(
 		eFolderIndex id) const noexcept override;
 
 	bool IsValidPath(const ktk::filesystem::path& path) const noexcept override;
@@ -66,14 +75,22 @@ public:
 
 private:
 	bool AddGamedataFolderToStorage(const ktk::filesystem::path& path,
-        eFolderIndex id, const ktk::cstring& folder_name) noexcept;
+		eFolderIndex id, const ktk::cstring& folder_name) noexcept;
 
 	void ValidateFolders(void) noexcept;
 
 	void CreateConfigFiles(void) noexcept;
 
 private:
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	ktk::static_unordered_map<eFolderIndex,
+		ktk::static_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>,
+		static_cast<size_t>(
+			static_cast<ktk::enum_base_t>(eFolderIndex::kEndOfEnum) - 1)>
+		m_storage_paths;
+#else
 	ktk::unordered_map<eFolderIndex, ktk::filesystem::path> m_storage_paths;
+#endif
 };
 
 KOTEK_END_NAMESPACE_CORE

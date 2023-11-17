@@ -8,7 +8,7 @@
 	#define VK_USE_PLATFORM_XCB_KHR
 	#include <vulkan/vulkan.h>
 
-    #include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
+	#include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
 
 	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
 		#include <GLFW/glfw3.h>
@@ -17,8 +17,6 @@
 		#include <GLFW/glfw3native.h>
 	#endif
 
-    #undef None
-    #undef Always
-
-	constexpr unsigned int kFileSystemPathLengthMax = PATH_MAX;
+	#undef None
+	#undef Always
 #endif

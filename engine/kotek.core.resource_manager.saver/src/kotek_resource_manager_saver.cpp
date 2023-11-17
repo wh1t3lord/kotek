@@ -17,9 +17,40 @@ void ktkResourceSaverManager::Initialize(
 
 	this->Set_Saver(eResourceLoadingType::kText,
 		new ktkResourceSaverFile_Text(p_main_manager));
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	for (unsigned int i = 0; i < KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL;
+		 ++i)
+	{
+		this->m_writers[i] = {ktk::cofstream(), true};
+	}
+#endif
 }
 
-void ktkResourceSaverManager::Shutdown(void) {}
+void ktkResourceSaverManager::Shutdown(void)
+{
+	for (auto& [type, saver] : this->m_savers)
+	{
+		auto* p_saver = saver;
+
+		delete p_saver;
+	}
+
+	this->m_savers.clear();
+
+#ifdef KOTEK_DEBUG
+	for (auto& [id, pair] : this->m_writers)
+	{
+		auto is_free = pair.second;
+
+		KOTEK_ASSERT(is_free,
+			"file is not free, but we do shutdown that means that file is "
+			"opened and awaits for writing or currently writes something rn!");
+	}
+#endif
+
+	this->m_writers.clear();
+}
 
 void ktkResourceSaverManager::Set_Saver(
 	eResourceLoadingType resource_type, ktkIResourceSaver* p_saver)
@@ -33,8 +64,12 @@ void ktkResourceSaverManager::Set_Saver(
 
 	if (this->m_savers.find(resource_type) != this->m_savers.end())
 	{
-		KOTEK_MESSAGE_WARNING("replacing resource loader for type: [{}]",
+		KOTEK_MESSAGE_WARNING(
+			"you try to replace resource loader for type: [{}]",
 			helper::Translate_ResourceLoadingType(resource_type));
+		
+		delete this->m_savers[resource_type];
+		this->m_savers[resource_type] = nullptr;
 	}
 
 	this->m_savers[resource_type] = p_saver;
@@ -108,6 +143,10 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 		"you must initialize file system before calling this method!");
 	KOTEK_ASSERT(this->m_writers.size() < this->m_writers.max_size(),
 		"overflow system can't allocate more!");
+	KOTEK_ASSERT(this->m_writers.find(id) != this->m_writers.end(),
+		"failed to find file by its id: [{}]", id);
+
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	bool result{};
 
@@ -120,7 +159,10 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 			path.extension().string().find("json") != std::string::npos,
 			"must have a such name");
 
-		result = this->CreateWriter(path, id);
+		auto& file = this->m_writers.at(id).first;
+
+		this->m_writers.at(id).second = false;
+
 		break;
 	}
 	}
@@ -134,9 +176,14 @@ void ktkResourceSaverManager::Write(
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
 
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
+
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		auto& file = this->m_writers.at(resource_id);
+		auto& file = this->m_writers.at(resource_id).first;
+
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
 
 		file << p_string;
 	}
@@ -147,10 +194,15 @@ void ktkResourceSaverManager::Write(
 {
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		auto& file = this->m_writers.at(resource_id);
+		auto& file = this->m_writers.at(resource_id).first;
+
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		file.write(p_string, size);
 	}
 }
@@ -160,10 +212,15 @@ void ktkResourceSaverManager::Write(
 {
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		auto& file = this->m_writers.at(resource_id);
+		auto& file = this->m_writers.at(resource_id).first;
+
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		file << p_raw_memory;
 	}
 }
@@ -173,10 +230,15 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 {
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such file!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		auto& file = this->m_writers.at(resource_id);
+		auto& file = this->m_writers.at(resource_id).first;
+
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		file.write((char*)&p_raw_memory[0], size);
 	}
 }
@@ -186,10 +248,15 @@ void ktkResourceSaverManager::Write(
 {
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		auto& file = this->m_writers.at(resource_id);
+		auto& file = this->m_writers.at(resource_id).first;
+
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		file << value;
 	}
 }
@@ -199,10 +266,15 @@ void ktkResourceSaverManager::Write(
 {
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		auto& file = this->m_writers.at(resource_id);
+		auto& file = this->m_writers.at(resource_id).first;
+
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		file << value;
 	}
 }
@@ -212,10 +284,15 @@ void ktkResourceSaverManager::Write(
 {
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		auto& file = this->m_writers.at(resource_id);
+		auto& file = this->m_writers.at(resource_id).first;
+
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		file << value;
 	}
 }
@@ -229,15 +306,19 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	ktk::cofstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		p_file = &this->m_writers.at(resource_id);
+		p_file = &this->m_writers.at(resource_id).first;
 	}
 
 	if (p_file)
 	{
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		for (auto i = 0; i < size; ++i)
 		{
 			(*p_file) << p_arr[i];
@@ -254,15 +335,19 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	ktk::cofstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		p_file = &this->m_writers.at(resource_id);
+		p_file = &this->m_writers.at(resource_id).first;
 	}
 
 	if (p_file)
 	{
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		for (auto i = 0; i < size; ++i)
 		{
 			(*p_file) << p_arr[i];
@@ -279,15 +364,19 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	ktk::cofstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		p_file = &this->m_writers.at(resource_id);
+		p_file = &this->m_writers.at(resource_id).first;
 	}
 
 	if (p_file)
 	{
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		for (auto i = 0; i < size; ++i)
 		{
 			(*p_file) << p_arr[i];
@@ -304,15 +393,19 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	ktk::cofstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		p_file = &this->m_writers.at(resource_id);
+		p_file = &this->m_writers.at(resource_id).first;
 	}
 
 	if (p_file)
 	{
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		for (auto i = 0; i < size; ++i)
 		{
 			(*p_file) << p_arr[i];
@@ -330,39 +423,18 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
 
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 	ktk::cofstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		p_file = &this->m_writers.at(resource_id);
+		p_file = &this->m_writers.at(resource_id).first;
 	}
 
 	if (p_file)
 	{
-		for (auto i = 0; i < size; ++i)
-		{
-			(*p_file) << p_arr[i];
-		}
-	}
-}
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
 
-void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
-	const ktk::uint8_t* p_arr, ktk::size_t size) noexcept
-{
-	KOTEK_ASSERT(p_arr, "must be valid pointer!");
-	KOTEK_ASSERT(size != ktk::size_t(-1), "must have a valid size");
-	KOTEK_ASSERT(size != 0, "can't be zero! Just doesn't make any sense!");
-
-	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
-		"can't find a such thing!");
-
-	ktk::cofstream* p_file{};
-	if (this->m_writers.find(resource_id) != this->m_writers.end())
-	{
-		p_file = &this->m_writers.at(resource_id);
-	}
-
-	if (p_file)
-	{
 		for (auto i = 0; i < size; ++i)
 		{
 			(*p_file) << p_arr[i];
@@ -379,15 +451,19 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	ktk::cofstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		p_file = &this->m_writers.at(resource_id);
+		p_file = &this->m_writers.at(resource_id).first;
 	}
 
 	if (p_file)
 	{
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		for (auto i = 0; i < size; ++i)
 		{
 			(*p_file) << p_arr[i];
@@ -404,15 +480,19 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
 	ktk::cofstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
-		p_file = &this->m_writers.at(resource_id);
+		p_file = &this->m_writers.at(resource_id).first;
 	}
 
 	if (p_file)
 	{
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
 		for (auto i = 0; i < size; ++i)
 		{
 			(*p_file) << p_arr[i];
@@ -425,16 +505,66 @@ bool ktkResourceSaverManager::Close(ktk::uint32_t id) noexcept
 	KOTEK_ASSERT(id != ktk::uint32_t(-1), "must be valid number!");
 	KOTEK_ASSERT(this->m_writers.empty() == false, "early calling!");
 
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
+
 	bool result{};
 
 	if (this->m_writers.empty() == false)
 	{
 		if (this->m_writers.find(id) != this->m_writers.end())
 		{
-			this->m_writers.erase(id);
+			KOTEK_ASSERT(this->m_writers.at(id).second == false,
+				"you try to close the file that was closed or not even "
+				"opened!");
+
+			this->m_writers.at(id).first.close();
+			// we set this file that it is 'freed' for writing
+			this->m_writers.at(id).second = true;
+
 			result = true;
 		}
 	}
+
+	return result;
+}
+
+ktk::uint32_t ktkResourceSaverManager::GenerateFileID(void) noexcept
+{
+	KOTEK_ASSERT(this->m_writers.empty() == false,
+		"you must initialize your file pool!");
+
+	// this means that if result equals to
+	// KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL it means value is invalid
+	// because we initialize from [0,
+	// KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL - 1]
+	ktk::uint32_t result{KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL};
+
+#ifdef KOTEK_DEBUG
+	bool is_any_avaiable = false;
+#endif
+
+	for (const auto& [id, pair] : this->m_writers)
+	{
+		bool is_available = pair.second;
+
+		if (is_available)
+		{
+			result = id;
+
+#ifdef KOTEK_DEBUG
+			is_any_avaiable = true;
+#endif
+			break;
+		}
+	}
+
+#ifdef KOTEK_DEBUG
+	KOTEK_ASSERT(is_any_avaiable,
+		"failed to obtain any avaiable file for writing. It means that engine "
+		"doesn't have any freed file, allocate more! Current file pool size "
+		"is: [{}]",
+		KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL);
+#endif
 
 	return result;
 }
@@ -474,29 +604,6 @@ eResourceLoadingType ktkResourceSaverManager::DetectResourceTypeByFileFormat(
 	KOTEK_ASSERT(result != eResourceLoadingType::kUnknown,
 		"you didn't provide any detector for a format file: {}",
 		reinterpret_cast<const char*>(path.extension().u8string().c_str()));
-
-	return result;
-}
-
-bool ktkResourceSaverManager::CreateWriter(
-	const ktk::filesystem::path& path, ktk::uint32_t id) noexcept
-{
-	KOTEK_ASSERT(path.empty() == false, "must be not empty!");
-	KOTEK_ASSERT(id != ktk::uint32_t(-1), "msut be valid!");
-	KOTEK_ASSERT(this->m_p_manager_filesystem, "must be valid!");
-	KOTEK_ASSERT(
-		this->m_p_manager_filesystem->IsValidPath(path), "invalid path!");
-
-	bool result{};
-
-	if (this->m_writers.find(id) == this->m_writers.end())
-	{
-		this->m_writers[id] = ktk::cofstream(path);
-		result = true;
-	}
-
-	KOTEK_ASSERT(this->m_writers.at(id).good(),
-		"something went wrong when we tried to open file!");
 
 	return result;
 }

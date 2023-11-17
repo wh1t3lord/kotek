@@ -8,15 +8,39 @@ ktkFileSystem::~ktkFileSystem(void) {}
 
 void ktkFileSystem::Initialize(void)
 {
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	KOTEK_ASSERT(ktk::filesystem::current_path().u8string().size() <=
+			KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH,
+		"overflow current_path().size() > "
+		"KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH({})",
+		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
+
+	ktk::memory::memcpy(
+		this->m_storage_paths[eFolderIndex::kFolderIndex_Root].data(),
+		reinterpret_cast<char*>(
+			ktk::filesystem::current_path().u8string().data()),
+		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
+#else
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Root] =
 		ktk::filesystem::current_path();
+#endif
 
-	KOTEK_MESSAGE("root path: {}",
-			this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root));
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	KOTEK_MESSAGE("root path: [{}]",
+		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root).c_str());
+#else
+	KOTEK_MESSAGE("root path: [{}]",
+		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root));
+#endif
 
-	KOTEK_ASSERT(this->IsValidPath(
-					 this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root)),
-		"your path must be valid!");
+	bool is_valid_path =
+		this->IsValidPath(this->m_storage_paths
+							  .at(eFolderIndex::kFolderIndex_Root)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+							  .c_str()
+#endif
+		);
+	KOTEK_ASSERT(is_valid_path, "your path must be valid!");
 
 	this->ValidateFolders();
 
@@ -25,7 +49,7 @@ void ktkFileSystem::Initialize(void)
 
 void ktkFileSystem::Shutdown(void) {}
 
-const ktk::filesystem::path& ktkFileSystem::GetFolderByEnum(
+ktk::filesystem::path ktkFileSystem::GetFolderByEnum(
 	eFolderIndex id) const noexcept
 {
 	KOTEK_ASSERT(this->m_storage_paths.empty() == false,
@@ -37,7 +61,12 @@ const ktk::filesystem::path& ktkFileSystem::GetFolderByEnum(
 			"can't find path by id[{}]", static_cast<ktk::enum_base_t>(id));
 	}
 
-	return this->m_storage_paths.at(id);
+	return this->m_storage_paths
+		.at(id)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+		.c_str()
+#endif
+		;
 }
 
 bool ktkFileSystem::IsValidPath(
@@ -103,6 +132,12 @@ bool ktkFileSystem::AddGamedataFolderToStorage(
 	const ktk::filesystem::path& path, eFolderIndex id,
 	const ktk::cstring& folder_name) noexcept
 {
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	KOTEK_ASSERT(path.u8string().size() <= KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH,
+		"overflow path is > KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH({})",
+		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
+#endif
+
 	if (this->m_storage_paths.find(id) != this->m_storage_paths.end())
 	{
 		KOTEK_MESSAGE("this path {} is existed in storage, can't add",
@@ -113,7 +148,18 @@ bool ktkFileSystem::AddGamedataFolderToStorage(
 	ktk::filesystem::path result(path);
 	result /= folder_name.c_str();
 
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	KOTEK_ASSERT(result.u8string().size() <= KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH,
+		"path overflow, filesystem::path::size() > "
+		"KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH({})!",
+		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
+
+	ktk::memory::memcpy(this->m_storage_paths[id].data(),
+		reinterpret_cast<char*>(result.u8string().data()),
+		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
+#else
 	this->m_storage_paths[id] = result;
+#endif
 
 	return this->IsValidPath(result);
 }
@@ -122,162 +168,323 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata] =
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root);
 
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	ktk::filesystem::path temp =
+		this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata].c_str();
+	temp /= KOTEK_TEXTU("gamedata");
+
+	KOTEK_ASSERT(temp.u8string().size() <= KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH,
+		"overflow kFolderIndex_Gamedata path is > "
+		"KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH({})",
+		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
+
+	ktk::memory::memcpy(
+		this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata].data(),
+		reinterpret_cast<char*>(temp.u8string().data()),
+		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
+
+#else
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata] /=
 		KOTEK_TEXTU("gamedata");
+#endif
 
-	bool status = this->IsValidPath(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata));
+	bool status = this->IsValidPath(this->m_storage_paths
+										.at(eFolderIndex::kFolderIndex_Gamedata)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+										.c_str()
+#endif
+	);
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_Gamedata)),
-			"can't create directory");
+		auto status_dir =
+			this->CreateDirectory(this->m_storage_paths
+									  .at(eFolderIndex::kFolderIndex_Gamedata)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+									  .c_str()
+#endif
+			);
+		KOTEK_ASSERT(status_dir, "can't create directory");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Gamedata)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_Configs, KOTEK_TEXTU("configs"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_Configs)),
-			"can't create directory");
+		auto status_dir =
+			this->CreateDirectory(this->m_storage_paths
+									  .at(eFolderIndex::kFolderIndex_Configs)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+									  .c_str()
+#endif
+			);
+		KOTEK_ASSERT(status_dir, "can't create directory");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Gamedata)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_Models, KOTEK_TEXTU("models"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_Models)),
-			"can't create directory");
+		auto status_dir =
+			this->CreateDirectory(this->m_storage_paths
+									  .at(eFolderIndex::kFolderIndex_Models)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+									  .c_str()
+#endif
+			);
+		KOTEK_ASSERT(status_dir, "can't create directory");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Gamedata)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_Textures, KOTEK_TEXTU("textures"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_Textures)),
-			"can't create directory");
+		auto status_dir =
+			this->CreateDirectory(this->m_storage_paths
+									  .at(eFolderIndex::kFolderIndex_Textures)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+									  .c_str()
+#endif
+			);
+		KOTEK_ASSERT(status_dir, "can't create directory");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Gamedata)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_Shaders, KOTEK_TEXTU("shaders"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_Shaders)),
-			"can't create directory for shaders root folder");
+		auto status_dir =
+			this->CreateDirectory(this->m_storage_paths
+									  .at(eFolderIndex::kFolderIndex_Shaders)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+									  .c_str()
+#endif
+			);
+
+		KOTEK_ASSERT(
+			status_dir, "can't create directory for shaders root folder");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Gamedata)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_AI, KOTEK_TEXTU("ai"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_AI)),
-			"can't create directory for ai");
+		auto status_dir =
+			this->CreateDirectory(this->m_storage_paths
+									  .at(eFolderIndex::kFolderIndex_AI)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+									  .c_str()
+#endif
+			);
+		KOTEK_ASSERT(status_dir, "can't create directory for ai");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Gamedata),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Gamedata)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_Levels, KOTEK_TEXTU("levels"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_Levels)),
-			"can't create directory for levels");
+		auto status_dir =
+			this->CreateDirectory(this->m_storage_paths
+									  .at(eFolderIndex::kFolderIndex_Levels)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+									  .c_str()
+#endif
+			);
+		KOTEK_ASSERT(status_dir, "can't create directory for levels");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Shaders)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_Shaders_GLSL, KOTEK_TEXTU("glsl"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_Shaders_GLSL)),
-			"can't create directory for glsl shaders");
+		auto status_dir = this->CreateDirectory(
+			this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_Shaders_GLSL)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+				.c_str()
+#endif
+		);
+		KOTEK_ASSERT(status_dir, "can't create directory for glsl shaders");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Shaders)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_Shaders_HLSL, KOTEK_TEXTU("hlsl"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_Shaders_HLSL)),
-			"can't create directory for hlsl shaders");
+		auto status_dir = this->CreateDirectory(
+			this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_Shaders_HLSL)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+				.c_str()
+#endif
+		);
+		KOTEK_ASSERT(status_dir, "can't create directory for hlsl shaders");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Shaders)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderindex_Shaders_SPV, KOTEK_TEXTU("spv"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderindex_Shaders_SPV)),
-			"can't create directory folder for SPIR-V shaders");
+		auto status_dir = this->CreateDirectory(
+			this->m_storage_paths
+				.at(eFolderIndex::kFolderindex_Shaders_SPV)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+				.c_str()
+#endif
+		);
+		KOTEK_ASSERT(
+			status_dir, "can't create directory folder for SPIR-V shaders");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Shaders),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Shaders)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_Shaders_WEBGPU, KOTEK_TEXTU("webgpu"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_Shaders_WEBGPU)),
-			"can't create directory folder for WEBGPU shaders");
+		auto status_dir = this->CreateDirectory(
+			this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_Shaders_WEBGPU)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+				.c_str()
+#endif
+		);
+		KOTEK_ASSERT(
+			status_dir, "can't create directory folder for WEBGPU shaders");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Root)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_UserData, KOTEK_TEXTU("user_data"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_UserData)),
-			"can't create directory for user_data folder");
+		auto status_dir =
+			this->CreateDirectory(this->m_storage_paths
+									  .at(eFolderIndex::kFolderIndex_UserData)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+									  .c_str()
+#endif
+			);
+		KOTEK_ASSERT(status_dir, "can't create directory for user_data folder");
 	}
 
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_UserData),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_UserData)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
 		eFolderIndex::kFolderIndex_UserData_ShaderCache,
 		KOTEK_TEXTU("shader_cache"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_UserData_ShaderCache)),
-			"can't create directory for shader_cache folder");
+		auto status_dir = this->CreateDirectory(
+			this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_UserData_ShaderCache)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+				.c_str()
+#endif
+		);
+		KOTEK_ASSERT(
+			status_dir, "can't create directory for shader_cache folder");
 	}
 
 #ifdef KOTEK_DEBUG
 	status = this->AddGamedataFolderToStorage(
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_UserData),
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_UserData)
+	#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+	#endif
+			,
 		eFolderIndex::kFolderIndex_UserTests, KOTEK_TEXTU("tests"));
 
 	if (status == false)
 	{
-		KOTEK_ASSERT(this->CreateDirectory(this->m_storage_paths.at(
-						 eFolderIndex::kFolderIndex_UserTests)),
-			"can't create directory");
+		auto status_dir =
+			this->CreateDirectory(this->m_storage_paths
+									  .at(eFolderIndex::kFolderIndex_UserTests)
+	#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+									  .c_str()
+	#endif
+			);
+		KOTEK_ASSERT(status_dir, "can't create directory");
 	}
 #endif
 }

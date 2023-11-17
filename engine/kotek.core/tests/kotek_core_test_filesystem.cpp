@@ -57,11 +57,6 @@ void test_file_create_pretty_output()
 	ktkResourceSaverManager saver_instance;
 	saver_instance.Initialize(&filesystem, &main_manager);
 
-	ktkResourceSaverFile_Text saver_texts_instance(&main_manager);
-
-	saver_instance.Set_Saver(
-		eResourceLoadingType::kText, &saver_texts_instance);
-
 	bool status = saver_instance.Save(path, &instance);
 
 	BOOST_REQUIRE(status);
