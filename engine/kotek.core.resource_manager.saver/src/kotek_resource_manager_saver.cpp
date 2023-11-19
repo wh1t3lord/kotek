@@ -22,7 +22,7 @@ void ktkResourceSaverManager::Initialize(
 	for (unsigned int i = 0; i < KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL;
 		 ++i)
 	{
-		this->m_writers[i] = {ktk::cofstream(), true};
+		this->m_writers[i].second = true;
 	}
 #endif
 }
@@ -41,7 +41,7 @@ void ktkResourceSaverManager::Shutdown(void)
 #ifdef KOTEK_DEBUG
 	for (auto& [id, pair] : this->m_writers)
 	{
-		auto is_free = pair.second;
+		auto is_free = pair.second.load();
 
 		KOTEK_ASSERT(is_free,
 			"file is not free, but we do shutdown that means that file is "
@@ -157,7 +157,9 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 			path.extension().string().find("json") != std::string::npos,
 			"must have a such name");
 
-		auto& file = this->m_writers.at(id).first;
+		auto* file = &this->m_writers.at(id).first;
+
+		auto is_already_opened = this->m_writers.at(id).second.load();
 
 		std::ios_base::openmode om = -1;
 
@@ -180,8 +182,8 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 		}
 		}
 
-		file.open(path, om);
-		result = file.good();
+		file->open(path, om);
+		result = file->good();
 		KOTEK_ASSERT(result, "failed to open file: [{}]", path);
 
 		this->m_writers.at(id).second = false;
@@ -578,7 +580,7 @@ bool ktkResourceSaverManager::Close(ktk::uint32_t id) noexcept
 			this->m_writers.at(id).first.close();
 			// we set this file that it is 'freed' for writing
 			this->m_writers.at(id).second = true;
-
+			KOTEK_MESSAGE("closed file: {}", id);
 			result = true;
 		}
 	}
@@ -615,6 +617,8 @@ ktk::uint32_t ktkResourceSaverManager::GenerateFileID(void) noexcept
 			break;
 		}
 	}
+
+	this->m_writers.at(result).second = false;
 
 #ifdef KOTEK_DEBUG
 	KOTEK_ASSERT(is_any_avaiable,

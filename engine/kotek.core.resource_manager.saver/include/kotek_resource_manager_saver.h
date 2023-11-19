@@ -5,6 +5,7 @@
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 #include <kotek.core.filesystem.file_text/include/kotek_core_filesystem_file_text.h>
 #include <kotek.core.containers.multithreading.mutex/include/kotek_core_containers_multithreading_mutex.h>
+#include <kotek.core.containers.multithreading.atomic/include/kotek_core_containers_multithreading_atomic.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -74,7 +75,7 @@ protected:
 
 private:
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	ktk::static_unordered_map<ktk::uint32_t, std::pair<ktk::cofstream, bool>,
+	ktk::static_unordered_map<ktk::uint32_t, std::pair<ktk::cofstream, Kotek::ktk::mt::atomic<bool>>,
 		KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL>
 		m_writers;
 #else

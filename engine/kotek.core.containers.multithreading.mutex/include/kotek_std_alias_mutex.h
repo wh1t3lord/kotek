@@ -15,6 +15,8 @@ namespace mt
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 	using mutex = std::mutex;
 
+	using recursive_mutex = std::recursive_mutex;
+
 	template <typename Mutex>
 	using lock_guard = std::lock_guard<Mutex>;
 
