@@ -17,6 +17,8 @@ KOTEK_END_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+class ktkIResourceManager;
+
 class ktkISDKRedoUndo
 {
 public:
@@ -29,7 +31,8 @@ public:
 	virtual void SetEntityID(Kotek::ktk::entity_t id) noexcept {}
 	virtual ktk::enum_base_t GetCommandType() noexcept = 0;
 
-	virtual const char* Serialize(Kotek::ktk::size_t file_index) noexcept = 0;
+	virtual void Serialize(const char* p_path,
+		Kotek::Core::ktkIResourceManager* p_resource_manager) noexcept = 0;
 };
 
 /// @brief manager stores registered command that will be accessed through
