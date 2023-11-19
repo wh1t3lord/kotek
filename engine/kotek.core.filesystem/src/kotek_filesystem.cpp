@@ -81,7 +81,7 @@ bool ktkFileSystem::IsValidPath(
 	return ktk::filesystem::exists(path);
 }
 
-bool ktkFileSystem::CreateDirectory(
+bool ktkFileSystem::CreateDirectoryImpl(
 	const ktk::filesystem::path& path) const noexcept
 {
 	if (path.empty())
@@ -128,6 +128,16 @@ ktk::ustring ktkFileSystem::ReadFile(
 	return result;
 }
 
+void ktkFileSystem::Create_Directory(
+	const ktk::filesystem::path& path, Core::eFolderVisibilityType type)
+{
+	KOTEK_ASSERT(path.empty() == false, "you can't pass an empty path");
+
+	bool status = this->CreateDirectoryImpl(path);
+
+	KOTEK_ASSERT(status, "failed to create directory: {}", path);
+}
+
 bool ktkFileSystem::AddGamedataFolderToStorage(
 	const ktk::filesystem::path& path, eFolderIndex id,
 	const ktk::cstring& folder_name) noexcept
@@ -163,6 +173,8 @@ bool ktkFileSystem::AddGamedataFolderToStorage(
 
 	return this->IsValidPath(result);
 }
+
+// TODO: parallel with task_group thing!
 void ktkFileSystem::ValidateFolders(void) noexcept
 {
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata] =
@@ -198,7 +210,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	if (status == false)
 	{
 		auto status_dir =
-			this->CreateDirectory(this->m_storage_paths
+			this->CreateDirectoryImpl(this->m_storage_paths
 									  .at(eFolderIndex::kFolderIndex_Gamedata)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 									  .c_str()
@@ -219,7 +231,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	if (status == false)
 	{
 		auto status_dir =
-			this->CreateDirectory(this->m_storage_paths
+			this->CreateDirectoryImpl(this->m_storage_paths
 									  .at(eFolderIndex::kFolderIndex_Configs)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 									  .c_str()
@@ -240,7 +252,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	if (status == false)
 	{
 		auto status_dir =
-			this->CreateDirectory(this->m_storage_paths
+			this->CreateDirectoryImpl(this->m_storage_paths
 									  .at(eFolderIndex::kFolderIndex_Models)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 									  .c_str()
@@ -261,7 +273,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	if (status == false)
 	{
 		auto status_dir =
-			this->CreateDirectory(this->m_storage_paths
+			this->CreateDirectoryImpl(this->m_storage_paths
 									  .at(eFolderIndex::kFolderIndex_Textures)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 									  .c_str()
@@ -282,7 +294,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	if (status == false)
 	{
 		auto status_dir =
-			this->CreateDirectory(this->m_storage_paths
+			this->CreateDirectoryImpl(this->m_storage_paths
 									  .at(eFolderIndex::kFolderIndex_Shaders)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 									  .c_str()
@@ -305,7 +317,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	if (status == false)
 	{
 		auto status_dir =
-			this->CreateDirectory(this->m_storage_paths
+			this->CreateDirectoryImpl(this->m_storage_paths
 									  .at(eFolderIndex::kFolderIndex_AI)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 									  .c_str()
@@ -326,7 +338,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	if (status == false)
 	{
 		auto status_dir =
-			this->CreateDirectory(this->m_storage_paths
+			this->CreateDirectoryImpl(this->m_storage_paths
 									  .at(eFolderIndex::kFolderIndex_Levels)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 									  .c_str()
@@ -346,7 +358,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectory(
+		auto status_dir = this->CreateDirectoryImpl(
 			this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_Shaders_GLSL)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -367,7 +379,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectory(
+		auto status_dir = this->CreateDirectoryImpl(
 			this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_Shaders_HLSL)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -388,7 +400,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectory(
+		auto status_dir = this->CreateDirectoryImpl(
 			this->m_storage_paths
 				.at(eFolderIndex::kFolderindex_Shaders_SPV)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -410,7 +422,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectory(
+		auto status_dir = this->CreateDirectoryImpl(
 			this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_Shaders_WEBGPU)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -433,7 +445,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 	if (status == false)
 	{
 		auto status_dir =
-			this->CreateDirectory(this->m_storage_paths
+			this->CreateDirectoryImpl(this->m_storage_paths
 									  .at(eFolderIndex::kFolderIndex_UserData)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 									  .c_str()
@@ -454,7 +466,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectory(
+		auto status_dir = this->CreateDirectoryImpl(
 			this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_UserData_ShaderCache)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -462,7 +474,78 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 #endif
 		);
 		KOTEK_ASSERT(
-			status_dir, "can't create directory for shader_cache folder");
+			status_dir, "can't create directory for shader_cache folder!");
+	}
+
+	status = this->AddGamedataFolderToStorage(
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_UserData)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
+		eFolderIndex::kFolderIndex_UserData_SDK, KOTEK_TEXTU("sdk"));
+
+	if (status == false)
+	{
+		auto status_dir = this->CreateDirectoryImpl(
+			this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_UserData_SDK)
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+				.c_str()
+#endif
+		);
+
+		KOTEK_ASSERT(status_dir, "can't create directory for sdk folder!");
+	}
+
+	status = this->AddGamedataFolderToStorage(
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_UserData_SDK)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
+		eFolderIndex::kFolderIndex_UserData_SDK_Settings,
+		KOTEK_TEXTU("settings"));
+
+	if (status == false)
+	{
+		auto status_dir = this->CreateDirectoryImpl(
+			this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_UserData_SDK_Settings)
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+				.c_str()
+#endif
+		);
+
+		KOTEK_ASSERT(
+			status_dir, "can't create directory for sdk/settings folder!");
+	}
+
+	status = this->AddGamedataFolderToStorage(
+		this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_UserData_SDK)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+			.c_str()
+#endif
+			,
+		eFolderIndex::kFolderIndex_UserData_SDK_Scenes, KOTEK_TEXTU("scenes"));
+
+	if (status == false)
+	{
+		auto status_dir = this->CreateDirectoryImpl(
+			this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_UserData_SDK_Scenes)
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+				.c_str()
+#endif
+		);
+
+		KOTEK_ASSERT(
+			status_dir, "can't create direcotry for sdk/scenes folder!");
 	}
 
 #ifdef KOTEK_DEBUG
@@ -473,17 +556,17 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 			.c_str()
 	#endif
 			,
-		eFolderIndex::kFolderIndex_UserTests, KOTEK_TEXTU("tests"));
+		eFolderIndex::kFolderIndex_UserData_Tests, KOTEK_TEXTU("tests"));
 
 	if (status == false)
 	{
-		auto status_dir =
-			this->CreateDirectory(this->m_storage_paths
-									  .at(eFolderIndex::kFolderIndex_UserTests)
+		auto status_dir = this->CreateDirectoryImpl(
+			this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_UserData_Tests)
 	#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-									  .c_str()
+				.c_str()
 	#endif
-			);
+		);
 		KOTEK_ASSERT(status_dir, "can't create directory");
 	}
 #endif

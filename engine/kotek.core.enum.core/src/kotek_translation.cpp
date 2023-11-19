@@ -56,7 +56,7 @@ namespace helper
 		{
 			return KOTEK_TEXTU("UserData");
 		}
-		case eFolderIndex::kFolderIndex_UserTests:
+		case eFolderIndex::kFolderIndex_UserData_Tests:
 		{
 			return KOTEK_TEXTU("UserTests");
 		}

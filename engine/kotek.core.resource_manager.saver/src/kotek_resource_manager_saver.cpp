@@ -67,7 +67,7 @@ void ktkResourceSaverManager::Set_Saver(
 		KOTEK_MESSAGE_WARNING(
 			"you try to replace resource loader for type: [{}]",
 			helper::Translate_ResourceLoadingType(resource_type));
-		
+
 		delete this->m_savers[resource_type];
 		this->m_savers[resource_type] = nullptr;
 	}
@@ -141,8 +141,6 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 	KOTEK_ASSERT(id != ktk::uint32_t(-1), "must be valid!");
 	KOTEK_ASSERT(this->m_p_manager_filesystem,
 		"you must initialize file system before calling this method!");
-	KOTEK_ASSERT(this->m_writers.size() < this->m_writers.max_size(),
-		"overflow system can't allocate more!");
 	KOTEK_ASSERT(this->m_writers.find(id) != this->m_writers.end(),
 		"failed to find file by its id: [{}]", id);
 
@@ -160,6 +158,31 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 			"must have a such name");
 
 		auto& file = this->m_writers.at(id).first;
+
+		std::ios_base::openmode om = -1;
+
+		switch (mode)
+		{
+		case eResourceWritingMode::kNew:
+		{
+			om = std::ios::out;
+			break;
+		}
+		case eResourceWritingMode::kAppend:
+		{
+			om = std::ios::app;
+			break;
+		}
+		default:
+		{
+			KOTEK_ASSERT(false, "unknown openmode");
+			break;
+		}
+		}
+
+		file.open(path, om);
+		result = file.good();
+		KOTEK_ASSERT(result, "failed to open file: [{}]", path);
 
 		this->m_writers.at(id).second = false;
 
@@ -496,6 +519,41 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 		for (auto i = 0; i < size; ++i)
 		{
 			(*p_file) << p_arr[i];
+		}
+	}
+}
+
+void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
+	Core::eFileWritingControlCharacterType type) noexcept
+{
+	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
+		"can't find a such file: {}", resource_id);
+
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
+
+	if (this->m_writers.find(resource_id) != this->m_writers.end())
+	{
+		auto& file = this->m_writers.at(resource_id).first;
+
+		switch (type)
+		{
+		case Core::eFileWritingControlCharacterType::kSpace:
+		{
+			file << " ";
+			break;
+		}
+		case Core::eFileWritingControlCharacterType::kNewLine:
+		{
+			file << std::endl;
+			break;
+		}
+		default:
+		{
+			KOTEK_ASSERT(false,
+				"engine doesn't implement default character, pass something "
+				"exact");
+			break;
+		}
 		}
 	}
 }

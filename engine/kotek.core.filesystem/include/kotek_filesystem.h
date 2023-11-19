@@ -55,8 +55,6 @@ public:
 
 	bool IsValidPath(const ktk::filesystem::path& path) const noexcept override;
 
-	bool CreateDirectory(const ktk::filesystem::path& path) const noexcept;
-
 	// TODO: think about multithreading and probably it is better to move to
 	// resource manager loader/saver
 	/*!
@@ -73,6 +71,9 @@ public:
 	ktk::ustring ReadFile(
 		const ktk::filesystem::path& path_to_file) const noexcept override;
 
+	void Create_Directory(const ktk::filesystem::path& path,
+		Core::eFolderVisibilityType type) override;
+
 private:
 	bool AddGamedataFolderToStorage(const ktk::filesystem::path& path,
 		eFolderIndex id, const ktk::cstring& folder_name) noexcept;
@@ -80,6 +81,9 @@ private:
 	void ValidateFolders(void) noexcept;
 
 	void CreateConfigFiles(void) noexcept;
+
+	bool CreateDirectoryImpl(const ktk::filesystem::path& path) const noexcept;
+
 
 private:
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS

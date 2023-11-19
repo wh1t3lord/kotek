@@ -184,6 +184,9 @@ public:
 	virtual bool IsValidPath(
 		const ktk::filesystem::path& path) const noexcept = 0;
 
+	virtual void Create_Directory(const ktk::filesystem::path& path,
+		Core::eFolderVisibilityType type) = 0;
+
 	// TODO: check todo in implementation class ktkFileSystem and it is
 	// a temporary virtual function delete it
 	virtual ktk::ustring ReadFile(
@@ -520,11 +523,14 @@ public:
 		ktk::size_t size) noexcept = 0;
 	virtual void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
 		ktk::size_t size) noexcept = 0;
+	virtual void Write(ktk::uint32_t resource_id,
+		Core::eFileWritingControlCharacterType type) noexcept = 0;
 	virtual bool Close(ktk::uint32_t id) noexcept = 0;
 
-	/// \~english @brief seeks for available instance of ofstream and returns its id 
-	/// @param  
-	/// @return 
+	/// \~english @brief seeks for available instance of ofstream and returns
+	/// its id
+	/// @param
+	/// @return
 	virtual ktk::uint32_t GenerateFileID(void) noexcept = 0;
 
 protected:
@@ -675,6 +681,7 @@ public:
 	}
 
 	ktk::uint32_t Get_ID(void) const noexcept { return this->m_id; }
+	void Set_ID(ktk::uint32_t id) noexcept { this->m_id = id; }
 
 	const ktk::filesystem::path& Get_Path(void) const noexcept
 	{
@@ -798,8 +805,11 @@ public:
 		ktk::size_t size) noexcept = 0;
 	virtual void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
 		ktk::size_t size) noexcept = 0;
-
+	virtual void Write(ktk::uint32_t resource_id,
+		Core::eFileWritingControlCharacterType) noexcept = 0;
 	virtual void Close(ktk::uint32_t resource_id) noexcept = 0;
+
+	virtual ktk::uint32_t GenerateFileID(void) noexcept = 0;
 
 	virtual void Set_ResourceLoader(
 		ktkIResourceLoaderManager* p_instance) noexcept = 0;

@@ -62,6 +62,8 @@ public:
 		ktk::size_t size) noexcept override;
 	void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
 		ktk::size_t size) noexcept override;
+	void Write(ktk::uint32_t resource_id,
+		Core::eFileWritingControlCharacterType type) noexcept override;
 	bool Close(ktk::uint32_t id) noexcept override;
 
 	ktk::uint32_t GenerateFileID(void) noexcept override;

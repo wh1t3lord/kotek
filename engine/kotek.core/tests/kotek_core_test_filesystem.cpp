@@ -13,7 +13,7 @@ void test_filesystem_check_folder_tests_for_existance()
 	instance.Initialize();
 
 	bool status = instance.IsValidPath(
-		instance.GetFolderByEnum(eFolderIndex::kFolderIndex_UserTests));
+		instance.GetFolderByEnum(eFolderIndex::kFolderIndex_UserData_Tests));
 
 	BOOST_REQUIRE(status);
 
@@ -32,7 +32,7 @@ void test_file_create_pretty_output()
 	ktkFileText instance("pretty");
 
 	auto path =
-		filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_UserTests);
+		filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_UserData_Tests);
 
 	path /= instance.Get_FileName().c_str();
 

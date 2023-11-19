@@ -22,8 +22,11 @@ enum class eFolderIndex : ktk::enum_base_t
 	kFolderIndex_Sounds,
 	kFolderIndex_Levels,
 	kFolderIndex_AI,
-	kFolderIndex_UserTests,
+	kFolderIndex_UserData_Tests,
 	kFolderIndex_UserData_ShaderCache,
+	kFolderIndex_UserData_SDK,
+	kFolderIndex_UserData_SDK_Settings,
+	kFolderIndex_UserData_SDK_Scenes,
 	kFolderIndex_UserData,
 	kEndOfEnum
 };
@@ -674,6 +677,15 @@ enum class eResourceWritingDataType : ktk::enum_base_t
 	kUnknown = -1
 };
 
+enum class eFileWritingControlCharacterType : ktk::enum_base_t
+{
+	/// @brief just a white space aka " "
+	kSpace,
+	/// @brief aka endl
+	kNewLine,
+	kEndOfEnum
+};
+
 enum class eResourceHowToWriteData : ktk::enum_base_t
 {
 	kNone,
@@ -682,6 +694,13 @@ enum class eResourceHowToWriteData : ktk::enum_base_t
 	kUseSpaceAndEndlAfterWrite,
 	kEndOfEnum,
 	kUnknown = -1
+};
+
+enum class eFolderVisibilityType : ktk::enum_base_t
+{
+	kVisible,
+	kHidden,
+	kEndOfEnum
 };
 
 KOTEK_END_NAMESPACE_CORE
