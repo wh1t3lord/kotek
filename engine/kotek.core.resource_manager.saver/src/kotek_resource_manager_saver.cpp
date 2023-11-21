@@ -333,7 +333,7 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 		"can't find a such thing!");
 	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
-	ktk::cofstream* p_file{};
+	ktk::cfstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
 		p_file = &this->m_writers.at(resource_id).first;
@@ -362,7 +362,7 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 		"can't find a such thing!");
 	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
-	ktk::cofstream* p_file{};
+	ktk::cfstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
 		p_file = &this->m_writers.at(resource_id).first;
@@ -391,7 +391,7 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 		"can't find a such thing!");
 	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
-	ktk::cofstream* p_file{};
+	ktk::cfstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
 		p_file = &this->m_writers.at(resource_id).first;
@@ -420,7 +420,7 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 		"can't find a such thing!");
 	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
-	ktk::cofstream* p_file{};
+	ktk::cfstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
 		p_file = &this->m_writers.at(resource_id).first;
@@ -449,7 +449,7 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 		"can't find a such thing!");
 
 	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
-	ktk::cofstream* p_file{};
+	ktk::cfstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
 		p_file = &this->m_writers.at(resource_id).first;
@@ -478,7 +478,7 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 		"can't find a such thing!");
 	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
-	ktk::cofstream* p_file{};
+	ktk::cfstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
 		p_file = &this->m_writers.at(resource_id).first;
@@ -507,7 +507,7 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 		"can't find a such thing!");
 	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
 
-	ktk::cofstream* p_file{};
+	ktk::cfstream* p_file{};
 	if (this->m_writers.find(resource_id) != this->m_writers.end())
 	{
 		p_file = &this->m_writers.at(resource_id).first;
@@ -549,6 +549,11 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 			file << std::endl;
 			break;
 		}
+		case Core::eFileWritingControlCharacterType::kFlush:
+		{
+			file << std::flush;
+			break;
+		}
 		default:
 		{
 			KOTEK_ASSERT(false,
@@ -558,6 +563,82 @@ void ktkResourceSaverManager::Write(ktk::uint32_t resource_id,
 		}
 		}
 	}
+}
+
+void ktkResourceSaverManager::Write(
+	ktk::uint32_t resource_id, ktk::size_t value) noexcept
+{
+	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
+		"can't find a such thing!");
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
+
+	if (this->m_writers.find(resource_id) != this->m_writers.end())
+	{
+		auto& file = this->m_writers.at(resource_id).first;
+
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
+		file << value;
+	}
+}
+
+void ktkResourceSaverManager::Seekg(
+	ktk::uint32_t resource_id, ktk::size_t bytes, eFileSeekDirectionType type)
+{
+	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
+		"can't find a such file: {}", resource_id);
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
+
+	if (this->m_writers.find(resource_id) != this->m_writers.end())
+	{
+		auto& file = this->m_writers.at(resource_id).first;
+
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
+		std::ios_base::seekdir direction;
+
+		switch (type)
+		{
+		case Core::eFileSeekDirectionType::kSeekdDirectionCurrent:
+		{
+			direction = std::ios::cur;
+			break;
+		}
+		case Core::eFileSeekDirectionType::kSeekDirectionBegin:
+		{
+			direction = std::ios::beg;
+			break;
+		}
+		case Core::eFileSeekDirectionType::kSeekDirectionEnd:
+		{
+			direction = std::ios::end;
+			break;
+		}
+		}
+
+		file.seekg(bytes, direction);
+	}
+}
+
+ktk::size_t ktkResourceSaverManager::Tellp(ktk::uint32_t resource_id)
+{
+	ktk::size_t result{};
+
+	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
+		"can't find a such file: {}", resource_id);
+
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
+
+	if (this->m_writers.find(resource_id) != this->m_writers.end())
+	{
+		auto& file = this->m_writers.at(resource_id).first;
+
+		result = file.tellp();
+	}
+
+	return result;
 }
 
 bool ktkResourceSaverManager::Close(ktk::uint32_t id) noexcept

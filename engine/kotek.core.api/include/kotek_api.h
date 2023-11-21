@@ -525,6 +525,11 @@ public:
 		ktk::size_t size) noexcept = 0;
 	virtual void Write(ktk::uint32_t resource_id,
 		Core::eFileWritingControlCharacterType type) noexcept = 0;
+	virtual void Write(
+		ktk::uint32_t resource_id, ktk::size_t value) noexcept = 0;
+	virtual void Seekg(ktk::uint32_t resource_id, ktk::size_t bytes,
+		eFileSeekDirectionType type) = 0;
+	virtual ktk::size_t Tellp(ktk::uint32_t resource_id) = 0;
 	virtual bool Close(ktk::uint32_t id) noexcept = 0;
 
 	/// \~english @brief seeks for available instance of ofstream and returns
@@ -807,6 +812,11 @@ public:
 		ktk::size_t size) noexcept = 0;
 	virtual void Write(ktk::uint32_t resource_id,
 		Core::eFileWritingControlCharacterType) noexcept = 0;
+	virtual void Write(
+		ktk::uint32_t resource_id, ktk::size_t value) noexcept = 0;
+	virtual void Seekg(ktk::uint32_t resource_id, ktk::size_t bytes,
+		eFileSeekDirectionType type) = 0;
+	virtual ktk::size_t Tellp(ktk::uint32_t resource_id) = 0;
 	virtual void Close(ktk::uint32_t resource_id) noexcept = 0;
 
 	virtual ktk::uint32_t GenerateFileID(void) noexcept = 0;

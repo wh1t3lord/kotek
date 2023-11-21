@@ -65,6 +65,10 @@ public:
 		ktk::size_t size) noexcept override;
 	void Write(ktk::uint32_t resource_id,
 		Core::eFileWritingControlCharacterType type) noexcept override;
+	void Write(ktk::uint32_t resource_id, ktk::size_t value) noexcept override;
+	void Seekg(ktk::uint32_t resource_id, ktk::size_t bytes,
+		eFileSeekDirectionType type) override;
+	ktk::size_t Tellp(ktk::uint32_t resource_id) override;
 	bool Close(ktk::uint32_t id) noexcept override;
 
 	ktk::uint32_t GenerateFileID(void) noexcept override;
@@ -75,11 +79,11 @@ protected:
 
 private:
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	ktk::static_unordered_map<ktk::uint32_t, std::pair<ktk::cofstream, Kotek::ktk::mt::atomic<bool>>,
+	ktk::static_unordered_map<ktk::uint32_t, std::pair<ktk::cfstream, Kotek::ktk::mt::atomic<bool>>,
 		KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL>
 		m_writers;
 #else
-	ktk::unordered_map<ktk::uint32_t, std::pair<ktk::cofstream, bool>>
+	ktk::unordered_map<ktk::uint32_t, std::pair<ktk::cfstream, bool>>
 		m_writers;
 #endif
 

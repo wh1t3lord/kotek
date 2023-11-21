@@ -18,6 +18,9 @@ using cofstream = std::basic_ofstream<char, std::char_traits<char>>;
 using ifstream = std::basic_ifstream<tchar, std::char_traits<tchar>>;
 using cifstream = std::basic_ifstream<char, std::char_traits<char>>;
 
+using fstream = std::basic_fstream<tchar, std::char_traits<tchar>>;
+using cfstream = std::basic_fstream<char, std::char_traits<char>>;
+
 using istreambuf_iterator =
 	std::istreambuf_iterator<tchar, std::char_traits<tchar>>;
 using cistreambuf_iterator =

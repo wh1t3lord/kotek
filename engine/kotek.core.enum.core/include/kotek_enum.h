@@ -681,8 +681,10 @@ enum class eFileWritingControlCharacterType : ktk::enum_base_t
 {
 	/// @brief just a white space aka " "
 	kSpace,
-	/// @brief aka endl
+	/// @brief aka std::endl
 	kNewLine,
+	/// @brief aka std::flush
+	kFlush,
 	kEndOfEnum
 };
 
@@ -700,6 +702,14 @@ enum class eFolderVisibilityType : ktk::enum_base_t
 {
 	kVisible,
 	kHidden,
+	kEndOfEnum
+};
+
+enum class eFileSeekDirectionType : ktk::enum_base_t
+{
+	kSeekDirectionEnd,
+	kSeekdDirectionCurrent,
+	kSeekDirectionBegin,
 	kEndOfEnum
 };
 

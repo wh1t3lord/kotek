@@ -32,7 +32,7 @@ public:
 	virtual ktk::enum_base_t GetCommandType() noexcept = 0;
 
 	virtual void Serialize(const char* p_path,
-		Kotek::Core::ktkIResourceManager* p_resource_manager) noexcept = 0;
+		ktk::uint32_t resource_handle_id, Kotek::Core::ktkIResourceManager* p_resource_manager) noexcept = 0;
 };
 
 /// @brief manager stores registered command that will be accessed through
