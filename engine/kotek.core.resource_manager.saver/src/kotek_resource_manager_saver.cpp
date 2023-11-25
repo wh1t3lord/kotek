@@ -167,7 +167,7 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 		{
 		case eResourceWritingMode::kNew:
 		{
-			om = std::ios::out | std::ios::in;
+			om = std::ios::in | std::ios::out | std::ios::trunc;
 			break;
 		}
 		case eResourceWritingMode::kAppend:
@@ -184,7 +184,7 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 
 		file->open(path, om);
 		result = file->good();
-		KOTEK_ASSERT(result, "failed to open file: [{}]", path);
+		KOTEK_ASSERT(result, "failed to open file: [{}]; error: {}", path, strerror(errno));
 
 		this->m_writers.at(id).second = false;
 
