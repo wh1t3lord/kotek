@@ -167,7 +167,7 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 		{
 		case eResourceWritingMode::kNew:
 		{
-			om = std::ios::out;
+			om = std::ios::out | std::ios::in;
 			break;
 		}
 		case eResourceWritingMode::kAppend:
@@ -639,6 +639,40 @@ ktk::size_t ktkResourceSaverManager::Tellp(ktk::uint32_t resource_id)
 	}
 
 	return result;
+}
+
+ktk::size_t ktkResourceSaverManager::Tellg(ktk::uint32_t resource_id)
+{
+	ktk::size_t result{};
+
+	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
+		"can't find a such file: {}", resource_id);
+
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
+
+	if (this->m_writers.find(resource_id) != this->m_writers.end())
+	{
+		auto& file = this->m_writers.at(resource_id).first;
+
+		result = file.tellg();
+	}
+
+	return result;
+}
+
+void ktkResourceSaverManager::Read(
+	ktk::uint32_t resource_id, char* p_buffer, ktk::size_t size)
+{
+	KOTEK_ASSERT(resource_id != ktk::uint32_t(-1), "must be valid number!");
+	KOTEK_ASSERT(p_buffer, "must be valid!");
+
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
+
+	if (this->m_writers.find(resource_id) != this->m_writers.end())
+	{
+		auto& file = this->m_writers.at(resource_id).first;
+		file.read(p_buffer, size);
+	}
 }
 
 bool ktkResourceSaverManager::Close(ktk::uint32_t id) noexcept

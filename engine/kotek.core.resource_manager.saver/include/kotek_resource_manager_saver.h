@@ -69,6 +69,9 @@ public:
 	void Seekg(ktk::uint32_t resource_id, ktk::size_t bytes,
 		eFileSeekDirectionType type) override;
 	ktk::size_t Tellp(ktk::uint32_t resource_id) override;
+	ktk::size_t Tellg(ktk::uint32_t resource_id) override;
+	void Read(
+		ktk::uint32_t resource_id, char* p_buffer, ktk::size_t size) override;
 	bool Close(ktk::uint32_t id) noexcept override;
 
 	ktk::uint32_t GenerateFileID(void) noexcept override;

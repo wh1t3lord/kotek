@@ -31,8 +31,8 @@ public:
 	virtual void SetEntityID(Kotek::ktk::entity_t id) noexcept {}
 	virtual ktk::enum_base_t GetCommandType() noexcept = 0;
 
-	virtual void Serialize(const char* p_path,
-		ktk::uint32_t resource_handle_id, Kotek::Core::ktkIResourceManager* p_resource_manager) noexcept = 0;
+	virtual void Serialize(ktk::uint32_t resource_handle_id,
+		Kotek::Core::ktkIResourceManager* p_resource_manager) noexcept = 0;
 };
 
 /// @brief manager stores registered command that will be accessed through
