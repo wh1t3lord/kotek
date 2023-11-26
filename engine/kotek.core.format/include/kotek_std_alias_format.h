@@ -29,8 +29,7 @@ struct std::formatter<Kotek::ktk::ustring, char>
 		return ctx.begin();
 	}
 
-	template <typename FormatContext>
-	inline auto format(Kotek::ktk::ustring const& str, FormatContext& ctx)
+	inline auto format(Kotek::ktk::ustring const& str, auto& ctx) const
 	{
 		#ifdef KOTEK_USE_UNICODE
 		return std::format_to(
@@ -50,14 +49,14 @@ struct std::formatter<Kotek::ktk::filesystem::path, char>
 		return ctx.begin();
 	}
 
-	template <typename FormatContext>
 	inline auto format(
-		Kotek::ktk::filesystem::path const& str, FormatContext& ctx)
+		Kotek::ktk::filesystem::path const& str, auto& ctx) const
 	{
 		return std::format_to(ctx.out(), "{}",
 			reinterpret_cast<const char*>(str.u8string().c_str()));
 	}
 };
+
 	#endif
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 template <>
