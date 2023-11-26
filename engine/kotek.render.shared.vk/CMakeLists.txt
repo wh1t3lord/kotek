@@ -11,6 +11,7 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render_shared_vk.h"
+	"include/kotek_render_format.h"
 	"src/main_render_shared_vk_dll.cpp"
 )
 

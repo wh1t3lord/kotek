@@ -12,8 +12,7 @@ struct std::formatter<VkResult, char>
 		return ctx.begin();
 	}
 
-	template <typename FormatContext>
-	inline auto format(VkResult const& result_id, FormatContext& ctx)
+	inline auto format(VkResult const& result_id, auto& ctx) const
 	{
 		return std::format_to(ctx.out(), "{}", static_cast<int>(result_id));
 	}
@@ -28,8 +27,7 @@ struct std::formatter<VkFormat, char>
 		return ctx.begin();
 	}
 
-	template <typename FormatContext>
-	inline auto format(VkFormat const& result_id, FormatContext& ctx)
+	inline auto format(VkFormat const& result_id, auto& ctx) const
 	{
 		return std::format_to(ctx.out(), "{}", static_cast<int>(result_id));
 	}
