@@ -63,15 +63,14 @@
 # You can add it, but last time it couldn't build successful
 # .\vcpkg\vcpkg install usd:x64-windows
 
-.\vcpkg\vcpkg install shader-slang:x64-windows
 .\vcpkg\vcpkg.exe install entt:x64-windows
 .\vcpkg\vcpkg.exe install etl::x64-windows
 
 # for shared configuration
-.\vcpkg\vcpkg install boost:x64-windows bullet3:x64-windows directxmath:x64-windows glfw3:x64-windows eigen3:x64-windows glm:x64-windows ktx:x64-windows mimalloc:x64-windows tracy:x64-windows shaderc:x64-windows spirv-reflect:x64-windows tbb:x64-windows wxwidgets:x64-windows wxwidgets:x64-windows angle:x64-windows assimp:x64-windows cgltf:x64-windows rmlui[freetype]:x64-windows shader-slang:x64-windows entt:x64-windows
+.\vcpkg\vcpkg install boost:x64-windows bullet3:x64-windows directxmath:x64-windows glfw3:x64-windows eigen3:x64-windows glm:x64-windows ktx:x64-windows mimalloc:x64-windows tracy:x64-windows shaderc:x64-windows spirv-reflect:x64-windows tbb:x64-windows wxwidgets:x64-windows wxwidgets:x64-windows angle:x64-windows assimp:x64-windows cgltf:x64-windows rmlui[freetype]:x64-windows entt:x64-windows
 
 # for static
-.\vcpkg\vcpkg install boost:x64-windows-static-md bullet3:x64-windows-static-md directxmath:x64-windows-static-md glfw3:x64-windows-static-md eigen3:x64-windows-static-md glm:x64-windows-static-md ktx:x64-windows-static-md mimalloc:x64-windows-static-md tracy:x64-windows-static-md shaderc:x64-windows-static-md spirv-reflect:x64-windows-static-md tbb:x64-windows-static-md wxwidgets:x64-windows-static-md wxwidgets:x64-windows-static-md angle:x64-windows-static-md assimp:x64-windows-static-md cgltf:x64-windows-static-md rmlui[freetype]:x64-windows-static-md shader-slang:x64-windows-static-md entt:x64-windows-static-md
+.\vcpkg\vcpkg install boost:x64-windows-static-md bullet3:x64-windows-static-md directxmath:x64-windows-static-md glfw3:x64-windows-static-md eigen3:x64-windows-static-md glm:x64-windows-static-md ktx:x64-windows-static-md mimalloc:x64-windows-static-md tracy:x64-windows-static-md shaderc:x64-windows-static-md spirv-reflect:x64-windows-static-md tbb:x64-windows-static-md wxwidgets:x64-windows-static-md wxwidgets:x64-windows-static-md angle:x64-windows-static-md assimp:x64-windows-static-md cgltf:x64-windows-static-md rmlui[freetype]:x64-windows-static-md entt:x64-windows-static-md
 
 
 # Linux
@@ -97,7 +96,6 @@
 # You can add it, but last time it couldn't build successful
 # ./vcpkg/vcpkg install usd:x64-linux
 
-./vcpkg/vcpkg install shader-slang:x64-linux-dynamic
 ./vcpkg/vcpkg install entt:x64-linux
 ./vcpkg/vcpkg install fmt:x64-linux
 ./vcpkg/vcpkg install etl:x64-linux
@@ -127,7 +125,6 @@ You need to install mingw for appropriate architecture
 # You can add it, but last time it couldn't build successful
 # ./vcpkg/vcpkg install usd:x64-mingw-dynamic
 
-./vcpkg/vcpkg install shader-slang:x64-mingw-dynamic
 ./vcpkg/vcpkg install entt:x64-mingw-dynamic
 
 # Mac
