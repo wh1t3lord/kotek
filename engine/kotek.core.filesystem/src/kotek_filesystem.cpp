@@ -183,7 +183,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 	ktk::filesystem::path temp =
 		this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata].c_str();
-	temp /= KOTEK_TEXTU("gamedata");
+	temp /= KOTEK_TEXTU("game_data");
 
 	KOTEK_ASSERT(temp.u8string().size() <= KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH,
 		"overflow kFolderIndex_Gamedata path is > "
@@ -197,7 +197,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 #else
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata] /=
-		KOTEK_TEXTU("gamedata");
+		KOTEK_TEXTU("game_data");
 #endif
 
 	bool status = this->IsValidPath(this->m_storage_paths
