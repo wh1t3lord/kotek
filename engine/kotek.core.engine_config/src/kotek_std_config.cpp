@@ -152,13 +152,15 @@ void ktkEngineConfig::SetFeatureStatus(
 }
 
 void ktkEngineConfig::SetFeatureStatus(
-	const ktk::vector<eEngineSupportedRenderer>& fallback_versions) noexcept
+	const ktk_vector<eEngineSupportedRenderer, KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
+		fallback_versions) noexcept
 {
 	this->m_fallback_renderers_versions = fallback_versions;
 }
 
 void ktkEngineConfig::SetFeatureStatus(
-	const ktk::vector<eEngineFeatureRenderer>& gapis) noexcept
+	const ktk_vector<eEngineFeatureRenderer, KOTEK_DEF_FALLBACK_RENDERERS_COUNT>&
+		gapis) noexcept
 {
 	this->m_fallback_renderers = gapis;
 }
@@ -202,13 +204,14 @@ ktk::enum_base_t ktkEngineConfig::GetRendererVersion(void) const noexcept
 	return this->m_version_renderer;
 }
 
-const ktk::vector<eEngineFeatureRenderer>&
+const ktk_vector<eEngineFeatureRenderer,
+	KOTEK_DEF_FALLBACK_RENDERERS_COUNT>&
 ktkEngineConfig::GetFallbackRendereres(void) const noexcept
 {
 	return this->m_fallback_renderers;
 }
 
-const ktk::vector<eEngineSupportedRenderer>&
+const ktk_vector<eEngineSupportedRenderer, KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
 ktkEngineConfig::GetFallbackRendererVersions(void) const noexcept
 {
 	return this->m_fallback_renderers_versions;
@@ -682,8 +685,13 @@ void ktkEngineConfig::Parse_CommandLine(void) noexcept
 {
 	KOTEK_ASSERT(this->m_argc != -1,
 		"you must set argc before calling set argv method!");
+	
+	#ifdef KOTEK_USE_LIBRARY_TYPE_EMB
+	KOTEK_ASSERT(
+		this->m_argc <= KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT, "overflow! reduce or set bigger size of this constant KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT in cmake (because it is dynamically generated constant and will be overwritten after any changes of cmake scripts)");
+	#endif
 
-	this->m_parsed_command_line_arguments = ktk::unordered_set<ktk::cstring>(
+	this->m_parsed_command_line_arguments = ktk_unordered_set<ktk::cstring, KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT>(
 		this->m_argv, this->m_argv + this->m_argc);
 }
 

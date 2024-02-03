@@ -325,7 +325,7 @@ namespace Engine
 		KOTEK_MESSAGE("UNIT TESTING UNIT TESTING UNIT "
 					  "TESTING\n\n\n\n\n\n\n\n\n\n\n\n");
 
-		ktk::vector<const char*> argv_test = {"C:/test"};
+		ktk_vector<const char*, 1> argv_test = {"C:/test"};
 
 		auto p_custom_init_unit_test_initialize_callback = [](void) -> bool
 		{

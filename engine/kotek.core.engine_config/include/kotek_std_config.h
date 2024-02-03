@@ -63,10 +63,12 @@ public:
 	void SetFeatureStatus(
 		eEngineSupportedRenderer version, bool status) noexcept override;
 
-	void SetFeatureStatus(const ktk::vector<eEngineSupportedRenderer>&
+	void SetFeatureStatus(
+		const ktk_vector<eEngineSupportedRenderer, KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
 			fallback_versions) noexcept override;
 	void SetFeatureStatus(
-		const ktk::vector<eEngineFeatureRenderer>& gapis) noexcept override;
+		const ktk_vector<eEngineFeatureRenderer, KOTEK_DEF_FALLBACK_RENDERERS_COUNT>&
+			gapis) noexcept override;
 
 	eEngineFeature GetEngineFeature(void) const noexcept override;
 	eEngineFeatureRender GetEngineFeatureRender(void) const noexcept override;
@@ -78,9 +80,11 @@ public:
 		void) const noexcept override;
 	ktk::enum_base_t GetRendererVersion(void) const noexcept override;
 
-	const ktk::vector<eEngineFeatureRenderer>& GetFallbackRendereres(
-		void) const noexcept override;
-	const ktk::vector<eEngineSupportedRenderer>& GetFallbackRendererVersions(
+	const ktk_vector<eEngineFeatureRenderer,
+		KOTEK_DEF_FALLBACK_RENDERERS_COUNT>&
+	GetFallbackRendereres(void) const noexcept override;
+	const ktk_vector<eEngineSupportedRenderer, KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
+	GetFallbackRendererVersions(
 		void) const noexcept override;
 
 	/**
@@ -232,9 +236,12 @@ private:
 	eEngineFeatureWindow m_engine_feature_window_flags;
 	ktk::enum_base_t m_version_renderer;
 	ktk::size_t m_video_memory_for_initialize;
-	ktk::vector<eEngineFeatureRenderer> m_fallback_renderers;
-	ktk::vector<eEngineSupportedRenderer> m_fallback_renderers_versions;
-	ktk::unordered_set<ktk::cstring> m_parsed_command_line_arguments;
+	ktk_vector<eEngineFeatureRenderer,
+		KOTEK_DEF_FALLBACK_RENDERERS_COUNT>
+		m_fallback_renderers;
+	ktk_vector<eEngineSupportedRenderer, KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>
+		m_fallback_renderers_versions;
+	ktk_unordered_set<ktk::cstring, KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT> m_parsed_command_line_arguments;
 	ktk::dll::shared_library m_user_dll;
 };
 

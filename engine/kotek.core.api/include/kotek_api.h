@@ -921,10 +921,11 @@ public:
 	virtual void SetFeatureStatus(
 		eEngineSupportedRenderer version, bool status) noexcept = 0;
 
-	virtual void SetFeatureStatus(const ktk::vector<eEngineSupportedRenderer>&
+	virtual void SetFeatureStatus(const ktk_vector<eEngineSupportedRenderer,
+		KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
 			fallback_versions) noexcept = 0;
-	virtual void SetFeatureStatus(
-		const ktk::vector<eEngineFeatureRenderer>& gapis) noexcept = 0;
+	virtual void SetFeatureStatus(const ktk_vector<eEngineFeatureRenderer,
+		KOTEK_DEF_FALLBACK_RENDERERS_COUNT>& gapis) noexcept = 0;
 
 	virtual eEngineFeature GetEngineFeature(void) const noexcept = 0;
 	virtual eEngineFeatureRender GetEngineFeatureRender(
@@ -938,9 +939,11 @@ public:
 	virtual eEngineSupportedRenderer GetRendererVersionEnum(
 		void) const noexcept = 0;
 	virtual ktk::enum_base_t GetRendererVersion(void) const noexcept = 0;
-	virtual const ktk::vector<eEngineFeatureRenderer>& GetFallbackRendereres(
-		void) const noexcept = 0;
-	virtual const ktk::vector<eEngineSupportedRenderer>&
+	virtual const ktk_vector<eEngineFeatureRenderer,
+		KOTEK_DEF_FALLBACK_RENDERERS_COUNT>&
+	GetFallbackRendereres(void) const noexcept = 0;
+	virtual const ktk_vector<eEngineSupportedRenderer,
+		KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
 	GetFallbackRendererVersions(void) const noexcept = 0;
 
 	virtual ktk::cstring GetRenderName(void) const noexcept = 0;

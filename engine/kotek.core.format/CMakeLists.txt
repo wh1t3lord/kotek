@@ -25,3 +25,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.text)
 if (UNIX)
 	target_link_libraries(${PROJECT_NAME} PUBLIC fmt::fmt-header-only)
 endif()
+
+if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
+	target_include_directories(${PROJECT_NAME} PUBLIC ${ETL_INCLUDE_DIRS})
+endif()

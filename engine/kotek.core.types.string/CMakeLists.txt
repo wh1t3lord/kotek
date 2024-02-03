@@ -13,3 +13,7 @@ add_library(${PROJECT_NAME} STATIC
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.char)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.string)
+
+if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
+	target_include_directories(${PROJECT_NAME} PUBLIC ${ETL_INCLUDE_DIRS})
+endif()

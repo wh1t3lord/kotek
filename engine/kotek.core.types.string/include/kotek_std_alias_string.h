@@ -5,6 +5,7 @@
 #include <kotek.core.memory.cpu/include/kotek_core_memory_cpu.h>
 #include <string>
 #include <typeinfo>
+#include <etl/hash.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
@@ -87,3 +88,24 @@ namespace helper
 
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
+
+#ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
+	#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+namespace etl
+{
+	template <>
+	struct hash<KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK cstring>
+	{
+		size_t operator()(
+			const KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK
+				cstring& str) const
+		{
+			return etl::private_hash::generic_hash<size_t>(
+				reinterpret_cast<const uint8_t*>(str.data()),
+				reinterpret_cast<const uint8_t*>(str.data() + str.size()));
+		}
+	};
+}
+	#endif
+#else
+#endif

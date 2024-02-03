@@ -425,9 +425,8 @@ enum class eEngineSupportedRenderer : ktk::enum_base_t
 	kOpenGL_4_5,
 	kOpenGL_4_6,
 	kOpenGL_Latest = kOpenGL_4_6,
-
-	kUnknown = -1,
-	kEndOfEnum
+	kEndOfEnum,
+	kUnknown = -1
 };
 
 enum class eEngineFeatureRenderer : ktk::enum_base_t
@@ -483,7 +482,10 @@ enum class eEngineFeatureRenderer : ktk::enum_base_t
 	kEngine_Render_Renderer_OpenGLES_Latest = 1 << 8,
 	kEngine_Render_Renderer_OpenGLES_SpecifiedByUser = 1 << 9,
 
-	kNone = 0
+	kNone = 0,
+	// defines amount of real fields before kNone
+	// needed to be updated regularly
+	kEndOfEnum = 9
 };
 
 /// @brief took information from https://github.com/google/angle
