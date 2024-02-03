@@ -38,6 +38,7 @@ using ustring_view = string_view;
 	#endif
 
 #else
+// TODO: sync with default allocator definitions
 using string = std::basic_string<tchar, std::char_traits<tchar>,
 	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<tchar>>;
 using u8string = std::basic_string<char8_t, std::char_traits<char8_t>,
@@ -105,7 +106,7 @@ namespace etl
 				reinterpret_cast<const uint8_t*>(str.data() + str.size()));
 		}
 	};
-}
+} // namespace etl
 	#endif
 #else
 #endif
