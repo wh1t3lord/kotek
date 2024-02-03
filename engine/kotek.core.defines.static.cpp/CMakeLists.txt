@@ -490,9 +490,15 @@ else()
 	message(FATAL_ERROR "you must specify KOTEK_DEVELOPMENT_TYPE as SHARED or STATIC...")
 endif()
 
+if ("${KOTEK_LIBRARY_TYPE}" STREQUAL "EMB")
+elseif("${KOTEK_LIBRARY_TYPE}" STREQUAL "DYN")
+else()
+	message(FATAL_ERROR "you must specify KOTEK_LIBRARY_TYPE as DYN or EMB...")
+endif()
 
 message("[${PROJECT_NAME}]: standard library is ${KOTEK_STD_LIBRARY_NAME}")
 message("[${PROJECT_NAME}]: string configuration is '${KOTEK_STRING_CONFIGURATION}'")
+message("[${PROJECT_NAME}]: development is for ${KOTEK_LIBRARY_TYPE} environment")
 
 
 ### Generating code
@@ -988,6 +994,19 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 			#define KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 		")
 	endif()
+
+	if("${KOTEK_LIBRARY_TYPE}" STREQUAL "DYN")
+		file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+		"
+			#define KOTEK_USE_LIBRARY_TYPE_DYNAMIC
+		")
+	elseif("${KOTEK_LIBRARY_TYPE}" STREQUAL "EMB")
+		file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+		"
+			#define KOTEK_USE_LIBRARY_TYPE_EMB
+		")
+	endif()
+
 else()
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
 endif()

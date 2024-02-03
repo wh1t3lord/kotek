@@ -19,7 +19,7 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
-template <typename Type,
+template <typename Type, size_t NotInUseArgument = 0,
 	typename Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>
 using deque = boost::container::deque<Type, Allocator>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
@@ -37,3 +37,17 @@ using static_deque = etl::deque<Type, Size>;
 
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
+
+#if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \
+	defined(KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS)
+	#define ktk_deque \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_deque
+	#define ktkDeque \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_deque
+	#define KTK_DEQUE \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_deque
+#else
+	#define ktk_deque KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK deque
+	#define ktkDeque KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK deque
+	#define KTK_DEQUE KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK deque
+#endif

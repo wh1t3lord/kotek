@@ -20,6 +20,11 @@ if ("${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}" STREQUAL "")
 	set(KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS ./include/kotek_std_preprocessors.h)
 endif()
 
+if ("${KOTEK_LIBRARY_TYPE}" STREQUAL "")
+	set(KOTEK_LIBRARY_TYPE "EMB" CACHE INTERNAL "")
+	message("[${PROJECT_NAME}]: library development - ${KOTEK_LIBRARY_TYPE} (EMB is embedded and DYN is dynamic, check documentation about these definitions)")
+endif()
+
 message("[${PROJECT_NAME}]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}'")
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
