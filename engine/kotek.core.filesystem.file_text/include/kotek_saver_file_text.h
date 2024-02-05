@@ -32,7 +32,9 @@ private:
 
 private:
 	ktkMainManager* m_p_main_manager;
-    ktk::unordered_map<ktk::cstring, ktkIResourceSaver*> m_savers;
+	ktk_unordered_map<ktk::cstring, ktkIResourceSaver*,
+		KOTEK_DEF_TEXT_RESOURCE_SAVERS_COUNT>
+		m_savers;
 };
 
 KOTEK_END_NAMESPACE_CORE

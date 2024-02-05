@@ -45,7 +45,9 @@ private:
 	// TODO: make thread safe queue
 	ktk::queue<ktk::pair<ktk::console_command_base_t, ktk::console_command_t>>
 		m_buffer;
-	ktk::unordered_map<ktk::enum_base_t, ktk::console_command_t> m_storage;
+	ktk_unordered_map<ktk::enum_base_t, ktk::console_command_t,
+		KOTEK_DEF_COMMAND_CONSOLE_COMMAND_STORAGE_COUNT>
+		m_storage;
 };
 
 KOTEK_END_NAMESPACE_CORE

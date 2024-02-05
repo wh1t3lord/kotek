@@ -33,14 +33,14 @@ public:
 	bool DetectTypeByFullPath(
 		const ktk::filesystem::path& path) noexcept override;
 
-    ktk::cstring Get_UserDescription() const noexcept override;
+	ktk::cstring Get_UserDescription() const noexcept override;
 
 	eResourceLoadingType Get_Type() const noexcept override;
 
 	ktkIResourceSaver* Get_Saver(
 		const ktk::filesystem::path& extension_of_file) noexcept override;
 
-    ktk::cstring Get_AllSupportedFormats(void) const noexcept override;
+	ktk::cstring Get_AllSupportedFormats(void) const noexcept override;
 
 private:
 	/**
@@ -51,12 +51,14 @@ private:
 	 * \param indent
 	 * \return void
 	 */
-    void FormatTextFile_JSON(ktk::cofstream& file, const ktk::json::value& json,
+	void FormatTextFile_JSON(ktk::cofstream& file, const ktk::json::value& json,
 		std::string* indent = nullptr) noexcept;
 
 private:
 	ktkMainManager* m_p_main_manager;
-    ktk::unordered_map<ktk::cstring, ktkIResourceSaver*> m_savers;
+	ktk_unordered_map<ktk::cstring, ktkIResourceSaver*,
+		KOTEK_DEF_JSON_RESOURCE_SAVERS_COUNT>
+		m_savers;
 };
 
 KOTEK_END_NAMESPACE_CORE

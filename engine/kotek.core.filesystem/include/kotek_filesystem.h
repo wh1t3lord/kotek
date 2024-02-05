@@ -86,15 +86,11 @@ private:
 
 
 private:
-#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	ktk::static_unordered_map<eFolderIndex,
+	ktk_unordered_map<eFolderIndex,
 		ktk::static_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>,
 		static_cast<size_t>(
 			static_cast<ktk::enum_base_t>(eFolderIndex::kEndOfEnum) - 1)>
 		m_storage_paths;
-#else
-	ktk::unordered_map<eFolderIndex, ktk::filesystem::path> m_storage_paths;
-#endif
 };
 
 KOTEK_END_NAMESPACE_CORE

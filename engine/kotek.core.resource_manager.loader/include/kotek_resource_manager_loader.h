@@ -15,7 +15,8 @@ public:
 	ktkResourceLoaderManager(void);
 	~ktkResourceLoaderManager(void);
 
-	void Initialize(ktkIFileSystem* p_manager_filesystem, ktkMainManager* p_main_manager) override;
+	void Initialize(ktkIFileSystem* p_manager_filesystem,
+		ktkMainManager* p_main_manager) override;
 	void Shutdown(void) override;
 
 	void Set_Loader(eResourceLoadingType resource_type,
@@ -32,7 +33,9 @@ protected:
 	eResourceLoadingType DetectResourceTypeByFileFormat(
 		const ktk::filesystem::path& path) noexcept override;
 
-	ktk::unordered_map<eResourceLoadingType, ktkIResourceLoader*> m_loaders;
+	ktk_unordered_map<eResourceLoadingType, ktkIResourceLoader*,
+		KOTEK_DEF_RESOURCE_LOADERS_TYPE_MAX_COUNT>
+		m_loaders;
 };
 
 KOTEK_END_NAMESPACE_CORE

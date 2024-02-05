@@ -32,7 +32,9 @@ public:
 
 private:
 	ktkMainManager* m_p_main_manager;
-    ktk::unordered_map<ktk::cstring, ktkIResourceLoader*> m_loaders;
+	ktk_unordered_map<ktk::cstring, ktkIResourceLoader*,
+		KOTEK_DEF_JSON_RESOURCE_LOADERS_COUNT>
+		m_loaders;
 };
 
 KOTEK_END_NAMESPACE_CORE

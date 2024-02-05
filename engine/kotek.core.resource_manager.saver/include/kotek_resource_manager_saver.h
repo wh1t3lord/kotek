@@ -10,8 +10,6 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-#define KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL 10
-
 class ktkResourceSaverManager : public ktkIResourceSaverManager
 {
 public:
@@ -81,17 +79,14 @@ protected:
 		const ktk::filesystem::path& path) noexcept override;
 
 private:
-#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	ktk::static_unordered_map<ktk::uint32_t, std::pair<ktk::cfstream, Kotek::ktk::mt::atomic<bool>>,
+	ktk_unordered_map<ktk::uint32_t, std::pair<ktk::cfstream, Kotek::ktk::mt::atomic<bool>>,
 		KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL>
 		m_writers;
-#else
-	ktk::unordered_map<ktk::uint32_t, std::pair<ktk::cfstream, bool>>
-		m_writers;
-#endif
 
 	// TODO: think how to replace for placement new and make it more useful
-	ktk::unordered_map<eResourceLoadingType, ktkIResourceSaver*> m_savers;
+	ktk_unordered_map<eResourceLoadingType, ktkIResourceSaver*,
+		KOTEK_DEF_RESOURCE_SAVERS_TYPE_MAX_COUNT>
+		m_savers;
 	ktk::mt::mutex m_mutex;
 };
 
