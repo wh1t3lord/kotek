@@ -1,7 +1,12 @@
 #include "../include/kotek_core_log.h"
 
-#ifdef KOTEK_USE_BOOST_LIBRARY
-	#include <boost/log/utility/setup.hpp>
+#ifdef KOTEK_USE_LOG_LIBRARY_BOOST
+	#ifdef KOTEK_USE_BOOST_LIBRARY
+		#include <boost/log/utility/setup.hpp>
+	#endif
+#elif defined(KOTEK_USE_LOG_LIBRARY_SPDLOG)
+#else
+// provide your some additional headers for log library
 #endif
 
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
@@ -12,12 +17,12 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 {
-#ifdef KOTEK_USE_BOOST_LIBRARY
+#ifdef KOTEK_USE_LOG_LIBRARY_BOOST
+	#ifdef KOTEK_USE_BOOST_LIBRARY
 	// TODO: filter messages when you pass type through cmake like
 	// KOTEK_LOG_SEVERITY_LEVEL=info and will be generated preprocessor like
 	// KOTEK_USE_LOG_SEVERITY_LEVEL info
 
-	/*
 	KOTEK_ASSERT(p_manager, "you pass an invalid main manager");
 	KOTEK_ASSERT(p_manager->GetFileSystem(),
 		"you must initialize filesystem before initializing this module!");
@@ -30,9 +35,8 @@ bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 	boost::log::add_file_log(
 		reinterpret_cast<const char*>(path_to_folder.u8string().c_str()));
 	boost::log::add_console_log();
-	*/
-#endif
-
+	#endif
+#elif defined(KOTEK_USE_LOG_LIBRARY_SPDLOG)
 	KOTEK_ASSERT(p_manager, "you pass an invalid main manager");
 	KOTEK_ASSERT(p_manager->GetFileSystem(),
 		"you must initialize filesystem before initializing this module!");
@@ -41,8 +45,11 @@ bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 		Kotek::Core::eFolderIndex::kFolderIndex_UserData);
 
 	path_to_folder /= KOTEK_USE_LOG_OUTPUT_FILE_NAME;
-	
-	spdlog::basic_logger_mt("log_session", reinterpret_cast<const char*>(path_to_folder.u8string().c_str()));
+
+	spdlog::basic_logger_mt("log_session",
+		reinterpret_cast<const char*>(path_to_folder.u8string().c_str()));
+#else
+#endif
 
 	return true;
 }

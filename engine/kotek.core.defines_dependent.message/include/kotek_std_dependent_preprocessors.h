@@ -5,75 +5,77 @@
 #include <kotek.core.format/include/kotek_core_format.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 
-#ifdef KOTEK_USE_BOOST_LIBRARY
-/*
-    #define KOTEK_MESSAGE_STRING(variable, ...)                              \
-        {                                                                    \
-            BOOST_LOG_TRIVIAL(info)                                          \
+#ifdef KOTEK_USE_LOG_LIBRARY_BOOST
+	#ifdef KOTEK_USE_BOOST_LIBRARY
+
+		#define KOTEK_MESSAGE_STRING(variable, ...) \
+			{                                       \
+			BOOST_LOG_TRIVIAL(info)                                          \
                 << reinterpret_cast<const char*>((Kotek::ktk::format(variable,
    ##__VA_ARGS__)) \
-                       .c_str());                                         \
-        }
-*/
+                       .c_str());
+   }
 
-// TODO: add feature that message can do log in file, but we can pass argument
-// like KOTEK_MESSAGE_WITH_LOG=ON or OFF if ON means KOTEK_MESSAGE will write in
-// text file if not ON it means message just write in our console.
+	   // TODO: add feature that message can do log in file, but we can pass
+	   // argument like KOTEK_MESSAGE_WITH_LOG=ON or OFF if ON means
+	   // KOTEK_MESSAGE will write in text file if not ON it means message just
+	   // write in our console.
 
-// TODO: create KOTEK_LOG to separate operation into writing in console or text
-// file
+	   // TODO: create KOTEK_LOG to separate operation into writing in console
+	   // or text file
 
-// If you want to use unicode version you must wrap your text by KOTEK_TEXT,
-// this preprocessor doesn't handle it at all!
-/*
-#define KOTEK_MESSAGE(text, ...)                                         \
-    {                                                                    \
-        BOOST_LOG_TRIVIAL(info)                                          \
+	   // If you want to use unicode version you must wrap your text by
+	   // KOTEK_TEXT, this preprocessor doesn't handle it at all!
+
+		#define KOTEK_MESSAGE(text, ...)                                 \
+			{                                                            \
+		BOOST_LOG_TRIVIAL(info)                                          \
             << "[" << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ \
             << "]"                                                       \
             << reinterpret_cast<const char*>((Kotek::ktk::format(text,
 ##__VA_ARGS__))     \
-                   .c_str());                                         \
-    }
-*/
+                   .c_str());
+}
 
-/*
-	#define KOTEK_MESSAGE_WARNING(text, ...)                             \
+		#define KOTEK_MESSAGE_WARNING(text, ...)                             \
+			{                                                                \
+				BOOST_LOG_TRIVIAL(warning) << reinterpret_cast<const char*>( \
+					(Kotek::ktk::format(text, ##__VA_ARGS__)).c_str());      \
+			}
+
+		#define KOTEK_MESSAGE_ERROR(text, ...)                             \
+			{                                                              \
+				BOOST_LOG_TRIVIAL(error) << reinterpret_cast<const char*>( \
+					(Kotek::ktk::format(text, ##__VA_ARGS__).c_str()));    \
+			}
+
+	#endif
+#elif defined(KOTEK_USE_LOG_LIBRARY_SPDLOG)
+	#define KOTEK_MESSAGE_STRING(variable, ...)                          \
 		{                                                                \
-			BOOST_LOG_TRIVIAL(warning) << reinterpret_cast<const char*>( \
-				(Kotek::ktk::format(text, ##__VA_ARGS__)).c_str());      \
+			spdlog::info(reinterpret_cast<const char*>(                  \
+				(Kotek::ktk::format(variable, ##__VA_ARGS__)).c_str())); \
 		}
-*/
 
-/*
-	#define KOTEK_MESSAGE_ERROR(text, ...)                             \
-		{                                                              \
-			BOOST_LOG_TRIVIAL(error) << reinterpret_cast<const char*>( \
-				(Kotek::ktk::format(text, ##__VA_ARGS__).c_str()));    \
+	#define KOTEK_MESSAGE(text, ...)                                         \
+		{                                                                    \
+			spdlog::info("[{}:{}:{}]] {}", __FILE__, __FUNCTION__, __LINE__, \
+				reinterpret_cast<const char*>(                               \
+					(Kotek::ktk::format(text, ##__VA_ARGS__)).c_str()));     \
 		}
-*/
-#endif
-
-// TODO: makig preprocessor for using boost log specifically, because vcpkg or boost developers broke it... :/
-// so by default we use spdlog otherwise user choose boost or custom (in that case user provides own implementation)
-
-	#define KOTEK_MESSAGE_STRING(variable, ...)                                                                  \
-	{ spdlog::info(reinterpret_cast<const char*>((Kotek::ktk::format(variable, ##__VA_ARGS__)).c_str())); \
-	}
-
-	#define KOTEK_MESSAGE(text, ...)                                                                                                                                \
-	{                                                                                                                                                           \
-			spdlog::info("[{}:{}:{}]] {}", __FILE__,  __FUNCTION__, __LINE__, reinterpret_cast<const char*>((Kotek::ktk::format(text, ##__VA_ARGS__)).c_str())); \
-	}
 
 	#define KOTEK_MESSAGE_WARNING(text, ...)                       \
-	{                                                          \
-		spdlog::warn(reinterpret_cast<const char*>(            \
-			Kotek::ktk::format(text, ##__VA_ARGS__).c_str())); \
-	}
+		{                                                          \
+			spdlog::warn(reinterpret_cast<const char*>(            \
+				Kotek::ktk::format(text, ##__VA_ARGS__).c_str())); \
+		}
 
 	#define KOTEK_MESSAGE_ERROR(text, ...)                           \
-	{                                                            \
-		spdlog::error(reinterpret_cast<const char*>(             \
-			(Kotek::ktk::format(text, ##__VA_ARGS__).c_str()))); \
-	}
+		{                                                            \
+			spdlog::error(reinterpret_cast<const char*>(             \
+				(Kotek::ktk::format(text, ##__VA_ARGS__).c_str()))); \
+		}
+#else
+// provide your implementation as overloading those preprocessors that used in
+// framework
+#endif

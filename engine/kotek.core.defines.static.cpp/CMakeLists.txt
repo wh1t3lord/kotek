@@ -543,10 +543,20 @@ else()
 	message(FATAL_ERROR "you must specify KOTEK_LIBRARY_TYPE as DYN or EMB...")
 endif()
 
+if ("${KOTEK_LOG_LIBRARY}" STREQUAL "" OR "${KOTEK_LOG_LIBRARY}" STREQUAL "SPDLOG")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_LOG_LIBRARY_SPDLOG)
+elseif("${KOTEK_LOG_LIBRARY}" STREQUAL "BOOST")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_LOG_LIBRARY_BOOST)	
+elseif("${KOTEK_LOG_LIBRARY}" STREQUAL "CUSTOM")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_LOG_LIBRARY_CUSTOM)
+else()
+	message(FATAL_ERROR "unsupported log type backend (supported values: BOOST - specifies that user uses boost.log library as log's backend; '' or SPDLOG - empty string means that user uses default backend based on spdlog library; CUSTOM - means user specifies own implementation for logging and overloads existing preprocessors/stuff;): ${KOTEK_LOG_LIBRARY}")
+endif()
+
 message("[${PROJECT_NAME}]: standard library is ${KOTEK_STD_LIBRARY_NAME}")
 message("[${PROJECT_NAME}]: string configuration is '${KOTEK_STRING_CONFIGURATION}'")
 message("[${PROJECT_NAME}]: development is for ${KOTEK_LIBRARY_TYPE} environment")
-
+message("[${PROJECT_NAME}]: log backend is ${KOTEK_LOG_LIBRARY}")
 
 ### Generating code
 if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
@@ -1066,6 +1076,23 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 			#define KOTEK_RESOURCE_SAVER_MANAGER_FILE_POOL_COUNT ${KOTEK_RESOURCE_SAVER_MANAGER_FILE_POOL_COUNT}
 			#define KOTEK_DEF_RESOURCE_SAVERS_TYPE_MAX_COUNT ${KOTEK_DEF_RESOURCE_SAVERS_TYPE_MAX_COUNT}
 			#define KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL ${KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL}
+		")
+	endif()
+
+	if ("${KOTEK_LOG_LIBRARY}" STREQUAL "" OR "${KOTEK_LOG_LIBRARY}" STREQUAL "SPDLOG")
+		file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+		"
+				#define KOTEK_USE_LOG_LIBRARY_SPDLOG
+		")
+	elseif ("${KOTEK_LOG_LIBRARY}" STREQUAL "BOOST")
+		file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+		"
+				#define KOTEK_USE_LOG_LIBRARY_BOOST
+		")
+	elseif ("${KOTEK_LOG_LIBRARY}" STREQUAL "CUSTOM")
+		file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+		"
+				#define KOTEK_USE_LOG_LIBRARY_CUSTOM
 		")
 	endif()
 
