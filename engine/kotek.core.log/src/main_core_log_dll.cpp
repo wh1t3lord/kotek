@@ -17,6 +17,7 @@ bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 	// KOTEK_LOG_SEVERITY_LEVEL=info and will be generated preprocessor like
 	// KOTEK_USE_LOG_SEVERITY_LEVEL info
 
+	/*
 	KOTEK_ASSERT(p_manager, "you pass an invalid main manager");
 	KOTEK_ASSERT(p_manager->GetFileSystem(),
 		"you must initialize filesystem before initializing this module!");
@@ -29,7 +30,19 @@ bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 	boost::log::add_file_log(
 		reinterpret_cast<const char*>(path_to_folder.u8string().c_str()));
 	boost::log::add_console_log();
+	*/
 #endif
+
+	KOTEK_ASSERT(p_manager, "you pass an invalid main manager");
+	KOTEK_ASSERT(p_manager->GetFileSystem(),
+		"you must initialize filesystem before initializing this module!");
+
+	auto path_to_folder = p_manager->GetFileSystem()->GetFolderByEnum(
+		Kotek::Core::eFolderIndex::kFolderIndex_UserData);
+
+	path_to_folder /= KOTEK_USE_LOG_OUTPUT_FILE_NAME;
+	
+	spdlog::basic_logger_mt("log_session", reinterpret_cast<const char*>(path_to_folder.u8string().c_str()));
 
 	return true;
 }

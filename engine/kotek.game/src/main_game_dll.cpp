@@ -203,6 +203,7 @@ namespace Engine
 
 		// _MSC_VER description took from
 		// https://docs.microsoft.com/en-us/cpp/preprocessor/predefined-macros?view=msvc-160
+		// https://learn.microsoft.com/en-us/cpp/overview/compiler-versions?view=msvc-170#service-releases-starting-with-visual-studio-2017
 
 	#if (_MSC_VER == 1200)
 		KOTEK_MESSAGE("Compiled with: Visual Studio 6.0");
@@ -266,9 +267,26 @@ namespace Engine
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.3");
 	#elif (_MSC_VER == 1934)
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.4");
+	#elif (_MSC_VER == 1935)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.5");
+	#elif (_MSC_VER == 1936)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.6");
+	#elif (_MSC_VER == 1937)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.7");
+	#elif (_MSC_VER == 1938)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.8");
+	#elif (_MSC_VER == 1939)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.9");
+	#elif (_MSC_VER == 1940)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.10");
 	#endif
 
 #endif
+	}
+
+	void PrintBoostVersion()
+	{
+		BOOST_USE_WINAPI_VERSION;
 	}
 
 	bool Serialize_Engine(Core::ktkMainManager* p_main_manager)
