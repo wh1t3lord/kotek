@@ -31,7 +31,7 @@ public:
 	virtual void SetEntityID(Kotek::ktk::entity_t id) noexcept {}
 	virtual ktk::enum_base_t GetCommandType() noexcept = 0;
 
-	virtual void Serialize(ktk::uint32_t resource_handle_id,
+	virtual ktk::size_t Serialize(ktk::uint32_t resource_handle_id,
 		Kotek::Core::ktkIResourceManager* p_resource_manager) noexcept = 0;
 };
 
