@@ -78,8 +78,12 @@ enum class eResourceCachingPolicy : ktk::enum_base_t
 
 enum class eResourceWritingMode : ktk::enum_base_t
 {
+	/// @brief ios::app
 	kAppend,
+	/// @brief ios::in | ios::out
 	kNew,
+	/// @brief ios::in | ios::out | ios::trunc
+	kNew_Trunc,
 	kEndOfEnum
 };
 

@@ -529,6 +529,8 @@ public:
 		ktk::uint32_t resource_id, ktk::size_t value) noexcept = 0;
 	virtual void Seekg(ktk::uint32_t resource_id, ktk::size_t bytes,
 		eFileSeekDirectionType type) = 0;
+	virtual void Seekp(ktk::uint32_t resource_id, ktk::size_t bytes,
+		eFileSeekDirectionType type) = 0;
 	virtual ktk::size_t Tellp(ktk::uint32_t resource_id) = 0;
 	virtual ktk::size_t Tellg(ktk::uint32_t resource_id) = 0;
 	virtual void Read(
@@ -648,7 +650,7 @@ class ktkResourceWritingRequest
 {
 public:
 	ktkResourceWritingRequest() :
-		m_id{}, m_writing_mode{Kotek::Core::eResourceWritingMode::kNew},
+		m_id{}, m_writing_mode{Kotek::Core::eResourceWritingMode::kNew_Trunc},
 		m_resource_type{Kotek::Core::eResourceWritingType::kUnknown},
 		m_policy{Kotek::Core::eResourceWritingPolicy::kSync}
 	{
@@ -818,6 +820,8 @@ public:
 	virtual void Write(
 		ktk::uint32_t resource_id, ktk::size_t value) noexcept = 0;
 	virtual void Seekg(ktk::uint32_t resource_id, ktk::size_t bytes,
+		eFileSeekDirectionType type) = 0;
+	virtual void Seekp(ktk::uint32_t resource_id, ktk::size_t bytes,
 		eFileSeekDirectionType type) = 0;
 	virtual ktk::size_t Tellp(ktk::uint32_t resource_id) = 0;
 	virtual ktk::size_t Tellg(ktk::uint32_t resource_id) = 0;

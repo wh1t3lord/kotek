@@ -8,6 +8,7 @@
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 	#include <etl/string.h>
 	#include <etl/wstring.h>
+	#include <etl/u8string.h>
 	#include <etl/u16string.h>
 	#include <etl/u32string.h>
 #endif
@@ -32,6 +33,10 @@ using string_view = std::u8string_view;
 
 using u8string = std::u8string;
 using u8string_view = std::u8string_view;
+
+template <size_t Size>
+using static_u8string = etl::u8string<Size>;
+using static_u8string_view = etl::u8string_view;
 
 template <size_t Size>
 using static_u16string = etl::u16string<Size>;

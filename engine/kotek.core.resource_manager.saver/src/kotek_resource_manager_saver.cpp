@@ -167,6 +167,11 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 		{
 		case eResourceWritingMode::kNew:
 		{
+			om = std::ios::in | std::ios::out;
+			break;
+		}
+		case eResourceWritingMode::kNew_Trunc:
+		{
 			om = std::ios::in | std::ios::out | std::ios::trunc;
 			break;
 		}
@@ -597,7 +602,7 @@ void ktkResourceSaverManager::Seekg(
 		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
 			"file must be in state for writing!");
 
-		std::ios_base::seekdir direction;
+		std::ios_base::seekdir direction{};
 
 		switch (type)
 		{
@@ -619,6 +624,45 @@ void ktkResourceSaverManager::Seekg(
 		}
 
 		file.seekg(bytes, direction);
+	}
+}
+
+void ktkResourceSaverManager::Seekp(
+	ktk::uint32_t resource_id, ktk::size_t bytes, eFileSeekDirectionType type)
+{
+	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
+		"can't find a such file: {}", resource_id);
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
+
+	if (this->m_writers.find(resource_id) != this->m_writers.end())
+	{
+		auto& file = this->m_writers.at(resource_id).first;
+
+		KOTEK_ASSERT(this->m_writers.at(resource_id).second == false,
+			"file must be in state for writing!");
+
+		std::ios_base::seekdir direction{};
+
+		switch (type)
+		{
+		case Core::eFileSeekDirectionType::kSeekdDirectionCurrent:
+		{
+			direction = std::ios::cur;
+			break;
+		}
+		case Core::eFileSeekDirectionType::kSeekDirectionBegin:
+		{
+			direction = std::ios::beg;
+			break;
+		}
+		case Core::eFileSeekDirectionType::kSeekDirectionEnd:
+		{
+			direction = std::ios::end;
+			break;
+		}
+		}
+
+		file.seekp(bytes, direction);
 	}
 }
 

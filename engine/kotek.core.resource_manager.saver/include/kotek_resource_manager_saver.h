@@ -10,6 +10,7 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+// todo: re-write using task manager
 class ktkResourceSaverManager : public ktkIResourceSaverManager
 {
 public:
@@ -66,6 +67,8 @@ public:
 	void Write(ktk::uint32_t resource_id, ktk::size_t value) noexcept override;
 	void Seekg(ktk::uint32_t resource_id, ktk::size_t bytes,
 		eFileSeekDirectionType type) override;
+	void Seekp(ktk::uint32_t resource_id, ktk::size_t bytes,
+		eFileSeekDirectionType type) override;
 	ktk::size_t Tellp(ktk::uint32_t resource_id) override;
 	ktk::size_t Tellg(ktk::uint32_t resource_id) override;
 	void Read(
@@ -79,7 +82,8 @@ protected:
 		const ktk::filesystem::path& path) noexcept override;
 
 private:
-	ktk_unordered_map<ktk::uint32_t, std::pair<ktk::cfstream, Kotek::ktk::mt::atomic<bool>>,
+	ktk_unordered_map<ktk::uint32_t,
+		std::pair<ktk::cfstream, Kotek::ktk::mt::atomic<bool>>,
 		KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL>
 		m_writers;
 

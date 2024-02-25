@@ -28,16 +28,6 @@ constexpr const char* kUserCallbackName_Update = "UpdateModule_Game";
 constexpr const char* kUserCallbackName_Initialize_Render =
 	"InitializeModule_Render";
 
-#ifdef KOTEK_USE_PLATFORM_WINDOWS
-	#define KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH 260
-#elif defined(KOTEK_USE_PLATFORM_LINUX)
-	#define KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH 1024
-#elif defined(KOTEK_USE_PLATFORM_MAC)
-	#define KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH 1024
-#else
-	#error undefined platform
-#endif
-
 class ktkFileSystem : public ktkIFileSystem
 {
 public:
@@ -83,7 +73,6 @@ private:
 	void CreateConfigFiles(void) noexcept;
 
 	bool CreateDirectoryImpl(const ktk::filesystem::path& path) const noexcept;
-
 
 private:
 	ktk_unordered_map<eFolderIndex,
