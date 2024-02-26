@@ -497,7 +497,7 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::replace_extension(
 	const static_path<Size>& replacement)
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return *this;
 }
 
@@ -529,70 +529,70 @@ inline static_path<Size>::operator string_type() const
 template <size_t Size>
 inline static_cstring<Size> static_path<Size>::string() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_cstring<Size>();
 }
 
 template <size_t Size>
 inline static_u8string<Size> static_path<Size>::u8string() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_u8string<Size>();
 }
 
 template <size_t Size>
 inline static_u16string<Size> static_path<Size>::u16string() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_u16string<Size>();
 }
 
 template <size_t Size>
 inline static_u32string<Size> static_path<Size>::u32string() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_u32string<Size>();
 }
 
 template <size_t Size>
 inline static_wstring<Size> static_path<Size>::wstring() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_wstring<Size>();
 }
 
 template <size_t Size>
 inline static_cstring<Size> static_path<Size>::generic_string() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_cstring<Size>();
 }
 
 template <size_t Size>
 inline static_u8string<Size> static_path<Size>::generic_u8string() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_u8string<Size>();
 }
 
 template <size_t Size>
 inline static_u16string<Size> static_path<Size>::generic_u16string() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_u16string<Size>();
 }
 
 template <size_t Size>
 inline static_u32string<Size> static_path<Size>::generic_u32string() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_u32string<Size>();
 }
 
 template <size_t Size>
 inline static_wstring<Size> static_path<Size>::generic_wstring() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_wstring<Size>();
 }
 
@@ -600,49 +600,49 @@ template <size_t Size>
 inline int static_path<Size>::compare(
 	const static_path<Size>& path) const noexcept
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return 0;
 }
 
 template <size_t Size>
 inline int static_path<Size>::compare(static_cstring_view str) const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return 0;
 }
 
 template <size_t Size>
 inline int static_path<Size>::compare(static_wstring_view str) const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return 0;
 }
 
 template <size_t Size>
 inline int static_path<Size>::compare(static_u8string_view str) const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return 0;
 }
 
 template <size_t Size>
 inline int static_path<Size>::compare(static_u16string_view str) const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return 0;
 }
 
 template <size_t Size>
 inline int static_path<Size>::compare(static_u32string_view str) const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return 0;
 }
 
 template <size_t Size>
 inline static_path<Size> static_path<Size>::lexically_normal() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
@@ -650,7 +650,7 @@ template <size_t Size>
 inline static_path<Size> static_path<Size>::lexically_relative(
 	const static_path<Size>& base) const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
@@ -658,63 +658,63 @@ template <size_t Size>
 inline static_path<Size> static_path<Size>::lexically_proximate(
 	const static_path<Size>& base) const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
 template <size_t Size>
 inline static_path<Size> static_path<Size>::root_name() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
 template <size_t Size>
 inline static_path<Size> static_path<Size>::root_directory() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
 template <size_t Size>
 inline static_path<Size> static_path<Size>::root_path() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
 template <size_t Size>
 inline static_path<Size> static_path<Size>::relative_path() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
 template <size_t Size>
 inline static_path<Size> static_path<Size>::parent_path() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
 template <size_t Size>
 inline static_path<Size> static_path<Size>::filename() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
 template <size_t Size>
 inline static_path<Size> static_path<Size>::stem() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
 template <size_t Size>
 inline static_path<Size> static_path<Size>::extension() const
 {
-	assert(false && "doto");
+	assert(false && "todo");
 	return static_path<Size>();
 }
 
