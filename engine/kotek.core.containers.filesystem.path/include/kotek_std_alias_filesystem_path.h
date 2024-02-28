@@ -3,6 +3,7 @@
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 #include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
 #include <kotek.core.containers.string/include/kotek_std_string.h>
+#include <kotek.core.utility/include/kotek_core_utility.h>
 
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 	#include <filesystem>
@@ -12,25 +13,15 @@
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
 // todo: provide overriding through cmake this length
 	#define KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH 260
-	#define KOTEK_DEF_OS_PATH_SEPARATOR "\\"
+	#define KOTEK_DEF_OS_PATH_SEPARATOR '\\'
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 	#define KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH 1024
-	#define KOTEK_DEF_OS_PATH_SEPARATOR "/"
+	#define KOTEK_DEF_OS_PATH_SEPARATOR '/'
 #elif defined(KOTEK_USE_PLATFORM_MAC)
 	#define KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH 1024
-	#define KOTEK_DEF_OS_PATH_SEPARATOR "/"
+	#define KOTEK_DEF_OS_PATH_SEPARATOR '/'
 #else
 	#error undefined platform
-#endif
-
-#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	#ifdef KOTEK_USE_PLATFORM_WINDOWS
-		#include <Windows.h>
-	#elif defined(KOTEK_USE_PLATFORM_LINUX)
-	#elif defined(KOTEK_USE_PLATFORM_MACOS)
-	#else
-		#error unknown platform please report to developers or community for implementation request ^_^
-	#endif
 #endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -48,10 +39,19 @@ public:
 
 	static constexpr value_type preferred_separator =
 		KOTEK_DEF_OS_PATH_SEPARATOR;
+	static constexpr auto npos = static_cstring<Size>::npos;
 
 public:
 	/* Member functions */
 	static_path();
+	static_path(const static_path<Size>& path);
+	static_path(static_path<Size>&& path);
+	static_path(const static_cstring_view& str);
+	static_path(const static_wstring_view& str);
+	static_path(const static_u8string_view& str);
+	static_path(const static_u16string_view& str);
+	static_path(const static_u32string_view& str);
+
 	~static_path();
 
 	static_path<Size>& operator=(const static_path<Size>& path);
@@ -240,6 +240,32 @@ inline static_path<Size>::static_path()
 
 template <size_t Size>
 inline static_path<Size>::~static_path()
+{
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(const static_cstring_view& str) :
+	m_buffer{str}
+{
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(const static_wstring_view& str)
+{
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(const static_u8string_view& str)
+{
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(const static_u16string_view& str)
+{
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(const static_u32string_view& str)
 {
 }
 
@@ -474,14 +500,57 @@ inline void static_path<Size>::clear() noexcept
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::make_preferred()
 {
-	assert(false && "todo");
+	if (this->m_buffer.empty() == false)
+	{
+		etl::replace(this->m_buffer.begin(), this->m_buffer.end(),
+			fs_give_opposite_to_preferred_separator(preferred_separator),
+			preferred_separator);
+	}
+
 	return *this;
 }
 
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::remove_filename()
 {
-	assert(false && "todo");
+	if (this->m_buffer.empty() == false)
+	{
+		auto index_forward = this->m_buffer.rfind('/');
+		auto index_back = this->m_buffer.rfind('\\');
+
+		if (index_forward != npos || index_back != npos)
+		{
+			if (this->m_buffer.size() > 1)
+			{
+				if (index_forward == npos)
+				{
+					this->m_buffer.erase(index_back + 1);
+				}
+				else if (index_back == npos)
+				{
+					this->m_buffer.erase(index_forward + 1);
+				}
+				else
+				{
+					// forward is the last symbol as separator
+					if (index_forward > index_back)
+					{
+						this->m_buffer.erase(index_forward + 1);
+					}
+					// otherwise it is a backslash
+					else
+					{
+						this->m_buffer.erase(index_back + 1);
+					}
+				}
+			}
+		}
+		else
+		{
+			this->m_buffer.clear();
+		}
+	}
+
 	return *this;
 }
 

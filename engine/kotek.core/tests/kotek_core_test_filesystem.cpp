@@ -65,6 +65,56 @@ void test_file_create_pretty_output()
 	saver_instance.Shutdown();
 	main_manager.Shutdown();
 }
+
+void test_container_filesystem_static_path_constructor()
+{
+	ktk_filesystem_path test1;
+}
+
+void test_container_filesystem_static_path_make_preferred()
+{
+	ktk_filesystem_path test1("a/b/c");
+		#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	BOOST_REQUIRE(test1.make_preferred().native() == "a\\b\\c");
+		#elif defined(KOTEK_USE_PLATFORM_LINUX)
+			#error implement
+		#elif defined(KOTEK_USE_PLATFORM_MACOS)
+			#error implement
+		#endif
+}
+
+void test_container_filesystem_static_path_remove_filename()
+{
+	ktk_filesystem_path test("/");
+	ktk_filesystem_path test1("\\");
+	ktk_filesystem_path test2;
+	ktk_filesystem_path test3("");
+	ktk_filesystem_path test4("foo/bar");
+	ktk_filesystem_path test5("foo/");
+	ktk_filesystem_path test6("/foo");
+
+	BOOST_REQUIRE(test.remove_filename().native() == "/");
+	BOOST_REQUIRE(test1.remove_filename().native() == "\\");
+	BOOST_REQUIRE(test2.remove_filename().native() == "");
+	BOOST_REQUIRE(test3.remove_filename().native() == "");
+	BOOST_REQUIRE(test4.remove_filename().native() == "foo/");
+	BOOST_REQUIRE(test5.remove_filename().native() == "foo/");
+	BOOST_REQUIRE(test6.remove_filename().native() == "/");
+}
+
+void test_container_filesystem_static_path_remove_filename2()
+{
+	ktk_filesystem_path test("/");
+	ktk_filesystem_path test1("\\");
+	ktk_filesystem_path test2;
+	ktk_filesystem_path test3("");
+
+	BOOST_REQUIRE(test.remove_filename().native() == "/");
+	BOOST_REQUIRE(test1.remove_filename().native() == "\\");
+	BOOST_REQUIRE(test2.remove_filename().native() == "");
+	BOOST_REQUIRE(test3.remove_filename().native() == "");
+}
+
 	#endif
 #endif
 
@@ -78,7 +128,14 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 	p_suite->add(
 		BOOST_TEST_CASE(&test_filesystem_check_folder_tests_for_existance));
 	p_suite->add(BOOST_TEST_CASE(&test_file_create_pretty_output));
-
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_constructor));
+	p_suite->add(BOOST_TEST_CASE(
+		&test_container_filesystem_static_path_remove_filename));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_make_preferred));
+	p_suite->add(BOOST_TEST_CASE(
+		&test_container_filesystem_static_path_remove_filename2));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");
