@@ -272,7 +272,7 @@ void test_container_filesystem_static_path_replace_extension()
 
 	ktk_filesystem_path test16("/foo/bar.jpg");
 	test16.replace_extension();
-	
+
 	BOOST_REQUIRE(test.native() == "/foo/bar.png");
 	BOOST_REQUIRE(test2.native() == "/foo/bar.png");
 	BOOST_REQUIRE(test3.native() == "/foo/bar.");
@@ -289,6 +289,35 @@ void test_container_filesystem_static_path_replace_extension()
 	BOOST_REQUIRE(test14.native() == "/foo/.png");
 	BOOST_REQUIRE(test15.native() == "/foo/.png");
 	BOOST_REQUIRE(test16.native() == "/foo/bar");
+}
+
+void test_container_filesystem_static_path_swap()
+{
+	ktk_filesystem_path test("C:/test");
+	ktk_filesystem_path b("D:/kek");
+
+	test.swap(b);
+
+	BOOST_REQUIRE(test.native() == "D:/kek");
+	BOOST_REQUIRE(b.native() == "C:/test");
+
+	ktk_filesystem_path test2("D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
+	ktk_filesystem_path b2("C:\\Program Files (x86)\\Microsoft SQL "
+						   "Server\\150\\LocalDB\\Binn\\Resources\\es-ES");
+
+	test2.swap(b2);
+
+	BOOST_REQUIRE(test2.native() ==
+		"C:\\Program Files (x86)\\Microsoft SQL "
+		"Server\\150\\LocalDB\\Binn\\Resources\\es-ES");
+	BOOST_REQUIRE(b2.native() == "D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
+
+	ktk_filesystem_path test3("D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
+	ktk_filesystem_path b3("");
+
+	test3.swap(b3);
+	BOOST_REQUIRE(test3.native() == "");
+	BOOST_REQUIRE(b3.native() == "D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
 }
 
 	#endif
@@ -318,6 +347,7 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_has_filename));
 	p_suite->add(BOOST_TEST_CASE(
 		&test_container_filesystem_static_path_replace_extension));
+	p_suite->add(BOOST_TEST_CASE(&test_container_filesystem_static_path_swap));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");

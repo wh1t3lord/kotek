@@ -703,6 +703,9 @@ inline static_path<Size>& static_path<Size>::replace_extension(
 template <size_t Size>
 inline void static_path<Size>::swap(static_path<Size>& other) noexcept
 {
+	auto copy = other.m_buffer;
+	other.m_buffer = this->m_buffer;
+	this->m_buffer = copy;
 }
 
 template <size_t Size>
