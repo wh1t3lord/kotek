@@ -687,6 +687,15 @@ inline static_path<Size>& static_path<Size>::replace_extension(
 			}
 		}
 	}
+	else
+	{
+		if (this->has_extension())
+		{
+			auto extension_dot = this->m_buffer.rfind('.');
+			this->m_buffer.erase(
+				extension_dot + 1, this->m_buffer.size() - extension_dot);
+		}
+	}
 
 	return *this;
 }

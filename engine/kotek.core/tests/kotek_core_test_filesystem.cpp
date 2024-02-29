@@ -223,10 +223,68 @@ void test_container_filesystem_static_path_has_filename()
 	BOOST_REQUIRE(test16.has_filename() == std_test16.has_filename());
 }
 
-void test_container_filesystem_static_path_replace_extension() 
+void test_container_filesystem_static_path_replace_extension()
 {
 	ktk_filesystem_path test("/foo/bar.jpg");
 	test.replace_extension(".png");
+
+	ktk_filesystem_path test2("/foo/bar.jpg");
+	test2.replace_extension("png");
+
+	ktk_filesystem_path test3("/foo/bar.jpg");
+	test3.replace_extension(".");
+
+	ktk_filesystem_path test4("/foo/bar.jpg");
+	test4.replace_extension("");
+
+	ktk_filesystem_path test5("/foo/bar.");
+	test5.replace_extension("png");
+
+	ktk_filesystem_path test6("/foo/bar");
+	test6.replace_extension(".png");
+
+	ktk_filesystem_path test7("/foo/bar");
+	test7.replace_extension("png");
+
+	ktk_filesystem_path test8("/foo/bar");
+	test8.replace_extension(".");
+
+	ktk_filesystem_path test9("/foo/bar");
+	test9.replace_extension("");
+
+	ktk_filesystem_path test10("/foo/.");
+	test10.replace_extension(".png");
+
+	ktk_filesystem_path test11("/foo/.");
+	test11.replace_extension("png");
+
+	ktk_filesystem_path test12("/foo/.");
+	test12.replace_extension(".");
+
+	ktk_filesystem_path test13("/foo/.");
+	test13.replace_extension("");
+
+	ktk_filesystem_path test14("/foo/");
+	test14.replace_extension(".png");
+
+	ktk_filesystem_path test15("/foo/");
+	test15.replace_extension("png");
+	
+	BOOST_REQUIRE(test.native() == "/foo/bar.png");
+	BOOST_REQUIRE(test2.native() == "/foo/bar.png");
+	BOOST_REQUIRE(test3.native() == "/foo/bar.");
+	BOOST_REQUIRE(test4.native() == "/foo/bar");
+	BOOST_REQUIRE(test5.native() == "/foo/bar.png");
+	BOOST_REQUIRE(test6.native() == "/foo/bar.png");
+	BOOST_REQUIRE(test7.native() == "/foo/bar.png");
+	BOOST_REQUIRE(test8.native() == "/foo/bar.");
+	BOOST_REQUIRE(test9.native() == "/foo/bar");
+	BOOST_REQUIRE(test10.native() == "/foo/..png");
+	BOOST_REQUIRE(test11.native() == "/foo/..png");
+	BOOST_REQUIRE(test12.native() == "/foo/..");
+	BOOST_REQUIRE(test13.native() == "/foo/.");
+	BOOST_REQUIRE(test14.native() == "/foo/.png");
+	BOOST_REQUIRE(test15.native() == "/foo/.png");
 }
 
 	#endif
