@@ -269,6 +269,9 @@ void test_container_filesystem_static_path_replace_extension()
 
 	ktk_filesystem_path test15("/foo/");
 	test15.replace_extension("png");
+
+	ktk_filesystem_path test16("/foo/bar.jpg");
+	test16.replace_extension();
 	
 	BOOST_REQUIRE(test.native() == "/foo/bar.png");
 	BOOST_REQUIRE(test2.native() == "/foo/bar.png");
@@ -285,6 +288,7 @@ void test_container_filesystem_static_path_replace_extension()
 	BOOST_REQUIRE(test13.native() == "/foo/.");
 	BOOST_REQUIRE(test14.native() == "/foo/.png");
 	BOOST_REQUIRE(test15.native() == "/foo/.png");
+	BOOST_REQUIRE(test16.native() == "/foo/bar");
 }
 
 	#endif
@@ -312,6 +316,8 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_has_extension));
 	p_suite->add(
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_has_filename));
+	p_suite->add(BOOST_TEST_CASE(
+		&test_container_filesystem_static_path_replace_extension));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");
