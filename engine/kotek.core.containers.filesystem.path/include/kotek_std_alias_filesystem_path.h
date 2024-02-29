@@ -1046,7 +1046,7 @@ inline bool static_path<Size>::has_extension() const
 
 				if (this->m_buffer[previous_pos2] == '/' ||
 					this->m_buffer[previous_pos2] == '\\')
-					return result;
+					result = false;
 				else
 					result = true;
 			}
@@ -1055,7 +1055,7 @@ inline bool static_path<Size>::has_extension() const
 				if (this->m_buffer[previous_pos] == '/' ||
 					this->m_buffer[previous_pos] == '\\')
 				{
-					return result;
+					result = false;
 				}
 				else
 				{
@@ -1078,14 +1078,14 @@ inline bool static_path<Size>::has_extension() const
 					this->m_buffer[next_pos] != '\\')
 					result = true;
 				else
-					return result;
+					result = false;
 			}
 			else
 			{
 				if (this->m_buffer[previous_pos] == '/' ||
 					this->m_buffer[previous_pos] == '\\')
 				{
-					return result;
+					result = false;
 				}
 				else
 				{
