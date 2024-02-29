@@ -46,6 +46,11 @@ public:
 	static_path();
 	static_path(const static_path<Size>& path);
 	static_path(static_path<Size>&& path);
+	static_path(const char* str);
+	static_path(const wchar_t* str);
+	static_path(const char8_t* str);
+	static_path(const char16_t* str);
+	static_path(const char32_t* str);
 	static_path(const static_cstring_view& str);
 	static_path(const static_wstring_view& str);
 	static_path(const static_u8string_view& str);
@@ -244,6 +249,35 @@ inline static_path<Size>::~static_path()
 }
 
 template <size_t Size>
+inline static_path<Size>::static_path(const char* str) : m_buffer{str}
+{
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(const wchar_t* str)
+{
+	assert(false && "todo");
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(const char8_t* str)
+{
+	assert(false && "todo");
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(const char16_t* str)
+{
+	assert(false && "todo");
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(const char32_t* str)
+{
+	assert(false && "todo");
+}
+
+template <size_t Size>
 inline static_path<Size>::static_path(const static_cstring_view& str) :
 	m_buffer{str}
 {
@@ -252,20 +286,36 @@ inline static_path<Size>::static_path(const static_cstring_view& str) :
 template <size_t Size>
 inline static_path<Size>::static_path(const static_wstring_view& str)
 {
+	assert(false && "todo");
 }
 
 template <size_t Size>
 inline static_path<Size>::static_path(const static_u8string_view& str)
 {
+	assert(false && "todo");
 }
 
 template <size_t Size>
 inline static_path<Size>::static_path(const static_u16string_view& str)
 {
+	assert(false && "todo");
 }
 
 template <size_t Size>
 inline static_path<Size>::static_path(const static_u32string_view& str)
+{
+	assert(false && "todo");
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(const static_path<Size>& path) :
+	m_buffer{path.m_buffer}
+{
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(static_path<Size>&& path) :
+	m_buffer{etl::move(path.m_buffer)}
 {
 }
 
@@ -400,7 +450,11 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::append(
 	const static_path<Size>& path)
 {
-	assert(false && "todo");
+	if (path.empty())
+		return *this;
+
+	this->m_buffer.append(path.m_buffer);
+
 	return *this;
 }
 
@@ -558,7 +612,7 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::replace_filename(
 	const static_path<Size>& replacement)
 {
-	assert(false && "todo");
+	this->remove_filename().append(replacement);
 	return *this;
 }
 
@@ -566,7 +620,74 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::replace_extension(
 	const static_path<Size>& replacement)
 {
-	assert(false && "todo");
+	if (replacement.empty() == false)
+	{
+		const auto& str_native = replacement.native();
+		bool has_dot_in_replacement = str_native[0] == '.';
+		const auto* p_c_str = str_native.c_str();
+
+		if (this->has_extension())
+		{
+			auto extension_dot = this->m_buffer.rfind('.');
+			this->m_buffer.erase(
+				extension_dot + 1, this->m_buffer.size() - extension_dot);
+
+			if (has_dot_in_replacement)
+			{
+				this->m_buffer.append(p_c_str + 1);
+			}
+			else
+			{
+				this->m_buffer.append(str_native);
+			}
+		}
+		else
+		{
+			if (this->has_filename())
+			{
+				if (has_dot_in_replacement)
+				{
+					this->m_buffer.append(str_native);
+				}
+				else
+				{
+					this->m_buffer.append(1,'.');
+					this->m_buffer.append(str_native);
+				}
+			}
+			else
+			{
+				if (this->m_buffer.back() == '/' ||
+					this->m_buffer.back() == '\\')
+				{
+					if (has_dot_in_replacement)
+					{
+						this->m_buffer.append(str_native);
+					}
+					else
+					{
+						this->m_buffer.append(1,'.');
+						this->m_buffer.append(str_native);
+					}
+				}
+				else
+				{
+					this->m_buffer.append(1,preferred_separator);
+
+					if (has_dot_in_replacement)
+					{
+						this->m_buffer.append(str_native);
+					}
+					else
+					{
+						this->m_buffer.append(1,'.');
+						this->m_buffer.append(str_native);
+					}
+				}
+			}
+		}
+	}
+
 	return *this;
 }
 
@@ -791,6 +912,195 @@ template <size_t Size>
 inline bool static_path<Size>::empty() const noexcept
 {
 	return this->m_buffer.empty();
+}
+
+template <size_t Size>
+inline bool static_path<Size>::has_root_path() const
+{
+	assert(false && "todo");
+	return false;
+}
+
+template <size_t Size>
+inline bool static_path<Size>::has_root_name() const
+{
+	assert(false && "todo");
+	return false;
+}
+
+template <size_t Size>
+inline bool static_path<Size>::has_root_directory() const
+{
+	assert(false && "todo");
+	return false;
+}
+
+template <size_t Size>
+inline bool static_path<Size>::has_relative_path() const
+{
+	assert(false && "todo");
+	return false;
+}
+
+template <size_t Size>
+inline bool static_path<Size>::has_parent_path() const
+{
+	assert(false && "todo");
+	return false;
+}
+
+template <size_t Size>
+inline bool static_path<Size>::has_filename() const
+{
+	bool result{};
+
+	auto index_forward_slash = this->m_buffer.rfind('/');
+	auto index_backward_slash = this->m_buffer.rfind('\\');
+
+	if (index_forward_slash != npos && index_backward_slash != npos)
+	{
+		// '/' is the last symbol from end
+		if (index_forward_slash > index_backward_slash)
+		{
+			if (index_forward_slash == this->m_buffer.size() - 1)
+			{
+				result = false;
+			}
+			else
+			{
+				result = true;
+			}
+		}
+		// otherwise it is '\\' from end
+		else
+		{
+			if (index_backward_slash == this->m_buffer.size() - 1)
+			{
+				result = false;
+			}
+			else
+			{
+				result = true;
+			}
+		}
+	}
+	else if (index_forward_slash != npos)
+	{
+		if (index_forward_slash == this->m_buffer.size() - 1)
+		{
+			result = false;
+		}
+		else
+		{
+			result = true;
+		}
+	}
+	else if (index_backward_slash != npos)
+	{
+		if (index_backward_slash == this->m_buffer.size() - 1)
+		{
+			result = false;
+		}
+		else
+		{
+			result = true;
+		}
+	}
+
+	return result;
+}
+
+template <size_t Size>
+inline bool static_path<Size>::has_stem() const
+{
+	assert(false && "todo");
+	return false;
+}
+
+template <size_t Size>
+inline bool static_path<Size>::has_extension() const
+{
+	bool result{};
+
+	auto index = this->m_buffer.rfind('.');
+
+	if (index != static_cstring<Size>::npos && index > 0)
+	{
+		// imagine like cat/ab/..
+		if (index == this->m_buffer.size() - 1)
+		{
+			auto previous_pos = index - 1;
+			// we got ".." string
+			if (this->m_buffer[previous_pos] == '.')
+			{
+				auto previous_pos2 = previous_pos - 1;
+
+				if (this->m_buffer[previous_pos2] == '/' ||
+					this->m_buffer[previous_pos2] == '\\')
+					return result;
+				else
+					result = true;
+			}
+			else
+			{
+				if (this->m_buffer[previous_pos] == '/' ||
+					this->m_buffer[previous_pos] == '\\')
+				{
+					return result;
+				}
+				else
+				{
+					result = true;
+				}
+			}
+		}
+		else
+		{
+			auto previous_pos = index - 1;
+
+			if (this->m_buffer[previous_pos] == '.')
+			{
+				// we might have a name of file as '.' and it has some
+				// extension...
+
+				auto next_pos = index + 1;
+
+				if (this->m_buffer[next_pos] != '/' ||
+					this->m_buffer[next_pos] != '\\')
+					result = true;
+				else
+					return result;
+			}
+			else
+			{
+				if (this->m_buffer[previous_pos] == '/' ||
+					this->m_buffer[previous_pos] == '\\')
+				{
+					return result;
+				}
+				else
+				{
+					result = true;
+				}
+			}
+		}
+	}
+
+	return result;
+}
+
+template <size_t Size>
+inline bool static_path<Size>::is_absolute() const
+{
+	assert(false && "todo");
+	return false;
+}
+
+template <size_t Size>
+inline bool static_path<Size>::is_relative() const
+{
+	assert(false && "todo");
+	return false;
 }
 
 KOTEK_END_NAMESPACE_KTK

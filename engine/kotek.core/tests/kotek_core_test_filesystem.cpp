@@ -115,6 +115,120 @@ void test_container_filesystem_static_path_remove_filename2()
 	BOOST_REQUIRE(test3.remove_filename().native() == "");
 }
 
+void test_container_filesystem_static_path_has_extension()
+{
+	ktk_filesystem_path test("/");
+	ktk_filesystem_path test2("\\");
+	ktk_filesystem_path test3("/ab/test.txt");
+	ktk_filesystem_path test4("/ab/.");
+	ktk_filesystem_path test5("/ab/..");
+	ktk_filesystem_path test6("/ab/.1");
+	ktk_filesystem_path test7("/ab/..1");
+	ktk_filesystem_path test8("/ab/1.1");
+	ktk_filesystem_path test9("/ab/1.");
+	ktk_filesystem_path test10("/ab/...");
+	ktk_filesystem_path test11("/ab/.1.");
+	ktk_filesystem_path test12("/ab\\..1");
+	ktk_filesystem_path test13("/ab/1.1");
+	ktk_filesystem_path test14("\\ab/1.");
+	ktk_filesystem_path test15("\\ab\\...");
+	ktk_filesystem_path test16("/ab\\.1.");
+
+	std::filesystem::path std_test("/");
+	std::filesystem::path std_test2("\\");
+	std::filesystem::path std_test3("/ab/test.txt");
+	std::filesystem::path std_test4("/ab/.");
+	std::filesystem::path std_test5("/ab/..");
+	std::filesystem::path std_test6("/ab/.1");
+	std::filesystem::path std_test7("/ab/..1");
+	std::filesystem::path std_test8("/ab/1.1");
+	std::filesystem::path std_test9("/ab/1.");
+	std::filesystem::path std_test10("/ab/...");
+	std::filesystem::path std_test11("/ab/.1.");
+	std::filesystem::path std_test12("/ab\\..1");
+	std::filesystem::path std_test13("/ab/1.1");
+	std::filesystem::path std_test14("\\ab/1.");
+	std::filesystem::path std_test15("\\ab\\...");
+	std::filesystem::path std_test16("/ab\\.1.");
+
+	BOOST_REQUIRE(test.has_extension() == std_test.has_extension());
+	BOOST_REQUIRE(test2.has_extension() == std_test2.has_extension());
+	BOOST_REQUIRE(test3.has_extension() == std_test3.has_extension());
+	BOOST_REQUIRE(test4.has_extension() == std_test4.has_extension());
+	BOOST_REQUIRE(test5.has_extension() == std_test5.has_extension());
+	BOOST_REQUIRE(test6.has_extension() == std_test6.has_extension());
+	BOOST_REQUIRE(test7.has_extension() == std_test7.has_extension());
+	BOOST_REQUIRE(test8.has_extension() == std_test8.has_extension());
+	BOOST_REQUIRE(test9.has_extension() == std_test9.has_extension());
+	BOOST_REQUIRE(test10.has_extension() == std_test10.has_extension());
+	BOOST_REQUIRE(test11.has_extension() == std_test11.has_extension());
+	BOOST_REQUIRE(test12.has_filename() == std_test12.has_filename());
+	BOOST_REQUIRE(test13.has_filename() == std_test13.has_filename());
+	BOOST_REQUIRE(test14.has_filename() == std_test14.has_filename());
+	BOOST_REQUIRE(test15.has_filename() == std_test15.has_filename());
+	BOOST_REQUIRE(test16.has_filename() == std_test16.has_filename());
+}
+
+void test_container_filesystem_static_path_has_filename()
+{
+	ktk_filesystem_path test("/");
+	ktk_filesystem_path test2("\\");
+	ktk_filesystem_path test3("/ab/test.txt");
+	ktk_filesystem_path test4("/ab/.");
+	ktk_filesystem_path test5("/ab/..");
+	ktk_filesystem_path test6("/ab/.1");
+	ktk_filesystem_path test7("/ab/..1");
+	ktk_filesystem_path test8("/ab/1.1");
+	ktk_filesystem_path test9("/ab/1.");
+	ktk_filesystem_path test10("/ab/...");
+	ktk_filesystem_path test11("/ab/.1.");
+	ktk_filesystem_path test12("/ab\\..1");
+	ktk_filesystem_path test13("/ab/1.1");
+	ktk_filesystem_path test14("\\ab/1.");
+	ktk_filesystem_path test15("\\ab\\...");
+	ktk_filesystem_path test16("/ab\\.1.");
+
+	std::filesystem::path std_test("/");
+	std::filesystem::path std_test2("\\");
+	std::filesystem::path std_test3("/ab/test.txt");
+	std::filesystem::path std_test4("/ab/.");
+	std::filesystem::path std_test5("/ab/..");
+	std::filesystem::path std_test6("/ab/.1");
+	std::filesystem::path std_test7("/ab/..1");
+	std::filesystem::path std_test8("/ab/1.1");
+	std::filesystem::path std_test9("/ab/1.");
+	std::filesystem::path std_test10("/ab/...");
+	std::filesystem::path std_test11("/ab/.1.");
+	std::filesystem::path std_test12("/ab\\..1");
+	std::filesystem::path std_test13("/ab/1.1");
+	std::filesystem::path std_test14("\\ab/1.");
+	std::filesystem::path std_test15("\\ab\\...");
+	std::filesystem::path std_test16("/ab\\.1.");
+
+	BOOST_REQUIRE(test.has_filename() == std_test.has_filename());
+	BOOST_REQUIRE(test2.has_filename() == std_test2.has_filename());
+	BOOST_REQUIRE(test3.has_filename() == std_test3.has_filename());
+	BOOST_REQUIRE(test4.has_filename() == std_test4.has_filename());
+	BOOST_REQUIRE(test5.has_filename() == std_test5.has_filename());
+	BOOST_REQUIRE(test6.has_filename() == std_test6.has_filename());
+	BOOST_REQUIRE(test7.has_filename() == std_test7.has_filename());
+	BOOST_REQUIRE(test8.has_filename() == std_test8.has_filename());
+	BOOST_REQUIRE(test9.has_filename() == std_test9.has_filename());
+	BOOST_REQUIRE(test10.has_filename() == std_test10.has_filename());
+	BOOST_REQUIRE(test11.has_filename() == std_test11.has_filename());
+	BOOST_REQUIRE(test12.has_filename() == std_test12.has_filename());
+	BOOST_REQUIRE(test13.has_filename() == std_test13.has_filename());
+	BOOST_REQUIRE(test14.has_filename() == std_test14.has_filename());
+	BOOST_REQUIRE(test15.has_filename() == std_test15.has_filename());
+	BOOST_REQUIRE(test16.has_filename() == std_test16.has_filename());
+}
+
+void test_container_filesystem_static_path_replace_extension() 
+{
+	ktk_filesystem_path test("/foo/bar.jpg");
+	test.replace_extension(".png");
+}
+
 	#endif
 #endif
 
@@ -136,6 +250,10 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_make_preferred));
 	p_suite->add(BOOST_TEST_CASE(
 		&test_container_filesystem_static_path_remove_filename2));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_has_extension));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_has_filename));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");
