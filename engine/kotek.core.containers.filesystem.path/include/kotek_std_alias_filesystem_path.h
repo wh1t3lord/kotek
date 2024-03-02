@@ -163,11 +163,16 @@ path& concat( InputIt first, InputIt last );
 	/* Compare */
 
 	int compare(const static_path<Size>& path) const noexcept;
-	int compare(static_cstring_view str) const;
-	int compare(static_wstring_view str) const;
-	int compare(static_u8string_view str) const;
-	int compare(static_u16string_view str) const;
-	int compare(static_u32string_view str) const;
+	int compare(const static_cstring_view& str) const;
+	int compare(const static_wstring_view& str) const;
+	int compare(const static_u8string_view& str) const;
+	int compare(const static_u16string_view& str) const;
+	int compare(const static_u32string_view& str) const;
+	int compare(const char* str) const;
+	int compare(const char8_t* str) const;
+	int compare(const char16_t* str) const;
+	int compare(const char32_t* str) const;
+	int compare(const wchar_t* str) const;
 
 	/* Generation */
 
@@ -820,34 +825,68 @@ inline int static_path<Size>::compare(
 }
 
 template <size_t Size>
-inline int static_path<Size>::compare(static_cstring_view str) const
+inline int static_path<Size>::compare(const static_cstring_view& str) const
 {
-	return this->m_buffer.compare(str);
+	return this->compare(static_path<Size>(str));
 }
 
 template <size_t Size>
-inline int static_path<Size>::compare(static_wstring_view str) const
-{
-	assert(false && "todo");
-	return 0;
-}
-
-template <size_t Size>
-inline int static_path<Size>::compare(static_u8string_view str) const
+inline int static_path<Size>::compare(const static_wstring_view& str) const
 {
 	assert(false && "todo");
 	return 0;
 }
 
 template <size_t Size>
-inline int static_path<Size>::compare(static_u16string_view str) const
+inline int static_path<Size>::compare(const static_u8string_view& str) const
 {
 	assert(false && "todo");
 	return 0;
 }
 
 template <size_t Size>
-inline int static_path<Size>::compare(static_u32string_view str) const
+inline int static_path<Size>::compare(const static_u16string_view& str) const
+{
+	assert(false && "todo");
+	return 0;
+}
+
+template <size_t Size>
+inline int static_path<Size>::compare(const static_u32string_view& str) const
+{
+	assert(false && "todo");
+	return 0;
+}
+
+template <size_t Size>
+inline int static_path<Size>::compare(const char* str) const
+{
+	return this->compare(static_path<Size>(str));
+}
+
+template <size_t Size>
+inline int static_path<Size>::compare(const char8_t* str) const
+{
+	assert(false && "todo");
+	return 0;
+}
+
+template <size_t Size>
+inline int static_path<Size>::compare(const char16_t* str) const
+{
+	assert(false && "todo");
+	return 0;
+}
+
+template <size_t Size>
+inline int static_path<Size>::compare(const char32_t* str) const
+{
+	assert(false && "todo");
+	return 0;
+}
+
+template <size_t Size>
+inline int static_path<Size>::compare(const wchar_t* str) const
 {
 	assert(false && "todo");
 	return 0;

@@ -343,6 +343,8 @@ void test_container_filesystem_static_path_compare()
 	BOOST_REQUIRE(a3.compare(b3) > 0);
 	BOOST_REQUIRE(a4.compare(b4) < 0);
 	BOOST_REQUIRE(a5.compare(b5) > 0);
+
+	a.compare("");
 }
 
 void test_container_filesystem_static_path_has_root_directory()
