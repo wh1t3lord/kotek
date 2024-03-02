@@ -1,6 +1,11 @@
 ﻿#include "../include/kotek_core.h"
 #include <boost/test/unit_test.hpp>
-#include <filesystem>
+
+#ifdef KOTEK_USE_TESTS
+	#ifdef KOTEK_DEBUG
+		#include <filesystem>
+	#endif
+#endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -328,13 +333,13 @@ void test_container_filesystem_static_path_compare()
 
 	ktk_filesystem_path a2("/a/b/");
 	ktk_filesystem_path b2("/a/b/c");
-	
+
 	ktk_filesystem_path a3("/a/b/../b");
 	ktk_filesystem_path b3("/a/b");
-	
+
 	ktk_filesystem_path a4("/a/b");
 	ktk_filesystem_path b4("/a/b/.");
-	
+
 	ktk_filesystem_path a5("/a/b/");
 	ktk_filesystem_path b5("a/c");
 
@@ -372,7 +377,7 @@ void test_container_filesystem_static_path_has_root_directory()
 	ktk_filesystem_path _t8("/A/b");
 	ktk_filesystem_path _t9("c\\d\\");
 	ktk_filesystem_path _t10(":/c\\d");
-	
+
 	BOOST_REQUIRE(t.has_root_directory() == _t.has_root_directory());
 	BOOST_REQUIRE(t1.has_root_directory() == _t1.has_root_directory());
 	BOOST_REQUIRE(t2.has_root_directory() == _t2.has_root_directory());
@@ -384,6 +389,92 @@ void test_container_filesystem_static_path_has_root_directory()
 	BOOST_REQUIRE(t8.has_root_directory() == _t8.has_root_directory());
 	BOOST_REQUIRE(t9.has_root_directory() == _t9.has_root_directory());
 	BOOST_REQUIRE(t10.has_root_directory() == _t10.has_root_directory());
+}
+
+void test_container_filesystem_static_path_is_absolute()
+{
+	std::filesystem::path t("a/b");
+	std::filesystem::path t1("C:/a/b");
+	std::filesystem::path t2("C:\\a/b");
+	std::filesystem::path t3("D:/a/b");
+	std::filesystem::path t4("b");
+	std::filesystem::path t5("/");
+	std::filesystem::path t6("\\");
+	std::filesystem::path t7("\\A\\B");
+	std::filesystem::path t8("/A/b");
+	std::filesystem::path t9("c\\d\\");
+	std::filesystem::path t10("D:c\\d");
+	std::filesystem::path t11("D:");
+	std::filesystem::path t12("D:\\");
+
+	ktk_filesystem_path _t("a/b");
+	ktk_filesystem_path _t1("C:/a/b");
+	ktk_filesystem_path _t2("C:\\a/b");
+	ktk_filesystem_path _t3("D:/a/b");
+	ktk_filesystem_path _t4("b");
+	ktk_filesystem_path _t5("/");
+	ktk_filesystem_path _t6("\\");
+	ktk_filesystem_path _t7("\\A\\B");
+	ktk_filesystem_path _t8("/A/b");
+	ktk_filesystem_path _t9("c\\d\\");
+	ktk_filesystem_path _t10("D:c\\d");
+	ktk_filesystem_path _t11("D:");
+	ktk_filesystem_path _t12("D:\\");
+
+	BOOST_REQUIRE(t.is_absolute() == _t.is_absolute());
+	BOOST_REQUIRE(t1.is_absolute() == _t1.is_absolute());
+	BOOST_REQUIRE(t2.is_absolute() == _t2.is_absolute());
+	BOOST_REQUIRE(t3.is_absolute() == _t3.is_absolute());
+	BOOST_REQUIRE(t4.is_absolute() == _t4.is_absolute());
+	BOOST_REQUIRE(t5.is_absolute() == _t5.is_absolute());
+	BOOST_REQUIRE(t6.is_absolute() == _t6.is_absolute());
+	BOOST_REQUIRE(t7.is_absolute() == _t7.is_absolute());
+	BOOST_REQUIRE(t8.is_absolute() == _t8.is_absolute());
+	BOOST_REQUIRE(t9.is_absolute() == _t9.is_absolute());
+	BOOST_REQUIRE(t10.is_absolute() == _t10.is_absolute());
+}
+
+void test_container_filesystem_static_path_is_relative()
+{
+	std::filesystem::path t("a/b");
+	std::filesystem::path t1("C:/a/b");
+	std::filesystem::path t2("C:\\a/b");
+	std::filesystem::path t3("D:/a/b");
+	std::filesystem::path t4("b");
+	std::filesystem::path t5("/");
+	std::filesystem::path t6("\\");
+	std::filesystem::path t7("\\A\\B");
+	std::filesystem::path t8("/A/b");
+	std::filesystem::path t9("c\\d\\");
+	std::filesystem::path t10("D:c\\d");
+	std::filesystem::path t11("D:");
+	std::filesystem::path t12("D:\\");
+
+	ktk_filesystem_path _t("a/b");
+	ktk_filesystem_path _t1("C:/a/b");
+	ktk_filesystem_path _t2("C:\\a/b");
+	ktk_filesystem_path _t3("D:/a/b");
+	ktk_filesystem_path _t4("b");
+	ktk_filesystem_path _t5("/");
+	ktk_filesystem_path _t6("\\");
+	ktk_filesystem_path _t7("\\A\\B");
+	ktk_filesystem_path _t8("/A/b");
+	ktk_filesystem_path _t9("c\\d\\");
+	ktk_filesystem_path _t10("D:c\\d");
+	ktk_filesystem_path _t11("D:");
+	ktk_filesystem_path _t12("D:\\");
+
+	BOOST_REQUIRE(t.is_relative() == _t.is_relative());
+	BOOST_REQUIRE(t1.is_relative() == _t1.is_relative());
+	BOOST_REQUIRE(t2.is_relative() == _t2.is_relative());
+	BOOST_REQUIRE(t3.is_relative() == _t3.is_relative());
+	BOOST_REQUIRE(t4.is_relative() == _t4.is_relative());
+	BOOST_REQUIRE(t5.is_relative() == _t5.is_relative());
+	BOOST_REQUIRE(t6.is_relative() == _t6.is_relative());
+	BOOST_REQUIRE(t7.is_relative() == _t7.is_relative());
+	BOOST_REQUIRE(t8.is_relative() == _t8.is_relative());
+	BOOST_REQUIRE(t9.is_relative() == _t9.is_relative());
+	BOOST_REQUIRE(t10.is_relative() == _t10.is_relative());
 }
 
 	#endif
@@ -418,6 +509,10 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_compare));
 	p_suite->add(BOOST_TEST_CASE(
 		&test_container_filesystem_static_path_has_root_directory));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_is_absolute));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_is_relative));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");
