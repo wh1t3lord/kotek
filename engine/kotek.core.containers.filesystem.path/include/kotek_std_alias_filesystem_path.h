@@ -1038,9 +1038,9 @@ inline bool static_path<Size>::has_root_directory() const
 		}
 	}
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
-
+	#error not implemented
 #elif defined(KOTEK_USE_PLATFORM_MACOS)
-
+	#error not implemented
 #endif
 
 	return result;
