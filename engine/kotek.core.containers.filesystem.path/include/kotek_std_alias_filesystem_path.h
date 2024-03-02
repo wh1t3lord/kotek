@@ -651,7 +651,7 @@ inline static_path<Size>& static_path<Size>::replace_extension(
 				}
 				else
 				{
-					this->m_buffer.append(1,'.');
+					this->m_buffer.append(1, '.');
 					this->m_buffer.append(str_native);
 				}
 			}
@@ -666,13 +666,13 @@ inline static_path<Size>& static_path<Size>::replace_extension(
 					}
 					else
 					{
-						this->m_buffer.append(1,'.');
+						this->m_buffer.append(1, '.');
 						this->m_buffer.append(str_native);
 					}
 				}
 				else
 				{
-					this->m_buffer.append(1,preferred_separator);
+					this->m_buffer.append(1, preferred_separator);
 
 					if (has_dot_in_replacement)
 					{
@@ -680,7 +680,7 @@ inline static_path<Size>& static_path<Size>::replace_extension(
 					}
 					else
 					{
-						this->m_buffer.append(1,'.');
+						this->m_buffer.append(1, '.');
 						this->m_buffer.append(str_native);
 					}
 				}
@@ -731,8 +731,7 @@ inline static_path<Size>::operator string_type() const
 template <size_t Size>
 inline static_cstring<Size> static_path<Size>::string() const
 {
-	assert(false && "todo");
-	return static_cstring<Size>();
+	return this->m_buffer;
 }
 
 template <size_t Size>
@@ -802,15 +801,28 @@ template <size_t Size>
 inline int static_path<Size>::compare(
 	const static_path<Size>& path) const noexcept
 {
-	assert(false && "todo");
-	return 0;
+	int result{this->m_buffer.compare(path.m_buffer)};
+	if (this->has_root_directory())
+	{
+		if (path.has_root_directory() == false)
+		{
+			if (result < 0)
+				result = -result;
+		}
+	}
+	else
+	{
+		if (result > 0)
+			result = -result;
+	}
+
+	return result;
 }
 
 template <size_t Size>
 inline int static_path<Size>::compare(static_cstring_view str) const
 {
-	assert(false && "todo");
-	return 0;
+	return this->m_buffer.compare(str);
 }
 
 template <size_t Size>
@@ -943,8 +955,56 @@ inline bool static_path<Size>::has_root_name() const
 template <size_t Size>
 inline bool static_path<Size>::has_root_directory() const
 {
-	assert(false && "todo");
-	return false;
+	bool result{};
+
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	if (this->m_buffer.empty() == false)
+	{
+		if (this->m_buffer.size() >= 3)
+		{
+			if (this->m_buffer[0] == ':')
+			{
+				// invalid disk and path so we think it is not root directory
+				// because of invalid path nothing applies to result variable
+			}
+			else
+			{
+				if (this->m_buffer[0] == '/' || this->m_buffer[0] == '\\')
+				{
+					result = true;
+				}
+				else
+				{
+					if ((this->m_buffer[0] >= 65 && this->m_buffer[0] <= 90) ||
+						(this->m_buffer[0] >= 97 && this->m_buffer[0] <= 122))
+					{
+						if (this->m_buffer[1] == ':')
+						{
+							if (this->m_buffer[2] == '/' ||
+								this->m_buffer[2] == '\\')
+							{
+								result = true;
+							}
+						}
+					}
+				}
+			}
+		}
+		else
+		{
+			if (this->m_buffer[0] == '/' || this->m_buffer[0] == '\\')
+			{
+				result = true;
+			}
+		}
+	}
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+
+#elif defined(KOTEK_USE_PLATFORM_MACOS)
+
+#endif
+
+	return result;
 }
 
 template <size_t Size>

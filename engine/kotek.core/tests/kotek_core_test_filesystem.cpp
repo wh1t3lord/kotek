@@ -1,5 +1,6 @@
 ﻿#include "../include/kotek_core.h"
 #include <boost/test/unit_test.hpp>
+#include <filesystem>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -320,6 +321,69 @@ void test_container_filesystem_static_path_swap()
 	BOOST_REQUIRE(b3.native() == "D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
 }
 
+void test_container_filesystem_static_path_compare()
+{
+	ktk_filesystem_path a("/a/b/");
+	ktk_filesystem_path b("/a/b/");
+
+	ktk_filesystem_path a2("/a/b/");
+	ktk_filesystem_path b2("/a/b/c");
+	
+	ktk_filesystem_path a3("/a/b/../b");
+	ktk_filesystem_path b3("/a/b");
+	
+	ktk_filesystem_path a4("/a/b");
+	ktk_filesystem_path b4("/a/b/.");
+	
+	ktk_filesystem_path a5("/a/b/");
+	ktk_filesystem_path b5("a/c");
+
+	BOOST_REQUIRE(a.compare(b) == 0);
+	BOOST_REQUIRE(a2.compare(b2) < 0);
+	BOOST_REQUIRE(a3.compare(b3) > 0);
+	BOOST_REQUIRE(a4.compare(b4) < 0);
+	BOOST_REQUIRE(a5.compare(b5) > 0);
+}
+
+void test_container_filesystem_static_path_has_root_directory()
+{
+	std::filesystem::path t("a/b");
+	std::filesystem::path t1("C:/a/b");
+	std::filesystem::path t2("C:\\a/b");
+	std::filesystem::path t3("D:/a/b");
+	std::filesystem::path t4("b");
+	std::filesystem::path t5("/");
+	std::filesystem::path t6("\\");
+	std::filesystem::path t7("\\A\\B");
+	std::filesystem::path t8("/A/b");
+	std::filesystem::path t9("c\\d\\");
+	std::filesystem::path t10(":/c\\d");
+
+	ktk_filesystem_path _t("a/b");
+	ktk_filesystem_path _t1("C:/a/b");
+	ktk_filesystem_path _t2("C:\\a/b");
+	ktk_filesystem_path _t3("D:/a/b");
+	ktk_filesystem_path _t4("b");
+	ktk_filesystem_path _t5("/");
+	ktk_filesystem_path _t6("\\");
+	ktk_filesystem_path _t7("\\A\\B");
+	ktk_filesystem_path _t8("/A/b");
+	ktk_filesystem_path _t9("c\\d\\");
+	ktk_filesystem_path _t10(":/c\\d");
+	
+	BOOST_REQUIRE(t.has_root_directory() == _t.has_root_directory());
+	BOOST_REQUIRE(t1.has_root_directory() == _t1.has_root_directory());
+	BOOST_REQUIRE(t2.has_root_directory() == _t2.has_root_directory());
+	BOOST_REQUIRE(t3.has_root_directory() == _t3.has_root_directory());
+	BOOST_REQUIRE(t4.has_root_directory() == _t4.has_root_directory());
+	BOOST_REQUIRE(t5.has_root_directory() == _t5.has_root_directory());
+	BOOST_REQUIRE(t6.has_root_directory() == _t6.has_root_directory());
+	BOOST_REQUIRE(t7.has_root_directory() == _t7.has_root_directory());
+	BOOST_REQUIRE(t8.has_root_directory() == _t8.has_root_directory());
+	BOOST_REQUIRE(t9.has_root_directory() == _t9.has_root_directory());
+	BOOST_REQUIRE(t10.has_root_directory() == _t10.has_root_directory());
+}
+
 	#endif
 #endif
 
@@ -348,6 +412,10 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 	p_suite->add(BOOST_TEST_CASE(
 		&test_container_filesystem_static_path_replace_extension));
 	p_suite->add(BOOST_TEST_CASE(&test_container_filesystem_static_path_swap));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_compare));
+	p_suite->add(BOOST_TEST_CASE(
+		&test_container_filesystem_static_path_has_root_directory));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");
