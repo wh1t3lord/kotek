@@ -1204,8 +1204,7 @@ inline bool static_path<Size>::has_relative_path() const
 template <size_t Size>
 inline bool static_path<Size>::has_parent_path() const
 {
-	assert(false && "todo");
-	return false;
+	return !parent_path().empty();
 }
 
 template <size_t Size>
