@@ -59,8 +59,8 @@ public:
 
 	~static_path();
 
-	static_path<Size>& operator=(const static_path<Size>& path);
-	static_path<Size>& operator=(static_path<Size>&& path) noexcept;
+	static_path<Size>& operator=(const static_path<Size>& path) = default;
+	static_path<Size>& operator=(static_path<Size>&& path) noexcept = default;
 	static_path<Size>& operator=(string_type&& source);
 
 	static_path<Size>& assign(string_type&& source);
@@ -322,22 +322,6 @@ template <size_t Size>
 inline static_path<Size>::static_path(static_path<Size>&& path) :
 	m_buffer{etl::move(path.m_buffer)}
 {
-}
-
-template <size_t Size>
-inline static_path<Size>& static_path<Size>::operator=(
-	const static_path<Size>& path)
-{
-	assert(false && "todo");
-	return *this;
-}
-
-template <size_t Size>
-inline static_path<Size>& static_path<Size>::operator=(
-	static_path<Size>&& path) noexcept
-{
-	assert(false && "todo");
-	return *this;
 }
 
 template <size_t Size>
@@ -939,7 +923,109 @@ inline static_path<Size> static_path<Size>::root_path() const
 template <size_t Size>
 inline static_path<Size> static_path<Size>::relative_path() const
 {
-	assert(false && "todo");
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	if (this->m_buffer.empty() == false)
+	{
+		if (this->m_buffer.size() > 3)
+		{
+			if (this->m_buffer[0] == '/' || this->m_buffer[0] == '\\')
+			{
+				return this->m_buffer.substr(1).c_str();
+			}
+			else
+			{
+				if ((this->m_buffer[0] >= 65 && this->m_buffer[0] <= 90) ||
+					(this->m_buffer[0] >= 97 && this->m_buffer[0] <= 122))
+				{
+					if (this->m_buffer.size() > 1)
+					{
+						if (this->m_buffer[1] == ':')
+						{
+							if (this->m_buffer.size() > 2)
+							{
+								if (this->m_buffer[2] == '/' ||
+									this->m_buffer[2] == '\\')
+								{
+									return this->m_buffer.substr(3).c_str();
+								}
+								else
+								{
+									return this->m_buffer.substr(2).c_str();
+								}
+							}
+							else
+							{
+								// nothing here
+							}
+						}
+						else
+						{
+							return this->m_buffer.c_str();						
+						}
+					}
+					else
+					{
+						return this->m_buffer.c_str();
+					}
+				}
+				else
+				{
+					return this->m_buffer.c_str();
+				}
+			}
+		}
+		else
+		{
+			if (this->m_buffer[0] == '/' || this->m_buffer[0] == '\\')
+			{
+				return this->m_buffer.substr(1).c_str();
+			}
+			else
+			{
+				if ((this->m_buffer[0] >= 65 && this->m_buffer[0] <= 90) ||
+					(this->m_buffer[0] >= 97 && this->m_buffer[0] <= 122))
+				{
+					if (this->m_buffer.size() > 1)
+					{
+						if (this->m_buffer[1] == ':')
+						{
+							if (this->m_buffer.size() > 2)
+							{
+								if (this->m_buffer[2] == '/' ||
+									this->m_buffer[2] == '\\')
+								{
+									// nothing
+								}
+								else
+								{
+									return this->m_buffer.substr(2).c_str();
+								}
+							}
+							else
+							{
+								// nothing here
+							}
+						}
+						else
+						{
+							return this->m_buffer.c_str();
+						}
+					}
+					else
+					{
+						return this->m_buffer.c_str();
+					}
+				}
+				else
+				{
+					return this->m_buffer.c_str();
+				}
+			}
+		}
+	}
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+#elif defined(KOTEK_USE_PLATFORM_MACOS)
+#endif
 	return static_path<Size>();
 }
 
@@ -1049,8 +1135,7 @@ inline bool static_path<Size>::has_root_directory() const
 template <size_t Size>
 inline bool static_path<Size>::has_relative_path() const
 {
-	assert(false && "todo");
-	return false;
+	return !relative_path().empty();
 }
 
 template <size_t Size>
