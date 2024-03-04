@@ -960,7 +960,7 @@ inline static_path<Size> static_path<Size>::relative_path() const
 						}
 						else
 						{
-							return this->m_buffer.c_str();						
+							return this->m_buffer.c_str();
 						}
 					}
 					else
@@ -1026,13 +1026,76 @@ inline static_path<Size> static_path<Size>::relative_path() const
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 #elif defined(KOTEK_USE_PLATFORM_MACOS)
 #endif
+
 	return static_path<Size>();
 }
 
 template <size_t Size>
 inline static_path<Size> static_path<Size>::parent_path() const
 {
-	assert(false && "todo");
+	if (this->has_relative_path() == false)
+		return *this;
+	else
+	{
+		auto index_forward = this->m_buffer.rfind('/');
+		auto index_backward = this->m_buffer.rfind('\\');
+
+		if (index_forward != npos && index_backward != npos)
+		{
+			if (index_forward > index_backward)
+			{
+				return this->m_buffer.substr(0, index_forward).c_str();
+			}
+			else
+			{
+				return this->m_buffer.substr(0, index_backward).c_str();
+			}
+		}
+		else if (index_forward != npos)
+		{
+			return this->m_buffer.substr(0, index_forward).c_str();
+		}
+		else if (index_backward != npos)
+		{
+			return this->m_buffer.substr(0, index_backward).c_str();
+		}
+		else
+		{
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+
+			if (this->m_buffer.size() > 1)
+			{
+				auto index_double_dots = this->m_buffer.rfind(':');
+
+				if (index_double_dots != npos)
+				{
+					if (index_double_dots == 0)
+					{
+						return "";
+					}
+					else
+					{
+						return this->m_buffer.c_str();
+					}
+				}
+				else
+				{
+					return "";
+				}
+			}
+			else
+			{
+				if (this->m_buffer[0] == ':')
+					return this->m_buffer.c_str();
+				else
+					return "";
+			}
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+#elif defined(KOTEK_USE_PLATFORM_MACOS)
+#endif
+		}
+	}
+
 	return static_path<Size>();
 }
 
