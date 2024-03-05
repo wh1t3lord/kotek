@@ -906,7 +906,25 @@ inline static_path<Size> static_path<Size>::lexically_proximate(
 template <size_t Size>
 inline static_path<Size> static_path<Size>::root_name() const
 {
-	assert(false && "todo");
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	if (this->m_buffer.empty()==false)
+	{
+		if (this->m_buffer.size()>=2)
+		{
+			if ((this->m_buffer[0] >= 65 && this->m_buffer[0] <= 90) ||
+				(this->m_buffer[0] >= 97 && this->m_buffer[0] <= 122))
+			{
+				if (this->m_buffer[1] == ':')
+				{
+					return this->m_buffer.substr(0, 2).c_str();
+				}
+			}
+		}
+	}
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+#elif defined(KOTEK_USE_PLATFORM_MACOS)
+#endif
+
 	return static_path<Size>();
 }
 
@@ -1164,7 +1182,7 @@ inline bool static_path<Size>::has_root_path() const
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 #elif defined(KOTEK_USE_PLATFORM_MACOS)
 #endif
-	
+
 	return result;
 }
 
@@ -1187,13 +1205,6 @@ inline bool static_path<Size>::has_root_name() const
 					{
 						result = true;
 					}
-				}
-			}
-			else
-			{
-				if (this->m_buffer[0] == '/' || this->m_buffer[0] == '\\')
-				{
-					result = true;
 				}
 			}
 		}

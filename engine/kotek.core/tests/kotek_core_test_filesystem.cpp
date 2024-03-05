@@ -913,24 +913,32 @@ void test_container_filesystem_static_path_root_name()
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	BOOST_REQUIRE(t.has_root_name() == _t.has_root_name());
-	BOOST_REQUIRE(t1.has_root_name() == _t1.has_root_name());
-	BOOST_REQUIRE(t2.has_root_name() == _t2.has_root_name());
-	BOOST_REQUIRE(t3.has_root_name() == _t3.has_root_name());
-	BOOST_REQUIRE(t4.has_root_name() == _t4.has_root_name());
-	BOOST_REQUIRE(t5.has_root_name() == _t5.has_root_name());
-	BOOST_REQUIRE(t6.has_root_name() == _t6.has_root_name());
-	BOOST_REQUIRE(t7.has_root_name() == _t7.has_root_name());
-	BOOST_REQUIRE(t8.has_root_name() == _t8.has_root_name());
-	BOOST_REQUIRE(t9.has_root_name() == _t9.has_root_name());
-	BOOST_REQUIRE(t10.has_root_name() == _t10.has_root_name());
-	BOOST_REQUIRE(t11.has_root_name() == _t11.has_root_name());
-	BOOST_REQUIRE(t12.has_root_name() == _t12.has_root_name());
-	BOOST_REQUIRE(t13.has_root_name() == _t13.has_root_name());
-	BOOST_REQUIRE(t14.has_root_name() == _t14.has_root_name());
-	BOOST_REQUIRE(t15.has_root_name() == _t15.has_root_name());
-	BOOST_REQUIRE(t16.has_root_name() == _t16.has_root_name());
-	BOOST_REQUIRE(t17.has_root_name() == _t17.has_root_name());
+	BOOST_REQUIRE(t.root_name().string().c_str() == _t.root_name().native());
+	BOOST_REQUIRE(t1.root_name().string().c_str() == _t1.root_name().native());
+	BOOST_REQUIRE(t2.root_name().string().c_str() == _t2.root_name().native());
+	BOOST_REQUIRE(t3.root_name().string().c_str() == _t3.root_name().native());
+	BOOST_REQUIRE(t4.root_name().string().c_str() == _t4.root_name().native());
+	BOOST_REQUIRE(t5.root_name().string().c_str() == _t5.root_name().native());
+	BOOST_REQUIRE(t6.root_name().string().c_str() == _t6.root_name().native());
+	BOOST_REQUIRE(t7.root_name().string().c_str() == _t7.root_name().native());
+	BOOST_REQUIRE(t8.root_name().string().c_str() == _t8.root_name().native());
+	BOOST_REQUIRE(t9.root_name().string().c_str() == _t9.root_name().native());
+	BOOST_REQUIRE(
+		t10.root_name().string().c_str() == _t10.root_name().native());
+	BOOST_REQUIRE(
+		t11.root_name().string().c_str() == _t11.root_name().native());
+	BOOST_REQUIRE(
+		t12.root_name().string().c_str() == _t12.root_name().native());
+	BOOST_REQUIRE(
+		t13.root_name().string().c_str() == _t13.root_name().native());
+	BOOST_REQUIRE(
+		t14.root_name().string().c_str() == _t14.root_name().native());
+	BOOST_REQUIRE(
+		t15.root_name().string().c_str() == _t15.root_name().native());
+	BOOST_REQUIRE(
+		t16.root_name().string().c_str() == _t16.root_name().native());
+	BOOST_REQUIRE(
+		t17.root_name().string().c_str() == _t17.root_name().native());
 }
 
 	#endif
@@ -981,6 +989,8 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_has_root_path));
 	p_suite->add(
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_has_root_name));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_root_name));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");
