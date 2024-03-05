@@ -201,6 +201,10 @@ path& concat( InputIt first, InputIt last );
 	bool has_relative_path() const;
 	bool has_parent_path() const;
 	bool has_filename() const;
+
+	/// @brief filename without the final extension
+	/// @return filename without the final extension (if it has filename or its
+	/// name is empty but extension is presented)
 	bool has_stem() const;
 	bool has_extension() const;
 
@@ -1271,8 +1275,95 @@ inline bool static_path<Size>::has_filename() const
 template <size_t Size>
 inline bool static_path<Size>::has_stem() const
 {
-	assert(false && "todo");
-	return false;
+	bool result{};
+
+	if (this->m_buffer.empty() == false)
+	{
+		auto last_dot = this->m_buffer.rfind('.');
+		auto index_forward = this->m_buffer.rfind('/');
+		auto index_backward = this->m_buffer.rfind('\\');
+
+		if (last_dot != npos)
+		{
+			result = true;
+		}
+		else
+		{
+			if (index_forward != npos && index_backward != npos)
+			{
+				if (index_forward > index_backward)
+				{
+					if (index_forward != this->m_buffer.size() - 1)
+					{
+						result = true;
+					}
+				}
+				else
+				{
+					if (index_backward != this->m_buffer.size() - 1)
+					{
+						result = true;
+					}
+				}
+			}
+			else if (index_forward != npos)
+			{
+				if (index_forward != this->m_buffer.size() - 1)
+				{
+					result = true;
+				}
+			}
+			else if (index_backward != npos)
+			{
+				if (index_backward != this->m_buffer.size() - 1)
+				{
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+					if (this->m_buffer[this->m_buffer.size() - 1] != ':')
+					{
+						result = true;
+					}
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+#elif defined(KOTEK_USE_PLATFORM_MACOS)
+#endif
+				}
+			}
+			else
+			{
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+				if (this->m_buffer.size() > 2)
+				{
+					if (this->m_buffer[0] == ':' ||
+						this->m_buffer[this->m_buffer.size() - 1] != ':')
+						result = true;
+				}
+				else
+				{
+					if (this->m_buffer.size() > 1)
+					{
+						if ((this->m_buffer[1] != ':' &&
+								this->m_buffer[this->m_buffer.size() - 1] !=
+									':') &&
+							this->m_buffer[0] != ':')
+						{
+							result = true;
+						}
+					}
+					else
+					{
+						if (this->m_buffer[0] != ':')
+						{
+							result = true;
+						}
+					}
+				}
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+#elif defined(KOTEK_USE_PLATFORM_MACOS)
+#endif
+			}
+		}
+	}
+
+	return result;
 }
 
 template <size_t Size>

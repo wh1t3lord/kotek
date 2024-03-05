@@ -711,6 +711,66 @@ void test_container_filesystem_static_path_has_parent_path()
 		t17.has_parent_path() == _t17.has_parent_path());
 }
 
+void test_container_filesystem_static_path_has_stem()
+{
+	std::filesystem::path t("a/b");
+	std::filesystem::path t1("C:/a/b");
+	std::filesystem::path t2("C:\\a/b");
+	std::filesystem::path t3("D:/a/b");
+	std::filesystem::path t4("b");
+	std::filesystem::path t5("/");
+	std::filesystem::path t6("\\");
+	std::filesystem::path t7("\\A\\B");
+	std::filesystem::path t8("/A/b");
+	std::filesystem::path t9("c\\d\\");
+	std::filesystem::path t10("D:c\\d");
+	std::filesystem::path t11("D:");
+	std::filesystem::path t12("D:\\");
+	std::filesystem::path t13("D\\:");
+	std::filesystem::path t14("D\\");
+	std::filesystem::path t15(":a");
+	std::filesystem::path t16(":/a");
+	std::filesystem::path t17(":c/a");
+
+	ktk_filesystem_path _t("a/b");
+	ktk_filesystem_path _t1("C:/a/b");
+	ktk_filesystem_path _t2("C:\\a/b");
+	ktk_filesystem_path _t3("D:/a/b");
+	ktk_filesystem_path _t4("b");
+	ktk_filesystem_path _t5("/");
+	ktk_filesystem_path _t6("\\");
+	ktk_filesystem_path _t7("\\A\\B");
+	ktk_filesystem_path _t8("/A/b");
+	ktk_filesystem_path _t9("c\\d\\");
+	ktk_filesystem_path _t10("D:c\\d");
+	ktk_filesystem_path _t11("D:");
+	ktk_filesystem_path _t12("D:\\");
+	ktk_filesystem_path _t13("D\\:");
+	ktk_filesystem_path _t14("D\\");
+	ktk_filesystem_path _t15(":a");
+	ktk_filesystem_path _t16(":/a");
+	ktk_filesystem_path _t17(":c/a");
+
+	BOOST_REQUIRE(t.has_stem() == _t.has_stem());
+	BOOST_REQUIRE(t1.has_stem() == _t1.has_stem());
+	BOOST_REQUIRE(t2.has_stem() == _t2.has_stem());
+	BOOST_REQUIRE(t3.has_stem() == _t3.has_stem());
+	BOOST_REQUIRE(t4.has_stem() == _t4.has_stem());
+	BOOST_REQUIRE(t5.has_stem() == _t5.has_stem());
+	BOOST_REQUIRE(t6.has_stem() == _t6.has_stem());
+	BOOST_REQUIRE(t7.has_stem() == _t7.has_stem());
+	BOOST_REQUIRE(t8.has_stem() == _t8.has_stem());
+	BOOST_REQUIRE(t9.has_stem() == _t9.has_stem());
+	BOOST_REQUIRE(t10.has_stem() == _t10.has_stem());
+	BOOST_REQUIRE(t11.has_stem() == _t11.has_stem());
+	BOOST_REQUIRE(t12.has_stem() == _t12.has_stem());
+	BOOST_REQUIRE(t13.has_stem() == _t13.has_stem());
+	BOOST_REQUIRE(t14.has_stem() == _t14.has_stem());
+	BOOST_REQUIRE(t15.has_stem() == _t15.has_stem());
+	BOOST_REQUIRE(t16.has_stem() == _t16.has_stem());
+	BOOST_REQUIRE(t17.has_stem() == _t17.has_stem());
+}
+
 	#endif
 #endif
 
@@ -753,6 +813,8 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_parent_path));
 	p_suite->add(BOOST_TEST_CASE(
 		&test_container_filesystem_static_path_has_parent_path));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_has_stem));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");
