@@ -1133,15 +1133,77 @@ inline bool static_path<Size>::empty() const noexcept
 template <size_t Size>
 inline bool static_path<Size>::has_root_path() const
 {
-	assert(false && "todo");
-	return false;
+	bool result{};
+
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	if (this->m_buffer.empty() == false)
+	{
+		if (this->m_buffer.size() >= 1)
+		{
+			if ((this->m_buffer[0] >= 65 && this->m_buffer[0] <= 90) ||
+				(this->m_buffer[0] >= 97 && this->m_buffer[0] <= 122))
+			{
+				if (this->m_buffer.size() >= 2)
+				{
+					if (this->m_buffer[1] == ':')
+					{
+						result = true;
+					}
+				}
+			}
+			else
+			{
+				if (this->m_buffer[0] == '/' || this->m_buffer[0] == '\\')
+				{
+					result = true;
+				}
+			}
+		}
+	}
+
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+#elif defined(KOTEK_USE_PLATFORM_MACOS)
+#endif
+	
+	return result;
 }
 
 template <size_t Size>
 inline bool static_path<Size>::has_root_name() const
 {
-	assert(false && "todo");
-	return false;
+	bool result{};
+
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	if (this->m_buffer.empty() == false)
+	{
+		if (this->m_buffer.size() >= 1)
+		{
+			if ((this->m_buffer[0] >= 65 && this->m_buffer[0] <= 90) ||
+				(this->m_buffer[0] >= 97 && this->m_buffer[0] <= 122))
+			{
+				if (this->m_buffer.size() >= 2)
+				{
+					if (this->m_buffer[1] == ':')
+					{
+						result = true;
+					}
+				}
+			}
+			else
+			{
+				if (this->m_buffer[0] == '/' || this->m_buffer[0] == '\\')
+				{
+					result = true;
+				}
+			}
+		}
+	}
+
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+#elif defined(KOTEK_USE_PLATFORM_MACOS)
+#endif
+
+	return result;
 }
 
 template <size_t Size>
