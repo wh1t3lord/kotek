@@ -907,9 +907,9 @@ template <size_t Size>
 inline static_path<Size> static_path<Size>::root_name() const
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	if (this->m_buffer.empty()==false)
+	if (this->m_buffer.empty() == false)
 	{
-		if (this->m_buffer.size()>=2)
+		if (this->m_buffer.size() >= 2)
 		{
 			if ((this->m_buffer[0] >= 65 && this->m_buffer[0] <= 90) ||
 				(this->m_buffer[0] >= 97 && this->m_buffer[0] <= 122))
@@ -1138,7 +1138,50 @@ inline static_path<Size> static_path<Size>::stem() const
 template <size_t Size>
 inline static_path<Size> static_path<Size>::extension() const
 {
-	assert(false && "todo");
+	if (this->m_buffer.empty() == false)
+	{
+		auto index_dot = this->m_buffer.rfind('.');
+
+		if (index_dot != npos)
+		{
+			auto index_previous_to_dot = index_dot - 1;
+			if (this->m_buffer[index_previous_to_dot] != '/' &&
+				this->m_buffer[index_previous_to_dot] != '\\')
+			{
+				if (this->m_buffer[index_previous_to_dot] != '.')
+				{
+					return this->m_buffer.substr(index_dot).c_str();
+				}
+				else
+				{
+					auto valid_last_symbol_index = this->m_buffer.size() - 1;
+
+					if (this->m_buffer.size() >= 3)
+					{
+						auto before_previous_index = index_previous_to_dot - 1;
+						if (((this->m_buffer[before_previous_index] != '/' &&
+									this->m_buffer[before_previous_index] !=
+										'\\')))
+						{
+							return this->m_buffer.substr(index_dot).c_str();
+						}
+						else
+						{
+							if (((this->m_buffer[valid_last_symbol_index] !=
+										 '/' &&
+									 this->m_buffer[valid_last_symbol_index] !=
+										 '\\') &&
+									index_dot != valid_last_symbol_index))
+							{
+								return this->m_buffer.substr(index_dot).c_str();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	return static_path<Size>();
 }
 
