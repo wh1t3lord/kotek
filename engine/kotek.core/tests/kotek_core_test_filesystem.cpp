@@ -986,6 +986,81 @@ void test_container_filesystem_static_path_extension()
 		test11.extension().native().c_str() == std_test11.extension().string());
 }
 
+void test_container_filesystem_static_path_filename()
+{
+	ktk_filesystem_path _t("/");
+	ktk_filesystem_path _t2("\\");
+	ktk_filesystem_path _t3("/ab/test.txt");
+	ktk_filesystem_path _t4("/ab/.");
+	ktk_filesystem_path _t5("/ab/..");
+	ktk_filesystem_path _t6("/ab/.1");
+	ktk_filesystem_path _t7("/ab/..1");
+	ktk_filesystem_path _t8("/ab/1.1");
+	ktk_filesystem_path _t9("/ab/1.");
+	ktk_filesystem_path _t10("/ab/...");
+	ktk_filesystem_path _t11("/ab/.1.");
+	ktk_filesystem_path _t12("/ab\\..1");
+	ktk_filesystem_path _t13("/ab/1.1");
+	ktk_filesystem_path _t14("\\ab/1.");
+	ktk_filesystem_path _t15("\\ab\\...");
+	ktk_filesystem_path _t16("/ab\\.1.");
+	ktk_filesystem_path _t17("ab");
+	ktk_filesystem_path _t18("1");
+	ktk_filesystem_path _t19(".1");
+	ktk_filesystem_path _t20(".1.");
+	ktk_filesystem_path _t21("..");
+	ktk_filesystem_path _t22(".");
+	ktk_filesystem_path _t23("...");
+
+	std::filesystem::path t("/");
+	std::filesystem::path t2("\\");
+	std::filesystem::path t3("/ab/test.txt");
+	std::filesystem::path t4("/ab/.");
+	std::filesystem::path t5("/ab/..");
+	std::filesystem::path t6("/ab/.1");
+	std::filesystem::path t7("/ab/..1");
+	std::filesystem::path t8("/ab/1.1");
+	std::filesystem::path t9("/ab/1.");
+	std::filesystem::path t10("/ab/...");
+	std::filesystem::path t11("/ab/.1.");
+	std::filesystem::path t12("/ab\\..1");
+	std::filesystem::path t13("/ab/1.1");
+	std::filesystem::path t14("\\ab/1.");
+	std::filesystem::path t15("\\ab\\...");
+	std::filesystem::path t16("/ab\\.1.");
+	std::filesystem::path t17("ab");
+	std::filesystem::path t18("1");
+	std::filesystem::path t19(".1");
+	std::filesystem::path t20(".1.");
+	std::filesystem::path t21("..");
+	std::filesystem::path t22(".");
+	std::filesystem::path t23("...");
+
+	BOOST_REQUIRE(_t.filename().native().c_str() == t.filename().string());
+	BOOST_REQUIRE(_t2.filename().native().c_str() == t2.filename().string());
+	BOOST_REQUIRE(_t3.filename().native().c_str() == t3.filename().string());
+	BOOST_REQUIRE(_t4.filename().native().c_str() == t4.filename().string());
+	BOOST_REQUIRE(_t5.filename().native().c_str() == t5.filename().string());
+	BOOST_REQUIRE(_t6.filename().native().c_str() == t6.filename().string());
+	BOOST_REQUIRE(_t7.filename().native().c_str() == t7.filename().string());
+	BOOST_REQUIRE(_t8.filename().native().c_str() == t8.filename().string());
+	BOOST_REQUIRE(_t9.filename().native().c_str() == t9.filename().string());
+	BOOST_REQUIRE(_t10.filename().native().c_str() == t10.filename().string());
+	BOOST_REQUIRE(_t11.filename().native().c_str() == t11.filename().string());
+	BOOST_REQUIRE(_t12.filename().native().c_str() == t12.filename().string());
+	BOOST_REQUIRE(_t13.filename().native().c_str() == t13.filename().string());
+	BOOST_REQUIRE(_t14.filename().native().c_str() == t14.filename().string());
+	BOOST_REQUIRE(_t15.filename().native().c_str() == t15.filename().string());
+	BOOST_REQUIRE(_t16.filename().native().c_str() == t16.filename().string());
+	BOOST_REQUIRE(_t17.filename().native().c_str() == t17.filename().string());
+	BOOST_REQUIRE(_t18.filename().native().c_str() == t18.filename().string());
+	BOOST_REQUIRE(_t19.filename().native().c_str() == t19.filename().string());
+	BOOST_REQUIRE(_t20.filename().native().c_str() == t20.filename().string());
+	BOOST_REQUIRE(_t21.filename().native().c_str() == t21.filename().string());
+	BOOST_REQUIRE(_t22.filename().native().c_str() == t22.filename().string());
+	BOOST_REQUIRE(_t23.filename().native().c_str() == t23.filename().string());
+}
+
 	#endif
 #endif
 
@@ -1038,6 +1113,8 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_root_name));
 	p_suite->add(
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_extension));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_filename));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");

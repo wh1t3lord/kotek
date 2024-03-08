@@ -1124,7 +1124,50 @@ inline static_path<Size> static_path<Size>::parent_path() const
 template <size_t Size>
 inline static_path<Size> static_path<Size>::filename() const
 {
-	assert(false && "todo");
+	if (this->m_buffer.empty()==false)
+	{
+		auto index_forward = this->m_buffer.rfind('/');
+		auto index_backward = this->m_buffer.rfind('\\');
+		auto index_last_symbol = this->m_buffer.size() - 1;
+
+
+		if (index_forward != npos && index_backward != npos)
+		{
+			if (index_forward > index_backward)
+			{
+				if (index_forward != index_last_symbol)
+				{
+					return this->m_buffer.substr(index_forward + 1).c_str();
+				}
+			}
+			else
+			{
+				if (index_backward != index_last_symbol)
+				{
+					return this->m_buffer.substr(index_backward + 1).c_str();
+				}
+			}
+		}
+		else if (index_backward != npos)
+		{
+			if (index_backward != index_last_symbol)
+			{
+				return this->m_buffer.substr(index_backward + 1).c_str();
+			}
+		}
+		else if (index_forward != npos)
+		{
+			if (index_forward != index_last_symbol)
+			{
+				return this->m_buffer.substr(index_forward + 1).c_str();
+			}
+		}
+		else
+		{
+			return this->m_buffer.c_str();
+		}
+	}
+
 	return static_path<Size>();
 }
 
