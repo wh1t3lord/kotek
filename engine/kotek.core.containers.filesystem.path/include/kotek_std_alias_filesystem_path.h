@@ -76,7 +76,6 @@ public:
 	static_path<Size>& assign(char symbol);
 	static_path<Size>& assign(char8_t symbol);
 
-
 	/* todo:
 	template< class InputIt >
 path& assign( InputIt first, InputIt last );
@@ -122,7 +121,6 @@ path& append( InputIt first, InputIt last )
 	static_path<Size>& operator+=(char str);
 	static_path<Size>& operator+=(char8_t str);
 
-
 	static_path<Size>& concat(const static_path<Size>& path);
 	static_path<Size>& concat(const static_cstring_view& str);
 	static_path<Size>& concat(const static_u8string_view& str);
@@ -130,7 +128,6 @@ path& append( InputIt first, InputIt last )
 	static_path<Size>& concat(const char8_t* str);
 	static_path<Size>& concat(char symbol);
 	static_path<Size>& concat(char8_t symbol);
-
 
 	inline friend static_path<Size> operator/(
 		const static_path<Size>& left, const static_path<Size>& right)
@@ -174,6 +171,25 @@ path& append( InputIt first, InputIt last )
 		const static_path<Size>& left, const static_path<Size>& right) noexcept
 	{
 		return !(left < right);
+	}
+
+	template <class CharT, class Traits>
+	inline friend std::basic_ostream<CharT, Traits>& operator<<(
+		std::basic_ostream<CharT, Traits>& os, const static_path<Size>& path)
+	{
+		os << std::quoted<CharT, Traits>(path.m_buffer.c_str());
+		return os;
+	}
+
+	template<class CharT, class Traits>
+	inline friend std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>& is, static_path<Size>& path)
+	{
+		std::basic_string<CharT, Traits> t;
+		is >> std::quoted(t);
+
+		path.m_buffer = t.c_str();
+
+		return is;
 	}
 
 	/* todo
@@ -763,7 +779,7 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::concat(
 	const static_path<Size>& path)
 {
-	if (path.empty()==false)
+	if (path.empty() == false)
 	{
 		this->m_buffer.append(path.m_buffer);
 	}
