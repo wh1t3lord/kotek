@@ -1165,9 +1165,57 @@ void test_container_filesystem_static_path_operator_slash()
 	BOOST_REQUIRE(new_t3.native() == new__t3.string().c_str());
 }
 
-void test_container_filesystem_static_path_operator_slash_equal() {}
+void test_container_filesystem_static_path_operator_slash_equal() 
+{
+	ktk_filesystem_path t;
+	ktk_filesystem_path t2("/");
+	ktk_filesystem_path t3("C:");
 
-void test_container_filesystem_static_path_append() {}
+	std::filesystem::path _t;
+	std::filesystem::path _t2("/");
+	std::filesystem::path _t3("C:");
+
+	auto new_t = t /= "test";
+	auto new__t = _t /= "test";
+
+	BOOST_REQUIRE(new_t.native() == new_t.string().c_str());
+
+	auto new_t2 = t2 /= "test";
+	auto new__t2 = _t2 /= "test";
+
+	BOOST_REQUIRE(new_t2.native() == new__t2.string().c_str());
+
+	auto new_t3 = t3 /= "test";
+	auto new__t3 = _t3 /= "test";
+
+	BOOST_REQUIRE(new_t3.native() == new__t3.string().c_str());
+}
+
+void test_container_filesystem_static_path_append() 
+{
+	ktk_filesystem_path t;
+	ktk_filesystem_path t2("/");
+	ktk_filesystem_path t3("C:");
+
+	std::filesystem::path _t;
+	std::filesystem::path _t2("/");
+	std::filesystem::path _t3("C:");
+
+	auto new_t = t.append("test");
+	auto new__t = _t.append("test");
+
+	BOOST_REQUIRE(new_t.native() == new_t.string().c_str());
+
+	auto new_t2 = t2.append("test");
+	auto new__t2 = _t2.append("test");
+
+	BOOST_REQUIRE(new_t2.native() == new__t2.string().c_str());
+
+	auto new_t3 = t3.append("test");
+	auto new__t3 = _t3.append("test");
+
+	BOOST_REQUIRE(new_t3.native() == new__t3.string().c_str());
+}
 
 	#endif
 #endif
@@ -1227,6 +1275,10 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_root_directory));
 	p_suite->add(
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_operator_slash));
+	p_suite->add(BOOST_TEST_CASE(
+		&test_container_filesystem_static_path_operator_slash_equal));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_append));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");
