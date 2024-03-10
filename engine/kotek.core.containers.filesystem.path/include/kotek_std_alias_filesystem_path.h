@@ -71,6 +71,11 @@ public:
 	static_path<Size>& assign(const static_u8string_view& path);
 	static_path<Size>& assign(const static_u16string_view& path);
 	static_path<Size>& assign(const static_u32string_view& path);
+	static_path<Size>& assign(const char* str);
+	static_path<Size>& assign(const char8_t* str);
+	static_path<Size>& assign(char symbol);
+	static_path<Size>& assign(char8_t symbol);
+
 
 	/* todo:
 	template< class InputIt >
@@ -112,6 +117,20 @@ path& append( InputIt first, InputIt last )
 	static_path<Size>& operator+=(const static_u8string_view& str);
 	static_path<Size>& operator+=(const static_u16string_view& str);
 	static_path<Size>& operator+=(const static_u32string_view& str);
+	static_path<Size>& operator+=(const char* str);
+	static_path<Size>& operator+=(const char8_t* str);
+	static_path<Size>& operator+=(char str);
+	static_path<Size>& operator+=(char8_t str);
+
+
+	static_path<Size>& concat(const static_path<Size>& path);
+	static_path<Size>& concat(const static_cstring_view& str);
+	static_path<Size>& concat(const static_u8string_view& str);
+	static_path<Size>& concat(const char* str);
+	static_path<Size>& concat(const char8_t* str);
+	static_path<Size>& concat(char symbol);
+	static_path<Size>& concat(char8_t symbol);
+
 
 	inline friend static_path<Size> operator/(
 		const static_path<Size>& left, const static_path<Size>& right)
@@ -449,6 +468,34 @@ inline static_path<Size>& static_path<Size>::assign(
 }
 
 template <size_t Size>
+inline static_path<Size>& static_path<Size>::assign(const char* str)
+{
+	assert(false && "todo");
+	return *this;
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::assign(const char8_t* str)
+{
+	assert(false && "todo");
+	return *this;
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::assign(char symbol)
+{
+	assert(false && "todo");
+	return *this;
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::assign(char8_t symbol)
+{
+	assert(false && "todo");
+	return *this;
+}
+
+template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator/=(
 	const static_path<Size>& path)
 {
@@ -647,15 +694,14 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator+=(
 	const static_path<Size>& path)
 {
-	return *this;
+	return this->concat(path);
 }
 
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator+=(
 	const static_cstring_view& str)
 {
-	assert(false && "todo");
-	return *this;
+	return this->operator+=(static_path<Size>(str));
 }
 
 template <size_t Size>
@@ -670,8 +716,7 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator+=(
 	const static_u8string_view& str)
 {
-	assert(false && "todo");
-	return *this;
+	return this->operator+=(reinterpret_cast<const char*>(str.data()));
 }
 
 template <size_t Size>
@@ -688,6 +733,80 @@ inline static_path<Size>& static_path<Size>::operator+=(
 {
 	assert(false && "todo");
 	return *this;
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator+=(const char* str)
+{
+	return this->operator+=(static_cstring_view(str));
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator+=(const char8_t* str)
+{
+	return this->operator+=(static_u8string_view(str));
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator+=(char str)
+{
+	return this->operator+=(&str);
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator+=(char8_t str)
+{
+	return this->operator+=(&str);
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::concat(
+	const static_path<Size>& path)
+{
+	if (path.empty()==false)
+	{
+		this->m_buffer.append(path.m_buffer);
+	}
+
+	return *this;
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::concat(
+	const static_cstring_view& str)
+{
+	return this->concat(static_path<Size>(str));
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::concat(
+	const static_u8string_view& str)
+{
+	return this->concat(reinterpret_cast<const char*>(str.data()));
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::concat(const char* str)
+{
+	return this->concat(static_cstring_view(str));
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::concat(const char8_t* str)
+{
+	return this->concat(reinterpret_cast<const char*>(str));
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::concat(char symbol)
+{
+	return this->concat(&symbol);
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::concat(char8_t symbol)
+{
+	return this->concat(&symbol);
 }
 
 template <size_t Size>
