@@ -1061,6 +1061,67 @@ void test_container_filesystem_static_path_filename()
 	BOOST_REQUIRE(_t23.filename().native().c_str() == t23.filename().string());
 }
 
+void test_container_filesystem_static_path_root_directory()
+{
+	std::filesystem::path t("a/b");
+	std::filesystem::path t1("C:/a/b");
+	std::filesystem::path t2("C:\\a/b");
+	std::filesystem::path t3("D:/a/b");
+	std::filesystem::path t4("b");
+	std::filesystem::path t5("/");
+	std::filesystem::path t6("\\");
+	std::filesystem::path t7("\\A\\B");
+	std::filesystem::path t8("/A/b");
+	std::filesystem::path t9("c\\d\\");
+	std::filesystem::path t10("D:c\\d");
+	std::filesystem::path t11("D:");
+	std::filesystem::path t12("D:\\");
+	std::filesystem::path t13("D\\:");
+	std::filesystem::path t14("D\\");
+	std::filesystem::path t15(":a");
+	std::filesystem::path t16(":/a");
+	std::filesystem::path t17(":c/a");
+
+	ktk_filesystem_path _t("a/b");
+	ktk_filesystem_path _t1("C:/a/b");
+	ktk_filesystem_path _t2("C:\\a/b");
+	ktk_filesystem_path _t3("D:/a/b");
+	ktk_filesystem_path _t4("b");
+	ktk_filesystem_path _t5("/");
+	ktk_filesystem_path _t6("\\");
+	ktk_filesystem_path _t7("\\A\\B");
+	ktk_filesystem_path _t8("/A/b");
+	ktk_filesystem_path _t9("c\\d\\");
+	ktk_filesystem_path _t10("D:c\\d");
+	ktk_filesystem_path _t11("D:");
+	ktk_filesystem_path _t12("D:\\");
+	ktk_filesystem_path _t13("D\\:");
+	ktk_filesystem_path _t14("D\\");
+	ktk_filesystem_path _t15(":a");
+	ktk_filesystem_path _t16(":/a");
+	ktk_filesystem_path _t17(":c/a");
+
+	BOOST_REQUIRE(t.root_directory().string().c_str() == _t.root_directory().native());
+	BOOST_REQUIRE(
+		t1.root_directory().string().c_str() == _t1.root_directory().native());
+	BOOST_REQUIRE(t2.root_directory().string().c_str() == _t2.root_directory().native());
+	BOOST_REQUIRE(t3.root_directory().string().c_str() == _t3.root_directory().native());
+	BOOST_REQUIRE(t4.root_directory().string().c_str() == _t4.root_directory().native());
+	BOOST_REQUIRE(t5.root_directory().string().c_str() == _t5.root_directory().native());
+	BOOST_REQUIRE(t6.root_directory().string().c_str() == _t6.root_directory().native());
+	BOOST_REQUIRE(t7.root_directory().string().c_str() == _t7.root_directory().native());
+	BOOST_REQUIRE(t8.root_directory().string().c_str() == _t8.root_directory().native());
+	BOOST_REQUIRE(t9.root_directory().string().c_str() == _t9.root_directory().native());
+	BOOST_REQUIRE(t10.root_directory().string().c_str() == _t10.root_directory().native());
+	BOOST_REQUIRE(t11.root_directory().string().c_str() == _t11.root_directory().native());
+	BOOST_REQUIRE(t12.root_directory().string().c_str() == _t12.root_directory().native());
+	BOOST_REQUIRE(t13.root_directory().string().c_str() == _t13.root_directory().native());
+	BOOST_REQUIRE(t14.root_directory().string().c_str() == _t14.root_directory().native());
+	BOOST_REQUIRE(t15.root_directory().string().c_str() == _t15.root_directory().native());
+	BOOST_REQUIRE(t16.root_directory().string().c_str() == _t16.root_directory().native());
+	BOOST_REQUIRE(t17.root_directory().string().c_str() == _t17.root_directory().native());
+}
+
 	#endif
 #endif
 
@@ -1115,6 +1176,8 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_extension));
 	p_suite->add(
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_filename));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_root_directory));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");

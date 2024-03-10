@@ -56,6 +56,7 @@ public:
 	static_path(const static_u8string_view& str);
 	static_path(const static_u16string_view& str);
 	static_path(const static_u32string_view& str);
+	static_path(char symbol);
 
 	~static_path();
 
@@ -314,6 +315,11 @@ template <size_t Size>
 inline static_path<Size>::static_path(const static_u32string_view& str)
 {
 	assert(false && "todo");
+}
+
+template <size_t Size>
+inline static_path<Size>::static_path(char symbol) : m_buffer{symbol}
+{
 }
 
 template <size_t Size>
@@ -931,7 +937,35 @@ inline static_path<Size> static_path<Size>::root_name() const
 template <size_t Size>
 inline static_path<Size> static_path<Size>::root_directory() const
 {
-	assert(false && "todo");
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	if (this->m_buffer.empty() == false)
+	{
+		if (this->m_buffer[0] == '/' || this->m_buffer[0] == '\\')
+		{
+			return this->m_buffer[0];
+		}
+		else
+		{
+			if (this->m_buffer.size() >= 3)
+			{
+				if ((this->m_buffer[0] >= 65 && this->m_buffer[0] <= 90) ||
+					(this->m_buffer[0] >= 97 && this->m_buffer[0] <= 122))
+				{
+					if (this->m_buffer[1] == ':')
+					{
+						if (this->m_buffer[2] == '/' || this->m_buffer[2] == '\\')
+						{
+							return this->m_buffer[2];
+						}
+					}
+				}
+			}
+		}
+	}
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+#elif defined(KOTEK_USE_PLATFORM_MACOS)
+#endif
+
 	return static_path<Size>();
 }
 
@@ -1124,12 +1158,11 @@ inline static_path<Size> static_path<Size>::parent_path() const
 template <size_t Size>
 inline static_path<Size> static_path<Size>::filename() const
 {
-	if (this->m_buffer.empty()==false)
+	if (this->m_buffer.empty() == false)
 	{
 		auto index_forward = this->m_buffer.rfind('/');
 		auto index_backward = this->m_buffer.rfind('\\');
 		auto index_last_symbol = this->m_buffer.size() - 1;
-
 
 		if (index_forward != npos && index_backward != npos)
 		{
@@ -1203,8 +1236,7 @@ inline static_path<Size> static_path<Size>::extension() const
 					{
 						auto before_previous_index = index_previous_to_dot - 1;
 						if (((this->m_buffer[before_previous_index] != '/' &&
-									this->m_buffer[before_previous_index] !=
-										'\\')))
+								this->m_buffer[before_previous_index] != '\\')))
 						{
 							return this->m_buffer.substr(index_dot).c_str();
 						}
