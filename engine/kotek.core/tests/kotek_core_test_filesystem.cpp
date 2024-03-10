@@ -1165,7 +1165,7 @@ void test_container_filesystem_static_path_operator_slash()
 	BOOST_REQUIRE(new_t3.native() == new__t3.string().c_str());
 }
 
-void test_container_filesystem_static_path_operator_slash_equal() 
+void test_container_filesystem_static_path_operator_slash_equal()
 {
 	ktk_filesystem_path t;
 	ktk_filesystem_path t2("/");
@@ -1191,7 +1191,7 @@ void test_container_filesystem_static_path_operator_slash_equal()
 	BOOST_REQUIRE(new_t3.native() == new__t3.string().c_str());
 }
 
-void test_container_filesystem_static_path_append() 
+void test_container_filesystem_static_path_append()
 {
 	ktk_filesystem_path t;
 	ktk_filesystem_path t2("/");
@@ -1217,6 +1217,131 @@ void test_container_filesystem_static_path_append()
 	BOOST_REQUIRE(new_t3.native() == new__t3.string().c_str());
 }
 
+void test_container_filesystem_static_path_operator_plus_slash()
+{
+	ktk_filesystem_path t("C:");
+	ktk_filesystem_path t1("C:/");
+	ktk_filesystem_path t2("C:\\");
+	ktk_filesystem_path t3("\\");
+	ktk_filesystem_path t4("/");
+	ktk_filesystem_path t5("");
+	ktk_filesystem_path t6(":a");
+	ktk_filesystem_path t7(":");
+	ktk_filesystem_path t8(":/");
+	ktk_filesystem_path t9(":///");
+	ktk_filesystem_path t10(":\\");
+
+	std::filesystem::path _t("C:");
+	std::filesystem::path _t1("C:/");
+	std::filesystem::path _t2("C:\\");
+	std::filesystem::path _t3("\\");
+	std::filesystem::path _t4("/");
+	std::filesystem::path _t5("");
+	std::filesystem::path _t6(":a");
+	std::filesystem::path _t7(":");
+	std::filesystem::path _t8(":/");
+	std::filesystem::path _t9(":///");
+	std::filesystem::path _t10(":\\");
+
+	t += "test";
+	t1 += "test";
+	t2 += "test";
+	t3 += "test";
+	t4 += "test";
+	t5 += "test";
+	t6 += "test";
+	t7 += "test";
+	t8 += "test";
+	t9 += "test";
+	t10 += "test";
+
+	_t += "test";
+	_t1 += "test";
+	_t2 += "test";
+	_t3 += "test";
+	_t4 += "test";
+	_t5 += "test";
+	_t6 += "test";
+	_t7 += "test";
+	_t8 += "test";
+	_t9 += "test";
+	_t10 += "test";
+
+	BOOST_REQUIRE(t.native() == _t.string().c_str());
+	BOOST_REQUIRE(t1.native() == _t1.string().c_str());
+	BOOST_REQUIRE(t2.native() == _t2.string().c_str());
+	BOOST_REQUIRE(t3.native() == _t3.string().c_str());
+	BOOST_REQUIRE(t4.native() == _t4.string().c_str());
+	BOOST_REQUIRE(t5.native() == _t5.string().c_str());
+	BOOST_REQUIRE(t6.native() == _t6.string().c_str());
+	BOOST_REQUIRE(t7.native() == _t7.string().c_str());
+	BOOST_REQUIRE(t8.native() == _t8.string().c_str());
+	BOOST_REQUIRE(t9.native() == _t9.string().c_str());
+	BOOST_REQUIRE(t10.native() == _t10.string().c_str());
+}
+
+void test_container_filesystem_static_path_concat()
+{
+	ktk_filesystem_path t("C:");
+	ktk_filesystem_path t1("C:/");
+	ktk_filesystem_path t2("C:\\");
+	ktk_filesystem_path t3("\\");
+	ktk_filesystem_path t4("/");
+	ktk_filesystem_path t5("");
+	ktk_filesystem_path t6(":a");
+	ktk_filesystem_path t7(":");
+	ktk_filesystem_path t8(":/");
+	ktk_filesystem_path t9(":///");
+	ktk_filesystem_path t10(":\\");
+
+	std::filesystem::path _t("C:");
+	std::filesystem::path _t1("C:/");
+	std::filesystem::path _t2("C:\\");
+	std::filesystem::path _t3("\\");
+	std::filesystem::path _t4("/");
+	std::filesystem::path _t5("");
+	std::filesystem::path _t6(":a");
+	std::filesystem::path _t7(":");
+	std::filesystem::path _t8(":/");
+	std::filesystem::path _t9(":///");
+	std::filesystem::path _t10(":\\");
+
+	t.concat("test");
+	t1.concat("test");
+	t2.concat("test");
+	t3.concat("test");
+	t4.concat("test");
+	t5.concat("test");
+	t6.concat("test");
+	t7.concat("test");
+	t8.concat("test");
+	t9.concat("test");
+	t10.concat("test");
+
+	_t.concat("test");
+	_t1.concat("test");
+	_t2.concat("test");
+	_t3.concat("test");
+	_t4.concat("test");
+	_t5.concat("test");
+	_t6.concat("test");
+	_t7.concat("test");
+	_t8.concat("test");
+	_t9.concat("test");
+	_t10.concat("test");
+
+	BOOST_REQUIRE(t.native() == _t.string().c_str());
+	BOOST_REQUIRE(t1.native() == _t1.string().c_str());
+	BOOST_REQUIRE(t2.native() == _t2.string().c_str());
+	BOOST_REQUIRE(t3.native() == _t3.string().c_str());
+	BOOST_REQUIRE(t4.native() == _t4.string().c_str());
+	BOOST_REQUIRE(t5.native() == _t5.string().c_str());
+	BOOST_REQUIRE(t6.native() == _t6.string().c_str());
+	BOOST_REQUIRE(t7.native() == _t7.string().c_str());
+	BOOST_REQUIRE(t8.native() == _t8.string().c_str());
+	BOOST_REQUIRE(t9.native() == _t9.string().c_str());
+	BOOST_REQUIRE(t10.native() == _t10.string().c_str());
+}
 	#endif
 #endif
 
@@ -1279,6 +1404,11 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		&test_container_filesystem_static_path_operator_slash_equal));
 	p_suite->add(
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_append));
+	p_suite->add(BOOST_TEST_CASE(
+		&test_container_filesystem_static_path_operator_plus_slash));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_concat));
+
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");
