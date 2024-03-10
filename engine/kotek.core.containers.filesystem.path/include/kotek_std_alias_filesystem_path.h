@@ -42,6 +42,56 @@ public:
 	static constexpr auto npos = static_cstring<Size>::npos;
 
 public:
+	class path_iterator
+	{
+	public:
+		using iterator_category = std::bidirectional_iterator_tag;
+		using value_type = const static_path<Size>;
+		using different_type = std::ptrdiff_t;
+		using pointer = const static_path<Size>*;
+		using reference = const static_path<Size>&;
+		using base_iterator = static_path<Size>::string_type::const_iterator;
+
+		path_iterator() = default;
+		path_iterator(const path_iterator&) = default;
+		path_iterator(path_iterator&&) = default;
+		path_iterator& operator=(const path_iterator&) = default;
+		path_iterator& operator=(path_iterator&&) = default;
+
+
+
+		path_iterator& operator++() {}
+
+		path_iterator operator++(int i) {}
+
+		path_iterator& operator--() {}
+
+		path_iterator operator--(int i) {}
+
+		bool operator==(const path_iterator& other) const {}
+		bool operator!=(const path_iterator& other) const {}
+
+		reference operator*() const {}
+		pointer operator->() const {}
+
+	private:
+		friend class static_path<Size>;
+
+	private:
+		base_iterator increment(const base_iterator& pos) const {}
+		base_iterator decrement(const base_iterator& pos) const {}
+		void update_current() {}
+
+	private:
+		base_iterator m_first;
+		base_iterator m_last;
+		base_iterator m_prefix;
+		base_iterator m_root;
+		base_iterator m_iter;
+		static_path<Size> m_current;
+	};
+
+public:
 	/* Member functions */
 	static_path();
 	static_path(const static_path<Size>& path);
@@ -181,8 +231,9 @@ path& append( InputIt first, InputIt last )
 		return os;
 	}
 
-	template<class CharT, class Traits>
-	inline friend std::basic_istream<CharT, Traits>& operator>>(std::basic_istream<CharT, Traits>& is, static_path<Size>& path)
+	template <class CharT, class Traits>
+	inline friend std::basic_istream<CharT, Traits>& operator>>(
+		std::basic_istream<CharT, Traits>& is, static_path<Size>& path)
 	{
 		std::basic_string<CharT, Traits> t;
 		is >> std::quoted(t);
