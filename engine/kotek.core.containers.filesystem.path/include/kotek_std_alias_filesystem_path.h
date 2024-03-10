@@ -85,6 +85,10 @@ path& assign( InputIt first, InputIt last );
 	static_path<Size>& operator/=(const static_u8string_view& path);
 	static_path<Size>& operator/=(const static_u16string_view& path);
 	static_path<Size>& operator/=(const static_u32string_view& path);
+	static_path<Size>& operator/=(const char* str);
+	static_path<Size>& operator/=(const char8_t* str);
+	static_path<Size>& operator/=(char str);
+	static_path<Size>& operator/=(char8_t str);
 
 	static_path<Size>& append(const static_path<Size>& path);
 	static_path<Size>& append(const static_cstring_view& path);
@@ -92,6 +96,10 @@ path& assign( InputIt first, InputIt last );
 	static_path<Size>& append(const static_u8string_view& path);
 	static_path<Size>& append(const static_u16string_view& path);
 	static_path<Size>& append(const static_u32string_view& path);
+	static_path<Size>& append(const char* str);
+	static_path<Size>& append(const char8_t* str);
+	static_path<Size>& append(char str);
+	static_path<Size>& append(char8_t str);
 
 	/* todo
 	template< class InputIt >
@@ -104,6 +112,50 @@ path& append( InputIt first, InputIt last )
 	static_path<Size>& operator+=(const static_u8string_view& str);
 	static_path<Size>& operator+=(const static_u16string_view& str);
 	static_path<Size>& operator+=(const static_u32string_view& str);
+
+	inline friend static_path<Size> operator/(
+		const static_path<Size>& left, const static_path<Size>& right)
+	{
+		auto tmp = left;
+		tmp /= right;
+		return tmp;
+	}
+
+	inline friend bool operator==(
+		const static_path<Size>& left, const static_path<Size>& right) noexcept
+	{
+		return left.native() == right.native();
+	}
+
+	inline friend bool operator!=(
+		const static_path<Size>& left, const static_path<Size>& right) noexcept
+	{
+		return !(left == right);
+	}
+
+	inline friend bool operator<(
+		const static_path<Size>& left, const static_path<Size>& right) noexcept
+	{
+		return (left.compare(right) < 0);
+	}
+
+	inline friend bool operator<=(
+		const static_path<Size>& left, const static_path<Size>& right) noexcept
+	{
+		return !(right < left);
+	}
+
+	inline friend bool operator>(
+		const static_path<Size>& left, const static_path<Size>& right) noexcept
+	{
+		return (right < left);
+	}
+
+	inline friend bool operator>=(
+		const static_path<Size>& left, const static_path<Size>& right) noexcept
+	{
+		return !(left < right);
+	}
 
 	/* todo
 	template< class InputIt >
@@ -400,17 +452,14 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator/=(
 	const static_path<Size>& path)
 {
-	assert(false && "todo");
-
-	return *this;
+	return this->append(path);
 }
 
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator/=(
 	const static_cstring_view& path)
 {
-	assert(false && "todo");
-	return *this;
+	return this->append(path);
 }
 
 template <size_t Size>
@@ -425,8 +474,7 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator/=(
 	const static_u8string_view& path)
 {
-	assert(false && "todo");
-	return *this;
+	return this->append(path);
 }
 
 template <size_t Size>
@@ -446,11 +494,62 @@ inline static_path<Size>& static_path<Size>::operator/=(
 }
 
 template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator/=(const char* str)
+{
+	return this->operator/=(static_cstring_view(str));
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator/=(const char8_t* str)
+{
+	return this->operator/=(static_u8string_view(str));
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator/=(char str)
+{
+	return this->operator/=(&str);
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator/=(char8_t str)
+{
+	return this->operator/=(&str);
+}
+
+template <size_t Size>
 inline static_path<Size>& static_path<Size>::append(
 	const static_path<Size>& path)
 {
-	if (path.empty())
-		return *this;
+	if (path.is_absolute() ||
+		(path.has_root_name() && path.root_name() != root_name()))
+	{
+		this->m_buffer = path.m_buffer;
+	}
+	else if (path.has_root_directory())
+	{
+		if (this->m_buffer.size() >= 2)
+		{
+			if (this->m_buffer[1] == ':')
+			{
+				this->m_buffer.replace(
+					2, this->m_buffer.size(), path.m_buffer.c_str());
+			}
+			else
+			{
+				this->m_buffer = path.m_buffer;
+			}
+		}
+		else
+		{
+			this->m_buffer = path.m_buffer;
+		}
+	}
+	else if (this->has_filename() ||
+		(!this->has_root_directory() && this->is_absolute()))
+	{
+		this->m_buffer.append(1, preferred_separator);
+	}
 
 	this->m_buffer.append(path.m_buffer);
 
@@ -459,9 +558,12 @@ inline static_path<Size>& static_path<Size>::append(
 
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::append(
-	const static_cstring_view& path)
+	const static_cstring_view& p)
 {
-	assert(false && "todo");
+	static_path<Size> path(p);
+
+	this->append(path);
+
 	return *this;
 }
 
@@ -477,7 +579,13 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::append(
 	const static_u8string_view& path)
 {
-	assert(false && "todo");
+	const static_cstring_view& casted =
+		static_cstring_view(reinterpret_cast<const char*>(path.data()));
+
+	static_path<Size> p(casted);
+
+	this->append(p);
+
 	return *this;
 }
 
@@ -495,6 +603,44 @@ inline static_path<Size>& static_path<Size>::append(
 {
 	assert(false && "todo");
 	return *this;
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::append(const char* str)
+{
+	if (str)
+	{
+		static_cstring_view view(str);
+		this->append(view);
+	}
+
+	return *this;
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::append(const char8_t* str)
+{
+	if (str)
+	{
+		static_u8string_view view(str);
+		this->append(view);
+	}
+
+	return *this;
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::append(char str)
+{
+	const char* p_str = &str;
+	return this->append(p_str);
+}
+
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::append(char8_t str)
+{
+	const char* p_str = reinterpret_cast<const char*>(&str);
+	return this->append(p_str);
 }
 
 template <size_t Size>
@@ -953,7 +1099,8 @@ inline static_path<Size> static_path<Size>::root_directory() const
 				{
 					if (this->m_buffer[1] == ':')
 					{
-						if (this->m_buffer[2] == '/' || this->m_buffer[2] == '\\')
+						if (this->m_buffer[2] == '/' ||
+							this->m_buffer[2] == '\\')
 						{
 							return this->m_buffer[2];
 						}
@@ -972,8 +1119,7 @@ inline static_path<Size> static_path<Size>::root_directory() const
 template <size_t Size>
 inline static_path<Size> static_path<Size>::root_path() const
 {
-	assert(false && "todo");
-	return static_path<Size>();
+	return (this->root_name() / this->root_directory());
 }
 
 template <size_t Size>

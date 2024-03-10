@@ -1101,26 +1101,73 @@ void test_container_filesystem_static_path_root_directory()
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	BOOST_REQUIRE(t.root_directory().string().c_str() == _t.root_directory().native());
+	BOOST_REQUIRE(
+		t.root_directory().string().c_str() == _t.root_directory().native());
 	BOOST_REQUIRE(
 		t1.root_directory().string().c_str() == _t1.root_directory().native());
-	BOOST_REQUIRE(t2.root_directory().string().c_str() == _t2.root_directory().native());
-	BOOST_REQUIRE(t3.root_directory().string().c_str() == _t3.root_directory().native());
-	BOOST_REQUIRE(t4.root_directory().string().c_str() == _t4.root_directory().native());
-	BOOST_REQUIRE(t5.root_directory().string().c_str() == _t5.root_directory().native());
-	BOOST_REQUIRE(t6.root_directory().string().c_str() == _t6.root_directory().native());
-	BOOST_REQUIRE(t7.root_directory().string().c_str() == _t7.root_directory().native());
-	BOOST_REQUIRE(t8.root_directory().string().c_str() == _t8.root_directory().native());
-	BOOST_REQUIRE(t9.root_directory().string().c_str() == _t9.root_directory().native());
-	BOOST_REQUIRE(t10.root_directory().string().c_str() == _t10.root_directory().native());
-	BOOST_REQUIRE(t11.root_directory().string().c_str() == _t11.root_directory().native());
-	BOOST_REQUIRE(t12.root_directory().string().c_str() == _t12.root_directory().native());
-	BOOST_REQUIRE(t13.root_directory().string().c_str() == _t13.root_directory().native());
-	BOOST_REQUIRE(t14.root_directory().string().c_str() == _t14.root_directory().native());
-	BOOST_REQUIRE(t15.root_directory().string().c_str() == _t15.root_directory().native());
-	BOOST_REQUIRE(t16.root_directory().string().c_str() == _t16.root_directory().native());
-	BOOST_REQUIRE(t17.root_directory().string().c_str() == _t17.root_directory().native());
+	BOOST_REQUIRE(
+		t2.root_directory().string().c_str() == _t2.root_directory().native());
+	BOOST_REQUIRE(
+		t3.root_directory().string().c_str() == _t3.root_directory().native());
+	BOOST_REQUIRE(
+		t4.root_directory().string().c_str() == _t4.root_directory().native());
+	BOOST_REQUIRE(
+		t5.root_directory().string().c_str() == _t5.root_directory().native());
+	BOOST_REQUIRE(
+		t6.root_directory().string().c_str() == _t6.root_directory().native());
+	BOOST_REQUIRE(
+		t7.root_directory().string().c_str() == _t7.root_directory().native());
+	BOOST_REQUIRE(
+		t8.root_directory().string().c_str() == _t8.root_directory().native());
+	BOOST_REQUIRE(
+		t9.root_directory().string().c_str() == _t9.root_directory().native());
+	BOOST_REQUIRE(t10.root_directory().string().c_str() ==
+		_t10.root_directory().native());
+	BOOST_REQUIRE(t11.root_directory().string().c_str() ==
+		_t11.root_directory().native());
+	BOOST_REQUIRE(t12.root_directory().string().c_str() ==
+		_t12.root_directory().native());
+	BOOST_REQUIRE(t13.root_directory().string().c_str() ==
+		_t13.root_directory().native());
+	BOOST_REQUIRE(t14.root_directory().string().c_str() ==
+		_t14.root_directory().native());
+	BOOST_REQUIRE(t15.root_directory().string().c_str() ==
+		_t15.root_directory().native());
+	BOOST_REQUIRE(t16.root_directory().string().c_str() ==
+		_t16.root_directory().native());
+	BOOST_REQUIRE(t17.root_directory().string().c_str() ==
+		_t17.root_directory().native());
 }
+
+void test_container_filesystem_static_path_operator_slash()
+{
+	ktk_filesystem_path t;
+	ktk_filesystem_path t2("/");
+	ktk_filesystem_path t3("C:");
+
+	std::filesystem::path _t;
+	std::filesystem::path _t2("/");
+	std::filesystem::path _t3("C:");
+
+	auto new_t = t / "test";
+	auto new__t = _t / "test";
+
+	BOOST_REQUIRE(new_t.native() == new_t.string().c_str());
+
+	auto new_t2 = t2 / "test";
+	auto new__t2 = _t2 / "test";
+
+	BOOST_REQUIRE(new_t2.native() == new__t2.string().c_str());
+
+	auto new_t3 = t3 / "test";
+	auto new__t3 = _t3 / "test";
+
+	BOOST_REQUIRE(new_t3.native() == new__t3.string().c_str());
+}
+
+void test_container_filesystem_static_path_operator_slash_equal() {}
+
+void test_container_filesystem_static_path_append() {}
 
 	#endif
 #endif
@@ -1178,6 +1225,8 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_filename));
 	p_suite->add(
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_root_directory));
+	p_suite->add(
+		BOOST_TEST_CASE(&test_container_filesystem_static_path_operator_slash));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");
