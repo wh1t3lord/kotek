@@ -53,33 +53,40 @@ public:
 		using base_iterator = static_path<Size>::string_type::const_iterator;
 
 		path_iterator() = default;
+
+		/*
 		path_iterator(const path_iterator&) = default;
 		path_iterator(path_iterator&&) = default;
 		path_iterator& operator=(const path_iterator&) = default;
 		path_iterator& operator=(path_iterator&&) = default;
+		*/
 
+		path_iterator(const static_path<Size>& path, const base_iterator& pos) :
+			m_first{path.m_buffer.begin()}, m_last{path.m_buffer.end()},
+			m_prefix{m_first + static_cast<string_type::difference_type>(path.get_prefix_length())}
+		{
+		}
 
+		path_iterator& operator++() { return *this; }
 
-		path_iterator& operator++() {}
+		path_iterator operator++(int i) { return *this; }
 
-		path_iterator operator++(int i) {}
+		path_iterator& operator--() { return *this; }
 
-		path_iterator& operator--() {}
+		path_iterator operator--(int i) { return *this; }
 
-		path_iterator operator--(int i) {}
+		bool operator==(const path_iterator& other) const { return false; }
+		bool operator!=(const path_iterator& other) const { return false; }
 
-		bool operator==(const path_iterator& other) const {}
-		bool operator!=(const path_iterator& other) const {}
-
-		reference operator*() const {}
-		pointer operator->() const {}
+		reference operator*() const { return this->m_current; }
+		pointer operator->() const { return &this->m_current; }
 
 	private:
 		friend class static_path<Size>;
 
 	private:
-		base_iterator increment(const base_iterator& pos) const {}
-		base_iterator decrement(const base_iterator& pos) const {}
+		base_iterator increment(const base_iterator& pos) const { return pos; }
+		base_iterator decrement(const base_iterator& pos) const { return pos; }
 		void update_current() {}
 
 	private:
@@ -351,6 +358,59 @@ path& concat( InputIt first, InputIt last );
 	bool is_relative() const;
 
 	/* Iterators */
+
+	inline path_iterator begin() const
+	{
+		return path_iterator(*this, this->m_buffer.begin());
+	}
+
+	inline path_iterator end() const
+	{
+		return path_iterator(*this, this->m_buffer.end());
+	}
+
+private:
+	inline size_t get_prefix_length() const
+	{
+		size_t result{};
+
+		#ifdef KOTEK_USE_PLATFORM_WINDOWS
+		if (this->m_buffer.empty() == false)
+		{
+			if (this->m_buffer.size() >= 6)
+			{
+				if (this->m_buffer[2] == '?' &&
+					((this->m_buffer[4] >= 65 && this->m_buffer[4] <= 90) ||
+						(this->m_buffer[4] >= 97 &&
+							this->m_buffer[4] <= 122)) &&
+					this->m_buffer[5] == ':')
+				{
+					// validating '\\?\' and '\??\' strings if they don't
+					// present in buffer we can't say anything about 'prefix'
+					if (((this->m_buffer[0] == '\\' ||
+							 this->m_buffer[0] == '/') &&
+							(this->m_buffer[1] == '\\' ||
+								this->m_buffer[1] == '/') &&
+							(this->m_buffer[2] == '?') &&
+							(this->m_buffer[3] == '\\' ||
+								this->m_buffer[3] == '/')) ||
+						((this->m_buffer[0] == '/' ||
+							 this->m_buffer[0] == '\\') &&
+							(this->m_buffer[1] == '?') &&
+							(this->m_buffer[2] == '?') &&
+							(this->m_buffer[3] == '/' ||
+								this->m_buffer[3] == '\\')))
+					{
+						result = 4;
+					}
+				}
+			}
+		}
+		#else
+		#endif
+
+		return result;
+	}
 
 private:
 	// todo: provide support of switching strings what user wants
