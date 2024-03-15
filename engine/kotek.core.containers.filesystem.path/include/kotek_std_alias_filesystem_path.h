@@ -42,7 +42,9 @@ public:
 	static constexpr auto npos = static_cstring<Size>::npos;
 
 public:
-	/// @brief implementation based on this
+	/// @brief implementation of iterator (not the whole static_path class)
+	/// based on this iterator implementation, maikyie (Microsoft) uses
+	/// input_iterator... so let it be bidirectional
 	/// https://github.com/gulrak/filesystem/blob/master/include/ghc/filesystem.hpp
 	/// Author: Copyright (c) 2018, Steffen Schümann <s.schuemann@pobox.com>
 	/// (MIT license)
@@ -73,16 +75,52 @@ public:
 		{
 		}
 
-		path_iterator& operator++() { return *this; }
+		path_iterator& operator++()
+		{
+			this->m_iter = this->increment(this->m_iter);
+			while (this->m_iter != this->m_last &&
+				this->m_iter != this->m_root &&
+				*this->m_iter == preferred_separator &&
+				(this->m_iter + 1) != this->m_last)
+			{
+				++this->m_iter;
+			}
 
-		path_iterator operator++(int i) { return *this; }
+			this->update_current();
 
-		path_iterator& operator--() { return *this; }
+			return *this;
+		}
 
-		path_iterator operator--(int i) { return *this; }
+		path_iterator operator++(int i)
+		{
+			path_iterator i{*this};
+			++(*this);
+			return i;
+		}
 
-		bool operator==(const path_iterator& other) const { return false; }
-		bool operator!=(const path_iterator& other) const { return false; }
+		path_iterator& operator--()
+		{
+			this->m_iter = this->decrement(this->m_iter);
+			this->update_current();
+			return *this;
+		}
+
+		path_iterator operator--(int i)
+		{
+			auto i = *this;
+			--(*this);
+			return i;
+		}
+
+		bool operator==(const path_iterator& other) const
+		{
+			return this->m_iter == other.m_iter;
+		}
+
+		bool operator!=(const path_iterator& other) const
+		{
+			return this->m_iter != other.m_iter;
+		}
 
 		reference operator*() const { return this->m_current; }
 		pointer operator->() const { return &this->m_current; }
@@ -187,13 +225,17 @@ public:
 		{
 			if ((this->m_iter == this->m_last) ||
 				(this->m_iter != this->m_first &&
-					this->m_iter != this->m_last && (*this->m_iter == preferred_separator && this->m_iter != this->m_root)) && (this->m_iter + 1 == this->m_last)) 
+					this->m_iter != this->m_last &&
+					(*this->m_iter == preferred_separator &&
+						this->m_iter != this->m_root)) &&
+					(this->m_iter + 1 == this->m_last))
 			{
 				this->m_current.clear();
 			}
 			else
 			{
-				this->m_current.assign(this->m_iter, this->increment(this->m_iter));
+				this->m_current.assign(
+					this->m_iter, this->increment(this->m_iter));
 			}
 		}
 
@@ -240,8 +282,8 @@ public:
 	static_path<Size>& assign(const char8_t* str);
 	static_path<Size>& assign(char symbol);
 	static_path<Size>& assign(char8_t symbol);
-	
-	template<class InputIterator>
+
+	template <class InputIterator>
 	static_path<Size>& assign(InputIterator first, InputIterator last);
 
 	/* todo:
@@ -733,7 +775,7 @@ inline static_path<Size>& static_path<Size>::assign(char8_t symbol)
 	return *this;
 }
 
-template<size_t Size>
+template <size_t Size>
 template <class InputIterator>
 inline static_path<Size>& static_path<Size>::assign(
 	InputIterator first, InputIterator last)
