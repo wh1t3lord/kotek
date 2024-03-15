@@ -265,6 +265,9 @@ public:
 	static_path(const static_u32string_view& str);
 	static_path(char symbol);
 
+	template <class InputIteratorType>
+	static_path(InputIteratorType first, InputIteratorType last);
+
 	~static_path();
 
 	static_path<Size>& operator=(const static_path<Size>& path) = default;
@@ -682,6 +685,14 @@ inline static_path<Size>::static_path(const static_path<Size>& path) :
 template <size_t Size>
 inline static_path<Size>::static_path(static_path<Size>&& path) :
 	m_buffer{etl::move(path.m_buffer)}
+{
+}
+
+template <size_t Size>
+template <class InputIteratorType>
+inline static_path<Size>::static_path(
+	InputIteratorType first, InputIteratorType last) :
+	m_buffer(first, last)
 {
 }
 
