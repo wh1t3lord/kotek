@@ -183,7 +183,19 @@ public:
 			return i;
 		}
 
-		void update_current() {}
+		void update_current()
+		{
+			if ((this->m_iter == this->m_last) ||
+				(this->m_iter != this->m_first &&
+					this->m_iter != this->m_last && (*this->m_iter == preferred_separator && this->m_iter != this->m_root)) && (this->m_iter + 1 == this->m_last)) 
+			{
+				this->m_current.clear();
+			}
+			else
+			{
+				this->m_current.assign(this->m_iter, this->increment(this->m_iter));
+			}
+		}
 
 	private:
 		base_iterator m_first;
@@ -228,6 +240,9 @@ public:
 	static_path<Size>& assign(const char8_t* str);
 	static_path<Size>& assign(char symbol);
 	static_path<Size>& assign(char8_t symbol);
+	
+	template<class InputIterator>
+	static_path<Size>& assign(InputIterator first, InputIterator last);
 
 	/* todo:
 	template< class InputIt >
@@ -715,6 +730,15 @@ template <size_t Size>
 inline static_path<Size>& static_path<Size>::assign(char8_t symbol)
 {
 	assert(false && "todo");
+	return *this;
+}
+
+template<size_t Size>
+template <class InputIterator>
+inline static_path<Size>& static_path<Size>::assign(
+	InputIterator first, InputIterator last)
+{
+	this->m_buffer.assign(first, last);
 	return *this;
 }
 
