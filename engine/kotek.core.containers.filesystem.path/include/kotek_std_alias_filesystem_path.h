@@ -141,7 +141,48 @@ public:
 			return i;
 		}
 
-		base_iterator decrement(const base_iterator& pos) const { return pos; }
+		base_iterator decrement(const base_iterator& pos) const
+		{
+			base_iterator i = pos;
+
+			if (i != this->m_first)
+			{
+				--i;
+
+				if (i != this->m_root &&
+					(pos != this->m_last || *i != preferred_separator))
+				{
+		#ifdef KOTEK_USE_PLATFORM_WINDOWS
+					static_cstring<3> seps = "\\:";
+
+					i = std::find_first_of(
+						std::reverse_iterator<base_iterator>(i),
+						std::reverse_iterator<base_iterator>(this->m_first),
+						seps.begin(), seps.end())
+							.base();
+					if (i > this->m_first && *i == ':')
+					{
+						i++;
+					}
+		#else
+					i = std::find(std::reverse_iterator<base_iterator>(i),
+						std::reverse_iterator<base_iterator>(this->m_first),
+						preferred_separator)
+							.base();
+		#endif
+					// Now we have to check if this is a network name
+					if (i - this->m_first == 2 &&
+						*this->m_first == preferred_separator &&
+						*(this->m_first + 1) == preferred_separator)
+					{
+						i -= 2;
+					}
+				}
+			}
+
+			return i;
+		}
+
 		void update_current() {}
 
 	private:
