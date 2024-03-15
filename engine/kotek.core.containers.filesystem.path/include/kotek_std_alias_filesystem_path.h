@@ -85,7 +85,52 @@ public:
 		friend class static_path<Size>;
 
 	private:
-		base_iterator increment(const base_iterator& pos) const { return pos; }
+		base_iterator increment(const base_iterator& pos) const 
+		{
+			base_iterator i = pos;
+
+			bool fromStart = i == this->m_first || i == this->m_prefix;
+
+			if (i != this->m_last)
+			{
+				if (fromStart && i == this->m_first && this->m_prefix > this->m_first)
+				{
+					i = this->m_prefix;
+				}
+				else if (*i++ == preferred_separator)
+				{
+					if (i != this->m_last && *i == preferred_separator)
+					{
+						if (fromStart && !(i + 1 != this->m_last && *(i+1)==preferred_separator))
+						{
+							i = std::find(
+								++i, this->m_last, preferred_separator);
+						}
+						else
+						{
+							while (i != this->m_last && *i == preferred_separator)
+							{
+								++i;
+							}
+						}
+					}
+				}
+				else
+				{
+					if (fromStart && i != this->m_last && *i == ':')
+					{
+						++i;
+					}
+					else
+					{
+						i = std::find(i, this->m_last, preferred_separator);
+					}
+				}
+			}
+
+			return i;
+		}
+
 		base_iterator decrement(const base_iterator& pos) const { return pos; }
 		void update_current() {}
 
