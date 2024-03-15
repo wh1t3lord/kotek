@@ -42,6 +42,10 @@ public:
 	static constexpr auto npos = static_cstring<Size>::npos;
 
 public:
+	/// @brief implementation based on this
+	/// https://github.com/gulrak/filesystem/blob/master/include/ghc/filesystem.hpp
+	/// Author: Copyright (c) 2018, Steffen Schümann <s.schuemann@pobox.com>
+	/// (MIT license)
 	class path_iterator
 	{
 	public:
@@ -63,7 +67,9 @@ public:
 
 		path_iterator(const static_path<Size>& path, const base_iterator& pos) :
 			m_first{path.m_buffer.begin()}, m_last{path.m_buffer.end()},
-			m_prefix{m_first + static_cast<string_type::difference_type>(path.get_prefix_length())}
+			m_prefix{m_first +
+				static_cast<string_type::difference_type>(
+					path.get_prefix_length())}
 		{
 		}
 
@@ -85,7 +91,7 @@ public:
 		friend class static_path<Size>;
 
 	private:
-		base_iterator increment(const base_iterator& pos) const 
+		base_iterator increment(const base_iterator& pos) const
 		{
 			base_iterator i = pos;
 
@@ -93,7 +99,8 @@ public:
 
 			if (i != this->m_last)
 			{
-				if (fromStart && i == this->m_first && this->m_prefix > this->m_first)
+				if (fromStart && i == this->m_first &&
+					this->m_prefix > this->m_first)
 				{
 					i = this->m_prefix;
 				}
@@ -101,14 +108,17 @@ public:
 				{
 					if (i != this->m_last && *i == preferred_separator)
 					{
-						if (fromStart && !(i + 1 != this->m_last && *(i+1)==preferred_separator))
+						if (fromStart &&
+							!(i + 1 != this->m_last &&
+								*(i + 1) == preferred_separator))
 						{
 							i = std::find(
 								++i, this->m_last, preferred_separator);
 						}
 						else
 						{
-							while (i != this->m_last && *i == preferred_separator)
+							while (
+								i != this->m_last && *i == preferred_separator)
 							{
 								++i;
 							}
