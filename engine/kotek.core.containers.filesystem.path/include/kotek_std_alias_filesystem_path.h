@@ -79,6 +79,10 @@ public:
 											 : this->m_last},
 			m_iter{pos}
 		{
+			if (pos != this->m_last)
+			{
+				this->update_current();
+			}
 		}
 
 		path_iterator& operator++()
@@ -277,8 +281,13 @@ public:
 	~static_path();
 
 	static_path<Size>& operator=(const static_path<Size>& path) = default;
-	static_path<Size>& operator=(static_path<Size>&& path) noexcept = default;
-	static_path<Size>& operator=(string_type&& source);
+	static_path<Size>& operator=(const string_type& source);
+	static_path<Size>& operator=(const char* str);
+	static_path<Size>& operator=(const char8_t* str);
+	static_path<Size>& operator=(char str);
+	static_path<Size>& operator=(char8_t str);
+	static_path<Size>& operator=(const static_cstring_view& view);
+	static_path<Size>& operator=(const static_u8string_view& view);
 
 	static_path<Size>& assign(string_type&& source);
 	static_path<Size>& assign(const static_path<Size>& path);
@@ -756,10 +765,42 @@ inline static_path<Size>::static_path(
 }
 
 template <size_t Size>
-inline static_path<Size>& static_path<Size>::operator=(string_type&& source)
+inline static_path<Size>& static_path<Size>::operator=(
+	const string_type& source)
 {
-	assert(false && "todo");
-	return *this;
+	this->m_buffer = source;
+}
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator=(const char* str)
+{
+	this->m_buffer = str;
+}
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator=(const char8_t* str)
+{
+	this->operator=(reinterpret_cast<const char*>(str));
+}
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator=(char str)
+{
+	this->operator=(&str);
+}
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator=(char8_t str)
+{
+	this->operator=(reinterpret_cast<const char*>(&str));
+}
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator=(
+	const static_cstring_view& view)
+{
+	this->operator=(view.data());
+}
+template <size_t Size>
+inline static_path<Size>& static_path<Size>::operator=(
+	const static_u8string_view& view)
+{
+	this->operator=(reinterpret_cast<const char*>(view.data()));
 }
 
 template <size_t Size>

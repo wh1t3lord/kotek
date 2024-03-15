@@ -4,6 +4,7 @@
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
 		#include <filesystem>
+		#include <vector>
 	#endif
 #endif
 
@@ -1343,21 +1344,48 @@ void test_container_filesystem_static_path_concat()
 	BOOST_REQUIRE(t10.native() == _t10.string().c_str());
 }
 
-void test_container_filesystem_static_path_operator_ostream() 
+void test_container_filesystem_static_path_operator_ostream()
 {
 	ktk_filesystem_path t("C:\\test\\ostream\\operator");
 
 	std::cout << t << std::endl;
 }
 
-void test_container_filesystem_static_path_iterator_for_loop() 
+void test_container_filesystem_static_path_iterator_for_loop()
 {
+	std::vector<std::string> kotek;
+	std::vector<std::string> stl;
+
 	ktk_filesystem_path t("C:\\test\\ostream\\operator");
+	std::filesystem::path t1("C:\\test\\ostream\\operator");
 
 	for (const auto& it : t)
 	{
 		std::cout << it << std::endl;
+		kotek.push_back(it.native().c_str());
 	}
+
+	for (const auto& it : t1)
+	{
+		stl.push_back(it.string());
+	}
+
+	BOOST_REQUIRE(kotek.size() == stl.size());
+
+	for (auto i = 0; i < kotek.size(); ++i)
+	{
+		BOOST_REQUIRE(kotek.at(i) == stl.at(i));
+	}
+
+	kotek.clear();
+	stl.clear();
+
+	t = "/a/b/c/d";
+}
+
+void test_container_filesystem_static_path_iterator_constructor() 
+{
+
 }
 
 	#endif
