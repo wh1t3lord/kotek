@@ -1350,6 +1350,16 @@ void test_container_filesystem_static_path_operator_ostream()
 	std::cout << t << std::endl;
 }
 
+void test_container_filesystem_static_path_iterator_for_loop() 
+{
+	ktk_filesystem_path t("C:\\test\\ostream\\operator");
+
+	for (const auto& it : t)
+	{
+		std::cout << it << std::endl;
+	}
+}
+
 	#endif
 #endif
 
@@ -1418,6 +1428,8 @@ void RegisterTests_Filesystem_ForModule_Core(void)
 		BOOST_TEST_CASE(&test_container_filesystem_static_path_concat));
 	p_suite->add(BOOST_TEST_CASE(
 		&test_container_filesystem_static_path_operator_ostream));
+	p_suite->add(BOOST_TEST_CASE(
+		&test_container_filesystem_static_path_iterator_for_loop));
 	boost::unit_test::framework::master_test_suite().add(p_suite);
 
 	KOTEK_MESSAGE("registered!");

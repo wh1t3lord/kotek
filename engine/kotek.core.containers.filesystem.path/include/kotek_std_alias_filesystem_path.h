@@ -71,7 +71,13 @@ public:
 			m_first{path.m_buffer.begin()}, m_last{path.m_buffer.end()},
 			m_prefix{m_first +
 				static_cast<string_type::difference_type>(
-					path.get_prefix_length())}
+					path.get_prefix_length())},
+			m_root{path.has_root_directory() ? this->m_first +
+						static_cast<string_type::difference_type>(
+							path.get_prefix_length() +
+							path.get_root_name_length())
+											 : this->m_last},
+			m_iter{pos}
 		{
 		}
 
@@ -564,6 +570,59 @@ private:
 		}
 		#else
 		#endif
+
+		return result;
+	}
+
+	inline size_t get_root_name_length() const
+	{
+		auto prefix_length = this->get_prefix_length();
+		size_t result{};
+
+		#ifdef KOTEK_USE_PLATFORM_WINDOWS
+		if (this->m_buffer.length() >= prefix_length + 2 &&
+			((this->m_buffer[prefix_length] >= 65 &&
+				 this->m_buffer[prefix_length] <= 90) ||
+				(this->m_buffer[prefix_length] >= 97 &&
+					this->m_buffer[prefix_length] <= 122)) &&
+			this->m_buffer[prefix_length + 1] == ':')
+		{
+			result = 2;
+		}
+		#endif
+
+		if (this->m_buffer.length() > prefix_length + 2 &&
+			(this->m_buffer[prefix_length] == '/' ||
+				this->m_buffer[prefix_length == '\\']) &&
+			(this->m_buffer[prefix_length + 1] == '/' ||
+				this->m_buffer[prefix_length + 1] == '\\') &&
+			(this->m_buffer[prefix_length + 2] != '/' ||
+				this->m_buffer[prefix_length + 2] != '\\'))
+		{
+			auto pos_forward = this->m_buffer.find('/', prefix_length + 3);
+			auto pos_backward = this->m_buffer.find('\\', prefix_length + 3);
+
+			if (pos_forward == npos && pos_backward == npos)
+			{
+				result = this->m_buffer.length();
+			}
+			else if (pos_forward != npos && pos_backward == npos)
+			{
+				result = pos_forward;
+			}
+			else if (pos_backward != npos && pos_forward == npos)
+			{
+				result = pos_backward;
+			}
+			else
+			{
+				result = pos_backward;
+				if (pos_backward > pos_forward)
+				{
+					result = pos_forward;
+				}
+			}
+		}
 
 		return result;
 	}
