@@ -769,38 +769,40 @@ inline static_path<Size>& static_path<Size>::operator=(
 	const string_type& source)
 {
 	this->m_buffer = source;
+	return *this;
 }
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator=(const char* str)
 {
 	this->m_buffer = str;
+	return *this;
 }
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator=(const char8_t* str)
 {
-	this->operator=(reinterpret_cast<const char*>(str));
+	return this->operator=(reinterpret_cast<const char*>(str));
 }
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator=(char str)
 {
-	this->operator=(&str);
+	return this->operator=(&str);
 }
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator=(char8_t str)
 {
-	this->operator=(reinterpret_cast<const char*>(&str));
+	return this->operator=(reinterpret_cast<const char*>(&str));
 }
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator=(
 	const static_cstring_view& view)
 {
-	this->operator=(view.data());
+	return this->operator=(view.data());
 }
 template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator=(
 	const static_u8string_view& view)
 {
-	this->operator=(reinterpret_cast<const char*>(view.data()));
+	return this->operator=(reinterpret_cast<const char*>(view.data()));
 }
 
 template <size_t Size>
