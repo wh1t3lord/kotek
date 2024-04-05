@@ -1381,6 +1381,25 @@ void test_container_filesystem_static_path_iterator_for_loop()
 	stl.clear();
 
 	t = "/a/b/c/d";
+	t1 = "/a/b/c/d";
+
+	for (const auto& it : t)
+	{
+		std::cout << it << std::endl;
+		kotek.push_back(it.native().c_str());
+	}
+
+	for (const auto& it : t1)
+	{
+		stl.push_back(it.string());
+	}
+
+	BOOST_REQUIRE(kotek.size() == stl.size());
+
+	for (auto i = 0; i < kotek.size(); ++i)
+	{
+		BOOST_REQUIRE(kotek.at(i) == stl.at(i));
+	}
 }
 
 void test_container_filesystem_static_path_iterator_constructor() 

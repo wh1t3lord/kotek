@@ -90,7 +90,7 @@ public:
 			this->m_iter = this->increment(this->m_iter);
 			while (this->m_iter != this->m_last &&
 				this->m_iter != this->m_root &&
-				*this->m_iter == preferred_separator &&
+				(*this->m_iter == '\\' || *this->m_iter == '/') &&
 				(this->m_iter + 1) != this->m_last)
 			{
 				++this->m_iter;
@@ -152,21 +152,28 @@ public:
 				{
 					i = this->m_prefix;
 				}
-				else if (*i++ == preferred_separator)
+				else if (auto extracted_symbol = *i++;
+						 (extracted_symbol == '/' || extracted_symbol == '\\'))
 				{
-					if (i != this->m_last && *i == preferred_separator)
+					if (i != this->m_last && (*i == '/' || *i == '\\'))
 					{
 						if (fromStart &&
 							!(i + 1 != this->m_last &&
-								*(i + 1) == preferred_separator))
+								(*(i + 1) == '/' || *(i + 1) == '\\')))
 						{
-							i = std::find(
-								++i, this->m_last, preferred_separator);
+							auto cur_forward =
+								std::find(++i, this->m_last, '/');
+							auto cur_backward =
+								std::find(i, this->m_last, '\\');
+
+							i = cur_forward;
+							if (cur_forward > cur_backward)
+								i = cur_backward;
 						}
 						else
 						{
 							while (
-								i != this->m_last && *i == preferred_separator)
+								i != this->m_last && (*i == '/' || *i == '\\'))
 							{
 								++i;
 							}
@@ -181,7 +188,13 @@ public:
 					}
 					else
 					{
-						i = std::find(i, this->m_last, preferred_separator);
+						auto cur_forward = std::find(i, this->m_last, '/');
+						auto cur_backward = std::find(i, this->m_last, '\\');
+
+						i = cur_forward;
+
+						if (cur_forward > cur_backward)
+							i = cur_backward;
 					}
 				}
 			}
@@ -198,7 +211,7 @@ public:
 				--i;
 
 				if (i != this->m_root &&
-					(pos != this->m_last || *i != preferred_separator))
+					(pos != this->m_last || (*i != '/' || *i == '\\')))
 				{
 		#ifdef KOTEK_USE_PLATFORM_WINDOWS
 					static_cstring<3> seps = "\\:";
@@ -213,15 +226,27 @@ public:
 						i++;
 					}
 		#else
-					i = std::find(std::reverse_iterator<base_iterator>(i),
-						std::reverse_iterator<base_iterator>(this->m_first),
-						preferred_separator)
+					auto cur_forward =
+						std::find(std::reverse_iterator<base_iterator>(i),
+							std::reverse_iterator<base_iterator>(this->m_first),
+							'/')
 							.base();
+					auto cur_backward =
+						std::find(std::reverse_iterator<base_iterator>(i),
+							std::reverse_iterator<base_iterator>(this->m_first),
+							'\\')
+							.base();
+
+					i = cur_forward;
+
+					if (cur_forward > cur_backward)
+						i = cur_backward;
 		#endif
 					// Now we have to check if this is a network name
 					if (i - this->m_first == 2 &&
-						*this->m_first == preferred_separator &&
-						*(this->m_first + 1) == preferred_separator)
+						(*this->m_first == '/' || *this->m_first == '\\') &&
+						(*(this->m_first + 1) == '/' ||
+							*(this->m_first + 1) == '\\'))
 					{
 						i -= 2;
 					}
@@ -236,7 +261,7 @@ public:
 			if ((this->m_iter == this->m_last) ||
 				(this->m_iter != this->m_first &&
 					this->m_iter != this->m_last &&
-					(*this->m_iter == preferred_separator &&
+					((*this->m_iter == '/' || *this->m_iter == '\\') &&
 						this->m_iter != this->m_root)) &&
 					(this->m_iter + 1 == this->m_last))
 			{
