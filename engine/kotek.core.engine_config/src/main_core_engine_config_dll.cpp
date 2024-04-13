@@ -168,7 +168,7 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 	ktk::cstring user_data_settings_name = KOTEK_USE_USER_DATA_CONFIG_NAME;
 	user_data_settings_name += kFormatFile_Text;
 
-	auto path_to_user_data_config = path_to_user_data / user_data_settings_name;
+	auto path_to_user_data_config = path_to_user_data / user_data_settings_name.c_str();
 	if (!p_filesystem->IsValidPath(path_to_user_data_config))
 	{
 

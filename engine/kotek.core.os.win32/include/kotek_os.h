@@ -8,6 +8,8 @@
 	#include <dwmapi.h>
 	#include <windows.h>
 	#include <commdlg.h>
+	#include <Shlwapi.h>
+	#include <winioctl.h>
 
 	#ifdef KOTEK_USE_VULKAN
 		#define VK_USE_PLATFORM_WIN32_KHR

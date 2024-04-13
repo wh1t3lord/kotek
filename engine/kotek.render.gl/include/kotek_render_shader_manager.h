@@ -37,10 +37,10 @@ public:
 		bool is_support_reallocation_feature = false);
 	void Shutdown(void);
 
-	ktkShaderModule LoadShader(const ktk::filesystem::path& path,
+	ktkShaderModule LoadShader(const ktk_filesystem_path& path,
 		gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT;
 	ktkShaderModule LoadShader(
-		const ktk::filesystem::path& path) KOTEK_CPP_KEYWORD_NOEXCEPT;
+		const ktk_filesystem_path& path) KOTEK_CPP_KEYWORD_NOEXCEPT;
 	ktkShaderModule LoadShaderAsString(const ktk::ustring& code_as_string,
 		gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT;
 

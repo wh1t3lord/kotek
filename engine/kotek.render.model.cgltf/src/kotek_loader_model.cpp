@@ -24,7 +24,7 @@ ktkLoaderModel_CGLTF::ktkLoaderModel_CGLTF(void) : m_p_filesystem{} {}
 
 ktkLoaderModel_CGLTF::~ktkLoaderModel_CGLTF(void) {}
 
-ktk::any ktkLoaderModel_CGLTF::Load(const ktk::filesystem::path& path) noexcept
+ktk::any ktkLoaderModel_CGLTF::Load(const ktk_filesystem_path& path) noexcept
 {
 	KOTEK_ASSERT(this->m_p_filesystem,
 		"you must initialize file system for this loader");
@@ -49,7 +49,7 @@ ktk::any ktkLoaderModel_CGLTF::Load(const ktk::filesystem::path& path) noexcept
 }
 
 bool ktkLoaderModel_CGLTF::Load(
-	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
+	const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
 {
 	KOTEK_ASSERT(this->m_p_filesystem,
 		"you must initialize file system for this loader");
@@ -85,7 +85,7 @@ Core::eResourceLoadingType ktkLoaderModel_CGLTF::Get_Type(void) const noexcept
 }
 
 bool ktkLoaderModel_CGLTF::DetectTypeByFullPath(
-	const ktk::filesystem::path& path) noexcept
+	const ktk_filesystem_path& path) noexcept
 {
 	KOTEK_ASSERT(
 		path.empty() == false, "you must pass a not empty path to file!");
@@ -100,7 +100,7 @@ bool ktkLoaderModel_CGLTF::DetectTypeByFullPath(
 }
 
 Core::ktkIResourceLoader* ktkLoaderModel_CGLTF::Get_Loader(
-	const ktk::filesystem::path& extension_of_file) noexcept
+	const ktk_filesystem_path& extension_of_file) noexcept
 {
 	KOTEK_ASSERT(extension_of_file.empty() == false,
 		"your extension is an empty string");

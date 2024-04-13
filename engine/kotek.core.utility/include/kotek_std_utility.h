@@ -26,6 +26,8 @@ bool is_equal(double a, double b,
 bool is_equal(long double a, long double b,
 	long double relative_difference_factor = ktk::kMin_Long_Double) noexcept;
 
+
+
 /// @brief returns OPPOSITE separator depends on OS. For example, if your OS is
 /// windows and you pass a '\\' separator it will return a '/' separator because
 /// '\\' is preferred separator on WindowsNT platforms and thus opposite

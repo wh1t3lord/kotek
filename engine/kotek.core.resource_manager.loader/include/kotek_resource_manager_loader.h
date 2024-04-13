@@ -25,13 +25,13 @@ public:
 	ktkIResourceLoader* Get_Loader(
 		eResourceLoadingType resource_type) const noexcept override;
 
-	ktk::any Load(const ktk::filesystem::path& path) noexcept override;
-	bool Load(const ktk::filesystem::path& path,
+	ktk::any Load(const ktk_filesystem_path& path) noexcept override;
+	bool Load(const ktk_filesystem_path& path,
 		ktk::any object_from_construct) noexcept override;
 
 protected:
 	eResourceLoadingType DetectResourceTypeByFileFormat(
-		const ktk::filesystem::path& path) noexcept override;
+		const ktk_filesystem_path& path) noexcept override;
 
 	ktk_unordered_map<eResourceLoadingType, ktkIResourceLoader*,
 		KOTEK_DEF_RESOURCE_LOADERS_TYPE_MAX_COUNT>

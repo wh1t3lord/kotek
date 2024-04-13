@@ -69,6 +69,7 @@
 .\vcpkg\vcpkg.exe install etl:x64-windows
 .\vcpkg\vcpkg.exe install dav1d:x64-windows
 .\vcpkg\vcpkg.exe install spdlog:x64-windows
+.\vcpkg\vcpkg.exe install utfcpp:x64-windows
 
 # for shared configuration
 .\vcpkg\vcpkg install boost:x64-windows bullet3:x64-windows directxmath:x64-windows glfw3:x64-windows eigen3:x64-windows glm:x64-windows ktx:x64-windows mimalloc:x64-windows tracy:x64-windows shaderc:x64-windows spirv-reflect:x64-windows tbb:x64-windows wxwidgets:x64-windows wxwidgets:x64-windows angle:x64-windows assimp:x64-windows cgltf:x64-windows rmlui[freetype]:x64-windows entt:x64-windows

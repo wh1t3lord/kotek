@@ -40,10 +40,10 @@ public:
 	/*
 	 * For Win32 returns without slash
 	 */
-	ktk::filesystem::path GetFolderByEnum(
+	ktk_filesystem_path GetFolderByEnum(
 		eFolderIndex id) const noexcept override;
 
-	bool IsValidPath(const ktk::filesystem::path& path) const noexcept override;
+	bool IsValidPath(const ktk_filesystem_path& path) const noexcept override;
 
 	// TODO: think about multithreading and probably it is better to move to
 	// resource manager loader/saver
@@ -59,20 +59,20 @@ public:
 	 * \return ktk::ustring
 	 */
 	ktk::ustring ReadFile(
-		const ktk::filesystem::path& path_to_file) const noexcept override;
+		const ktk_filesystem_path& path_to_file) const noexcept override;
 
-	void Create_Directory(const ktk::filesystem::path& path,
+	void Create_Directory(const ktk_filesystem_path& path,
 		Core::eFolderVisibilityType type) override;
 
 private:
-	bool AddGamedataFolderToStorage(const ktk::filesystem::path& path,
+	bool AddGamedataFolderToStorage(const ktk_filesystem_path& path,
 		eFolderIndex id, const ktk::cstring& folder_name) noexcept;
 
 	void ValidateFolders(void) noexcept;
 
 	void CreateConfigFiles(void) noexcept;
 
-	bool CreateDirectoryImpl(const ktk::filesystem::path& path) const noexcept;
+	bool CreateDirectoryImpl(const ktk_filesystem_path& path) const noexcept;
 
 private:
 	ktk_unordered_map<eFolderIndex,

@@ -31,9 +31,9 @@ public:
 		eResourceLoadingType resource_type) const noexcept override;
 
 	bool Save(
-		const ktk::filesystem::path& path, ktk::any data) noexcept override;
+		const ktk_filesystem_path& path, ktk::any data) noexcept override;
 
-	bool Open(const ktk::filesystem::path& path,
+	bool Open(const ktk_filesystem_path& path,
 		eResourceWritingType resource_type, eResourceWritingPolicy policy,
 		eResourceWritingMode mode, ktk::uint32_t id) noexcept override;
 	void Write(
@@ -79,7 +79,7 @@ public:
 
 protected:
 	eResourceLoadingType DetectResourceTypeByFileFormat(
-		const ktk::filesystem::path& path) noexcept override;
+		const ktk_filesystem_path& path) noexcept override;
 
 private:
 	ktk_unordered_map<ktk::uint32_t,

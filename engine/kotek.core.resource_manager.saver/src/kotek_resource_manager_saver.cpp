@@ -108,7 +108,7 @@ ktkIResourceSaver* ktkResourceSaverManager::Get_Saver(
 }
 
 bool ktkResourceSaverManager::Save(
-	const ktk::filesystem::path& path, ktk::any data) noexcept
+	const ktk_filesystem_path& path, ktk::any data) noexcept
 {
 	KOTEK_ASSERT(path.has_extension(),
 		"you must provide an extension for your file: [{}]", path);
@@ -128,7 +128,7 @@ bool ktkResourceSaverManager::Save(
 	return result;
 }
 
-bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
+bool ktkResourceSaverManager::Open(const ktk_filesystem_path& path,
 	eResourceWritingType resource_type, eResourceWritingPolicy policy,
 	eResourceWritingMode mode, ktk::uint32_t id) noexcept
 {
@@ -187,7 +187,7 @@ bool ktkResourceSaverManager::Open(const ktk::filesystem::path& path,
 		}
 		}
 
-		file->open(path, om);
+		file->open(path.c_str(), om);
 		result = file->good();
 		KOTEK_ASSERT(result, "failed to open file: [{}]; error: {}", path, strerror(errno));
 
@@ -791,7 +791,7 @@ ktk::uint32_t ktkResourceSaverManager::GenerateFileID(void) noexcept
 }
 
 eResourceLoadingType ktkResourceSaverManager::DetectResourceTypeByFileFormat(
-	const ktk::filesystem::path& path) noexcept
+	const ktk_filesystem_path& path) noexcept
 {
 	KOTEK_ASSERT(this->m_savers.empty() == false,
 		"you must provide some loaders. Otherwise loaders are empty thus "
@@ -831,7 +831,7 @@ eResourceLoadingType ktkResourceSaverManager::DetectResourceTypeByFileFormat(
 
 /*
 bool ktkResourceSaverManager::Save_Text(
-    const ktk::filesystem::path& path, ktk::any data) noexcept
+    const ktk_filesystem_path& path, ktk::any data) noexcept
 {
     KOTEK_ASSERT(this->m_p_manager_filesystem,
         "you must initialize your file system here");
@@ -868,7 +868,7 @@ bool ktkResourceSaverManager::Save_Text(
 }
 
 bool ktkResourceSaverManager::Save_Text_Formatted(
-    const ktk::filesystem::path& path, ktk::any data) noexcept
+    const ktk_filesystem_path& path, ktk::any data) noexcept
 {
 
 }

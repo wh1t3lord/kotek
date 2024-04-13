@@ -28,6 +28,9 @@ cstring to_lower(const cstring& str);
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 // TODO: add static version of strings containers respect to char8_t model
 // architecture !
+// TODO: add predefined versions size of static strings like
+// 2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536
+
 using string = std::u8string;
 using string_view = std::u8string_view;
 
@@ -64,6 +67,29 @@ using ustring_view = static_string_view;
 	#endif
 
 #endif
+
+/// @brief allocates memory because it is not embedded function on stack
+/// @param str takes char16_t type (don't mistake with wchar_t)
+/// @return char8_t based std::u8string container, then you can keep this type
+/// or convert to std::string (char based string)
+u8string convert_utf16_to_utf8(const u16string_view& str);
+/// @brief allocates memory because it is not embedded function on stack
+/// @param str takes char32_t string type
+/// @return char8_t based std::u8string container, then you can keep this type
+/// or convert to std::string (char based string)
+u8string convert_utf32_to_utf8(const u32string_view& str);
+
+// TODO: create default size of stack static string size
+template <size_t Size = 128>
+inline static_cstring<Size> convert_wchar_to_char(const wstring_view& str)
+{
+	assert(str.size() > Size && "can't convert try to change the size!");
+
+	ktk::size_t written;
+	static_cstring<Size> stack{};
+	wcstombs_s(&written, stack.data(), Size, str.data(), str.size());
+	return stack;
+}
 
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK

@@ -122,7 +122,7 @@ public:
 		ktk::enum_base_t resource_loading_type, ktk::entity_t id) = 0;
 	virtual ktk::shared_ptr<ktk::any> LoadGeometry(
 		ktk::enum_base_t resource_loading_type,
-		const ktk::filesystem::path& path_to_file, ktk::entity_t id) = 0;
+		const ktk_filesystem_path& path_to_file, ktk::entity_t id) = 0;
 
 	virtual void Resize(ktkIRenderDevice* p_raw_device,
 		ktkIRenderSwapchain* p_raw_swapchain) = 0;
@@ -182,17 +182,18 @@ public:
 	virtual void Initialize(void) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual bool IsValidPath(
-		const ktk::filesystem::path& path) const noexcept = 0;
+		const ktk_filesystem_path& path) const noexcept = 0;
 
-	virtual void Create_Directory(const ktk::filesystem::path& path,
+	virtual void Create_Directory(
+		const ktk_filesystem_path& path,
 		Core::eFolderVisibilityType type) = 0;
 
 	// TODO: check todo in implementation class ktkFileSystem and it is
 	// a temporary virtual function delete it
 	virtual ktk::ustring ReadFile(
-		const ktk::filesystem::path& path_to_file) const noexcept = 0;
+		const ktk_filesystem_path& path_to_file) const noexcept = 0;
 
-	virtual ktk::filesystem::path GetFolderByEnum(
+	virtual ktk_filesystem_path GetFolderByEnum(
 		eFolderIndex id) const noexcept = 0;
 };
 
@@ -293,7 +294,7 @@ public:
 	/// shared_ptr
 	/// @param path to your file where it is located on system
 	/// @return
-	virtual ktk::any Load(const ktk::filesystem::path& path) noexcept = 0;
+	virtual ktk::any Load(const ktk_filesystem_path& path) noexcept = 0;
 
 	/// \~english @brief This method constucts an object that was passed
 	/// on stack. It means it doesn't create shared_ptr and uses only
@@ -302,11 +303,11 @@ public:
 	/// @param path
 	/// @param object_from_construct
 	/// @return
-	virtual bool Load(const ktk::filesystem::path& path,
+	virtual bool Load(const ktk_filesystem_path& path,
 		ktk::any object_from_construct) noexcept = 0;
 
 	virtual bool DetectTypeByFullPath(
-		const ktk::filesystem::path& path) noexcept = 0;
+		const ktk_filesystem_path& path) noexcept = 0;
 
 	/// \~english @brief This is only for user. You just provide your
 	/// description of loader's implementation and access it through interface.
@@ -410,7 +411,7 @@ public:
 	/// @see Kotek::Render::ktkLoaderModel_CGLTF default implementation of cgltf
 	/// loader library
 	virtual ktkIResourceLoader* Get_Loader(
-		const ktk::filesystem::path& extension_of_file) noexcept = 0;
+		const ktk_filesystem_path& extension_of_file) noexcept = 0;
 
 	virtual ktk::cstring Get_AllSupportedFormats(void) const noexcept = 0;
 };
@@ -431,13 +432,13 @@ public:
 	virtual ktkIResourceLoader* Get_Loader(
 		eResourceLoadingType resource_type) const noexcept = 0;
 
-	virtual ktk::any Load(const ktk::filesystem::path& path) noexcept = 0;
-	virtual bool Load(const ktk::filesystem::path& path,
+	virtual ktk::any Load(const ktk_filesystem_path& path) noexcept = 0;
+	virtual bool Load(const ktk_filesystem_path& path,
 		ktk::any object_from_construct) noexcept = 0;
 
 protected:
 	virtual eResourceLoadingType DetectResourceTypeByFileFormat(
-		const ktk::filesystem::path& path) noexcept = 0;
+		const ktk_filesystem_path& path) noexcept = 0;
 
 	ktkIFileSystem* m_p_manager_filesystem;
 };
@@ -447,11 +448,11 @@ class ktkIResourceSaver
 public:
 	virtual ~ktkIResourceSaver(void) {}
 
-	virtual bool Save(const ktk::filesystem::path& path,
+	virtual bool Save(const ktk_filesystem_path& path,
 		ktk::any object_for_saving) noexcept = 0;
 
 	virtual bool DetectTypeByFullPath(
-		const ktk::filesystem::path& path) noexcept = 0;
+		const ktk_filesystem_path& path) noexcept = 0;
 
 	virtual ktk::cstring Get_UserDescription() const noexcept
 	{
@@ -464,7 +465,7 @@ public:
 	}
 
 	virtual ktkIResourceSaver* Get_Saver(
-		const ktk::filesystem::path& extension_of_file) noexcept = 0;
+		const ktk_filesystem_path& extension_of_file) noexcept = 0;
 
 	virtual ktk::cstring Get_AllSupportedFormats(void) const noexcept = 0;
 };
@@ -490,9 +491,9 @@ public:
 		eResourceLoadingType resource_type) const noexcept = 0;
 
 	virtual bool Save(
-		const ktk::filesystem::path& path, ktk::any data) noexcept = 0;
+		const ktk_filesystem_path& path, ktk::any data) noexcept = 0;
 
-	virtual bool Open(const ktk::filesystem::path& path,
+	virtual bool Open(const ktk_filesystem_path& path,
 		eResourceWritingType resource_type, eResourceWritingPolicy policy,
 		eResourceWritingMode mode, ktk::uint32_t id) noexcept = 0;
 	virtual void Write(
@@ -545,7 +546,7 @@ public:
 
 protected:
 	virtual eResourceLoadingType DetectResourceTypeByFileFormat(
-		const ktk::filesystem::path& path) noexcept = 0;
+		const ktk_filesystem_path& path) noexcept = 0;
 
 	ktkIFileSystem* m_p_manager_filesystem;
 };
@@ -556,7 +557,7 @@ public:
 	ktkLoadingRequest(eResourceLoadingPolicy type_loading,
 		eResourceCachingPolicy type_policy_caching,
 		eResourceLoadingType type_of_loading_resource,
-		const ktk::filesystem::path& resource_path) :
+		const ktk_filesystem_path& resource_path) :
 		m_policy_loading{type_loading},
 		m_policy_caching{type_policy_caching},
 		m_resource_type{type_of_loading_resource}, m_id{ktk::entity_t(-1)},
@@ -567,7 +568,7 @@ public:
 	ktkLoadingRequest(eResourceLoadingPolicy type_loading,
 		eResourceCachingPolicy type_policy_caching,
 		eResourceLoadingType type_of_loading_resource,
-		const ktk::filesystem::path& resource_path, Kotek::ktk::entity_t id) :
+		const ktk_filesystem_path& resource_path, Kotek::ktk::entity_t id) :
 		m_policy_loading{type_loading},
 		m_policy_caching{type_policy_caching},
 		m_resource_type{type_of_loading_resource}, m_id{id},
@@ -617,13 +618,13 @@ public:
 	}
 
 	ktkLoadingRequest& Set_ResourcePath(
-		const ktk::filesystem::path& path) noexcept
+		const ktk_filesystem_path& path) noexcept
 	{
 		this->m_resource_path = path;
 		return *this;
 	}
 
-	const ktk::filesystem::path& Get_ResourcePath(void) const noexcept
+	const ktk_filesystem_path& Get_ResourcePath(void) const noexcept
 	{
 		return this->m_resource_path;
 	}
@@ -643,7 +644,7 @@ private:
 	eResourceCachingPolicy m_policy_caching;
 	eResourceLoadingType m_resource_type;
 	Kotek::ktk::entity_t m_id;
-	ktk::filesystem::path m_resource_path;
+	ktk_filesystem_path m_resource_path;
 };
 
 class ktkResourceWritingRequest
@@ -658,7 +659,7 @@ public:
 
 	ktkResourceWritingRequest(ktk::uint32_t id, eResourceWritingMode mode,
 		eResourceWritingType type, eResourceWritingPolicy policy,
-		const ktk::filesystem::path& path) :
+		const ktk_filesystem_path& path) :
 		m_id{id},
 		m_writing_mode{mode}, m_resource_type{type},
 		m_filepath_for_writing{path}, m_policy{policy}
@@ -693,13 +694,13 @@ public:
 	ktk::uint32_t Get_ID(void) const noexcept { return this->m_id; }
 	void Set_ID(ktk::uint32_t id) noexcept { this->m_id = id; }
 
-	const ktk::filesystem::path& Get_Path(void) const noexcept
+	const ktk_filesystem_path& Get_Path(void) const noexcept
 	{
 		return this->m_filepath_for_writing;
 	}
 
 	ktkResourceWritingRequest& Set_Path(
-		const ktk::filesystem::path& path) noexcept
+		const ktk_filesystem_path& path) noexcept
 	{
 		this->m_filepath_for_writing = path;
 		return *this;
@@ -715,7 +716,7 @@ private:
 	eResourceWritingMode m_writing_mode;
 	eResourceWritingType m_resource_type;
 	eResourceWritingPolicy m_policy;
-	ktk::filesystem::path m_filepath_for_writing;
+	ktk_filesystem_path m_filepath_for_writing;
 };
 
 class ktkResourceWritingStatus
@@ -993,7 +994,7 @@ public:
 	virtual bool IsApplicationWorking(void) const noexcept = 0;
 	virtual void SetApplicationWorking(bool status) noexcept = 0;
 	virtual void Set_UserLibrary(
-		const ktk::filesystem::path& path_to_library) noexcept = 0;
+		const ktk_filesystem_path& path_to_library) noexcept = 0;
 	virtual void* Get_UserLibrary(void) noexcept = 0;
 };
 

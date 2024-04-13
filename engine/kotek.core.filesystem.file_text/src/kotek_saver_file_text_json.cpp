@@ -12,7 +12,7 @@ ktkSaverFile_JSON::ktkSaverFile_JSON(ktkMainManager* p_main_manager) :
 ktkSaverFile_JSON::~ktkSaverFile_JSON() {}
 
 bool ktkSaverFile_JSON::Save(
-	const ktk::filesystem::path& path, ktk::any object_for_saving) noexcept
+	const ktk_filesystem_path& path, ktk::any object_for_saving) noexcept
 {
 	KOTEK_ASSERT(path.has_extension(),
 		"you must save with full path aka filename + extension");
@@ -43,7 +43,7 @@ bool ktkSaverFile_JSON::Save(
 	KOTEK_ASSERT(p_casted_file->Get_FileName().empty() == false,
 		"you can't have an empty filename in your ktkFileText instance");
 
-    ktk::cofstream output_file(path);
+    ktk::cofstream output_file(path.c_str());
 
 	this->FormatTextFile_JSON(output_file, p_casted_file->Get_Json());
 
@@ -57,7 +57,7 @@ bool ktkSaverFile_JSON::Save(
 }
 
 bool ktkSaverFile_JSON::DetectTypeByFullPath(
-	const ktk::filesystem::path& path) noexcept
+	const ktk_filesystem_path& path) noexcept
 {
 	return false;
 }
@@ -73,7 +73,7 @@ eResourceLoadingType ktkSaverFile_JSON::Get_Type() const noexcept
 }
 
 ktkIResourceSaver* ktkSaverFile_JSON::Get_Saver(
-	const ktk::filesystem::path& extension_of_file) noexcept
+	const ktk_filesystem_path& extension_of_file) noexcept
 {
 	return nullptr;
 }

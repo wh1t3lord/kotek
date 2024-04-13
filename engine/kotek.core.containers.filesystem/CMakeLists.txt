@@ -8,6 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_filesystem.h"
 	"include/kotek_core_containers_filesystem.h"
+	"src/kotek_std_alias_filesystem.cpp"
 	"src/main_core_containers_filesystem_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.filesystem.path)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)

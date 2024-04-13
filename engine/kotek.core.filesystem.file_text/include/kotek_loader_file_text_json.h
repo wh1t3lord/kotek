@@ -13,9 +13,9 @@ public:
 	ktkLoaderFile_JSON(ktkMainManager* p_main_manager);
 	~ktkLoaderFile_JSON();
 
-	ktk::any Load(const ktk::filesystem::path& path) noexcept override;
+	ktk::any Load(const ktk_filesystem_path& path) noexcept override;
 
-	bool Load(const ktk::filesystem::path& path,
+	bool Load(const ktk_filesystem_path& path,
 		ktk::any object_from_construct) noexcept override;
 
     ktk::cstring Get_UserDescription(void) const noexcept override;
@@ -23,10 +23,10 @@ public:
 	Core::eResourceLoadingType Get_Type(void) const noexcept override;
 
 	bool DetectTypeByFullPath(
-		const ktk::filesystem::path& path) noexcept override;
+		const ktk_filesystem_path& path) noexcept override;
 
 	ktkIResourceLoader* Get_Loader(
-		const ktk::filesystem::path& extension_of_file) noexcept override;
+		const ktk_filesystem_path& extension_of_file) noexcept override;
 
     ktk::cstring Get_AllSupportedFormats(void) const noexcept override;
 

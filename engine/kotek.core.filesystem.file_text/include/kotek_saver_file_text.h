@@ -11,18 +11,18 @@ public:
 	ktkResourceSaverFile_Text(ktkMainManager* p_main_manager);
 	~ktkResourceSaverFile_Text();
 
-	bool Save(const ktk::filesystem::path& path,
+	bool Save(const ktk_filesystem_path& path,
 		ktk::any object_for_saving) noexcept override;
 
 	bool DetectTypeByFullPath(
-		const ktk::filesystem::path& path) noexcept override;
+		const ktk_filesystem_path& path) noexcept override;
 
     ktk::cstring Get_UserDescription() const noexcept override;
 
 	eResourceLoadingType Get_Type() const noexcept override;
 
 	ktkIResourceSaver* Get_Saver(
-		const ktk::filesystem::path& extension_of_file) noexcept override;
+		const ktk_filesystem_path& extension_of_file) noexcept override;
 
     ktk::cstring Get_AllSupportedFormats(void) const noexcept override;
 

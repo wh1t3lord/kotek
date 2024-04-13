@@ -655,7 +655,7 @@ void ktkEngineConfig::SetApplicationWorking(bool status) noexcept
 }
 
 void ktkEngineConfig::Set_UserLibrary(
-	const ktk::filesystem::path& path_to_library) noexcept
+	const ktk_filesystem_path& path_to_library) noexcept
 {
 	this->m_user_dll = ktk::dll::shared_library(path_to_library.c_str());
 }

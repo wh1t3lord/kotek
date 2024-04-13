@@ -49,7 +49,7 @@ void ktkFileSystem::Initialize(void)
 
 void ktkFileSystem::Shutdown(void) {}
 
-ktk::filesystem::path ktkFileSystem::GetFolderByEnum(
+ktk_filesystem_path ktkFileSystem::GetFolderByEnum(
 	eFolderIndex id) const noexcept
 {
 	KOTEK_ASSERT(this->m_storage_paths.empty() == false,
@@ -70,7 +70,7 @@ ktk::filesystem::path ktkFileSystem::GetFolderByEnum(
 }
 
 bool ktkFileSystem::IsValidPath(
-	const ktk::filesystem::path& path) const noexcept
+	const ktk_filesystem_path& path) const noexcept
 {
 	if (path.empty())
 	{
@@ -82,7 +82,7 @@ bool ktkFileSystem::IsValidPath(
 }
 
 bool ktkFileSystem::CreateDirectoryImpl(
-	const ktk::filesystem::path& path) const noexcept
+	const ktk_filesystem_path& path) const noexcept
 {
 	if (path.empty())
 	{
@@ -100,7 +100,7 @@ bool ktkFileSystem::CreateDirectoryImpl(
 }
 
 ktk::ustring ktkFileSystem::ReadFile(
-	const ktk::filesystem::path& path_to_file) const noexcept
+	const ktk_filesystem_path& path_to_file) const noexcept
 {
 	ktk::ustring result;
 
@@ -129,7 +129,7 @@ ktk::ustring ktkFileSystem::ReadFile(
 }
 
 void ktkFileSystem::Create_Directory(
-	const ktk::filesystem::path& path, Core::eFolderVisibilityType type)
+	const ktk_filesystem_path& path, Core::eFolderVisibilityType type)
 {
 	KOTEK_ASSERT(path.empty() == false, "you can't pass an empty path");
 
@@ -139,7 +139,7 @@ void ktkFileSystem::Create_Directory(
 }
 
 bool ktkFileSystem::AddGamedataFolderToStorage(
-	const ktk::filesystem::path& path, eFolderIndex id,
+	const ktk_filesystem_path& path, eFolderIndex id,
 	const ktk::cstring& folder_name) noexcept
 {
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -155,7 +155,7 @@ bool ktkFileSystem::AddGamedataFolderToStorage(
 		return false;
 	}
 
-	ktk::filesystem::path result(path);
+	ktk_filesystem_path result(path);
 	result /= folder_name.c_str();
 
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -181,7 +181,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root);
 
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	ktk::filesystem::path temp =
+	ktk_filesystem_path temp =
 		this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata].c_str();
 	temp /= KOTEK_TEXTU("game_data");
 

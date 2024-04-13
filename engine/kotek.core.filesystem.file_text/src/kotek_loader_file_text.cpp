@@ -16,7 +16,7 @@ ktkResourceLoaderFile_Text::~ktkResourceLoaderFile_Text()
 	this->Delete_Loaders();
 }
 
-ktk::any ktkResourceLoaderFile_Text::Load(const ktk::filesystem::path& path) noexcept
+ktk::any ktkResourceLoaderFile_Text::Load(const ktk_filesystem_path& path) noexcept
 {
 	KOTEK_ASSERT(this->m_p_main_manager,
 		"you must initialize main manager for this loader");
@@ -35,7 +35,7 @@ ktk::any ktkResourceLoaderFile_Text::Load(const ktk::filesystem::path& path) noe
 }
 
 bool ktkResourceLoaderFile_Text::Load(
-	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
+	const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
 {
 	KOTEK_ASSERT(this->m_p_main_manager,
 		"you must initialize main manager for this loader");
@@ -70,7 +70,7 @@ Core::eResourceLoadingType ktkResourceLoaderFile_Text::Get_Type(void) const noex
 }
 
 bool ktkResourceLoaderFile_Text::DetectTypeByFullPath(
-	const ktk::filesystem::path& path) noexcept
+	const ktk_filesystem_path& path) noexcept
 {
 	KOTEK_ASSERT(
 		path.empty() == false, "you must pass a not empty path to file!");
@@ -85,7 +85,7 @@ bool ktkResourceLoaderFile_Text::DetectTypeByFullPath(
 }
 
 ktkIResourceLoader* ktkResourceLoaderFile_Text::Get_Loader(
-	const ktk::filesystem::path& extension_of_file) noexcept
+	const ktk_filesystem_path& extension_of_file) noexcept
 {
 	KOTEK_ASSERT(extension_of_file.empty() == false,
 		"your extension is an empty string");

@@ -41,7 +41,7 @@ struct std::formatter<Kotek::ktk::ustring, char>
 };
 
 template <>
-struct std::formatter<Kotek::ktk::filesystem::path, char>
+struct std::formatter<ktk_filesystem_path, char>
 {
 	template <typename ParseContext>
 	constexpr inline auto parse(ParseContext& ctx)
@@ -50,7 +50,7 @@ struct std::formatter<Kotek::ktk::filesystem::path, char>
 	}
 
 	inline auto format(
-		Kotek::ktk::filesystem::path const& str, auto& ctx) const
+		ktk_filesystem_path const& str, auto& ctx) const
 	{
 		return std::format_to(ctx.out(), "{}",
 			reinterpret_cast<const char*>(str.u8string().c_str()));

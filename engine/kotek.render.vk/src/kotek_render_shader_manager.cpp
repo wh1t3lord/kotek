@@ -36,14 +36,14 @@ namespace Kotek
 				if (path.empty())
 				{
 					KOTEK_ASSERT(false, "you have passed an empty path",
-                        reinterpret_cast<const char*>(path.c_str()));
+						reinterpret_cast<const char*>(path.c_str()));
 					return result;
 				}
 
-                if (this->m_p_filesystem->IsValidPath(path.c_str()) == false)
+				if (this->m_p_filesystem->IsValidPath(path.c_str()) == false)
 				{
 					KOTEK_ASSERT(false, "you passed an invalid path: [{}]",
-                        reinterpret_cast<const char*>(path.c_str()));
+						reinterpret_cast<const char*>(path.c_str()));
 					return result;
 				}
 
@@ -56,24 +56,24 @@ namespace Kotek
 				case shader_type_t::kShaderType_Vertex:
 				{
 					shader_code = this->compileShaderToSPIRV(
-                        reinterpret_cast<const char*>(path.c_str()),
-                        shaderc_shader_kind::shaderc_vertex_shader);
+						reinterpret_cast<const char*>(path.c_str()),
+						shaderc_shader_kind::shaderc_vertex_shader);
 
 					break;
 				}
 				case shader_type_t::kShaderType_Compute:
 				{
 					shader_code = this->compileShaderToSPIRV(
-                        reinterpret_cast<const char*>(path.c_str()),
-                        shaderc_shader_kind::shaderc_compute_shader);
+						reinterpret_cast<const char*>(path.c_str()),
+						shaderc_shader_kind::shaderc_compute_shader);
 
 					break;
 				}
 				case shader_type_t::kShaderType_Pixel:
 				{
 					shader_code = this->compileShaderToSPIRV(
-                        reinterpret_cast<const char*>(path.c_str()),
-                        shaderc_shader_kind::shaderc_fragment_shader);
+						reinterpret_cast<const char*>(path.c_str()),
+						shaderc_shader_kind::shaderc_fragment_shader);
 
 					break;
 				}
@@ -89,7 +89,7 @@ namespace Kotek
 					KOTEK_ASSERT(false,
 						"shader code is not valid. Can't compile and "
 						"load shader by path: [{}]",
-                        reinterpret_cast<const char*>(path.c_str()));
+						reinterpret_cast<const char*>(path.c_str()));
 					return result;
 				}
 
@@ -131,10 +131,10 @@ namespace Kotek
 					return result;
 				}
 
-                if (this->m_p_filesystem->IsValidPath(path) == false)
+				if (this->m_p_filesystem->IsValidPath(path) == false)
 				{
-                    KOTEK_MESSAGE_WARNING("you passed an invalid path: [{}]",
-                        reinterpret_cast<const char*>(path.c_str()));
+					KOTEK_MESSAGE_WARNING("you passed an invalid path: [{}]",
+						reinterpret_cast<const char*>(path.c_str()));
 					return result;
 				}
 
@@ -153,7 +153,7 @@ namespace Kotek
 
 			kotek_render_shader_manager::shader_module_t
 			kotek_render_shader_manager::loadShaderAsString(
-                const ktk::cstring& code_as_string, shader_type_t type) noexcept
+				const ktk::cstring& code_as_string, shader_type_t type) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -161,8 +161,8 @@ namespace Kotek
 
 				if (code_as_string.empty())
 				{
-                    KOTEK_MESSAGE_WARNING("you can't have an empty code string "
-                                          "for loadShaderAsString");
+					KOTEK_MESSAGE_WARNING("you can't have an empty code string "
+										  "for loadShaderAsString");
 					return result;
 				}
 
@@ -238,18 +238,18 @@ namespace Kotek
 
 			ktk::vector<ktk::uint32_t>
 			kotek_render_shader_manager::compileShaderToSPIRV(
-                const ktk::cstring& path_to_file, shaderc_shader_kind type,
-                const ktk::map<ktk::cstring, ktk::cstring>& macros) noexcept
+				const ktk::cstring& path_to_file, shaderc_shader_kind type,
+				const ktk::map<ktk::cstring, ktk::cstring>& macros) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
 				ktk::vector<ktk::uint32_t> result;
 
-                if (this->m_p_filesystem->IsValidPath(path_to_file) == false)
+				if (this->m_p_filesystem->IsValidPath(path_to_file) == false)
 				{
 					KOTEK_MESSAGE_WARNING(
 						"invalid path for compiling shader to SPIRV: [{}]",
-                        reinterpret_cast<const char*>(path_to_file.c_str()));
+						reinterpret_cast<const char*>(path_to_file.c_str()));
 
 					return result;
 				}
@@ -270,23 +270,24 @@ namespace Kotek
 					shaderc_optimization_level_size);
 #endif
 
-                ktk::ustring temp = this->m_p_filesystem->ReadFile(path_to_file);
+				ktk::ustring temp =
+					this->m_p_filesystem->ReadFile(path_to_file);
 
 				if (temp.empty() == true)
 				{
 					KOTEK_MESSAGE_WARNING(
 						"your shader file contains nothing: [{}]",
-                        reinterpret_cast<const char*>(path_to_file.c_str()));
+						reinterpret_cast<const char*>(path_to_file.c_str()));
 					return result;
 				}
 
-                ktk::cstring_view file_content(
-                    reinterpret_cast<const char*>(temp.c_str()));
+				ktk::cstring_view file_content(
+					reinterpret_cast<const char*>(temp.c_str()));
 
 				shaderc::SpvCompilationResult module =
-                    compiler.CompileGlslToSpv(file_content.data(), type,
-                        reinterpret_cast<const char*>(path_to_file.c_str()),
-                        user_options);
+					compiler.CompileGlslToSpv(file_content.data(), type,
+						reinterpret_cast<const char*>(path_to_file.c_str()),
+						user_options);
 
 				auto status = module.GetCompilationStatus();
 
@@ -294,7 +295,7 @@ namespace Kotek
 				{
 					KOTEK_MESSAGE_ERROR("can't build shader: status[{}] {}",
 						static_cast<int>(module.GetCompilationStatus()),
-                        module.GetErrorMessage().c_str());
+						module.GetErrorMessage().c_str());
 
 					return result;
 				}
@@ -306,8 +307,8 @@ namespace Kotek
 
 			ktk::vector<ktk::uint32_t>
 			kotek_render_shader_manager::compileShaderFromStringToSPIRV(
-                const ktk::cstring& code_as_string, shaderc_shader_kind type,
-                const ktk::map<ktk::cstring, ktk::cstring>& macros) noexcept
+				const ktk::cstring& code_as_string, shaderc_shader_kind type,
+				const ktk::map<ktk::cstring, ktk::cstring>& macros) noexcept
 			{
 				KOTEK_CPU_PROFILE();
 
@@ -337,7 +338,7 @@ namespace Kotek
 #endif
 
 				shaderc::SpvCompilationResult module =
-                    compiler.CompileGlslToSpv(code_as_string.c_str(), type,
+					compiler.CompileGlslToSpv(code_as_string.c_str(), type,
 						"CompiledFromString", user_options);
 
 				auto status = module.GetCompilationStatus();
@@ -346,7 +347,7 @@ namespace Kotek
 				{
 					KOTEK_MESSAGE_ERROR("can't build shader: status[{}] {}",
 						static_cast<int>(module.GetCompilationStatus()),
-                        module.GetErrorMessage().c_str());
+						module.GetErrorMessage().c_str());
 
 					return result;
 				}
@@ -366,60 +367,60 @@ namespace Kotek
 				{
 					KOTEK_MESSAGE_WARNING("you have an empty path, engine "
 										  "can't detect type, [{}]",
-                        reinterpret_cast<const char*>(path_to_file.c_str()));
+						reinterpret_cast<const char*>(path_to_file.c_str()));
 					return shader_type_t::kShaderType_Unknown;
 				}
 
-                if (this->m_p_filesystem->IsValidPath(path_to_file) == false)
+				if (this->m_p_filesystem->IsValidPath(path_to_file) == false)
 				{
 					KOTEK_MESSAGE_WARNING(
 						"invalid path to file, can't analyze this path: [{}]",
-                        reinterpret_cast<const char*>(path_to_file.c_str()));
+						reinterpret_cast<const char*>(path_to_file.c_str()));
 					return shader_type_t::kShaderType_Unknown;
 				}
 
-				ktk::filesystem::path temp(path_to_file);
+				ktk_filesystem_path temp(path_to_file);
 
 #ifdef KOTEK_DEBUG
 				KOTEK_MESSAGE("detecting shader for type: [{}]",
-                    reinterpret_cast<const char*>(path_to_file.c_str()));
+					reinterpret_cast<const char*>(path_to_file.c_str()));
 #endif
 
 				if (temp.has_filename())
 				{
 					const auto& filename = temp.filename();
 
-                    ktk::cstring temp_filename(filename.string());
+					ktk::cstring temp_filename(filename.c_str());
 
-                    if (temp_filename.find(_kShaderPrefix_Vertex) !=
+					if (temp_filename.find(_kShaderPrefix_Vertex) !=
 						ktk::ustring::npos)
 					{
 #ifdef KOTEK_DEBUG
 						KOTEK_MESSAGE("detected: Vertex [{}]",
-                            static_cast<ktk::enum_base_t>(
-                                shader_type_t::kShaderType_Vertex));
+							static_cast<ktk::enum_base_t>(
+								shader_type_t::kShaderType_Vertex));
 #endif
 
 						return shader_type_t::kShaderType_Vertex;
 					}
-                    else if (temp_filename.find(_kShaderPrefix_Fragment) !=
-                        ktk::ustring::npos)
+					else if (temp_filename.find(_kShaderPrefix_Fragment) !=
+						ktk::ustring::npos)
 					{
 #ifdef KOTEK_DEBUG
 						KOTEK_MESSAGE("detected: Pixel [{}]",
-                            static_cast<ktk::enum_base_t>(
-                                shader_type_t::kShaderType_Pixel));
+							static_cast<ktk::enum_base_t>(
+								shader_type_t::kShaderType_Pixel));
 #endif
 
 						return shader_type_t::kShaderType_Pixel;
 					}
-                    else if (temp_filename.find(_kShaderPrefix_Compute) !=
-                        ktk::ustring::npos)
+					else if (temp_filename.find(_kShaderPrefix_Compute) !=
+						ktk::ustring::npos)
 					{
 #ifdef KOTEK_DEBUG
 						KOTEK_MESSAGE("detected: Compute [{}]",
-                            static_cast<ktk::enum_base_t>(
-                                shader_type_t::kShaderType_Compute));
+							static_cast<ktk::enum_base_t>(
+								shader_type_t::kShaderType_Compute));
 #endif
 
 						return shader_type_t::kShaderType_Compute;
@@ -429,8 +430,8 @@ namespace Kotek
 						KOTEK_MESSAGE_WARNING(
 							"can't detect shader type because we can't handle "
 							"with this prefix or non prefixed file: [{}]",
-                            reinterpret_cast<const char*>(
-                                path_to_file.c_str()));
+							reinterpret_cast<const char*>(
+								path_to_file.c_str()));
 
 						return shader_type_t::kShaderType_Unknown;
 					}
@@ -439,7 +440,7 @@ namespace Kotek
 				{
 					KOTEK_MESSAGE_WARNING("you passed an invalid path without "
 										  "destination file!!! [{}]",
-                        reinterpret_cast<const char*>(path_to_file.c_str()));
+						reinterpret_cast<const char*>(path_to_file.c_str()));
 
 					return shader_type_t::kShaderType_Unknown;
 				}
@@ -490,7 +491,7 @@ namespace Kotek
 					return false;
 				}
 
-                ktk::cstring translateShaderTypeToString(
+				ktk::cstring translateShaderTypeToString(
 					shader_type_t type) noexcept
 				{
 					switch (type)
@@ -567,7 +568,7 @@ namespace Kotek
 					}
 				}
 
-                ktk::cstring translateShaderTypeToStringFormat(
+				ktk::cstring translateShaderTypeToStringFormat(
 					shader_type_t type) noexcept
 				{
 					switch (type)
@@ -644,7 +645,7 @@ namespace Kotek
 					}
 				}
 
-                ktk::cstring translateDescriptorTypeToString(
+				ktk::cstring translateDescriptorTypeToString(
 					VkDescriptorType type) noexcept
 				{
 					return string_VkDescriptorType(type);
@@ -656,12 +657,12 @@ namespace Kotek
 					KOTEK_MESSAGE("\n\n/// Binding ///\n\n");
 
 					KOTEK_MESSAGE("Attached to variable (in shader): {}",
-                        reinterpret_cast<const char*>(
-                            info.getVariableName().c_str()));
+						reinterpret_cast<const char*>(
+							info.getVariableName().c_str()));
 					KOTEK_MESSAGE("Descriptor type: {}",
 						translateDescriptorTypeToString(
 							info.getDescriptorType())
-                            .c_str());
+							.c_str());
 					KOTEK_MESSAGE("Descriptor set index: {}",
 						info.getDescriptorSetIndex());
 					KOTEK_MESSAGE("Binding index: {}", info.getBindingIndex());
@@ -1387,7 +1388,7 @@ namespace Kotek
 			descriptor_set_info_t::descriptor_set_info_t(
 				ktk::uint32_t descriptor_set_index, ktk::uint32_t binding_index,
 				VkDescriptorType type, shader_type_t shader_type,
-                const ktk::cstring& shader_variable_name) :
+				const ktk::cstring& shader_variable_name) :
 				m_descriptor_set_index(descriptor_set_index),
 				m_binding_index(binding_index), m_type(type),
 				m_shader_type(shader_type),
@@ -1417,7 +1418,7 @@ namespace Kotek
 				return this->m_type;
 			}
 
-            const ktk::cstring& descriptor_set_info_t::getVariableName(
+			const ktk::cstring& descriptor_set_info_t::getVariableName(
 				void) const noexcept
 			{
 				return this->m_variable_name;

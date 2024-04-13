@@ -136,7 +136,7 @@ namespace gl
 
 	ktk::shared_ptr<ktk::any> ktkRenderResourceManager::LoadGeometry(
 		ktk::enum_base_t resource_loading_type,
-		const ktk::filesystem::path& path_to_file, ktk::entity_t id)
+		const ktk_filesystem_path& path_to_file, ktk::entity_t id)
 	{
 		return nullptr;
 	}

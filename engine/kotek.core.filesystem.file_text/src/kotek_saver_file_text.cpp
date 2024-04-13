@@ -18,7 +18,7 @@ ktkResourceSaverFile_Text::~ktkResourceSaverFile_Text()
 }
 
 bool ktkResourceSaverFile_Text::Save(
-	const ktk::filesystem::path& path, ktk::any object_for_saving) noexcept
+	const ktk_filesystem_path& path, ktk::any object_for_saving) noexcept
 {
 	KOTEK_ASSERT(this->m_p_main_manager,
 		"you must initialize main manager for this loader");
@@ -37,7 +37,7 @@ bool ktkResourceSaverFile_Text::Save(
 }
 
 bool ktkResourceSaverFile_Text::DetectTypeByFullPath(
-	const ktk::filesystem::path& path) noexcept
+	const ktk_filesystem_path& path) noexcept
 {
 	KOTEK_ASSERT(
 		path.empty() == false, "you must pass a not empty path to file!");
@@ -62,7 +62,7 @@ eResourceLoadingType ktkResourceSaverFile_Text::Get_Type() const noexcept
 }
 
 ktkIResourceSaver* ktkResourceSaverFile_Text::Get_Saver(
-	const ktk::filesystem::path& extension_of_file) noexcept
+	const ktk_filesystem_path& extension_of_file) noexcept
 {
 	KOTEK_ASSERT(extension_of_file.empty() == false,
 		"your extension is an empty string");

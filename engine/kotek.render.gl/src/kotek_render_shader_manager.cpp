@@ -48,7 +48,7 @@ void ktkRenderShaderManager::Initialize(
 void ktkRenderShaderManager::Shutdown(void) {}
 
 ktkShaderModule ktkRenderShaderManager::LoadShader(
-	const ktk::filesystem::path& path,
+	const ktk_filesystem_path& path,
 	gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	auto content = this->m_p_filesystem->ReadFile(path);
@@ -57,7 +57,7 @@ ktkShaderModule ktkRenderShaderManager::LoadShader(
 }
 
 ktkShaderModule ktkRenderShaderManager::LoadShader(
-	const ktk::filesystem::path& path) KOTEK_CPP_KEYWORD_NOEXCEPT
+	const ktk_filesystem_path& path) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	KOTEK_ASSERT(path.empty() == false, "you can't pass an empty path to file");
 	KOTEK_ASSERT(
@@ -195,7 +195,7 @@ gl::eShaderType ktkRenderShaderManager::DetectType(
 		return eShaderType::kShaderType_Unknown;
 	}
 
-	ktk::filesystem::path temp(path_to_file);
+	ktk_filesystem_path temp(path_to_file);
 
 #ifdef KOTEK_DEBUG
 	KOTEK_MESSAGE("detecting shader for type: [{}]",
@@ -206,7 +206,7 @@ gl::eShaderType ktkRenderShaderManager::DetectType(
 	{
 		const auto& filename = temp.filename();
 
-		ktk::cstring temp_filename(filename.string());
+		ktk::cstring temp_filename(filename.c_str());
 
 		if (temp_filename.find(_kShaderPrefix_Vertex) != ktk::ustring::npos)
 		{

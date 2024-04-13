@@ -196,7 +196,7 @@ public:
 	 * means you need to pass with filename and format. \return nothing
 	 */
 	void Set_UserLibrary(
-		const ktk::filesystem::path& path_to_library) noexcept override;
+		const ktk_filesystem_path& path_to_library) noexcept override;
 
 	/**
 	 * Return the hidden instance of ktk::dll::shared_library.

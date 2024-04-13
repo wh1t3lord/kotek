@@ -13,7 +13,7 @@ ktkLoaderFile_JSON::ktkLoaderFile_JSON(ktkMainManager* p_main_manager) :
 
 ktkLoaderFile_JSON::~ktkLoaderFile_JSON() {}
 
-ktk::any ktkLoaderFile_JSON::Load(const ktk::filesystem::path& path) noexcept
+ktk::any ktkLoaderFile_JSON::Load(const ktk_filesystem_path& path) noexcept
 {
 	if (path.empty())
 	{
@@ -31,7 +31,7 @@ ktk::any ktkLoaderFile_JSON::Load(const ktk::filesystem::path& path) noexcept
 
 	ktkFileText result;
 
-	ktk::ifstream _file(path);
+	ktk::ifstream _file(path.c_str());
 
 	if (_file.good())
 	{
@@ -66,7 +66,7 @@ ktk::any ktkLoaderFile_JSON::Load(const ktk::filesystem::path& path) noexcept
 
 			result.Set_Json(data.as_object());
 
-			ktk::filesystem::path path_object(path);
+			ktk_filesystem_path path_object(path);
 #ifdef KOTEK_USE_UNICODE
 	#ifdef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
 			result.Set_FileName(reinterpret_cast<const char*>(
@@ -99,7 +99,7 @@ ktk::any ktkLoaderFile_JSON::Load(const ktk::filesystem::path& path) noexcept
 }
 
 bool ktkLoaderFile_JSON::Load(
-	const ktk::filesystem::path& path, ktk::any object_from_construct) noexcept
+	const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
 {
 	ktkFileText* p_result = std::any_cast<ktkFileText*>(object_from_construct);
 
@@ -119,7 +119,7 @@ bool ktkLoaderFile_JSON::Load(
 
 	KOTEK_MESSAGE("reading file: {}", path);
 
-	ktk::cifstream _file(path);
+	ktk::cifstream _file(path.c_str());
 
 	if (_file.good())
 	{
@@ -154,7 +154,7 @@ bool ktkLoaderFile_JSON::Load(
 
 			p_result->Set_Json(data.as_object());
 
-			ktk::filesystem::path path_object(path);
+			ktk_filesystem_path path_object(path);
 
 #ifdef KOTEK_USE_UNICODE
 	#ifdef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
@@ -204,13 +204,13 @@ Core::eResourceLoadingType ktkLoaderFile_JSON::Get_Type(void) const noexcept
 }
 
 bool ktkLoaderFile_JSON::DetectTypeByFullPath(
-	const ktk::filesystem::path& path) noexcept
+	const ktk_filesystem_path& path) noexcept
 {
 	return false;
 }
 
 ktkIResourceLoader* ktkLoaderFile_JSON::Get_Loader(
-	const ktk::filesystem::path& extension_of_file) noexcept
+	const ktk_filesystem_path& extension_of_file) noexcept
 {
 	return nullptr;
 }
