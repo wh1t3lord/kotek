@@ -77,6 +77,58 @@ namespace filesystem
 
 		return result;
 	}
+
+	bool remove(const ktk_filesystem_path& path)
+	{
+		bool result{};
+
+	#ifdef KOTEK_USE_PLATFORM_WINDOWS
+		auto cstr = path.c_str();
+		DWORD attr = GetFileAttributesA(cstr);
+		bool is_valid{true};
+		if (attr == INVALID_FILE_ATTRIBUTES)
+		{
+			auto error = ::GetLastError();
+			if (error == ERROR_FILE_NOT_FOUND || error == ERROR_PATH_NOT_FOUND)
+			{
+				is_valid = false;
+			}
+		}
+		else if (attr & FILE_ATTRIBUTE_READONLY)
+		{
+			auto new_attr = attr & ~static_cast<DWORD>(FILE_ATTRIBUTE_READONLY);
+			if (!SetFileAttributesA(cstr, new_attr))
+			{
+				is_valid = false;
+			}
+		}
+		if (is_valid)
+		{
+			if (attr & FILE_ATTRIBUTE_DIRECTORY)
+			{
+				if (!RemoveDirectoryA(cstr))
+				{
+					result = true;
+				}
+			}
+			else
+			{
+				if (!DeleteFileA(cstr))
+				{
+					result = true;
+				}
+			}
+		}
+	#elif defined(KOTEK_USE_PLATFORM_LINUX)
+		#error todo: implement
+	#elif defined(KOTEK_USE_PLATFORM_MACOS)
+		#error todo: implement
+	#else
+		#error unknown platform
+	#endif
+
+		return result;
+	}
 } // namespace filesystem
 #endif
 KOTEK_END_NAMESPACE_KTK

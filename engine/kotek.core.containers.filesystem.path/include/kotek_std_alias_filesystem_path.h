@@ -30,6 +30,7 @@
 // KOTEK_USE_NAMESPACE_KTK is used
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
+KOTEK_BEGIN_NAMESPACE_FILESYSTEM
 
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 	#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -716,6 +717,29 @@ enum class perms : uint16_t
 	unknown = 0xffff
 };
 
+enum class directory_options : uint16_t
+{
+	none = 0,
+	follow_directory_symlink = 1,
+	skip_permission_denied = 2,
+};
+
+inline directory_options operator&(
+	const directory_options& left, const directory_options& right)
+{
+	return left & right;
+}
+
+inline perms operator|(const perms& left, const perms& right)
+{
+	return left | right;
+}
+
+inline perms operator&(const perms& left, const perms& right)
+{
+	return left & right;
+}
+
 class file_status
 {
 public:
@@ -849,8 +873,6 @@ typedef struct _REPARSE_DATA_BUFFER
 	} DUMMYUNIONNAME;
 } REPARSE_DATA_BUFFER;
 
-			#define MAXIMUM_REPARSE_DATA_BUFFER_SIZE (16 * 1024)
-
 inline REPARSE_DATA_BUFFER getReparseData(
 	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p, std::error_code& ec)
 {
@@ -921,10 +943,10 @@ inline bool is_symlink_from_INFO(
 {
 	if ((info->dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT))
 	{
-		auto reparseData = detail::getReparseData(p, ec);
-		if (!ec && reparseData &&
-			IsReparseTagMicrosoft(reparseData->ReparseTag) &&
-			reparseData->ReparseTag == IO_REPARSE_TAG_SYMLINK)
+		auto reparseData = getReparseData(p, ec);
+		if (!ec && reparseData.is_initialized() &&
+			IsReparseTagMicrosoft(reparseData.ReparseTag) &&
+			reparseData.ReparseTag == IO_REPARSE_TAG_SYMLINK)
 		{
 			return true;
 		}
@@ -949,23 +971,69 @@ inline bool is_symlink_from_INFO(
 		info->dwReserved0 == IO_REPARSE_TAG_SYMLINK;
 }
 
+inline time_t timeFromFILETIME(const FILETIME& ft)
+{
+	ULARGE_INTEGER ull;
+	ull.LowPart = ft.dwLowDateTime;
+	ull.HighPart = ft.dwHighDateTime;
+	return static_cast<time_t>(ull.QuadPart / 10000000ULL - 11644473600ULL);
+}
+
+inline bool equals_simple_insensitive(
+	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>::value_type* str1,
+	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>::value_type* str2)
+{
+	while (::tolower((unsigned char)*str1) == ::tolower((unsigned char)*str2++))
+	{
+		if (*str1++ == 0)
+			return true;
+	}
+	return false;
+}
+
+inline bool has_executable_extension(
+	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p)
+{
+	if (p.has_relative_path())
+	{
+		auto iter = p.end();
+		const auto& fn = *--iter;
+		auto pos = fn.string().find_last_of('.');
+		if (pos == std::string::npos || pos == 0 ||
+			fn.string().length() - pos != 3)
+		{
+			return false;
+		}
+		const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>::value_type* ext =
+			fn.c_str() + pos + 1;
+		if (equals_simple_insensitive(ext, "exe") ||
+			equals_simple_insensitive(ext, "cmd") ||
+			equals_simple_insensitive(ext, "bat") ||
+			equals_simple_insensitive(ext, "com"))
+		{
+			return true;
+		}
+	}
+	return false;
+}
+
 template <typename INFO>
 inline file_status status_from_INFO(
 	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p, const INFO* info,
 	std::error_code& ec, uintmax_t* sz = nullptr, time_t* lwt = nullptr)
 {
-	file_type ft = file_type::unknown;
+	auto ft = eFileType::kUnknown;
 	if (is_symlink_from_INFO(p, info, ec))
 	{
-		ft = file_type::symlink;
+		ft = eFileType::kSymLink;
 	}
 	else if ((info->dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 	{
-		ft = file_type::directory;
+		ft = eFileType::kDirectory;
 	}
 	else
 	{
-		ft = file_type::regular;
+		ft = eFileType::kRegular;
 	}
 	perms prms = perms::owner_read | perms::group_read | perms::others_read;
 	if (!(info->dwFileAttributes & FILE_ATTRIBUTE_READONLY))
@@ -986,12 +1054,12 @@ inline file_status status_from_INFO(
 	}
 	if (lwt)
 	{
-		*lwt = detail::timeFromFILETIME(info->ftLastWriteTime);
+		*lwt = timeFromFILETIME(info->ftLastWriteTime);
 	}
 	return file_status(ft, prms);
 }
 
-		#endif
+		#endif // KOTEK_PLATFORM_WINDOWS
 
 inline static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH> resolveSymlink(
 	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p, std::error_code& ec)
@@ -1286,6 +1354,17 @@ inline uintmax_t hard_link_count(
 }
 
 inline std::chrono::time_point<std::chrono::system_clock> last_write_time(
+	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
+	std::error_code& ec) noexcept
+{
+	time_t result = 0;
+	ec.clear();
+	file_status fs = status_ex(p, ec, nullptr, nullptr, nullptr, &result);
+	return ec ? (std::chrono::time_point<std::chrono::system_clock>::min)()
+			  : std::chrono::system_clock::from_time_t(result);
+}
+
+inline std::chrono::time_point<std::chrono::system_clock> last_write_time(
 	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p)
 {
 	std::error_code ec;
@@ -1297,15 +1376,11 @@ inline std::chrono::time_point<std::chrono::system_clock> last_write_time(
 	return result;
 }
 
-inline std::chrono::time_point<std::chrono::system_clock> last_write_time(
+inline file_status symlink_status(
 	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
 	std::error_code& ec) noexcept
 {
-	time_t result = 0;
-	ec.clear();
-	file_status fs = status_ex(p, ec, nullptr, nullptr, nullptr, &result);
-	return ec ? (std::chrono::time_point<std::chrono::system_clock>::min)()
-			  : std::chrono::system_clock::from_time_t(result);
+	return symlink_status_ex(p, ec);
 }
 
 inline file_status symlink_status(
@@ -1318,13 +1393,6 @@ inline file_status symlink_status(
 		assert(false && "error");
 	}
 	return result;
-}
-
-inline file_status symlink_status(
-	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
-	std::error_code& ec) noexcept
-{
-	return symlink_status_ex(p, ec);
 }
 
 class directory_entry
@@ -1456,7 +1524,8 @@ inline eFileType directory_entry::status_file_type() const
 {
 	return _status.type() != eFileType::kNone
 		? _status.type()
-		: KOTEK_USE_NAMESPACE_KTK status(path()).type();
+		: KOTEK_USE_NAMESPACE_KTK KOTEK_USE_NAMESPACE_FILESYSTEM status(path())
+			  .type();
 }
 
 inline bool directory_entry::exists() const
@@ -1506,7 +1575,8 @@ inline bool directory_entry::is_symlink() const
 {
 	return _symlink_status.type() != eFileType::kNone
 		? _symlink_status.type() == eFileType::kSymLink
-		: KOTEK_USE_NAMESPACE_KTK is_symlink(symlink_status());
+		: KOTEK_USE_NAMESPACE_KTK KOTEK_USE_NAMESPACE_FILESYSTEM is_symlink(
+			  symlink_status());
 }
 
 inline uintmax_t directory_entry::file_size() const
@@ -1515,7 +1585,8 @@ inline uintmax_t directory_entry::file_size() const
 	{
 		return _file_size;
 	}
-	return KOTEK_USE_NAMESPACE_KTK file_size(path());
+	return KOTEK_USE_NAMESPACE_KTK KOTEK_USE_NAMESPACE_FILESYSTEM file_size(
+		path());
 }
 
 inline uintmax_t directory_entry::hard_link_count() const
@@ -1527,7 +1598,8 @@ inline uintmax_t directory_entry::hard_link_count() const
 	}
 		#endif
 
-	return KOTEK_USE_NAMESPACE_KTK hard_link_count(path());
+	return KOTEK_USE_NAMESPACE_KTK KOTEK_USE_NAMESPACE_FILESYSTEM
+		hard_link_count(path());
 }
 
 inline std::chrono::time_point<std::chrono::system_clock>
@@ -1537,7 +1609,8 @@ directory_entry::last_write_time() const
 	{
 		return std::chrono::system_clock::from_time_t(_last_write_time);
 	}
-	return KOTEK_USE_NAMESPACE_KTK last_write_time(path());
+	return KOTEK_USE_NAMESPACE_KTK KOTEK_USE_NAMESPACE_FILESYSTEM
+		last_write_time(path());
 }
 
 inline file_status directory_entry::status() const
@@ -1547,7 +1620,8 @@ inline file_status directory_entry::status() const
 	{
 		return _status;
 	}
-	return KOTEK_USE_NAMESPACE_KTK status(path());
+	return KOTEK_USE_NAMESPACE_KTK KOTEK_USE_NAMESPACE_FILESYSTEM status(
+		path());
 }
 
 inline file_status directory_entry::symlink_status() const
@@ -1557,7 +1631,8 @@ inline file_status directory_entry::symlink_status() const
 	{
 		return _symlink_status;
 	}
-	return KOTEK_USE_NAMESPACE_KTK symlink_status(path());
+	return KOTEK_USE_NAMESPACE_KTK KOTEK_USE_NAMESPACE_FILESYSTEM
+		symlink_status(path());
 }
 
 inline bool directory_entry::operator<(
@@ -1602,13 +1677,262 @@ public:
 	class proxy
 	{
 	public:
+		const directory_entry& operator*() const& noexcept
+		{
+			return _dir_entry;
+		}
+
+		directory_entry operator*() && noexcept
+		{
+			return std::move(_dir_entry);
+		}
+
+	private:
+		explicit proxy(const directory_entry& dir_entry) : _dir_entry(dir_entry)
+		{
+		}
+		friend class directory_iterator;
+		directory_entry _dir_entry;
 	};
+
+public:
+	using iterator_category = std::input_iterator_tag;
+	using value_type = directory_entry;
+	using difference_type = std::ptrdiff_t;
+	using pointer = const directory_entry*;
+	using reference = const directory_entry&;
+
+public:
+	directory_iterator() noexcept;
+	explicit directory_iterator(
+		const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p);
+	directory_iterator(const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
+		directory_options options);
+	directory_iterator(const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
+		std::error_code& ec) noexcept;
+	directory_iterator(const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
+		directory_options options, std::error_code& ec) noexcept;
+	directory_iterator(const directory_iterator& rhs);
+	directory_iterator(directory_iterator&& rhs) noexcept;
+	~directory_iterator();
+	directory_iterator& operator=(const directory_iterator& rhs);
+	directory_iterator& operator=(directory_iterator&& rhs) noexcept;
+	const directory_entry& operator*() const;
+	const directory_entry* operator->() const;
+	directory_iterator& operator++();
+	directory_iterator& increment(std::error_code& ec) noexcept;
+	proxy operator++(int)
+	{
+		proxy p{**this};
+		++*this;
+		return p;
+	}
+
+	bool operator==(const directory_iterator& rhs) const;
+	bool operator!=(const directory_iterator& rhs) const;
+
+private:
+		#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	class impl
+	{
+	public:
+		impl(const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
+			directory_options options) :
+			_base(p),
+			_options(options), _dirHandle(INVALID_HANDLE_VALUE)
+		{
+			if (!_base.empty())
+			{
+				ZeroMemory(&_findData, sizeof(WIN32_FIND_DATAW));
+				if ((_dirHandle = FindFirstFileA((_base / "*").c_str(),
+						 &_findData)) != INVALID_HANDLE_VALUE)
+				{
+					if (strcmp(_findData.cFileName, ".") == 0 ||
+						strcmp(_findData.cFileName, "..") == 0)
+					{
+						increment(_ec);
+					}
+					else
+					{
+						_dir_entry._path = _base / (_findData.cFileName);
+						copyToDirEntry(_ec);
+					}
+				}
+				else
+				{
+					auto error = ::GetLastError();
+					_base = static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>();
+					if (error != ERROR_ACCESS_DENIED ||
+						(options & directory_options::skip_permission_denied) ==
+							directory_options::none)
+					{
+						_ec = make_system_error();
+					}
+				}
+			}
+		}
+		impl(const impl& other) = delete;
+		~impl()
+		{
+			if (_dirHandle != INVALID_HANDLE_VALUE)
+			{
+				FindClose(_dirHandle);
+				_dirHandle = INVALID_HANDLE_VALUE;
+			}
+		}
+		void increment(std::error_code& ec)
+		{
+			if (_dirHandle != INVALID_HANDLE_VALUE)
+			{
+				do
+				{
+					if (FindNextFileA(_dirHandle, &_findData))
+					{
+						_dir_entry._path = _base;
+						//	_dir_entry._path.append_name(_findData.cFileName);
+
+						copyToDirEntry(ec);
+					}
+					else
+					{
+						auto err = ::GetLastError();
+						if (err != ERROR_NO_MORE_FILES)
+						{
+							_ec = ec = make_system_error(err);
+						}
+						FindClose(_dirHandle);
+						_dirHandle = INVALID_HANDLE_VALUE;
+						_dir_entry._path.clear();
+						break;
+					}
+				} while (strcmp(_findData.cFileName, ".") == 0 ||
+					strcmp(_findData.cFileName, "..") == 0);
+			}
+			else
+			{
+				ec = _ec;
+			}
+		}
+		void copyToDirEntry(std::error_code& ec)
+		{
+			if (_findData.dwFileAttributes & FILE_ATTRIBUTE_REPARSE_POINT)
+			{
+				_dir_entry._status = status_ex(_dir_entry._path, ec,
+					&_dir_entry._symlink_status, &_dir_entry._file_size,
+					nullptr, &_dir_entry._last_write_time);
+			}
+			else
+			{
+				_dir_entry._status =
+					status_from_INFO(_dir_entry._path, &_findData, ec,
+						&_dir_entry._file_size, &_dir_entry._last_write_time);
+				_dir_entry._symlink_status = _dir_entry._status;
+			}
+			if (ec)
+			{
+				if (_dir_entry._status.type() != eFileType::kNone &&
+					_dir_entry._symlink_status.type() != eFileType::kNone)
+				{
+					ec.clear();
+				}
+				else
+				{
+					_dir_entry._file_size = static_cast<uintmax_t>(-1);
+					_dir_entry._last_write_time = 0;
+				}
+			}
+		}
+
+		static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH> _base;
+		directory_options _options;
+		WIN32_FIND_DATAA _findData;
+		HANDLE _dirHandle;
+		directory_entry _dir_entry;
+		std::error_code _ec;
+	};
+		#else
+			#error todo: implement
+		#endif
+	std::shared_ptr<impl> _impl;
 };
+
+
+
+inline directory_iterator::directory_iterator() noexcept :
+	_impl(new impl(static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>(),
+		directory_options::none))
+{
+}
+
+inline directory_iterator::directory_iterator(
+	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p) :
+	_impl(new impl(p, directory_options::none))
+{
+	if (_impl->_ec)
+	{
+		assert(false && "check value of error code _ec variable");
+	}
+
+	_impl->_ec.clear();
+}
+
+inline directory_iterator::directory_iterator(
+	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
+	directory_options options) :
+	_impl(new impl(p, options))
+{
+}
+
+inline directory_iterator::directory_iterator(
+	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
+	std::error_code& ec) noexcept :
+	_impl(new impl(p, directory_options::none))
+{
+	if (_impl->_ec)
+	{
+		ec = _impl->_ec;
+	}
+}
+
+inline directory_iterator::directory_iterator(
+	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
+	directory_options options, std::error_code& ec) noexcept :
+	_impl(new impl(p, options))
+{
+	if (_impl->_ec)
+	{
+		ec = _impl->_ec;
+	}
+}
+
+inline directory_iterator::directory_iterator(const directory_iterator& rhs) :
+	_impl(rhs._impl)
+{
+}
+
+inline directory_iterator::directory_iterator(directory_iterator&& rhs) noexcept
+	:
+	_impl(std::move(rhs._impl))
+{
+}
+
+inline directory_iterator::~directory_iterator() {}
+
+inline directory_iterator begin(directory_iterator& iter) noexcept
+{
+	return iter;
+}
+
+inline directory_iterator end(const directory_iterator& iter) noexcept
+{
+	return directory_iterator();
+}
 	#endif
 #else
 	#error todo: implement
-#endif
+#endif // KOTEK_USE_NOT_CUSTOM_LIBRARY
 
+KOTEK_END_NAMESPACE_FILESYSTEM
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
 
@@ -1616,13 +1940,16 @@ KOTEK_END_NAMESPACE_KOTEK
 	defined(KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS)
 	#define ktk_filesystem_path                           \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK \
-			static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>
+			KOTEK_USE_NAMESPACE_FILESYSTEM                \
+				static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>
 	#define ktkFileSystemPath                             \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK \
-			static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>
+			KOTEK_USE_NAMESPACE_FILESYSTEM                \
+				static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>
 	#define KTK_FILESYSTEM_PATH                           \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK \
-			static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>
+			KOTEK_USE_NAMESPACE_FILESYSTEM                \
+				static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>
 #else
 	#define ktk_array \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK std::filesystem::path
@@ -1634,6 +1961,7 @@ KOTEK_END_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
+KOTEK_BEGIN_NAMESPACE_FILESYSTEM
 
 template <size_t Size>
 inline static_path<Size>::static_path()
@@ -3310,5 +3638,6 @@ inline bool static_path<Size>::is_relative() const
 	return !(this->is_absolute());
 }
 
+KOTEK_END_NAMESPACE_FILESYSTEM
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK

@@ -16,6 +16,7 @@ namespace filesystem
 	ktk_filesystem_path current_path();
 	bool exists(const ktk_filesystem_path& path);
 	bool create_directory(const ktk_filesystem_path& path);
+	bool remove(const ktk_filesystem_path& path);
 } // namespace filesystem
 	#else
 namespace filesystem = std::filesystem;
