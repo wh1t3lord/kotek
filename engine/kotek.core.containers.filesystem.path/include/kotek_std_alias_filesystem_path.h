@@ -1918,6 +1918,60 @@ inline directory_iterator::directory_iterator(directory_iterator&& rhs) noexcept
 
 inline directory_iterator::~directory_iterator() {}
 
+inline directory_iterator& directory_iterator::operator=(
+	const directory_iterator& rhs)
+{
+	_impl = rhs._impl;
+	return *this;
+}
+
+inline directory_iterator& directory_iterator::operator=(
+	directory_iterator&& rhs) noexcept
+{
+	_impl = std::move(rhs._impl);
+	return *this;
+}
+
+inline const directory_entry& directory_iterator::operator*() const
+{
+	return _impl->_dir_entry;
+}
+
+inline const directory_entry* directory_iterator::operator->() const
+{
+	return &_impl->_dir_entry;
+}
+
+inline directory_iterator& directory_iterator::operator++()
+{
+	std::error_code ec;
+	_impl->increment(ec);
+	if (ec)
+	{
+		assert(false && "something is wrong, check error code!");
+	}
+	return *this;
+}
+
+inline directory_iterator& directory_iterator::increment(
+	std::error_code& ec) noexcept
+{
+	_impl->increment(ec);
+	return *this;
+}
+
+inline bool directory_iterator::operator==(
+	const directory_iterator& rhs) const
+{
+	return _impl->_dir_entry._path == rhs._impl->_dir_entry._path;
+}
+
+inline bool directory_iterator::operator!=(
+	const directory_iterator& rhs) const
+{
+	return _impl->_dir_entry._path != rhs._impl->_dir_entry._path;
+}
+
 inline directory_iterator begin(directory_iterator& iter) noexcept
 {
 	return iter;

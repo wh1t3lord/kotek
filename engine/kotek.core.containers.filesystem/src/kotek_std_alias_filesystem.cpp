@@ -2,13 +2,17 @@
 
 #include <kotek.core.os/include/kotek_core_os.h>
 
+
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	#pragma comment(lib, "shlwapi.lib")
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
 #if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \
 	defined(KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS)
-namespace filesystem
-{
+KOTEK_BEGIN_NAMESPACE_FILESYSTEM
 	ktk_filesystem_path current_path()
 	{
 	#ifdef KOTEK_USE_PLATFORM_WINDOWS
@@ -129,7 +133,7 @@ namespace filesystem
 
 		return result;
 	}
-} // namespace filesystem
+KOTEK_END_NAMESPACE_FILESYSTEM
 #endif
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK

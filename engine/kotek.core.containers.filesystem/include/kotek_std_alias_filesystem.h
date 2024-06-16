@@ -11,13 +11,12 @@ KOTEK_BEGIN_NAMESPACE_KTK
 		defined(KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS)
 // todo: rename to filesystem when you finish static_path and all replacement to
 // ktk_filesystem_path
-namespace filesystem
-{
+KOTEK_BEGIN_NAMESPACE_FILESYSTEM
 	ktk_filesystem_path current_path();
 	bool exists(const ktk_filesystem_path& path);
 	bool create_directory(const ktk_filesystem_path& path);
 	bool remove(const ktk_filesystem_path& path);
-} // namespace filesystem
+KOTEK_END_NAMESPACE_FILESYSTEM
 	#else
 namespace filesystem = std::filesystem;
 	#endif
