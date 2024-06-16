@@ -15,11 +15,18 @@ void ktkFileSystem::Initialize(void)
 		"KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH({})",
 		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
 
+	/*
 	ktk::memory::memcpy(
 		this->m_storage_paths[eFolderIndex::kFolderIndex_Root].data(),
 		reinterpret_cast<char*>(
 			ktk::filesystem::current_path().u8string().data()),
 		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
+	*/
+
+
+	this->m_storage_paths[eFolderIndex::kFolderIndex_Root] =
+		reinterpret_cast<char*>(
+			ktk::filesystem::current_path().u8string().data());
 #else
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Root] =
 		ktk::filesystem::current_path();
@@ -164,9 +171,8 @@ bool ktkFileSystem::AddGamedataFolderToStorage(
 		"KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH({})!",
 		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
 
-	ktk::memory::memcpy(this->m_storage_paths[id].data(),
-		reinterpret_cast<char*>(result.u8string().data()),
-		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
+	this->m_storage_paths[id] =
+		reinterpret_cast<char*>(result.u8string().data());
 #else
 	this->m_storage_paths[id] = result;
 #endif
@@ -190,11 +196,8 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 		"KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH({})",
 		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
 
-	ktk::memory::memcpy(
-		this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata].data(),
-		reinterpret_cast<char*>(temp.u8string().data()),
-		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
-
+	this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata] =
+		reinterpret_cast<char*>(temp.u8string().data());
 #else
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Gamedata] /=
 		KOTEK_TEXTU("game_data");

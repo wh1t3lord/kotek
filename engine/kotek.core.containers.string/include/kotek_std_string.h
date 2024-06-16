@@ -83,7 +83,7 @@ u8string convert_utf32_to_utf8(const u32string_view& str);
 template <size_t Size = 128>
 inline static_cstring<Size> convert_wchar_to_char(const wstring_view& str)
 {
-	assert(str.size() > Size && "can't convert try to change the size!");
+	assert(str.size() <= Size && "can't convert try to change the size!");
 
 	ktk::size_t written;
 	static_cstring<Size> stack{};
