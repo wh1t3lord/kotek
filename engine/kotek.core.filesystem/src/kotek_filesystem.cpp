@@ -15,15 +15,6 @@ void ktkFileSystem::Initialize(void)
 		"KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH({})",
 		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
 
-	/*
-	ktk::memory::memcpy(
-		this->m_storage_paths[eFolderIndex::kFolderIndex_Root].data(),
-		reinterpret_cast<char*>(
-			ktk::filesystem::current_path().u8string().data()),
-		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH);
-	*/
-
-
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Root] =
 		reinterpret_cast<char*>(
 			ktk::filesystem::current_path().u8string().data());

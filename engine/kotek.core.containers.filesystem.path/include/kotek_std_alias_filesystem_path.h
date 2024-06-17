@@ -727,17 +727,17 @@ enum class directory_options : uint16_t
 inline directory_options operator&(
 	const directory_options& left, const directory_options& right)
 {
-	return left & right;
+	return static_cast<directory_options>(static_cast<uint16_t>(left) & static_cast<uint16_t>(right));
 }
 
 inline perms operator|(const perms& left, const perms& right)
 {
-	return left | right;
+	return static_cast<perms>(static_cast<uint16_t>(left) | static_cast<uint16_t>(right));
 }
 
 inline perms operator&(const perms& left, const perms& right)
 {
-	return left & right;
+	return static_cast<perms>(static_cast<uint16_t>(left) & static_cast<uint16_t>(right));
 }
 
 class file_status
@@ -1398,8 +1398,17 @@ inline file_status symlink_status(
 class directory_entry
 {
 public:
-	directory_entry() noexcept = default;
-	directory_entry(const directory_entry&) = default;
+	directory_entry() noexcept {}
+	directory_entry(const directory_entry& de) :
+		_status{de._status}, _symlink_status{de._symlink_status},
+		_file_size{de._file_size},
+		#ifndef KOTEK_USE_PLATFORM_WINDOWS
+		_hard_link_count{de._hard_link_count},
+		#endif
+		_last_write_time{de._last_write_time}, _path{de._path}
+
+	{
+	}
 	directory_entry(directory_entry&&) noexcept = default;
 	explicit directory_entry(
 		const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p);
@@ -1743,7 +1752,7 @@ private:
 		{
 			if (!_base.empty())
 			{
-				ZeroMemory(&_findData, sizeof(WIN32_FIND_DATAW));
+				ZeroMemory(&_findData, sizeof(_findData));
 				if ((_dirHandle = FindFirstFileA((_base / "*").c_str(),
 						 &_findData)) != INVALID_HANDLE_VALUE)
 				{
@@ -1856,8 +1865,6 @@ private:
 	std::shared_ptr<impl> _impl;
 };
 
-
-
 inline directory_iterator::directory_iterator() noexcept :
 	_impl(new impl(static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>(),
 		directory_options::none))
@@ -1960,14 +1967,12 @@ inline directory_iterator& directory_iterator::increment(
 	return *this;
 }
 
-inline bool directory_iterator::operator==(
-	const directory_iterator& rhs) const
+inline bool directory_iterator::operator==(const directory_iterator& rhs) const
 {
 	return _impl->_dir_entry._path == rhs._impl->_dir_entry._path;
 }
 
-inline bool directory_iterator::operator!=(
-	const directory_iterator& rhs) const
+inline bool directory_iterator::operator!=(const directory_iterator& rhs) const
 {
 	return _impl->_dir_entry._path != rhs._impl->_dir_entry._path;
 }
