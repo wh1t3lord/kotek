@@ -73,6 +73,7 @@ public:
 	ktk::size_t Tellg(ktk::uint32_t resource_id) override;
 	void Read(
 		ktk::uint32_t resource_id, char* p_buffer, ktk::size_t size) override;
+	bool Is_Open(ktk::uint32_t resource_id) noexcept override;
 	bool Close(ktk::uint32_t id) noexcept override;
 
 	ktk::uint32_t GenerateFileID(void) noexcept override;

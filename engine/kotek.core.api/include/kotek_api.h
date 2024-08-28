@@ -536,6 +536,7 @@ public:
 	virtual ktk::size_t Tellg(ktk::uint32_t resource_id) = 0;
 	virtual void Read(
 		ktk::uint32_t resource_id, char* p_buffer, ktk::size_t size) = 0;
+	virtual bool Is_Open(ktk::uint32_t resource_id) noexcept = 0;
 	virtual bool Close(ktk::uint32_t id) noexcept = 0;
 
 	/// \~english @brief seeks for available instance of ofstream and returns
@@ -828,7 +829,7 @@ public:
 	virtual ktk::size_t Tellg(ktk::uint32_t resource_id) = 0;
 	virtual void Read(
 		ktk::uint32_t resource_id, char* p_buffer, ktk::size_t size) = 0;
-
+	virtual bool Is_Open(ktk::uint32_t resource_id) = 0;
 	virtual void Close(ktk::uint32_t resource_id) noexcept = 0;
 
 	virtual ktk::uint32_t GenerateFileID(void) noexcept = 0;

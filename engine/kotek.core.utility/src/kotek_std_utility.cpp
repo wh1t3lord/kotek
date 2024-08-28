@@ -1,7 +1,7 @@
 #include "../include/kotek_std_utility.h"
 #include "../../kotek.core.defines.static.os/include/kotek_core_defines_static_os.h"
 #include <cmath>
-
+#include <utility>
 
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 	#ifdef KOTEK_USE_PLATFORM_WINDOWS

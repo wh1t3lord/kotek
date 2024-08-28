@@ -719,6 +719,21 @@ void ktkResourceSaverManager::Read(
 	}
 }
 
+bool ktkResourceSaverManager::Is_Open(ktk::uint32_t resource_id) noexcept
+{
+	KOTEK_ASSERT(resource_id != ktk::uint32_t(-1), "must be valid!");
+	
+	ktk::mt::lock_guard<ktk::mt::mutex> lock_guard{this->m_mutex};
+
+	bool result{};
+	if (this->m_writers.find(resource_id) != this->m_writers.end())
+	{
+		result = this->m_writers.at(resource_id).first.is_open();
+	}
+
+	return result;
+}
+
 bool ktkResourceSaverManager::Close(ktk::uint32_t id) noexcept
 {
 	KOTEK_ASSERT(id != ktk::uint32_t(-1), "must be valid number!");
