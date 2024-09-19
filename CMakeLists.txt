@@ -9,9 +9,9 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
 	message(FATAL_ERROR "[${PROJECT_NAME}]: you must specify CMAKE_BUILD_TYPE flag with the following types: Debug, Release, MinSizeRel, RelWithDebInfo. It supposed to be like -DCMAKE_BUILD_TYPE=Debug")
 endif()
 
-if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "")
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "vcpkg")
 	set(KOTEK_DEPS_FOLDER_ENABLE "ON" CACHE INTERNAL "")
-	message("[${PROJECT_NAME}]: KOTEK_DEPS_FOLDER is enabled! Now you should specified your dependency folder name (but not its path)")
+	message("[${PROJECT_NAME}]: KOTEK_DEPS_FOLDER is enabled! Your dependency folder name is [${KOTEK_DEPS_FOLDER}]")
 endif()
 
 message("[${PROJECT_NAME}]: build type is '${CMAKE_BUILD_TYPE}'")
@@ -26,6 +26,14 @@ if ("${KOTEK_LIBRARY_TYPE}" STREQUAL "")
 endif()
 
 message("[${PROJECT_NAME}]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}'")
+
+if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
+	message("[${PROJECT_NAME}]: using nuget packages")
+
+	if (WIN32)
+		include("cmake/windows/nuget.cmake")
+	endif()
+endif()
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")

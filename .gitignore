@@ -36,4 +36,7 @@ documentation/*
 !documentation/git/
 !documentation/shared/
 user_data/
+!cmake/*.cmake
+!cmake/*.config
+[Nn]uget/
 engine/**/kotek_std_preprocessors.h
