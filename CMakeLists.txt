@@ -4,9 +4,13 @@ project(kotek.engine)
 message("[${PROJECT_NAME}]: CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}")
 message("[${PROJECT_NAME}]: CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}")
 
-# it is our requirement for generating the library e.g. don't just write 'cmake ..'
+# it is our requirement for generating the library e.g. don't just write 'cmake ..' - OUTDATED
+# By new standard you can pass a empty string, but we need to generate solution for debug build. It is required for including/generating stuff for better debug experience
+# Memory leak manager, etc
 if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
-	message(FATAL_ERROR "[${PROJECT_NAME}]: you must specify CMAKE_BUILD_TYPE flag with the following types: Debug, Release, MinSizeRel, RelWithDebInfo. It supposed to be like -DCMAKE_BUILD_TYPE=Debug")
+	#message(FATAL_ERROR "[${PROJECT_NAME}]: you must specify CMAKE_BUILD_TYPE flag with the following types: Debug, Release, MinSizeRel, RelWithDebInfo. It supposed to be like -DCMAKE_BUILD_TYPE=Debug")
+	message("[${PROJECT_NAME}]: Setting build type to: 'Debug'")
+	set(CMAKE_BUILD_TYPE Debug)
 endif()
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "vcpkg")
