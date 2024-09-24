@@ -125,7 +125,12 @@ if (WIN32)
 
         if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages.config")
             message("Using packages config file [${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages.config]")
-            
+            message("Start to download packages from config...")
+            execute_process(
+                COMMAND ${NUGET_COMMAND} restore ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages.config -SolutionDirectory ${CMAKE_CURRENT_SOURCE_DIR}/nuget
+            )
+
+
         else()
             message(FATAL_ERROR "failed to obtain file: [${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages.config] report to kotek developers -> https://gitlab.com/wh1t3lord/kotek/-/issues")
         endif()
