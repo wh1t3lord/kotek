@@ -8,6 +8,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 		find_package(TBB REQUIRED)
+	elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+		file(GLOB nuget_onetbb_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Onetbb.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
+		if ("${nuget_onetbb_folder}" MATCHES "Kotek.Packages.Onetbb.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+			message("[${PROJECT_NAME}][nuget]: package onetbb exists!")
+		else()
+			message(FATAL_ERROR "failed to find onetbb package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
+		endif()
 	else()
 		find_package(TBB REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 	endif()
@@ -19,4 +26,79 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_containers_multithreading_tbb_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC TBB::tbb)
+
+if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+	if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
+		message("[${PROJECT_NAME}]: onetbb package included directory")
+		target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
+	endif()
+
+	if (WIN32)
+		# Debug
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/tbb12_debug.lib")
+			message("[${PROJECT_NAME}][Debug]: adding tbb12_debug.lib to Debug configuration")
+			target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/tbb12_debug.lib)
+		endif()
+
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/tbbbind_2_5_debug.lib")
+			message("[${PROJECT_NAME}][Debug]: adding tbbbind_2_5_debug.lib to Debug configuration")
+			target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/tbbbind_2_5_debug.lib)
+		endif()
+
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/tbbmalloc_debug.lib")
+			message("[${PROJECT_NAME}][Debug]: adding tbbmalloc_debug.lib to Debug configuration")
+			target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/tbbmalloc_debug.lib)
+		endif()
+
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/tbbmalloc_proxy_debug.lib")
+			message("[${PROJECT_NAME}][Debug]: adding tbbmalloc_proxy_debug.lib to Debug configuration")
+			target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/tbbmalloc_proxy_debug.lib)
+		endif()
+
+		# Release
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/tbb12.lib")
+			message("[${PROJECT_NAME}][None-Debug]: adding tbb12.lib to not Debug configurations")
+			target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/tbb12.lib)
+		endif()
+
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/tbbbind_2_5.lib")
+			message("[${PROJECT_NAME}][None-Debug]: adding tbbbind_2_5.lib to not Debug configurations")
+			target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/tbbbind_2_5.lib)
+		endif()
+
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/tbbmalloc_proxy.lib")
+			message("[${PROJECT_NAME}][None-Debug]: adding tbbmalloc_proxy.lib to not Debug configurations")
+			target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/tbbmalloc_proxy.lib)
+		endif()
+
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/tbbmalloc.lib")
+			message("[${PROJECT_NAME}][None-Debug]: adding tbbmalloc.lib to not Debug configurations")
+			target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/tbbmalloc.lib)
+		endif()
+
+		# Post comand = copy bins
+		add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        	COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbb12_debug.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
+        	COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbbind_2_5_debug.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
+        	COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbmalloc_debug.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
+        	COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbmalloc_proxy_debug.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
+        	COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbb12_debug.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
+        	COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbbind_2_5_debug.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
+        	COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbmalloc_debug.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
+        	COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbmalloc_proxy_debug.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
+
+        	COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbb12.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
+        	COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbbind_2_5.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
+        	COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbmalloc.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
+        	COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbmalloc_proxy.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
+        	COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbb12.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
+        	COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbbind_2_5.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
+        	COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbmalloc.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
+        	COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbmalloc_proxy.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
+			COMMENT "copying dlls after compilation of project"
+   		)
+
+	endif()
+else()
+	target_link_libraries(${PROJECT_NAME} PUBLIC TBB::tbb)
+endif()

@@ -39,4 +39,5 @@ user_data/
 !cmake/*.cmake
 !cmake/*.config
 [Nn]uget/
+cmake/**/packages.config
 engine/**/kotek_std_preprocessors.h
