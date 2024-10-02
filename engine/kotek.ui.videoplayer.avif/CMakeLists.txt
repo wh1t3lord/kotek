@@ -7,8 +7,15 @@ project(kotek.ui.videoplayer.avif VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(PkgConfig REQUIRED)
-pkg_check_modules(dav1d REQUIRED IMPORTED_TARGET dav1d)
+if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+
+elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+	find_package(PkgConfig REQUIRED)
+	pkg_check_modules(dav1d REQUIRED IMPORTED_TARGET dav1d)
+else()
+	message(FATAL_ERROR "provide implementation")
+endif()
+
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_ui_videoplayer_avif.h"
@@ -19,4 +26,11 @@ add_library(${PROJECT_NAME} STATIC
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
-target_link_libraries(${PROJECT_NAME} PUBLIC PkgConfig::dav1d)
+
+if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+
+elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+	target_link_libraries(${PROJECT_NAME} PUBLIC PkgConfig::dav1d)
+else()
+	message(FATAL_ERROR "provide implementation")
+endif()

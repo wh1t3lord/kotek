@@ -35,8 +35,11 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
 	message("[${PROJECT_NAME}]: using nuget packages")
 
 	if (WIN32)
+		include("cmake/windows/vcpkg_nuget.cmake")
 		include("cmake/windows/nuget.cmake")
 	endif()
+
+	include("${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
 endif()
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
