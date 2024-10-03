@@ -54,11 +54,11 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	endif()
 
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-	COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/mimalloc-debug.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
-	COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/mimalloc-debug.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
+	COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/mimalloc-debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
+	COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/mimalloc-debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
 
-	COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/mimalloc.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
-	COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/mimalloc.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
+	COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/mimalloc.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
+	COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/mimalloc.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
 	COMMENT "copying dlls after compilation of project"
    )
 else()
@@ -76,11 +76,4 @@ endif()
 
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
-
-if ("${KOTEK_MEMORY_LEAK_DETECTION}" STREQUAL "ON")
-	if ("${KOTEK_CPP_MEMORY_LEAK_LIBRARY}" STREQUAL "VLD")
-		target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.vld)
-	endif()
-endif()
-
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)

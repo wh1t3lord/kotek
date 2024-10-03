@@ -46,11 +46,11 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	endif()
 
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/spdlogd.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
-		COMMAND if $<CONFIG:Debug> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/spdlogd.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/")
+		COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/spdlogd.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
+		COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/spdlogd.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
 
-		COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/spdlog.dll ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
-		COMMAND if $<CONFIG:Release> ("${CMAKE_COMMAND} -E copy_if_different ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/spdlog.pdb ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/")
+		COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/spdlog.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
+		COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/spdlog.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
 
 		COMMENT "copying dlls after compilation of project"
    )

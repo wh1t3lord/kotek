@@ -3,16 +3,11 @@
 #include <kotek.core.types.numerics/include/kotek_core_types_numerics.h>
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 
-#ifdef KOTEK_USE_MEMORY_LEAK_DETECTION_VLD
-	#include <kotek.core.memory.vld/include/kotek_core_memory_vld.h>
-#endif
-
 #include <cstring>
 
 #ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
 	#include <mimalloc.h>
 #endif
-// TODO: add feature in order to disable mimalloc and use regular std::allocator
 
 #ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
 	#define KOTEK_USE_MEMORY_ALLOCATOR_CLASS mi_stl_allocator

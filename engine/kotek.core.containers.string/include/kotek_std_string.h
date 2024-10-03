@@ -31,12 +31,6 @@ cstring to_lower(const cstring& str);
 // TODO: add predefined versions size of static strings like
 // 2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536
 
-using string = std::u8string;
-using string_view = std::u8string_view;
-
-using u8string = std::u8string;
-using u8string_view = std::u8string_view;
-
 template <size_t Size>
 using static_u8string = etl::u8string<Size>;
 using static_u8string_view = etl::u8string_view;

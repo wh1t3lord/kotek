@@ -13,3 +13,7 @@ add_library(${PROJECT_NAME} STATIC
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.filesystem.path)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
+
+if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
+	target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
+endif()

@@ -149,7 +149,8 @@ endif()
 
 if ("${KOTEK_CPP_MEMORY_LEAK_LIBRARY}" STREQUAL "")
 	if (WIN32)
-		set(KOTEK_CPP_MEMORY_LEAK_LIBRARY "VLD" CACHE INTERNAL "")
+		message("[${PROJECT_NAME}]: enabling memory leak detection (built-in)")
+		set(KOTEK_CPP_MEMORY_LEAK_LIBRARY "CRT" CACHE INTERNAL "")
 	endif()
 endif()
 
