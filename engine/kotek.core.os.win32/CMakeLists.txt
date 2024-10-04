@@ -85,7 +85,7 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_1}>"
 			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_2}>"			
 			COMMAND_EXPAND_LISTS
-			COMMENT "copying dlls after compilation of project"
+			COMMENT "copying dlls after compilation of ${PROJECT_NAME}"
 	   )
 	endif()
 

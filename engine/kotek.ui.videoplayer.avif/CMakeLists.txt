@@ -48,12 +48,23 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/dav1d.lib)
 	endif()
 
+	set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+
+	set(copy_local_command_debug_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/dav1d.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+
+	set(copy_local_command_release_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/dav1d.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+
+
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-		COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/dav1d.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
+		COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_1}>"
+		COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_2}>"
 
-		COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/dav1d.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
+		COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_1}>"
+		COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_2}>"
 
-		COMMENT "copying dlls after compilation of project"
+		COMMAND_EXPAND_LISTS
+
+		COMMENT "copying dlls after compilation of ${PROJECT_NAME}"
    )
 
 elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")

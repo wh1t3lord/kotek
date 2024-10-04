@@ -77,25 +77,50 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		endif()
 
 		# Post comand = copy bins
-		add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        	COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbb12_debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
-        	COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbbind_2_5_debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
-        	COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbmalloc_debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
-        	COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbmalloc_proxy_debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
-        	COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbb12_debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
-        	COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbbind_2_5_debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
-        	COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbmalloc_debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
-        	COMMAND if $<CONFIG:Debug> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Debug/tbbmalloc_proxy_debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/
 
-        	COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbb12.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
-        	COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbbind_2_5.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
-        	COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbmalloc.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
-        	COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbmalloc_proxy.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
-        	COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbb12.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
-        	COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbbind_2_5.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
-        	COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbmalloc.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
-        	COMMAND if $<CONFIG:Release> ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/bin/Release/tbbmalloc_proxy.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/
-			COMMENT "copying dlls after compilation of project"
+		set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+
+		set(copy_local_command_debug_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/tbb12_debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		set(copy_local_command_debug_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/tbbbind_2_5_debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		set(copy_local_command_debug_3 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/tbbmalloc_debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		set(copy_local_command_debug_4 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/tbbmalloc_proxy_debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		set(copy_local_command_debug_5 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/tbb12_debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		set(copy_local_command_debug_6 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/tbbbind_2_5_debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		set(copy_local_command_debug_7 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/tbbmalloc_debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		set(copy_local_command_debug_8 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/tbbmalloc_proxy_debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+
+		set(copy_local_command_release_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/tbb12.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		set(copy_local_command_release_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/tbbbind_2_5.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		set(copy_local_command_release_3 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/tbbmalloc.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		set(copy_local_command_release_4 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/tbbmalloc_proxy.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		set(copy_local_command_release_5 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/tbb12.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		set(copy_local_command_release_6 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/tbbbind_2_5.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		set(copy_local_command_release_7 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/tbbmalloc.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		set(copy_local_command_release_8 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/tbbmalloc_proxy.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+
+
+		add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_1}>"
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_2}>"
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_3}>"
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_4}>"
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_5}>"
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_6}>"
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_7}>"
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_8}>"
+
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_1}>"
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_2}>"
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_3}>"
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_4}>"
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_5}>"
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_6}>"
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_7}>"
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_8}>"
+
+			COMMAND_EXPAND_LISTS
+
+			COMMENT "copying dlls after compilation of ${PROJECT_NAME}"
    		)
 
 	endif()
