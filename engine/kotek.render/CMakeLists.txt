@@ -31,7 +31,7 @@ endif()
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl)
 
 # TODO: Vulkan you implement in the last stage of development. First gl and gl without shaderc!
-#target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.vk) 
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.vk) 
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.software)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.angle.gles23)

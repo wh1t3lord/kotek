@@ -59,13 +59,15 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_1}>"
 		COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_2}>"
 
-		COMMAND "$<$<CONFIG:Debug>:${copy_local_command_release_1}>"
-		COMMAND "$<$<CONFIG:Debug>:${copy_local_command_release_2}>"
+		COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_1}>"
+		COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_2}>"
 
 		COMMAND_EXPAND_LISTS
 
 		COMMENT "copying dlls after compilation of ${PROJECT_NAME}"
    )
+
+   target_compile_definitions(${PROJECT_NAME} PUBLIC SPDLOG_USE_STD_FORMAT)
 else()
 	target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog_header_only)
 endif()

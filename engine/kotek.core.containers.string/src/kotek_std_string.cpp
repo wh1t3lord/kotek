@@ -48,12 +48,14 @@ cstring to_lower(const cstring& str)
 
 u8string convert_utf16_to_utf8(const u16string_view& str)
 {
-	return utf8::utf16tou8(str);
+	const auto& temp = utf8::utf16tou8(str);
+	return u8string(temp.begin(), temp.end());
 }
 
 u8string convert_utf32_to_utf8(const u32string_view& str)
 {
-	return utf8::utf32tou8(str);
+	const auto& temp = utf8::utf32tou8(str);
+	return u8string(temp.begin(), temp.end());
 }
 
 #endif

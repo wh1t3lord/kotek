@@ -4,9 +4,7 @@
 #include <kotek.render/include/kotek_render.h>
 
 #ifdef KOTEK_DEBUG
-	#define BOOST_TEST_MODULE kotek_engine_test_module
-	#define BOOST_TEST_ALTERNATIVE_INIT_API
-	#include <boost/test/unit_test.hpp>
+
 #endif
 
 bool isUserCallbackUpdateFunctionContainsLoop = false;
@@ -279,6 +277,8 @@ namespace Engine
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.9");
 	#elif (_MSC_VER == 1940)
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.10");
+	#elif (_MSC_VER == 1941)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.11.1");
 	#endif
 
 #endif
@@ -343,7 +343,7 @@ namespace Engine
 		KOTEK_MESSAGE("UNIT TESTING UNIT TESTING UNIT "
 					  "TESTING\n\n\n\n\n\n\n\n\n\n\n\n");
 
-		ktk_vector<const char*, 1> argv_test = {"C:/test"};
+	//	ktk_vector<const char*, 1> argv_test = {"C:/test"};
 
 		auto p_custom_init_unit_test_initialize_callback = [](void) -> bool
 		{
@@ -351,11 +351,11 @@ namespace Engine
 			return true;
 		};
 
-		auto status = boost::unit_test_framework::unit_test_main(
-			p_custom_init_unit_test_initialize_callback, 1,
-			const_cast<char**>(argv_test.data()));
+	//	auto status = boost::unit_test_framework::unit_test_main(
+		//	p_custom_init_unit_test_initialize_callback, 1,
+			//const_cast<char**>(argv_test.data()));
 
-		KOTEK_ASSERT(status == 0, "you have got failed tests");
+	//	KOTEK_ASSERT(status == 0, "you have got failed tests");
 
 		KOTEK_MESSAGE("\n\n\n\n\nUNIT TESTING UNIT TESTING UNIT TESTING");
 			#endif

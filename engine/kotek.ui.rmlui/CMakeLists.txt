@@ -5,17 +5,12 @@ project(kotek.ui.rmlui VERSION 1 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+find_package(Freetype CONFIG REQUIRED)
 find_package(RmlUi 6.0 CONFIG REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_ui_game_ui_manager.h"
 	"src/kotek_ui_game_ui_manager.cpp"
-	"include/kotek_ui_rmlui_system_interface_glfw.h"
-	"src/kotek_ui_rmlui_system_interface_glfw.cpp"
-	# TODO: implement for SDL
-
-	"include/kotek_ui_rmlui_render_interface_gl3.h"
-	"src/kotek_ui_rmlui_render_interface_gl3.cpp"
 
 	"include/kotek_ui_rmlui.h"
 	"src/main_ui_rmlui_dll.cpp")
@@ -28,10 +23,8 @@ if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 	target_compile_definitions(${PROJECT_NAME} PUBLIC -DRMLUI_STATIC_LIB)
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC 
-	RmlCore 
-	RmlDebugger
-)
+target_link_libraries(${PROJECT_NAME} PUBLIC Freetype::Freetype)
+target_link_libraries(${PROJECT_NAME} PUBLIC RmlUi::RmlUi)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)

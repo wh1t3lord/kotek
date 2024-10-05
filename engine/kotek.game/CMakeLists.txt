@@ -9,7 +9,7 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 	if ("${KOTEK_USER_GAME_PROJECT_NAME}" STREQUAL "")
-		message(FATAL_ERROR "specify KOTEK_USER_GAME_PROJECT_NAME of folder where your root source directory is located. e.g. see sandbox example https://gitlab.com/wh1t3lord/sandbox")
+		message(FATAL_ERROR "specify KOTEK_USER_GAME_PROJECT_NAME of folder where your root source directory is located. e.g. see zircon example")
 	endif()
 
 	include_directories(../../../${KOTEK_USER_GAME_PROJECT_NAME})
@@ -31,7 +31,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui)
 
 if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 	if ("${KOTEK_USER_GAME_MODULE_FOR_LINK_NAME}" STREQUAL "")
-		message(FATAL_ERROR "you must specify KOTEK_USER_GAME_MODULE_FOR_LINK_NAME for linking to kotek.game project. See sandbox example https://gitlab.com/wh1t3lord/sandbox")
+		message(FATAL_ERROR "you must specify KOTEK_USER_GAME_MODULE_FOR_LINK_NAME for linking to kotek.game project. See zircon example ")
 	endif()
 
 	target_link_libraries(${PROJECT_NAME} PUBLIC ${KOTEK_USER_GAME_MODULE_FOR_LINK_NAME})

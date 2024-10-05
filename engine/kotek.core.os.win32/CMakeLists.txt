@@ -63,12 +63,12 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 
 		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/glfw3dll.lib")
 			message("[${PROJECT_NAME}][Debug]: adding glfw3dll.lib to Debug configuration")
-			target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_json-vc140-mt-gd.lib)
+			target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/glfw3dll.lib)
 		endif()
 
 		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/glfw3dll.lib")
 			message("[${PROJECT_NAME}][None-Debug]: glfw3dll.lib to not Debug configurations")
-			target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_json-vc140-mt.lib)
+			target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/glfw3dll.lib)
 		endif()
 
 		set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")

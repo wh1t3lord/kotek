@@ -153,7 +153,7 @@ ktk::cstring format(const ktk::cstring& text, Args&&... args) noexcept
 		fmt::vformat(text.c_str(), fmt::make_format_args(args...));
 #endif
 
-	return data;
+	return ktk::cstring(data.begin(), data.end());
 }
 
 KOTEK_END_NAMESPACE_KTK
