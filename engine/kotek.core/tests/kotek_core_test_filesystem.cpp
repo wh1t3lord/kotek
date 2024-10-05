@@ -1,5 +1,5 @@
 ﻿#include "../include/kotek_core.h"
-#include <catch2/catch_test_macros.hpp>
+
 
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG

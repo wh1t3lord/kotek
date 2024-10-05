@@ -4,7 +4,7 @@
 #include <kotek.render/include/kotek_render.h>
 
 #ifdef KOTEK_DEBUG
-
+	#include <CppUTest/CommandLineTestRunner.h>
 #endif
 
 bool isUserCallbackUpdateFunctionContainsLoop = false;
@@ -329,7 +329,7 @@ namespace Engine
 		if (p_user_callback_initialize_render_from_game_library)
 			p_user_callback_initialize_render_from_game_library(p_main_manager);
 #elif defined(KOTEK_USE_DEVELOPMENT_TYPE_STATIC)
-		::KOTEK_USER_FUNCTION_INITIALIZE_MODULE_RENDER(p_main_manager);
+		::KOTEK_USER_FUNCTION_INITIALIZE/_MODULE_RENDER(p_main_manager);
 #else
 	#error Unknown development type, see what you specified in your cmd/cmake GUI. The macro accepts only two variables STATIC or SHARED
 #endif
@@ -338,6 +338,10 @@ namespace Engine
 
 #ifdef KOTEK_DEBUG
 	#ifdef KOTEK_USE_TESTS_RUNTIME
+		KOTEK_MESSAGE("[UNIT TESTING]");
+		auto status = RUN_ALL_TESTS(p_main_manager->Get_EngineConfig()->GetARGC(), p_main_manager->Get_EngineConfig()->GetARGV());
+		KOTEK_ASSERT(status == 0, "unit tests failed!");
+		KOTEK_MESSAGE("[UNIT TESTING]");
 	#endif
 #endif
 

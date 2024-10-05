@@ -4,7 +4,7 @@
 #include <kotek.core.utility/include/kotek_core_utility.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
-#include <catch2/catch_test_macros.hpp>
+#include <CppUTest/TestHarness.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -12,7 +12,10 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
-TEST_CASE("Translation to enum invalid cases") 
+
+TEST_GROUP(EnumCoreTranslation){};
+
+TEST(EnumCoreTranslation, TranslationToEnumInvalidCases)
 {
 	eEngineSupportedRenderer result{};
 
@@ -37,7 +40,7 @@ TEST_CASE("Translation to enum invalid cases")
 	CHECK(result == eEngineSupportedRenderer::kUnknown);
 }
 
-TEST_CASE("translation to enum valid case")
+TEST(EnumCoreTranslation, TranslationToEnumValidCase)
 {
 	eEngineSupportedRenderer result{};
 

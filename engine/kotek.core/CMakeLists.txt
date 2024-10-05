@@ -11,7 +11,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 			find_package(Boost COMPONENTS json filesystem REQUIRED)
-			find_package(Catch2 CONFIG REQUIRED)
+			find_package(CppUTest CONFIG REQUIRED)
 		elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			file(GLOB nuget_boost_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
 			if ("${nuget_boost_folder}" MATCHES "Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
@@ -20,9 +20,9 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 				message(FATAL_ERROR "failed to find boost package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
 			endif()
 
-			find_package(Catch2 CONFIG REQUIRED)
+			find_package(CppUTest CONFIG REQUIRED)
 		else()
-			find_package(Catch2 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+			find_package(CppUTest REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 			find_package(Boost COMPONENTS json filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 		endif()
 	endif()
@@ -74,7 +74,10 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 			message(FATAL_ERROR "provide implementation for other platforms")
 		endif()
 
-		target_link_libraries(${PROJECT_NAME} PUBLIC Catch2::Catch2)
+		target_link_libraries(${PROJECT_NAME} PUBLIC 
+			CppUTest
+			CppUTestExt
+		)
 	else()
 		target_link_libraries(${PROJECT_NAME} PUBLIC 
 			Boost::headers 
@@ -82,7 +85,10 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 			Boost::filesystem
 		)
 
-		target_link_libraries(${PROJECT_NAME} PUBLIC Catch2::Catch2)
+		target_link_libraries(${PROJECT_NAME} PUBLIC 
+			CppUTest
+			CppUTestExt
+		)
 	endif()
 endif()
 
