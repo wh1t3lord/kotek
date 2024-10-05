@@ -310,6 +310,12 @@ namespace Engine
 	{
 		PrintCompiler();
 
+#ifdef KOTEK_DEBUG
+	#ifdef KOTEK_USE_TESTS_RUNTIME
+		MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
+	#endif
+#endif
+
 		Core::InitializeModule_Core(p_main_manager);
 
 		// TODO: must gurantee that write/read operations are not in
@@ -329,7 +335,7 @@ namespace Engine
 		if (p_user_callback_initialize_render_from_game_library)
 			p_user_callback_initialize_render_from_game_library(p_main_manager);
 #elif defined(KOTEK_USE_DEVELOPMENT_TYPE_STATIC)
-		::KOTEK_USER_FUNCTION_INITIALIZE/_MODULE_RENDER(p_main_manager);
+		::KOTEK_USER_FUNCTION_INITIALIZE / _MODULE_RENDER(p_main_manager);
 #else
 	#error Unknown development type, see what you specified in your cmd/cmake GUI. The macro accepts only two variables STATIC or SHARED
 #endif
@@ -339,7 +345,9 @@ namespace Engine
 #ifdef KOTEK_DEBUG
 	#ifdef KOTEK_USE_TESTS_RUNTIME
 		KOTEK_MESSAGE("[UNIT TESTING]");
-		auto status = RUN_ALL_TESTS(p_main_manager->Get_EngineConfig()->GetARGC(), p_main_manager->Get_EngineConfig()->GetARGV());
+		auto status =
+			RUN_ALL_TESTS(p_main_manager->Get_EngineConfig()->GetARGC(),
+				p_main_manager->Get_EngineConfig()->GetARGV());
 		KOTEK_ASSERT(status == 0, "unit tests failed!");
 		KOTEK_MESSAGE("[UNIT TESTING]");
 	#endif
