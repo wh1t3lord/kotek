@@ -11,6 +11,10 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 				find_package(etl CONFIG REQUIRED)
 			endif()
 			find_package(utf8cpp CONFIG REQUIRED)
+
+			if ("${KOTEK_TESTS}" STREQUAL "ON")
+				find_package(GTest CONFIG REQUIRED)
+			endif()
 		elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
 				file(GLOB nuget_etl_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Etl.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
@@ -28,11 +32,19 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 			else()
 				message(FATAL_ERROR "failed to find utfcpp package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
 			endif()
+
+			if ("${KOTEK_TESTS}" STREQUAL "ON")
+				find_package(GTest CONFIG REQUIRED)
+			endif()
 		else()
 			if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
 				find_package(etl REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 			endif()
 			find_package(utf8cpp CONFIG REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+
+			if ("${KOTEK_TESTS}" STREQUAL "ON")
+				find_package(GTest REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+			endif()
 		endif()
 endif()
 
@@ -67,10 +79,24 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		message("[${PROJECT_NAME}]: utf8cpp package included directory")
 		target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_utf8cpp_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
 	endif()
+
+	if ("${KOTEK_TESTS}" STREQUAL "ON")
+		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		GTest::gtest 
+		GTest::gmock
+		)
+	endif()
 else()
 	target_link_libraries(${PROJECT_NAME} PUBLIC utf8::cpp utf8cpp::utf8cpp)
 
 	if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
 		target_link_libraries(${PROJECT_NAME} PUBLIC etl::etl)
+	endif()
+
+	if ("${KOTEK_TESTS}" STREQUAL "ON")
+		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		GTest::gtest 
+		GTest::gmock
+		)
 	endif()
 endif()

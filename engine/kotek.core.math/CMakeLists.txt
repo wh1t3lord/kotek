@@ -6,6 +6,21 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+		if ("${KOTEK_TESTS}" STREQUAL "ON")
+			find_package(GTest CONFIG REQUIRED)
+		endif()
+	elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+		if ("${KOTEK_TESTS}" STREQUAL "ON")
+			find_package(GTest CONFIG REQUIRED)
+		endif()
+	else()
+		if ("${KOTEK_TESTS}" STREQUAL "ON")
+			find_package(GTest REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+		endif()
+	endif()
+
+
 	if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 			find_package(glm REQUIRED)
@@ -77,12 +92,24 @@ else()
 endif()
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
-	# nothing here, really
+	if ("${KOTEK_TESTS}" STREQUAL "ON")
+		target_link_libraries(${PROJECT_NAME} PUBLIC 
+			GTest::gtest 
+			GTest::gmock
+		)
+	endif()
 else()
 	if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
 		target_link_libraries(${PROJECT_NAME} PUBLIC glm::glm)
 	elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
 		target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
+	endif()
+
+	if ("${KOTEK_TESTS}" STREQUAL "ON")
+		target_link_libraries(${PROJECT_NAME} PUBLIC 
+			GTest::gtest 
+			GTest::gmock
+		)
 	endif()
 endif()
 

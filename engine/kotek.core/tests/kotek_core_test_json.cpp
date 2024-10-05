@@ -1,12 +1,11 @@
 ﻿#include "../include/kotek_core.h"
-#include <CppUTest/TestHarness.h>
+#include <gtest/gtest.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
-TEST_GROUP(Json){};
 
 TEST(Json,test_json_std_vector){}
 

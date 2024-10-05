@@ -5,7 +5,7 @@
 		#include <filesystem>
 		#include <vector>
 		#include <iostream>
-		#include <CppUTest/TestHarness.h>
+		#include <gtest/gtest.h>
 	#endif
 #endif
 
@@ -14,7 +14,7 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
-TEST_GROUP(Filesystem){};
+ 
 
 TEST(Filesystem, test_filesystem_check_folder_tests_for_existance)
 {
@@ -25,7 +25,7 @@ TEST(Filesystem, test_filesystem_check_folder_tests_for_existance)
 	bool status = instance.IsValidPath(
 		instance.GetFolderByEnum(eFolderIndex::kFolderIndex_UserData_Tests));
 
-	CHECK(status);
+	EXPECT_TRUE(status);
 
 	instance.Shutdown();
 }
@@ -69,7 +69,7 @@ TEST(Filesystem, test_file_create_pretty_output)
 
 	bool status = saver_instance.Save(path, &instance);
 
-	CHECK(status);
+	EXPECT_TRUE(status);
 
 	filesystem.Shutdown();
 	saver_instance.Shutdown();
@@ -85,7 +85,7 @@ TEST(Filesystem, test_container_filesystem_static_path_make_preferred)
 {
 	ktk_filesystem_path test1("a/b/c");
 		#ifdef KOTEK_USE_PLATFORM_WINDOWS
-	CHECK(test1.make_preferred().native() == "a\\b\\c");
+	EXPECT_TRUE(test1.make_preferred().native() == "a\\b\\c");
 		#elif defined(KOTEK_USE_PLATFORM_LINUX)
 			#error implement
 		#elif defined(KOTEK_USE_PLATFORM_MACOS)
@@ -103,13 +103,13 @@ TEST(Filesystem, test_container_filesystem_static_path_remove_filename)
 	ktk_filesystem_path test5("foo/");
 	ktk_filesystem_path test6("/foo");
 
-	CHECK(test.remove_filename().native() == "/");
-	CHECK(test1.remove_filename().native() == "\\");
-	CHECK(test2.remove_filename().native() == "");
-	CHECK(test3.remove_filename().native() == "");
-	CHECK(test4.remove_filename().native() == "foo/");
-	CHECK(test5.remove_filename().native() == "foo/");
-	CHECK(test6.remove_filename().native() == "/");
+	EXPECT_TRUE(test.remove_filename().native() == "/");
+	EXPECT_TRUE(test1.remove_filename().native() == "\\");
+	EXPECT_TRUE(test2.remove_filename().native() == "");
+	EXPECT_TRUE(test3.remove_filename().native() == "");
+	EXPECT_TRUE(test4.remove_filename().native() == "foo/");
+	EXPECT_TRUE(test5.remove_filename().native() == "foo/");
+	EXPECT_TRUE(test6.remove_filename().native() == "/");
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_remove_filename2)
@@ -119,10 +119,10 @@ TEST(Filesystem, test_container_filesystem_static_path_remove_filename2)
 	ktk_filesystem_path test2;
 	ktk_filesystem_path test3("");
 
-	CHECK(test.remove_filename().native() == "/");
-	CHECK(test1.remove_filename().native() == "\\");
-	CHECK(test2.remove_filename().native() == "");
-	CHECK(test3.remove_filename().native() == "");
+	EXPECT_TRUE(test.remove_filename().native() == "/");
+	EXPECT_TRUE(test1.remove_filename().native() == "\\");
+	EXPECT_TRUE(test2.remove_filename().native() == "");
+	EXPECT_TRUE(test3.remove_filename().native() == "");
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_has_extension)
@@ -151,17 +151,17 @@ TEST(Filesystem, test_container_filesystem_static_path_has_extension)
 	std::filesystem::path std_test10("/ab/...");
 	std::filesystem::path std_test11("/ab/.1.");
 
-	CHECK(test.has_extension() == std_test.has_extension());
-	CHECK(test2.has_extension() == std_test2.has_extension());
-	CHECK(test3.has_extension() == std_test3.has_extension());
-	CHECK(test4.has_extension() == std_test4.has_extension());
-	CHECK(test5.has_extension() == std_test5.has_extension());
-	CHECK(test6.has_extension() == std_test6.has_extension());
-	CHECK(test7.has_extension() == std_test7.has_extension());
-	CHECK(test8.has_extension() == std_test8.has_extension());
-	CHECK(test9.has_extension() == std_test9.has_extension());
-	CHECK(test10.has_extension() == std_test10.has_extension());
-	CHECK(test11.has_extension() == std_test11.has_extension());
+	EXPECT_TRUE(test.has_extension() == std_test.has_extension());
+	EXPECT_TRUE(test2.has_extension() == std_test2.has_extension());
+	EXPECT_TRUE(test3.has_extension() == std_test3.has_extension());
+	EXPECT_TRUE(test4.has_extension() == std_test4.has_extension());
+	EXPECT_TRUE(test5.has_extension() == std_test5.has_extension());
+	EXPECT_TRUE(test6.has_extension() == std_test6.has_extension());
+	EXPECT_TRUE(test7.has_extension() == std_test7.has_extension());
+	EXPECT_TRUE(test8.has_extension() == std_test8.has_extension());
+	EXPECT_TRUE(test9.has_extension() == std_test9.has_extension());
+	EXPECT_TRUE(test10.has_extension() == std_test10.has_extension());
+	EXPECT_TRUE(test11.has_extension() == std_test11.has_extension());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_has_filename)
@@ -200,22 +200,22 @@ TEST(Filesystem, test_container_filesystem_static_path_has_filename)
 	std::filesystem::path std_test15("\\ab\\...");
 	std::filesystem::path std_test16("/ab\\.1.");
 
-	CHECK(test.has_filename() == std_test.has_filename());
-	CHECK(test2.has_filename() == std_test2.has_filename());
-	CHECK(test3.has_filename() == std_test3.has_filename());
-	CHECK(test4.has_filename() == std_test4.has_filename());
-	CHECK(test5.has_filename() == std_test5.has_filename());
-	CHECK(test6.has_filename() == std_test6.has_filename());
-	CHECK(test7.has_filename() == std_test7.has_filename());
-	CHECK(test8.has_filename() == std_test8.has_filename());
-	CHECK(test9.has_filename() == std_test9.has_filename());
-	CHECK(test10.has_filename() == std_test10.has_filename());
-	CHECK(test11.has_filename() == std_test11.has_filename());
-	CHECK(test12.has_filename() == std_test12.has_filename());
-	CHECK(test13.has_filename() == std_test13.has_filename());
-	CHECK(test14.has_filename() == std_test14.has_filename());
-	CHECK(test15.has_filename() == std_test15.has_filename());
-	CHECK(test16.has_filename() == std_test16.has_filename());
+	EXPECT_TRUE(test.has_filename() == std_test.has_filename());
+	EXPECT_TRUE(test2.has_filename() == std_test2.has_filename());
+	EXPECT_TRUE(test3.has_filename() == std_test3.has_filename());
+	EXPECT_TRUE(test4.has_filename() == std_test4.has_filename());
+	EXPECT_TRUE(test5.has_filename() == std_test5.has_filename());
+	EXPECT_TRUE(test6.has_filename() == std_test6.has_filename());
+	EXPECT_TRUE(test7.has_filename() == std_test7.has_filename());
+	EXPECT_TRUE(test8.has_filename() == std_test8.has_filename());
+	EXPECT_TRUE(test9.has_filename() == std_test9.has_filename());
+	EXPECT_TRUE(test10.has_filename() == std_test10.has_filename());
+	EXPECT_TRUE(test11.has_filename() == std_test11.has_filename());
+	EXPECT_TRUE(test12.has_filename() == std_test12.has_filename());
+	EXPECT_TRUE(test13.has_filename() == std_test13.has_filename());
+	EXPECT_TRUE(test14.has_filename() == std_test14.has_filename());
+	EXPECT_TRUE(test15.has_filename() == std_test15.has_filename());
+	EXPECT_TRUE(test16.has_filename() == std_test16.has_filename());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_replace_extension)
@@ -268,22 +268,22 @@ TEST(Filesystem, test_container_filesystem_static_path_replace_extension)
 	ktk_filesystem_path test16("/foo/bar.jpg");
 	test16.replace_extension();
 
-	CHECK(test.native() == "/foo/bar.png");
-	CHECK(test2.native() == "/foo/bar.png");
-	CHECK(test3.native() == "/foo/bar.");
-	CHECK(test4.native() == "/foo/bar");
-	CHECK(test5.native() == "/foo/bar.png");
-	CHECK(test6.native() == "/foo/bar.png");
-	CHECK(test7.native() == "/foo/bar.png");
-	CHECK(test8.native() == "/foo/bar.");
-	CHECK(test9.native() == "/foo/bar");
-	CHECK(test10.native() == "/foo/..png");
-	CHECK(test11.native() == "/foo/..png");
-	CHECK(test12.native() == "/foo/..");
-	CHECK(test13.native() == "/foo/.");
-	CHECK(test14.native() == "/foo/.png");
-	CHECK(test15.native() == "/foo/.png");
-	CHECK(test16.native() == "/foo/bar");
+	EXPECT_TRUE(test.native() == "/foo/bar.png");
+	EXPECT_TRUE(test2.native() == "/foo/bar.png");
+	EXPECT_TRUE(test3.native() == "/foo/bar.");
+	EXPECT_TRUE(test4.native() == "/foo/bar");
+	EXPECT_TRUE(test5.native() == "/foo/bar.png");
+	EXPECT_TRUE(test6.native() == "/foo/bar.png");
+	EXPECT_TRUE(test7.native() == "/foo/bar.png");
+	EXPECT_TRUE(test8.native() == "/foo/bar.");
+	EXPECT_TRUE(test9.native() == "/foo/bar");
+	EXPECT_TRUE(test10.native() == "/foo/..png");
+	EXPECT_TRUE(test11.native() == "/foo/..png");
+	EXPECT_TRUE(test12.native() == "/foo/..");
+	EXPECT_TRUE(test13.native() == "/foo/.");
+	EXPECT_TRUE(test14.native() == "/foo/.png");
+	EXPECT_TRUE(test15.native() == "/foo/.png");
+	EXPECT_TRUE(test16.native() == "/foo/bar");
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_swap)
@@ -293,8 +293,8 @@ TEST(Filesystem, test_container_filesystem_static_path_swap)
 
 	test.swap(b);
 
-	CHECK(test.native() == "D:/kek");
-	CHECK(b.native() == "C:/test");
+	EXPECT_TRUE(test.native() == "D:/kek");
+	EXPECT_TRUE(b.native() == "C:/test");
 
 	ktk_filesystem_path test2("D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
 	ktk_filesystem_path b2("C:\\Program Files (x86)\\Microsoft SQL "
@@ -302,17 +302,17 @@ TEST(Filesystem, test_container_filesystem_static_path_swap)
 
 	test2.swap(b2);
 
-	CHECK(test2.native() ==
+	EXPECT_TRUE(test2.native() ==
 		"C:\\Program Files (x86)\\Microsoft SQL "
 		"Server\\150\\LocalDB\\Binn\\Resources\\es-ES");
-	CHECK(b2.native() == "D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
+	EXPECT_TRUE(b2.native() == "D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
 
 	ktk_filesystem_path test3("D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
 	ktk_filesystem_path b3("");
 
 	test3.swap(b3);
-	CHECK(test3.native() == "");
-	CHECK(b3.native() == "D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
+	EXPECT_TRUE(test3.native() == "");
+	EXPECT_TRUE(b3.native() == "D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_compare)
@@ -332,11 +332,11 @@ TEST(Filesystem, test_container_filesystem_static_path_compare)
 	ktk_filesystem_path a5("/a/b/");
 	ktk_filesystem_path b5("a/c");
 
-	CHECK(a.compare(b) == 0);
-	CHECK(a2.compare(b2) < 0);
-	CHECK(a3.compare(b3) > 0);
-	CHECK(a4.compare(b4) < 0);
-	CHECK(a5.compare(b5) > 0);
+	EXPECT_TRUE(a.compare(b) == 0);
+	EXPECT_TRUE(a2.compare(b2) < 0);
+	EXPECT_TRUE(a3.compare(b3) > 0);
+	EXPECT_TRUE(a4.compare(b4) < 0);
+	EXPECT_TRUE(a5.compare(b5) > 0);
 
 	a.compare("");
 }
@@ -367,17 +367,17 @@ TEST(Filesystem, test_container_filesystem_static_path_has_root_directory)
 	ktk_filesystem_path _t9("c\\d\\");
 	ktk_filesystem_path _t10(":/c\\d");
 
-	CHECK(t.has_root_directory() == _t.has_root_directory());
-	CHECK(t1.has_root_directory() == _t1.has_root_directory());
-	CHECK(t2.has_root_directory() == _t2.has_root_directory());
-	CHECK(t3.has_root_directory() == _t3.has_root_directory());
-	CHECK(t4.has_root_directory() == _t4.has_root_directory());
-	CHECK(t5.has_root_directory() == _t5.has_root_directory());
-	CHECK(t6.has_root_directory() == _t6.has_root_directory());
-	CHECK(t7.has_root_directory() == _t7.has_root_directory());
-	CHECK(t8.has_root_directory() == _t8.has_root_directory());
-	CHECK(t9.has_root_directory() == _t9.has_root_directory());
-	CHECK(t10.has_root_directory() == _t10.has_root_directory());
+	EXPECT_TRUE(t.has_root_directory() == _t.has_root_directory());
+	EXPECT_TRUE(t1.has_root_directory() == _t1.has_root_directory());
+	EXPECT_TRUE(t2.has_root_directory() == _t2.has_root_directory());
+	EXPECT_TRUE(t3.has_root_directory() == _t3.has_root_directory());
+	EXPECT_TRUE(t4.has_root_directory() == _t4.has_root_directory());
+	EXPECT_TRUE(t5.has_root_directory() == _t5.has_root_directory());
+	EXPECT_TRUE(t6.has_root_directory() == _t6.has_root_directory());
+	EXPECT_TRUE(t7.has_root_directory() == _t7.has_root_directory());
+	EXPECT_TRUE(t8.has_root_directory() == _t8.has_root_directory());
+	EXPECT_TRUE(t9.has_root_directory() == _t9.has_root_directory());
+	EXPECT_TRUE(t10.has_root_directory() == _t10.has_root_directory());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_is_absolute)
@@ -410,17 +410,17 @@ TEST(Filesystem, test_container_filesystem_static_path_is_absolute)
 	ktk_filesystem_path _t11("D:");
 	ktk_filesystem_path _t12("D:\\");
 
-	CHECK(t.is_absolute() == _t.is_absolute());
-	CHECK(t1.is_absolute() == _t1.is_absolute());
-	CHECK(t2.is_absolute() == _t2.is_absolute());
-	CHECK(t3.is_absolute() == _t3.is_absolute());
-	CHECK(t4.is_absolute() == _t4.is_absolute());
-	CHECK(t5.is_absolute() == _t5.is_absolute());
-	CHECK(t6.is_absolute() == _t6.is_absolute());
-	CHECK(t7.is_absolute() == _t7.is_absolute());
-	CHECK(t8.is_absolute() == _t8.is_absolute());
-	CHECK(t9.is_absolute() == _t9.is_absolute());
-	CHECK(t10.is_absolute() == _t10.is_absolute());
+	EXPECT_TRUE(t.is_absolute() == _t.is_absolute());
+	EXPECT_TRUE(t1.is_absolute() == _t1.is_absolute());
+	EXPECT_TRUE(t2.is_absolute() == _t2.is_absolute());
+	EXPECT_TRUE(t3.is_absolute() == _t3.is_absolute());
+	EXPECT_TRUE(t4.is_absolute() == _t4.is_absolute());
+	EXPECT_TRUE(t5.is_absolute() == _t5.is_absolute());
+	EXPECT_TRUE(t6.is_absolute() == _t6.is_absolute());
+	EXPECT_TRUE(t7.is_absolute() == _t7.is_absolute());
+	EXPECT_TRUE(t8.is_absolute() == _t8.is_absolute());
+	EXPECT_TRUE(t9.is_absolute() == _t9.is_absolute());
+	EXPECT_TRUE(t10.is_absolute() == _t10.is_absolute());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_is_relative)
@@ -453,17 +453,17 @@ TEST(Filesystem, test_container_filesystem_static_path_is_relative)
 	ktk_filesystem_path _t11("D:");
 	ktk_filesystem_path _t12("D:\\");
 
-	CHECK(t.is_relative() == _t.is_relative());
-	CHECK(t1.is_relative() == _t1.is_relative());
-	CHECK(t2.is_relative() == _t2.is_relative());
-	CHECK(t3.is_relative() == _t3.is_relative());
-	CHECK(t4.is_relative() == _t4.is_relative());
-	CHECK(t5.is_relative() == _t5.is_relative());
-	CHECK(t6.is_relative() == _t6.is_relative());
-	CHECK(t7.is_relative() == _t7.is_relative());
-	CHECK(t8.is_relative() == _t8.is_relative());
-	CHECK(t9.is_relative() == _t9.is_relative());
-	CHECK(t10.is_relative() == _t10.is_relative());
+	EXPECT_TRUE(t.is_relative() == _t.is_relative());
+	EXPECT_TRUE(t1.is_relative() == _t1.is_relative());
+	EXPECT_TRUE(t2.is_relative() == _t2.is_relative());
+	EXPECT_TRUE(t3.is_relative() == _t3.is_relative());
+	EXPECT_TRUE(t4.is_relative() == _t4.is_relative());
+	EXPECT_TRUE(t5.is_relative() == _t5.is_relative());
+	EXPECT_TRUE(t6.is_relative() == _t6.is_relative());
+	EXPECT_TRUE(t7.is_relative() == _t7.is_relative());
+	EXPECT_TRUE(t8.is_relative() == _t8.is_relative());
+	EXPECT_TRUE(t9.is_relative() == _t9.is_relative());
+	EXPECT_TRUE(t10.is_relative() == _t10.is_relative());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_relative_path)
@@ -506,31 +506,31 @@ TEST(Filesystem, test_container_filesystem_static_path_relative_path)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	CHECK(t.relative_path().string().c_str() == _t.relative_path().native());
-	CHECK(t1.relative_path().string().c_str() == _t1.relative_path().native());
-	CHECK(t2.relative_path().string().c_str() == _t2.relative_path().native());
-	CHECK(t3.relative_path().string().c_str() == _t3.relative_path().native());
-	CHECK(t4.relative_path().string().c_str() == _t4.relative_path().native());
-	CHECK(t5.relative_path().string().c_str() == _t5.relative_path().native());
-	CHECK(t6.relative_path().string().c_str() == _t6.relative_path().native());
-	CHECK(t7.relative_path().string().c_str() == _t7.relative_path().native());
-	CHECK(t8.relative_path().string().c_str() == _t8.relative_path().native());
-	CHECK(t9.relative_path().string().c_str() == _t9.relative_path().native());
-	CHECK(
+	EXPECT_TRUE(t.relative_path().string().c_str() == _t.relative_path().native());
+	EXPECT_TRUE(t1.relative_path().string().c_str() == _t1.relative_path().native());
+	EXPECT_TRUE(t2.relative_path().string().c_str() == _t2.relative_path().native());
+	EXPECT_TRUE(t3.relative_path().string().c_str() == _t3.relative_path().native());
+	EXPECT_TRUE(t4.relative_path().string().c_str() == _t4.relative_path().native());
+	EXPECT_TRUE(t5.relative_path().string().c_str() == _t5.relative_path().native());
+	EXPECT_TRUE(t6.relative_path().string().c_str() == _t6.relative_path().native());
+	EXPECT_TRUE(t7.relative_path().string().c_str() == _t7.relative_path().native());
+	EXPECT_TRUE(t8.relative_path().string().c_str() == _t8.relative_path().native());
+	EXPECT_TRUE(t9.relative_path().string().c_str() == _t9.relative_path().native());
+	EXPECT_TRUE(
 		t10.relative_path().string().c_str() == _t10.relative_path().native());
-	CHECK(
+	EXPECT_TRUE(
 		t11.relative_path().string().c_str() == _t11.relative_path().native());
-	CHECK(
+	EXPECT_TRUE(
 		t12.relative_path().string().c_str() == _t12.relative_path().native());
-	CHECK(
+	EXPECT_TRUE(
 		t13.relative_path().string().c_str() == _t13.relative_path().native());
-	CHECK(
+	EXPECT_TRUE(
 		t14.relative_path().string().c_str() == _t14.relative_path().native());
-	CHECK(
+	EXPECT_TRUE(
 		t15.relative_path().string().c_str() == _t15.relative_path().native());
-	CHECK(
+	EXPECT_TRUE(
 		t16.relative_path().string().c_str() == _t16.relative_path().native());
-	CHECK(
+	EXPECT_TRUE(
 		t17.relative_path().string().c_str() == _t17.relative_path().native());
 }
 
@@ -574,24 +574,24 @@ TEST(Filesystem, test_container_filesystem_static_path_parent_path)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	CHECK(t.parent_path().string().c_str() == _t.parent_path().native());
-	CHECK(t1.parent_path().string().c_str() == _t1.parent_path().native());
-	CHECK(t2.parent_path().string().c_str() == _t2.parent_path().native());
-	CHECK(t3.parent_path().string().c_str() == _t3.parent_path().native());
-	CHECK(t4.parent_path().string().c_str() == _t4.parent_path().native());
-	CHECK(t5.parent_path().string().c_str() == _t5.parent_path().native());
-	CHECK(t6.parent_path().string().c_str() == _t6.parent_path().native());
-	CHECK(t7.parent_path().string().c_str() == _t7.parent_path().native());
-	CHECK(t8.parent_path().string().c_str() == _t8.parent_path().native());
-	CHECK(t9.parent_path().string().c_str() == _t9.parent_path().native());
-	CHECK(t10.parent_path().string().c_str() == _t10.parent_path().native());
-	CHECK(t11.parent_path().string().c_str() == _t11.parent_path().native());
-	CHECK(t12.parent_path().string().c_str() == _t12.parent_path().native());
-	CHECK(t13.parent_path().string().c_str() == _t13.parent_path().native());
-	CHECK(t14.parent_path().string().c_str() == _t14.parent_path().native());
-	CHECK(t15.parent_path().string().c_str() == _t15.parent_path().native());
-	CHECK(t16.parent_path().string().c_str() == _t16.parent_path().native());
-	CHECK(t17.parent_path().string().c_str() == _t17.parent_path().native());
+	EXPECT_TRUE(t.parent_path().string().c_str() == _t.parent_path().native());
+	EXPECT_TRUE(t1.parent_path().string().c_str() == _t1.parent_path().native());
+	EXPECT_TRUE(t2.parent_path().string().c_str() == _t2.parent_path().native());
+	EXPECT_TRUE(t3.parent_path().string().c_str() == _t3.parent_path().native());
+	EXPECT_TRUE(t4.parent_path().string().c_str() == _t4.parent_path().native());
+	EXPECT_TRUE(t5.parent_path().string().c_str() == _t5.parent_path().native());
+	EXPECT_TRUE(t6.parent_path().string().c_str() == _t6.parent_path().native());
+	EXPECT_TRUE(t7.parent_path().string().c_str() == _t7.parent_path().native());
+	EXPECT_TRUE(t8.parent_path().string().c_str() == _t8.parent_path().native());
+	EXPECT_TRUE(t9.parent_path().string().c_str() == _t9.parent_path().native());
+	EXPECT_TRUE(t10.parent_path().string().c_str() == _t10.parent_path().native());
+	EXPECT_TRUE(t11.parent_path().string().c_str() == _t11.parent_path().native());
+	EXPECT_TRUE(t12.parent_path().string().c_str() == _t12.parent_path().native());
+	EXPECT_TRUE(t13.parent_path().string().c_str() == _t13.parent_path().native());
+	EXPECT_TRUE(t14.parent_path().string().c_str() == _t14.parent_path().native());
+	EXPECT_TRUE(t15.parent_path().string().c_str() == _t15.parent_path().native());
+	EXPECT_TRUE(t16.parent_path().string().c_str() == _t16.parent_path().native());
+	EXPECT_TRUE(t17.parent_path().string().c_str() == _t17.parent_path().native());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_has_parent_path)
@@ -634,24 +634,24 @@ TEST(Filesystem, test_container_filesystem_static_path_has_parent_path)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	CHECK(t.has_parent_path() == _t.has_parent_path());
-	CHECK(t1.has_parent_path() == _t1.has_parent_path());
-	CHECK(t2.has_parent_path() == _t2.has_parent_path());
-	CHECK(t3.has_parent_path() == _t3.has_parent_path());
-	CHECK(t4.has_parent_path() == _t4.has_parent_path());
-	CHECK(t5.has_parent_path() == _t5.has_parent_path());
-	CHECK(t6.has_parent_path() == _t6.has_parent_path());
-	CHECK(t7.has_parent_path() == _t7.has_parent_path());
-	CHECK(t8.has_parent_path() == _t8.has_parent_path());
-	CHECK(t9.has_parent_path() == _t9.has_parent_path());
-	CHECK(t10.has_parent_path() == _t10.has_parent_path());
-	CHECK(t11.has_parent_path() == _t11.has_parent_path());
-	CHECK(t12.has_parent_path() == _t12.has_parent_path());
-	CHECK(t13.has_parent_path() == _t13.has_parent_path());
-	CHECK(t14.has_parent_path() == _t14.has_parent_path());
-	CHECK(t15.has_parent_path() == _t15.has_parent_path());
-	CHECK(t16.has_parent_path() == _t16.has_parent_path());
-	CHECK(t17.has_parent_path() == _t17.has_parent_path());
+	EXPECT_TRUE(t.has_parent_path() == _t.has_parent_path());
+	EXPECT_TRUE(t1.has_parent_path() == _t1.has_parent_path());
+	EXPECT_TRUE(t2.has_parent_path() == _t2.has_parent_path());
+	EXPECT_TRUE(t3.has_parent_path() == _t3.has_parent_path());
+	EXPECT_TRUE(t4.has_parent_path() == _t4.has_parent_path());
+	EXPECT_TRUE(t5.has_parent_path() == _t5.has_parent_path());
+	EXPECT_TRUE(t6.has_parent_path() == _t6.has_parent_path());
+	EXPECT_TRUE(t7.has_parent_path() == _t7.has_parent_path());
+	EXPECT_TRUE(t8.has_parent_path() == _t8.has_parent_path());
+	EXPECT_TRUE(t9.has_parent_path() == _t9.has_parent_path());
+	EXPECT_TRUE(t10.has_parent_path() == _t10.has_parent_path());
+	EXPECT_TRUE(t11.has_parent_path() == _t11.has_parent_path());
+	EXPECT_TRUE(t12.has_parent_path() == _t12.has_parent_path());
+	EXPECT_TRUE(t13.has_parent_path() == _t13.has_parent_path());
+	EXPECT_TRUE(t14.has_parent_path() == _t14.has_parent_path());
+	EXPECT_TRUE(t15.has_parent_path() == _t15.has_parent_path());
+	EXPECT_TRUE(t16.has_parent_path() == _t16.has_parent_path());
+	EXPECT_TRUE(t17.has_parent_path() == _t17.has_parent_path());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_has_stem)
@@ -694,24 +694,24 @@ TEST(Filesystem, test_container_filesystem_static_path_has_stem)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	CHECK(t.has_stem() == _t.has_stem());
-	CHECK(t1.has_stem() == _t1.has_stem());
-	CHECK(t2.has_stem() == _t2.has_stem());
-	CHECK(t3.has_stem() == _t3.has_stem());
-	CHECK(t4.has_stem() == _t4.has_stem());
-	CHECK(t5.has_stem() == _t5.has_stem());
-	CHECK(t6.has_stem() == _t6.has_stem());
-	CHECK(t7.has_stem() == _t7.has_stem());
-	CHECK(t8.has_stem() == _t8.has_stem());
-	CHECK(t9.has_stem() == _t9.has_stem());
-	CHECK(t10.has_stem() == _t10.has_stem());
-	CHECK(t11.has_stem() == _t11.has_stem());
-	CHECK(t12.has_stem() == _t12.has_stem());
-	CHECK(t13.has_stem() == _t13.has_stem());
-	CHECK(t14.has_stem() == _t14.has_stem());
-	CHECK(t15.has_stem() == _t15.has_stem());
-	CHECK(t16.has_stem() == _t16.has_stem());
-	CHECK(t17.has_stem() == _t17.has_stem());
+	EXPECT_TRUE(t.has_stem() == _t.has_stem());
+	EXPECT_TRUE(t1.has_stem() == _t1.has_stem());
+	EXPECT_TRUE(t2.has_stem() == _t2.has_stem());
+	EXPECT_TRUE(t3.has_stem() == _t3.has_stem());
+	EXPECT_TRUE(t4.has_stem() == _t4.has_stem());
+	EXPECT_TRUE(t5.has_stem() == _t5.has_stem());
+	EXPECT_TRUE(t6.has_stem() == _t6.has_stem());
+	EXPECT_TRUE(t7.has_stem() == _t7.has_stem());
+	EXPECT_TRUE(t8.has_stem() == _t8.has_stem());
+	EXPECT_TRUE(t9.has_stem() == _t9.has_stem());
+	EXPECT_TRUE(t10.has_stem() == _t10.has_stem());
+	EXPECT_TRUE(t11.has_stem() == _t11.has_stem());
+	EXPECT_TRUE(t12.has_stem() == _t12.has_stem());
+	EXPECT_TRUE(t13.has_stem() == _t13.has_stem());
+	EXPECT_TRUE(t14.has_stem() == _t14.has_stem());
+	EXPECT_TRUE(t15.has_stem() == _t15.has_stem());
+	EXPECT_TRUE(t16.has_stem() == _t16.has_stem());
+	EXPECT_TRUE(t17.has_stem() == _t17.has_stem());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_has_root_path)
@@ -754,24 +754,24 @@ TEST(Filesystem, test_container_filesystem_static_path_has_root_path)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	CHECK(t.has_root_path() == _t.has_root_path());
-	CHECK(t1.has_root_path() == _t1.has_root_path());
-	CHECK(t2.has_root_path() == _t2.has_root_path());
-	CHECK(t3.has_root_path() == _t3.has_root_path());
-	CHECK(t4.has_root_path() == _t4.has_root_path());
-	CHECK(t5.has_root_path() == _t5.has_root_path());
-	CHECK(t6.has_root_path() == _t6.has_root_path());
-	CHECK(t7.has_root_path() == _t7.has_root_path());
-	CHECK(t8.has_root_path() == _t8.has_root_path());
-	CHECK(t9.has_root_path() == _t9.has_root_path());
-	CHECK(t10.has_root_path() == _t10.has_root_path());
-	CHECK(t11.has_root_path() == _t11.has_root_path());
-	CHECK(t12.has_root_path() == _t12.has_root_path());
-	CHECK(t13.has_root_path() == _t13.has_root_path());
-	CHECK(t14.has_root_path() == _t14.has_root_path());
-	CHECK(t15.has_root_path() == _t15.has_root_path());
-	CHECK(t16.has_root_path() == _t16.has_root_path());
-	CHECK(t17.has_root_path() == _t17.has_root_path());
+	EXPECT_TRUE(t.has_root_path() == _t.has_root_path());
+	EXPECT_TRUE(t1.has_root_path() == _t1.has_root_path());
+	EXPECT_TRUE(t2.has_root_path() == _t2.has_root_path());
+	EXPECT_TRUE(t3.has_root_path() == _t3.has_root_path());
+	EXPECT_TRUE(t4.has_root_path() == _t4.has_root_path());
+	EXPECT_TRUE(t5.has_root_path() == _t5.has_root_path());
+	EXPECT_TRUE(t6.has_root_path() == _t6.has_root_path());
+	EXPECT_TRUE(t7.has_root_path() == _t7.has_root_path());
+	EXPECT_TRUE(t8.has_root_path() == _t8.has_root_path());
+	EXPECT_TRUE(t9.has_root_path() == _t9.has_root_path());
+	EXPECT_TRUE(t10.has_root_path() == _t10.has_root_path());
+	EXPECT_TRUE(t11.has_root_path() == _t11.has_root_path());
+	EXPECT_TRUE(t12.has_root_path() == _t12.has_root_path());
+	EXPECT_TRUE(t13.has_root_path() == _t13.has_root_path());
+	EXPECT_TRUE(t14.has_root_path() == _t14.has_root_path());
+	EXPECT_TRUE(t15.has_root_path() == _t15.has_root_path());
+	EXPECT_TRUE(t16.has_root_path() == _t16.has_root_path());
+	EXPECT_TRUE(t17.has_root_path() == _t17.has_root_path());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_has_root_name)
@@ -814,24 +814,24 @@ TEST(Filesystem, test_container_filesystem_static_path_has_root_name)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	CHECK(t.has_root_name() == _t.has_root_name());
-	CHECK(t1.has_root_name() == _t1.has_root_name());
-	CHECK(t2.has_root_name() == _t2.has_root_name());
-	CHECK(t3.has_root_name() == _t3.has_root_name());
-	CHECK(t4.has_root_name() == _t4.has_root_name());
-	CHECK(t5.has_root_name() == _t5.has_root_name());
-	CHECK(t6.has_root_name() == _t6.has_root_name());
-	CHECK(t7.has_root_name() == _t7.has_root_name());
-	CHECK(t8.has_root_name() == _t8.has_root_name());
-	CHECK(t9.has_root_name() == _t9.has_root_name());
-	CHECK(t10.has_root_name() == _t10.has_root_name());
-	CHECK(t11.has_root_name() == _t11.has_root_name());
-	CHECK(t12.has_root_name() == _t12.has_root_name());
-	CHECK(t13.has_root_name() == _t13.has_root_name());
-	CHECK(t14.has_root_name() == _t14.has_root_name());
-	CHECK(t15.has_root_name() == _t15.has_root_name());
-	CHECK(t16.has_root_name() == _t16.has_root_name());
-	CHECK(t17.has_root_name() == _t17.has_root_name());
+	EXPECT_TRUE(t.has_root_name() == _t.has_root_name());
+	EXPECT_TRUE(t1.has_root_name() == _t1.has_root_name());
+	EXPECT_TRUE(t2.has_root_name() == _t2.has_root_name());
+	EXPECT_TRUE(t3.has_root_name() == _t3.has_root_name());
+	EXPECT_TRUE(t4.has_root_name() == _t4.has_root_name());
+	EXPECT_TRUE(t5.has_root_name() == _t5.has_root_name());
+	EXPECT_TRUE(t6.has_root_name() == _t6.has_root_name());
+	EXPECT_TRUE(t7.has_root_name() == _t7.has_root_name());
+	EXPECT_TRUE(t8.has_root_name() == _t8.has_root_name());
+	EXPECT_TRUE(t9.has_root_name() == _t9.has_root_name());
+	EXPECT_TRUE(t10.has_root_name() == _t10.has_root_name());
+	EXPECT_TRUE(t11.has_root_name() == _t11.has_root_name());
+	EXPECT_TRUE(t12.has_root_name() == _t12.has_root_name());
+	EXPECT_TRUE(t13.has_root_name() == _t13.has_root_name());
+	EXPECT_TRUE(t14.has_root_name() == _t14.has_root_name());
+	EXPECT_TRUE(t15.has_root_name() == _t15.has_root_name());
+	EXPECT_TRUE(t16.has_root_name() == _t16.has_root_name());
+	EXPECT_TRUE(t17.has_root_name() == _t17.has_root_name());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_root_name)
@@ -874,24 +874,24 @@ TEST(Filesystem, test_container_filesystem_static_path_root_name)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	CHECK(t.root_name().string().c_str() == _t.root_name().native());
-	CHECK(t1.root_name().string().c_str() == _t1.root_name().native());
-	CHECK(t2.root_name().string().c_str() == _t2.root_name().native());
-	CHECK(t3.root_name().string().c_str() == _t3.root_name().native());
-	CHECK(t4.root_name().string().c_str() == _t4.root_name().native());
-	CHECK(t5.root_name().string().c_str() == _t5.root_name().native());
-	CHECK(t6.root_name().string().c_str() == _t6.root_name().native());
-	CHECK(t7.root_name().string().c_str() == _t7.root_name().native());
-	CHECK(t8.root_name().string().c_str() == _t8.root_name().native());
-	CHECK(t9.root_name().string().c_str() == _t9.root_name().native());
-	CHECK(t10.root_name().string().c_str() == _t10.root_name().native());
-	CHECK(t11.root_name().string().c_str() == _t11.root_name().native());
-	CHECK(t12.root_name().string().c_str() == _t12.root_name().native());
-	CHECK(t13.root_name().string().c_str() == _t13.root_name().native());
-	CHECK(t14.root_name().string().c_str() == _t14.root_name().native());
-	CHECK(t15.root_name().string().c_str() == _t15.root_name().native());
-	CHECK(t16.root_name().string().c_str() == _t16.root_name().native());
-	CHECK(t17.root_name().string().c_str() == _t17.root_name().native());
+	EXPECT_TRUE(t.root_name().string().c_str() == _t.root_name().native());
+	EXPECT_TRUE(t1.root_name().string().c_str() == _t1.root_name().native());
+	EXPECT_TRUE(t2.root_name().string().c_str() == _t2.root_name().native());
+	EXPECT_TRUE(t3.root_name().string().c_str() == _t3.root_name().native());
+	EXPECT_TRUE(t4.root_name().string().c_str() == _t4.root_name().native());
+	EXPECT_TRUE(t5.root_name().string().c_str() == _t5.root_name().native());
+	EXPECT_TRUE(t6.root_name().string().c_str() == _t6.root_name().native());
+	EXPECT_TRUE(t7.root_name().string().c_str() == _t7.root_name().native());
+	EXPECT_TRUE(t8.root_name().string().c_str() == _t8.root_name().native());
+	EXPECT_TRUE(t9.root_name().string().c_str() == _t9.root_name().native());
+	EXPECT_TRUE(t10.root_name().string().c_str() == _t10.root_name().native());
+	EXPECT_TRUE(t11.root_name().string().c_str() == _t11.root_name().native());
+	EXPECT_TRUE(t12.root_name().string().c_str() == _t12.root_name().native());
+	EXPECT_TRUE(t13.root_name().string().c_str() == _t13.root_name().native());
+	EXPECT_TRUE(t14.root_name().string().c_str() == _t14.root_name().native());
+	EXPECT_TRUE(t15.root_name().string().c_str() == _t15.root_name().native());
+	EXPECT_TRUE(t16.root_name().string().c_str() == _t16.root_name().native());
+	EXPECT_TRUE(t17.root_name().string().c_str() == _t17.root_name().native());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_extension)
@@ -930,18 +930,18 @@ TEST(Filesystem, test_container_filesystem_static_path_extension)
 	std::filesystem::path std_test15("\\ab\\...");
 	std::filesystem::path std_test16("/ab\\.1.");
 
-	CHECK(test.extension().native().c_str() == std_test.extension().string());
-	CHECK(test2.extension().native().c_str() == std_test2.extension().string());
-	CHECK(test3.extension().native().c_str() == std_test3.extension().string());
-	CHECK(test4.extension().native().c_str() == std_test4.extension().string());
-	CHECK(test5.extension().native().c_str() == std_test5.extension().string());
-	CHECK(test6.extension().native().c_str() == std_test6.extension().string());
-	CHECK(test7.extension().native().c_str() == std_test7.extension().string());
-	CHECK(test8.extension().native().c_str() == std_test8.extension().string());
-	CHECK(test9.extension().native().c_str() == std_test9.extension().string());
-	CHECK(
+	EXPECT_TRUE(test.extension().native().c_str() == std_test.extension().string());
+	EXPECT_TRUE(test2.extension().native().c_str() == std_test2.extension().string());
+	EXPECT_TRUE(test3.extension().native().c_str() == std_test3.extension().string());
+	EXPECT_TRUE(test4.extension().native().c_str() == std_test4.extension().string());
+	EXPECT_TRUE(test5.extension().native().c_str() == std_test5.extension().string());
+	EXPECT_TRUE(test6.extension().native().c_str() == std_test6.extension().string());
+	EXPECT_TRUE(test7.extension().native().c_str() == std_test7.extension().string());
+	EXPECT_TRUE(test8.extension().native().c_str() == std_test8.extension().string());
+	EXPECT_TRUE(test9.extension().native().c_str() == std_test9.extension().string());
+	EXPECT_TRUE(
 		test10.extension().native().c_str() == std_test10.extension().string());
-	CHECK(
+	EXPECT_TRUE(
 		test11.extension().native().c_str() == std_test11.extension().string());
 }
 
@@ -995,29 +995,29 @@ TEST(Filesystem, test_container_filesystem_static_path_filename)
 	std::filesystem::path t22(".");
 	std::filesystem::path t23("...");
 
-	CHECK(_t.filename().native().c_str() == t.filename().string());
-	CHECK(_t2.filename().native().c_str() == t2.filename().string());
-	CHECK(_t3.filename().native().c_str() == t3.filename().string());
-	CHECK(_t4.filename().native().c_str() == t4.filename().string());
-	CHECK(_t5.filename().native().c_str() == t5.filename().string());
-	CHECK(_t6.filename().native().c_str() == t6.filename().string());
-	CHECK(_t7.filename().native().c_str() == t7.filename().string());
-	CHECK(_t8.filename().native().c_str() == t8.filename().string());
-	CHECK(_t9.filename().native().c_str() == t9.filename().string());
-	CHECK(_t10.filename().native().c_str() == t10.filename().string());
-	CHECK(_t11.filename().native().c_str() == t11.filename().string());
-	CHECK(_t12.filename().native().c_str() == t12.filename().string());
-	CHECK(_t13.filename().native().c_str() == t13.filename().string());
-	CHECK(_t14.filename().native().c_str() == t14.filename().string());
-	CHECK(_t15.filename().native().c_str() == t15.filename().string());
-	CHECK(_t16.filename().native().c_str() == t16.filename().string());
-	CHECK(_t17.filename().native().c_str() == t17.filename().string());
-	CHECK(_t18.filename().native().c_str() == t18.filename().string());
-	CHECK(_t19.filename().native().c_str() == t19.filename().string());
-	CHECK(_t20.filename().native().c_str() == t20.filename().string());
-	CHECK(_t21.filename().native().c_str() == t21.filename().string());
-	CHECK(_t22.filename().native().c_str() == t22.filename().string());
-	CHECK(_t23.filename().native().c_str() == t23.filename().string());
+	EXPECT_TRUE(_t.filename().native().c_str() == t.filename().string());
+	EXPECT_TRUE(_t2.filename().native().c_str() == t2.filename().string());
+	EXPECT_TRUE(_t3.filename().native().c_str() == t3.filename().string());
+	EXPECT_TRUE(_t4.filename().native().c_str() == t4.filename().string());
+	EXPECT_TRUE(_t5.filename().native().c_str() == t5.filename().string());
+	EXPECT_TRUE(_t6.filename().native().c_str() == t6.filename().string());
+	EXPECT_TRUE(_t7.filename().native().c_str() == t7.filename().string());
+	EXPECT_TRUE(_t8.filename().native().c_str() == t8.filename().string());
+	EXPECT_TRUE(_t9.filename().native().c_str() == t9.filename().string());
+	EXPECT_TRUE(_t10.filename().native().c_str() == t10.filename().string());
+	EXPECT_TRUE(_t11.filename().native().c_str() == t11.filename().string());
+	EXPECT_TRUE(_t12.filename().native().c_str() == t12.filename().string());
+	EXPECT_TRUE(_t13.filename().native().c_str() == t13.filename().string());
+	EXPECT_TRUE(_t14.filename().native().c_str() == t14.filename().string());
+	EXPECT_TRUE(_t15.filename().native().c_str() == t15.filename().string());
+	EXPECT_TRUE(_t16.filename().native().c_str() == t16.filename().string());
+	EXPECT_TRUE(_t17.filename().native().c_str() == t17.filename().string());
+	EXPECT_TRUE(_t18.filename().native().c_str() == t18.filename().string());
+	EXPECT_TRUE(_t19.filename().native().c_str() == t19.filename().string());
+	EXPECT_TRUE(_t20.filename().native().c_str() == t20.filename().string());
+	EXPECT_TRUE(_t21.filename().native().c_str() == t21.filename().string());
+	EXPECT_TRUE(_t22.filename().native().c_str() == t22.filename().string());
+	EXPECT_TRUE(_t23.filename().native().c_str() == t23.filename().string());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_root_directory)
@@ -1060,40 +1060,40 @@ TEST(Filesystem, test_container_filesystem_static_path_root_directory)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	CHECK(t.root_directory().string().c_str() == _t.root_directory().native());
-	CHECK(
+	EXPECT_TRUE(t.root_directory().string().c_str() == _t.root_directory().native());
+	EXPECT_TRUE(
 		t1.root_directory().string().c_str() == _t1.root_directory().native());
-	CHECK(
+	EXPECT_TRUE(
 		t2.root_directory().string().c_str() == _t2.root_directory().native());
-	CHECK(
+	EXPECT_TRUE(
 		t3.root_directory().string().c_str() == _t3.root_directory().native());
-	CHECK(
+	EXPECT_TRUE(
 		t4.root_directory().string().c_str() == _t4.root_directory().native());
-	CHECK(
+	EXPECT_TRUE(
 		t5.root_directory().string().c_str() == _t5.root_directory().native());
-	CHECK(
+	EXPECT_TRUE(
 		t6.root_directory().string().c_str() == _t6.root_directory().native());
-	CHECK(
+	EXPECT_TRUE(
 		t7.root_directory().string().c_str() == _t7.root_directory().native());
-	CHECK(
+	EXPECT_TRUE(
 		t8.root_directory().string().c_str() == _t8.root_directory().native());
-	CHECK(
+	EXPECT_TRUE(
 		t9.root_directory().string().c_str() == _t9.root_directory().native());
-	CHECK(t10.root_directory().string().c_str() ==
+	EXPECT_TRUE(t10.root_directory().string().c_str() ==
 		_t10.root_directory().native());
-	CHECK(t11.root_directory().string().c_str() ==
+	EXPECT_TRUE(t11.root_directory().string().c_str() ==
 		_t11.root_directory().native());
-	CHECK(t12.root_directory().string().c_str() ==
+	EXPECT_TRUE(t12.root_directory().string().c_str() ==
 		_t12.root_directory().native());
-	CHECK(t13.root_directory().string().c_str() ==
+	EXPECT_TRUE(t13.root_directory().string().c_str() ==
 		_t13.root_directory().native());
-	CHECK(t14.root_directory().string().c_str() ==
+	EXPECT_TRUE(t14.root_directory().string().c_str() ==
 		_t14.root_directory().native());
-	CHECK(t15.root_directory().string().c_str() ==
+	EXPECT_TRUE(t15.root_directory().string().c_str() ==
 		_t15.root_directory().native());
-	CHECK(t16.root_directory().string().c_str() ==
+	EXPECT_TRUE(t16.root_directory().string().c_str() ==
 		_t16.root_directory().native());
-	CHECK(t17.root_directory().string().c_str() ==
+	EXPECT_TRUE(t17.root_directory().string().c_str() ==
 		_t17.root_directory().native());
 }
 
@@ -1110,17 +1110,17 @@ TEST(Filesystem, test_container_filesystem_static_path_operator_slash)
 	auto new_t = t / "test";
 	auto new__t = _t / "test";
 
-	CHECK(new_t.native() == new_t.string().c_str());
+	EXPECT_TRUE(new_t.native() == new_t.string().c_str());
 
 	auto new_t2 = t2 / "test";
 	auto new__t2 = _t2 / "test";
 
-	CHECK(new_t2.native() == new__t2.string().c_str());
+	EXPECT_TRUE(new_t2.native() == new__t2.string().c_str());
 
 	auto new_t3 = t3 / "test";
 	auto new__t3 = _t3 / "test";
 
-	CHECK(new_t3.native() == new__t3.string().c_str());
+	EXPECT_TRUE(new_t3.native() == new__t3.string().c_str());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_operator_slash_equal)
@@ -1136,17 +1136,17 @@ TEST(Filesystem, test_container_filesystem_static_path_operator_slash_equal)
 	auto new_t = t /= "test";
 	auto new__t = _t /= "test";
 
-	CHECK(new_t.native() == new_t.string().c_str());
+	EXPECT_TRUE(new_t.native() == new_t.string().c_str());
 
 	auto new_t2 = t2 /= "test";
 	auto new__t2 = _t2 /= "test";
 
-	CHECK(new_t2.native() == new__t2.string().c_str());
+	EXPECT_TRUE(new_t2.native() == new__t2.string().c_str());
 
 	auto new_t3 = t3 /= "test";
 	auto new__t3 = _t3 /= "test";
 
-	CHECK(new_t3.native() == new__t3.string().c_str());
+	EXPECT_TRUE(new_t3.native() == new__t3.string().c_str());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_append)
@@ -1162,17 +1162,17 @@ TEST(Filesystem, test_container_filesystem_static_path_append)
 	auto new_t = t.append("test");
 	auto new__t = _t.append("test");
 
-	CHECK(new_t.native() == new_t.string().c_str());
+	EXPECT_TRUE(new_t.native() == new_t.string().c_str());
 
 	auto new_t2 = t2.append("test");
 	auto new__t2 = _t2.append("test");
 
-	CHECK(new_t2.native() == new__t2.string().c_str());
+	EXPECT_TRUE(new_t2.native() == new__t2.string().c_str());
 
 	auto new_t3 = t3.append("test");
 	auto new__t3 = _t3.append("test");
 
-	CHECK(new_t3.native() == new__t3.string().c_str());
+	EXPECT_TRUE(new_t3.native() == new__t3.string().c_str());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_operator_plus_slash)
@@ -1225,17 +1225,17 @@ TEST(Filesystem, test_container_filesystem_static_path_operator_plus_slash)
 	_t9 += "test";
 	_t10 += "test";
 
-	CHECK(t.native() == _t.string().c_str());
-	CHECK(t1.native() == _t1.string().c_str());
-	CHECK(t2.native() == _t2.string().c_str());
-	CHECK(t3.native() == _t3.string().c_str());
-	CHECK(t4.native() == _t4.string().c_str());
-	CHECK(t5.native() == _t5.string().c_str());
-	CHECK(t6.native() == _t6.string().c_str());
-	CHECK(t7.native() == _t7.string().c_str());
-	CHECK(t8.native() == _t8.string().c_str());
-	CHECK(t9.native() == _t9.string().c_str());
-	CHECK(t10.native() == _t10.string().c_str());
+	EXPECT_TRUE(t.native() == _t.string().c_str());
+	EXPECT_TRUE(t1.native() == _t1.string().c_str());
+	EXPECT_TRUE(t2.native() == _t2.string().c_str());
+	EXPECT_TRUE(t3.native() == _t3.string().c_str());
+	EXPECT_TRUE(t4.native() == _t4.string().c_str());
+	EXPECT_TRUE(t5.native() == _t5.string().c_str());
+	EXPECT_TRUE(t6.native() == _t6.string().c_str());
+	EXPECT_TRUE(t7.native() == _t7.string().c_str());
+	EXPECT_TRUE(t8.native() == _t8.string().c_str());
+	EXPECT_TRUE(t9.native() == _t9.string().c_str());
+	EXPECT_TRUE(t10.native() == _t10.string().c_str());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_concat)
@@ -1288,17 +1288,17 @@ TEST(Filesystem, test_container_filesystem_static_path_concat)
 	_t9.concat("test");
 	_t10.concat("test");
 
-	CHECK(t.native() == _t.string().c_str());
-	CHECK(t1.native() == _t1.string().c_str());
-	CHECK(t2.native() == _t2.string().c_str());
-	CHECK(t3.native() == _t3.string().c_str());
-	CHECK(t4.native() == _t4.string().c_str());
-	CHECK(t5.native() == _t5.string().c_str());
-	CHECK(t6.native() == _t6.string().c_str());
-	CHECK(t7.native() == _t7.string().c_str());
-	CHECK(t8.native() == _t8.string().c_str());
-	CHECK(t9.native() == _t9.string().c_str());
-	CHECK(t10.native() == _t10.string().c_str());
+	EXPECT_TRUE(t.native() == _t.string().c_str());
+	EXPECT_TRUE(t1.native() == _t1.string().c_str());
+	EXPECT_TRUE(t2.native() == _t2.string().c_str());
+	EXPECT_TRUE(t3.native() == _t3.string().c_str());
+	EXPECT_TRUE(t4.native() == _t4.string().c_str());
+	EXPECT_TRUE(t5.native() == _t5.string().c_str());
+	EXPECT_TRUE(t6.native() == _t6.string().c_str());
+	EXPECT_TRUE(t7.native() == _t7.string().c_str());
+	EXPECT_TRUE(t8.native() == _t8.string().c_str());
+	EXPECT_TRUE(t9.native() == _t9.string().c_str());
+	EXPECT_TRUE(t10.native() == _t10.string().c_str());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_operator_ostream)
@@ -1327,11 +1327,11 @@ TEST(Filesystem, test_container_filesystem_static_path_iterator_for_loop)
 		stl.push_back(it.string());
 	}
 
-	CHECK(kotek.size() == stl.size());
+	EXPECT_TRUE(kotek.size() == stl.size());
 
 	for (auto i = 0; i < kotek.size(); ++i)
 	{
-		CHECK(kotek.at(i) == stl.at(i));
+		EXPECT_TRUE(kotek.at(i) == stl.at(i));
 	}
 
 	kotek.clear();
@@ -1351,11 +1351,11 @@ TEST(Filesystem, test_container_filesystem_static_path_iterator_for_loop)
 		stl.push_back(it.string());
 	}
 
-	CHECK(kotek.size() == stl.size());
+	EXPECT_TRUE(kotek.size() == stl.size());
 
 	for (auto i = 0; i < kotek.size(); ++i)
 	{
-		CHECK(kotek.at(i) == stl.at(i));
+		EXPECT_TRUE(kotek.at(i) == stl.at(i));
 	}
 }
 

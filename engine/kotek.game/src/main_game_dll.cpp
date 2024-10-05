@@ -4,7 +4,7 @@
 #include <kotek.render/include/kotek_render.h>
 
 #ifdef KOTEK_DEBUG
-	#include <CppUTest/CommandLineTestRunner.h>
+	#include <gtest/gtest.h>
 #endif
 
 bool isUserCallbackUpdateFunctionContainsLoop = false;
@@ -278,7 +278,7 @@ namespace Engine
 	#elif (_MSC_VER == 1940)
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.10");
 	#elif (_MSC_VER == 1941)
-		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.11.1");
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.11");
 	#endif
 
 #endif
@@ -310,12 +310,6 @@ namespace Engine
 	{
 		PrintCompiler();
 
-#ifdef KOTEK_DEBUG
-	#ifdef KOTEK_USE_TESTS_RUNTIME
-		MemoryLeakWarningPlugin::turnOffNewDeleteOverloads();
-	#endif
-#endif
-
 		Core::InitializeModule_Core(p_main_manager);
 
 		// TODO: must gurantee that write/read operations are not in
@@ -345,9 +339,11 @@ namespace Engine
 #ifdef KOTEK_DEBUG
 	#ifdef KOTEK_USE_TESTS_RUNTIME
 		KOTEK_MESSAGE("[UNIT TESTING]");
+		int argc = p_main_manager->Get_EngineConfig()->GetARGC();
+		testing::InitGoogleTest(
+			&argc, p_main_manager->Get_EngineConfig()->GetARGV());
 		auto status =
-			RUN_ALL_TESTS(p_main_manager->Get_EngineConfig()->GetARGC(),
-				p_main_manager->Get_EngineConfig()->GetARGV());
+			RUN_ALL_TESTS();
 		KOTEK_ASSERT(status == 0, "unit tests failed!");
 		KOTEK_MESSAGE("[UNIT TESTING]");
 	#endif
