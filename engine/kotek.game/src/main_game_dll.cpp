@@ -338,30 +338,6 @@ namespace Engine
 
 #ifdef KOTEK_DEBUG
 	#ifdef KOTEK_USE_TESTS_RUNTIME
-		#ifdef KOTEK_USE_BOOST_LIBRARY
-			#ifdef KOTEK_USE_PLATFORM_WINDOWS
-		KOTEK_MESSAGE("UNIT TESTING UNIT TESTING UNIT "
-					  "TESTING\n\n\n\n\n\n\n\n\n\n\n\n");
-
-	//	ktk_vector<const char*, 1> argv_test = {"C:/test"};
-
-		auto p_custom_init_unit_test_initialize_callback = [](void) -> bool
-		{
-			Core::RegisterAllTests();
-			return true;
-		};
-
-	//	auto status = boost::unit_test_framework::unit_test_main(
-		//	p_custom_init_unit_test_initialize_callback, 1,
-			//const_cast<char**>(argv_test.data()));
-
-	//	KOTEK_ASSERT(status == 0, "you have got failed tests");
-
-		KOTEK_MESSAGE("\n\n\n\n\nUNIT TESTING UNIT TESTING UNIT TESTING");
-			#endif
-		#else
-		// TODO: find alternative for std case!
-		#endif
 	#endif
 #endif
 

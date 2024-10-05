@@ -1,16 +1,16 @@
 ﻿#include "../include/kotek_core.h"
-#include <boost/test/unit_test.hpp>
+#include <catch2/catch_test_macros.hpp>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
-void test_json_std_vector() {}
+TEST_CASE("test_json_std_vector()"){}
 
-void test_json_std_map() {}
+TEST_CASE("test_json_std_map()") {}
 
-void test_json_vector1f()
+TEST_CASE("test_json_vector1f()")
 {
 	ktk::math::vector1f test(10.0f);
 
@@ -23,7 +23,7 @@ void test_json_vector1f()
 		"can't be deserializer or serializer doesn't work well!");
 }
 
-void test_json_vector2f()
+TEST_CASE("test_json_vector2f()")
 {
 	ktk::math::vector2f test(10.3141f, 20.2515f);
 
@@ -36,7 +36,7 @@ void test_json_vector2f()
 		"can't be deserializer or serialize doesn't work well");
 }
 
-void test_json_vector3f()
+TEST_CASE("test_json_vector3f()")
 {
 	ktk::math::vector3f test(10.3141f, 20.2515f, 3131141.1414f);
 
@@ -49,7 +49,7 @@ void test_json_vector3f()
 		"can't be deserializer or serialize doesn't work well");
 }
 
-void test_json_vector4f()
+TEST_CASE("test_json_vector4f()")
 {
 	ktk::math::vector4f test(10.3141f, 20.2515f, 3131141.1414f, 1000000.18979f);
 
@@ -62,7 +62,7 @@ void test_json_vector4f()
 		"can't be deserializer or serialize doesn't work well");
 }
 
-void test_json_matrix2x2f()
+TEST_CASE("test_json_matrix2x2f()")
 {
 	ktk::math::matrix2x2f test(
 		10.3141f, 20.2515f, 3131141.1414f, 1000000.18979f);
@@ -76,7 +76,7 @@ void test_json_matrix2x2f()
 		"can't be deserializer or serialize doesn't work well");
 }
 
-void test_json_matrix3x3f()
+TEST_CASE("test_json_matrix3x3f()")
 {
 	ktk::math::matrix3x3f test(10.3141f, 20.2515f, 3131141.1414f,
 		1000000.18979f, 141.134f, 3414.124f, 1415.1234f, 341.4f, 124.23f);
@@ -90,7 +90,7 @@ void test_json_matrix3x3f()
 		"can't be deserializer or serialize doesn't work well");
 }
 
-void test_json_matrix4x4f()
+TEST_CASE("test_json_matrix4x4f()")
 {
 	ktk::math::matrix4x4f test(10.3141f, 20.2515f, 3131141.1414f,
 		1000000.18979f, 141.134f, 3414.124f, 1415.1234f, 341.4f, 124.23f, 113.f,
@@ -110,18 +110,7 @@ void test_json_matrix4x4f()
 
 void RegisterTests_Json_ForModule_Core(void)
 {
-#ifdef KOTEK_USE_TESTS
-
-	boost::unit_test::test_suite* p_suite = BOOST_TEST_SUITE("ktk::json");
-
-	p_suite->add(BOOST_TEST_CASE(&test_json_vector1f));
-	p_suite->add(BOOST_TEST_CASE(&test_json_vector2f));
-	p_suite->add(BOOST_TEST_CASE(&test_json_vector3f));
-	p_suite->add(BOOST_TEST_CASE(&test_json_vector4f));
-
-	boost::unit_test::framework::master_test_suite().add(p_suite);
-
-	KOTEK_MESSAGE("registered!");
+#ifdef KOTEK_USE_TESTS	
 #endif
 }
 

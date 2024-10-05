@@ -10,7 +10,8 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-			find_package(Boost COMPONENTS json unit_test_framework filesystem REQUIRED)
+			find_package(Boost COMPONENTS json filesystem REQUIRED)
+			find_package(Catch2 CONFIG REQUIRED)
 		elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			file(GLOB nuget_boost_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
 			if ("${nuget_boost_folder}" MATCHES "Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
@@ -18,8 +19,11 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 			else()
 				message(FATAL_ERROR "failed to find boost package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
 			endif()
+
+			find_package(Catch2 CONFIG REQUIRED)
 		else()
-			find_package(Boost COMPONENTS json unit_test_framework filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+			find_package(Catch2 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+			find_package(Boost COMPONENTS json filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 		endif()
 	endif()
 endif()
@@ -56,15 +60,6 @@ add_library(${PROJECT_NAME} STATIC
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		if (WIN32)
-			if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_unit_test_framework-vc140-mt-gd.lib")
-				message("[${PROJECT_NAME}][Debug]: adding boost_unit_test_framework-vc140-mt-gd.lib to Debug configuration")
-				target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_unit_test_framework-vc140-mt-gd.lib)
-			endif()
-
-			if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_unit_test_framework-vc140-mt.lib")
-				message("[${PROJECT_NAME}][None-Debug]: adding boost_unit_test_framework-vc140-mt.lib to not Debug configurations")
-				target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_unit_test_framework-vc140-mt.lib)
-			endif()
 
 			if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_filesystem-vc140-mt-gd.lib")
 				message("[${PROJECT_NAME}][Debug]: adding boost_filesystem-vc140-mt-gd.lib to Debug configuration")
@@ -78,13 +73,16 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 		else()
 			message(FATAL_ERROR "provide implementation for other platforms")
 		endif()
+
+		target_link_libraries(${PROJECT_NAME} PUBLIC Catch2::Catch2)
 	else()
 		target_link_libraries(${PROJECT_NAME} PUBLIC 
 			Boost::headers 
 			Boost::json 
-			Boost::unit_test_framework 
 			Boost::filesystem
 		)
+
+		target_link_libraries(${PROJECT_NAME} PUBLIC Catch2::Catch2)
 	endif()
 endif()
 

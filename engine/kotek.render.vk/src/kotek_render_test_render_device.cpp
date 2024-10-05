@@ -1,6 +1,6 @@
 #ifdef KOTEK_DEBUG
 	#include "../include/kotek_render_device.h"
-	#include <boost/test/unit_test.hpp>
+	#include <catch2/catch_test_macros.hpp>
 
 namespace Kotek
 {
