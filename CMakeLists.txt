@@ -77,6 +77,7 @@ endif()
 
 include_directories("engine")
 
+add_subdirectory("engine/kotek.core.defines.static.tests")
 add_subdirectory("engine/kotek.core.defines.static.cpp")
 add_subdirectory("engine/kotek.core.defines.static.git")
 add_subdirectory("engine/kotek.core.defines.static.render")
@@ -90,7 +91,6 @@ add_subdirectory("engine/kotek.core.defines.static.os.linux")
 add_subdirectory("engine/kotek.core.defines.static.profilers")
 add_subdirectory("engine/kotek.core.defines.static.sdk")
 add_subdirectory("engine/kotek.core.defines.static.string")
-add_subdirectory("engine/kotek.core.defines.static.tests")
 add_subdirectory("engine/kotek.core.defines.static")
 
 
