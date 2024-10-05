@@ -38,41 +38,42 @@ add_library(${PROJECT_NAME} STATIC
 )
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
-	if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
-		message("[${PROJECT_NAME}]: mimalloc package included directory")
-		target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
+	if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
+			message("[${PROJECT_NAME}]: mimalloc package included directory")
+			target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
+		endif()
+
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/mimalloc-debug.lib")
+			message("[${PROJECT_NAME}][Debug]: adding mimalloc-debug.lib to Debug configuration")
+			target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/mimalloc-debug.lib)
+		endif()
+
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/mimalloc.lib")
+			message("[${PROJECT_NAME}][None-Debug]: adding mimalloc.lib to not Debug configurations")
+			target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/mimalloc.lib)
+		endif()
+
+		set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+
+		set(copy_local_command_debug_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/mimalloc-debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		set(copy_local_command_debug_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/mimalloc-debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+
+		set(copy_local_command_release_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/mimalloc.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		set(copy_local_command_release_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/mimalloc.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+
+		add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_1}>"
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_2}>"
+
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_1}>"
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_2}>"
+
+			COMMAND_EXPAND_LISTS
+
+			COMMENT "copying dlls after compilation of ${PROJECT_NAME}"
+		)
 	endif()
-
-	if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/mimalloc-debug.lib")
-		message("[${PROJECT_NAME}][Debug]: adding mimalloc-debug.lib to Debug configuration")
-		target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/mimalloc-debug.lib)
-	endif()
-
-	if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/mimalloc.lib")
-		message("[${PROJECT_NAME}][None-Debug]: adding mimalloc.lib to not Debug configurations")
-		target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/mimalloc.lib)
-	endif()
-
-	set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
-
-	set(copy_local_command_debug_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/mimalloc-debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
-	set(copy_local_command_debug_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/mimalloc-debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
-
-	set(copy_local_command_release_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/mimalloc.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
-	set(copy_local_command_release_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/mimalloc.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
-
-	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-
-	COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_1}>"
-	COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_2}>"
-
-	COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_1}>"
-	COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_2}>"
-
-	COMMAND_EXPAND_LISTS
-
-	COMMENT "copying dlls after compilation of ${PROJECT_NAME}"
-   )
 else()
 	if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC")
 		if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
