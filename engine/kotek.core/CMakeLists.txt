@@ -60,16 +60,46 @@ add_library(${PROJECT_NAME} STATIC
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		if (WIN32)
+			if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+		
+				if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_filesystem-vc140-mt-gd.lib")
+					message("[${PROJECT_NAME}][Debug]: adding boost_filesystem-vc140-mt-gd.lib to Debug configuration")
+					target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_filesystem-vc140-mt-gd.lib)
+				endif()
 
-			if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_filesystem-vc140-mt-gd.lib")
-				message("[${PROJECT_NAME}][Debug]: adding boost_filesystem-vc140-mt-gd.lib to Debug configuration")
-				target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_filesystem-vc140-mt-gd.lib)
+				if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_filesystem-vc140-mt.lib")
+					message("[${PROJECT_NAME}][None-Debug]: adding boost_filesystem-vc140-mt.lib to not Debug configurations")
+					target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_filesystem-vc140-mt.lib)
+				endif()
+
+				set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+
+				set(copy_local_command_debug_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/boost_filesystem-vc143-mt-gd-x64-1_84.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+				set(copy_local_command_debug_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/boost_filesystem-vc143-mt-gd-x64-1_84.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+				set(copy_local_command_debug_3 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/boost_json-vc143-mt-gd-x64-1_84.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+				set(copy_local_command_debug_4 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/boost_json-vc143-mt-gd-x64-1_84.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		
+
+
+				set(copy_local_command_release_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/boost_filesystem-vc143-mt-x64-1_84.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+				set(copy_local_command_release_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/boost_filesystem-vc143-mt-x64-1_84.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+				set(copy_local_command_release_3 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/boost_json-vc143-mt-x64-1_84.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+				set(copy_local_command_release_4 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/boost_json-vc143-mt-x64-1_84.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		
+				add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+					COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_1}>"
+					COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_2}>"
+					COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_3}>"
+					COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_4}>"
+					COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_1}>"
+					COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_2}>"	
+					COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_3}>"
+					COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_4}>"			
+					COMMAND_EXPAND_LISTS
+					COMMENT "copying dlls after compilation of ${PROJECT_NAME}"
+				)
 			endif()
 
-			if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_filesystem-vc140-mt.lib")
-				message("[${PROJECT_NAME}][None-Debug]: adding boost_filesystem-vc140-mt.lib to not Debug configurations")
-				target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_filesystem-vc140-mt.lib)
-			endif()
 		else()
 			message(FATAL_ERROR "provide implementation for other platforms")
 		endif()
