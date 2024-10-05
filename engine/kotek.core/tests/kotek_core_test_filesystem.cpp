@@ -4,6 +4,7 @@
 	#ifdef KOTEK_DEBUG
 		#include <filesystem>
 		#include <vector>
+		#include <iostream>
 		#include <CppUTest/TestHarness.h>
 	#endif
 #endif
@@ -15,7 +16,7 @@ KOTEK_BEGIN_NAMESPACE_CORE
 	#ifdef KOTEK_DEBUG
 TEST_GROUP(Filesystem){};
 
-TEST(Filesystem,test_filesystem_check_folder_tests_for_existance)
+TEST(Filesystem, test_filesystem_check_folder_tests_for_existance)
 {
 	ktkFileSystem instance;
 
@@ -506,24 +507,15 @@ TEST(Filesystem, test_container_filesystem_static_path_relative_path)
 	ktk_filesystem_path _t17(":c/a");
 
 	CHECK(t.relative_path().string().c_str() == _t.relative_path().native());
-	CHECK(
-		t1.relative_path().string().c_str() == _t1.relative_path().native());
-	CHECK(
-		t2.relative_path().string().c_str() == _t2.relative_path().native());
-	CHECK(
-		t3.relative_path().string().c_str() == _t3.relative_path().native());
-	CHECK(
-		t4.relative_path().string().c_str() == _t4.relative_path().native());
-	CHECK(
-		t5.relative_path().string().c_str() == _t5.relative_path().native());
-	CHECK(
-		t6.relative_path().string().c_str() == _t6.relative_path().native());
-	CHECK(
-		t7.relative_path().string().c_str() == _t7.relative_path().native());
-	CHECK(
-		t8.relative_path().string().c_str() == _t8.relative_path().native());
-	CHECK(
-		t9.relative_path().string().c_str() == _t9.relative_path().native());
+	CHECK(t1.relative_path().string().c_str() == _t1.relative_path().native());
+	CHECK(t2.relative_path().string().c_str() == _t2.relative_path().native());
+	CHECK(t3.relative_path().string().c_str() == _t3.relative_path().native());
+	CHECK(t4.relative_path().string().c_str() == _t4.relative_path().native());
+	CHECK(t5.relative_path().string().c_str() == _t5.relative_path().native());
+	CHECK(t6.relative_path().string().c_str() == _t6.relative_path().native());
+	CHECK(t7.relative_path().string().c_str() == _t7.relative_path().native());
+	CHECK(t8.relative_path().string().c_str() == _t8.relative_path().native());
+	CHECK(t9.relative_path().string().c_str() == _t9.relative_path().native());
 	CHECK(
 		t10.relative_path().string().c_str() == _t10.relative_path().native());
 	CHECK(
@@ -939,22 +931,14 @@ TEST(Filesystem, test_container_filesystem_static_path_extension)
 	std::filesystem::path std_test16("/ab\\.1.");
 
 	CHECK(test.extension().native().c_str() == std_test.extension().string());
-	CHECK(
-		test2.extension().native().c_str() == std_test2.extension().string());
-	CHECK(
-		test3.extension().native().c_str() == std_test3.extension().string());
-	CHECK(
-		test4.extension().native().c_str() == std_test4.extension().string());
-	CHECK(
-		test5.extension().native().c_str() == std_test5.extension().string());
-	CHECK(
-		test6.extension().native().c_str() == std_test6.extension().string());
-	CHECK(
-		test7.extension().native().c_str() == std_test7.extension().string());
-	CHECK(
-		test8.extension().native().c_str() == std_test8.extension().string());
-	CHECK(
-		test9.extension().native().c_str() == std_test9.extension().string());
+	CHECK(test2.extension().native().c_str() == std_test2.extension().string());
+	CHECK(test3.extension().native().c_str() == std_test3.extension().string());
+	CHECK(test4.extension().native().c_str() == std_test4.extension().string());
+	CHECK(test5.extension().native().c_str() == std_test5.extension().string());
+	CHECK(test6.extension().native().c_str() == std_test6.extension().string());
+	CHECK(test7.extension().native().c_str() == std_test7.extension().string());
+	CHECK(test8.extension().native().c_str() == std_test8.extension().string());
+	CHECK(test9.extension().native().c_str() == std_test9.extension().string());
 	CHECK(
 		test10.extension().native().c_str() == std_test10.extension().string());
 	CHECK(
@@ -1076,8 +1060,7 @@ TEST(Filesystem, test_container_filesystem_static_path_root_directory)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	CHECK(
-		t.root_directory().string().c_str() == _t.root_directory().native());
+	CHECK(t.root_directory().string().c_str() == _t.root_directory().native());
 	CHECK(
 		t1.root_directory().string().c_str() == _t1.root_directory().native());
 	CHECK(
@@ -1376,7 +1359,7 @@ TEST(Filesystem, test_container_filesystem_static_path_iterator_for_loop)
 	}
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_iterator_constructor() ") {}
+TEST(Filesystem, test_container_filesystem_static_path_iterator_constructor) {}
 
 	#endif
 #endif
