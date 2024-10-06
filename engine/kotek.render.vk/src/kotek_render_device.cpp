@@ -101,7 +101,7 @@ namespace Kotek
 
 			void ktkRenderDevice::Resize(
 				Core::ktkIRenderSwapchain* p_raw_swapchain,
-				Core::kotek_i_renderer* p_raw_renderer,
+				Core::ktkIRenderer* p_raw_renderer,
 				Core::ktkIRenderResourceManager* p_raw_resource_manager,
 				int width, int height)
 			{

@@ -20,7 +20,7 @@ namespace Kotek
 		namespace vk
 		{
 			// TODO: delete this manager and move to pass for imgui
-			class kotek_render_imgui_manager : public Core::kotek_i_render_imgui
+			class kotek_render_imgui_manager : public Core::ktkIRenderImgui
 			{
 			public:
 				kotek_render_imgui_manager(void);

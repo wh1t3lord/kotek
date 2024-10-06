@@ -94,7 +94,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
 
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-    # Spirv-Tools, TODO: add when you will change all projects to SHARED, STATIC and HYBRID (most of them static, but sandbox.game is shared and glad projects too!)
+    # Spirv-Tools, TODO: add when you will change all projects to SHARED, STATIC and HYBRID (most of them static, but zircon.game is shared and glad projects too!)
     # if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "SHARED")
     #     target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-shared)
     # elseif("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")

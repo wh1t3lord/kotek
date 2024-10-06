@@ -27,9 +27,9 @@ class ktkMainManager;
 class ktkIRenderDevice;
 class ktkIRenderSwapchain;
 class ktkIRenderGraph;
-class kotek_i_render_imgui;
+class ktkIRenderImgui;
 class ktkIRenderResourceManager;
-class kotek_i_renderer;
+class ktkIRenderer;
 class ktkProfiler;
 class ktkConsole;
 KOTEK_END_NAMESPACE_CORE
@@ -78,7 +78,7 @@ public:
 	virtual void Initialize(Core::ktkMainManager* main_manager) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual void Resize(ktkIRenderSwapchain* p_raw_swapchain,
-		kotek_i_renderer* p_raw_renderer,
+		ktkIRenderer* p_raw_renderer,
 		ktkIRenderResourceManager* p_raw_resource_manager, int width,
 		int height) = 0;
 
@@ -143,10 +143,10 @@ public:
 	virtual void Shutdown(void) = 0;
 };
 
-class kotek_i_render_imgui
+class ktkIRenderImgui
 {
 public:
-	virtual ~kotek_i_render_imgui(void) {}
+	virtual ~ktkIRenderImgui(void) {}
 
 	// TODO: change signature on void
 	virtual void initialize(ktkMainManager& main_manager) noexcept = 0;
@@ -164,10 +164,10 @@ public:
 	virtual void Shutdown(void) = 0;
 };
 
-class kotek_i_renderer
+class ktkIRenderer
 {
 public:
-	virtual ~kotek_i_renderer(void) {}
+	virtual ~ktkIRenderer(void) {}
 	virtual void draw(void) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual void Resize(void) = 0;
@@ -229,7 +229,7 @@ public:
 	virtual void Initialize(ktkMainManager* p_main_manager) = 0;
 	virtual void Shutdown(ktkMainManager* p_main_manager) = 0;
 
-	virtual kotek_i_renderer* GetRenderer(void) const noexcept = 0;
+	virtual ktkIRenderer* GetRenderer(void) const noexcept = 0;
 
 	virtual void* GetWindowHandle(void) const noexcept = 0;
 	virtual ktkProfiler* GetProfiler(void) const noexcept = 0;

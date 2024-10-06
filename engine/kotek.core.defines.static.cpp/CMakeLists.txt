@@ -490,7 +490,7 @@ elseif("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 	set(KOTEK_DEVELOPMENT_TYPE_PACKAGES "STATIC" CACHE INTERNAL "")
 
 	if ("${KOTEK_GAME_MODULE_FUNCTIONS_FILE}" STREQUAL "")
-		message(FATAL_ERROR "you must specify KOTEK_GAME_MODULE_FUNCTIONS_FILE by writting <path/to/your_file_where_standard_functions_for_running_module_are_defined.h>. But you make a path from root of your folder see sandbox example https://gitlab.com/wh1t3lord/sandbox")
+		message(FATAL_ERROR "you must specify KOTEK_GAME_MODULE_FUNCTIONS_FILE by writting <path/to/your_file_where_standard_functions_for_running_module_are_defined.h>. But you make a path from root of your folder see zircon example https://gitlab.com/wh1t3lord/zircon")
 	endif()
 
 	if ("${KOTEK_USER_FUNCTION_IMG}" STREQUAL "")

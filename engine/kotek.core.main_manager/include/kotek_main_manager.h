@@ -63,7 +63,7 @@ private:
 	int m_argc;
 	char** m_argv;
 	ktkIEngineConfig* m_p_manager_config;
-	kotek_i_renderer* m_p_manager_renderer;
+	ktkIRenderer* m_p_manager_renderer;
 	ktkIGameManager* m_p_game_manager;
 	ktkIResourceManager* m_p_resource_manager;
 	ktkIFileSystem* m_p_manager_filesystem;
