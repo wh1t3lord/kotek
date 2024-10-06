@@ -89,7 +89,7 @@ void ktkRenderBufferManager::FreeOffset(const OffsetAllocator::Allocation& info)
 	this->m_stats.Set_UsedMemory(
 		this->m_stats.Get_AllocatedMemory() - this->m_stats.Get_FreeMemory());
 
-	this->m_p_allocator->free(info);
+	this->m_p_allocator->deallocate(info);
 }
 
 const ktk::cstring& ktkRenderBufferManager::Get_DescriptionName(

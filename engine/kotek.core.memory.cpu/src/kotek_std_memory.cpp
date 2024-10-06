@@ -14,42 +14,53 @@ KOTEK_BEGIN_NAMESPACE_KTK
 
 namespace memory
 {
+#ifndef KOTEK_USE_MEMORY_LEAK_DETECTION_CRT
 	void free(void* pointer)
 	{
-#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
+	#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
 		mi_free(pointer);
-#else
+	#else
 		// TODO: provide a function here
 		::free(pointer);
-#endif
+	#endif
 	}
 
 	void* malloc(ktk::size_t size)
 	{
-#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
+	#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
 		return mi_malloc(size);
-#else
+	#else
 		return ::malloc(size);
-#endif
+	#endif
 	}
 
 	void* calloc(ktk::size_t count, ktk::size_t size)
 	{
-#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
+	#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
 		return mi_calloc(count, size);
-#else
+	#else
 		return ::calloc(count, size);
-#endif
+	#endif
 	}
 
 	void* realloc(void* pointer, ktk::size_t newsize)
 	{
-#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
+	#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
 		return mi_realloc(pointer, newsize);
-#else
+	#else
 		return ::realloc(pointer, newsize);
-#endif
+	#endif
 	}
+
+	char* strdup(const char* str)
+	{
+	#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
+		return mi_strdup(str);
+	#else
+		return ::strdup(str);
+	#endif
+	}
+#endif
 
 	void* expand(void* pointer, ktk::size_t newsize)
 	{
@@ -58,16 +69,7 @@ namespace memory
 #else
 		// TODO: provide a function herer
 		return nullptr;
-	//	return ::expand(pointer, newsize);
-#endif
-	}
-
-	char* strdup(const char* str)
-	{
-#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
-		return mi_strdup(str);
-#else
-		return ::strdup(str);
+		//	return ::expand(pointer, newsize);
 #endif
 	}
 

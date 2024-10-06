@@ -287,7 +287,7 @@ namespace OffsetAllocator
         return {.offset = node.dataOffset, .metadata = nodeIndex};
     }
     
-    void Allocator::free(Allocation allocation)
+    void Allocator::deallocate(Allocation allocation)
     {
         ASSERT(allocation.metadata != Allocation::NO_SPACE);
         if (!m_nodes) return;

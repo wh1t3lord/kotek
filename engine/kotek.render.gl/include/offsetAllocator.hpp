@@ -57,7 +57,7 @@ namespace OffsetAllocator
         void reset();
         
         Allocation allocate(uint32 size);
-        void free(Allocation allocation);
+        void deallocate(Allocation allocation);
 
         uint32 allocationSize(Allocation allocation) const;
         StorageReport storageReport() const;
