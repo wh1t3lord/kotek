@@ -1,7 +1,7 @@
 #ifdef KOTEK_DEBUG
 	#include "../include/kotek_render_device.h"
 	#include "../include/kotek_render_shader_manager.h"
-	#include <CppUTest/TestHarness.h>
+	#include <gtest/gtest.h>
 
 namespace Kotek
 {

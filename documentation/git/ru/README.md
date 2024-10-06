@@ -205,33 +205,33 @@ P.S. стоит учитывать что это временное решени
 
 - KOTEK_USER_GAME_PROJECT_NAME
 
-Здесь мы указываем наименование папки, корневого каталога (см. раздел документации о стандарте разработки), а также смотрите пример в [sandbox](https://gitlab.com/wh1t3lord/sandbox).
+Здесь мы указываем наименование папки, корневого каталога (см. раздел документации о стандарте разработки), а также смотрите пример в [zircon](https://gitlab.com/wh1t3lord/zircon).
 
-На примере sandbox мы пишем название папки такое
+На примере zircon мы пишем название папки такое
 
-> -DKOTEK_USER_GAME_PROJECT_NAME=sandbox
+> -DKOTEK_USER_GAME_PROJECT_NAME=zircon
 
 - KOTEK_USER_GAME_MODULE_FOR_LINK_NAME
 
 Здесь мы также указываем уже наименование проекта которые нужно линковать к kotek.game проекту. 
 
-На примере sandbox будет так
+На примере zircon будет так
 
-> -DKOTEK_USER_GAME_MODULE_FOR_LINK_NAME="sandbox.game"
+> -DKOTEK_USER_GAME_MODULE_FOR_LINK_NAME="zircon.game"
 
 - KOTEK_GAME_MODULE_FUNCTIONS_FILE
 
 Здесь мы указываем путь до файла который содержит стандартные функции при обращении к модулю (см. документацию о стандарте разработке для пользователя).
 
-На примере sandbox будет
+На примере zircon будет
 
-> -DKOTEK_GAME_MODULE_FUNCTIONS_FILE="<game/sandbox_game.h>"
+> -DKOTEK_GAME_MODULE_FUNCTIONS_FILE="<game/zircon_game.h>"
 
 Таким образом, конечная команда для генерации решения для статической разработки то получаем следующее:
 
-На примере sandbox
+На примере zircon
 
-> cmake -DCMAKE_BUILD_TYPE=Debug -DKOTEK_DEPS_FOLDER="kotek-engine-deps-win32-vs19-full" -DKOTEK_DEVELOPMENT_TYPE=STATIC -DKOTEK_USER_GAME_PROJECT_NAME=sandbox -DKOTEK_USER_GAME_MODULE_FOR_LINK_NAME="sandbox.game" -DKOTEK_GAME_MODULE_FUNCTIONS_FILE="<game/sandbox_game.h>" ..
+> cmake -DCMAKE_BUILD_TYPE=Debug -DKOTEK_DEPS_FOLDER="kotek-engine-deps-win32-vs19-full" -DKOTEK_DEVELOPMENT_TYPE=STATIC -DKOTEK_USER_GAME_PROJECT_NAME=zircon -DKOTEK_USER_GAME_MODULE_FOR_LINK_NAME="zircon.game" -DKOTEK_GAME_MODULE_FUNCTIONS_FILE="<game/zircon_game.h>" ..
 
 Если у вас свои функции для определения модуля, то вы должны определить наименования через соответствующие макросы:
 
