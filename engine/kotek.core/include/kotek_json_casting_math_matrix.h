@@ -78,7 +78,7 @@ inline ktk::math::matrix3x3f tag_invoke(
 
 	float m00 = static_cast<float>(row_1[0].as_double());
 	float m01 = static_cast<float>(row_1[1].as_double());
-	float m02 = static_cast<float>(row_2[2].as_double());
+	float m02 = static_cast<float>(row_1[2].as_double());
 
 	float m10 = static_cast<float>(row_2[0].as_double());
 	float m11 = static_cast<float>(row_2[1].as_double());
@@ -133,8 +133,8 @@ inline ktk::math::matrix4x4f tag_invoke(
 
 	float m00 = static_cast<float>(row_1[0].as_double());
 	float m01 = static_cast<float>(row_1[1].as_double());
-	float m02 = static_cast<float>(row_2[2].as_double());
-	float m03 = static_cast<float>(row_2[3].as_double());
+	float m02 = static_cast<float>(row_1[2].as_double());
+	float m03 = static_cast<float>(row_1[3].as_double());
 
 	float m10 = static_cast<float>(row_2[0].as_double());
 	float m11 = static_cast<float>(row_2[1].as_double());
@@ -161,4 +161,6 @@ KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
 
+#else
+	#error provide implementation if it is needed
 #endif
