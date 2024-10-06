@@ -13,8 +13,9 @@ bool InitializeModule_Core_Memory(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core_Memory(ktkMainManager* p_manager)
 {
-	ShutdownModule_Core_Memory_CPU(p_manager);
 	ShutdownModule_Core_Memory_GPU(p_manager);
+	ShutdownModule_Core_Memory_CPU(p_manager);
+
 
 	return true;
 }
