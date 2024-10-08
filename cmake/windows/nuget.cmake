@@ -262,6 +262,27 @@ if (WIN32)
 				endif()
 			endforeach()
 
+            if ("${KOTEK_NUGET_PLATFORM_NAME}" STREQUAL "Win10")
+                file(READ "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/packages.config" KOTEK_PACKAGES_CONFIG_AS_STRING)
+
+                string(FIND "${KOTEK_PACKAGES_CONFIG_AS_STRING}" "win11" win10_config_has_win11_naming)
+
+                message("Has packages.config win11 dependencies on win10 platform: ${win10_config_has_win11_naming}")
+
+                if (${win10_config_has_win11_naming} EQUAL -1)
+                    foreach (folder_name IN LISTS nuget_packages)
+                        string(REPLACE Win11 Win10 folder_name_renamed "${folder_name}")
+                        file(RENAME "${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages/${folder_name}" "${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages/${folder_name_renamed}")
+                    endforeach()
+
+                    file(GLOB nuget_packages RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages  ${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages/Kotek.Packages.*)
+
+                    foreach (folder_name IN LISTS nuget_packages)
+                        file(RENAME "${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages/${folder_name}/runtimes/win11" "${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages/${folder_name}/runtimes/win10")
+                    endforeach()
+                endif()
+            endif()
+
         else()
             message(FATAL_ERROR "failed to obtain file: [${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages.config] report to kotek developers -> https://gitlab.com/wh1t3lord/kotek/-/issues")
         endif()

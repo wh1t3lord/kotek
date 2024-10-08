@@ -57,17 +57,21 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
 
 		set(copy_local_command_debug_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/mimalloc-debug.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
-		set(copy_local_command_debug_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/mimalloc-debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		set(copy_local_command_debug_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/mimalloc-redirect.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
+		set(copy_local_command_debug_3 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Debug/mimalloc-debug.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/)
 
 		set(copy_local_command_release_1 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/mimalloc.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
-		set(copy_local_command_release_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/mimalloc.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		set(copy_local_command_release_2 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/mimalloc-redirect.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
+		set(copy_local_command_release_3 ${CMAKE_COMMAND} -E copy_if_different "${path_to_bins}/bin/Release/mimalloc.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
 
 		add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_1}>"
 			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_2}>"
+			COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_3}>"
 
 			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_1}>"
 			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_2}>"
+			COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_3}>"
 
 			COMMAND_EXPAND_LISTS
 
