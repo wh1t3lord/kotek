@@ -33,6 +33,6 @@ template <typename... Args>
 using variant_t = KUN_KOTEK KUN_KTK variant<Args...>;
 
 template <typename... Args>
-using static_variant_t = KUN_KOTEK KUN_KTK static_variant_t<Args...>;
+using static_variant_t = KUN_KOTEK KUN_KTK static_variant<Args...>;
 
 KOTEK_END_NAMESPACE_KOTEK

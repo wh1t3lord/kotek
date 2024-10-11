@@ -44,8 +44,10 @@ template <class K, class V, size_t NotInUseArgument = 0, class P = std::less<K>,
 		KOTEK_USE_MEMORY_ALLOCATOR_CLASS<std::pair<const K, V>>>
 using map_t = KUN_KOTEK KUN_KTK map<K, V, NotInUseArgument, P, allocator>;
 
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 template <class K, class V, size_t Size>
-using static_map_t = static_map<K, V, Size>;
+using static_map_t = KUN_KOTEK KUN_KTK static_map<K, V, Size>;
+#endif
 
 KOTEK_END_NAMESPACE_KOTEK
 
