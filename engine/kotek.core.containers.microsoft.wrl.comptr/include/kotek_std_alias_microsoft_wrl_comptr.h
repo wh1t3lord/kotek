@@ -15,4 +15,10 @@ using comptr_t = Microsoft::WRL::ComPtr<T>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+#ifdef KOTEK_PLATFORM_WINDOWS
+template <typename Type>
+using comptr_t = KUN_KOTEK KUN_KTK comptr_t<Type>;
+#endif
+
 KOTEK_END_NAMESPACE_KOTEK

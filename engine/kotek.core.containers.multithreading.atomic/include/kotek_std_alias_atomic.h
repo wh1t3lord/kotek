@@ -21,4 +21,11 @@ namespace mt
 } // namespace mt
 
 KOTEK_END_NAMESPACE_KTK
+
+namespace mt
+{
+	template <typename Type>
+	using atomic_t = KUN_KOTEK KUN_KTK mt::atomic<Type>;
+}
+
 KOTEK_END_NAMESPACE_KOTEK

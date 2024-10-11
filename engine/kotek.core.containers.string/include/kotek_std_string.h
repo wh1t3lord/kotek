@@ -87,4 +87,32 @@ inline static_cstring<Size> convert_wchar_to_char(const wstring_view& str)
 }
 
 KOTEK_END_NAMESPACE_KTK
+
+using cstring_t = KUN_KOTEK KUN_KTK cstring;
+
+template <KUN_KOTEK KUN_KTK size_t Size>
+using static_u8string_t = KUN_KOTEK KUN_KTK static_u8string<Size>;
+
+template <KUN_KOTEK KUN_KTK size_t Size>
+using static_u16string_t = KUN_KOTEK KUN_KTK static_u16string<Size>;
+
+template <KUN_KOTEK KUN_KTK size_t Size>
+using static_u32string_t = KUN_KOTEK KUN_KTK static_u32string<Size>;
+
+template <KUN_KOTEK KUN_KTK size_t Size>
+using static_wstring_t = KUN_KOTEK KUN_KTK static_wstring<Size>;
+
+template <KUN_KOTEK KUN_KTK size_t Size>
+using static_cstring_t = KUN_KOTEK KUN_KTK static_cstring<Size>;
+
+template <KUN_KOTEK KUN_KTK size_t Size>
+using static_ustring_t = KUN_KOTEK KUN_KTK static_ustring<Size>;
+
+using static_u8string_view_t = KUN_KOTEK KUN_KTK static_u8string_view;
+using static_u16string_view_t = KUN_KOTEK KUN_KTK static_u16string_view;
+using static_u32string_view_t = KUN_KOTEK KUN_KTK static_u32string_view;
+using static_wstring_view_t = KUN_KOTEK KUN_KTK static_wstring_view;
+using static_cstring_view_t = KUN_KOTEK KUN_KTK static_cstring_view;
+using static_ustring_view_t = KUN_KOTEK KUN_KTK static_ustring_view;
+
 KOTEK_END_NAMESPACE_KOTEK

@@ -22,11 +22,26 @@ namespace mt
 
 	using condition_variable = std::condition_variable;
 
-	template<typename Mutex>
+	template <typename Mutex>
 	using unique_lock = std::unique_lock<Mutex>;
 #else
 #endif
 } // namespace mt
 
 KOTEK_END_NAMESPACE_KTK
+
+namespace mt
+{
+	using mutex_t = KUN_KOTEK KUN_KTK mt::mutex;
+	using recursive_mutex_t = KUN_KOTEK KUN_KTK mt::recursive_mutex;
+
+	template <typename MutexType>
+	using lock_guard_t = KUN_KOTEK KUN_KTK mt::lock_guard<MutexType>;
+
+	using condition_variable_t = KUN_KOTEK KUN_KTK mt::condition_variable;
+
+	template <typename MutexType>
+	using unique_lock_t = KUN_KOTEK KUN_KTK mt::unique_lock<MutexType>;
+} // namespace mt
+
 KOTEK_END_NAMESPACE_KOTEK

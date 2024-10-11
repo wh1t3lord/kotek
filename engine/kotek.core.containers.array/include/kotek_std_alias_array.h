@@ -34,6 +34,15 @@ using static_array = etl::array<Type, Size>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template <class Type, KUN_KOTEK KUN_KTK size_t Size>
+using array_t = KUN_KOTEK KUN_KTK array<Type, Size>;
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+template <typename Type, size_t Size>
+using static_array_t = KUN_KOTEK KUN_KTK static_array<Type, Size>;
+#endif
+
 KOTEK_END_NAMESPACE_KOTEK
 
 #if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \

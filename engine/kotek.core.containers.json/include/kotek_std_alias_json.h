@@ -21,4 +21,7 @@ namespace json = boost::json;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+namespace json = KUN_KOTEK KUN_KTK json;
+
 KOTEK_END_NAMESPACE_KOTEK

@@ -35,6 +35,14 @@ using static_list = etl::list<Type, Size>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template <typename Type, size_t NotInUseArgument = 0>
+using list_t = KUN_KOTEK KUN_KTK list<Type, NotInUseArgument>;
+
+template <typename Type, size_t Size>
+using static_list_t = KUN_KOTEK KUN_KTK static_list<Type, Size>;
+
+
 KOTEK_END_NAMESPACE_KOTEK
 
 #if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \

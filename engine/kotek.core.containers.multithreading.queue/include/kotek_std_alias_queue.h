@@ -61,4 +61,14 @@ namespace mt
 } // namespace mt
 
 KOTEK_END_NAMESPACE_KTK
+
+namespace mt
+{
+	template <typename Type>
+	using queue_t = KUN_KOTEK KUN_KTK mt::queue<Type>;
+
+	template <typename Type, size_t Size>
+	using static_queue_t = KUN_KOTEK KUN_KTK mt::static_queue<Type, Size>;
+} // namespace mt
+
 KOTEK_END_NAMESPACE_KOTEK

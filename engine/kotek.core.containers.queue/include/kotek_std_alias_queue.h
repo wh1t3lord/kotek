@@ -28,6 +28,14 @@ using static_queue = etl::queue<Type, Size>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template <typename Type, size_t NotInUseArgument = 0>
+using queue_t = KUN_KOTEK KUN_KTK queue<Type, NotInUseArgument>;
+
+template <typename Type, size_t Size>
+using static_queue_t = KUN_KOTEK KUN_KTK static_queue<Type, Size>;
+
+
 KOTEK_END_NAMESPACE_KOTEK
 
 #if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \

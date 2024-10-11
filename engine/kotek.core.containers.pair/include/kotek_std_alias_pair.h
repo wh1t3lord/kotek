@@ -15,4 +15,8 @@ using pair = std::pair<K, V>;
 #else
 #endif
 KOTEK_END_NAMESPACE_KTK
+
+template <class K, class V>
+using pair_t = KUN_KOTEK KUN_KTK pair<K, V>;
+
 KOTEK_END_NAMESPACE_KOTEK

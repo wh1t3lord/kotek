@@ -33,6 +33,13 @@ using static_vector = etl::vector<Type, Size>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template <typename Type, KUN_KOTEK KUN_KTK size_t NotInUseArgument = 0>
+using vector_t = KUN_KOTEK KUN_KTK vector<Type, NotInUseArgument>;
+
+template <typename Type, KUN_KOTEK KUN_KTK size_t Size>
+using static_vector_t = KUN_KOTEK KUN_KTK static_vector<Type, Size>;
+
 KOTEK_END_NAMESPACE_KOTEK
 
 #if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \

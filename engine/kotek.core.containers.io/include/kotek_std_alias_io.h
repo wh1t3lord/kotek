@@ -34,4 +34,16 @@ using costreambuf_iterator =
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+using ofstream_t = KUN_KOTEK KUN_KTK ofstream;
+using cofstream_t = KUN_KOTEK KUN_KTK cofstream;
+using ifstream_t = KUN_KOTEK KUN_KTK ifstream;
+using cifstream_t = KUN_KOTEK KUN_KTK cifstream;
+using fstream_t = KUN_KOTEK KUN_KTK fstream;
+using cfstream_t = KUN_KOTEK KUN_KTK cfstream;
+using istreambuf_iterator_t = KUN_KOTEK KUN_KTK istreambuf_iterator;
+using cistreambuf_iterator_t = KUN_KOTEK KUN_KTK cistreambuf_iterator;
+using ostreambuf_iterator_t = KUN_KOTEK KUN_KTK ostreambuf_iterator;
+using costreambuf_iterator_t = KUN_KOTEK KUN_KTK costreambuf_iterator;
+
 KOTEK_END_NAMESPACE_KOTEK

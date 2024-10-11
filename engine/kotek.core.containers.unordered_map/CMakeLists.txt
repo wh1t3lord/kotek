@@ -58,6 +58,7 @@ endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.hash)
 
 if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")

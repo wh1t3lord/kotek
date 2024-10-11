@@ -17,4 +17,10 @@ namespace mt
 #endif
 } // namespace mt
 KOTEK_END_NAMESPACE_KTK
+
+namespace mt
+{
+	using thread_t = KUN_KOTEK KUN_KTK mt::thread;
+} // namespace mt
+
 KOTEK_END_NAMESPACE_KOTEK

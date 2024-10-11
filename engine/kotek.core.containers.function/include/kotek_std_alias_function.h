@@ -17,4 +17,8 @@ using function = std::function<T>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template<class Type>
+using function_t = KUN_KOTEK KUN_KTK function<Type>;
+
 KOTEK_END_NAMESPACE_KOTEK

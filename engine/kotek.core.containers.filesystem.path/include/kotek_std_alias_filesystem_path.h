@@ -1993,6 +1993,10 @@ inline directory_iterator end(const directory_iterator& iter) noexcept
 
 KOTEK_END_NAMESPACE_FILESYSTEM
 KOTEK_END_NAMESPACE_KTK
+
+using static_path_t = KUN_KOTEK KUN_KTK KUN_FILESYSTEM
+	static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>;
+
 KOTEK_END_NAMESPACE_KOTEK
 
 #if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \

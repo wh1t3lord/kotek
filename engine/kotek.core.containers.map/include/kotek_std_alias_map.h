@@ -38,6 +38,15 @@ using static_map = etl::map<K, V, Size>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template <class K, class V, size_t NotInUseArgument = 0, class P = std::less<K>,
+	typename allocator =
+		KOTEK_USE_MEMORY_ALLOCATOR_CLASS<std::pair<const K, V>>>
+using map_t = KUN_KOTEK KUN_KTK map<K, V, NotInUseArgument, P, allocator>;
+
+template <class K, class V, size_t Size>
+using static_map_t = static_map<K, V, Size>;
+
 KOTEK_END_NAMESPACE_KOTEK
 
 #if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \

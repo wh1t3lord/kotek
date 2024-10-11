@@ -28,4 +28,11 @@ using static_variant = etl::variant<Args...>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template <typename... Args>
+using variant_t = KUN_KOTEK KUN_KTK variant<Args...>;
+
+template <typename... Args>
+using static_variant_t = KUN_KOTEK KUN_KTK static_variant_t<Args...>;
+
 KOTEK_END_NAMESPACE_KOTEK

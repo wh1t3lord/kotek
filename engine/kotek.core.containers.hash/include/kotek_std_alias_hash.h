@@ -22,4 +22,8 @@ using hash = std::hash<Type>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template<typename Type>
+using hash_t = KUN_KOTEK KUN_KTK hash<Type>;
+
 KOTEK_END_NAMESPACE_KOTEK

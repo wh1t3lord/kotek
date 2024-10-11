@@ -17,4 +17,8 @@ using shared_ptr = std::shared_ptr<T>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template <typename Type>
+using shared_ptr_t = KUN_KOTEK KUN_KTK shared_ptr<Type>;
+
 KOTEK_END_NAMESPACE_KOTEK

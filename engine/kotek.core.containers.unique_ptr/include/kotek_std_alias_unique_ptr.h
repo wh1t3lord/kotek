@@ -17,4 +17,8 @@ using unique_ptr = std::unique_ptr<T>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template <typename Type>
+using unique_ptr_t = KUN_KOTEK KUN_KTK unique_ptr<Type>;
+
 KOTEK_END_NAMESPACE_KOTEK

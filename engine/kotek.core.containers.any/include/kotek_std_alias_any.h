@@ -16,4 +16,7 @@ using any = std::any;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+using any_t = KUN_KOTEK KUN_KTK any;
+
 KOTEK_END_NAMESPACE_KOTEK

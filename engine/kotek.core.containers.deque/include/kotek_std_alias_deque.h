@@ -36,6 +36,16 @@ using static_deque = etl::deque<Type, Size>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
+
+template <typename Type, KUN_KOTEK KUN_KTK size_t NotInUseArgument = 0,
+	typename Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>
+using deque_t = KUN_KOTEK KUN_KTK deque<Type, NotInUseArgument, Allocator>;
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+template <typename Type, KUN_KOTEK KUN_KTK size_t Size>
+using static_deque_t = KUN_KOTEK KUN_KTK static_deque<Type, Size>;
+#endif
+
 KOTEK_END_NAMESPACE_KOTEK
 
 #if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \

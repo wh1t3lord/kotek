@@ -37,7 +37,19 @@ using static_unordered_set = etl::unordered_set<Key, Size>;
 #endif
 
 KOTEK_END_NAMESPACE_KTK
-KOTEK_END_NAMESPACE_KTK
+
+template <class Key, size_t NotInUseArgument = 0,
+	class Hash = KUN_KOTEK KUN_KTK hash<Key>,
+	class Predicate = std::equal_to<Key>,
+	class Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Key>>
+using unordered_set_t = KUN_KOTEK KUN_KTK
+	unordered_set<Key, NotInUseArgument, Hash, Predicate, Allocator>;
+
+template <class Key, size_t Size>
+using static_unordered_set_t =
+	KUN_KOTEK KUN_KTK static_unordered_set<Key, Size>;
+
+KOTEK_END_NAMESPACE_KOTEK
 
 #if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \
 	defined(KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS)
