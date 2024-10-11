@@ -21,7 +21,8 @@ KOTEK_BEGIN_NAMESPACE_KTK
 std::size_t hash_value(const ktk::ustring& instance);
 void to_lower(cstring& str);
 cstring to_lower(const cstring& str);
-
+int sprintf(char* const p_string, const std::size_t buffer_count,
+	char const* const p_format,...);
 #else
 #endif
 

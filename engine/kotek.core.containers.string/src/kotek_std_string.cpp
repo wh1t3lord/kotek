@@ -3,6 +3,7 @@
 #include <kotek.core.containers.hash/include/kotek_core_containers_hash.h>
 
 #include <utf8cpp/utf8.h>
+#include <cstdarg>
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 	#include <boost/algorithm/string.hpp>
@@ -43,6 +44,20 @@ cstring to_lower(const cstring& str)
 	return result;
 	#else
 	// your custom implementation
+	#endif
+}
+
+int sprintf(char* const p_string, const std::size_t buffer_count,
+	char const* const p_format,...)
+{
+	#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	va_list args;
+	va_start(args, p_format);
+	int result = ::vsprintf_s(p_string, buffer_count, p_format, args);
+	va_end(args);
+	return result;
+	#else
+	#error provide implementation
 	#endif
 }
 
