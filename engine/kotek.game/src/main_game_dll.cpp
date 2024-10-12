@@ -340,8 +340,13 @@ namespace Engine
 	#ifdef KOTEK_USE_TESTS_RUNTIME
 		KOTEK_MESSAGE("[UNIT TESTING]");
 		int argc = p_main_manager->Get_EngineConfig()->GetARGC();
+		testing::FLAGS_gtest_catch_exceptions = true;
+		testing::FLAGS_gtest_break_on_failure = true;
+		testing::FLAGS_gtest_print_time = true;
+		testing::FLAGS_gtest_throw_on_failure = true;
 		testing::InitGoogleTest(
 			&argc, p_main_manager->Get_EngineConfig()->GetARGV());
+
 		auto status =
 			RUN_ALL_TESTS();
 		KOTEK_ASSERT(status == 0, "unit tests failed!");

@@ -10,6 +10,7 @@ bool InitializeModule_Core_Memory_CPU(ktkMainManager* p_manager)
 
 #ifdef KOTEK_USE_MEMORY_LEAK_DETECTION_CRT
 	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
+	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE | _CRTDBG_MODE_WNDW);
 #endif
 
 	return true;
