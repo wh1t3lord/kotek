@@ -118,7 +118,7 @@ bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 	path_to_folder /= KOTEK_USE_LOG_OUTPUT_FILE_NAME;
 
 	auto logger_main = spdlog::basic_logger_mt(kLoggerMainName,
-		reinterpret_cast<const char*>(path_to_folder.u8string().c_str()));
+		reinterpret_cast<const char*>(path_to_folder.u8string().c_str()), true);
 	logger_main->sinks().push_back(
 		std::make_shared<spdlog::sinks::wincolor_stdout_sink_mt>());
 
