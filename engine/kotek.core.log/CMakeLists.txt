@@ -26,6 +26,8 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_log_dll.cpp")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 

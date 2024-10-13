@@ -8,7 +8,7 @@ ktkMainManager::ktkMainManager(int argc, char** argv) :
 	m_p_manager_input{}, m_p_manager_render_device{},
 	m_p_manager_render_resource{}, m_p_manager_render_graph{},
 	m_p_manager_swapchain{}, m_p_manager_profiler{}, m_p_manager_window{},
-	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}
+	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{}
 {
 }
 
@@ -18,7 +18,7 @@ ktkMainManager::ktkMainManager() :
 	m_p_manager_input{}, m_p_manager_render_device{},
 	m_p_manager_render_resource{}, m_p_manager_render_graph{},
 	m_p_manager_swapchain{}, m_p_manager_profiler{}, m_p_manager_window{},
-	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}
+	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{}
 {
 }
 
@@ -147,6 +147,16 @@ ktkIGameUIManager* ktkMainManager::Get_GameUIEngine(void) const noexcept
 void ktkMainManager::Set_GameUIEngine(ktkIGameUIManager* p_manager) noexcept
 {
 	this->m_p_game_ui_engine = p_manager;
+}
+
+ktkILogger* ktkMainManager::Get_Logger(void) const noexcept 
+{
+	return this->m_p_logger;
+}
+
+void ktkMainManager::Set_Logger(ktkILogger* p_logger) noexcept 
+{
+	this->m_p_logger = p_logger;
 }
 
 void ktkMainManager::Initialize(void)

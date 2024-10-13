@@ -1,10 +1,81 @@
 #include "../include/kotek_core_log.h"
+#include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 
 #ifdef KOTEK_USE_LOG_LIBRARY_BOOST
 	#ifdef KOTEK_USE_BOOST_LIBRARY
 		#include <boost/log/utility/setup.hpp>
 	#endif
 #elif defined(KOTEK_USE_LOG_LIBRARY_SPDLOG)
+	#include <spdlog/sinks/msvc_sink.h>
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+ktkLogger::ktkLogger(void) {}
+
+ktkLogger::~ktkLogger(void) {}
+
+void ktkLogger::Initialize(void) {}
+
+void ktkLogger::Shutdown(void) {}
+
+void* ktkLogger::Get(const char* p_logger_name)
+{
+	if (!strcmp(p_logger_name, kLoggerMainName))
+	{
+		return static_cast<void*>(m_pLoggerMain);
+	}
+	else if (!strcmp(p_logger_name, kLoggerMsvcOutputWindowName))
+	{
+		return static_cast<void*>(m_pLoggerMsvc);
+	}
+
+	return static_cast<void*>(nullptr);
+}
+
+void ktkLogger::Set(spdlog::logger* p_logger, const char* p_logger_name)
+{
+	if (!strcmp(p_logger_name, kLoggerMainName))
+	{
+		if (!m_pLoggerMain)
+		{
+			m_pLoggerMain = p_logger;
+		}
+	}
+	else if (!strcmp(p_logger_name, kLoggerMsvcOutputWindowName))
+	{
+		if (!m_pLoggerMsvc)
+		{
+			m_pLoggerMsvc = p_logger;
+		}
+	}
+}
+KOTEK_END_NAMESPACE_CORE
+
+spdlog::logger* _pLoggerMain{};
+spdlog::logger* _pLoggerMsvcOutput{};
+
+spdlog::logger* Get_LoggerMain()
+{
+	return _pLoggerMain;
+}
+
+spdlog::logger* Get_LoggerMsvcOutput()
+{
+	return _pLoggerMsvcOutput;
+}
+
+void Set_LoggerMain(void* p_logger) 
+{
+	_pLoggerMain = static_cast<spdlog::logger*>(p_logger);
+}
+
+void Set_LoggerMsvcOutput(void* p_logger)
+{
+	_pLoggerMsvcOutput = static_cast<spdlog::logger*>(p_logger);
+}
+
+KOTEK_END_NAMESPACE_KOTEK
+
 #else
 // provide your some additional headers for log library
 #endif
@@ -46,8 +117,29 @@ bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 
 	path_to_folder /= KOTEK_USE_LOG_OUTPUT_FILE_NAME;
 
-	spdlog::basic_logger_mt("log_session",
+	auto logger_main = spdlog::basic_logger_mt(kLoggerMainName,
 		reinterpret_cast<const char*>(path_to_folder.u8string().c_str()));
+	logger_main->sinks().push_back(
+		std::make_shared<spdlog::sinks::wincolor_stdout_sink_mt>());
+
+	auto sink = std::make_shared<spdlog::sinks::msvc_sink_mt>();
+	auto logger_msvc =
+		std::make_shared<spdlog::logger>(kLoggerMsvcOutputWindowName, sink);
+	logger_msvc->sinks().push_back(
+		std::make_shared<spdlog::sinks::wincolor_stdout_sink_mt>());
+	spdlog::initialize_logger(logger_msvc);
+	logger_msvc->set_level(spdlog::level::level_enum::trace);
+	ktkLogger* p_logger_manager = new ktkLogger();
+	p_manager->Set_Logger(p_logger_manager);
+
+	if (p_manager->Get_Logger())
+	{
+		p_logger_manager->Set(logger_main.get(), kLoggerMainName);
+		p_logger_manager->Set(logger_msvc.get(), kLoggerMsvcOutputWindowName);
+	}
+
+	Set_LoggerMain(logger_main.get());
+	Set_LoggerMsvcOutput(logger_msvc.get());
 #else
 #endif
 

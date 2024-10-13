@@ -56,6 +56,9 @@ public:
 	ktkIGameUIManager* Get_GameUIEngine(void) const noexcept;
 	void Set_GameUIEngine(ktkIGameUIManager* p_manager) noexcept;
 
+	ktkILogger* Get_Logger(void) const noexcept;
+	void Set_Logger(ktkILogger* p_logger) noexcept;
+
 	void Initialize(void);
 	void Shutdown(void);
 
@@ -76,6 +79,7 @@ private:
 	ktkIWindowManager* m_p_manager_window;
 	ktkIImguiWrapper* m_p_manager_imgui_wrapper;
 	ktkIGameUIManager* m_p_game_ui_engine;
+	ktkILogger* m_p_logger;
 };
 
 KOTEK_END_NAMESPACE_CORE
