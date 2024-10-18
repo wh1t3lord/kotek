@@ -44,10 +44,10 @@ public:
 	// called from a thread! Not render thread!!!!
 	// not cached , without cache
 	ktk::shared_ptr<ktk::any> LoadGeometry(
-		ktk::enum_base_t resource_loading_type, ktk::entity_t id) override;
+		ktk::enum_base_t resource_loading_type, ktk::uint32_t id) override;
 	ktk::shared_ptr<ktk::any> LoadGeometry(
 		ktk::enum_base_t resource_loading_type,
-		const ktk_filesystem_path& path_to_file, ktk::entity_t id) override;
+		const ktk_filesystem_path& path_to_file, ktk::uint32_t id) override;
 
 	// call only in render thread
 	void Update(void) noexcept;

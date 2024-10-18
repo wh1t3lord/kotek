@@ -19,6 +19,7 @@ using int8_t = std::int8_t;
 using size_t = std::size_t;
 using ptrdiff_t = std::ptrdiff_t;
 using enum_base_t = int;
+using flag_t = unsigned int;
 
 using float_t = float;
 using double_t = double;

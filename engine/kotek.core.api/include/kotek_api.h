@@ -119,10 +119,10 @@ public:
 	virtual void shutdown(ktkIRenderDevice* p_raw_device) = 0;
 
 	virtual ktk::shared_ptr<ktk::any> LoadGeometry(
-		ktk::enum_base_t resource_loading_type, ktk::entity_t id) = 0;
+		ktk::enum_base_t resource_loading_type, ktk::uint32_t id) = 0;
 	virtual ktk::shared_ptr<ktk::any> LoadGeometry(
 		ktk::enum_base_t resource_loading_type,
-		const ktk_filesystem_path& path_to_file, ktk::entity_t id) = 0;
+		const ktk_filesystem_path& path_to_file, ktk::uint32_t id) = 0;
 
 	virtual void Resize(ktkIRenderDevice* p_raw_device,
 		ktkIRenderSwapchain* p_raw_swapchain) = 0;
@@ -561,7 +561,7 @@ public:
 		const ktk_filesystem_path& resource_path) :
 		m_policy_loading{type_loading},
 		m_policy_caching{type_policy_caching},
-		m_resource_type{type_of_loading_resource}, m_id{ktk::entity_t(-1)},
+		m_resource_type{type_of_loading_resource}, m_id{ktk::uint32_t(-1)},
 		m_resource_path{resource_path}
 	{
 	}
@@ -569,7 +569,7 @@ public:
 	ktkLoadingRequest(eResourceLoadingPolicy type_loading,
 		eResourceCachingPolicy type_policy_caching,
 		eResourceLoadingType type_of_loading_resource,
-		const ktk_filesystem_path& resource_path, Kotek::ktk::entity_t id) :
+		const ktk_filesystem_path& resource_path, ktk::uint32_t id) :
 		m_policy_loading{type_loading},
 		m_policy_caching{type_policy_caching},
 		m_resource_type{type_of_loading_resource}, m_id{id},
@@ -632,10 +632,10 @@ public:
 
 	bool Is_ForEntity(void) const noexcept
 	{
-		return this->m_id != ktk::entity_t(-1);
+		return this->m_id != ktk::uint32_t(-1);
 	}
 
-	Kotek::ktk::entity_t Get_EntityID(void) const noexcept
+	ktk::uint32_t Get_EntityID(void) const noexcept
 	{
 		return this->m_id;
 	}
@@ -644,7 +644,7 @@ private:
 	eResourceLoadingPolicy m_policy_loading;
 	eResourceCachingPolicy m_policy_caching;
 	eResourceLoadingType m_resource_type;
-	Kotek::ktk::entity_t m_id;
+	ktk::uint32_t m_id;
 	ktk_filesystem_path m_resource_path;
 };
 
@@ -1013,13 +1013,13 @@ class ktkIComponentAllocator
 public:
 	virtual ~ktkIComponentAllocator() {}
 
-	virtual bool Create(ktk::entity_t id) noexcept = 0;
-	virtual void* Get(ktk::entity_t id) noexcept = 0;
-	virtual bool Remove(ktk::entity_t id) noexcept = 0;
+	virtual bool Create(ktk::uint32_t id) noexcept = 0;
+	virtual void* Get(ktk::uint32_t id) noexcept = 0;
+	virtual bool Remove(ktk::uint32_t id) noexcept = 0;
 	virtual ktk::cstring GetDebugName(void) const noexcept = 0;
 	virtual ktk::ustring GetComponentName(void) const noexcept = 0;
 	virtual void DrawImGui(Kotek::Core::ktkMainManager* main_manager,
-		Kotek::ktk::entity_t entity_id) noexcept = 0;
+		ktk::uint32_t entity_id) noexcept = 0;
 };
 
 class ktkIWindow

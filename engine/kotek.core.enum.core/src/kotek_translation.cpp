@@ -102,11 +102,11 @@ namespace helper
 	{
 		switch (type)
 		{
-		case eEngineFeatureRender::kEngine_Render_Feature_MSAA:
+		case eEngineFeatureRender::kEngine_Feature_Render_MSAA:
 		{
 			return KOTEK_TEXTU("MSAA");
 		}
-		case eEngineFeatureRender::kEngine_Render_Feature_VSYNC:
+		case eEngineFeatureRender::kEngine_Feature_Render_VSYNC:
 		{
 			return KOTEK_TEXTU("VSYNC");
 		}
@@ -276,45 +276,45 @@ namespace helper
 	{
 		switch (type)
 		{
-		case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest:
+		case eEngineFeatureRenderer::kEngine_Feature_Renderer_DirectX_Latest:
 		{
 			return Translate_EngineSupportedRenderer(eEngineSupportedRenderer::kDirectX_Latest);
 		}
-		case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest:
+		case eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGL_Latest:
 		{
 			return Translate_EngineSupportedRenderer(
 				eEngineSupportedRenderer::kOpenGL_Latest);
 		}
-		case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGLES_Latest:
+		case eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGLES_Latest:
 		{
 			return Translate_EngineSupportedRenderer(eEngineSupportedRenderer::kOpenGLES_Latest);
 		}
-		case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest:
+		case eEngineFeatureRenderer::kEngine_Feature_Renderer_Vulkan_Latest:
 		{
 			return Translate_EngineSupportedRenderer(
 				eEngineSupportedRenderer::kVulkan_Latest);
 		}
 		case eEngineFeatureRenderer::
-			kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
+			kEngine_Feature_Renderer_OpenGL_SpecifiedByUser:
 		{
 			return KOTEK_TEXTU("OpenGL version is specified by user");
 		}
 		case eEngineFeatureRenderer::
-			kEngine_Render_Renderer_DirectX_SpecifiedByUser:
+			kEngine_Feature_Renderer_DirectX_SpecifiedByUser:
 		{
 			return KOTEK_TEXTU("DirectX version is specified by user");
 		}
 		case eEngineFeatureRenderer::
-			kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
+			kEngine_Feature_Renderer_Vulkan_SpecifiedByUser:
 		{
 			return KOTEK_TEXTU("Vulkan version is specified by user");
 		}
 		case eEngineFeatureRenderer::
-			kEngine_Render_Renderer_OpenGLES_SpecifiedByUser:
+			kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser:
 		{
 			return KOTEK_TEXTU("OpenGL ES version is specified by user");
 		}
-		case eEngineFeatureRenderer::kEngine_Render_Renderer_Software:
+		case eEngineFeatureRenderer::kEngine_Feature_Renderer_Software:
 		{
 			return KOTEK_TEXTU("Software");
 		}
@@ -331,32 +331,32 @@ namespace helper
 		switch (type)
 		{
 		case eEngineFeatureRendererANGLE::
-			kEngine_Render_Renderer_ANGLE_Feature_Desktop_GL:
+			kEngine_Feature_Renderer_ANGLE_Feature_Desktop_GL:
 		{
 			return KOTEK_TEXTU("Desktop GL");
 		}
 		case eEngineFeatureRendererANGLE::
-			kEngine_Render_Renderer_ANGLE_Feature_DirectX_9:
+			kEngine_Feature_Renderer_ANGLE_Feature_DirectX_9:
 		{
 			return KOTEK_TEXTU("DirectX 9");
 		}
 		case eEngineFeatureRendererANGLE::
-			kEngine_Render_Renderer_ANGLE_Feature_DirectX_11:
+			kEngine_Feature_Renderer_ANGLE_Feature_DirectX_11:
 		{
 			return KOTEK_TEXTU("DirectX 11");
 		}
 		case eEngineFeatureRendererANGLE::
-			kEngine_Render_Renderer_ANGLE_Feature_Vulkan:
+			kEngine_Feature_Renderer_ANGLE_Feature_Vulkan:
 		{
 			return KOTEK_TEXTU("Vulkan");
 		}
 		case eEngineFeatureRendererANGLE::
-			kEngine_Render_Renderer_ANGLE_Feature_GL_ES:
+			kEngine_Feature_Renderer_ANGLE_Feature_GL_ES:
 		{
 			return KOTEK_TEXTU("GL ES");
 		}
 		case eEngineFeatureRendererANGLE::
-			kEngine_Render_Renderer_ANGLE_Feature_Metal:
+			kEngine_Feature_Renderer_ANGLE_Feature_Metal:
 		{
 			return KOTEK_TEXTU("Metal");
 		}
@@ -393,19 +393,19 @@ namespace helper
 	{
 		switch (type)
 		{
-		case eEngineFeatureWindow::kEngine_Window_Borderless:
+		case eEngineFeatureWindow::kEngine_Feature_Window_Borderless:
 		{
 			return KOTEK_TEXTU("Borderless");
 		}
-		case eEngineFeatureWindow::kEngine_Window_FullScreen:
+		case eEngineFeatureWindow::kEngine_Feature_Window_FullScreen:
 		{
 			return KOTEK_TEXTU("FullScreen");
 		}
-		case eEngineFeatureWindow::kEngine_Window_Windowed:
+		case eEngineFeatureWindow::kEngine_Feature_Window_Windowed:
 		{
 			return KOTEK_TEXTU("Windowed");
 		}
-		case eEngineFeatureWindow::kNone:
+		case eEngineFeatureWindow::kEngine_Feature_Window_None:
 		{
 			return KOTEK_TEXTU("None");
 		}
@@ -892,7 +892,7 @@ namespace helper
 	eEngineFeatureRenderer TranslateFromStringToEnum_EngineFeatureRenderer(
 		const ktk::cstring& name)
 	{
-		eEngineFeatureRenderer result{eEngineFeatureRenderer::kNone};
+		eEngineFeatureRenderer result{eEngineFeatureRenderer::kEngine_Feature_Renderer_None};
 
 		if (name.empty())
 			return result;
@@ -906,30 +906,30 @@ namespace helper
 			renderer_name == KOTEK_TEXTU("gl es"))
 		{
 			result = eEngineFeatureRenderer::
-				kEngine_Render_Renderer_OpenGLES_SpecifiedByUser;
+				kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser;
 		}
 		else if (renderer_name == KOTEK_TEXTU("software") ||
 			renderer_name == KOTEK_TEXTU("sw"))
 		{
-			result = eEngineFeatureRenderer::kEngine_Render_Renderer_Software;
+			result = eEngineFeatureRenderer::kEngine_Feature_Renderer_Software;
 		}
 		else if (renderer_name == KOTEK_TEXTU("directx") ||
 			renderer_name == KOTEK_TEXTU("dx"))
 		{
 			result = eEngineFeatureRenderer::
-				kEngine_Render_Renderer_DirectX_SpecifiedByUser;
+				kEngine_Feature_Renderer_DirectX_SpecifiedByUser;
 		}
 		else if (renderer_name == KOTEK_TEXTU("vulkan") ||
 			renderer_name == KOTEK_TEXTU("vk"))
 		{
 			result = eEngineFeatureRenderer::
-				kEngine_Render_Renderer_Vulkan_SpecifiedByUser;
+				kEngine_Feature_Renderer_Vulkan_SpecifiedByUser;
 		}
 		else if (renderer_name == KOTEK_TEXTU("opengl") ||
 			renderer_name == KOTEK_TEXTU("gl"))
 		{
 			result = eEngineFeatureRenderer::
-				kEngine_Render_Renderer_OpenGL_SpecifiedByUser;
+				kEngine_Feature_Renderer_OpenGL_SpecifiedByUser;
 		}
 
 		return result;

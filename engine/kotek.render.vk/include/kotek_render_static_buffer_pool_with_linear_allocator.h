@@ -30,17 +30,17 @@ namespace Kotek
 
 				void Shutdown(ktkRenderDevice* p_render_device);
 
-				bool AllocBuffer(ktk::entity_t entity_id,
+				bool AllocBuffer(ktk::uint32_t entity_id,
 					ktk::uint32_t number_of_elements,
 					ktk::uint32_t stride_in_bytes, void** p_data,
 					VkDescriptorBufferInfo* p_out) noexcept;
 
-				bool Dealloc(ktk::entity_t entity_id) noexcept;
+				bool Dealloc(ktk::uint32_t entity_id) noexcept;
 
 				bool IsNeedToRecalculate(void) const noexcept;
 
 			private:
-				bool AllocBuffer(ktk::entity_t entity_id, ktk::uint32_t size,
+				bool AllocBuffer(ktk::uint32_t entity_id, ktk::uint32_t size,
 					void** p_data, VkDescriptorBufferInfo* p_out) noexcept;
 
 			private:
@@ -49,9 +49,9 @@ namespace Kotek
 				ktk::uint32_t m_total_memory;
 				VkBuffer m_p_buffer;
 				char* m_p_data;
-				ktk::unordered_map<ktk::entity_t, ktk::uint32_t>
+				ktk::unordered_map<ktk::uint32_t, ktk::uint32_t>
 					m_entities_offset;
-				ktk::unordered_map<ktk::entity_t, ktk::uint32_t>
+				ktk::unordered_map<ktk::uint32_t, ktk::uint32_t>
 					m_entities_vertex_size_with_stride;
 				VmaAllocation m_buffer_allocation;
 			};

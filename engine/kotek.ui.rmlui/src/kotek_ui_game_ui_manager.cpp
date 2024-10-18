@@ -33,7 +33,7 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 		switch (feature)
 		{
 		case Core::eEngineFeatureRenderer::
-			kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
+			kEngine_Feature_Renderer_OpenGL_SpecifiedByUser:
 		{
 			if ((p_config->GetRendererVersionEnum() >=
 						Core::eEngineSupportedRenderer::kOpenGL_3_0 &&
@@ -50,7 +50,7 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 			break;
 		}
 		case Core::eEngineFeatureRenderer::
-			kEngine_Render_Renderer_OpenGLES_SpecifiedByUser:
+			kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser:
 
 		{
 			if ((p_config->GetRendererVersionEnum() >=
@@ -67,7 +67,7 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
 			break;
 		}
 		case Core::eEngineFeatureRenderer::
-			kEngine_Render_Renderer_OpenGL_Latest:
+			kEngine_Feature_Renderer_OpenGL_Latest:
 		{
 			break;
 		}

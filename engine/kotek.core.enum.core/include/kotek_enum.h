@@ -270,7 +270,7 @@ enum class eWindowTitleType : ktk::enum_base_t
 ///
 ///
 /// \~french
-enum class eEngineFeature : ktk::enum_base_t
+enum eEngineFeature
 {
 	/// \~english @brief This field is system and it means that if the
 	/// required feature is not implemenented or exist you need to use
@@ -292,10 +292,12 @@ enum class eEngineFeature : ktk::enum_base_t
 	/// GetRenderFeature в Kotek::Core::ktkEngineConfig.
 	/// \~german @brief
 	/// \~french @brief
-	kNone = 0
+	kEngine_Feature_None = 0
 };
 
-enum class eEngineFeatureWindow : ktk::enum_base_t
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeature);
+
+enum eEngineFeatureWindow
 {
 	/// \~english @brief This field specifies that (main) window is in
 	/// windowed mode. So if user checks if this feature is in true
@@ -310,7 +312,7 @@ enum class eEngineFeatureWindow : ktk::enum_base_t
 	/// что если поле включено, то это соответствует действительности.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Window_Windowed = 1 << 2,
+	kEngine_Feature_Window_Windowed = 1 << 2,
 
 	/// \~english @brief This field specifies that window is in
 	/// borderless mode. So if the user checks if this field is set to
@@ -324,7 +326,7 @@ enum class eEngineFeatureWindow : ktk::enum_base_t
 	/// гарантировать это состояние.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Window_Borderless = 1 << 3,
+	kEngine_Feature_Window_Borderless = 1 << 3,
 
 	/// \~english @brief This field specifies that window is in
 	/// fullscreen mode. If user checks that field is in true state it
@@ -338,12 +340,14 @@ enum class eEngineFeatureWindow : ktk::enum_base_t
 	/// гарантировать такое состояние.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Window_FullScreen = 1 << 4,
+	kEngine_Feature_Window_FullScreen = 1 << 4,
 
-	kNone = 0
+	kEngine_Feature_Window_None = 0
 };
 
-enum class eEngineFeatureSDK : ktk::enum_base_t
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureWindow);
+
+enum eEngineFeatureSDK
 {
 	/// \~english @brief This field means that your engine is called SDK
 	/// initialization or it means that your SDK implementation is
@@ -382,8 +386,10 @@ enum class eEngineFeatureSDK : ktk::enum_base_t
 
 	kEngine_Feature_SDK_ImGui_Initialized = 1 << 2,
 
-	kNone = 0
+	kEngine_Feature_SDK_None = 0
 };
+
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureSDK);
 
 /// @brief
 enum class eEngineSupportedRenderer : ktk::enum_base_t
@@ -433,7 +439,7 @@ enum class eEngineSupportedRenderer : ktk::enum_base_t
 	kUnknown = -1
 };
 
-enum class eEngineFeatureRenderer : ktk::enum_base_t
+enum eEngineFeatureRenderer
 {
 	/// \~english @brief This field means that engine uses OpenGL
 	/// version 4.6. If this field is true it means that engine uses
@@ -446,11 +452,11 @@ enum class eEngineFeatureRenderer : ktk::enum_base_t
 	/// соответствует работе движка.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_OpenGL_Latest = 1 << 1,
-	kEngine_Render_Renderer_OpenGL_SpecifiedByUser = 1 << 2,
+	kEngine_Feature_Renderer_OpenGL_Latest = 1 << 1,
+	kEngine_Feature_Renderer_OpenGL_SpecifiedByUser = 1 << 2,
 
-	kEngine_Render_Renderer_DirectX_Latest = 1 << 3,
-	kEngine_Render_Renderer_DirectX_SpecifiedByUser = 1 << 4,
+	kEngine_Feature_Renderer_DirectX_Latest = 1 << 3,
+	kEngine_Feature_Renderer_DirectX_SpecifiedByUser = 1 << 4,
 
 	/// \~english @brief This field means that renderer is Vulkan. In
 	/// Engine it supposed that only one renderer can exist, thus if
@@ -464,8 +470,8 @@ enum class eEngineFeatureRenderer : ktk::enum_base_t
 	/// соотносится с работой рендерера Vulkan.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_Vulkan_Latest = 1 << 5,
-	kEngine_Render_Renderer_Vulkan_SpecifiedByUser = 1 << 6,
+	kEngine_Feature_Renderer_Vulkan_Latest = 1 << 5,
+	kEngine_Feature_Renderer_Vulkan_SpecifiedByUser = 1 << 6,
 
 	/// \~english @brief This field means that renderer is software. In
 	/// Engine it supposed that only one renderer can exist, so if you
@@ -481,30 +487,34 @@ enum class eEngineFeatureRenderer : ktk::enum_base_t
 	/// данным рендерером.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Renderer_Software = 1 << 7,
+	kEngine_Feature_Renderer_Software = 1 << 7,
 
-	kEngine_Render_Renderer_OpenGLES_Latest = 1 << 8,
-	kEngine_Render_Renderer_OpenGLES_SpecifiedByUser = 1 << 9,
+	kEngine_Feature_Renderer_OpenGLES_Latest = 1 << 8,
+	kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser = 1 << 9,
 
-	kNone = 0,
+	kEngine_Feature_Renderer_None = 0,
 	// defines amount of real fields before kNone
 	// needed to be updated regularly
 	kEndOfEnum = 9
 };
 
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRenderer);
+
 /// @brief took information from https://github.com/google/angle
-enum class eEngineFeatureRendererANGLE : ktk::enum_base_t
+enum eEngineFeatureRendererANGLE
 {
-	kEngine_Render_Renderer_ANGLE_Feature_Vulkan = 1 << 0,
-	kEngine_Render_Renderer_ANGLE_Feature_DirectX_9 = 1 << 1,
-	kEngine_Render_Renderer_ANGLE_Feature_DirectX_11 = 1 << 2,
-	kEngine_Render_Renderer_ANGLE_Feature_Desktop_GL = 1 << 3,
-	kEngine_Render_Renderer_ANGLE_Feature_GL_ES = 1 << 4,
-	kEngine_Render_Renderer_ANGLE_Feature_Metal = 1 << 5,
-	kNone = 0
+	kEngine_Feature_Renderer_ANGLE_Feature_Vulkan = 1 << 0,
+	kEngine_Feature_Renderer_ANGLE_Feature_DirectX_9 = 1 << 1,
+	kEngine_Feature_Renderer_ANGLE_Feature_DirectX_11 = 1 << 2,
+	kEngine_Feature_Renderer_ANGLE_Feature_Desktop_GL = 1 << 3,
+	kEngine_Feature_Renderer_ANGLE_Feature_GL_ES = 1 << 4,
+	kEngine_Feature_Renderer_ANGLE_Feature_Metal = 1 << 5,
+	kEngine_Feature_Renderer_ANGLE_Feature_None = 0
 };
 
-enum class eEngineFeatureRender : ktk::enum_base_t
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRendererANGLE);
+
+enum eEngineFeatureRender
 {
 	/// \~english @brief This field means that renderer enabled MSAA
 	/// feature. If the field's state is true it means that renderer
@@ -516,7 +526,7 @@ enum class eEngineFeatureRender : ktk::enum_base_t
 	/// гарантировать что состояние поля соответствует работе рендерера.
 	/// \~german @brief
 	/// \~french @brief
-	kEngine_Render_Feature_MSAA = 1 << 0,
+	kEngine_Feature_Render_MSAA = 1 << 0,
 
 	/// \~english @brief This field means that renderer enabled VSYNC
 	/// feature. If the field's state is true it means that renderer
@@ -529,10 +539,12 @@ enum class eEngineFeatureRender : ktk::enum_base_t
 	/// \~german @brief
 	/// \~french @brief
 	///
-	kEngine_Render_Feature_VSYNC = 1 << 1,
+	kEngine_Feature_Render_VSYNC = 1 << 1,
 
-	kNone = 0
+	kEngine_Feature_Render_None = 0
 };
+
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRender);
 
 /**
  * \~english @brief This is used for console manager class ktkConsole. And it

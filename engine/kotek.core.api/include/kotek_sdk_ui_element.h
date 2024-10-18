@@ -19,7 +19,7 @@ KOTEK_BEGIN_NAMESPACE_CORE
 ///
 /// 1. In game library you create your custom class which overrides this
 /// class (e.g. class Game::kotek_sdk_ui_my_custom_element : public
-/// Core::kotek_sdk_ui_element ...)
+/// Core::ktkISDKUIElement ...)
 /// 2. After that you pass in initializeModule_Game your element and
 /// create them by new operator
 ///
@@ -30,11 +30,11 @@ KOTEK_BEGIN_NAMESPACE_CORE
 /// on all pointers and destroy them in RAII's manner (e.g. destroying
 /// in destructor of ~kotek_renderer)
 /// </summary>
-class kotek_sdk_ui_element
+class ktkISDKUIElement
 {
 public:
-	kotek_sdk_ui_element(void) {}
-	virtual ~kotek_sdk_ui_element(void) {}
+	ktkISDKUIElement(void) {}
+	virtual ~ktkISDKUIElement(void) {}
 
 	virtual void initialize(void) = 0;
 	virtual void shutdown(void) = 0;

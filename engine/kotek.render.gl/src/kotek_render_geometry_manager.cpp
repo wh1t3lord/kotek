@@ -367,7 +367,7 @@ namespace gl
 		return this->m_indirect_commands_models_by_enum;
 	}
 
-	void ktkRenderGeometryManager::FreeOffset(ktk::entity_t id) {}
+	void ktkRenderGeometryManager::FreeOffset(ktk::uint32_t id) {}
 } // namespace gl
 
 KOTEK_END_NAMESPACE_RENDER

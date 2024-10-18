@@ -9,10 +9,7 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_KTK
-using entity_t = ktk::uint32_t;
 KOTEK_END_NAMESPACE_KTK
-
-using entity_t = KUN_KOTEK KUN_KTK entity_t;
 
 KOTEK_END_NAMESPACE_KOTEK
 
@@ -29,8 +26,8 @@ public:
 	virtual void Execute() = 0;
 	virtual void Undo() = 0;
 	virtual const char* GetName() = 0;
-	virtual Kotek::ktk::entity_t GetEntityID(void) const noexcept { return -1; }
-	virtual void SetEntityID(Kotek::ktk::entity_t id) noexcept {}
+	virtual ktk::uint32_t GetEntityID(void) const noexcept { return -1; }
+	virtual void SetEntityID(ktk::uint32_t id) noexcept {}
 	virtual ktk::enum_base_t GetCommandType() noexcept = 0;
 
 	virtual ktk::size_t Serialize(ktk::uint32_t resource_handle_id,

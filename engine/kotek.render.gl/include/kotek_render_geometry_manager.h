@@ -49,7 +49,7 @@ namespace gl
 		Get_IndirectCommands_PredefinedModels(void) const;
 
 	private:
-		void FreeOffset(ktk::entity_t id);
+		void FreeOffset(ktk::uint32_t id);
 
 	private:
 		GLuint m_vao_handle;

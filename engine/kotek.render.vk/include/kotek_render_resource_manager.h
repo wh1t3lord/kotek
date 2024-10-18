@@ -63,11 +63,11 @@ namespace Kotek
 					Core::ktkIRenderSwapchain* p_raw_swapchain) override;
 
 				ktk::shared_ptr<ktk::any> LoadGeometry(ktk::enum_base_t resource_loading_type,
-					ktk::entity_t id) override;
+					ktk::uint32_t id) override;
 				ktk::shared_ptr<ktk::any> LoadGeometry(
 					ktk::enum_base_t resource_loading_type,
 					const ktk_filesystem_path& path_to_file,
-					ktk::entity_t id) override;
+					ktk::uint32_t id) override;
 
 				kotek_render_dynamic_buffer_ring* GetDynamicBufferRing(
 					void) noexcept;

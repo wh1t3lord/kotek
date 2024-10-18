@@ -25,7 +25,7 @@ namespace gl
 	void ktkRenderStaticBufferPool_LinearAllocator::Shutdown() {}
 
 	bool ktkRenderStaticBufferPool_LinearAllocator::AllocBuffer(
-		ktk::entity_t entity_id, ktk::uint32_t number_of_elements,
+		ktk::uint32_t entity_id, ktk::uint32_t number_of_elements,
 		ktk::uint32_t stride_in_bytes, void** p_data) noexcept
 	{
 		return this->AllocBuffer(entity_id,
@@ -35,7 +35,7 @@ namespace gl
 	}
 
 	bool ktkRenderStaticBufferPool_LinearAllocator::Dealloc(
-		ktk::entity_t entity_id) noexcept
+		ktk::uint32_t entity_id) noexcept
 	{
 		if (this->m_entities_offset.find(entity_id) ==
 			this->m_entities_offset.end())
@@ -63,7 +63,7 @@ namespace gl
 	}
 
 	bool ktkRenderStaticBufferPool_LinearAllocator::AllocBuffer(
-		ktk::entity_t entity_id, ktk::uint32_t size, void** p_data) noexcept
+		ktk::uint32_t entity_id, ktk::uint32_t size, void** p_data) noexcept
 	{
 		if (this->m_entities_offset.find(entity_id) !=
 			this->m_entities_offset.end())

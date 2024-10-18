@@ -18,13 +18,13 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 
 	switch (renderer_type)
 	{
-	case eEngineFeatureRenderer::kEngine_Render_Renderer_DirectX_Latest:
+	case eEngineFeatureRenderer::kEngine_Feature_Renderer_DirectX_Latest:
 	{
 		renderer_version = eEngineSupportedRenderer::kDirectX_Latest;
 		break;
 	}
 	case eEngineFeatureRenderer::
-	kEngine_Render_Renderer_DirectX_SpecifiedByUser:
+	kEngine_Feature_Renderer_DirectX_SpecifiedByUser:
 	{
 		renderer_version =
 			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
@@ -35,7 +35,7 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 
 		break;
 	}
-	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGLES_Latest:
+	case eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGLES_Latest:
 	{
 		renderer_version = eEngineSupportedRenderer::kOpenGLES_Latest;
 
@@ -47,7 +47,7 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 		break;
 	}
 	case eEngineFeatureRenderer::
-	kEngine_Render_Renderer_OpenGLES_SpecifiedByUser:
+	kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser:
 	{
 		renderer_version =
 			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
@@ -59,7 +59,7 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 			"all!");
 		break;
 	}
-	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_Latest:
+	case eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGL_Latest:
 	{
 		renderer_version =
 			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
@@ -70,7 +70,7 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 			"you passed OpenGL renderer but version is not for OpenGL at all!");
 		break;
 	}
-	case eEngineFeatureRenderer::kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
+	case eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGL_SpecifiedByUser:
 	{
 		renderer_version =
 			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
@@ -81,12 +81,12 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 			"you passed OpenGL renderer but version is not for OpenGL at all!");
 		break;
 	}
-	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_Latest:
+	case eEngineFeatureRenderer::kEngine_Feature_Renderer_Vulkan_Latest:
 	{
 		renderer_version = eEngineSupportedRenderer::kVulkan_Latest;
 		break;
 	}
-	case eEngineFeatureRenderer::kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
+	case eEngineFeatureRenderer::kEngine_Feature_Renderer_Vulkan_SpecifiedByUser:
 	{
 		renderer_version =
 			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
@@ -97,7 +97,7 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 			"you passed Vulkan but version is not for Vulkan at all!");
 		break;
 	}
-	case eEngineFeatureRenderer::kEngine_Render_Renderer_Software:
+	case eEngineFeatureRenderer::kEngine_Feature_Renderer_Software:
 	{
 		KOTEK_ASSERT(false, "think about it");
 		break;

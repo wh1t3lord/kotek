@@ -75,27 +75,27 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		// TODO: finish for all renderers
 		bool is_gl =
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_OpenGL_Latest) ||
+					kEngine_Feature_Renderer_OpenGL_Latest) ||
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_OpenGL_SpecifiedByUser);
+					kEngine_Feature_Renderer_OpenGL_SpecifiedByUser);
 
 		bool is_vk =
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_Vulkan_Latest) ||
+					kEngine_Feature_Renderer_Vulkan_Latest) ||
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_Vulkan_SpecifiedByUser);
+					kEngine_Feature_Renderer_Vulkan_SpecifiedByUser);
 
 		bool is_dx =
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_DirectX_Latest) ||
+					kEngine_Feature_Renderer_DirectX_Latest) ||
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_DirectX_SpecifiedByUser);
+					kEngine_Feature_Renderer_DirectX_SpecifiedByUser);
 
 		bool is_gles =
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_OpenGLES_Latest) ||
+					kEngine_Feature_Renderer_OpenGLES_Latest) ||
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_OpenGLES_SpecifiedByUser);
+					kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser);
 
 		if (is_gl)
 		{
@@ -135,17 +135,17 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 			switch (renderer)
 			{
 			case Core::eEngineFeatureRenderer::
-				kEngine_Render_Renderer_OpenGLES_SpecifiedByUser:
+				kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser:
 			{
 				KOTEK_ASSERT(false, "not implemented");
 				break;
 			}
-			case Core::eEngineFeatureRenderer::kEngine_Render_Renderer_Software:
+			case Core::eEngineFeatureRenderer::kEngine_Feature_Renderer_Software:
 			{
 				break;
 			}
 			case Core::eEngineFeatureRenderer::
-				kEngine_Render_Renderer_Vulkan_SpecifiedByUser:
+				kEngine_Feature_Renderer_Vulkan_SpecifiedByUser:
 			{
 #ifdef KOTEK_USE_RENDER_VULKAN
 				const auto& enum_vk_versions =
@@ -164,7 +164,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 				break;
 			}
 			case Core::eEngineFeatureRenderer::
-				kEngine_Render_Renderer_OpenGL_SpecifiedByUser:
+				kEngine_Feature_Renderer_OpenGL_SpecifiedByUser:
 			{
 				const auto& enum_gl_versions =
 					p_engine_config->GetFallbackRendererVersions();
@@ -181,7 +181,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 				break;
 			}
 			case Core::eEngineFeatureRenderer::
-				kEngine_Render_Renderer_DirectX_SpecifiedByUser:
+				kEngine_Feature_Renderer_DirectX_SpecifiedByUser:
 			{
 				const auto& enum_dx_versions =
 					p_engine_config->GetFallbackRendererVersions();
@@ -246,27 +246,27 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 		// TODO: finish for all renderers
 		bool is_gl =
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_OpenGL_Latest) ||
+					kEngine_Feature_Renderer_OpenGL_Latest) ||
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_OpenGL_SpecifiedByUser);
+					kEngine_Feature_Renderer_OpenGL_SpecifiedByUser);
 
 		bool is_vk =
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_Vulkan_Latest) ||
+					kEngine_Feature_Renderer_Vulkan_Latest) ||
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_Vulkan_SpecifiedByUser);
+					kEngine_Feature_Renderer_Vulkan_SpecifiedByUser);
 
 		bool is_dx =
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_DirectX_Latest) ||
+					kEngine_Feature_Renderer_DirectX_Latest) ||
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_DirectX_SpecifiedByUser);
+					kEngine_Feature_Renderer_DirectX_SpecifiedByUser);
 
 		bool is_gles =
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_OpenGLES_Latest) ||
+					kEngine_Feature_Renderer_OpenGLES_Latest) ||
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
-					kEngine_Render_Renderer_OpenGLES_SpecifiedByUser);
+					kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser);
 
 		if (is_gl)
 		{

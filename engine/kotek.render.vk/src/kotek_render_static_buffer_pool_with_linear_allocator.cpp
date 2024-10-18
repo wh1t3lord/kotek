@@ -94,7 +94,7 @@ namespace Kotek
 			}
 
 			bool ktkRenderStaticBufferPool_LinearAllocator::AllocBuffer(
-				ktk::entity_t entity_id, ktk::uint32_t number_of_elements,
+				ktk::uint32_t entity_id, ktk::uint32_t number_of_elements,
 				ktk::uint32_t stride_in_bytes, void** p_data,
 				VkDescriptorBufferInfo* p_out) noexcept
 			{
@@ -105,7 +105,7 @@ namespace Kotek
 			}
 
 			bool ktkRenderStaticBufferPool_LinearAllocator::Dealloc(
-				ktk::entity_t entity_id) noexcept
+				ktk::uint32_t entity_id) noexcept
 			{
 				if (this->m_entities_offset.find(entity_id) ==
 					this->m_entities_offset.end())
@@ -134,7 +134,7 @@ namespace Kotek
 			}
 
 			bool ktkRenderStaticBufferPool_LinearAllocator::AllocBuffer(
-				ktk::entity_t entity_id, ktk::uint32_t size, void** p_data,
+				ktk::uint32_t entity_id, ktk::uint32_t size, void** p_data,
 				VkDescriptorBufferInfo* p_out) noexcept
 			{
 				if (this->m_entities_offset.find(entity_id) !=
