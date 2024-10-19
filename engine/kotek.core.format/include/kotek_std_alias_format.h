@@ -160,14 +160,16 @@ static_cstring<Size> static_format(
 	const cstring_view& text, Args&&... args) noexcept
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	const cstring& data =
-		std::vformat(text.data(), std::make_format_args(args...));
+	static_cstring<Size> buffer{};
+
+	std::vformat_to(std::back_insert_iterator{buffer}, text,
+		std::make_format_args(args...));
+
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
-	const auto& data =
-		fmt::vformat(text.data(), fmt::make_format_args(args...));
+	#error provide implementation
 #endif
 
-	return static_cstring<Size>(data.begin(), data.end());
+	return buffer;
 }
 
 KOTEK_END_NAMESPACE_KTK

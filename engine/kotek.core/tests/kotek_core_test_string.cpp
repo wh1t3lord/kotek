@@ -37,6 +37,12 @@ TEST(String, static_format_exact_size_without_terminated_null)
 	EXPECT_TRUE(str == "12");
 }
 
+TEST(String, static_format_wrong_size_2) 
+{
+	auto str = kun_ktk static_format<1>("{} {}", 13, 14);
+	EXPECT_FALSE(str == "13 14");
+}
+
 	#endif
 #endif
 
