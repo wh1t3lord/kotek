@@ -21,7 +21,7 @@
 
 	#ifdef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
 template <>
-struct std::formatter<Kotek::ktk::ustring, char>
+struct std::formatter<kun_kotek kun_ktk ustring, char>
 {
 	template <typename ParseContext>
 	constexpr inline auto parse(ParseContext& ctx)
@@ -29,7 +29,7 @@ struct std::formatter<Kotek::ktk::ustring, char>
 		return ctx.begin();
 	}
 
-	inline auto format(Kotek::ktk::ustring const& str, auto& ctx) const
+	inline auto format(kun_kotek kun_ktk ustring const& str, auto& ctx) const
 	{
 		#ifdef KOTEK_USE_UNICODE
 		return std::format_to(
@@ -49,8 +49,7 @@ struct std::formatter<ktk_filesystem_path, char>
 		return ctx.begin();
 	}
 
-	inline auto format(
-		ktk_filesystem_path const& str, auto& ctx) const
+	inline auto format(ktk_filesystem_path const& str, auto& ctx) const
 	{
 		return std::format_to(ctx.out(), "{}",
 			reinterpret_cast<const char*>(str.u8string().c_str()));
@@ -60,7 +59,7 @@ struct std::formatter<ktk_filesystem_path, char>
 	#endif
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 template <>
-struct fmt::formatter<Kotek::ktk::ustring, char>
+struct fmt::formatter<kun_kotek kun_ktk ustring, char>
 {
 	template <typename ParseContext>
 	constexpr inline auto parse(ParseContext& ctx)
@@ -69,7 +68,7 @@ struct fmt::formatter<Kotek::ktk::ustring, char>
 	}
 
 	template <typename FormatContext>
-	inline auto format(Kotek::ktk::ustring const& str, FormatContext& ctx)
+	inline auto format(kun_kotek kun_ktk ustring const& str, FormatContext& ctx)
 	{
 	#ifdef KOTEK_USE_UNICODE
 		return fmt::format_to(
@@ -81,7 +80,7 @@ struct fmt::formatter<Kotek::ktk::ustring, char>
 };
 
 template <>
-struct fmt::formatter<Kotek::ktk::filesystem::path, char>
+struct fmt::formatter<kun_kotek kun_ktk filesystem::path, char>
 {
 	template <typename ParseContext>
 	constexpr inline auto parse(ParseContext& ctx)
@@ -91,10 +90,10 @@ struct fmt::formatter<Kotek::ktk::filesystem::path, char>
 
 	template <typename FormatContext>
 	inline auto format(
-		Kotek::ktk::filesystem::path const& str, FormatContext& ctx)
+		kun_kotek kun_ktk filesystem::path const& str, FormatContext& ctx)
 	{
-		return fmt::format_to(
-			ctx.out(), u8"{}", Kotek::ktk::ustring(str.u8string().c_str()));
+		return fmt::format_to(ctx.out(), u8"{}",
+			kun_kotek kun_ktk ustring(str.u8string().c_str()));
 	}
 };
 #else
@@ -127,33 +126,48 @@ KOTEK_BEGIN_NAMESPACE_KTK
 #ifndef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
 	#if KOTEK_USE_STRING_CONFIGURATION_CHAR_TYPE != 1
 template <typename... Args>
-ktk::cstring format(const ktk::ustring& text, Args&&... args) noexcept
+cstring format(const ustring_view& text, Args&&... args) noexcept
 {
 		#ifdef KOTEK_USE_PLATFORM_WINDOWS
-	const auto& data = std::vformat(reinterpret_cast<const char*>(text.c_str()),
+	const auto& data = std::vformat(reinterpret_cast<const char*>(text.data()),
 		std::make_format_args(args...));
 		#elif defined(KOTEK_USE_PLATFORM_LINUX)
-	const auto& data = fmt::vformat(reinterpret_cast<const char*>(text.c_str()),
+	const auto& data = fmt::vformat(reinterpret_cast<const char*>(text.data()),
 		fmt::make_format_args(args...));
 		#endif
 
-	return ktk::cstring(data.begin(), data.end());
+	return cstring(data.begin(), data.end());
 }
 	#endif
 #endif
 
 template <typename... Args>
-ktk::cstring format(const ktk::cstring& text, Args&&... args) noexcept
+cstring format(const cstring_view& text, Args&&... args) noexcept
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	const auto& data =
-		std::vformat(text.c_str(), std::make_format_args(args...));
+	const cstring& data =
+		std::vformat(text.data(), std::make_format_args(args...));
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 	const auto& data =
-		fmt::vformat(text.c_str(), fmt::make_format_args(args...));
+		fmt::vformat(text.data(), fmt::make_format_args(args...));
 #endif
 
-	return ktk::cstring(data.begin(), data.end());
+	return cstring(data.begin(), data.end());
+}
+
+template <size_t Size = 64, typename... Args>
+static_cstring<Size> static_format(
+	const cstring_view& text, Args&&... args) noexcept
+{
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	const cstring_view& data =
+		std::vformat(text.data(), std::make_format_args(args...));
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+	const auto& data =
+		fmt::vformat(text.data(), fmt::make_format_args(args...));
+#endif
+
+	return static_cstring<Size>(data.begin(), data.end());
 }
 
 KOTEK_END_NAMESPACE_KTK

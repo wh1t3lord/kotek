@@ -11,11 +11,12 @@ bool RegisterCommands(ktkMainManager* p_manager) noexcept
 void RegisterAllTests(void)
 {
 #ifdef KOTEK_USE_TESTS
-	RegisterTests_String_ForModule_Core();
+	RegisterTests_String_ForModule_Containers_String();
 	RegisterTests_Filesystem_ForModule_Core();
 	RegisterTests_Math_ForModule_Core();
 	RegisterTests_Translation_ForModule_Enum_Core();
 	RegisterTests_Json_ForModule_Core();
+	RegisterTests_String_ForModule_Core();
 #endif
 }
 

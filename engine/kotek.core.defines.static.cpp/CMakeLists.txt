@@ -1071,7 +1071,7 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 
 	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
 	"
-		#define KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(your_type) inline your_type operator|=(your_type left, your_type right) { return your_type(left|right);} inline your_type operator&=(your_type left, your_type right) { return your_type(left & right); } inline your_type operator&=(your_type left, int right) { return your_type(left & right); } inline your_type operator&=(your_type left, unsigned int right) { return your_type(left & right); }
+		#define KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(your_type) inline your_type& operator|=(your_type& left, your_type right) { return left = your_type(left|right);} inline your_type& operator&=(your_type& left, your_type right) { return left = your_type(left & right); } inline your_type& operator&=(your_type& left, int right) { return left = your_type(left & right); } inline your_type& operator&=(your_type& left, unsigned int right) { return left = your_type(left & right); }
 	")
 
 	if ("${KOTEK_STRING_CONFIGURATION_CHAR_TYPE}" STREQUAL "1")

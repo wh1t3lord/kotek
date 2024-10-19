@@ -52,11 +52,12 @@ bool SerializeModule_Core(ktkMainManager* p_manager);
 bool DeserializeModule_Core(ktkMainManager* p_manager);
 bool ShutdownModule_Core(ktkMainManager* p_manager);
 
-void RegisterTests_String_ForModule_Core(void);
+void RegisterTests_String_ForModule_Containers_String(void);
 void RegisterTests_Filesystem_ForModule_Core(void);
 void RegisterTests_Math_ForModule_Core(void);
 void RegisterTests_Translation_ForModule_Enum_Core(void);
 void RegisterTests_Json_ForModule_Core(void);
+void RegisterTests_String_ForModule_Core(void);
 void RegisterAllTests(void);
 
 KOTEK_END_NAMESPACE_CORE

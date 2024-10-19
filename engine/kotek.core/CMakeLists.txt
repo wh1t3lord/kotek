@@ -40,7 +40,9 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON")
 	message("[${PROJECT_NAME}]: adding tests for runtime in project ${PROJECT_NAME}")
 	set(to_include_tests 
 		"tests/kotek_core_test_filesystem.cpp"
-		"tests/kotek_core_test_json.cpp")
+		"tests/kotek_core_test_json.cpp"
+		"tests/kotek_core_test_string.cpp"
+	)
 elseif("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "OFF")
 	# TODO: add support for own projects for unit testing
 	message("[${PROJECT_NAME}]: creating test projects for project ${PROJECT_NAME}")
