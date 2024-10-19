@@ -28,6 +28,13 @@ TEST(String, static_format_custom_size)
 TEST(String, static_format_wrong_size)
 {
 	auto str = kun_ktk static_format<1>("{}", 12);
+	EXPECT_FALSE(str == "12");
+}
+
+TEST(String, static_format_exact_size_without_terminated_null) 
+{
+	auto str = kun_ktk static_format<2>("{}", 12);
+	EXPECT_TRUE(str == "12");
 }
 
 	#endif

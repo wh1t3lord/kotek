@@ -160,7 +160,7 @@ static_cstring<Size> static_format(
 	const cstring_view& text, Args&&... args) noexcept
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	const cstring_view& data =
+	const cstring& data =
 		std::vformat(text.data(), std::make_format_args(args...));
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 	const auto& data =
