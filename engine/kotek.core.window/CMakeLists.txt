@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC
+	"include/kotek_window_splash.h"
+	"src/kotek_window_splash.cpp"
 	"include/kotek_core_window.h"
 	"src/main_core_window_dll.cpp")
 

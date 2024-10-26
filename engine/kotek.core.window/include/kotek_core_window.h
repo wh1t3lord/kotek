@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kotek.core.window.glfw/include/kotek_core_window_glfw.h>
+#include "kotek_window_splash.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE

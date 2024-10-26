@@ -5,13 +5,16 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+/*
+* TODO: provide complex implementation when is needed. Mostly splash + main is enough for general purpose
+*/
 class ktkWindowManager : public ktkIWindowManager
 {
 public:
 	ktkWindowManager(void);
 	~ktkWindowManager(void);
 
-	void Initialize(ktkIWindow* p_active_window) override;
+	void Initialize(void) override;
 	void Shutdown(void) override;
 
 	void ActiveWindow_PollEvents(void) override;
@@ -23,8 +26,15 @@ public:
 	void ActiveWindow_MakeContextCurrent(void) noexcept override;
 	ktkIWindow* Get_ActiveWindow(void) const noexcept override;
 
+	ktkIWindowSplash* Get_ActiveWindowSplash(void) const noexcept override;
+
+	void Set_ActiveWindow(ktkIWindow* p_window) noexcept override;
+	void Set_ActiveWindowSplash(
+		ktkIWindowSplash* p_window) noexcept override;
+
 private:
 	ktkIWindow* m_p_active_window;
+	ktkIWindowSplash* m_p_active_splash;
 };
 
 KOTEK_END_NAMESPACE_CORE

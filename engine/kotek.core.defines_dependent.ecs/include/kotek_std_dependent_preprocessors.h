@@ -46,4 +46,6 @@ private:                                                                     \
 	inline static Kotek::ktk::cstring m_component_name = #YourClass;         \
 	inline static Kotek::ktk::size_t m_component_name_hash =                 \
 		Kotek::ktk::hash<Kotek::ktk::cstring>{}(m_component_name);           \
+	inline static Kotek::ktk::uint8_t m_component_type =                     \
+		kComponentType##YourClass;                                           \
 	bool m_is_enabled = true;

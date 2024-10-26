@@ -7,8 +7,16 @@ KOTEK_BEGIN_NAMESPACE_CORE
 bool InitializeModule_Core_Window_GLFW(ktkMainManager* p_manager)
 {
 #ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
-	p_manager->Get_WindowManager()->Initialize(new ktkWindow());
+	if (p_manager)
+	{
+		ktkIWindowManager* p_manager_window = p_manager->Get_WindowManager();
+		if (p_manager_window)
+		{
+			p_manager_window->Set_ActiveWindow(new ktkWindow());
+		}
+	}
 #endif
+
 	return true;
 }
 

@@ -316,6 +316,31 @@ namespace Engine
 		// InitializeStage, InitializeStage only initializes and validates and
 		// does nothing with write and read operations
 
+		std::thread thread_splash(
+			[p_main_manager]()
+			{
+				kun_kotek kun_core ktkIWindowManager* p_manager =
+					p_main_manager->Get_WindowManager();
+
+				if (p_manager)
+				{
+					kun_kotek kun_core ktkIWindowSplash* p_window =
+						p_manager
+							->Get_ActiveWindowSplash();
+
+					if (p_window)
+					{
+						if (!p_window->Is_Initialized())	
+						{
+							p_window->Create(-1, -1, nullptr, nullptr);
+						}
+
+						p_window->Update();
+					}
+				}
+			});
+		thread_splash.detach();
+
 		Deserialize_Engine(p_main_manager);
 
 		// TODO: restore when you implement ImGui
@@ -347,8 +372,7 @@ namespace Engine
 		testing::InitGoogleTest(
 			&argc, p_main_manager->Get_EngineConfig()->GetARGV());
 
-		auto status =
-			RUN_ALL_TESTS();
+		auto status = RUN_ALL_TESTS();
 		KOTEK_ASSERT(status == 0, "unit tests failed!");
 		KOTEK_MESSAGE("[UNIT TESTING]");
 	#endif

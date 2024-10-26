@@ -3,13 +3,15 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkWindowManager::ktkWindowManager(void) : m_p_active_window{} {}
+ktkWindowManager::ktkWindowManager(void) :
+	m_p_active_window{}, m_p_active_splash{}
+{
+}
 
 ktkWindowManager::~ktkWindowManager(void) {}
 
-void ktkWindowManager::Initialize(ktkIWindow* p_active_window)
+void ktkWindowManager::Initialize()
 {
-	this->m_p_active_window = p_active_window;
 }
 
 void ktkWindowManager::Shutdown(void)
@@ -20,41 +22,79 @@ void ktkWindowManager::Shutdown(void)
 		delete this->m_p_active_window;
 		this->m_p_active_window = nullptr;
 	}
+
+	if (this->m_p_active_splash)
+	{
+		delete this->m_p_active_splash;
+		this->m_p_active_splash = nullptr;
+	}
 }
 
 void ktkWindowManager::ActiveWindow_PollEvents(void)
 {
-	this->m_p_active_window->PollEvents();
+	if (this->m_p_active_window)
+		this->m_p_active_window->PollEvents();
 }
 
 void* ktkWindowManager::ActiveWindow_GetHandle(void) const noexcept
 {
-	return this->m_p_active_window->GetHandle();
+	if (this->m_p_active_window)
+		return this->m_p_active_window->GetHandle();
+
+	return nullptr;
 }
 
 int ktkWindowManager::ActiveWindow_GetHeight(void) const noexcept
 {
-	return this->m_p_active_window->GetHeight();
+	if (this->m_p_active_window)
+		return this->m_p_active_window->GetHeight();
+
+	return -1;
 }
 
 int ktkWindowManager::ActiveWindow_GetWidth(void) const noexcept
 {
-	return this->m_p_active_window->GetWidth();
+	if (this->m_p_active_window)
+		return this->m_p_active_window->GetWidth();
+
+	return -1;
 }
 
 bool ktkWindowManager::ActiveWindow_ShouldToClose(void)
 {
-	return this->m_p_active_window->Is_NeedToClose();
+	if (this->m_p_active_window)
+		return this->m_p_active_window->Is_NeedToClose();
+
+	return true;
 }
 
 void ktkWindowManager::ActiveWindow_MakeContextCurrent(void) noexcept
 {
-	this->m_p_active_window->MakeContextCurrent();
+	if (this->m_p_active_window)
+		this->m_p_active_window->MakeContextCurrent();
 }
 
 ktkIWindow* ktkWindowManager::Get_ActiveWindow(void) const noexcept
 {
 	return this->m_p_active_window;
+}
+
+ktkIWindowSplash* ktkWindowManager::Get_ActiveWindowSplash(void) const noexcept
+{
+	return this->m_p_active_splash;
+}
+
+void ktkWindowManager::Set_ActiveWindow(ktkIWindow* p_window) noexcept 
+{
+	if (!this->m_p_active_window)
+		this->m_p_active_window = p_window;
+}
+
+void ktkWindowManager::Set_ActiveWindowSplash(
+	ktkIWindowSplash* p_window) noexcept
+{
+	if (!this->m_p_active_splash)
+		this->m_p_active_splash = p_window;
 }
 
 KOTEK_END_NAMESPACE_CORE

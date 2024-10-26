@@ -8,6 +8,8 @@ bool InitializeModule_Core_Window_Manager(ktkMainManager* p_manager)
 	p_manager->Set_WindowManager(new ktkWindowManager());
 	InitializeModule_Core_Window(p_manager);
 
+	p_manager->Get_WindowManager()->Initialize();
+
 	return true;
 }
 
