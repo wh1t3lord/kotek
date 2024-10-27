@@ -406,7 +406,7 @@ namespace Engine
 		return true;
 	}
 
-	bool ExecuteEngine(Core::ktkMainManager* p_main_manager)
+	bool ExecuteEngine(kun_core ktkMainManager* p_main_manager)
 	{
 		if (!p_main_manager)
 			return false;
@@ -421,7 +421,7 @@ namespace Engine
 		return true;
 	}
 
-	bool ShutdownEngine(Core::ktkMainManager* p_main_manager)
+	bool ShutdownEngine(kun_core ktkMainManager* p_main_manager)
 	{
 		if (!p_main_manager)
 			return false;
@@ -437,9 +437,9 @@ namespace Engine
 
 		Serialize_Engine(p_main_manager);
 
-		Game::ShutdownModule_Game(p_main_manager);
-		UI::ShutdownModule_UI(p_main_manager);
-		Core::ShutdownModule_Core(p_main_manager);
+		kun_game ShutdownModule_Game(p_main_manager);
+		kun_ui ShutdownModule_UI(p_main_manager);
+		kun_core ShutdownModule_Core(p_main_manager);
 
 		return true;
 	}
