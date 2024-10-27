@@ -4,12 +4,15 @@
 #include "../include/kotek_render_swapchain.h"
 #include <kotek.render.gl/include/kotek_render_resource_manager.h>
 #include <kotek.render.gl/include/offsetAllocator.hpp>
+#include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
-bool InitializeModule_Render_ANGLE_GLES23(Core::ktkMainManager* p_main_manager,
-	Core::eEngineSupportedRenderer version)
+bool InitializeModule_Render_ANGLE_GLES23(
+	kun_kotek kun_core ktkMainManager* p_main_manager,
+	kun_kotek kun_core eEngineSupportedRenderer version)
 {
 	KOTEK_MESSAGE("render module is initialized");
 
@@ -26,6 +29,32 @@ bool InitializeModule_Render_ANGLE_GLES23(Core::ktkMainManager* p_main_manager,
 	p_main_manager->setRenderDevice(p_render_device);
 	p_main_manager->setRenderSwapchainManager(p_render_swapchain);
 	p_main_manager->SetRenderResourceManager(p_render_resource_manager);
+
+	if (p_main_manager->Get_Splash())
+	{
+		p_main_manager->Get_Splash()->Set_Text("loading complete!");
+		p_main_manager->Get_Splash()->Set_Progress(-1.0f);
+	}
+
+	kun_kotek kun_ktk mt::thread close_splash(
+		[p_main_manager]()
+		{
+			kun_kotek kun_ktk mt::this_thread::sleep_for(
+				kun_kotek kun_ktk chrono::milliseconds(1000));
+
+			if (p_main_manager)
+			{
+				kun_kotek kun_core ktkIWindowSplash* p_window =
+					p_main_manager->Get_Splash();
+
+				if (p_window)
+				{
+					p_window->Hide();
+				}
+			}
+		});
+
+	close_splash.detach();
 
 	p_main_manager->Get_WindowManager()->Get_ActiveWindow()->Initialize(
 		version);

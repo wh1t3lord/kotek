@@ -290,9 +290,7 @@ namespace Engine
 #endif
 	}
 
-	void PrintBoostVersion()
-	{
-	}
+	void PrintBoostVersion() {}
 
 	bool Serialize_Engine(Core::ktkMainManager* p_main_manager)
 	{
@@ -319,8 +317,11 @@ namespace Engine
 
 	bool InitializeEngine(Core::ktkMainManager* p_main_manager)
 	{
+		if (!p_main_manager)
+			return false;
+
 		PrintCompiler();
-		
+
 		kun_core ktkWindowSplash* p_window_splash =
 			new kun_core ktkWindowSplash();
 
@@ -348,7 +349,8 @@ namespace Engine
 			});
 		thread_splash.detach();
 
-		while (p_window_splash->Is_Initialized()==false || p_window_splash->Is_Show()==false)
+		while (p_window_splash->Is_Initialized() == false ||
+			p_window_splash->Is_Show() == false)
 		{
 		}
 
@@ -406,6 +408,9 @@ namespace Engine
 
 	bool ExecuteEngine(Core::ktkMainManager* p_main_manager)
 	{
+		if (!p_main_manager)
+			return false;
+
 #ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 		p_user_callback_update_game_library(p_main_manager);
 #elif defined(KOTEK_USE_DEVELOPMENT_TYPE_STATIC)
@@ -418,6 +423,18 @@ namespace Engine
 
 	bool ShutdownEngine(Core::ktkMainManager* p_main_manager)
 	{
+		if (!p_main_manager)
+			return false;
+
+		kun_kotek kun_core ktkIWindowSplash* p_window =
+			p_main_manager->Get_Splash();
+
+		if (p_window)
+		{
+			delete p_window;
+			p_main_manager->Set_Splash(nullptr);
+		}
+
 		Serialize_Engine(p_main_manager);
 
 		Game::ShutdownModule_Game(p_main_manager);

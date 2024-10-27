@@ -110,8 +110,6 @@ int ktkWindowSplash::Get_Height(void) const noexcept
 
 void ktkWindowSplash::Show(void) noexcept
 {
-	m_is_show = true;
-
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
 	if (this->m_p_private_impl)
 	{
@@ -130,8 +128,6 @@ void ktkWindowSplash::Show(void) noexcept
 
 void ktkWindowSplash::Hide(void) noexcept
 {
-	m_is_show = false;
-
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
 	if (this->m_p_private_impl)
 	{
@@ -141,6 +137,7 @@ void ktkWindowSplash::Hide(void) noexcept
 		if (p_impl)
 		{
 			ShowWindow(p_impl->m_p_hwnd, SW_HIDE);
+			p_impl->m_is_show = false;
 		}
 	}
 #else
@@ -175,6 +172,9 @@ void ktkWindowSplash::Create(int width, int height,
 void ktkWindowSplash::Set_Text(
 	const char* p_string, int* p_color_rgb_array) noexcept
 {
+	if (this->m_current_progress >= this->m_max_progress)
+		return;
+
 	if (p_string)
 	{
 		memset(this->m_p_label, 0, sizeof(this->m_p_label));
@@ -212,7 +212,7 @@ void ktkWindowSplash::Set_Progress(float progress) noexcept
 {
 	if (progress < 0.0f)
 	{
-		progress = this->m_max_progress;
+		this->m_current_progress = this->m_max_progress;
 	}
 
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
@@ -255,10 +255,20 @@ void ktkWindowSplash::Set_Progress(void) noexcept
 void ktkWindowSplash::Update() noexcept
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	MSG msg;
 
 	ktkPrivateImpl* p_impl =
 		static_cast<ktkPrivateImpl*>(this->m_p_private_impl);
+
+	if (p_impl)
+	{
+		if (!p_impl->m_is_show)
+		{
+			return;
+		}
+	}
+
+
+	MSG msg;
 
 	while (true)
 	{
@@ -266,6 +276,14 @@ void ktkWindowSplash::Update() noexcept
 		{
 			TranslateMessage(&msg);
 			DispatchMessageA(&msg);
+		}
+
+		if (p_impl)
+		{
+			if (!p_impl->m_is_show)
+			{
+				break;
+			}
 		}
 	}
 #else
@@ -283,7 +301,8 @@ bool ktkWindowSplash::Is_Initialized(void) const noexcept
 
 		if (p_impl)
 		{
-			return (p_impl->m_p_hwnd && p_impl->m_p_progressbar) || (p_impl->m_is_failed_to_initialize);
+			return (p_impl->m_p_hwnd && p_impl->m_p_progressbar) ||
+				(p_impl->m_is_failed_to_initialize);
 		}
 #else
 #endif
@@ -529,7 +548,8 @@ void ktkWindowSplash::Get_DisplaySize(int* p_width, int* p_height)
 #endif
 }
 
-void ktkWindowSplash::Failed(){
+void ktkWindowSplash::Failed()
+{
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
 	ktkPrivateImpl* p_impl =
 		static_cast<ktkPrivateImpl*>(this->m_p_private_impl);
