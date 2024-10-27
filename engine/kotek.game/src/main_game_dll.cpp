@@ -39,6 +39,12 @@ namespace Game
 
 	bool InitializeModule_Game(Core::ktkMainManager* p_main_manager)
 	{
+		if (p_main_manager->Get_Splash())
+		{
+			p_main_manager->Get_Splash()->Set_Text("[game]: init");
+			p_main_manager->Get_Splash()->Set_Progress();
+		}
+
 #ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 		auto path_to_system_json =
 			p_main_manager->GetFileSystem()->GetFolderByEnum(
@@ -286,7 +292,6 @@ namespace Engine
 
 	void PrintBoostVersion()
 	{
-		BOOST_USE_WINAPI_VERSION;
 	}
 
 	bool Serialize_Engine(Core::ktkMainManager* p_main_manager)
@@ -298,10 +303,16 @@ namespace Engine
 		return true;
 	}
 
-	bool Deserialize_Engine(Core::ktkMainManager* p_main_manager)
+	bool Deserialize_Engine(Core::ktkMainManager* p_manager)
 	{
+		if (p_manager->Get_Splash())
+		{
+			p_manager->Get_Splash()->Set_Text("[engine]: deserialize");
+			p_manager->Get_Splash()->Set_Progress();
+		}
+
 		// TODO: remember status from every calling
-		Core::DeserializeModule_Core(p_main_manager);
+		Core::DeserializeModule_Core(p_manager);
 
 		return true;
 	}
@@ -309,30 +320,26 @@ namespace Engine
 	bool InitializeEngine(Core::ktkMainManager* p_main_manager)
 	{
 		PrintCompiler();
+		
+		kun_core ktkWindowSplash* p_window_splash =
+			new kun_core ktkWindowSplash();
 
-		Core::InitializeModule_Core(p_main_manager);
+		p_main_manager->Set_Splash(p_window_splash);
 
-		// TODO: must gurantee that write/read operations are not in
-		// InitializeStage, InitializeStage only initializes and validates and
-		// does nothing with write and read operations
-
-		std::thread thread_splash(
+		kun_kotek kun_ktk mt::thread thread_splash(
 			[p_main_manager]()
 			{
-				kun_kotek kun_core ktkIWindowManager* p_manager =
-					p_main_manager->Get_WindowManager();
-
-				if (p_manager)
+				if (p_main_manager)
 				{
 					kun_kotek kun_core ktkIWindowSplash* p_window =
-						p_manager
-							->Get_ActiveWindowSplash();
+						p_main_manager->Get_Splash();
 
 					if (p_window)
 					{
-						if (!p_window->Is_Initialized())	
+						if (!p_window->Is_Initialized())
 						{
-							p_window->Create(-1, -1, nullptr, nullptr);
+							float max_progress = 150.0f;
+							p_window->Create(-1, -1, nullptr, &max_progress);
 						}
 
 						p_window->Update();
@@ -340,6 +347,22 @@ namespace Engine
 				}
 			});
 		thread_splash.detach();
+
+		while (p_window_splash->Is_Initialized()==false || p_window_splash->Is_Show()==false)
+		{
+		}
+
+		if (p_main_manager->Get_Splash())
+		{
+			p_main_manager->Get_Splash()->Set_Text("init...");
+			p_main_manager->Get_Splash()->Set_Progress();
+		}
+
+		Core::InitializeModule_Core(p_main_manager);
+
+		// TODO: must gurantee that write/read operations are not in
+		// InitializeStage, InitializeStage only initializes and validates and
+		// does nothing with write and read operations
 
 		Deserialize_Engine(p_main_manager);
 

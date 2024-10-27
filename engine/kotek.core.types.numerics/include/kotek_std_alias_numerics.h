@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstdint>
+#include <chrono>
 
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 
@@ -25,6 +26,9 @@ using float_t = float;
 using double_t = double;
 using long_double_t = long double;
 
+namespace chrono = std::chrono;
+namespace chrono_literals = std::chrono_literals;
+
 KOTEK_END_NAMESPACE_KTK
 
 using uint64_t = KUN_KOTEK KUN_KTK uint64_t;
@@ -43,5 +47,7 @@ using float_t = KUN_KOTEK KUN_KTK float_t;
 using double_t = KUN_KOTEK KUN_KTK double_t;
 using long_double_t = KUN_KOTEK KUN_KTK long_double_t;
 
+namespace chrono = KUN_KOTEK KUN_KTK chrono;
+namespace chrono_literals = KUN_KOTEK KUN_KTK chrono_literals;
 
 KOTEK_END_NAMESPACE_KOTEK

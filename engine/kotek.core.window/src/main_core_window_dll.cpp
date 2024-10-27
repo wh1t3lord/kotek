@@ -1,5 +1,6 @@
 #include "../include/kotek_core_window.h"
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -7,17 +8,13 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Window(ktkMainManager* p_manager)
 {
-	InitializeModule_Core_Window_GLFW(p_manager);
-
-	if (p_manager)
+	if (p_manager->Get_Splash())
 	{
-		ktkIWindowManager* p_manager_window = p_manager->Get_WindowManager();
-		if (p_manager_window)
-		{
-			p_manager_window->Set_ActiveWindowSplash(
-				new ktkWindowSplash());
-		}
+		p_manager->Get_Splash()->Set_Text("[core]: init [window]");
+		p_manager->Get_Splash()->Set_Progress();
 	}
+
+	InitializeModule_Core_Window_GLFW(p_manager);
 
 	return true;
 }

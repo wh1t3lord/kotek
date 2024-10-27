@@ -7,6 +7,12 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Resource_Manager_Loader(ktkMainManager* p_manager)
 {
+	if (p_manager->Get_Splash())
+	{
+		p_manager->Get_Splash()->Set_Text("[core]: init [resource manager][loader]");
+		p_manager->Get_Splash()->Set_Progress();
+	}
+
 	return true;
 }
 

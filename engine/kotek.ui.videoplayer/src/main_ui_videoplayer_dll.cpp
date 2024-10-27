@@ -1,10 +1,18 @@
 #include "../include/kotek_ui_videoplayer.h"
+#include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
 bool InitializeModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
 {
+	if (p_main_manager->Get_Splash())
+	{
+		p_main_manager->Get_Splash()->Set_Text("[ui]: init [videoplayer]");
+		p_main_manager->Get_Splash()->Set_Progress();
+	}
+
 	InitializeModule_UI_VideoPlayer_AVIF(p_main_manager);
 
 	return true;

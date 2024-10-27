@@ -40,7 +40,7 @@ namespace memory
 	void* expand(void* pointer, ktk::size_t newsize);
 	char* strndup(const char* str, size_t n);
 	void* memcpy(void* p_dest, void* p_src, ktk::size_t count);
-
+	void* memcpy(void* p_dest, const void* p_src, ktk::size_t count);
 
 } // namespace memory
 

@@ -1,4 +1,7 @@
 #include "../include/kotek_core_containers_multithreading_semaphore.h"
+#include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
+
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -6,6 +9,12 @@ KOTEK_BEGIN_NAMESPACE_CORE
 bool InitializeModule_Core_Containers_MultiThreading_Semaphore(
 	ktkMainManager* p_manager)
 {
+	if (p_manager->Get_Splash())
+	{
+		p_manager->Get_Splash()->Set_Text("[core]: init [containers][multithreading][semaphore]");
+		p_manager->Get_Splash()->Set_Progress();
+	}
+
 	return true;
 }
 

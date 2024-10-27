@@ -1,5 +1,6 @@
 #include "../include/kotek_core_engine_config.h"
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 #include <kotek.core.filesystem/include/kotek_core_filesystem.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -7,6 +8,12 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 {
+	if (p_manager->Get_Splash())
+	{
+		p_manager->Get_Splash()->Set_Text("[core]: init [engine][config]");
+		p_manager->Get_Splash()->Set_Progress();
+	}
+
 	ktkEngineConfig* p_instance = new ktkEngineConfig();
 	p_instance->Initialize();
 
@@ -118,6 +125,12 @@ bool SerializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 
 bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 {
+	if (p_manager->Get_Splash())
+	{
+		p_manager->Get_Splash()->Set_Text("[core]: deserialize [engine][config]");
+		p_manager->Get_Splash()->Set_Progress();
+	}
+
 	auto* p_filesystem = p_manager->GetFileSystem();
 
 	KOTEK_ASSERT(p_filesystem,

@@ -1,4 +1,5 @@
 #include "../include/kotek_main_manager.h"
+#include <kotek.core.api/include/kotek_api.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -8,7 +9,7 @@ ktkMainManager::ktkMainManager(int argc, char** argv) :
 	m_p_manager_input{}, m_p_manager_render_device{},
 	m_p_manager_render_resource{}, m_p_manager_render_graph{},
 	m_p_manager_swapchain{}, m_p_manager_profiler{}, m_p_manager_window{},
-	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{}
+	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{}, m_p_splash{}
 {
 }
 
@@ -18,7 +19,8 @@ ktkMainManager::ktkMainManager() :
 	m_p_manager_input{}, m_p_manager_render_device{},
 	m_p_manager_render_resource{}, m_p_manager_render_graph{},
 	m_p_manager_swapchain{}, m_p_manager_profiler{}, m_p_manager_window{},
-	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{}
+	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{},
+	m_p_splash{}
 {
 }
 
@@ -157,6 +159,16 @@ ktkILogger* ktkMainManager::Get_Logger(void) const noexcept
 void ktkMainManager::Set_Logger(ktkILogger* p_logger) noexcept 
 {
 	this->m_p_logger = p_logger;
+}
+
+ktkIWindowSplash* ktkMainManager::Get_Splash(void) const noexcept 
+{
+	return this->m_p_splash;
+}
+
+void ktkMainManager::Set_Splash(ktkIWindowSplash* p_window) noexcept 
+{
+	this->m_p_splash = p_window;
 }
 
 void ktkMainManager::Initialize(void)

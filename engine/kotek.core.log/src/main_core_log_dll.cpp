@@ -1,5 +1,6 @@
 #include "../include/kotek_core_log.h"
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 
 #ifdef KOTEK_USE_LOG_LIBRARY_BOOST
 	#ifdef KOTEK_USE_BOOST_LIBRARY
@@ -88,6 +89,12 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 {
+	if (p_manager->Get_Splash())
+	{
+		p_manager->Get_Splash()->Set_Text("[core]: init [log]");
+		p_manager->Get_Splash()->Set_Progress();
+	}
+
 #ifdef KOTEK_USE_LOG_LIBRARY_BOOST
 	#ifdef KOTEK_USE_BOOST_LIBRARY
 	// TODO: filter messages when you pass type through cmake like

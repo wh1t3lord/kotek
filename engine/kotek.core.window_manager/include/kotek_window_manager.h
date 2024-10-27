@@ -26,15 +26,10 @@ public:
 	void ActiveWindow_MakeContextCurrent(void) noexcept override;
 	ktkIWindow* Get_ActiveWindow(void) const noexcept override;
 
-	ktkIWindowSplash* Get_ActiveWindowSplash(void) const noexcept override;
-
 	void Set_ActiveWindow(ktkIWindow* p_window) noexcept override;
-	void Set_ActiveWindowSplash(
-		ktkIWindowSplash* p_window) noexcept override;
 
 private:
 	ktkIWindow* m_p_active_window;
-	ktkIWindowSplash* m_p_active_splash;
 };
 
 KOTEK_END_NAMESPACE_CORE

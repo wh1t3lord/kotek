@@ -4,7 +4,7 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 ktkWindowManager::ktkWindowManager(void) :
-	m_p_active_window{}, m_p_active_splash{}
+	m_p_active_window{}
 {
 }
 
@@ -21,12 +21,6 @@ void ktkWindowManager::Shutdown(void)
 		this->m_p_active_window->Shutdown();
 		delete this->m_p_active_window;
 		this->m_p_active_window = nullptr;
-	}
-
-	if (this->m_p_active_splash)
-	{
-		delete this->m_p_active_splash;
-		this->m_p_active_splash = nullptr;
 	}
 }
 
@@ -79,22 +73,10 @@ ktkIWindow* ktkWindowManager::Get_ActiveWindow(void) const noexcept
 	return this->m_p_active_window;
 }
 
-ktkIWindowSplash* ktkWindowManager::Get_ActiveWindowSplash(void) const noexcept
-{
-	return this->m_p_active_splash;
-}
-
 void ktkWindowManager::Set_ActiveWindow(ktkIWindow* p_window) noexcept 
 {
 	if (!this->m_p_active_window)
 		this->m_p_active_window = p_window;
-}
-
-void ktkWindowManager::Set_ActiveWindowSplash(
-	ktkIWindowSplash* p_window) noexcept
-{
-	if (!this->m_p_active_splash)
-		this->m_p_active_splash = p_window;
 }
 
 KOTEK_END_NAMESPACE_CORE

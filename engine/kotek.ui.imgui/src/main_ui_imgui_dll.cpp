@@ -1,5 +1,6 @@
 #include "../include/kotek_ui_imgui.h"
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -7,6 +8,12 @@ KOTEK_BEGIN_NAMESPACE_UI
 
 bool InitializeModule_UI_IMGUI(Core::ktkMainManager* p_main_manager)
 {
+	if (p_main_manager->Get_Splash())
+	{
+		p_main_manager->Get_Splash()->Set_Text("[ui]: init [imgui]");
+		p_main_manager->Get_Splash()->Set_Progress();
+	}
+
 	p_main_manager->Set_ImguiWrapper(new UI::ktkImguiWrapper());
 
 	return true;

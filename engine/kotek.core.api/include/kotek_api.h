@@ -19,6 +19,7 @@
 #include <kotek.ui.imgui/include/imgui_impl_opengl3.h>
 
 #include "kotek_api_sdk.h"
+#include "kotek_api_no_std.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -1018,34 +1019,6 @@ public:
 		ktk::uint32_t entity_id) noexcept = 0;
 };
 
-class ktkIWindowSplash
-{
-public:
-	virtual ~ktkIWindowSplash(void) {}
-
-	virtual int Get_Width(void) const noexcept = 0;
-	virtual int Get_Height(void) const noexcept = 0;
-
-	virtual void Show(void) noexcept = 0;
-	virtual void Hide(void) noexcept = 0;
-
-	virtual void Create(int width, int height, unsigned char* p_raw_image_data,
-		float* p_max_progress) noexcept = 0;
-
-	virtual void Add_Text(float normalized_width, float normalized_height,
-		const char* p_string) noexcept = 0;
-
-	virtual void Set_Progress(
-		float progress, const char* p_string) noexcept = 0;
-
-	virtual bool Is_Initialized(void) const noexcept = 0;
-
-	/// @brief implements message loop for your window, supposed to be called in
-	/// separated thread because of purpose of window (splash - preview before
-	/// loading the main window)
-	virtual void Update() noexcept = 0;
-};
-
 class ktkIWindow
 {
 public:
@@ -1091,11 +1064,7 @@ public:
 	virtual void ActiveWindow_MakeContextCurrent(void) noexcept = 0;
 
 	virtual ktkIWindow* Get_ActiveWindow(void) const noexcept = 0;
-	virtual ktkIWindowSplash* Get_ActiveWindowSplash(void) const noexcept = 0;
-
 	virtual void Set_ActiveWindow(ktkIWindow* p_window) noexcept = 0;
-	virtual void Set_ActiveWindowSplash(
-		ktkIWindowSplash* p_window) noexcept = 0;
 };
 
 class ktkIGameUIManager

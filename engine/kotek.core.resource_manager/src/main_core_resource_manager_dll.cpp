@@ -16,6 +16,12 @@ bool InitializeModule_Core_Resource_Manager(ktkMainManager* p_manager)
 
 	//	p_manager->SetResourceManager(p_instance);
 
+	if (p_manager->Get_Splash())
+	{
+		p_manager->Get_Splash()->Set_Text("[core]: init [resource manager]");
+		p_manager->Get_Splash()->Set_Progress();
+	}
+
 	InitializeModule_Core_Resource_Manager_Loader(p_manager);
 	InitializeModule_Core_Resource_Manager_Saver(p_manager);
 

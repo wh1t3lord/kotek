@@ -1,10 +1,17 @@
 #include "../include/kotek_core_filesystem.h"
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 bool InitializeModule_Core_FileSystem(ktkMainManager* p_manager)
 {
+	if (p_manager->Get_Splash())
+	{
+		p_manager->Get_Splash()->Set_Text("[core]: init [filesystem]");
+		p_manager->Get_Splash()->Set_Progress();
+	}
+
 	InitializeModule_Core_FileSystem_File_Text(p_manager);
 
 	ktkFileSystem* p_instance = new ktkFileSystem();

@@ -1,6 +1,29 @@
 #pragma once
 
-#include <kotek.core.api/include/kotek_api.h>
+#include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+class ktkIProfiler;
+class ktkIFileSystem;
+class ktkIInput;
+class ktkIGameManager;
+class ktkIResourceManager;
+class ktkIRenderDevice;
+class ktkIRenderResourceManager;
+class ktkIRenderSwapchain;
+class ktkIRenderer;
+class ktkIEngineConfig;
+class ktkIWindowManager;
+class ktkIImguiWrapper;
+class ktkIGameUIManager;
+class ktkILogger;
+class ktkIWindowSplash;
+class ktkIRenderGraph;
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -59,6 +82,9 @@ public:
 	ktkILogger* Get_Logger(void) const noexcept;
 	void Set_Logger(ktkILogger* p_logger) noexcept;
 
+	ktkIWindowSplash* Get_Splash(void) const noexcept;
+	void Set_Splash(ktkIWindowSplash* p_window) noexcept;
+
 	void Initialize(void);
 	void Shutdown(void);
 
@@ -80,6 +106,7 @@ private:
 	ktkIImguiWrapper* m_p_manager_imgui_wrapper;
 	ktkIGameUIManager* m_p_game_ui_engine;
 	ktkILogger* m_p_logger;
+	ktkIWindowSplash* m_p_splash;
 };
 
 KOTEK_END_NAMESPACE_CORE

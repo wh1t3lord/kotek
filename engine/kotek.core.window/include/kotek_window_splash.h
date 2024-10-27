@@ -32,12 +32,21 @@ public:
 
 	void Create(int width, int height, unsigned char* p_raw_image_data,
 		float* p_max_progress) noexcept override;
-	void Add_Text(float normalized_width, float normalized_height,
-		const char* p_string) noexcept override;
-	void Set_Progress(float progress, const char* p_string) noexcept override;
+	void Set_Text(
+		const char* p_string, int* p_color_rgb_array=nullptr) noexcept override;
+	void Set_Progress(float progress) noexcept override;
+	void Set_Progress(void) noexcept override;
 	void Update() noexcept override;
 
 	bool Is_Initialized(void) const noexcept override;
+
+	const int* Get_TextColor(void) const noexcept;
+	float Get_TextOffsetWidth(void) const noexcept;
+	float Get_TextOffsetHeight(void) const noexcept;
+	const char* Get_Label(void) const noexcept;
+	bool Is_Show() const noexcept;
+
+	void* Get_Impl() const noexcept;
 
 private:
 	void Create_Window(int width, int height);
@@ -47,9 +56,11 @@ private:
 	void Create_MacOS();
 	void Create_Android();
 
-	void Center_Window(int width, int height);
+	void Center_Window(int width, int height, int& x, int& y);
 
 	void Get_DisplaySize(int* p_width, int* p_height);
+
+	void Failed();
 
 private:
 	bool m_is_show;
@@ -58,6 +69,10 @@ private:
 	float m_max_progress;
 	float m_current_progress;
 	void* m_p_private_impl;
+	float m_text_width;
+	float m_text_height;
+	int m_p_current_color_text[3];
+	char m_p_label[128];
 };
 
 KOTEK_END_NAMESPACE_CORE

@@ -8,6 +8,12 @@ KOTEK_BEGIN_NAMESPACE_UI
 
 bool InitializeModule_UI_RMLUI(Core::ktkMainManager* p_main_manager)
 {
+	if (p_main_manager->Get_Splash())
+	{
+		p_main_manager->Get_Splash()->Set_Text("[ui]: init [rmlui]");
+		p_main_manager->Get_Splash()->Set_Progress();
+	}
+
 #ifdef KOTEK_USE_RMLUI_LIBRARY
 	KOTEK_ASSERT(
 		p_main_manager, "you can't pass an invalid pointer to ktkMainManager");

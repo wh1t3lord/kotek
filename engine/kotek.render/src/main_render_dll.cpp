@@ -1,4 +1,6 @@
 #include "../include/kotek_render.h"
+#include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 
 #include <kotek.render.model/include/kotek_render_model.h>
 

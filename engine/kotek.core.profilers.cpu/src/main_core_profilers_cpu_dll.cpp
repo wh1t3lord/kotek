@@ -1,10 +1,19 @@
 #include "../include/kotek_core_profilers_cpu.h"
+#include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Profilers_CPU(ktkMainManager* p_manager)
 {
+	if (p_manager->Get_Splash())
+	{
+		p_manager->Get_Splash()->Set_Text("[core]: init [profilers][cpu]");
+		p_manager->Get_Splash()->Set_Progress();
+	}
+	
+
 	return true;
 }
 
