@@ -16,6 +16,7 @@ struct ktkPrivateImpl
 	HWND m_p_hwnd = NULL;
 	HWND m_p_progressbar = NULL;
 
+	bool m_is_shutdown = false;
 	bool m_is_show = false;
 	bool m_is_failed_to_initialize = false;
 };
@@ -138,6 +139,7 @@ void ktkWindowSplash::Hide(void) noexcept
 		{
 			ShowWindow(p_impl->m_p_hwnd, SW_HIDE);
 			p_impl->m_is_show = false;
+			p_impl->m_is_shutdown = true;
 		}
 	}
 #else
@@ -261,12 +263,11 @@ void ktkWindowSplash::Update() noexcept
 
 	if (p_impl)
 	{
-		if (!p_impl->m_is_show)
+		if (p_impl->m_is_shutdown)
 		{
 			return;
 		}
 	}
-
 
 	MSG msg;
 
@@ -281,6 +282,14 @@ void ktkWindowSplash::Update() noexcept
 		if (p_impl)
 		{
 			if (!p_impl->m_is_show)
+			{
+				if (IsWindowVisible(p_impl->m_p_hwnd))
+				{
+					p_impl->m_is_show = true;
+				}
+			}
+
+			if (p_impl->m_is_shutdown)
 			{
 				break;
 			}
@@ -483,8 +492,6 @@ void ktkWindowSplash::Create_Windows(int width, int height)
 
 			p_impl->m_p_progressbar = p_hwnd_progress_bar;
 		}
-
-		p_impl->m_is_show = true;
 	}
 #else
 	#error provide implementation
