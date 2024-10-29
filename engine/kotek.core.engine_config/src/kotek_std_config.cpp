@@ -145,10 +145,10 @@ void ktkEngineConfig::SetFeatureStatus(
 	eEngineSupportedRenderer version, bool status) noexcept
 {
 	if (status)
-		this->m_version_renderer = static_cast<ktk::enum_base_t>(version);
+		this->m_version_renderer = static_cast<kun_ktk enum_base_t>(version);
 	else
 		this->m_version_renderer =
-			static_cast<ktk::enum_base_t>(eEngineSupportedRenderer::kUnknown);
+			static_cast<kun_ktk enum_base_t>(eEngineSupportedRenderer::kUnknown);
 }
 
 void ktkEngineConfig::SetFeatureStatus(
@@ -199,7 +199,7 @@ eEngineSupportedRenderer ktkEngineConfig::GetRendererVersionEnum(
 	return static_cast<eEngineSupportedRenderer>(this->m_version_renderer);
 }
 
-ktk::enum_base_t ktkEngineConfig::GetRendererVersion(void) const noexcept
+kun_ktk enum_base_t ktkEngineConfig::GetRendererVersion(void) const noexcept
 {
 	return this->m_version_renderer;
 }
@@ -217,7 +217,7 @@ ktkEngineConfig::GetFallbackRendererVersions(void) const noexcept
 	return this->m_fallback_renderers_versions;
 }
 
-ktk::cstring ktkEngineConfig::GetRenderName(void) const noexcept
+kun_ktk cstring ktkEngineConfig::GetRenderName(void) const noexcept
 {
 	return helper::Translate_EngineSupportedRenderer(
 		this->GetRendererVersionEnum());
@@ -387,14 +387,14 @@ void ktkEngineConfig::SetARGV(char** p_char) noexcept
 }
 
 bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(
-	const ktk::cstring& your_argument) const noexcept
+	const kun_ktk cstring& your_argument) const noexcept
 {
 	/* TODO: delete this because it was for vector
 	return std::find_if(this->m_parsed_command_line_arguments.begin(),
 	           this->m_parsed_command_line_arguments.end(),
-	           [your_argument](const ktk::cstring& argument) -> bool
+	           [your_argument](const kun_ktk cstring& argument) -> bool
 	           {
-	               ktk::cstring_view wrapped_argument = your_argument.c_str();
+	               kun_ktk cstring_view wrapped_argument = your_argument.c_str();
 	               return argument == wrapped_argument;
 	           }) != this->m_parsed_command_line_arguments.end();*/
 
@@ -404,7 +404,7 @@ bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(
 
 bool ktkEngineConfig::IsUserSpecifiedValidRenderer(void) const noexcept
 {
-	ktk::size_t validation{0};
+	kun_ktk size_t validation{0};
 	for (const auto& argument : this->m_parsed_command_line_arguments)
 	{
 		if (argument.starts_with(KOTEK_TEXTU("--render_")))
@@ -487,7 +487,7 @@ eEngineSupportedRenderer ktkEngineConfig::GetRendererVersionFromCommandLine(
 
 	eEngineSupportedRenderer result{eEngineSupportedRenderer::kUnknown};
 
-	ktk::size_t validation{};
+	kun_ktk size_t validation{};
 
 	if (this->m_parsed_command_line_arguments.find(
 			kConsoleCommandArg_Render_Vulkan1_0) !=
@@ -657,7 +657,7 @@ void ktkEngineConfig::SetApplicationWorking(bool status) noexcept
 void ktkEngineConfig::Set_UserLibrary(
 	const ktk_filesystem_path& path_to_library) noexcept
 {
-	this->m_user_dll = ktk::dll::shared_library(path_to_library.c_str());
+	this->m_user_dll = kun_ktk dll::shared_library(path_to_library.c_str());
 }
 
 void* ktkEngineConfig::Get_UserLibrary(void) noexcept
@@ -666,17 +666,17 @@ void* ktkEngineConfig::Get_UserLibrary(void) noexcept
 }
 
 // TODO: finish this
-ktk::size_t ktkEngineConfig::Get_VideoMemoryTotal(void) const noexcept
+kun_ktk size_t ktkEngineConfig::Get_VideoMemoryTotal(void) const noexcept
 {
 	return 0;
 }
 
-ktk::size_t ktkEngineConfig::Get_VideoMemoryForInitialize(void) const noexcept
+kun_ktk size_t ktkEngineConfig::Get_VideoMemoryForInitialize(void) const noexcept
 {
 	return this->m_video_memory_for_initialize;
 }
 
-void ktkEngineConfig::Set_VideoMemoryForInitialize(ktk::size_t value) noexcept
+void ktkEngineConfig::Set_VideoMemoryForInitialize(kun_ktk size_t value) noexcept
 {
 	this->m_video_memory_for_initialize = value;
 }
@@ -691,7 +691,7 @@ void ktkEngineConfig::Parse_CommandLine(void) noexcept
 		this->m_argc <= KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT, "overflow! reduce or set bigger size of this constant KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT in cmake (because it is dynamically generated constant and will be overwritten after any changes of cmake scripts)");
 	#endif
 
-	this->m_parsed_command_line_arguments = ktk_unordered_set<ktk::cstring, KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT>(
+	this->m_parsed_command_line_arguments = ktk_unordered_set<kun_ktk cstring, KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT>(
 		this->m_argv, this->m_argv + this->m_argc);
 }
 

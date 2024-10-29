@@ -8,8 +8,7 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
-namespace mt
-{
+KOTEK_BEGIN_NAMESPACE_MT
 	template <typename Type>
 	class queue
 	{
@@ -58,17 +57,16 @@ namespace mt
 	template <typename Type, size_t Size>
 	using static_queue = etl::queue_mpmc_mutex<Type, Size>;
 #endif
-} // namespace mt
+KOTEK_END_NAMESPACE_MT
 
 KOTEK_END_NAMESPACE_KTK
 
-namespace mt
-{
+KOTEK_BEGIN_NAMESPACE_MT
 	template <typename Type>
-	using queue_t = KUN_KOTEK KUN_KTK mt::queue<Type>;
+	using queue_t = KUN_KOTEK KUN_KTK KUN_MT queue<Type>;
 
 	template <typename Type, size_t Size>
-	using static_queue_t = KUN_KOTEK KUN_KTK mt::static_queue<Type, Size>;
-} // namespace mt
+	using static_queue_t = KUN_KOTEK KUN_KTK KUN_MT static_queue<Type, Size>;
+KOTEK_END_NAMESPACE_MT
 
 KOTEK_END_NAMESPACE_KOTEK

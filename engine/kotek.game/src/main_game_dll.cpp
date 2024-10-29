@@ -327,7 +327,7 @@ namespace Engine
 
 		p_main_manager->Set_Splash(p_window_splash);
 
-		kun_kotek kun_ktk mt::thread thread_splash(
+		kun_kotek kun_ktk kun_mt thread thread_splash(
 			[p_main_manager]()
 			{
 				if (p_main_manager)

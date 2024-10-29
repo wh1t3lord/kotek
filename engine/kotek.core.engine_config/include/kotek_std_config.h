@@ -218,9 +218,9 @@ public:
 	// Standartization means standartization and you must handle all possible
 	// situations...
 
-	ktk::size_t Get_VideoMemoryTotal(void) const noexcept override;
-	ktk::size_t Get_VideoMemoryForInitialize(void) const noexcept override;
-	void Set_VideoMemoryForInitialize(ktk::size_t value) noexcept override;
+	kun_ktk size_t Get_VideoMemoryTotal(void) const noexcept override;
+	kun_ktk size_t Get_VideoMemoryForInitialize(void) const noexcept override;
+	void Set_VideoMemoryForInitialize(kun_ktk size_t value) noexcept override;
 
 private:
 	void Parse_CommandLine(void) noexcept;
@@ -228,21 +228,21 @@ private:
 private:
 	int m_argc;
 	char** m_argv;
-	ktk::mt::atomic<bool> m_is_running;
+	kun_ktk kun_mt atomic<bool> m_is_running;
 	eEngineFeature m_engine_feature_flags;
 	eEngineFeatureRender m_engine_feature_render_flags;
 	eEngineFeatureRenderer m_engine_feature_renderer_flags;
 	eEngineFeatureSDK m_engine_feature_sdk_flags;
 	eEngineFeatureWindow m_engine_feature_window_flags;
-	ktk::enum_base_t m_version_renderer;
-	ktk::size_t m_video_memory_for_initialize;
+	kun_ktk enum_base_t m_version_renderer;
+	kun_ktk size_t m_video_memory_for_initialize;
 	ktk_vector<eEngineFeatureRenderer,
 		KOTEK_DEF_FALLBACK_RENDERERS_COUNT>
 		m_fallback_renderers;
 	ktk_vector<eEngineSupportedRenderer, KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>
 		m_fallback_renderers_versions;
-	ktk_unordered_set<ktk::cstring, KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT> m_parsed_command_line_arguments;
-	ktk::dll::shared_library m_user_dll;
+	ktk_unordered_set<kun_ktk cstring, KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT> m_parsed_command_line_arguments;
+	kun_ktk dll::shared_library m_user_dll;
 };
 
 KOTEK_END_NAMESPACE_CORE

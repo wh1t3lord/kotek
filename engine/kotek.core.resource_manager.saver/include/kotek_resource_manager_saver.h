@@ -31,60 +31,60 @@ public:
 		eResourceLoadingType resource_type) const noexcept override;
 
 	bool Save(
-		const ktk_filesystem_path& path, ktk::any data) noexcept override;
+		const ktk_filesystem_path& path, kun_ktk any data) noexcept override;
 
 	bool Open(const ktk_filesystem_path& path,
 		eResourceWritingType resource_type, eResourceWritingPolicy policy,
-		eResourceWritingMode mode, ktk::uint32_t id) noexcept override;
+		eResourceWritingMode mode, kun_ktk uint32_t id) noexcept override;
 	void Write(
-		ktk::uint32_t resource_id, const char* p_string) noexcept override;
-	void Write(ktk::uint32_t resource_id, const char* p_string,
-		ktk::size_t size) noexcept override;
-	void Write(ktk::uint32_t resource_id,
+		kun_ktk uint32_t resource_id, const char* p_string) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, const char* p_string,
+		kun_ktk size_t size) noexcept override;
+	void Write(kun_ktk uint32_t resource_id,
 		const unsigned char* p_raw_memory) noexcept override;
-	void Write(ktk::uint32_t resource_id, const unsigned char* p_raw_memory,
-		ktk::size_t size) noexcept override;
-	void Write(ktk::uint32_t resource_id, ktk::int32_t value) noexcept override;
-	void Write(ktk::uint32_t resource_id, ktk::float_t value) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, const unsigned char* p_raw_memory,
+		kun_ktk size_t size) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, kun_ktk int32_t value) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, kun_ktk float_t value) noexcept override;
 	void Write(
-		ktk::uint32_t resource_id, ktk::double_t value) noexcept override;
-	void Write(ktk::uint32_t resource_id, const ktk::int32_t* p_arr,
-		ktk::size_t size) noexcept override;
-	void Write(ktk::uint32_t resource_id, const ktk::uint32_t* p_arr,
-		ktk::size_t size) noexcept override;
-	void Write(ktk::uint32_t resource_id, const ktk::float_t* p_arr,
-		ktk::size_t size) noexcept override;
-	void Write(ktk::uint32_t resource_id, const ktk::double_t* p_arr,
-		ktk::size_t size) noexcept override;
-	void Write(ktk::uint32_t resource_id, const ktk::int8_t* p_arr,
-		ktk::size_t size) noexcept override;
-	void Write(ktk::uint32_t resource_id, const ktk::int16_t* p_arr,
-		ktk::size_t size) noexcept override;
-	void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
-		ktk::size_t size) noexcept override;
-	void Write(ktk::uint32_t resource_id,
+		kun_ktk uint32_t resource_id, kun_ktk double_t value) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, const kun_ktk int32_t* p_arr,
+		kun_ktk size_t size) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, const kun_ktk uint32_t* p_arr,
+		kun_ktk size_t size) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, const kun_ktk float_t* p_arr,
+		kun_ktk size_t size) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, const kun_ktk double_t* p_arr,
+		kun_ktk size_t size) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, const kun_ktk int8_t* p_arr,
+		kun_ktk size_t size) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, const kun_ktk int16_t* p_arr,
+		kun_ktk size_t size) noexcept override;
+	void Write(kun_ktk uint32_t resource_id, const kun_ktk uint16_t* p_arr,
+		kun_ktk size_t size) noexcept override;
+	void Write(kun_ktk uint32_t resource_id,
 		Core::eFileWritingControlCharacterType type) noexcept override;
-	void Write(ktk::uint32_t resource_id, ktk::size_t value) noexcept override;
-	void Seekg(ktk::uint32_t resource_id, ktk::size_t bytes,
+	void Write(kun_ktk uint32_t resource_id, kun_ktk size_t value) noexcept override;
+	void Seekg(kun_ktk uint32_t resource_id, kun_ktk size_t bytes,
 		eFileSeekDirectionType type) override;
-	void Seekp(ktk::uint32_t resource_id, ktk::size_t bytes,
+	void Seekp(kun_ktk uint32_t resource_id, kun_ktk size_t bytes,
 		eFileSeekDirectionType type) override;
-	ktk::size_t Tellp(ktk::uint32_t resource_id) override;
-	ktk::size_t Tellg(ktk::uint32_t resource_id) override;
+	kun_ktk size_t Tellp(kun_ktk uint32_t resource_id) override;
+	kun_ktk size_t Tellg(kun_ktk uint32_t resource_id) override;
 	void Read(
-		ktk::uint32_t resource_id, char* p_buffer, ktk::size_t size) override;
-	bool Is_Open(ktk::uint32_t resource_id) noexcept override;
-	bool Close(ktk::uint32_t id) noexcept override;
+		kun_ktk uint32_t resource_id, char* p_buffer, kun_ktk size_t size) override;
+	bool Is_Open(kun_ktk uint32_t resource_id) noexcept override;
+	bool Close(kun_ktk uint32_t id) noexcept override;
 
-	ktk::uint32_t GenerateFileID(void) noexcept override;
+	kun_ktk uint32_t GenerateFileID(void) noexcept override;
 
 protected:
 	eResourceLoadingType DetectResourceTypeByFileFormat(
 		const ktk_filesystem_path& path) noexcept override;
 
 private:
-	ktk_unordered_map<ktk::uint32_t,
-		std::pair<ktk::cfstream, Kotek::ktk::mt::atomic<bool>>,
+	ktk_unordered_map<kun_ktk uint32_t,
+		std::pair<kun_ktk cfstream, kun_ktk kun_mt atomic<bool>>,
 		KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL>
 		m_writers;
 
@@ -92,7 +92,7 @@ private:
 	ktk_unordered_map<eResourceLoadingType, ktkIResourceSaver*,
 		KOTEK_DEF_RESOURCE_SAVERS_TYPE_MAX_COUNT>
 		m_savers;
-	ktk::mt::mutex m_mutex;
+	kun_ktk kun_mt mutex m_mutex;
 };
 
 KOTEK_END_NAMESPACE_CORE

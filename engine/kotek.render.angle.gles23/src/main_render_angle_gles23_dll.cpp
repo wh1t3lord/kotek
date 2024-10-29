@@ -36,11 +36,11 @@ bool InitializeModule_Render_ANGLE_GLES23(
 		p_main_manager->Get_Splash()->Set_Progress(-1.0f);
 	}
 
-	kun_kotek kun_ktk mt::thread close_splash(
+	kun_kotek kun_ktk kun_mt thread close_splash(
 		[p_main_manager]()
 		{
-			kun_kotek kun_ktk mt::this_thread::sleep_for(
-				kun_kotek kun_ktk chrono::milliseconds(1000));
+			kun_kotek kun_ktk kun_mt this_thread::sleep_for(
+				kun_kotek kun_ktk chrono::milliseconds(700));
 
 			if (p_main_manager)
 			{
