@@ -11,9 +11,8 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
+KOTEK_BEGIN_NAMESPACE_MATH
 
-namespace math
-{
 	using vec1f_t = vector1f;
 	using vec2f_t = vector2f;
 	using vec3f_t = vector3f;
@@ -24,7 +23,7 @@ namespace math
 	using quatf_t = quaternionf;
 
 	// TODO: add double implementation
-} // namespace math
 
+KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK

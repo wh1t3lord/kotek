@@ -4,9 +4,8 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
+KOTEK_BEGIN_NAMESPACE_MATH
 
-namespace math
-{
 	class vector3f
 	{
 	public:
@@ -406,7 +405,7 @@ namespace math
 		return left.Get_Base() / right;
 #endif
 	}
-} // namespace math
 
+KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK

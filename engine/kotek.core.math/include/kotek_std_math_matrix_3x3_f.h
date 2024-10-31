@@ -4,9 +4,8 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
+KOTEK_BEGIN_NAMESPACE_MATH
 
-namespace math
-{
 	class matrix3x3f
 	{
 	public:
@@ -788,7 +787,7 @@ namespace math
         return (left.Get_Base() / right.Get_Base());
 #endif
 	}
-} // namespace math
 
+KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK

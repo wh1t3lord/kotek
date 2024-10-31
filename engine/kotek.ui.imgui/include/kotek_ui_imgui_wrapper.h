@@ -8,16 +8,17 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
-namespace math
-{
-	class vector2f;
-	class vector3f;
-	class vector4f;
-	class matrix2x2f;
-	class matrix3x3f;
-	class matrix4x4f;
-	class quaternionf;
-} // namespace math
+KOTEK_BEGIN_NAMESPACE_MATH
+
+class vector2f;
+class vector3f;
+class vector4f;
+class matrix2x2f;
+class matrix3x3f;
+class matrix4x4f;
+class quaternionf;
+
+KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
 

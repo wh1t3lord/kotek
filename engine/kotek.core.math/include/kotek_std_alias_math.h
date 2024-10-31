@@ -20,9 +20,8 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
+KOTEK_BEGIN_NAMESPACE_MATH
 
-namespace math
-{
 	constexpr float kEpsilon_Float = std::numeric_limits<float>::epsilon();
 	constexpr double kEpsilon_Double = std::numeric_limits<double>::epsilon();
 	constexpr long double kEpsilon_LongDouble =
@@ -64,7 +63,7 @@ namespace math
 
 	using base_quat_t = base_vec4_t;
 #endif
-} // namespace math
 
+KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
