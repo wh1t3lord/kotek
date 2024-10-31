@@ -4,9 +4,8 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
+KOTEK_BEGIN_NAMESPACE_RENDER_GL
 
-namespace gl
-{
 	class ktkRenderGraphSimplifiedStorageOutput
 	{
 	public:
@@ -35,7 +34,7 @@ namespace gl
 		ktk::unordered_map<ktk::ustring, gl::ktkRenderGraphBufferInfo>
 			m_output_buffers;
 	};
-} // namespace gl
 
+KOTEK_END_NAMESPACE_RENDER_GL
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK
