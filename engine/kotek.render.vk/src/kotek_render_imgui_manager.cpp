@@ -65,7 +65,7 @@ namespace Kotek
 				//       static_cast<ktkRenderResourceManager*>(
 				//           main_manager.getRenderResourceManager()));
 
-				io.Fonts->TexID = this->m_p_image_view;
+				io.Fonts->TexID = reinterpret_cast<ImTextureID>(this->m_p_image_view);
 
 				KOTEK_MESSAGE("ImGui is created");
 			}
@@ -184,7 +184,7 @@ namespace Kotek
 				vkCmdBindPipeline(
 					p_cmd, VK_PIPELINE_BIND_POINT_GRAPHICS, this->m_p_pipeline);
 
-				ImTextureID p_tex_id = nullptr;
+				ImTextureID p_tex_id{};
 
 				int vtx_offset = 0;
 				int idx_offset = 0;
@@ -548,7 +548,7 @@ namespace Kotek
 				ktkRenderResourceManager* p_render_resource_manager) noexcept
 			{
 				ImGui::GetIO().Fonts->SetTexID(
-					static_cast<ImTextureID>(this->m_p_image));
+					reinterpret_cast<ImTextureID>(this->m_p_image));
 
 				ktk::uint8_t* p_data;
 				int width, height;

@@ -1027,12 +1027,12 @@ void ktkImguiWrapper::Image(ImTextureID user_texture_id, const ImVec2& size,
 {
 	::ImGui::Image(user_texture_id, size, uv0, uv1, tint_col, border_col);
 }
-bool ktkImguiWrapper::ImageButton(ImTextureID user_texture_id,
-	const ImVec2& size, const ImVec2& uv0, const ImVec2& uv1, int frame_padding,
-	const ImVec4& bg_col, const ImVec4& tint_col)
+bool ktkImguiWrapper::ImageButton(const char* str_id,
+	ImTextureID user_texture_id, const ImVec2& image_size, const ImVec2& uv0,
+	const ImVec2& uv1, const ImVec4& bg_col, const ImVec4& tint_col)
 {
-	return ::ImGui::ImageButton(
-		user_texture_id, size, uv0, uv1, frame_padding, bg_col, tint_col);
+	return ImGui::ImageButton(
+		str_id, user_texture_id, image_size, uv0, uv1, bg_col, tint_col);
 }
 bool ktkImguiWrapper::Checkbox(const char* label, bool* v)
 {
@@ -1977,12 +1977,6 @@ ImGuiStorage* ktkImguiWrapper::GetStateStorage()
 {
 	return ::ImGui::GetStateStorage();
 }
-void ktkImguiWrapper::CalcListClipping(int items_count, float items_height,
-	int* out_items_display_start, int* out_items_display_end)
-{
-	::ImGui::CalcListClipping(items_count, items_height,
-		out_items_display_start, out_items_display_end);
-}
 bool ktkImguiWrapper::BeginChildFrame(
 	ImGuiID id, const ImVec2& size, ImGuiWindowFlags flags)
 {
@@ -2038,9 +2032,10 @@ int ktkImguiWrapper::GetKeyPressedAmount(
 	return ::ImGui::GetKeyPressedAmount(
 		static_cast<ImGuiKey>(key_index), repeat_delay, rate);
 }
-void ktkImguiWrapper::CaptureKeyboardFromApp(bool want_capture_keyboard_value)
+void ktkImguiWrapper::SetNextFrameWantCaptureKeyboard(
+	bool want_capture_keyboard_value)
 {
-	::ImGui::CaptureKeyboardFromApp(want_capture_keyboard_value);
+	::ImGui::SetNextFrameWantCaptureKeyboard(want_capture_keyboard_value);
 }
 bool ktkImguiWrapper::IsMouseDown(ImGuiMouseButton button)
 {
@@ -2101,9 +2096,10 @@ void ktkImguiWrapper::SetMouseCursor(ImGuiMouseCursor cursor_type)
 {
 	::ImGui::SetMouseCursor(cursor_type);
 }
-void ktkImguiWrapper::CaptureMouseFromApp(bool want_capture_mouse_value)
+void ktkImguiWrapper::SetNextFrameWantCaptureMouse(
+	bool want_capture_mouse_value)
 {
-	::ImGui::CaptureMouseFromApp(want_capture_mouse_value);
+	::ImGui::SetNextFrameWantCaptureMouse(want_capture_mouse_value);
 }
 const char* ktkImguiWrapper::GetClipboardText()
 {

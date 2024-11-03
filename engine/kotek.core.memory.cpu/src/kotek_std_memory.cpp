@@ -92,6 +92,11 @@ namespace memory
 	{
 		return std::memcpy(p_dest, p_src, count);
 	}
+
+	void* memset(void* p_dest, int value, kun_ktk size_t bytes)
+	{
+		return std::memset(p_dest, value, bytes);
+	}
 } // namespace memory
 
 KOTEK_END_NAMESPACE_KTK

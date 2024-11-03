@@ -25,7 +25,7 @@ KOTEK_END_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
-class ktkImguiWrapper : public Core::ktkIImguiWrapper
+class ktkImguiWrapper : public kun_core ktkIImguiWrapper
 {
 public:
 	ktkImguiWrapper(void);
@@ -237,9 +237,10 @@ public:
 		const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1),
 		const ImVec4& tint_col = ImVec4(1, 1, 1, 1),
 		const ImVec4& border_col = ImVec4(0, 0, 0, 0)) override;
-	bool ImageButton(ImTextureID user_texture_id, const ImVec2& size,
-		const ImVec2& uv0 = ImVec2(0, 0), const ImVec2& uv1 = ImVec2(1, 1),
-		int frame_padding = -1, const ImVec4& bg_col = ImVec4(0, 0, 0, 0),
+	bool ImageButton(const char* str_id, ImTextureID user_texture_id,
+		const ImVec2& image_size, const ImVec2& uv0 = ImVec2(0, 0),
+		const ImVec2& uv1 = ImVec2(1, 1),
+		const ImVec4& bg_col = ImVec4(0, 0, 0, 0),
 		const ImVec4& tint_col = ImVec4(1, 1, 1, 1)) override; // <0 frame_
 	bool Checkbox(const char* label, bool* v) override;
 	bool CheckboxFlags(const char* label, int* flags, int flags_value) override;
@@ -605,8 +606,6 @@ public:
 	const char* GetStyleColorName(ImGuiCol idx) override;
 	void SetStateStorage(ImGuiStorage* storage) override;
 	ImGuiStorage* GetStateStorage() override;
-	void CalcListClipping(int items_count, float items_height,
-		int* out_items_display_start, int* out_items_display_end) override;
 	bool BeginChildFrame(
 		ImGuiID id, const ImVec2& size, ImGuiWindowFlags flags = 0) override;
 	void EndChildFrame() override;
@@ -628,7 +627,7 @@ public:
 	bool IsKeyReleased(int user_key_index) override;
 	int GetKeyPressedAmount(
 		int key_index, float repeat_delay, float rate) override;
-	void CaptureKeyboardFromApp(
+	void SetNextFrameWantCaptureKeyboard(
 		bool want_capture_keyboard_value = true) override;
 
 	bool IsMouseDown(ImGuiMouseButton button) override;
@@ -648,7 +647,8 @@ public:
 	void ResetMouseDragDelta(ImGuiMouseButton button = 0) override;
 	ImGuiMouseCursor GetMouseCursor() override;
 	void SetMouseCursor(ImGuiMouseCursor cursor_type) override;
-	void CaptureMouseFromApp(bool want_capture_mouse_value = true) override;
+	void SetNextFrameWantCaptureMouse(
+		bool want_capture_mouse_value = true) override;
 
 	const char* GetClipboardText() override;
 	void SetClipboardText(const char* text) override;
