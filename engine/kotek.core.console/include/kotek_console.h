@@ -11,12 +11,19 @@
 #include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
-
 KOTEK_BEGIN_NAMESPACE_KTK
-using console_command_base_t = ktk::vector<
-	std::variant<ktk::int64_t, ktk::int32_t, ktk::int16_t, ktk::int8_t,
-		ktk::uint64_t, ktk::uint32_t, ktk::uint16_t, ktk::uint8_t, ktk::cstring,
-		Kotek::Core::ktkLoadingRequest, ktk::shared_ptr<ktk::any>>>;
+
+// TODO: create wrapper for std::variant!!!
+using console_command_base_t = ktk::vector<std::variant<ktk::int64_t,
+	ktk::int32_t, ktk::int16_t, ktk::int8_t, ktk::uint64_t, ktk::uint32_t,
+	ktk::uint16_t, ktk::uint8_t, kun_ktk static_cstring<1024>,
+	kun_ktk static_cstring<512>, kun_ktk static_cstring<256>,
+	kun_ktk static_cstring<128>, kun_ktk static_cstring<64>,
+	kun_ktk static_cstring<32>, kun_ktk static_cstring<16>,
+	kun_ktk static_cstring<8>, kun_ktk static_cstring<4>,
+	kun_ktk static_cstring<2>, kun_ktk static_cstring<1>,
+	kun_ktk static_cstring<2048>, kun_kotek static_path_t,
+	Kotek::Core::ktkLoadingRequest, ktk::shared_ptr<ktk::any>>>;
 using console_command_args_t = const console_command_base_t&;
 using console_command_signature_function_t = bool(console_command_args_t);
 using console_command_t = ktk::function<console_command_signature_function_t>;

@@ -51,6 +51,7 @@ using static_wstring_view = etl::wstring_view;
 template <size_t Size>
 using static_cstring = etl::string<Size>;
 using static_cstring_view = etl::string_view;
+using static_cstring_ext = etl::string_ext;
 
 template <size_t Size>
 	#ifdef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
