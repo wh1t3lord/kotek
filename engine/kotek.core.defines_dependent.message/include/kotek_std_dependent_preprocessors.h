@@ -11,7 +11,7 @@
 		#define KOTEK_MESSAGE_STRING(variable, ...) \
 			{                                       \
 			BOOST_LOG_TRIVIAL(info)                                          \
-                << reinterpret_cast<const char*>((Kotek::ktk::format(variable,
+                << reinterpret_cast<const char*>((kun_kotek kun_ktk static_format<128>(variable,
    ##__VA_ARGS__)) \
                        .c_str());
    }
@@ -32,7 +32,7 @@
 		BOOST_LOG_TRIVIAL(info)                                          \
             << "[" << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ \
             << "]"                                                       \
-            << reinterpret_cast<const char*>((Kotek::ktk::format(text,
+            << reinterpret_cast<const char*>((kun_kotek kun_ktk static_format<128>(text,
 ##__VA_ARGS__))     \
                    .c_str());
 }
@@ -40,13 +40,13 @@
 		#define KOTEK_MESSAGE_WARNING(text, ...)                             \
 			{                                                                \
 				BOOST_LOG_TRIVIAL(warning) << reinterpret_cast<const char*>( \
-					(Kotek::ktk::format(text, ##__VA_ARGS__)).c_str());      \
+					(kun_kotek kun_ktk static_format<128>(text, ##__VA_ARGS__)).c_str());      \
 			}
 
 		#define KOTEK_MESSAGE_ERROR(text, ...)                             \
 			{                                                              \
 				BOOST_LOG_TRIVIAL(error) << reinterpret_cast<const char*>( \
-					(Kotek::ktk::format(text, ##__VA_ARGS__).c_str()));    \
+					(kun_kotek kun_ktk static_format<128>(text, ##__VA_ARGS__).c_str()));    \
 			}
 
 	#endif
@@ -56,7 +56,7 @@
 			auto p_logger = KUN_KOTEK Get_LoggerMain();                \
 			if (p_logger)                                              \
 				p_logger->info(reinterpret_cast<const char*>(          \
-					Kotek::ktk::format(text, ##__VA_ARGS__).c_str())); \
+					kun_kotek kun_ktk static_format<128>(text, ##__VA_ARGS__).c_str())); \
 		}
 
 	#define KOTEK_MESSAGE(text, ...)                                         \
@@ -66,7 +66,7 @@
 				p_logger->info("[{}:{}:{}] {}", __FILE__, __FUNCTION__,     \
 					__LINE__,                                                \
 					reinterpret_cast<const char*>(                           \
-						(Kotek::ktk::format(text, ##__VA_ARGS__)).c_str())); \
+						(kun_kotek kun_ktk static_format<128>(text, ##__VA_ARGS__)).c_str())); \
 		}
 
 	#define KOTEK_MESSAGE_WARNING(text, ...)                           \
@@ -74,7 +74,7 @@
 			auto p_logger = KUN_KOTEK Get_LoggerMain();                \
 			if (p_logger)                                              \
 				p_logger->warn(reinterpret_cast<const char*>(          \
-					Kotek::ktk::format(text, ##__VA_ARGS__).c_str())); \
+					kun_kotek kun_ktk static_format<128>(text, ##__VA_ARGS__).c_str())); \
 		}
 
 	#define KOTEK_MESSAGE_ERROR(text, ...)                             \
@@ -82,7 +82,7 @@
 			auto p_logger = KUN_KOTEK Get_LoggerMain();                \
 			if (p_logger)                                              \
 				p_logger->error(reinterpret_cast<const char*>(         \
-					Kotek::ktk::format(text, ##__VA_ARGS__).c_str())); \
+					kun_kotek kun_ktk static_format<128>(text, ##__VA_ARGS__).c_str())); \
 		}
 
 // writes to log
@@ -91,7 +91,7 @@
 			auto p_logger = KUN_KOTEK Get_LoggerMain();                \
 			if (p_logger)                                              \
 				p_logger->trace(reinterpret_cast<const char*>(         \
-					Kotek::ktk::format(text, ##__VA_ARGS__).c_str())); \
+					kun_kotek kun_ktk static_format<128>(text, ##__VA_ARGS__).c_str())); \
 		}
 
 // writes to IDE output window
@@ -100,7 +100,7 @@
 			auto p_logger = KUN_KOTEK Get_LoggerMsvcOutput();          \
 			if (p_logger)                                              \
 				p_logger->trace(reinterpret_cast<const char*>(         \
-					Kotek::ktk::format(text, ##__VA_ARGS__).c_str())); \
+					kun_kotek kun_ktk static_format<128>(text, ##__VA_ARGS__).c_str())); \
 		}
 #else
 // provide your implementation as overloading those preprocessors that used in
