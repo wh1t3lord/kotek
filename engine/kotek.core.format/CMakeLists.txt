@@ -32,6 +32,30 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
+set(kotek_format_static_cstring_formatter_file_name "include/kotek_formatter_static_cstring.h")
+
+file(WRITE ${kotek_format_static_cstring_formatter_file_name} "#pragma once")
+
+foreach(static_cstring_size RANGE 1 4096 1)
+	file(APPEND ${kotek_format_static_cstring_formatter_file_name} "
+	template <>
+	struct std::formatter<kun_kotek kun_ktk static_cstring<${static_cstring_size}>, char>
+	{
+		template <typename ParseContext>
+		constexpr inline auto parse(ParseContext& ctx)
+		{
+			return ctx.begin();
+		}
+
+		inline auto format(
+			kun_kotek kun_ktk static_cstring<${static_cstring_size}> const& str, auto& ctx) const
+		{
+			return std::format_to(ctx.out(), \"{}\", (str.c_str()));
+		}
+	};
+")
+endforeach()
+
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_format.h"
 	"include/kotek_core_format.h"
