@@ -36,7 +36,7 @@ set(kotek_format_static_cstring_formatter_file_name "include/kotek_formatter_sta
 
 file(WRITE ${kotek_format_static_cstring_formatter_file_name} "#pragma once")
 
-foreach(static_cstring_size RANGE 1 4096 1)
+foreach(static_cstring_size RANGE 1 1024 1)
 	file(APPEND ${kotek_format_static_cstring_formatter_file_name} "
 	template <>
 	struct std::formatter<kun_kotek kun_ktk static_cstring<${static_cstring_size}>, char>
