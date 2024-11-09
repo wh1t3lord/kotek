@@ -963,7 +963,7 @@ void ktkImguiWrapper::TextDisabled(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	::ImGui::TextDisabled(fmt, args);
+	::ImGui::TextDisabledV(fmt, args);
 	va_end(args);
 }
 void ktkImguiWrapper::TextDisabledV(const char* fmt, va_list args)
@@ -974,7 +974,7 @@ void ktkImguiWrapper::TextWrapped(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	::ImGui::TextWrapped(fmt, args);
+	::ImGui::TextWrappedV(fmt, args);
 	va_end(args);
 }
 void ktkImguiWrapper::TextWrappedV(const char* fmt, va_list args)
@@ -985,7 +985,7 @@ void ktkImguiWrapper::LabelText(const char* label, const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	::ImGui::LabelText(label, fmt, args);
+	::ImGui::LabelTextV(label, fmt, args);
 	va_end(args);
 }
 void ktkImguiWrapper::LabelTextV(
@@ -997,7 +997,7 @@ void ktkImguiWrapper::BulletText(const char* fmt, ...)
 {
 	va_list args;
 	va_start(args, fmt);
-	::ImGui::BulletText(fmt, args);
+	::ImGui::BulletTextV(fmt, args);
 	va_end(args);
 }
 void ktkImguiWrapper::BulletTextV(const char* fmt, va_list args)
