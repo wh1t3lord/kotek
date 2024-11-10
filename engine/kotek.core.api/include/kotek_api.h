@@ -71,6 +71,61 @@ struct ImVec4;
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+class ktkResourceHandle
+{
+public:
+	ktkResourceHandle(void* p_allocated, bool is_allocated_on_stack = false
+#ifdef KOTEK_DEBUG
+		,
+		const kun_ktk static_cstring_view& debug_type_name = "",
+		const kun_ktk static_cstring_view& file_creation = "",
+		const kun_ktk static_cstring_view& place_name = ""
+#endif
+		) :
+		m_is_allocated_on_stack{is_allocated_on_stack},
+		m_p_any_data_allocated{p_allocated}
+#ifdef KOTEK_DEBUG
+		,
+		m_debug_type_name{debug_type_name.data()},
+		m_file_name{file_creation.data()}, m_function_name{place_name.data()}
+#endif
+	{
+	}
+
+	ktkResourceHandle() = delete;
+	~ktkResourceHandle()
+	{
+		if (!m_is_allocated_on_stack)
+		{
+			if (this->m_p_any_data_allocated)
+			{
+				delete this->m_p_any_data_allocated;
+				this->m_p_any_data_allocated = nullptr;
+			}
+		}
+	}
+
+	bool Is_AllocatedOnStack(void) const noexcept
+	{
+		return this->m_is_allocated_on_stack;
+	}
+
+	void* Get_Resource(void) const noexcept
+	{
+		return this->m_p_any_data_allocated;
+	}
+
+private:
+	bool m_is_allocated_on_stack;
+	void* m_p_any_data_allocated;
+
+#ifdef KOTEK_DEBUG
+	kun_kotek kun_ktk static_cstring<128> m_debug_type_name;
+	kun_kotek kun_ktk static_cstring<128> m_file_name;
+	kun_kotek kun_ktk static_cstring<128> m_function_name;
+#endif
+};
+
 class ktkIRenderDevice
 {
 public:
@@ -119,9 +174,9 @@ public:
 	// TODO: change signature on void
 	virtual void shutdown(ktkIRenderDevice* p_raw_device) = 0;
 
-	virtual ktk::shared_ptr<ktk::any> LoadGeometry(
+	virtual ktk::shared_ptr<kun_core ktkResourceHandle> LoadGeometry(
 		ktk::enum_base_t resource_loading_type, ktk::uint32_t id) = 0;
-	virtual ktk::shared_ptr<ktk::any> LoadGeometry(
+	virtual ktk::shared_ptr<kun_core ktkResourceHandle> LoadGeometry(
 		ktk::enum_base_t resource_loading_type,
 		const ktk_filesystem_path& path_to_file, ktk::uint32_t id) = 0;
 
@@ -290,12 +345,6 @@ class ktkIResourceLoader
 public:
 	virtual ~ktkIResourceLoader(void) {}
 
-	/// \~english @brief This method creates a new resouce with a
-	/// shared_ptr
-	/// @param path to your file where it is located on system
-	/// @return
-	virtual ktk::any Load(const ktk_filesystem_path& path) noexcept = 0;
-
 	/// \~english @brief This method constucts an object that was passed
 	/// on stack. It means it doesn't create shared_ptr and uses only
 	/// for situations where user wants to pass an instance that was
@@ -304,7 +353,7 @@ public:
 	/// @param object_from_construct
 	/// @return
 	virtual bool Load(const ktk_filesystem_path& path,
-		ktk::any object_from_construct) noexcept = 0;
+		kun_core ktkResourceHandle object_from_construct) noexcept = 0;
 
 	virtual bool DetectTypeByFullPath(
 		const ktk_filesystem_path& path) noexcept = 0;
@@ -432,9 +481,8 @@ public:
 	virtual ktkIResourceLoader* Get_Loader(
 		eResourceLoadingType resource_type) const noexcept = 0;
 
-	virtual ktk::any Load(const ktk_filesystem_path& path) noexcept = 0;
 	virtual bool Load(const ktk_filesystem_path& path,
-		ktk::any object_from_construct) noexcept = 0;
+		kun_core ktkResourceHandle object_from_construct) noexcept = 0;
 
 protected:
 	virtual eResourceLoadingType DetectResourceTypeByFileFormat(
@@ -449,7 +497,7 @@ public:
 	virtual ~ktkIResourceSaver(void) {}
 
 	virtual bool Save(const ktk_filesystem_path& path,
-		ktk::any object_for_saving) noexcept = 0;
+		kun_core ktkResourceHandle object_for_saving) noexcept = 0;
 
 	virtual bool DetectTypeByFullPath(
 		const ktk_filesystem_path& path) noexcept = 0;
@@ -490,8 +538,8 @@ public:
 	virtual ktkIResourceSaver* Get_Saver(
 		eResourceLoadingType resource_type) const noexcept = 0;
 
-	virtual bool Save(
-		const ktk_filesystem_path& path, ktk::any data) noexcept = 0;
+	virtual bool Save(const ktk_filesystem_path& path,
+		kun_core ktkResourceHandle data) noexcept = 0;
 
 	virtual bool Open(const ktk_filesystem_path& path,
 		eResourceWritingType resource_type, eResourceWritingPolicy policy,
@@ -734,45 +782,50 @@ private:
 	bool m_is_writing;
 };
 
+/*
 class ktkResourceWritingData
 {
 public:
-	ktkResourceWritingData() :
-		m_type{eResourceWritingDataType::kUnknown}, m_resource_id{}, m_size{},
-		m_data{}
-	{
-	}
-	~ktkResourceWritingData() {}
+    ktkResourceWritingData() :
+        m_type{eResourceWritingDataType::kUnknown}, m_resource_id{}, m_size{},
+        m_data{}
+    {
+    }
+    ~ktkResourceWritingData() {}
 
-	eResourceWritingDataType Get_Type(void) const noexcept
-	{
-		return this->m_type;
-	}
+    eResourceWritingDataType Get_Type(void) const noexcept
+    {
+        return this->m_type;
+    }
 
-	void Set_Type(eResourceWritingDataType type) { this->m_type = type; }
+    void Set_Type(eResourceWritingDataType type) { this->m_type = type; }
 
-	ktk::any Get_Data(void) const noexcept { return this->m_data; }
+    kun_core ktkResourceHandle Get_Data(void) const noexcept
+    {
+        return this->m_data;
+    }
 
-	void Set_Data(ktk::any data) { this->m_data = data; }
+    void Set_Data(kun_core ktkResourceHandle data) { this->m_data = data; }
 
-	ktk::size_t Get_ElementCount(void) const noexcept { return this->m_size; }
+    ktk::size_t Get_ElementCount(void) const noexcept { return this->m_size; }
 
-	void Set_ElementCount(ktk::size_t size) { this->m_size = size; }
+    void Set_ElementCount(ktk::size_t size) { this->m_size = size; }
 
-	void Set_ResourceID(ktk::uint32_t id) { this->m_resource_id = id; }
+    void Set_ResourceID(ktk::uint32_t id) { this->m_resource_id = id; }
 
-	ktk::uint32_t Get_ResourceID(void) const noexcept
-	{
-		return this->m_resource_id;
-	}
+    ktk::uint32_t Get_ResourceID(void) const noexcept
+    {
+        return this->m_resource_id;
+    }
 
 private:
-	/// \~english @brief for casting
-	eResourceWritingDataType m_type;
-	ktk::uint32_t m_resource_id;
-	ktk::size_t m_size;
-	ktk::any m_data;
+    /// \~english @brief for casting
+    eResourceWritingDataType m_type;
+    ktk::uint32_t m_resource_id;
+    ktk::size_t m_size;
+    kun_core ktkResourceHandle m_data;
 };
+*/
 
 class ktkIResourceManager
 {
@@ -782,7 +835,8 @@ public:
 	virtual void Initialize(void) = 0;
 	virtual void Shutdown(void) = 0;
 
-	virtual ktk::any Load(const ktkLoadingRequest& request) noexcept = 0;
+	virtual kun_ktk shared_ptr<ktkResourceHandle> Load(
+		const ktkLoadingRequest& request) noexcept = 0;
 
 	virtual void Open(const ktkResourceWritingRequest& request) noexcept = 0;
 

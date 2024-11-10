@@ -20,7 +20,7 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 	auto renderer_type = eEngineFeatureRenderer::KOTEK_USE_STARTUP_RENDERER;
 
 	p_instance->SetFeatureStatus(renderer_type, true);
-	
+
 	eEngineSupportedRenderer renderer_version{};
 
 	switch (renderer_type)
@@ -31,14 +31,15 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 		break;
 	}
 	case eEngineFeatureRenderer::
-	kEngine_Feature_Renderer_DirectX_SpecifiedByUser:
+		kEngine_Feature_Renderer_DirectX_SpecifiedByUser:
 	{
 		renderer_version =
 			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
 
 		KOTEK_ASSERT(renderer_version >= eEngineSupportedRenderer::kDirectX_7 &&
 				renderer_version <= eEngineSupportedRenderer::kDirectX_Latest,
-			"You passed DirectX renderer but version is not for DirectX at all!");
+			"You passed DirectX renderer but version is not for DirectX at "
+			"all!");
 
 		break;
 	}
@@ -50,11 +51,11 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 			renderer_version >= eEngineSupportedRenderer::kOpenGLES_1 &&
 				renderer_version <= eEngineSupportedRenderer::kOpenGLES_Latest,
 			"you passed OpenGL ES renderer but version is not for OpenGL ES at "
-		    "all!");
+			"all!");
 		break;
 	}
 	case eEngineFeatureRenderer::
-	kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser:
+		kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser:
 	{
 		renderer_version =
 			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
@@ -77,7 +78,8 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 			"you passed OpenGL renderer but version is not for OpenGL at all!");
 		break;
 	}
-	case eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGL_SpecifiedByUser:
+	case eEngineFeatureRenderer::
+		kEngine_Feature_Renderer_OpenGL_SpecifiedByUser:
 	{
 		renderer_version =
 			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
@@ -93,7 +95,8 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 		renderer_version = eEngineSupportedRenderer::kVulkan_Latest;
 		break;
 	}
-	case eEngineFeatureRenderer::kEngine_Feature_Renderer_Vulkan_SpecifiedByUser:
+	case eEngineFeatureRenderer::
+		kEngine_Feature_Renderer_Vulkan_SpecifiedByUser:
 	{
 		renderer_version =
 			eEngineSupportedRenderer::KOTEK_USE_STARTUP_RENDERER_VERSION;
@@ -127,7 +130,8 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 {
 	if (p_manager->Get_Splash())
 	{
-		p_manager->Get_Splash()->Set_Text("[core]: deserialize [engine][config]");
+		p_manager->Get_Splash()->Set_Text(
+			"[core]: deserialize [engine][config]");
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
@@ -168,11 +172,10 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 			KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME);
 
 		p_manager->GetResourceManager()->Get_ResourceSaver()->Save(
-			path_to_sys_info_json, &sys_info);
+			path_to_sys_info_json, ktkResourceHandle(&sys_info, true));
 	}
 	else
 	{
-
 	}
 
 	auto path_to_user_data =
@@ -181,14 +184,13 @@ bool DeserializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 	ktk::cstring user_data_settings_name = KOTEK_USE_USER_DATA_CONFIG_NAME;
 	user_data_settings_name += kFormatFile_Text;
 
-	auto path_to_user_data_config = path_to_user_data / user_data_settings_name.c_str();
+	auto path_to_user_data_config =
+		path_to_user_data / user_data_settings_name.c_str();
 	if (!p_filesystem->IsValidPath(path_to_user_data_config))
 	{
-
 	}
 	else
 	{
-
 	}
 
 	return true;

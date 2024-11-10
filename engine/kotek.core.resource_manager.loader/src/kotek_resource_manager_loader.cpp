@@ -70,29 +70,8 @@ ktkIResourceLoader* ktkResourceLoaderManager::Get_Loader(
 	return p_result;
 }
 
-ktk::any ktkResourceLoaderManager::Load(
-	const ktk_filesystem_path& path) noexcept
-{
-	KOTEK_ASSERT(path.has_extension(),
-		"you must provide an extension for your file: [{}]", path);
-
-	auto resource_type = this->DetectResourceTypeByFileFormat(path);
-
-	auto* p_loader = this->Get_Loader(resource_type);
-
-	KOTEK_ASSERT(p_loader, "failed to find loader for format file: [{}]",
-		path.extension());
-
-	if (p_loader)
-	{
-		return p_loader->Load(path);
-	}
-
-	return ktk::any();
-}
-
 bool ktkResourceLoaderManager::Load(
-	const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
+	const ktk_filesystem_path& path, kun_core ktkResourceHandle object_from_construct) noexcept
 {
 	KOTEK_ASSERT(path.has_extension(),
 		"you must provide an extension for your file: [{}]", path);
@@ -152,19 +131,19 @@ eResourceLoadingType ktkResourceLoaderManager::DetectResourceTypeByFileFormat(
 }
 
 /*
-ktk::any ktkResourceLoaderManager::Load_Text(
+kun_core ktkResourceHandle ktkResourceLoaderManager::Load_Text(
     const ktk_filesystem_path& path) noexcept
 {
-    return ktk::any();
+    return kun_core ktkResourceHandle();
 }
 
-ktk::any ktkResourceLoaderManager::Load_Texture(
+kun_core ktkResourceHandle ktkResourceLoaderManager::Load_Texture(
     const ktk_filesystem_path& path) noexcept
 {
-    return ktk::any();
+    return kun_core ktkResourceHandle();
 }
 
-ktk::any ktkResourceLoaderManager::Load_Model(
+kun_core ktkResourceHandle ktkResourceLoaderManager::Load_Model(
     const ktk_filesystem_path& path) noexcept
 {
     auto resource_type = this->DetectResourceTypeByFileFormat(path);
@@ -177,29 +156,29 @@ ktk::any ktkResourceLoaderManager::Load_Model(
         return result;
     }
 
-    return ktk::any();
+    return kun_core ktkResourceHandle();
 }
 
-ktk::any ktkResourceLoaderManager::Load_Sound(
+kun_core ktkResourceHandle ktkResourceLoaderManager::Load_Sound(
     const ktk_filesystem_path& path) noexcept
 {
-    return ktk::any();
+    return kun_core ktkResourceHandle();
 }
 
-ktk::any ktkResourceLoaderManager::Load_Video(
+kun_core ktkResourceHandle ktkResourceLoaderManager::Load_Video(
     const ktk_filesystem_path& path) noexcept
 {
-    return ktk::any();
+    return kun_core ktkResourceHandle();
 }
 
-ktk::any ktkResourceLoaderManager::Load_CPlusPlusLibrary(
+kun_core ktkResourceHandle ktkResourceLoaderManager::Load_CPlusPlusLibrary(
     const ktk_filesystem_path& path) noexcept
 {
-    return ktk::any();
+    return kun_core ktkResourceHandle();
 }
 
 bool ktkResourceLoaderManager::Load_Text(
-    const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
+    const ktk_filesystem_path& path, kun_core ktkResourceHandle object_from_construct) noexcept
 {
     if (this->m_p_manager_filesystem->IsValidPath(path) == false)
     {
@@ -269,13 +248,13 @@ bool ktkResourceLoaderManager::Load_Text(
 }
 
 bool ktkResourceLoaderManager::Load_Texture(
-    const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
+    const ktk_filesystem_path& path, kun_core ktkResourceHandle object_from_construct) noexcept
 {
     return true;
 }
 
 bool ktkResourceLoaderManager::Load_Model(
-    const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
+    const ktk_filesystem_path& path, kun_core ktkResourceHandle object_from_construct) noexcept
 {
     auto resource_type = this->DetectResourceTypeByFileFormat(path);
 
@@ -294,13 +273,13 @@ bool ktkResourceLoaderManager::Load_Model(
 }
 
 bool ktkResourceLoaderManager::Load_Sound(
-    const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
+    const ktk_filesystem_path& path, kun_core ktkResourceHandle object_from_construct) noexcept
 {
     return true;
 }
 
 bool ktkResourceLoaderManager::Load_Video(
-    const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
+    const ktk_filesystem_path& path, kun_core ktkResourceHandle object_from_construct) noexcept
 {
     return true;
 }

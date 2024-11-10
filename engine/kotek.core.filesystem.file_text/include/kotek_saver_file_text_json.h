@@ -28,7 +28,7 @@ public:
 	/// @return status about saving, if it returns true means operation was
 	/// successful otherwise it couldn't save your file
 	bool Save(const ktk_filesystem_path& path,
-		ktk::any object_for_saving) noexcept override;
+		kun_core ktkResourceHandle object_for_saving) noexcept override;
 
 	bool DetectTypeByFullPath(
 		const ktk_filesystem_path& path) noexcept override;

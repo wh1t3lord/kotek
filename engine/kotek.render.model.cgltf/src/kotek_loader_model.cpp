@@ -24,32 +24,8 @@ ktkLoaderModel_CGLTF::ktkLoaderModel_CGLTF(void) : m_p_filesystem{} {}
 
 ktkLoaderModel_CGLTF::~ktkLoaderModel_CGLTF(void) {}
 
-ktk::any ktkLoaderModel_CGLTF::Load(const ktk_filesystem_path& path) noexcept
-{
-	KOTEK_ASSERT(this->m_p_filesystem,
-		"you must initialize file system for this loader");
-
-	KOTEK_ASSERT(path.empty() == false,
-		"you can't pass an empty string of your path to file!");
-
-	// in scenario if we have only one loader (because it handles all
-	// 'different' formats (at least for their formal namings)) you just need to
-	// validate your pointer or just be sure that Get_Loader method returned
-	// instance, if it returns nullptr it means that your format is not
-	// supported by this class
-
-	auto* p_validation = this->Get_Loader(path.extension());
-
-	KOTEK_ASSERT(p_validation,
-		"this class doesn't support your file format: [{}]", path.extension());
-
-	ktk::any result;
-
-	return result;
-}
-
 bool ktkLoaderModel_CGLTF::Load(
-	const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
+	const ktk_filesystem_path& path, kun_core ktkResourceHandle object_from_construct) noexcept
 {
 	KOTEK_ASSERT(this->m_p_filesystem,
 		"you must initialize file system for this loader");

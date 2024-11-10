@@ -31,7 +31,7 @@ public:
 		eResourceLoadingType resource_type) const noexcept override;
 
 	bool Save(
-		const ktk_filesystem_path& path, kun_ktk any data) noexcept override;
+		const ktk_filesystem_path& path, kun_core ktkResourceHandle data) noexcept override;
 
 	bool Open(const ktk_filesystem_path& path,
 		eResourceWritingType resource_type, eResourceWritingPolicy policy,

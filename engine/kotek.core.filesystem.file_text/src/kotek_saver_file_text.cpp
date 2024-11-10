@@ -18,7 +18,7 @@ ktkResourceSaverFile_Text::~ktkResourceSaverFile_Text()
 }
 
 bool ktkResourceSaverFile_Text::Save(
-	const ktk_filesystem_path& path, ktk::any object_for_saving) noexcept
+	const ktk_filesystem_path& path, kun_core ktkResourceHandle object_for_saving) noexcept
 {
 	KOTEK_ASSERT(this->m_p_main_manager,
 		"you must initialize main manager for this loader");

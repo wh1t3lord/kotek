@@ -10,6 +10,9 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
+using handle = uintptr_t;
+using handle_t = handle;
+
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 using any = std::any;
 #else
@@ -18,5 +21,6 @@ using any = std::any;
 KOTEK_END_NAMESPACE_KTK
 
 using any_t = KUN_KOTEK KUN_KTK any;
+using handle_t = KUN_KOTEK KUN_KTK handle_t;
 
 KOTEK_END_NAMESPACE_KOTEK

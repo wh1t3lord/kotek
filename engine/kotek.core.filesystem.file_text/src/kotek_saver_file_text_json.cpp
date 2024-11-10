@@ -12,7 +12,7 @@ ktkSaverFile_JSON::ktkSaverFile_JSON(ktkMainManager* p_main_manager) :
 ktkSaverFile_JSON::~ktkSaverFile_JSON() {}
 
 bool ktkSaverFile_JSON::Save(
-	const ktk_filesystem_path& path, ktk::any object_for_saving) noexcept
+	const ktk_filesystem_path& path, kun_core ktkResourceHandle object_for_saving) noexcept
 {
 	KOTEK_ASSERT(path.has_extension(),
 		"you must save with full path aka filename + extension");
@@ -35,7 +35,7 @@ bool ktkSaverFile_JSON::Save(
 		return false;
 	}
 
-	ktkFileText* p_casted_file = std::any_cast<ktkFileText*>(object_for_saving);
+	ktkFileText* p_casted_file = reinterpret_cast<ktkFileText*>(object_for_saving.Get_Resource());
 
 	KOTEK_ASSERT(
 		p_casted_file, "you must have a valid instance of ktkFileText");

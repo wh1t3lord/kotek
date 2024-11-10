@@ -108,7 +108,7 @@ ktkIResourceSaver* ktkResourceSaverManager::Get_Saver(
 }
 
 bool ktkResourceSaverManager::Save(
-	const ktk_filesystem_path& path, kun_ktk any data) noexcept
+	const ktk_filesystem_path& path, kun_core ktkResourceHandle data) noexcept
 {
 	KOTEK_ASSERT(path.has_extension(),
 		"you must provide an extension for your file: [{}]", path);
@@ -846,7 +846,7 @@ eResourceLoadingType ktkResourceSaverManager::DetectResourceTypeByFileFormat(
 
 /*
 bool ktkResourceSaverManager::Save_Text(
-    const ktk_filesystem_path& path, kun_ktk any data) noexcept
+    const ktk_filesystem_path& path, kun_core ktkResourceHandle data) noexcept
 {
     KOTEK_ASSERT(this->m_p_manager_filesystem,
         "you must initialize your file system here");
@@ -883,7 +883,7 @@ bool ktkResourceSaverManager::Save_Text(
 }
 
 bool ktkResourceSaverManager::Save_Text_Formatted(
-    const ktk_filesystem_path& path, kun_ktk any data) noexcept
+    const ktk_filesystem_path& path, kun_core ktkResourceHandle data) noexcept
 {
 
 }

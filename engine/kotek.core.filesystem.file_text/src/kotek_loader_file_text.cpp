@@ -16,26 +16,8 @@ ktkResourceLoaderFile_Text::~ktkResourceLoaderFile_Text()
 	this->Delete_Loaders();
 }
 
-ktk::any ktkResourceLoaderFile_Text::Load(const ktk_filesystem_path& path) noexcept
-{
-	KOTEK_ASSERT(this->m_p_main_manager,
-		"you must initialize main manager for this loader");
-
-	KOTEK_ASSERT(path.empty() == false,
-		"you can't pass an empty string of your path to file!");
-
-	auto* p_validation = this->Get_Loader(path.extension());
-
-	KOTEK_ASSERT(p_validation,
-		"this class doesn't support your file format: [{}]", path.extension());
-
-	ktk::any result = p_validation->Load(path);
-
-	return result;
-}
-
 bool ktkResourceLoaderFile_Text::Load(
-	const ktk_filesystem_path& path, ktk::any object_from_construct) noexcept
+	const ktk_filesystem_path& path, kun_core ktkResourceHandle object_from_construct) noexcept
 {
 	KOTEK_ASSERT(this->m_p_main_manager,
 		"you must initialize main manager for this loader");

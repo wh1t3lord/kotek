@@ -62,9 +62,9 @@ namespace Kotek
 				void Resize(Core::ktkIRenderDevice* p_raw_device,
 					Core::ktkIRenderSwapchain* p_raw_swapchain) override;
 
-				ktk::shared_ptr<ktk::any> LoadGeometry(ktk::enum_base_t resource_loading_type,
+				ktk::shared_ptr<kun_core ktkResourceHandle> LoadGeometry(ktk::enum_base_t resource_loading_type,
 					ktk::uint32_t id) override;
-				ktk::shared_ptr<ktk::any> LoadGeometry(
+				ktk::shared_ptr<kun_core ktkResourceHandle> LoadGeometry(
 					ktk::enum_base_t resource_loading_type,
 					const ktk_filesystem_path& path_to_file,
 					ktk::uint32_t id) override;

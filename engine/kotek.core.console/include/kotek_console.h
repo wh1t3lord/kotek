@@ -14,17 +14,18 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
 // TODO: create wrapper for std::variant!!!
-using console_command_base_t = kun_ktk vector<std::variant<kun_ktk int64_t,
-	kun_ktk int32_t, kun_ktk int16_t, kun_ktk int8_t, kun_ktk uint64_t,
-	kun_ktk uint32_t, kun_ktk uint16_t, kun_ktk uint8_t,
-	kun_ktk static_cstring<1024>, kun_ktk static_cstring<512>,
-	kun_ktk static_cstring<256>, kun_ktk static_cstring<128>,
-	kun_ktk static_cstring<64>, kun_ktk static_cstring<32>,
-	kun_ktk static_cstring<16>, kun_ktk static_cstring<8>,
-	kun_ktk static_cstring<4>, kun_ktk static_cstring<2>,
-	kun_ktk static_cstring<1>, kun_ktk static_cstring<2048>,
-	kun_kotek static_path_t, const char*, kun_ktk static_cstring_view,
-	kun_core ktkLoadingRequest, kun_ktk shared_ptr<kun_ktk any>>>;
+using console_command_base_t =
+	kun_ktk vector<std::variant<kun_ktk int64_t, kun_ktk int32_t,
+		kun_ktk int16_t, kun_ktk int8_t, kun_ktk uint64_t, kun_ktk uint32_t,
+		kun_ktk uint16_t, kun_ktk uint8_t, kun_ktk static_cstring<1024>,
+		kun_ktk static_cstring<512>, kun_ktk static_cstring<256>,
+		kun_ktk static_cstring<128>, kun_ktk static_cstring<64>,
+		kun_ktk static_cstring<32>, kun_ktk static_cstring<16>,
+		kun_ktk static_cstring<8>, kun_ktk static_cstring<4>,
+		kun_ktk static_cstring<2>, kun_ktk static_cstring<1>,
+		kun_ktk static_cstring<2048>, kun_kotek static_path_t, const char*,
+		kun_ktk static_cstring_view, kun_core ktkLoadingRequest,
+		kun_ktk shared_ptr<kun_core ktkResourceHandle>>>;
 using console_command_args_t = const console_command_base_t&;
 using console_command_signature_function_t = bool(console_command_args_t);
 using console_command_t =

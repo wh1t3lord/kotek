@@ -14,7 +14,6 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
- 
 
 TEST(Filesystem, test_filesystem_check_folder_tests_for_existance)
 {
@@ -67,7 +66,7 @@ TEST(Filesystem, test_file_create_pretty_output)
 	ktkResourceSaverManager saver_instance;
 	saver_instance.Initialize(&filesystem, &main_manager);
 
-	bool status = saver_instance.Save(path, &instance);
+	bool status = saver_instance.Save(path, ktkResourceHandle(&instance, true));
 
 	EXPECT_TRUE(status);
 
@@ -506,16 +505,26 @@ TEST(Filesystem, test_container_filesystem_static_path_relative_path)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	EXPECT_TRUE(t.relative_path().string().c_str() == _t.relative_path().native());
-	EXPECT_TRUE(t1.relative_path().string().c_str() == _t1.relative_path().native());
-	EXPECT_TRUE(t2.relative_path().string().c_str() == _t2.relative_path().native());
-	EXPECT_TRUE(t3.relative_path().string().c_str() == _t3.relative_path().native());
-	EXPECT_TRUE(t4.relative_path().string().c_str() == _t4.relative_path().native());
-	EXPECT_TRUE(t5.relative_path().string().c_str() == _t5.relative_path().native());
-	EXPECT_TRUE(t6.relative_path().string().c_str() == _t6.relative_path().native());
-	EXPECT_TRUE(t7.relative_path().string().c_str() == _t7.relative_path().native());
-	EXPECT_TRUE(t8.relative_path().string().c_str() == _t8.relative_path().native());
-	EXPECT_TRUE(t9.relative_path().string().c_str() == _t9.relative_path().native());
+	EXPECT_TRUE(
+		t.relative_path().string().c_str() == _t.relative_path().native());
+	EXPECT_TRUE(
+		t1.relative_path().string().c_str() == _t1.relative_path().native());
+	EXPECT_TRUE(
+		t2.relative_path().string().c_str() == _t2.relative_path().native());
+	EXPECT_TRUE(
+		t3.relative_path().string().c_str() == _t3.relative_path().native());
+	EXPECT_TRUE(
+		t4.relative_path().string().c_str() == _t4.relative_path().native());
+	EXPECT_TRUE(
+		t5.relative_path().string().c_str() == _t5.relative_path().native());
+	EXPECT_TRUE(
+		t6.relative_path().string().c_str() == _t6.relative_path().native());
+	EXPECT_TRUE(
+		t7.relative_path().string().c_str() == _t7.relative_path().native());
+	EXPECT_TRUE(
+		t8.relative_path().string().c_str() == _t8.relative_path().native());
+	EXPECT_TRUE(
+		t9.relative_path().string().c_str() == _t9.relative_path().native());
 	EXPECT_TRUE(
 		t10.relative_path().string().c_str() == _t10.relative_path().native());
 	EXPECT_TRUE(
@@ -575,23 +584,40 @@ TEST(Filesystem, test_container_filesystem_static_path_parent_path)
 	ktk_filesystem_path _t17(":c/a");
 
 	EXPECT_TRUE(t.parent_path().string().c_str() == _t.parent_path().native());
-	EXPECT_TRUE(t1.parent_path().string().c_str() == _t1.parent_path().native());
-	EXPECT_TRUE(t2.parent_path().string().c_str() == _t2.parent_path().native());
-	EXPECT_TRUE(t3.parent_path().string().c_str() == _t3.parent_path().native());
-	EXPECT_TRUE(t4.parent_path().string().c_str() == _t4.parent_path().native());
-	EXPECT_TRUE(t5.parent_path().string().c_str() == _t5.parent_path().native());
-	EXPECT_TRUE(t6.parent_path().string().c_str() == _t6.parent_path().native());
-	EXPECT_TRUE(t7.parent_path().string().c_str() == _t7.parent_path().native());
-	EXPECT_TRUE(t8.parent_path().string().c_str() == _t8.parent_path().native());
-	EXPECT_TRUE(t9.parent_path().string().c_str() == _t9.parent_path().native());
-	EXPECT_TRUE(t10.parent_path().string().c_str() == _t10.parent_path().native());
-	EXPECT_TRUE(t11.parent_path().string().c_str() == _t11.parent_path().native());
-	EXPECT_TRUE(t12.parent_path().string().c_str() == _t12.parent_path().native());
-	EXPECT_TRUE(t13.parent_path().string().c_str() == _t13.parent_path().native());
-	EXPECT_TRUE(t14.parent_path().string().c_str() == _t14.parent_path().native());
-	EXPECT_TRUE(t15.parent_path().string().c_str() == _t15.parent_path().native());
-	EXPECT_TRUE(t16.parent_path().string().c_str() == _t16.parent_path().native());
-	EXPECT_TRUE(t17.parent_path().string().c_str() == _t17.parent_path().native());
+	EXPECT_TRUE(
+		t1.parent_path().string().c_str() == _t1.parent_path().native());
+	EXPECT_TRUE(
+		t2.parent_path().string().c_str() == _t2.parent_path().native());
+	EXPECT_TRUE(
+		t3.parent_path().string().c_str() == _t3.parent_path().native());
+	EXPECT_TRUE(
+		t4.parent_path().string().c_str() == _t4.parent_path().native());
+	EXPECT_TRUE(
+		t5.parent_path().string().c_str() == _t5.parent_path().native());
+	EXPECT_TRUE(
+		t6.parent_path().string().c_str() == _t6.parent_path().native());
+	EXPECT_TRUE(
+		t7.parent_path().string().c_str() == _t7.parent_path().native());
+	EXPECT_TRUE(
+		t8.parent_path().string().c_str() == _t8.parent_path().native());
+	EXPECT_TRUE(
+		t9.parent_path().string().c_str() == _t9.parent_path().native());
+	EXPECT_TRUE(
+		t10.parent_path().string().c_str() == _t10.parent_path().native());
+	EXPECT_TRUE(
+		t11.parent_path().string().c_str() == _t11.parent_path().native());
+	EXPECT_TRUE(
+		t12.parent_path().string().c_str() == _t12.parent_path().native());
+	EXPECT_TRUE(
+		t13.parent_path().string().c_str() == _t13.parent_path().native());
+	EXPECT_TRUE(
+		t14.parent_path().string().c_str() == _t14.parent_path().native());
+	EXPECT_TRUE(
+		t15.parent_path().string().c_str() == _t15.parent_path().native());
+	EXPECT_TRUE(
+		t16.parent_path().string().c_str() == _t16.parent_path().native());
+	EXPECT_TRUE(
+		t17.parent_path().string().c_str() == _t17.parent_path().native());
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_has_parent_path)
@@ -930,15 +956,24 @@ TEST(Filesystem, test_container_filesystem_static_path_extension)
 	std::filesystem::path std_test15("\\ab\\...");
 	std::filesystem::path std_test16("/ab\\.1.");
 
-	EXPECT_TRUE(test.extension().native().c_str() == std_test.extension().string());
-	EXPECT_TRUE(test2.extension().native().c_str() == std_test2.extension().string());
-	EXPECT_TRUE(test3.extension().native().c_str() == std_test3.extension().string());
-	EXPECT_TRUE(test4.extension().native().c_str() == std_test4.extension().string());
-	EXPECT_TRUE(test5.extension().native().c_str() == std_test5.extension().string());
-	EXPECT_TRUE(test6.extension().native().c_str() == std_test6.extension().string());
-	EXPECT_TRUE(test7.extension().native().c_str() == std_test7.extension().string());
-	EXPECT_TRUE(test8.extension().native().c_str() == std_test8.extension().string());
-	EXPECT_TRUE(test9.extension().native().c_str() == std_test9.extension().string());
+	EXPECT_TRUE(
+		test.extension().native().c_str() == std_test.extension().string());
+	EXPECT_TRUE(
+		test2.extension().native().c_str() == std_test2.extension().string());
+	EXPECT_TRUE(
+		test3.extension().native().c_str() == std_test3.extension().string());
+	EXPECT_TRUE(
+		test4.extension().native().c_str() == std_test4.extension().string());
+	EXPECT_TRUE(
+		test5.extension().native().c_str() == std_test5.extension().string());
+	EXPECT_TRUE(
+		test6.extension().native().c_str() == std_test6.extension().string());
+	EXPECT_TRUE(
+		test7.extension().native().c_str() == std_test7.extension().string());
+	EXPECT_TRUE(
+		test8.extension().native().c_str() == std_test8.extension().string());
+	EXPECT_TRUE(
+		test9.extension().native().c_str() == std_test9.extension().string());
 	EXPECT_TRUE(
 		test10.extension().native().c_str() == std_test10.extension().string());
 	EXPECT_TRUE(
@@ -1060,7 +1095,8 @@ TEST(Filesystem, test_container_filesystem_static_path_root_directory)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	EXPECT_TRUE(t.root_directory().string().c_str() == _t.root_directory().native());
+	EXPECT_TRUE(
+		t.root_directory().string().c_str() == _t.root_directory().native());
 	EXPECT_TRUE(
 		t1.root_directory().string().c_str() == _t1.root_directory().native());
 	EXPECT_TRUE(

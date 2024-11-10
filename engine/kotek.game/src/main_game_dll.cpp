@@ -56,7 +56,8 @@ namespace Game
 
 		Core::ktkResourceLoaderFile_Text resource_loader_text(p_main_manager);
 
-		auto status = resource_loader_text.Load(path_to_system_json, &file);
+		auto status = resource_loader_text.Load(
+			path_to_system_json, kun_core ktkResourceHandle(&file, true));
 		KOTEK_ASSERT(status, "can't load text: {}",
 			reinterpret_cast<const char*>(
 				path_to_system_json.u8string().c_str()));
