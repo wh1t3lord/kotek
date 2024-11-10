@@ -10,7 +10,7 @@
 	#define KOTEK_GL_ASSERT()                                            \
 		{                                                                \
 			auto stat = glGetError();                                    \
-			KOTEK_ASSERT(stat == GL_NO_ERROR, "[ERROR]: {}", (int)stat); \
+			KOTEK_ASSERT(stat == GL_NO_ERROR, "[GL/GLES][ERROR]: {}", (int)stat); \
 		}
 #else
 	#define KOTEK_GL_ASSERT()

@@ -192,10 +192,7 @@ class ktkIRenderGraphResourceManager
 public:
 	virtual ~ktkIRenderGraphResourceManager(void) {}
 
-	virtual void Initialize(
-		Kotek::Render::gl::eRenderGraphBuilderType type_of_framebuffer,
-		Kotek::Render::gl::eRenderGraphBuilderPipelineRenderingType
-			type_videocard_pipeline) = 0;
+	virtual void Initialize() = 0;
 	virtual void Shutdown(void) = 0;
 };
 
@@ -216,7 +213,8 @@ class ktkIRenderGraph
 public:
 	virtual ~ktkIRenderGraph(void) {}
 
-	virtual void Initialize(void) = 0;
+	virtual void Initialize(kun_core ktkMainManager* p_main_manager,
+		kun_core ktkIRenderResourceManager*) = 0;
 	virtual void Shutdown(void) = 0;
 };
 
@@ -227,7 +225,7 @@ public:
 	virtual void draw(void) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual void Resize(void) = 0;
-	virtual ktk::cstring GetName(void) const noexcept = 0;
+	virtual const char* Get_Name(void) const noexcept = 0;
 };
 
 class ktkIFileSystem

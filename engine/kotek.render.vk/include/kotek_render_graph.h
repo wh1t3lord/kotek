@@ -7,6 +7,7 @@ namespace Kotek
 	namespace Core
 	{
 		class ktkProfiler;
+		class ktkIRenderResourceManager;
 	}
 } // namespace Kotek
 
@@ -45,7 +46,7 @@ namespace Kotek
 				ktkRenderGraph(void);
 				~ktkRenderGraph(void);
 
-				void Initialize(void) override;
+				void Initialize(kun_core ktkMainManager* p_main_manager, kun_core ktkIRenderResourceManager* p_resource_manager) override;
 				void Shutdown(void) override;
 
 				void UpdateAll(void);
