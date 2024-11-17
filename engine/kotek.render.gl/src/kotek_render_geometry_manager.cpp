@@ -204,6 +204,7 @@ namespace gl
 				glBufferSubData(this->m_p_draw_indirect_commands->Get_Target(),
 					info_alloc.offset, sizeof(ktkDrawIndexIndirectCommand),
 					&command);
+				KOTEK_GL_ASSERT(); 
 
 				glBindBuffer(this->m_p_draw_indirect_commands->Get_Target(), 0);
 				KOTEK_GL_ASSERT();

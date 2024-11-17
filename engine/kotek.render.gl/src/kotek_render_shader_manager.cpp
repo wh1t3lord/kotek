@@ -83,6 +83,23 @@ void ktkRenderShaderManager::Shutdown(void)
 	KOTEK_ASSERT(deleted_all_buffers,
 		"you forget to issue Destroy_Buffer calling in your renderer "
 		"implementation! Not all shader's buffer resources are destroyed!!!");
+
+	bool deleted_all_programs = true;
+	for (const auto& [program_handle_id, delete_status] :
+		this->m_user_called_destroy_programs)
+	{
+		if (delete_status == false)
+		{
+			KOTEK_ASSERT(delete_status,
+				"forgot to call Destroy_Program from shader manager! Program "
+				"handle: {}",
+				program_handle_id);
+		}
+	}
+
+	KOTEK_ASSERT(deleted_all_programs,
+		"you forget to issue Destroy_Program calling in your renderer "
+	    "implementation! Not all programs resources are destroyed!!!");
 #endif
 }
 
@@ -285,6 +302,56 @@ ktkShaderModule ktkRenderShaderManager::Create_ShaderAsString(
 #endif
 
 	return result;
+}
+
+GLuint ktkRenderShaderManager::Create_Program(
+	const ktkShaderModule& shader_vertex,
+	const ktkShaderModule& shader_pixel) KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+	GLuint program = glCreateProgram();
+	KOTEK_GL_ASSERT();
+
+	glAttachShader(program, shader_vertex.Get_Shader());
+	KOTEK_GL_ASSERT();
+
+	glAttachShader(program, shader_pixel.Get_Shader());
+	KOTEK_GL_ASSERT();
+
+	glLinkProgram(program);
+	KOTEK_GL_ASSERT();
+
+#ifdef KOTEK_DEBUG
+	int success;
+	glGetProgramiv(program, GL_LINK_STATUS, &success);
+
+	if (!success)
+	{
+		char info[512];
+		glGetProgramInfoLog(program, 512, nullptr, info);
+		KOTEK_GL_ASSERT();
+
+		KOTEK_MESSAGE_ERROR("failed to create program: {}", info);
+	}
+
+	this->m_user_called_destroy_programs[program] = false;
+#endif
+
+	return program;
+}
+
+void ktkRenderShaderManager::Destroy_Program(
+	GLuint program) KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+	glDeleteProgram(program);
+	KOTEK_GL_ASSERT();
+
+#ifdef KOTEK_DEBUG
+	if (this->m_user_called_destroy_programs.find(program) !=
+		this->m_user_called_destroy_programs.end())
+	{
+		this->m_user_called_destroy_programs[program] = true;
+	}
+#endif
 }
 
 void ktkRenderShaderManager::Destroy_Shader(

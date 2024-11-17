@@ -54,6 +54,11 @@ public:
 		const kun_ktk cstring_view& code_as_string,
 		gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
+	GLuint Create_Program(const ktkShaderModule& shader_vertex,
+		const ktkShaderModule& shader_pixel) KOTEK_CPP_KEYWORD_NOEXCEPT;
+
+	void Destroy_Program(GLuint program) KOTEK_CPP_KEYWORD_NOEXCEPT;
+
 	void Destroy_Shader(
 		const ktkShaderModule& instance) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
@@ -83,6 +88,7 @@ private:
 	// and dynamic
 	kun_ktk unordered_map<GLuint, bool> m_user_called_destroy_shaders;
 	kun_ktk unordered_map<GLuint, bool> m_user_called_destroy_buffers;
+	kun_ktk unordered_map<GLuint, bool> m_user_called_destroy_programs;
 #endif
 };
 
