@@ -1,16 +1,23 @@
-#include "../include/kotek_render_buffer_manager.h"
+#include "../include/kotek_render_buffer.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
-ktkRenderBufferManager::ktkRenderBufferManager() :
+ktkRenderBuffer::ktkRenderBuffer() :
 	m_is_reallocation{}, m_target{}, m_p_allocator{}
 {
 }
 
-ktkRenderBufferManager::~ktkRenderBufferManager() {}
+ktkRenderBuffer::~ktkRenderBuffer() 
+{
+	if (this->m_p_allocator)
+	{
+		delete this->m_p_allocator;
+		this->m_p_allocator = nullptr;
+	}
+}
 
-void ktkRenderBufferManager::Initialize(ktk::size_t memory_size,
+void ktkRenderBuffer::Initialize(ktk::size_t memory_size,
 	const ktk::cstring& debug_name, GLenum target,
 	Core::eRenderStatistics stat_type, GLuint index_binding_in_shader) noexcept
 {
@@ -58,7 +65,7 @@ void ktkRenderBufferManager::Initialize(ktk::size_t memory_size,
 #endif
 }
 
-void ktkRenderBufferManager::Shutdown(void)
+void ktkRenderBuffer::Shutdown(void)
 {
 #ifdef KOTEK_DEBUG
 	KOTEK_MESSAGE("Destroying: {} [{}]", this->m_description_name,
@@ -73,7 +80,7 @@ void ktkRenderBufferManager::Shutdown(void)
 	}
 }
 
-OffsetAllocator::Allocation ktkRenderBufferManager::AllocateOffset(
+OffsetAllocator::Allocation ktkRenderBuffer::AllocateOffset(
 	ktk::size_t mem)
 {
 	this->m_stats.Set_FreeMemory(this->m_stats.Get_AllocatedMemory() - mem);
@@ -83,7 +90,7 @@ OffsetAllocator::Allocation ktkRenderBufferManager::AllocateOffset(
 	return this->m_p_allocator->allocate(mem);
 }
 
-void ktkRenderBufferManager::FreeOffset(const OffsetAllocator::Allocation& info)
+void ktkRenderBuffer::FreeOffset(const OffsetAllocator::Allocation& info)
 {
 	this->m_stats.Set_FreeMemory(this->m_stats.Get_FreeMemory() + info.offset);
 	this->m_stats.Set_UsedMemory(
@@ -92,24 +99,24 @@ void ktkRenderBufferManager::FreeOffset(const OffsetAllocator::Allocation& info)
 	this->m_p_allocator->deallocate(info);
 }
 
-const ktk::cstring& ktkRenderBufferManager::Get_DescriptionName(
+const ktk::cstring& ktkRenderBuffer::Get_DescriptionName(
 	void) const noexcept
 {
 	return this->m_description_name;
 }
 
-const ktk::vector<GLuint>& ktkRenderBufferManager::Get_Handles(
+const ktk::vector<GLuint>& ktkRenderBuffer::Get_Handles(
 	void) const noexcept
 {
 	return this->m_handles;
 }
 
-GLenum ktkRenderBufferManager::Get_Target(void) const noexcept
+GLenum ktkRenderBuffer::Get_Target(void) const noexcept
 {
 	return this->m_target;
 }
 
-ktkRenderStats* ktkRenderBufferManager::Get_Stat(void) noexcept
+ktkRenderStats* ktkRenderBuffer::Get_Stat(void) noexcept
 {
 	return &this->m_stats;
 }

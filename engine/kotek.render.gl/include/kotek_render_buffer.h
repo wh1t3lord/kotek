@@ -5,14 +5,14 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
-class ktkRenderBufferManager
+class ktkRenderBuffer
 {
 public:
 	/// \~english @brief  
-	ktkRenderBufferManager();
+	ktkRenderBuffer();
 
 	/// \~english @brief 
-	~ktkRenderBufferManager();
+	~ktkRenderBuffer();
 
 	/// \~english @brief Method for initializing manager that handles with
 	/// allocated buffer with OffsetAllocator::Allocator

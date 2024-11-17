@@ -52,6 +52,7 @@ template <size_t Size>
 using static_cstring = etl::string<Size>;
 using static_cstring_view = etl::string_view;
 using static_cstring_ext = etl::string_ext;
+using static_cstring_base = etl::ibasic_string<char>;
 
 template <size_t Size>
 	#ifdef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
@@ -105,6 +106,7 @@ using static_wstring_t = KUN_KOTEK KUN_KTK static_wstring<Size>;
 
 template <KUN_KOTEK KUN_KTK size_t Size>
 using static_cstring_t = KUN_KOTEK KUN_KTK static_cstring<Size>;
+using static_cstring_base_t = KUN_KOTEK KUN_KTK static_cstring_base;
 
 template <KUN_KOTEK KUN_KTK size_t Size>
 using static_ustring_t = KUN_KOTEK KUN_KTK static_ustring<Size>;

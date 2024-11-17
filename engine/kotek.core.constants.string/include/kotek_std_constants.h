@@ -53,20 +53,17 @@ constexpr const char* kRenderer_DirectX_9_Name = "DirectX 9";
 /**
  * Constant expresses in string that it is DirectX 10
  */
-constexpr const char* kRenderer_DirectX_10_Name =
-    "DirectX 10";
+constexpr const char* kRenderer_DirectX_10_Name = "DirectX 10";
 
 /**
  * Constant expresses in string that it is DirectX 11
  */
-constexpr const char* kRenderer_DirectX_11_Name =
-    "DirectX 11";
+constexpr const char* kRenderer_DirectX_11_Name = "DirectX 11";
 
 /**
  * Constant expresses in string that it is DirectX 12
  */
-constexpr const char* kRenderer_DirectX_12_Name =
-    "DirectX 12";
+constexpr const char* kRenderer_DirectX_12_Name = "DirectX 12";
 
 /**
  * Constant expresses in string that it is Vulkan
@@ -78,8 +75,7 @@ constexpr const char* kRenderer_Vulkan_Name = "Vulkan";
  */
 constexpr const char* kRenderer_Software_Name = "Software";
 
-constexpr const char* kRenderer_Unknown_Name =
-    "RENDERER_UNKNOWN";
+constexpr const char* kRenderer_Unknown_Name = "RENDERER_UNKNOWN";
 
 /**
  * Constant expresses in string that it is a flag used in application
@@ -123,8 +119,10 @@ constexpr const char* kConsoleCommandArg_Editor = "--editor";
  * "--editor_imgui"
  * @endcode
  */
-constexpr const char* kConsoleCommandArg_Editor_ImGui =
-    "--editor_imgui";
+constexpr const char* kConsoleCommandArg_Editor_ImGui = "--editor_imgui";
+
+/// @brief removes splash window on startup of application
+constexpr const char* kConsoleCommandArg_No_Splash = "--no_splash";
 
 /**
  * Constant expresses that we specify width for our executable.
@@ -163,8 +161,7 @@ constexpr const char* kConsoleCommandArg_Height = "--height";
  * "--render_gl3_3"
  * @endcode
  */
-constexpr const char* kConsoleCommandArg_Render_OpenGL3_3 =
-    "--render_gl3_3";
+constexpr const char* kConsoleCommandArg_Render_OpenGL3_3 = "--render_gl3_3";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -181,11 +178,10 @@ constexpr const char* kConsoleCommandArg_Render_OpenGL3_3 =
  * "--render_gl4_6"
  * @endcode
  */
-constexpr const char* kConsoleCommandArg_Render_OpenGL4_6 =
-    "--render_gl4_6";
+constexpr const char* kConsoleCommandArg_Render_OpenGL4_6 = "--render_gl4_6";
 
 constexpr const char* kConsoleCommandArg_Render_OpenGL_Latest =
-    "--render_gl_latest";
+	"--render_gl_latest";
 
 constexpr const char* kConsoleCommandArg_Render_OpenGLES1_0 =
 	"--render_gles1_0";
@@ -214,20 +210,16 @@ constexpr const char* kConsoleCommandArg_Render_OpenGLES_Latest =
  * "--render_vk"
  * @endcode
  */
-constexpr const char* kConsoleCommandArg_Render_Vulkan1_0 =
-    "--render_vk1_0";
+constexpr const char* kConsoleCommandArg_Render_Vulkan1_0 = "--render_vk1_0";
 
-constexpr const char* kConsoleCommandArg_Render_Vulkan1_1 =
-    "--render_vk1_1";
+constexpr const char* kConsoleCommandArg_Render_Vulkan1_1 = "--render_vk1_1";
 
-constexpr const char* kConsoleCommandArg_Render_Vulkan1_2 =
-    "--render_vk1_2";
+constexpr const char* kConsoleCommandArg_Render_Vulkan1_2 = "--render_vk1_2";
 
-constexpr const char* kConsoleCommandArg_Render_Vulkan1_3 =
-    "--render_vk1_3";
+constexpr const char* kConsoleCommandArg_Render_Vulkan1_3 = "--render_vk1_3";
 
 constexpr const char* kConsoleCommandArg_Render_Vulkan_Latest =
-    "--render_vk_latest";
+	"--render_vk_latest";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -243,8 +235,7 @@ constexpr const char* kConsoleCommandArg_Render_Vulkan_Latest =
  * "--render_dx_7"
  * @endcode
  */
-constexpr const char* kConsoleCommandArg_Render_DirectX7 =
-    "--render_dx_7";
+constexpr const char* kConsoleCommandArg_Render_DirectX7 = "--render_dx_7";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -260,8 +251,7 @@ constexpr const char* kConsoleCommandArg_Render_DirectX7 =
  * "--render_dx_8"
  * @endcode
  */
-constexpr const char* kConsoleCommandArg_Render_DirectX8 =
-    "--render_dx_8";
+constexpr const char* kConsoleCommandArg_Render_DirectX8 = "--render_dx_8";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -277,8 +267,7 @@ constexpr const char* kConsoleCommandArg_Render_DirectX8 =
  * "--render_dx_9"
  * @endcode
  */
-constexpr const char* kConsoleCommandArg_Render_DirectX9 =
-    "--render_dx_9";
+constexpr const char* kConsoleCommandArg_Render_DirectX9 = "--render_dx_9";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -294,8 +283,7 @@ constexpr const char* kConsoleCommandArg_Render_DirectX9 =
  * "--render_dx_10"
  * @endcode
  */
-constexpr const char* kConsoleCommandArg_Render_DirectX10 =
-    "--render_dx_10";
+constexpr const char* kConsoleCommandArg_Render_DirectX10 = "--render_dx_10";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -311,8 +299,7 @@ constexpr const char* kConsoleCommandArg_Render_DirectX10 =
  * "--render_dx_11"
  * @endcode
  */
-constexpr const char* kConsoleCommandArg_Render_DirectX11 =
-    "--render_dx_11";
+constexpr const char* kConsoleCommandArg_Render_DirectX11 = "--render_dx_11";
 
 /**
  * Constant expresses that we specify what renderer the engine will use. If
@@ -328,10 +315,9 @@ constexpr const char* kConsoleCommandArg_Render_DirectX11 =
  * "--render_dx_12"
  * @endcode
  */
-constexpr const char* kConsoleCommandArg_Render_DirectX12 =
-    "--render_dx_12";
+constexpr const char* kConsoleCommandArg_Render_DirectX12 = "--render_dx_12";
 
 constexpr const char* kConsoleCommandArg_Render_DirectX_Latest =
-    "--render_dx_latest";
+	"--render_dx_latest";
 
 KOTEK_END_NAMESPACE_KOTEK

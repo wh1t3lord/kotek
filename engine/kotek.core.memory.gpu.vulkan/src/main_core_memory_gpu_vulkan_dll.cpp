@@ -10,8 +10,12 @@ bool InitializeModule_Core_Memory_GPU_Vulkan(ktkMainManager* p_manager)
 {
 	if (p_manager)
 	{
-		p_manager->Get_Splash()->Set_Text("[core]: init [memory][gpu][vulkan]");
-		p_manager->Get_Splash()->Set_Progress();
+		if (p_manager->Get_Splash())
+		{
+			p_manager->Get_Splash()->Set_Text(
+				"[core]: init [memory][gpu][vulkan]");
+			p_manager->Get_Splash()->Set_Progress();
+		}
 	}
 
 	return true;

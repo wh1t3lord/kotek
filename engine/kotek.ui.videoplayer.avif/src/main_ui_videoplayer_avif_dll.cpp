@@ -9,8 +9,12 @@ bool InitializeModule_UI_VideoPlayer_AVIF(Core::ktkMainManager* p_main_manager)
 {
 	if (p_main_manager)
 	{
-		p_main_manager->Get_Splash()->Set_Text("[ui]: init [videoplayer][avif]");
-		p_main_manager->Get_Splash()->Set_Progress();
+		if (p_main_manager->Get_Splash())
+		{
+			p_main_manager->Get_Splash()->Set_Text(
+				"[ui]: init [videoplayer][avif]");
+			p_main_manager->Get_Splash()->Set_Progress();
+		}
 	}
 
 	return true;

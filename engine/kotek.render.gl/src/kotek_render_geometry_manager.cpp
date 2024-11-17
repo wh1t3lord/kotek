@@ -9,9 +9,9 @@ namespace gl
 		m_vao_handle{}, m_p_vertex_buffer{}, m_p_index_buffer{},
 		m_p_draw_indirect_commands{}
 	{
-		this->m_p_index_buffer = new ktkRenderBufferManager();
-		this->m_p_vertex_buffer = new ktkRenderBufferManager();
-		this->m_p_draw_indirect_commands = new ktkRenderBufferManager();
+		this->m_p_index_buffer = new ktkRenderBuffer();
+		this->m_p_vertex_buffer = new ktkRenderBuffer();
+		this->m_p_draw_indirect_commands = new ktkRenderBuffer();
 	}
 
 	ktkRenderGeometryManager::~ktkRenderGeometryManager()
@@ -43,9 +43,9 @@ namespace gl
 #endif
 
 		// TODO: use value of amount draw commands from config
-		auto draw_commands_memory = sizeof(ktkDrawIndexIndirectCommand) * 50;
+		constexpr auto _kDrawCommandsAllocatedMemory = sizeof(ktkDrawIndexIndirectCommand) * 50;
 
-		auto total_memory = memory_size - draw_commands_memory;
+		auto total_memory = memory_size - _kDrawCommandsAllocatedMemory;
 
 		auto vertex_buffer_memory =
 			ktk::align_down<ktk::size_t>((total_memory / 100) * 40, 2);
@@ -77,7 +77,7 @@ namespace gl
 		glBindVertexArray(0);
 		KOTEK_GL_ASSERT();
 
-		this->m_p_draw_indirect_commands->Initialize(draw_commands_memory,
+		this->m_p_draw_indirect_commands->Initialize(_kDrawCommandsAllocatedMemory,
 			"draw indexed (elements) indirect commands buffer",
 			GL_DRAW_INDIRECT_BUFFER,
 			Core::eRenderStatistics::kStat_Buffer_Indirect_Indexed);
@@ -86,7 +86,7 @@ namespace gl
 		KOTEK_MESSAGE("Remainder: {}", total_memory);
 
 		KOTEK_MESSAGE("Draw commands count: {}",
-			draw_commands_memory / sizeof(ktkDrawIndexIndirectCommand));
+			_kDrawCommandsAllocatedMemory / sizeof(ktkDrawIndexIndirectCommand));
 #endif
 	}
 
@@ -355,7 +355,7 @@ namespace gl
 		// TODO: finish this
 	}
 
-	ktkRenderBufferManager*
+	ktkRenderBuffer*
 	ktkRenderGeometryManager::Get_Buffer_DrawIndirectCommands(void) const
 	{
 		return this->m_p_draw_indirect_commands;

@@ -61,6 +61,12 @@ public:
 	ktk::ustring ReadFile(
 		const ktk_filesystem_path& path_to_file) const noexcept override;
 
+	// static implementation
+	bool Read_File(char*& p_buffer, size_t& length_of_buffer,
+		const kun_ktk kun_filesystem
+			static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>&
+				absolute_path_to_file) noexcept override;
+
 	void Create_Directory(const ktk_filesystem_path& path,
 		Core::eFolderVisibilityType type) override;
 
@@ -80,6 +86,8 @@ private:
 		static_cast<size_t>(
 			static_cast<ktk::enum_base_t>(eFolderIndex::kEndOfEnum) - 1)>
 		m_storage_paths;
+	// for static string buffer implementation of Read_File
+	kun_ktk static_cstring<2048> m_reserved_buffer;
 };
 
 KOTEK_END_NAMESPACE_CORE

@@ -8,7 +8,7 @@ KOTEK_END_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
-class ktkRenderBufferManager;
+class ktkRenderBuffer;
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK
 
@@ -37,14 +37,24 @@ public:
 		bool is_support_reallocation_feature = false);
 	void Shutdown(void);
 
-	ktkShaderModule LoadShader(const ktk_filesystem_path& path,
+	ktkShaderModule Create_Shader(const ktk_filesystem_path& absolute_path,
 		gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT;
-	ktkShaderModule LoadShader(
-		const ktk_filesystem_path& path) KOTEK_CPP_KEYWORD_NOEXCEPT;
-	ktkShaderModule LoadShaderAsString(const ktk::ustring& code_as_string,
+	ktkShaderModule Create_Shader(
+		const ktk_filesystem_path& relative_to_glsl_folder_or_absolute_path)
+		KOTEK_CPP_KEYWORD_NOEXCEPT;
+	ktkShaderModule Create_Shader(
+		kun_ktk static_cstring_base& static_string_view,
+		const ktk_filesystem_path& path,
+		gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT;
+	ktkShaderModule Create_Shader(
+		kun_ktk static_cstring_base& static_string_view,
+		const ktk_filesystem_path& relative_to_glsl_folder_or_absolute_path)
+		KOTEK_CPP_KEYWORD_NOEXCEPT;
+	ktkShaderModule Create_ShaderAsString(
+		const kun_ktk cstring_view& code_as_string,
 		gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
-	void DestroyShader(
+	void Destroy_Shader(
 		const ktkShaderModule& instance) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
 	ktkBufferModule Create_Buffer(

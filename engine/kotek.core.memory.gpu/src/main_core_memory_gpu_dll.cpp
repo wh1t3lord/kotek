@@ -9,8 +9,11 @@ bool InitializeModule_Core_Memory_GPU(ktkMainManager* p_manager)
 {
 	if (p_manager)
 	{
-		p_manager->Get_Splash()->Set_Text("[core]: init [memory][gpu]");
-		p_manager->Get_Splash()->Set_Progress();
+		if (p_manager->Get_Splash())
+		{
+			p_manager->Get_Splash()->Set_Text("[core]: init [memory][gpu]");
+			p_manager->Get_Splash()->Set_Progress();
+		}
 	}
 
 	InitializeModule_Core_Memory_GPU_Vulkan(p_manager);

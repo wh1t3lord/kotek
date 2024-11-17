@@ -244,7 +244,23 @@ public:
 	// TODO: check todo in implementation class ktkFileSystem and it is
 	// a temporary virtual function delete it
 	virtual ktk::ustring ReadFile(
-		const ktk_filesystem_path& path_to_file) const noexcept = 0;
+		const ktk_filesystem_path& absolute_path_to_file) const noexcept = 0;
+
+	// be careful! this method's purpose is only on stack and for stack
+	// purposes! You should copy the content of p_buffer and (if updated)
+	// length_of_buffer because if you suppose that you use 128 char buffer for
+	// reading file but the real size is bigger than 128 than it used predefined
+	// buffer as a defense but it is only for operations that don't store
+	// pointers for session or longer time otherwise just copy the content and
+	// don't store as string_view or native raw pointer string in your data, it
+	// is for fast reading without using dynamic version based on ustring alias
+	// (std::string class). So pointer of p_buffer and value of length_of_buffer
+	// can be changed and that means they use data from predefined string in
+	// filesystem, but it depends on user implementation tbh
+	virtual bool Read_File(char*& p_buffer, size_t& length_of_buffer,
+		const kun_ktk kun_filesystem
+			static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>&
+				absolute_path_to_file) noexcept = 0;
 
 	virtual ktk_filesystem_path GetFolderByEnum(
 		eFolderIndex id) const noexcept = 0;

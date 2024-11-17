@@ -12,8 +12,11 @@ bool InitializeModule_Core_Memory_CPU(ktkMainManager* p_manager)
 
 	if (p_manager)
 	{
-		p_manager->Get_Splash()->Set_Text("[core]: init [memory][cpu]");
-		p_manager->Get_Splash()->Set_Progress();
+		if (p_manager->Get_Splash())
+		{
+			p_manager->Get_Splash()->Set_Text("[core]: init [memory][cpu]");
+			p_manager->Get_Splash()->Set_Progress();
+		}
 	}
 
 #ifdef KOTEK_USE_MEMORY_LEAK_DETECTION_CRT

@@ -171,6 +171,16 @@ void ktkMainManager::Set_Splash(ktkIWindowSplash* p_window) noexcept
 	this->m_p_splash = p_window;
 }
 
+int ktkMainManager::Get_ARGC(void) const noexcept
+{
+	return this->m_argc;
+}
+
+char** ktkMainManager::Get_ARGV(void) const noexcept
+{
+	return this->m_argv;
+}
+
 void ktkMainManager::Initialize(void)
 {
 	if (this->m_p_manager_config)
@@ -181,6 +191,8 @@ void ktkMainManager::Initialize(void)
 }
 
 void ktkMainManager::Shutdown(void) {}
+
+
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

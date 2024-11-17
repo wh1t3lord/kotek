@@ -9,8 +9,12 @@ bool InitializeModule_Core_Containers_String(ktkMainManager* p_manager)
 {
 	if (p_manager)
 	{
-		p_manager->Get_Splash()->Set_Text("[core]: init [containers][string]");
-		p_manager->Get_Splash()->Set_Progress();
+		if (p_manager->Get_Splash())
+		{
+			p_manager->Get_Splash()->Set_Text(
+				"[core]: init [containers][string]");
+			p_manager->Get_Splash()->Set_Progress();
+		}
 	}
 
 	return true;

@@ -30,6 +30,7 @@ using ostreambuf_iterator =
 	std::ostreambuf_iterator<tchar, std::char_traits<tchar>>;
 using costreambuf_iterator =
 	std::ostreambuf_iterator<char, std::char_traits<char>>;
+using ios = std::ios;
 #else
 #endif
 

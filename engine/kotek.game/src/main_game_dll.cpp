@@ -316,6 +316,37 @@ namespace Engine
 		return true;
 	}
 
+	bool Hide_SplashWindow(kun_core ktkMainManager* p_manager)
+	{
+		bool result{};
+
+		if (p_manager)
+		{
+			if (p_manager->Get_ARGC() > 0)
+			{
+				if (p_manager->Get_ARGV())
+				{
+					char** p_args = p_manager->Get_ARGV();
+					for (char i = 0; i < p_manager->Get_ARGC(); ++i)
+					{
+						char* p_argument = p_args[i];
+
+						if (p_argument)
+						{
+							if (strstr(
+									p_argument, kConsoleCommandArg_No_Splash))
+							{
+								result = true;
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return result;
+	}
+
 	bool InitializeEngine(Core::ktkMainManager* p_main_manager)
 	{
 		if (!p_main_manager)
@@ -323,36 +354,42 @@ namespace Engine
 
 		PrintCompiler();
 
-		kun_core ktkWindowSplash* p_window_splash =
-			new kun_core ktkWindowSplash();
+		bool is_need_to_show_splash_window = Hide_SplashWindow(p_main_manager);
 
-		p_main_manager->Set_Splash(p_window_splash);
-
-		kun_kotek kun_ktk kun_mt thread thread_splash(
-			[p_main_manager]()
-			{
-				if (p_main_manager)
-				{
-					kun_kotek kun_core ktkIWindowSplash* p_window =
-						p_main_manager->Get_Splash();
-
-					if (p_window)
-					{
-						if (!p_window->Is_Initialized())
-						{
-							float max_progress = 150.0f;
-							p_window->Create(-1, -1, nullptr, &max_progress);
-						}
-
-						p_window->Update();
-					}
-				}
-			});
-		thread_splash.detach();
-
-		while (p_window_splash->Is_Initialized() == false ||
-			p_window_splash->Is_Show() == false)
+		if (!is_need_to_show_splash_window)
 		{
+			kun_core ktkWindowSplash* p_window_splash =
+				new kun_core ktkWindowSplash();
+
+			p_main_manager->Set_Splash(p_window_splash);
+
+			kun_kotek kun_ktk kun_mt thread thread_splash(
+				[p_main_manager]()
+				{
+					if (p_main_manager)
+					{
+						kun_kotek kun_core ktkIWindowSplash* p_window =
+							p_main_manager->Get_Splash();
+
+						if (p_window)
+						{
+							if (!p_window->Is_Initialized())
+							{
+								float max_progress = 150.0f;
+								p_window->Create(
+									-1, -1, nullptr, &max_progress);
+							}
+
+							p_window->Update();
+						}
+					}
+				});
+			thread_splash.detach();
+
+			while (p_window_splash->Is_Initialized() == false ||
+				p_window_splash->Is_Show() == false)
+			{
+			}
 		}
 
 		if (p_main_manager->Get_Splash())

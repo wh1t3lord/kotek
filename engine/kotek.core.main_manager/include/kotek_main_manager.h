@@ -85,6 +85,9 @@ public:
 	ktkIWindowSplash* Get_Splash(void) const noexcept;
 	void Set_Splash(ktkIWindowSplash* p_window) noexcept;
 
+	int Get_ARGC(void) const noexcept;
+	char** Get_ARGV(void) const noexcept;
+
 	void Initialize(void);
 	void Shutdown(void);
 

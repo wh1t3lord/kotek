@@ -1,6 +1,6 @@
 #include "../include/kotek_render_shader_manager.h"
 #include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
-#include "../include/kotek_render_buffer_manager.h"
+#include "../include/kotek_render_buffer.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
@@ -47,26 +47,32 @@ void ktkRenderShaderManager::Initialize(
 
 void ktkRenderShaderManager::Shutdown(void) {}
 
-ktkShaderModule ktkRenderShaderManager::LoadShader(
-	const ktk_filesystem_path& path,
+ktkShaderModule ktkRenderShaderManager::Create_Shader(
+	const ktk_filesystem_path& absolute_path,
 	gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
-	auto content = this->m_p_filesystem->ReadFile(path);
+	auto content = this->m_p_filesystem->ReadFile(absolute_path);
 
-	return this->LoadShaderAsString(content, type);
+	KOTEK_ASSERT(content.empty(),
+		"failed to read file: {} or file's content is empty!", absolute_path);
+
+	return this->Create_ShaderAsString(content, type);
 }
 
-ktkShaderModule ktkRenderShaderManager::LoadShader(
-	const ktk_filesystem_path& path) KOTEK_CPP_KEYWORD_NOEXCEPT
+ktkShaderModule ktkRenderShaderManager::Create_Shader(
+	const ktk_filesystem_path& relative_to_glsl_folder_or_absolute_path)
+	KOTEK_CPP_KEYWORD_NOEXCEPT
 {
-	KOTEK_ASSERT(path.empty() == false, "you can't pass an empty path to file");
-	KOTEK_ASSERT(
-		path.has_extension(), "you must pass filename with extension at least");
+	KOTEK_ASSERT(relative_to_glsl_folder_or_absolute_path.empty() == false,
+		"you can't pass an empty path to file");
+	KOTEK_ASSERT(relative_to_glsl_folder_or_absolute_path.has_extension(),
+		"you must pass filename with extension at least");
 
 	ktkShaderModule result;
 
-	auto real_path = path;
-	if (!this->m_p_filesystem->IsValidPath(path))
+	auto real_path = relative_to_glsl_folder_or_absolute_path;
+	if (!this->m_p_filesystem->IsValidPath(
+			relative_to_glsl_folder_or_absolute_path))
 	{
 		// so you passed a name with extension
 
@@ -80,6 +86,9 @@ ktkShaderModule ktkRenderShaderManager::LoadShader(
 		if (!this->m_p_filesystem->IsValidPath(path_to_folder))
 		{
 			KOTEK_ASSERT(false, "path is not valid at all!");
+			KOTEK_MESSAGE_ERROR("failed to load file by path: {} the file "
+								"doesn't present on disk!",
+				path_to_folder);
 		}
 		else
 		{
@@ -95,13 +104,91 @@ ktkShaderModule ktkRenderShaderManager::LoadShader(
 	KOTEK_ASSERT(
 		type != eShaderType::kShaderType_Unknown, "failed to detect type");
 
-	result = this->LoadShader(real_path, type);
+	result = this->Create_Shader(real_path, type);
 
 	return result;
 }
 
-ktkShaderModule ktkRenderShaderManager::LoadShaderAsString(
-	const ktk::ustring& code_as_string,
+ktkShaderModule ktkRenderShaderManager::Create_Shader(
+	kun_ktk static_cstring_base& static_string_view,
+	const ktk_filesystem_path& absolute_path,
+	gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+	char* p_temporary_reference = static_string_view.begin();
+	size_t size_of_buffer = static_string_view.max_size();
+	size_t prev_size = size_of_buffer;
+	auto status = this->m_p_filesystem->Read_File(
+		p_temporary_reference, size_of_buffer, absolute_path);
+
+#ifdef KOTEK_DEBUG
+	if (size_of_buffer > prev_size)
+	{
+		KOTEK_MESSAGE_WARNING("can't read file with stack buffer size: {} "
+							  "required size for reading: {}. Update your "
+							  "stack buffer size up to {} please.",
+			prev_size, size_of_buffer, size_of_buffer);
+	}
+#endif
+
+	if (size_of_buffer < prev_size)
+		static_string_view[size_of_buffer] = '\0';
+
+	KOTEK_ASSERT(status, "failed to read shader by path: {}", absolute_path);
+
+	return this->Create_ShaderAsString(p_temporary_reference, type);
+}
+
+ktkShaderModule ktkRenderShaderManager::Create_Shader(
+	kun_ktk static_cstring_base& static_string_view,
+	const ktk_filesystem_path& relative_to_glsl_folder_or_absolute_path)
+	KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+	KOTEK_ASSERT(static_string_view.data(), "must be a valid data!");
+	KOTEK_ASSERT(static_string_view.max_size(), "size must be non-zero!");
+
+	ktkShaderModule result;
+
+	auto real_path = relative_to_glsl_folder_or_absolute_path;
+	if (!this->m_p_filesystem->IsValidPath(
+			relative_to_glsl_folder_or_absolute_path))
+	{
+		auto path_to_folder = this->m_p_filesystem->GetFolderByEnum(
+			kun_core eFolderIndex::kFolderIndex_Shaders_GLSL);
+
+		path_to_folder /= real_path;
+
+		if (!this->m_p_filesystem->IsValidPath(path_to_folder))
+		{
+			KOTEK_ASSERT(false,
+				"path is not valid at all! tried to construct as relative to "
+				"absolute, but there's no file {}",
+				path_to_folder);
+			KOTEK_MESSAGE_ERROR("failed to load shader file by path: {} path "
+								"doesn't present on disk",
+				path_to_folder);
+		}
+		else
+		{
+			real_path = path_to_folder;
+		}
+	}
+
+	const auto& utf8_path = real_path.u8string();
+
+	auto type =
+		this->DetectType(reinterpret_cast<const char*>(utf8_path.c_str()));
+
+	KOTEK_ASSERT(type != eShaderType::kShaderType_Unknown,
+		"failed to detect the type of shader by path {}!",
+		reinterpret_cast<const char*>(utf8_path.c_str()));
+
+	result = this->Create_Shader(static_string_view, real_path, type);
+
+	return result;
+}
+
+ktkShaderModule ktkRenderShaderManager::Create_ShaderAsString(
+	const kun_ktk cstring_view& code_as_string,
 	gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	KOTEK_ASSERT(
@@ -113,7 +200,7 @@ ktkShaderModule ktkRenderShaderManager::LoadShaderAsString(
 
 	ktkShaderModule result;
 
-	const char* p_str = reinterpret_cast<const char*>(code_as_string.c_str());
+	const char* p_str = reinterpret_cast<const char*>(code_as_string.data());
 
 	GLuint shader_handle{};
 
@@ -157,7 +244,7 @@ ktkShaderModule ktkRenderShaderManager::LoadShaderAsString(
 	return result;
 }
 
-void ktkRenderShaderManager::DestroyShader(
+void ktkRenderShaderManager::Destroy_Shader(
 	const ktkShaderModule& instance) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	if (instance.Get_ShaderType() != gl::eShaderType::kShaderType_Unknown)
