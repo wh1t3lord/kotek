@@ -79,70 +79,12 @@ public:
 	void Set_Buffer(
 		GLenum buffer_object_type, GLuint handle_from_gl_gen_buffers) noexcept;
 
-	/// \~english @brief it has implementation when development build is
-	/// KOTEK_DEBUG otherwise there is no implementation and will be return 0.
-	/// This method return information about final memory allocation that was
-	/// aligned by value that user passed when he creates it in storage input
-	/// class. (e.g. Add_Buffer calling)
-	/// @param void, nothing
-	/// @return returns 0 when development build IS NOT KOTEK_DEBUG otherwise
-	/// returns value (in bytes!) that user passed for constructor. So use it
-	/// only when development build is KOTEK_DEBUG!
-	ktk::size_t Get_AlignedMemoryForAllocation(void) const noexcept;
-
-	/// \~english @brief it has implementation when development build is
-	/// KOTEK_DEBUG otherwise there is no implementation and will be returned 0.
-	/// This method sets value to m_aligned_memory_for_allocation field
-	/// @param value is ktk::size_t type and represents the final value for
-	/// memory allocation. Value is in bytes!
-	void Set_AlignedMemoryForAllocation(ktk::size_t value) noexcept;
-
-	/// \~english @brief it has implementation when development build is
-	/// KOTEK_DEBUG otherwise there is no implementation and will be returned 0.
-	/// This method returns information about value for alingment for required
-	/// memory. What does it mean? It means that if I pass value 59 (in bytes)
-	/// but my alignment value is 2 the final value will be
-	/// ktk::align_down<ktk::size_t>(59, 2) equals  58 because we use align_down
-	/// and it 'searches' for the close value to 59 but not higher than 59 for
-	/// align_up result will be 60
-	/// @param void, nothing to pass
-	/// @return returns 0 when development build IS NOT KOTEK_DEBUG otherwise
-	/// returns value (in bytes!) that user passed for constructor. So use it
-	/// only when development build is KOTEK_DEBUG
-	ktk::size_t Get_MemoryAlign(void) const noexcept;
-
-	/// \~english @brief it has implementation when development build is
-	/// KOTEK_DEBUG otherwise there is no implementation and will be returned 0.
-	/// This method sets value to m_memory_align field.
-	/// @param value is ktk::size_t type and represents the alignment when
-	/// ktk::align_down is issued its second parameter of that function
-	void Set_MemoryAlign(ktk::size_t value) noexcept;
-
-	/// \~english @brief it has implementation when development build is
-	/// KOTEK_DEBUG otherwise there is no implementation and will be returned 0.
-	/// This method return information about what user initially passed value as
-	/// memory size for allocation. Because after that when we want to create a
-	/// buffer we find the aligned value to the alignment value by using
-	/// ktk::align_down function.
-	/// @param void, nothing to pass
-	/// @return returns 0 when development build IS NOT KOTEK_DEBUG otherwise
-	/// returns value (in bytes!) that user passed for constructor. So use it
-	/// only when development build is KOTEK_DEBUG
-	ktk::size_t Get_NotAlignedMemoryForAllocation(void) const noexcept;
-
-	/// \~english @brief it has implementation when development build is
-	/// KOTEK_DEBUG otherwise there is no implementation and will be returned 0.
-	/// This method sets value to  m_not_aligned_memory_for_allocation field
-	/// @param value is ktk::size_t type and represents initial not aligned
-	/// value for memory allocation. It uses when ktk::align_down function is
-	/// issued and its first parameter.
-	void Set_NotAlignedMemoryForAllocation(ktk::size_t value) noexcept;
-
 	GLuint Get_BindingPointIndex(void) const noexcept;
 	void Set_BindingPointIndex(GLuint id) noexcept;
 
-	const ktk::ustring& Get_UniformBlockName(void) const noexcept;
-	void Set_UniformBlockName(const ktk::ustring& block_name) noexcept;
+	const char* Get_UniformBlockName(void) const noexcept;
+	void Set_UniformBlockName(
+		const kun_ktk static_cstring<32>& block_name) noexcept;
 
 private:
 	/// \~english @brief this field contains data from glGenBuffers result
@@ -158,12 +100,8 @@ private:
 	GLenum m_buffer_object_type;
 
 #ifdef KOTEK_DEBUG
-	ktk::size_t m_aligned_memory_for_allocation;
-	ktk::size_t m_memory_align;
-	ktk::size_t m_not_aligned_memory_for_allocation;
+	kun_ktk static_cstring<32> m_uniform_block_name;
 #endif
-
-	ktk::ustring m_uniform_block_name;
 };
 
 // for indirect rendering

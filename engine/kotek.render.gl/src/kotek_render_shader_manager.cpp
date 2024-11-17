@@ -48,21 +48,41 @@ void ktkRenderShaderManager::Initialize(
 void ktkRenderShaderManager::Shutdown(void)
 {
 #ifdef KOTEK_DEBUG
-	bool deleted_all = true;
+	bool deleted_all_shaders = true;
 	for (const auto& [shader_handle_id, delete_status] :
 		this->m_user_called_destroy_shaders)
 	{
 		if (delete_status == false)
 		{
-			deleted_all = false;
+			deleted_all_shaders = false;
 			KOTEK_ASSERT(delete_status,
-				"forgot to call Destroy_Shader from shader manager! Shader handle: {}", shader_handle_id);
+				"forgot to call Destroy_Shader from shader manager! Shader "
+				"handle: {}",
+				shader_handle_id);
 		}
 	}
 
-	KOTEK_ASSERT(deleted_all,
+	KOTEK_ASSERT(deleted_all_shaders,
 		"you forget to issue Destroy_Shader calling in your renderer "
 		"implementation! Not all shader resources are destroyed!!!");
+
+	bool deleted_all_buffers = true;
+	for (const auto& [buffer_handle_id, delete_status] :
+		this->m_user_called_destroy_buffers)
+	{
+		if (delete_status == false)
+		{
+			deleted_all_buffers = false;
+			KOTEK_ASSERT(delete_status,
+				"forgot to call Destroy_Buffer from shader manager! Buffer "
+				"handle: {}",
+				buffer_handle_id);
+		}
+	}
+
+	KOTEK_ASSERT(deleted_all_buffers,
+		"you forget to issue Destroy_Buffer calling in your renderer "
+		"implementation! Not all shader's buffer resources are destroyed!!!");
 #endif
 }
 
@@ -273,6 +293,7 @@ void ktkRenderShaderManager::Destroy_Shader(
 	if (instance.Get_ShaderType() != gl::eShaderType::kShaderType_Unknown)
 	{
 		glDeleteShader(instance.Get_Shader());
+		KOTEK_GL_ASSERT();
 
 #ifdef KOTEK_DEBUG
 		if (this->m_user_called_destroy_shaders.find(instance.Get_Shader()) !=
@@ -380,15 +401,22 @@ gl::eShaderType ktkRenderShaderManager::DetectType(
 }
 
 ktkBufferModule ktkRenderShaderManager::Create_Buffer(
-	ktk::size_t memory_in_bytes, GLenum buffer_object_type, GLenum usage
+	kun_ktk size_t memory_in_bytes, GLenum buffer_object_type, GLenum usage,
+	GLuint binding_point_in_shader
 #ifdef KOTEK_DEBUG
 	,
-	const ktkRenderGraphBufferInfo& info
+	const char* p_uniform_block_name_in_shader
 #endif
+
 	) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
 	KOTEK_ASSERT(memory_in_bytes != 0,
 		"you can't pass 0 as memory count for allocation!");
+
+#ifdef KOTEK_DEBUG
+	KOTEK_ASSERT(p_uniform_block_name_in_shader,
+		"don't pass an empty name in debug please!");
+#endif
 
 	if (this->m_is_reallocation_feature_supported == false)
 	{
@@ -416,22 +444,25 @@ ktkBufferModule ktkRenderShaderManager::Create_Buffer(
 	KOTEK_GL_ASSERT();
 
 	result.Set_Buffer(buffer_object_type, handle_id);
-	result.Set_BindingPointIndex(info.Get_BindingPointIndex());
-	result.Set_UniformBlockName(info.Get_UniformBlockName());
-#ifdef KOTEK_DEBUG
-	result.Set_MemoryAlign(info.Get_AlignOfMemory());
-	result.Set_AlignedMemoryForAllocation(memory_in_bytes);
-	result.Set_NotAlignedMemoryForAllocation(info.Get_Memory());
+	result.Set_BindingPointIndex(binding_point_in_shader);
 
+#ifdef KOTEK_DEBUG
+	result.Set_UniformBlockName(p_uniform_block_name_in_shader);
 	KOTEK_MESSAGE("allocated buffer: {} Kb ({} Mb) memory left: {} Mb ({} Kb)",
 		(static_cast<float>(memory_in_bytes) /
-			static_cast<float>(ktk::kMemoryConvertValueDenominator_Kilobytes)),
+			static_cast<float>(
+				kun_ktk kMemoryConvertValueDenominator_Kilobytes)),
 		(static_cast<float>(memory_in_bytes) /
-			static_cast<float>(ktk::kMemoryConvertValueDenominator_Megabytes)),
+			static_cast<float>(
+				kun_ktk kMemoryConvertValueDenominator_Megabytes)),
 		(static_cast<float>(this->m_current_memory) /
-			static_cast<float>(ktk::kMemoryConvertValueDenominator_Megabytes)),
+			static_cast<float>(
+				kun_ktk kMemoryConvertValueDenominator_Megabytes)),
 		(static_cast<float>(this->m_current_memory) /
-			static_cast<float>(ktk::kMemoryConvertValueDenominator_Kilobytes)));
+			static_cast<float>(
+				kun_ktk kMemoryConvertValueDenominator_Kilobytes)));
+
+	this->m_user_called_destroy_buffers[handle_id] = false;
 #endif
 
 	return result;
@@ -443,6 +474,14 @@ void ktkRenderShaderManager::Destroy_Buffer(
 	auto handle_id = instance.Get_Buffer();
 	glDeleteBuffers(1, &handle_id);
 	KOTEK_GL_ASSERT();
+
+#ifdef KOTEK_DEBUG
+	if (this->m_user_called_destroy_buffers.find(handle_id) !=
+		this->m_user_called_destroy_buffers.end())
+	{
+		this->m_user_called_destroy_buffers[handle_id] = true;
+	}
+#endif
 }
 
 KOTEK_END_NAMESPACE_RENDER_GL

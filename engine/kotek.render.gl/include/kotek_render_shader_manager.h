@@ -57,11 +57,11 @@ public:
 	void Destroy_Shader(
 		const ktkShaderModule& instance) KOTEK_CPP_KEYWORD_NOEXCEPT;
 
-	ktkBufferModule Create_Buffer(
-		ktk::size_t memory_in_bytes, GLenum buffer_object_type, GLenum usage
+	ktkBufferModule Create_Buffer(kun_ktk size_t memory_in_bytes,
+		GLenum buffer_object_type, GLenum usage, GLuint binding_point_in_shader
 #ifdef KOTEK_DEBUG
 		,
-		const ktkRenderGraphBufferInfo& info
+		const char* p_uniform_block_name_in_shader
 #endif
 		) KOTEK_CPP_KEYWORD_NOEXCEPT;
 	void Destroy_Buffer(
@@ -82,6 +82,7 @@ private:
 	// todo: provide switching between static (stack/embedded) implementation
 	// and dynamic
 	kun_ktk unordered_map<GLuint, bool> m_user_called_destroy_shaders;
+	kun_ktk unordered_map<GLuint, bool> m_user_called_destroy_buffers;
 #endif
 };
 

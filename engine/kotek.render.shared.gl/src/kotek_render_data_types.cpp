@@ -31,11 +31,6 @@ gl::eShaderType ktkShaderModule::Get_ShaderType(
 
 ktkBufferModule::ktkBufferModule(void) :
 	m_buffer_handle{}, m_buffer_object_type{}
-#ifdef KOTEK_DEBUG
-	,
-	m_aligned_memory_for_allocation{}, m_memory_align{},
-	m_not_aligned_memory_for_allocation{}
-#endif
 {
 }
 
@@ -59,56 +54,6 @@ void ktkBufferModule::Set_Buffer(GLenum buffer_object_type,
 	this->m_buffer_object_type = buffer_object_type;
 }
 
-ktk::size_t ktkBufferModule::Get_AlignedMemoryForAllocation(
-	void) const KOTEK_CPP_KEYWORD_NOEXCEPT
-{
-	return this->m_aligned_memory_for_allocation;
-}
-
-void ktkBufferModule::Set_AlignedMemoryForAllocation(
-	ktk::size_t value) KOTEK_CPP_KEYWORD_NOEXCEPT
-{
-#ifdef KOTEK_DEBUG
-	this->m_aligned_memory_for_allocation = value;
-#endif
-}
-
-ktk::size_t ktkBufferModule::Get_MemoryAlign(
-	void) const KOTEK_CPP_KEYWORD_NOEXCEPT
-{
-#ifdef KOTEK_DEBUG
-	return this->m_memory_align;
-#else
-	return 0;
-#endif
-}
-
-void ktkBufferModule::Set_MemoryAlign(
-	ktk::size_t value) KOTEK_CPP_KEYWORD_NOEXCEPT
-{
-#ifdef KOTEK_DEBUG
-	this->m_memory_align = value;
-#endif
-}
-
-ktk::size_t ktkBufferModule::Get_NotAlignedMemoryForAllocation(
-	void) const KOTEK_CPP_KEYWORD_NOEXCEPT
-{
-#ifdef KOTEK_DEBUG
-	return this->m_not_aligned_memory_for_allocation;
-#else
-	return 0;
-#endif
-}
-
-void ktkBufferModule::Set_NotAlignedMemoryForAllocation(
-	ktk::size_t value) KOTEK_CPP_KEYWORD_NOEXCEPT
-{
-#ifdef KOTEK_DEBUG
-	this->m_not_aligned_memory_for_allocation = value;
-#endif
-}
-
 GLuint ktkBufferModule::Get_BindingPointIndex(void) const noexcept
 {
 	return this->m_binding_point_index;
@@ -119,15 +64,21 @@ void ktkBufferModule::Set_BindingPointIndex(GLuint id) noexcept
 	this->m_binding_point_index = id;
 }
 
-const ktk::ustring& ktkBufferModule::Get_UniformBlockName(void) const noexcept
+const char* ktkBufferModule::Get_UniformBlockName(void) const noexcept
 {
-	return this->m_uniform_block_name;
+#ifdef KOTEK_DEBUG
+	return this->m_uniform_block_name.c_str();
+#else
+	return nullptr;
+#endif
 }
 
 void ktkBufferModule::Set_UniformBlockName(
-	const ktk::ustring& block_name) noexcept
+	const kun_ktk static_cstring<32>& block_name) noexcept
 {
+#ifdef KOTEK_DEBUG
 	this->m_uniform_block_name = block_name;
+#endif
 }
 
 KOTEK_END_NAMESPACE_RENDER_GL

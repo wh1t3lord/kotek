@@ -52,6 +52,7 @@ private:
 	ktk::uint32_t m_format;
 };
 
+// todo: probably deleete it!
 class ktkRenderGraphBufferInfo
 {
 public:
