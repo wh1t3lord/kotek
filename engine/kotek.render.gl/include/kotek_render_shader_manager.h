@@ -30,7 +30,7 @@ KOTEK_CPP_KEYWORD_CONSTEXPR const char* _kShaderPrefix_TessellationControl =
 class ktkRenderShaderManager
 {
 public:
-	ktkRenderShaderManager(Core::ktkMainManager* p_main_manager);
+	ktkRenderShaderManager(kun_core ktkMainManager* p_main_manager);
 	~ktkRenderShaderManager(void);
 
 	void Initialize(ktk::size_t value_in_bytes,
@@ -73,10 +73,16 @@ private:
 
 private:
 	bool m_is_reallocation_feature_supported;
-	ktk::size_t m_total_memory;
-	ktk::size_t m_current_memory;
-	Core::ktkMainManager* m_p_main_manager;
-	Core::ktkIFileSystem* m_p_filesystem;
+	kun_ktk size_t m_total_memory;
+	kun_ktk size_t m_current_memory;
+	kun_core ktkMainManager* m_p_main_manager;
+	kun_core ktkIFileSystem* m_p_filesystem;
+
+#ifdef KOTEK_DEBUG
+	// todo: provide switching between static (stack/embedded) implementation
+	// and dynamic
+	kun_ktk unordered_map<GLuint, bool> m_user_called_destroy_shaders;
+#endif
 };
 
 KOTEK_END_NAMESPACE_RENDER_GL

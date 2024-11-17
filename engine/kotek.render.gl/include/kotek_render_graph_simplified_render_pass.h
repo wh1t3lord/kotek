@@ -24,6 +24,7 @@ public:
 
 	virtual void OnCreateResources(kun_core ktkMainManager* p_manager_main,
 		kun_core ktkIRenderResourceManager* p_manager_resource);
+	virtual void OnDestroyResources();
 	virtual void OnUpdate(
 		const ktkRenderGraphSimplifiedRenderPass* p_previous_pass);
 	virtual void OnRender(

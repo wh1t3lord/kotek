@@ -50,13 +50,16 @@ void ktkRenderGraphSimplified::Shutdown(void)
 {
 	for (auto* p_pass : this->m_passes)
 	{
+		if (p_pass)
+		{
 #ifdef KOTEK_DEBUG
-		KOTEK_MESSAGE("Deleting render pass {}",
-			reinterpret_cast<const char*>(p_pass->Get_Name()));
+			KOTEK_MESSAGE("Deleting render pass {}",
+				reinterpret_cast<const char*>(p_pass->Get_Name()));
 #endif
-
-		delete p_pass;
-		p_pass = nullptr;
+			p_pass->OnDestroyResources();
+			delete p_pass;
+			p_pass = nullptr;
+		}
 	}
 
 	this->m_passes.clear();

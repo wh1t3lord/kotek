@@ -28,6 +28,8 @@ void ktkRenderGraphSimplifiedRenderPass::OnCreateResources(
 		"you forgot to overload! Always provide implementation in child class");
 }
 
+void ktkRenderGraphSimplifiedRenderPass::OnDestroyResources() {}
+
 void ktkRenderGraphSimplifiedRenderPass::OnUpdate(
 	const ktkRenderGraphSimplifiedRenderPass* p_previous_pass)
 {

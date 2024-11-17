@@ -82,12 +82,6 @@ bool ShutdownModule_Render_ANGLE_GLES23(Core::ktkMainManager* p_main_manager)
 {
 	p_main_manager->getRenderDevice()->GPUFlush();
 
-	p_main_manager->getRenderSwapchainManager()->Shutdown(
-		p_main_manager->getRenderDevice());
-
-	p_main_manager->GetRenderResourceManager()->shutdown(
-		p_main_manager->getRenderDevice());
-
 	Core::ktkIGameManager* p_game_manager = p_main_manager->GetGameManager();
 	if (p_game_manager)
 	{
@@ -98,6 +92,12 @@ bool ShutdownModule_Render_ANGLE_GLES23(Core::ktkMainManager* p_main_manager)
 			p_renderer->Shutdown();
 		}
 	}
+
+	p_main_manager->getRenderSwapchainManager()->Shutdown(
+		p_main_manager->getRenderDevice());
+
+	p_main_manager->GetRenderResourceManager()->shutdown(
+		p_main_manager->getRenderDevice());
 
 	p_main_manager->getRenderDevice()->Shutdown();
 

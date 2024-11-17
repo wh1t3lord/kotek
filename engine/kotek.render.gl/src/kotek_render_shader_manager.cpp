@@ -45,7 +45,26 @@ void ktkRenderShaderManager::Initialize(
 #endif
 }
 
-void ktkRenderShaderManager::Shutdown(void) {}
+void ktkRenderShaderManager::Shutdown(void)
+{
+#ifdef KOTEK_DEBUG
+	bool deleted_all = true;
+	for (const auto& [shader_handle_id, delete_status] :
+		this->m_user_called_destroy_shaders)
+	{
+		if (delete_status == false)
+		{
+			deleted_all = false;
+			KOTEK_ASSERT(delete_status,
+				"forgot to call Destroy_Shader from shader manager! Shader handle: {}", shader_handle_id);
+		}
+	}
+
+	KOTEK_ASSERT(deleted_all,
+		"you forget to issue Destroy_Shader calling in your renderer "
+		"implementation! Not all shader resources are destroyed!!!");
+#endif
+}
 
 ktkShaderModule ktkRenderShaderManager::Create_Shader(
 	const ktk_filesystem_path& absolute_path,
@@ -241,6 +260,10 @@ ktkShaderModule ktkRenderShaderManager::Create_ShaderAsString(
 
 	result.Set_Shader(type, shader_handle);
 
+#ifdef KOTEK_DEBUG
+	this->m_user_called_destroy_shaders[shader_handle] = false;
+#endif
+
 	return result;
 }
 
@@ -250,6 +273,14 @@ void ktkRenderShaderManager::Destroy_Shader(
 	if (instance.Get_ShaderType() != gl::eShaderType::kShaderType_Unknown)
 	{
 		glDeleteShader(instance.Get_Shader());
+
+#ifdef KOTEK_DEBUG
+		if (this->m_user_called_destroy_shaders.find(instance.Get_Shader()) !=
+			this->m_user_called_destroy_shaders.end())
+		{
+			this->m_user_called_destroy_shaders[instance.Get_Shader()] = true;
+		}
+#endif
 	}
 #ifdef KOTEK_DEBUG
 	else
