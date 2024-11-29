@@ -15,7 +15,7 @@ This project might be useful for those who doesn't want to spend time for making
 - Plugin system;
 - Different built types;
 - Ability to replace any existed thing in engine;
-- No ANY Global variables in whole solution;
+- No ANY Global variables in whole solution (Except for external libraries);
 
 And many other features. It will sound huge only when you understand the amount of code what was written ha-ha :slightly_smiling_face:. 
 
@@ -112,6 +112,10 @@ For sane reasons, I want to support and test on modern XBox systems, but communi
 ## Development
 
 ### Roadmap
+
+## License
+
+I choose Apache 2.0 license to provide people the full freedom as much as possible. If a some person can patent the fork, the project or any other part of my work I would be really happy :=)  
 
 ## Community
 
