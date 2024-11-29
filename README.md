@@ -4,6 +4,30 @@ kotek framework is written in C++20 and using OpenGL ES (ANGLE backend) and Vulk
 
 This project might be useful for those who doesn't want to spend time for making own architecture, how to design and literally waste a large time for that thing. For young (and not) scientists in computation/informatics field, especially for those who want to make some experiments fast and doesn't want to spend time for writting "core" part just for writting "business logic", you just take it and write own business logic and it doesn't matter you write your AI, Graphics or something else. 
 
+## How to build
+
+### Personal computers
+
+#### Windows
+
+#### Linux
+
+#### MacOS
+
+### Phones
+
+#### Android
+
+#### IPhone
+
+### Game consoles
+
+#### Playstation
+
+#### XBox
+
+#### Nintendo Switch
+
 ## Features
 
 - Absolutely modular design;
