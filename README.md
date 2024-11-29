@@ -113,7 +113,7 @@ For sane reasons, I want to support and test on modern XBox systems, but communi
 
 ### Roadmap
 
-## Discord
+## Community
 
 I have my personal discord server for chatting, I welcome everyone. 
 
