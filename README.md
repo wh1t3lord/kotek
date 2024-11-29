@@ -123,6 +123,8 @@ I have my personal discord server for chatting, I welcome everyone.
 
 Just click on discord button.
 
+## Alternative translation pages
+
 <details>
   <summary>If English is hard for you you might have interest to read in translated version of your language (I welcome contribution)</summary>
   
