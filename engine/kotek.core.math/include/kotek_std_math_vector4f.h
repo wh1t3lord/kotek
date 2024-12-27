@@ -108,18 +108,19 @@ public:
 		return *this;
 	}
 
-	vector4f& operator+=(const matrix4_view_t& data) noexcept 
+	vector4f& operator+=(const matrix4_view_t& data) noexcept
 	{
 		return this->operator+=(
 			base_vec4_t(data.x(), data.y(), data.z(), data.w()));
 	}
 
-	vector4f& operator+=(const matrix3_view_t& data) noexcept {
+	vector4f& operator+=(const matrix3_view_t& data) noexcept
+	{
 		return this->operator+=(
 			base_vec4_t(data.x(), data.y(), data.z(), 0.0f));
 	}
 
-	vector4f& operator+=(const matrix2_view_t& data) noexcept 
+	vector4f& operator+=(const matrix2_view_t& data) noexcept
 	{
 		return this->operator+=(base_vec4_t(data.x(), data.y(), 0.0f, 0.0f));
 	}
@@ -210,13 +211,13 @@ public:
 		return *this;
 	}
 
-	vector4f& operator*=(const matrix4_view_t& data) noexcept 
+	vector4f& operator*=(const matrix4_view_t& data) noexcept
 	{
 		return this->operator*=(
 			base_vec4_t(data.x(), data.y(), data.z(), data.w()));
 	}
 
-	vector4f& operator*=(const matrix3_view_t& data) noexcept 
+	vector4f& operator*=(const matrix3_view_t& data) noexcept
 	{
 		return this->operator*=(
 			base_vec4_t(data.x(), data.y(), data.z(), 1.0f));
@@ -227,7 +228,7 @@ public:
 		return this->operator*=(base_vec4_t(data.x(), data.y(), 1.0f, 1.0f));
 	}
 
-	vector4f& operator*=(const matrix1_view_t& data) noexcept 
+	vector4f& operator*=(const matrix1_view_t& data) noexcept
 	{
 		return this->operator*=(base_vec4_t(data.x(), 1.0f, 1.0f, 1.0f));
 	}
@@ -274,9 +275,10 @@ public:
 		return *this;
 	}
 
-	vector4f& operator/=(const matrix4_view_t& data) noexcept 
+	vector4f& operator/=(const matrix4_view_t& data) noexcept
 	{
-		return this -> operator/=(base_vec4_t(data.x(), data.y(), data.z(), data.w()));
+		return this->operator/=(
+			base_vec4_t(data.x(), data.y(), data.z(), data.w()));
 	}
 
 	vector4f& operator/=(const matrix3_view_t& data) noexcept
@@ -285,12 +287,12 @@ public:
 			base_vec4_t(data.x(), data.y(), data.z(), 1.0f));
 	}
 
-	vector4f& operator/=(const matrix2_view_t& data) noexcept 
+	vector4f& operator/=(const matrix2_view_t& data) noexcept
 	{
-		return this -> operator/=(base_vec4_t(data.x(), data.y(), 1.0f, 1.0f));
+		return this->operator/=(base_vec4_t(data.x(), data.y(), 1.0f, 1.0f));
 	}
 
-	vector4f& operator/=(const matrix1_view_t& data) noexcept 
+	vector4f& operator/=(const matrix1_view_t& data) noexcept
 	{
 		return this->operator/=(base_vec4_t(data.x(), 1.0f, 1.0f, 1.0f));
 	}

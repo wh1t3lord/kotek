@@ -22,6 +22,8 @@ public:
 	vector2f(const matrix2_view_t& view) : m_base(view.x(), view.y()) {}
 	vector2f(const matrix1_view_t& view) : m_base(view.x(), 0.0f) {}
 
+	vector2f(const matrix1_view_t& view, float y) : m_base(view.x(), y) {}
+
 	vector2f(const base_vec2_t& data) : m_base(data) {}
 	vector2f(const vector2f& data) : m_base(data.m_base) {}
 	vector2f(void) : m_base{} {}
@@ -46,6 +48,26 @@ public:
 		this->m_base += data.m_base;
 #endif
 		return *this;
+	}
+
+	vector2f& operator+=(const matrix4_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator+=(const matrix3_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator+=(const matrix2_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator+=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec2_t(data.x(), 0.0f));
 	}
 
 	vector2f& operator+=(const base_vec2_t& data) noexcept
@@ -75,6 +97,26 @@ public:
 		this->m_base -= data.m_base;
 #endif
 		return *this;
+	}
+
+	vector2f& operator-=(const matrix4_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator-=(const matrix3_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator-=(const matrix2_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator-=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec2_t(data.x(), 0.0f));
 	}
 
 	vector2f& operator-=(const base_vec2_t& data) noexcept
@@ -107,6 +149,26 @@ public:
 		return *this;
 	}
 
+	vector2f& operator*=(const matrix4_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator*=(const matrix3_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator*=(const matrix2_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator*=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec2_t(data.x(), 1.0f));
+	}
+
 	vector2f& operator*=(const base_vec2_t& data) noexcept
 	{
 		return this->operator*=(data);
@@ -137,6 +199,26 @@ public:
 		this->m_base /= data.m_base;
 #endif
 		return *this;
+	}
+
+	vector2f& operator/=(const matrix4_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator/=(const matrix3_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator/=(const matrix2_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec2_t(data.x(), data.y()));
+	}
+
+	vector2f& operator/=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec2_t(data.x(), 1.0f));
 	}
 
 	vector2f& operator/=(const base_vec2_t& data) noexcept

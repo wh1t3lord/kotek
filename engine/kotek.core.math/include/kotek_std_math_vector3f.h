@@ -26,6 +26,16 @@ public:
 	vector3f(const matrix2_view_t& view) : m_base(view.x(), view.y(), 0.0f) {}
 	vector3f(const matrix1_view_t& view) : m_base(view.x(), 0.0f, 0.0f) {}
 
+	vector3f(const matrix2_view_t& view, float z) :
+		m_base(view.x(), view.y(), z)
+	{
+	}
+
+	vector3f(const matrix1_view_t& view, float y, float z) :
+		m_base(view.x(), y, z)
+	{
+	}
+
 	vector3f(const base_vec3_t& data) : m_base(data) {}
 	vector3f(const vector3f& data) : m_base(data.m_base) {}
 
@@ -51,6 +61,26 @@ public:
 		this->m_base += data.m_base;
 #endif
 		return *this;
+	}
+
+	vector3f& operator+=(const matrix4_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator+=(const matrix3_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator+=(const matrix2_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec3_t(data.x(), data.y(), 0.0f));
+	}
+
+	vector3f& operator+=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec3_t(data.x(), 0.0f, 0.0f));
 	}
 
 	vector3f& operator+=(const base_vec3_t& data) noexcept
@@ -82,6 +112,26 @@ public:
 		return *this;
 	}
 
+	vector3f& operator-=(const matrix4_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator-=(const matrix3_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator-=(const matrix2_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec3_t(data.x(), data.y(), 0.0f));
+	}
+
+	vector3f& operator-=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec3_t(data.x(), 0.0f, 0.0f));
+	}
+
 	vector3f& operator-=(const base_vec3_t& data) noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -110,6 +160,26 @@ public:
 		this->m_base *= data.m_base;
 #endif
 		return *this;
+	}
+
+	vector3f& operator*=(const matrix4_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator*=(const matrix3_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator*=(const matrix2_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec3_t(data.x(), data.y(), 1.0f));
+	}
+
+	vector3f& operator*=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec3_t(data.x(), 1.0f, 1.0f));
 	}
 
 	vector3f& operator*=(const base_vec3_t& data) noexcept
@@ -152,6 +222,26 @@ public:
 		this->m_base /= data.m_base;
 #endif
 		return *this;
+	}
+
+	vector3f& operator/=(const matrix4_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator/=(const matrix3_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator/=(const matrix2_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec3_t(data.x(), data.y(), 1.0f));
+	}
+
+	vector3f& operator/=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec3_t(data.x(), 1.0f, 1.0f));
 	}
 
 	vector3f& operator/=(const base_vec3_t& data) noexcept
