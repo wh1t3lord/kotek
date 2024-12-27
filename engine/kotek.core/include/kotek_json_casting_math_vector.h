@@ -12,7 +12,7 @@ KOTEK_BEGIN_NAMESPACE_MATH
 inline void tag_invoke(const ktk::json::value_from_tag&,
 	ktk::json::value& write_to, const ktk::math::vector1f& data)
 {
-	ktk::json::array result = {data.Get_X()};
+	ktk::json::array result = {data.x()};
 
 	write_to = result;
 }
@@ -33,7 +33,7 @@ inline ktk::math::vector1f tag_invoke(
 inline void tag_invoke(const ktk::json::value_from_tag&,
 	ktk::json::value& write_to, const ktk::math::vector2f& data)
 {
-	ktk::json::array result = {data.Get_X(), data.Get_Y()};
+	ktk::json::array result = {data.x(), data.y()};
 
 	write_to = result;
 }
@@ -55,7 +55,7 @@ inline ktk::math::vector2f tag_invoke(
 inline void tag_invoke(const ktk::json::value_from_tag&,
 	ktk::json::value& write_to, const ktk::math::vector3f& data)
 {
-	ktk::json::array result = {data.Get_X(), data.Get_Y(), data.Get_Z()};
+	ktk::json::array result = {data.x(), data.y(), data.z()};
 
 	write_to = result;
 }
@@ -79,7 +79,7 @@ inline void tag_invoke(const ktk::json::value_from_tag&,
 	ktk::json::value& write_to, const ktk::math::vector4f& data)
 {
 	ktk::json::array result = {
-		data.Get_X(), data.Get_Y(), data.Get_Z(), data.Get_W()};
+		data.x(), data.y(), data.z(), data.w()};
 
 	write_to = result;
 }

@@ -79,14 +79,14 @@ TEST(Math, vector1f_testing_constructor_default)
 {
 	Kotek::ktk::math::vector1f test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 0.0f));
 }
 
 TEST(Math, vector1f_testing_constructor_based_on_number)
 {
 	Kotek::ktk::math::vector1f vec(5.0f);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_X(), 5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.x(), 5.0f));
 }
 
 		#ifdef KOTEK_USE_MATH_LIBRARY_GLM
@@ -98,7 +98,7 @@ TEST(Math, vector1f_testing_copy_constructor)
 	Kotek::ktk::math::vector1f vec_original(550.5f);
 	Kotek::ktk::math::vector1f vec_copy(vec_original);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.Get_X(), vec_copy.Get_X()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.x(), vec_copy.x()));
 }
 
 TEST(Math, vector1f_testing_assignment_operator_based_on_own_type)
@@ -106,7 +106,7 @@ TEST(Math, vector1f_testing_assignment_operator_based_on_own_type)
 	Kotek::ktk::math::vector1f some(50.0f);
 	Kotek::ktk::math::vector1f some2 = some;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(some.Get_X(), some2.Get_X()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some.x(), some2.x()));
 }
 
 TEST(Math, vector1f_testing_assignment_operator_based_on_base_type)
@@ -115,9 +115,9 @@ TEST(Math, vector1f_testing_assignment_operator_based_on_base_type)
 	Kotek::ktk::math::vector1f some2 = some;
 
 		#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	EXPECT_TRUE(Kotek::ktk::is_equal(some2.Get_X(), some));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some2.x(), some));
 		#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-	EXPECT_TRUE(Kotek::ktk::is_equal(some2.Get_X(), some.x));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some2.x(), some.x));
 		#endif
 }
 
@@ -125,18 +125,9 @@ TEST(Math, vector1f_testing_setter_single_depth)
 {
 	Kotek::ktk::math::vector1f test;
 
-	test.Set_X(105.0f);
+	test.x() = 105.0f;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test.Get_X(), 105.0f));
-}
-
-TEST(Math, vector1f_testing_setter_two_depth)
-{
-	Kotek::ktk::math::vector1f test2;
-
-	test2.Set_X(50.0f).Set_X(150.0f);
-
-	EXPECT_TRUE(Kotek::ktk::is_equal(test2.Get_X(), 150.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test.x(), 105.0f));
 }
 
 TEST(Math, vector1f_testing_plus_equal_operator_based_on_number)
@@ -146,7 +137,7 @@ TEST(Math, vector1f_testing_plus_equal_operator_based_on_number)
 
 	test1 += test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 9.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 9.0f));
 }
 
 TEST(Math, vector1f_testing_plus_equal_operator_based_on_vector)
@@ -156,7 +147,7 @@ TEST(Math, vector1f_testing_plus_equal_operator_based_on_vector)
 
 	test1 += test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 9.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 9.0f));
 }
 
 TEST(Math, vector1f_testing_subtract_equal_operator_based_on_number)
@@ -166,7 +157,7 @@ TEST(Math, vector1f_testing_subtract_equal_operator_based_on_number)
 
 	test1 -= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 2.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 2.0f));
 }
 
 TEST(Math, vector1f_testing_subtract_equal_operator_based_on_vector)
@@ -176,7 +167,7 @@ TEST(Math, vector1f_testing_subtract_equal_operator_based_on_vector)
 
 	test1 -= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 2.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 2.0f));
 }
 
 TEST(Math, vector1f_testing_multiply_equal_operator_based_on_number_its_scale)
@@ -186,7 +177,7 @@ TEST(Math, vector1f_testing_multiply_equal_operator_based_on_number_its_scale)
 
 	test1 *= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 17.6f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 17.6f));
 }
 
 TEST(Math,
@@ -197,7 +188,7 @@ TEST(Math,
 
 	test1 *= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 17.6f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 17.6f));
 }
 
 TEST(Math, vector1f_testing_divide_equal_operator_based_on_number_its_scale)
@@ -207,7 +198,7 @@ TEST(Math, vector1f_testing_divide_equal_operator_based_on_number_its_scale)
 
 	test1 /= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.6f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (8.4f / 2.6f)));
 }
 
 TEST(Math, vector1f_testing_divide_equal_operator_based_on_vector_its_divide)
@@ -217,7 +208,7 @@ TEST(Math, vector1f_testing_divide_equal_operator_based_on_vector_its_divide)
 
 	test1 /= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.6f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (8.4f / 2.6f)));
 }
 
 TEST(Math, vector1f_testing_modulo_equal_operator_based_on_number)
@@ -227,7 +218,7 @@ TEST(Math, vector1f_testing_modulo_equal_operator_based_on_number)
 
 	test1 %= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(5.3f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (std::fmod(5.3f, 2.0f))));
 }
 
 TEST(Math, vector1f_testing_modulo_equal_operator_based_on_vector)
@@ -237,7 +228,7 @@ TEST(Math, vector1f_testing_modulo_equal_operator_based_on_vector)
 
 	test1 %= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(5.3f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (std::fmod(5.3f, 2.0f))));
 }
 
 TEST(Math, vector1f_testing_unary_plus_operator)
@@ -246,7 +237,7 @@ TEST(Math, vector1f_testing_unary_plus_operator)
 
 	test1 = +test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 10.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 10.0f));
 }
 
 TEST(Math, vector1f_testing_unary_minus_operator)
@@ -255,7 +246,7 @@ TEST(Math, vector1f_testing_unary_minus_operator)
 
 	test1 = -test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), -10.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), -10.0f));
 }
 
 TEST(Math, vector1f_testing_comparison_equal_zeros)
@@ -343,7 +334,7 @@ TEST(Math, vector1f_testing_cast_operator_xmvector)
 
 	float value = DirectX::XMVectorGetX(vec);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(value, test1.Get_X()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(value, test1.x()));
 }
 		#endif
 
@@ -431,15 +422,15 @@ TEST(Math, vector2f_testing_constructor_default)
 {
 	Kotek::ktk::math::vector2f test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 0.0f));
 }
 
 TEST(Math, vector2f_testing_constructor_based_on_number)
 {
 	Kotek::ktk::math::vector2f vec(5.0f, 6.0f);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_X(), 5.0f) &&
-		Kotek::ktk::is_equal(vec.Get_Y(), 6.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.x(), 5.0f) &&
+		Kotek::ktk::is_equal(vec.y(), 6.0f));
 }
 
 TEST(Math, vector2f_testing_constructor_based_on_struct)
@@ -447,8 +438,8 @@ TEST(Math, vector2f_testing_constructor_based_on_struct)
 	Kotek::ktk::math::base_vec2_t data = {5.0f, 6.0f};
 	Kotek::ktk::math::vector2f vec(data);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_X(), 5.0f) &&
-		Kotek::ktk::is_equal(vec.Get_Y(), 6.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.x(), 5.0f) &&
+		Kotek::ktk::is_equal(vec.y(), 6.0f));
 }
 
 TEST(Math, vector2f_testing_copy_constructor)
@@ -456,8 +447,8 @@ TEST(Math, vector2f_testing_copy_constructor)
 	Kotek::ktk::math::vector2f vec_original(550.5f, 153.2f);
 	Kotek::ktk::math::vector2f vec_copy(vec_original);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.Get_X(), vec_copy.Get_X()) &&
-		Kotek::ktk::is_equal(vec_original.Get_Y(), vec_copy.Get_Y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.x(), vec_copy.x()) &&
+		Kotek::ktk::is_equal(vec_original.y(), vec_copy.y()));
 }
 
 TEST(Math, vector2f_testing_assignment_operator_based_on_own_type)
@@ -465,8 +456,8 @@ TEST(Math, vector2f_testing_assignment_operator_based_on_own_type)
 	Kotek::ktk::math::vector2f some(50.0f, 25.4f);
 	Kotek::ktk::math::vector2f some2 = some;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(some.Get_X(), some2.Get_X()) &&
-		Kotek::ktk::is_equal(some.Get_Y(), some2.Get_Y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some.x(), some2.x()) &&
+		Kotek::ktk::is_equal(some.y(), some2.y()));
 }
 
 TEST(Math, vector2f_testing_assignment_operator_based_on_base_type)
@@ -474,30 +465,19 @@ TEST(Math, vector2f_testing_assignment_operator_based_on_base_type)
 	Kotek::ktk::math::base_vec2_t some(51.0f, 15.3f);
 	Kotek::ktk::math::vector2f some2 = some;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(some2.Get_X(), some.x) &&
-		Kotek::ktk::is_equal(some2.Get_Y(), some.y));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some2.x(), some.x) &&
+		Kotek::ktk::is_equal(some2.y(), some.y));
 }
 
 TEST(Math, vector2f_testing_setter_single_depth)
 {
 	Kotek::ktk::math::vector2f test;
 
-	test.Set_X(105.0f);
-	test.Set_Y(103.0f);
+	test.x() = 105.0f;
+	test.y() = 103.0f;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test.Get_X(), 105.0f) &&
-		Kotek::ktk::is_equal(test.Get_Y(), 103.0f));
-}
-
-TEST(Math, vector2f_testing_setter_two_depth)
-{
-	Kotek::ktk::math::vector2f test2;
-
-	test2.Set_X(50.0f).Set_X(150.0f);
-	test2.Set_Y(151.3f).Set_Y(425.25f);
-
-	EXPECT_TRUE(Kotek::ktk::is_equal(test2.Get_X(), 150.0f) &&
-		Kotek::ktk::is_equal(test2.Get_Y(), 425.25f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test.x(), 105.0f) &&
+		Kotek::ktk::is_equal(test.y(), 103.0f));
 }
 
 TEST(Math, vector2f_testing_plus_equal_operator_based_on_vector)
@@ -507,8 +487,8 @@ TEST(Math, vector2f_testing_plus_equal_operator_based_on_vector)
 
 	test1 += test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 5.0f) &&
-		Kotek::ktk::is_equal(test1.Get_Y(), 4.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 5.0f) &&
+		Kotek::ktk::is_equal(test1.y(), 4.5f));
 }
 
 TEST(Math, vector2f_testing_subtract_equal_operator_based_on_vector)
@@ -518,8 +498,8 @@ TEST(Math, vector2f_testing_subtract_equal_operator_based_on_vector)
 
 	test1 -= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 2.0f) &&
-		Kotek::ktk::is_equal(test1.Get_Y(), 0.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 2.0f) &&
+		Kotek::ktk::is_equal(test1.y(), 0.5f));
 }
 
 TEST(Math, vector2f_testing_multiply_equal_operator_based_on_number_its_scale)
@@ -529,8 +509,8 @@ TEST(Math, vector2f_testing_multiply_equal_operator_based_on_number_its_scale)
 
 	test1 *= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 11.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), 35.2f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 11.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), 35.2f));
 }
 
 TEST(Math,
@@ -541,8 +521,8 @@ TEST(Math,
 
 	test1 *= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 11.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (6.4f * 252.1f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 11.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (6.4f * 252.1f)));
 }
 
 TEST(Math, vector2f_testing_divide_equal_operator_based_on_number_its_scale)
@@ -552,8 +532,8 @@ TEST(Math, vector2f_testing_divide_equal_operator_based_on_number_its_scale)
 
 	test1 /= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (2.6f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (8.4f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (2.6f / 2.0f)));
 }
 
 TEST(Math, vector2f_testing_divide_equal_operator_based_on_vector_its_divide)
@@ -563,8 +543,8 @@ TEST(Math, vector2f_testing_divide_equal_operator_based_on_vector_its_divide)
 
 	test1 /= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (3.5f / 0.5f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (8.4f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (3.5f / 0.5f)));
 }
 
 TEST(Math, vector2f_testing_modulo_equal_operator_based_on_number)
@@ -574,8 +554,8 @@ TEST(Math, vector2f_testing_modulo_equal_operator_based_on_number)
 
 	test1 %= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(4.0f, 2.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (std::fmod(6.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (std::fmod(4.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (std::fmod(6.0f, 2.0f))));
 }
 
 TEST(Math, vector2f_testing_modulo_equal_operator_based_on_vector)
@@ -585,8 +565,8 @@ TEST(Math, vector2f_testing_modulo_equal_operator_based_on_vector)
 
 	test1 %= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(4.0f, 2.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (std::fmod(6.0f, 3.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (std::fmod(4.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (std::fmod(6.0f, 3.0f))));
 }
 
 TEST(Math, vector2f_testing_unary_plus_operator)
@@ -595,8 +575,8 @@ TEST(Math, vector2f_testing_unary_plus_operator)
 
 	test1 = +test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 10.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), 5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 10.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), 5.0f));
 }
 
 TEST(Math, vector2f_testing_unary_minus_operator)
@@ -605,8 +585,8 @@ TEST(Math, vector2f_testing_unary_minus_operator)
 
 	test1 = -test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), -10.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), -5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), -10.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), -5.0f));
 }
 
 TEST(Math, vector2f_testing_comparison_equal_zeros)
@@ -715,8 +695,8 @@ TEST(Math, vector2f_testing_cast_operator_xmvector)
 	float value_x = DirectX::XMVectorGetX(vec);
 	float value_y = DirectX::XMVectorGetY(vec);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(value_x, test1.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(value_y, test1.Get_Y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(value_x, test1.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(value_y, test1.y()));
 }
 		#endif
 
@@ -727,8 +707,8 @@ TEST(Math, vector2f_testing_binary_plus_operator_both_vectors)
 
 	auto new_vector = test1 + test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f + 5.5f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f + 0.5f, new_vector.Get_Y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f + 5.5f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f + 0.5f, new_vector.y()));
 }
 
 TEST(Math, vector2f_testing_binary_subtract_operator_both_vectors)
@@ -738,8 +718,8 @@ TEST(Math, vector2f_testing_binary_subtract_operator_both_vectors)
 
 	auto new_vector = test1 - test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f - 0.5f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f - 5.0f, new_vector.Get_Y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f - 0.5f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f - 5.0f, new_vector.y()));
 }
 
 TEST(Math, vector2f_testing_binary_mutiply_operator_both_vectors)
@@ -749,8 +729,8 @@ TEST(Math, vector2f_testing_binary_mutiply_operator_both_vectors)
 
 	auto new_vector = test1 * test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.5f * 5.5f, new_vector.Get_Y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.5f * 5.5f, new_vector.y()));
 }
 
 TEST(Math, vector2f_testing_binary_multiply_operator_vector_number)
@@ -760,8 +740,8 @@ TEST(Math, vector2f_testing_binary_multiply_operator_vector_number)
 
 	auto new_vector = test1 * test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f * 2.2f, new_vector.Get_Y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f * 2.2f, new_vector.y()));
 }
 
 TEST(Math, vector2f_testing_binary_divide_operator_both_vectors)
@@ -771,8 +751,8 @@ TEST(Math, vector2f_testing_binary_divide_operator_both_vectors)
 
 	auto new_vector = test1 / test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.4f, new_vector.Get_Y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.4f, new_vector.y()));
 }
 
 TEST(Math, vector2f_testing_binary_divide_operator_vector_number)
@@ -782,26 +762,26 @@ TEST(Math, vector2f_testing_binary_divide_operator_vector_number)
 
 	auto new_vector = test1 / test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.2f, new_vector.Get_Y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.2f, new_vector.y()));
 }
 
 TEST(Math, vector3f_testing_constructor_default)
 {
 	Kotek::ktk::math::vector3f test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 0.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), 0.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), 0.0f));
 }
 
 TEST(Math, vector3f_testing_constructor_based_on_number)
 {
 	Kotek::ktk::math::vector3f vec(5.0f, 6.0f, 7.0f);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_X(), 5.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_Y(), 6.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_Z(), 7.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.x(), 5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.y(), 6.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.z(), 7.0f));
 }
 
 TEST(Math, vector3f_testing_constructor_based_on_struct)
@@ -809,9 +789,9 @@ TEST(Math, vector3f_testing_constructor_based_on_struct)
 	Kotek::ktk::math::base_vec3_t data = {5.0f, 6.0f, 7.0f};
 	Kotek::ktk::math::vector3f vec(data);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_X(), 5.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_Y(), 6.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_Z(), 7.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.x(), 5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.y(), 6.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.z(), 7.0f));
 }
 
 TEST(Math, vector3f_testing_copy_constructor)
@@ -819,9 +799,9 @@ TEST(Math, vector3f_testing_copy_constructor)
 	Kotek::ktk::math::vector3f vec_original(550.5f, 153.2f, 25.25f);
 	Kotek::ktk::math::vector3f vec_copy(vec_original);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.Get_X(), vec_copy.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.Get_Y(), vec_copy.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.Get_Z(), vec_copy.Get_Z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.x(), vec_copy.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.y(), vec_copy.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.z(), vec_copy.z()));
 }
 
 TEST(Math, vector3f_testing_assignment_operator_based_on_own_type)
@@ -829,9 +809,9 @@ TEST(Math, vector3f_testing_assignment_operator_based_on_own_type)
 	Kotek::ktk::math::vector3f some(50.0f, 25.4f, 252.0f);
 	Kotek::ktk::math::vector3f some2 = some;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(some.Get_X(), some2.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(some.Get_Y(), some2.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(some.Get_Z(), some2.Get_Z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some.x(), some2.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some.y(), some2.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some.z(), some2.z()));
 }
 
 TEST(Math, vector3f_testing_assignment_operator_based_on_base_type)
@@ -839,35 +819,22 @@ TEST(Math, vector3f_testing_assignment_operator_based_on_base_type)
 	Kotek::ktk::math::base_vec3_t some(51.0f, 15.3f, 25.0f);
 	Kotek::ktk::math::vector3f some2 = some;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(some2.Get_X(), some.x));
-	EXPECT_TRUE(Kotek::ktk::is_equal(some2.Get_Y(), some.y));
-	EXPECT_TRUE(Kotek::ktk::is_equal(some2.Get_Z(), some.z));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some2.x(), some.x));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some2.y(), some.y));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some2.z(), some.z));
 }
 
 TEST(Math, vector3f_testing_setter_single_depth)
 {
 	Kotek::ktk::math::vector3f test;
 
-	test.Set_X(105.0f);
-	test.Set_Y(103.0f);
-	test.Set_Z(144.0f);
+	test.x() = 105.0f;
+	test.y() = 103.0f;
+	test.z() = 144.0f;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test.Get_X(), 105.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test.Get_Y(), 103.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test.Get_Z(), 144.0f));
-}
-
-TEST(Math, vector3f_testing_setter_two_depth)
-{
-	Kotek::ktk::math::vector3f test2;
-
-	test2.Set_X(50.0f).Set_X(150.0f);
-	test2.Set_Y(151.3f).Set_Y(425.25f);
-	test2.Set_Z(131.3f).Set_Z(325.25f);
-
-	EXPECT_TRUE(Kotek::ktk::is_equal(test2.Get_X(), 150.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test2.Get_Y(), 425.25f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test2.Get_Z(), 325.25f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test.x(), 105.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test.y(), 103.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test.z(), 144.0f));
 }
 
 TEST(Math, vector3f_testing_plus_equal_operator_based_on_vector)
@@ -877,9 +844,9 @@ TEST(Math, vector3f_testing_plus_equal_operator_based_on_vector)
 
 	test1 += test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 5.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), 4.5f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), 360.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), 4.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), 360.0f));
 }
 
 TEST(Math, vector3f_testing_subtract_equal_operator_based_on_vector)
@@ -889,8 +856,8 @@ TEST(Math, vector3f_testing_subtract_equal_operator_based_on_vector)
 
 	test1 -= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 2.0f) &&
-		Kotek::ktk::is_equal(test1.Get_Y(), 0.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 2.0f) &&
+		Kotek::ktk::is_equal(test1.y(), 0.5f));
 }
 
 TEST(Math, vector3f_testing_multiply_equal_operator_based_on_number_its_scale)
@@ -900,9 +867,9 @@ TEST(Math, vector3f_testing_multiply_equal_operator_based_on_number_its_scale)
 
 	test1 *= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 2.0f * 5.5f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), 6.4f * 5.5f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), 4.4f * 5.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 2.0f * 5.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), 6.4f * 5.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), 4.4f * 5.5f));
 }
 
 TEST(Math,
@@ -913,9 +880,9 @@ TEST(Math,
 
 	test1 *= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (2.0f * 5.5f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (6.4f * 252.1f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (25.5f * 60.4f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (2.0f * 5.5f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (6.4f * 252.1f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (25.5f * 60.4f)));
 }
 
 TEST(Math, vector3f_testing_divide_equal_operator_based_on_number_its_scale)
@@ -925,9 +892,9 @@ TEST(Math, vector3f_testing_divide_equal_operator_based_on_number_its_scale)
 
 	test1 /= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (2.6f / 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (25.0f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (8.4f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (2.6f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (25.0f / 2.0f)));
 }
 
 TEST(Math, vector3f_testing_divide_equal_operator_based_on_vector_its_divide)
@@ -937,9 +904,9 @@ TEST(Math, vector3f_testing_divide_equal_operator_based_on_vector_its_divide)
 
 	test1 /= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (3.5f / 0.5f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (5.5f / 52.5f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (8.4f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (3.5f / 0.5f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (5.5f / 52.5f)));
 }
 
 TEST(Math, vector3f_testing_modulo_equal_operator_based_on_number)
@@ -949,9 +916,9 @@ TEST(Math, vector3f_testing_modulo_equal_operator_based_on_number)
 
 	test1 %= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(4.0f, 2.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (std::fmod(6.0f, 2.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (std::fmod(8.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (std::fmod(4.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (std::fmod(6.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (std::fmod(8.0f, 2.0f))));
 }
 
 TEST(Math, vector3f_testing_modulo_equal_operator_based_on_vector)
@@ -961,9 +928,9 @@ TEST(Math, vector3f_testing_modulo_equal_operator_based_on_vector)
 
 	test1 %= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(4.0f, 2.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (std::fmod(6.0f, 3.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (std::fmod(8.0f, 4.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (std::fmod(4.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (std::fmod(6.0f, 3.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (std::fmod(8.0f, 4.0f))));
 }
 
 TEST(Math, vector3f_testing_unary_plus_operator)
@@ -972,9 +939,9 @@ TEST(Math, vector3f_testing_unary_plus_operator)
 
 	test1 = +test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 10.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), 5.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), 15.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 10.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), 5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), 15.0f));
 }
 
 TEST(Math, vector3f_testing_unary_minus_operator)
@@ -983,9 +950,9 @@ TEST(Math, vector3f_testing_unary_minus_operator)
 
 	test1 = -test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), -10.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), -5.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), -15.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), -10.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), -5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), -15.0f));
 }
 
 TEST(Math, vector3f_testing_comparison_equal_zeros)
@@ -1095,9 +1062,9 @@ TEST(Math, vector3f_testing_cast_operator_xmvector)
 	float value_y = DirectX::XMVectorGetY(vec);
 	float value_z = DirectX::XMVectorGetZ(vec);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(value_x, test1.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(value_y, test1.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(value_z, test1.Get_Z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(value_x, test1.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(value_y, test1.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(value_z, test1.z()));
 }
 		#endif
 
@@ -1108,9 +1075,9 @@ TEST(Math, vector3f_testing_binary_plus_operator_both_vectors)
 
 	auto new_vector = test1 + test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f + 5.5f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f + 0.5f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f + 2.5f, new_vector.Get_Z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f + 5.5f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f + 0.5f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f + 2.5f, new_vector.z()));
 }
 
 TEST(Math, vector3f_testing_binary_subtract_operator_both_vectors)
@@ -1120,9 +1087,9 @@ TEST(Math, vector3f_testing_binary_subtract_operator_both_vectors)
 
 	auto new_vector = test1 - test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f - 0.5f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f - 5.0f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f - 2.5f, new_vector.Get_Z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f - 0.5f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f - 5.0f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f - 2.5f, new_vector.z()));
 }
 
 TEST(Math, vector3f_testing_binary_mutiply_operator_both_vectors)
@@ -1132,9 +1099,9 @@ TEST(Math, vector3f_testing_binary_mutiply_operator_both_vectors)
 
 	auto new_vector = test1 * test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.5f * 5.5f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f * 2.5f, new_vector.Get_Z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.5f * 5.5f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f * 2.5f, new_vector.z()));
 }
 
 TEST(Math, vector3f_testing_binary_multiply_operator_vector_number)
@@ -1144,9 +1111,9 @@ TEST(Math, vector3f_testing_binary_multiply_operator_vector_number)
 
 	auto new_vector = test1 * test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f * 2.2f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f * 2.2f, new_vector.Get_Z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f * 2.2f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f * 2.2f, new_vector.z()));
 }
 
 TEST(Math, vector3f_testing_binary_divide_operator_both_vectors)
@@ -1156,9 +1123,9 @@ TEST(Math, vector3f_testing_binary_divide_operator_both_vectors)
 
 	auto new_vector = test1 / test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.4f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f / 0.5f, new_vector.Get_Z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.4f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f / 0.5f, new_vector.z()));
 }
 
 TEST(Math, vector3f_testing_binary_divide_operator_vector_number)
@@ -1168,29 +1135,29 @@ TEST(Math, vector3f_testing_binary_divide_operator_vector_number)
 
 	auto new_vector = test1 / test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.2f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f / 0.2f, new_vector.Get_Z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.2f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f / 0.2f, new_vector.z()));
 }
 
 TEST(Math, vector4f_testing_constructor_default)
 {
 	Kotek::ktk::math::vector4f test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 0.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), 0.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), 0.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), 0.0f));
 }
 
 TEST(Math, vector4f_testing_constructor_based_on_number)
 {
 	Kotek::ktk::math::vector4f vec(5.0f, 6.0f, 7.0f, 8.0f);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_X(), 5.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_Y(), 6.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_Z(), 7.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_W(), 8.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.x(), 5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.y(), 6.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.z(), 7.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.w(), 8.0f));
 }
 
 TEST(Math, vector4f_testing_constructor_based_on_struct)
@@ -1198,10 +1165,10 @@ TEST(Math, vector4f_testing_constructor_based_on_struct)
 	Kotek::ktk::math::base_vec4_t data = {5.0f, 6.0f, 7.0f, 8.0f};
 	Kotek::ktk::math::vector4f vec(data);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_X(), 5.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_Y(), 6.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_Z(), 7.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec.Get_W(), 8.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.x(), 5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.y(), 6.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.z(), 7.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec.w(), 8.0f));
 }
 
 TEST(Math, vector4f_testing_copy_constructor)
@@ -1209,10 +1176,10 @@ TEST(Math, vector4f_testing_copy_constructor)
 	Kotek::ktk::math::vector4f vec_original(550.5f, 153.2f, 25.25f, 2525.52f);
 	Kotek::ktk::math::vector4f vec_copy(vec_original);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.Get_X(), vec_copy.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.Get_Y(), vec_copy.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.Get_Z(), vec_copy.Get_Z()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.Get_W(), vec_copy.Get_W()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.x(), vec_copy.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.y(), vec_copy.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.z(), vec_copy.z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec_original.w(), vec_copy.w()));
 }
 
 TEST(Math, vector4f_testing_assignment_operator_based_on_own_type)
@@ -1220,10 +1187,10 @@ TEST(Math, vector4f_testing_assignment_operator_based_on_own_type)
 	Kotek::ktk::math::vector4f some(50.0f, 25.4f, 252.0f, 25215.15f);
 	Kotek::ktk::math::vector4f some2 = some;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(some.Get_X(), some2.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(some.Get_Y(), some2.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(some.Get_Z(), some2.Get_Z()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(some.Get_W(), some2.Get_W()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some.x(), some2.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some.y(), some2.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some.z(), some2.z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some.w(), some2.w()));
 }
 
 TEST(Math, vector4f_testing_assignment_operator_based_on_base_type)
@@ -1231,40 +1198,25 @@ TEST(Math, vector4f_testing_assignment_operator_based_on_base_type)
 	Kotek::ktk::math::base_vec4_t some(51.0f, 15.3f, 25.0f, 1511.3f);
 	Kotek::ktk::math::vector4f some2 = some;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(some2.Get_X(), some.x));
-	EXPECT_TRUE(Kotek::ktk::is_equal(some2.Get_Y(), some.y));
-	EXPECT_TRUE(Kotek::ktk::is_equal(some2.Get_Z(), some.z));
-	EXPECT_TRUE(Kotek::ktk::is_equal(some2.Get_W(), some.w));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some2.x(), some.x));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some2.y(), some.y));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some2.z(), some.z));
+	EXPECT_TRUE(Kotek::ktk::is_equal(some2.w(), some.w));
 }
 
 TEST(Math, vector4f_testing_setter_single_depth)
 {
 	Kotek::ktk::math::vector4f test;
 
-	test.Set_X(105.0f);
-	test.Set_Y(103.0f);
-	test.Set_Z(144.0f);
-	test.Set_W(1514.0f);
+	test.x() = 105.0f;
+	test.y() = 103.0f;
+	test.z() = 144.0f;
+	test.w() = 1514.0f;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test.Get_X(), 105.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test.Get_Y(), 103.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test.Get_Z(), 144.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test.Get_W(), 1514.0f));
-}
-
-TEST(Math, vector4f_testing_setter_two_depth)
-{
-	Kotek::ktk::math::vector4f test2;
-
-	test2.Set_X(50.0f).Set_X(150.0f);
-	test2.Set_Y(151.3f).Set_Y(425.25f);
-	test2.Set_Z(131.3f).Set_Z(325.25f);
-	test2.Set_W(1414.14f).Set_W(3254.25f);
-
-	EXPECT_TRUE(Kotek::ktk::is_equal(test2.Get_X(), 150.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test2.Get_Y(), 425.25f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test2.Get_Z(), 325.25f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test2.Get_W(), 3254.25f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test.x(), 105.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test.y(), 103.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test.z(), 144.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test.w(), 1514.0f));
 }
 
 TEST(Math, vector4f_testing_plus_equal_operator_based_on_vector)
@@ -1274,10 +1226,10 @@ TEST(Math, vector4f_testing_plus_equal_operator_based_on_vector)
 
 	test1 += test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (3.5f + 1.5f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (2.5f + 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (351.0f + 9.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), (151.1f + 15.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (3.5f + 1.5f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (2.5f + 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (351.0f + 9.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), (151.1f + 15.0f)));
 }
 
 TEST(Math, vector4f_testing_subtract_equal_operator_based_on_vector)
@@ -1287,10 +1239,10 @@ TEST(Math, vector4f_testing_subtract_equal_operator_based_on_vector)
 
 	test1 -= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (3.5f - 1.5f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (2.5f - 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (252.0f - 3.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), (16.0f - 4.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (3.5f - 1.5f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (2.5f - 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (252.0f - 3.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), (16.0f - 4.0f)));
 }
 
 TEST(Math, vector4f_testing_multiply_equal_operator_based_on_number_its_scale)
@@ -1300,10 +1252,10 @@ TEST(Math, vector4f_testing_multiply_equal_operator_based_on_number_its_scale)
 
 	test1 *= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 2.0f * 5.5f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), 6.4f * 5.5f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), 4.4f * 5.5f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), 25.25f * 5.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 2.0f * 5.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), 6.4f * 5.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), 4.4f * 5.5f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), 25.25f * 5.5f));
 }
 
 TEST(Math,
@@ -1314,10 +1266,10 @@ TEST(Math,
 
 	test1 *= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (2.0f * 5.5f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (6.4f * 252.1f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (25.5f * 60.4f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), (10.10f * 25.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (2.0f * 5.5f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (6.4f * 252.1f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (25.5f * 60.4f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), (10.10f * 25.0f)));
 }
 
 TEST(Math, vector4f_testing_divide_equal_operator_based_on_number_its_scale)
@@ -1327,10 +1279,10 @@ TEST(Math, vector4f_testing_divide_equal_operator_based_on_number_its_scale)
 
 	test1 /= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (2.6f / 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (25.0f / 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), (251.0f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (8.4f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (2.6f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (25.0f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), (251.0f / 2.0f)));
 }
 
 TEST(Math, vector4f_testing_divide_equal_operator_based_on_vector_its_divide)
@@ -1340,10 +1292,10 @@ TEST(Math, vector4f_testing_divide_equal_operator_based_on_vector_its_divide)
 
 	test1 /= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (8.4f / 2.0f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (3.5f / 0.5f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (5.5f / 52.5f)));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), (251.15f / 151.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (8.4f / 2.0f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (3.5f / 0.5f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (5.5f / 52.5f)));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), (251.15f / 151.0f)));
 }
 
 TEST(Math, vector4f_testing_modulo_equal_operator_based_on_number)
@@ -1353,10 +1305,10 @@ TEST(Math, vector4f_testing_modulo_equal_operator_based_on_number)
 
 	test1 %= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(4.0f, 2.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (std::fmod(6.0f, 2.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (std::fmod(8.0f, 2.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), (std::fmod(151.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (std::fmod(4.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (std::fmod(6.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (std::fmod(8.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), (std::fmod(151.0f, 2.0f))));
 }
 
 TEST(Math, vector4f_testing_modulo_equal_operator_based_on_vector)
@@ -1366,10 +1318,10 @@ TEST(Math, vector4f_testing_modulo_equal_operator_based_on_vector)
 
 	test1 %= test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), (std::fmod(4.0f, 2.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), (std::fmod(6.0f, 3.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), (std::fmod(8.0f, 4.0f))));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), (std::fmod(15.0f, 12.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), (std::fmod(4.0f, 2.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), (std::fmod(6.0f, 3.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), (std::fmod(8.0f, 4.0f))));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), (std::fmod(15.0f, 12.0f))));
 }
 
 TEST(Math, vector4f_testing_unary_plus_operator)
@@ -1378,10 +1330,10 @@ TEST(Math, vector4f_testing_unary_plus_operator)
 
 	test1 = +test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), 10.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), 5.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), 15.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), 151.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), 10.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), 5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), 15.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), 151.0f));
 }
 
 TEST(Math, vector4f_testing_unary_minus_operator)
@@ -1390,10 +1342,10 @@ TEST(Math, vector4f_testing_unary_minus_operator)
 
 	test1 = -test1;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_X(), -10.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Y(), -5.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_Z(), -15.0f));
-	EXPECT_TRUE(Kotek::ktk::is_equal(test1.Get_W(), -151.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.x(), -10.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.y(), -5.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.z(), -15.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(test1.w(), -151.0f));
 }
 
 TEST(Math, vector4f_testing_comparison_equal_zeros)
@@ -1506,10 +1458,10 @@ TEST(Math, vector4f_testing_cast_operator_xmvector)
 	float value_z = DirectX::XMVectorGetZ(vec);
 	float value_w = DirectX::XMVectorGetW(vec);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(value_x, test1.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(value_y, test1.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(value_z, test1.Get_Z()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(value_w, test1.Get_W()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(value_x, test1.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(value_y, test1.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(value_z, test1.z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(value_w, test1.w()));
 }
 		#endif
 
@@ -1520,10 +1472,10 @@ TEST(Math, vector4f_testing_binary_plus_operator_both_vectors)
 
 	auto new_vector = test1 + test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f + 5.5f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f + 0.5f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f + 2.5f, new_vector.Get_Z()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.5f + 252.5f, new_vector.Get_W()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f + 5.5f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f + 0.5f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f + 2.5f, new_vector.z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.5f + 252.5f, new_vector.w()));
 }
 
 TEST(Math, vector4f_testing_binary_subtract_operator_both_vectors)
@@ -1533,10 +1485,10 @@ TEST(Math, vector4f_testing_binary_subtract_operator_both_vectors)
 
 	auto new_vector = test1 - test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f - 0.5f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f - 5.0f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f - 2.5f, new_vector.Get_Z()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.5f - 6.0f, new_vector.Get_W()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(50.5f - 0.5f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f - 5.0f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f - 2.5f, new_vector.z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.5f - 6.0f, new_vector.w()));
 }
 
 TEST(Math, vector4f_testing_binary_mutiply_operator_both_vectors)
@@ -1546,10 +1498,10 @@ TEST(Math, vector4f_testing_binary_mutiply_operator_both_vectors)
 
 	auto new_vector = test1 * test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.5f * 5.5f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f * 2.5f, new_vector.Get_Z()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.5f * 25.5f, new_vector.Get_W()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.5f * 5.5f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f * 2.5f, new_vector.z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.5f * 25.5f, new_vector.w()));
 }
 
 TEST(Math, vector4f_testing_binary_multiply_operator_vector_number)
@@ -1559,10 +1511,10 @@ TEST(Math, vector4f_testing_binary_multiply_operator_vector_number)
 
 	auto new_vector = test1 * test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f * 2.2f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f * 2.2f, new_vector.Get_Z()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.15f * 2.2f, new_vector.Get_W()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.5f * 2.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f * 2.2f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f * 2.2f, new_vector.z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.15f * 2.2f, new_vector.w()));
 }
 
 TEST(Math, vector4f_testing_binary_divide_operator_both_vectors)
@@ -1572,10 +1524,10 @@ TEST(Math, vector4f_testing_binary_divide_operator_both_vectors)
 
 	auto new_vector = test1 / test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.4f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f / 0.5f, new_vector.Get_Z()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.5f / 5.0f, new_vector.Get_W()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.4f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.5f / 0.5f, new_vector.z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.5f / 5.0f, new_vector.w()));
 }
 
 TEST(Math, vector4f_testing_binary_divide_operator_vector_number)
@@ -1585,10 +1537,10 @@ TEST(Math, vector4f_testing_binary_divide_operator_vector_number)
 
 	auto new_vector = test1 / test2;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.Get_X()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.2f, new_vector.Get_Y()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f / 0.2f, new_vector.Get_Z()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(151.5f / 0.2f, new_vector.Get_W()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.6f / 0.2f, new_vector.x()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.6f / 0.2f, new_vector.y()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.5f / 0.2f, new_vector.z()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(151.5f / 0.2f, new_vector.w()));
 }
 
 TEST(Math, matrix4x4f_constructor_values)
@@ -1871,7 +1823,8 @@ TEST(Math, matrix4x4f_assignment_divide_operator)
 	{
 		for (int j = 0; j < 4; ++j)
 		{
-			EXPECT_TRUE(Kotek::ktk::is_equal(copy(i, j) / copy2(i, j), test(i, j)));
+			EXPECT_TRUE(
+				Kotek::ktk::is_equal(copy(i, j) / copy2(i, j), test(i, j)));
 		}
 	}
 }
@@ -2201,10 +2154,364 @@ TEST(Math, matrix4x4f_minus_operator)
 	EXPECT_TRUE(Kotek::ktk::is_equal(31.0f - 15.0f, test.Get_32()));
 	EXPECT_TRUE(Kotek::ktk::is_equal(32.0f - 16.0f, test.Get_33()));
 }
+
+TEST(Math, vector1f_constructors)
+{
+	Kotek::ktk::math::vector1f vec1(10.0f, 5.0f, 1.0f, -1.0f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec1.x(), 10.0f));
+
+	Kotek::ktk::math::vector1f vec2(5.0f, -1.0f, 2.0f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec2.x(), 5.0f));
+
+	Kotek::ktk::math::vector1f vec3(2.212f, 141.1f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec3.x(), 2.212f));
+
+	Kotek::ktk::math::vector1f vec4(1241.1414f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec4.x(), 1241.1414f));
+
+	float arr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
+	float arr3[3] = {1.310f, 11.1f, 3113.0f};
+	float arr2[2] = {3113.0f, 1.310f};
+	float arr1[1] = {
+		-13.0f,
+	};
+
+	Kotek::ktk::math::vector1f vec5(arr4);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec5.x(), 11.1f));
+
+	Kotek::ktk::math::vector1f vec6(arr3);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec6.x(), 1.310f));
+
+	Kotek::ktk::math::vector1f vec7(arr2);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec7.x(), 3113.0f));
+
+	Kotek::ktk::math::vector1f vec8(arr1);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec8.x(), -13.0f));
+
+	Kotek::ktk::math::vector1f vec9(&arr1[0]);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec9.x(), -13.0f));
+
+	float* p_val = nullptr;
+	float val = 3.11f;
+	p_val = &val;
+
+	Kotek::ktk::math::vector1f vec10(p_val);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec10.x(), 3.11f));
+
+	const float carr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
+	const float carr3[3] = {1.310f, 11.1f, 3113.0f};
+	const float carr2[2] = {3113.0f, 1.310f};
+	const float carr1[1] = {
+		-13.0f,
+	};
+
+	Kotek::ktk::math::vector1f vec11(carr4);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec11.x(), 11.1f));
+
+	Kotek::ktk::math::vector1f vec12(carr3);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec12.x(), 1.310f));
+
+	Kotek::ktk::math::vector1f vec13(carr2);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec13.x(), 3113.0f));
+
+	Kotek::ktk::math::vector1f vec14(carr1);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec14.x(), -13.0f));
+}
+
+TEST(Math, vector2f_contsructors)
+{
+	Kotek::ktk::math::vector2f vec1(10.0f, 5.0f, 1.0f, -1.0f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec1.x(), 10.0f) &&
+		Kotek::ktk::is_equal(vec1.y(), 5.0f));
+
+	Kotek::ktk::math::vector2f vec2(5.0f, -1.0f, 2.0f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec2.x(), 5.0f) &&
+		Kotek::ktk::is_equal(vec2.y(), -1.0f));
+
+	Kotek::ktk::math::vector2f vec3(2.212f, 141.1f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec3.x(), 2.212f) &&
+		Kotek::ktk::is_equal(vec3.y(), 141.1f));
+
+	Kotek::ktk::math::vector2f vec4(1241.1414f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec4.x(), 1241.1414f) &&
+		Kotek::ktk::is_equal(vec4.y(), 0.0f));
+
+	float arr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
+	float arr3[3] = {1.310f, 11.1f, 3113.0f};
+	float arr2[2] = {3113.0f, 1.310f};
+	float arr1[1] = {
+		-13.0f,
+	};
+
+	Kotek::ktk::math::vector2f vec5(arr4);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec5.x(), 11.1f) &&
+		Kotek::ktk::is_equal(vec5.y(), 1.310f));
+
+	Kotek::ktk::math::vector2f vec6(arr3);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec6.x(), 1.310f) &&
+		Kotek::ktk::is_equal(vec6.y(), 11.1f));
+
+	Kotek::ktk::math::vector2f vec7(arr2);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec7.x(), 3113.0f) &&
+		Kotek::ktk::is_equal(vec7.y(), 1.310f));
+
+	Kotek::ktk::math::vector2f vec8(arr1);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec8.x(), -13.0f) &&
+		Kotek::ktk::is_equal(vec8.y(), 0.0f));
+
+	Kotek::ktk::math::vector2f vec9(&arr1[0]);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec9.x(), -13.0f) &&
+		Kotek::ktk::is_equal(vec9.y(), 0.0f));
+
+	float* p_val = nullptr;
+	float val = 3.11f;
+	p_val = &val;
+
+	Kotek::ktk::math::vector2f vec10(p_val);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec10.x(), 3.11f) &&
+		Kotek::ktk::is_equal(vec10.y(), 0.0f));
+
+	const float carr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
+	const float carr3[3] = {1.310f, 11.1f, 3113.0f};
+	const float carr2[2] = {3113.0f, 1.310f};
+	const float carr1[1] = {
+		-13.0f,
+	};
+
+	Kotek::ktk::math::vector2f vec11(carr4);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec11.x(), 11.1f) &&
+		Kotek::ktk::is_equal(vec11.y(), 1.310f));
+
+	Kotek::ktk::math::vector2f vec12(carr3);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec12.x(), 1.310f) &&
+		Kotek::ktk::is_equal(vec12.y(), 11.1f));
+
+	Kotek::ktk::math::vector2f vec13(carr2);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec13.x(), 3113.0f) &&
+		Kotek::ktk::is_equal(vec13.y(), 1.310f));
+
+	Kotek::ktk::math::vector2f vec14(carr1);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec14.x(), -13.0f) &&
+		Kotek::ktk::is_equal(vec14.y(), 0.0f));
+}
+
+TEST(Math, vector3f_constructors)
+{
+	Kotek::ktk::math::vector3f vec1(10.0f, 5.0f, 1.0f, -1.0f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec1.x(), 10.0f) &&
+		Kotek::ktk::is_equal(vec1.y(), 5.0f) &&
+		Kotek::ktk::is_equal(vec1.z(), 1.0f));
+
+	Kotek::ktk::math::vector3f vec2(5.0f, -1.0f, 2.0f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec2.x(), 5.0f) &&
+		Kotek::ktk::is_equal(vec2.y(), -1.0f) &&
+		Kotek::ktk::is_equal(vec2.z(), 2.0f));
+
+	Kotek::ktk::math::vector3f vec3(2.212f, 141.1f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec3.x(), 2.212f) &&
+		Kotek::ktk::is_equal(vec3.y(), 141.1f) &&
+		Kotek::ktk::is_equal(vec3.z(), 0.0f));
+
+	Kotek::ktk::math::vector3f vec4(1241.1414f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec4.x(), 1241.1414f) &&
+		Kotek::ktk::is_equal(vec4.y(), 0.0f) &&
+		Kotek::ktk::is_equal(vec4.z(), 0.0f));
+
+	float arr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
+	float arr3[3] = {1.310f, 11.1f, 3113.0f};
+	float arr2[2] = {3113.0f, 1.310f};
+	float arr1[1] = {
+		-13.0f,
+	};
+
+	Kotek::ktk::math::vector3f vec5(arr4);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec5.x(), 11.1f) &&
+		Kotek::ktk::is_equal(vec5.y(), 1.310f) &&
+		Kotek::ktk::is_equal(vec5.z(), 3113.0f));
+
+	Kotek::ktk::math::vector3f vec6(arr3);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec6.x(), 1.310f) &&
+		Kotek::ktk::is_equal(vec6.y(), 11.1f) &&
+		Kotek::ktk::is_equal(vec6.z(), 3113.0f));
+
+	Kotek::ktk::math::vector3f vec7(arr2);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec7.x(), 3113.0f) &&
+		Kotek::ktk::is_equal(vec7.y(), 1.310f) &&
+		Kotek::ktk::is_equal(vec7.z(), 0.0f));
+
+	Kotek::ktk::math::vector3f vec8(arr1);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec8.x(), -13.0f) &&
+		Kotek::ktk::is_equal(vec8.y(), 0.0f) &&
+		Kotek::ktk::is_equal(vec8.z(), 0.0f));
+
+	Kotek::ktk::math::vector3f vec9(&arr1[0]);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec9.x(), -13.0f) &&
+		Kotek::ktk::is_equal(vec9.y(), 0.0f) &&
+		Kotek::ktk::is_equal(vec9.z(), 0.0f));
+
+	float* p_val = nullptr;
+	float val = 3.11f;
+	p_val = &val;
+
+	Kotek::ktk::math::vector3f vec10(p_val);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec10.x(), 3.11f) &&
+		Kotek::ktk::is_equal(vec10.y(), 0.0f) &&
+		Kotek::ktk::is_equal(vec10.z(), 0.0f));
+
+	const float carr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
+	const float carr3[3] = {1.310f, 11.1f, 3113.0f};
+	const float carr2[2] = {3113.0f, 1.310f};
+	const float carr1[1] = {
+		-13.0f,
+	};
+
+	Kotek::ktk::math::vector3f vec11(carr4);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec11.x(), 11.1f) &&
+		Kotek::ktk::is_equal(vec11.y(), 1.310f) &&
+		Kotek::ktk::is_equal(vec11.z(), 3113.0f));
+
+	Kotek::ktk::math::vector3f vec12(carr3);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec12.x(), 1.310f) &&
+		Kotek::ktk::is_equal(vec12.y(), 11.1f) &&
+		Kotek::ktk::is_equal(vec12.z(), 3113.0f));
+
+	Kotek::ktk::math::vector3f vec13(carr2);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec13.x(), 3113.0f) &&
+		Kotek::ktk::is_equal(vec13.y(), 1.310f) &&
+		Kotek::ktk::is_equal(vec13.z(), 0.0f));
+
+	Kotek::ktk::math::vector3f vec14(carr1);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec14.x(), -13.0f) &&
+		Kotek::ktk::is_equal(vec14.y(), 0.0f) &&
+		Kotek::ktk::is_equal(vec14.z(), 0.0f));
+}
+
+TEST(Math, vector4f_constructors)
+{
+	Kotek::ktk::math::vector4f vec1(10.0f, 5.0f, 1.0f, -1.0f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec1.x(), 10.0f) &&
+		Kotek::ktk::is_equal(vec1.y(), 5.0f) &&
+		Kotek::ktk::is_equal(vec1.z(), 1.0f) &&
+		Kotek::ktk::is_equal(vec1.w(), -1.0f));
+
+	Kotek::ktk::math::vector4f vec2(5.0f, -1.0f, 2.0f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec2.x(), 5.0f) &&
+		Kotek::ktk::is_equal(vec2.y(), -1.0f) &&
+		Kotek::ktk::is_equal(vec2.z(), 2.0f) &&
+		Kotek::ktk::is_equal(vec2.w(), 0.0f));
+
+	Kotek::ktk::math::vector4f vec3(2.212f, 141.1f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec3.x(), 2.212f) &&
+		Kotek::ktk::is_equal(vec3.y(), 141.1f) &&
+		Kotek::ktk::is_equal(vec3.z(), 0.0f) &&
+		Kotek::ktk::is_equal(vec3.w(), 0.0f));
+
+	Kotek::ktk::math::vector4f vec4(1241.1414f);
+
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec4.x(), 1241.1414f) &&
+		Kotek::ktk::is_equal(vec4.y(), 0.0f) &&
+		Kotek::ktk::is_equal(vec4.z(), 0.0f) &&
+		Kotek::ktk::is_equal(vec4.w(), 0.0f));
+
+	float arr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
+	float arr3[3] = {1.310f, 11.1f, 3113.0f};
+	float arr2[2] = {3113.0f, 1.310f};
+	float arr1[1] = {
+		-13.0f,
+	};
+
+	Kotek::ktk::math::vector4f vec5(arr4);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec5.x(), 11.1f) &&
+		Kotek::ktk::is_equal(vec5.y(), 1.310f) &&
+		Kotek::ktk::is_equal(vec5.z(), 3113.0f) &&
+		Kotek::ktk::is_equal(vec5.w(), -13.0f));
+
+	Kotek::ktk::math::vector4f vec6(arr3);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec6.x(), 1.310f) &&
+		Kotek::ktk::is_equal(vec6.y(), 11.1f) &&
+		Kotek::ktk::is_equal(vec6.z(), 3113.0f) &&
+		Kotek::ktk::is_equal(vec6.w(), 0.0f));
+
+	Kotek::ktk::math::vector4f vec7(arr2);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec7.x(), 3113.0f) &&
+		Kotek::ktk::is_equal(vec7.y(), 1.310f) &&
+		Kotek::ktk::is_equal(vec7.z(), 0.0f) &&
+		Kotek::ktk::is_equal(vec7.w(), 0.0f));
+
+	Kotek::ktk::math::vector4f vec8(arr1);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec8.x(), -13.0f) &&
+		Kotek::ktk::is_equal(vec8.y(), 0.0f) &&
+		Kotek::ktk::is_equal(vec8.z(), 0.0f) &&
+		Kotek::ktk::is_equal(vec8.w(), 0.0f));
+
+	Kotek::ktk::math::vector4f vec9(&arr1[0]);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec9.x(), -13.0f) &&
+		Kotek::ktk::is_equal(vec9.y(), 0.0f) &&
+		Kotek::ktk::is_equal(vec9.z(), 0.0f) &&
+		Kotek::ktk::is_equal(vec9.w(), 0.0f));
+
+	float* p_val = nullptr;
+	float val = 3.11f;
+	p_val = &val;
+
+	Kotek::ktk::math::vector4f vec10(p_val);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec10.x(), 3.11f) &&
+		Kotek::ktk::is_equal(vec10.y(), 0.0f) &&
+		Kotek::ktk::is_equal(vec10.z(), 0.0f) &&
+		Kotek::ktk::is_equal(vec10.w(), 0.0f));
+
+	const float carr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
+	const float carr3[3] = {1.310f, 11.1f, 3113.0f};
+	const float carr2[2] = {3113.0f, 1.310f};
+	const float carr1[1] = {
+		-13.0f,
+	};
+
+	Kotek::ktk::math::vector4f vec11(carr4);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec11.x(), 11.1f) &&
+		Kotek::ktk::is_equal(vec11.y(), 1.310f) &&
+		Kotek::ktk::is_equal(vec11.z(), 3113.0f) &&
+		Kotek::ktk::is_equal(vec11.w(), -13.0f));
+
+	Kotek::ktk::math::vector4f vec12(carr3);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec12.x(), 1.310f) &&
+		Kotek::ktk::is_equal(vec12.y(), 11.1f) &&
+		Kotek::ktk::is_equal(vec12.z(), 3113.0f) &&
+		Kotek::ktk::is_equal(vec12.w(), 0.0F));
+
+	Kotek::ktk::math::vector4f vec13(carr2);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec13.x(), 3113.0f) &&
+		Kotek::ktk::is_equal(vec13.y(), 1.310f) &&
+		Kotek::ktk::is_equal(vec13.z(), 0.0f) &&
+		Kotek::ktk::is_equal(vec13.w(), 0.0f));
+
+	Kotek::ktk::math::vector4f vec14(carr1);
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec14.x(), -13.0f) &&
+		Kotek::ktk::is_equal(vec14.y(), 0.0f) &&
+		Kotek::ktk::is_equal(vec14.z(), 0.0f) &&
+		Kotek::ktk::is_equal(vec14.w(), 0.0f));
+}
+
 	#endif
 #endif
 
-void RegisterTests_Math_ForModule_Core(){
+void RegisterTests_Math_ForModule_Core()
+{
 #ifdef KOTEK_USE_TESTS
 #endif
 }

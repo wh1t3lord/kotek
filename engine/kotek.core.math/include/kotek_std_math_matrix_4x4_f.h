@@ -405,8 +405,12 @@ public:
 #endif
 	}
 
-	float* operator[](kun_ktk size_t row)
+	float* operator[](unsigned char row)
 	{
+		KOTEK_ASSERT(row != unsigned char(-1),
+			"out of range (probably you passed a negative number)");
+		KOTEK_ASSERT(row <= 3, "out of range");
+
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		return &this->m_base.m[row][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -416,8 +420,12 @@ public:
 #endif
 	}
 
-	const float* operator[](kun_ktk size_t row) const
+	const float* operator[](unsigned char row) const
 	{
+		KOTEK_ASSERT(row != unsigned char(-1),
+			"out of range (probably you passed a negative number)");
+		KOTEK_ASSERT(row <= 3, "out of range!");
+
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		return &this->m_base.m[row][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)

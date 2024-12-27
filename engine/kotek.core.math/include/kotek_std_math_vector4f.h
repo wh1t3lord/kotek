@@ -9,7 +9,46 @@ KOTEK_BEGIN_NAMESPACE_MATH
 class vector4f
 {
 public:
+	vector4f(float x) : m_base(x, 0.0f, 0.0f, 0.0f) {}
+	vector4f(float x, float y) : m_base(x, y, 0.0f, 0.0f) {}
+	vector4f(float x, float y, float z) : m_base(x, y, z, 0.0f) {}
 	vector4f(float x, float y, float z, float w) : m_base(x, y, z, w) {}
+
+	vector4f(float* p_arr4) : m_base(p_arr4[0], p_arr4[1], p_arr4[2], p_arr4[3])
+	{
+	}
+	vector4f(const float* p_arr4) :
+		m_base(p_arr4[0], p_arr4[1], p_arr4[2], p_arr4[3])
+	{
+	}
+
+	vector4f(const matrix4_view_t& view) :
+		m_base(view.x(), view.y(), view.z(), view.w())
+	{
+	}
+	vector4f(const matrix3_view_t& view) :
+		m_base(view.x(), view.y(), view.z(), 0.0f)
+	{
+	}
+	vector4f(const matrix2_view_t& view) :
+		m_base(view.x(), view.y(), 0.0f, 0.0f)
+	{
+	}
+	vector4f(const matrix1_view_t& view) : m_base(view.x(), 0.0f, 0.0f, 0.0f) {}
+
+	vector4f(const matrix3_view_t& view, float w) :
+		m_base(view.x(), view.y(), view.z(), w)
+	{
+	}
+	vector4f(const matrix2_view_t& view, float z, float w) :
+		m_base(view.x(), view.y(), z, w)
+	{
+	}
+	vector4f(const matrix1_view_t& view, float y, float z, float w) :
+		m_base(view.x(), y, z, w)
+	{
+	}
+
 	vector4f(const base_vec4_t& data) : m_base(data) {}
 	vector4f(const vector4f& data) : m_base(data.m_base) {}
 	vector4f(void) : m_base{} {}
@@ -19,6 +58,39 @@ public:
 	vector4f& operator=(const vector4f& data) noexcept
 	{
 		this->m_base = data.m_base;
+		return *this;
+	}
+
+	vector4f& operator=(const matrix4_view_t& data) noexcept
+	{
+		this->m_base.x = data.x();
+		this->m_base.y = data.y();
+		this->m_base.z = data.z();
+		this->m_base.w = data.w();
+
+		return *this;
+	}
+
+	vector4f& operator=(const matrix3_view_t& data) noexcept
+	{
+		this->m_base.x = data.x();
+		this->m_base.y = data.y();
+		this->m_base.z = data.z();
+
+		return *this;
+	}
+
+	vector4f& operator=(const matrix2_view_t& data) noexcept
+	{
+		this->m_base.x = data.x();
+		this->m_base.y = data.y();
+
+		return *this;
+	}
+
+	vector4f& operator=(const matrix1_view_t& data) noexcept
+	{
+		this->m_base.x = data.x();
 		return *this;
 	}
 
@@ -34,6 +106,27 @@ public:
 		this->m_base += data.m_base;
 #endif
 		return *this;
+	}
+
+	vector4f& operator+=(const matrix4_view_t& data) noexcept 
+	{
+		return this->operator+=(
+			base_vec4_t(data.x(), data.y(), data.z(), data.w()));
+	}
+
+	vector4f& operator+=(const matrix3_view_t& data) noexcept {
+		return this->operator+=(
+			base_vec4_t(data.x(), data.y(), data.z(), 0.0f));
+	}
+
+	vector4f& operator+=(const matrix2_view_t& data) noexcept 
+	{
+		return this->operator+=(base_vec4_t(data.x(), data.y(), 0.0f, 0.0f));
+	}
+
+	vector4f& operator+=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec4_t(data.x(), 0.0f, 0.0f, 0.0f));
 	}
 
 	vector4f& operator+=(const base_vec4_t& data) noexcept
@@ -65,6 +158,28 @@ public:
 		return *this;
 	}
 
+	vector4f& operator-=(const matrix4_view_t& data) noexcept
+	{
+		return this->operator-=(
+			base_vec4_t(data.x(), data.y(), data.z(), data.w()));
+	}
+
+	vector4f& operator-=(const matrix3_view_t& data) noexcept
+	{
+		return this->operator-=(
+			base_vec4_t(data.x(), data.y(), data.z(), 0.0f));
+	}
+
+	vector4f& operator-=(const matrix2_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec4_t(data.x(), data.y(), 0.0f, 0.0f));
+	}
+
+	vector4f& operator-=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec4_t(data.x(), 0.0f, 0.0f, 0.0f));
+	}
+
 	vector4f& operator-=(const base_vec4_t& data) noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -93,6 +208,28 @@ public:
 		this->m_base *= data.m_base;
 #endif
 		return *this;
+	}
+
+	vector4f& operator*=(const matrix4_view_t& data) noexcept 
+	{
+		return this->operator*=(
+			base_vec4_t(data.x(), data.y(), data.z(), data.w()));
+	}
+
+	vector4f& operator*=(const matrix3_view_t& data) noexcept 
+	{
+		return this->operator*=(
+			base_vec4_t(data.x(), data.y(), data.z(), 1.0f));
+	}
+
+	vector4f& operator*=(const matrix2_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec4_t(data.x(), data.y(), 1.0f, 1.0f));
+	}
+
+	vector4f& operator*=(const matrix1_view_t& data) noexcept 
+	{
+		return this->operator*=(base_vec4_t(data.x(), 1.0f, 1.0f, 1.0f));
 	}
 
 	vector4f& operator*=(const base_vec4_t& data) noexcept
@@ -137,6 +274,27 @@ public:
 		return *this;
 	}
 
+	vector4f& operator/=(const matrix4_view_t& data) noexcept 
+	{
+		return this -> operator/=(base_vec4_t(data.x(), data.y(), data.z(), data.w()));
+	}
+
+	vector4f& operator/=(const matrix3_view_t& data) noexcept
+	{
+		return this->operator/=(
+			base_vec4_t(data.x(), data.y(), data.z(), 1.0f));
+	}
+
+	vector4f& operator/=(const matrix2_view_t& data) noexcept 
+	{
+		return this -> operator/=(base_vec4_t(data.x(), data.y(), 1.0f, 1.0f));
+	}
+
+	vector4f& operator/=(const matrix1_view_t& data) noexcept 
+	{
+		return this->operator/=(base_vec4_t(data.x(), 1.0f, 1.0f, 1.0f));
+	}
+
 	vector4f& operator/=(const base_vec4_t& data) noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -168,10 +326,10 @@ public:
 
 	vector4f& operator%=(const vector4f& data) noexcept
 	{
-		this->m_base.x = std::fmod(this->m_base.x, data.Get_X());
-		this->m_base.y = std::fmod(this->m_base.y, data.Get_Y());
-		this->m_base.z = std::fmod(this->m_base.z, data.Get_Z());
-		this->m_base.w = std::fmod(this->m_base.w, data.Get_W());
+		this->m_base.x = std::fmod(this->m_base.x, data.x());
+		this->m_base.y = std::fmod(this->m_base.y, data.y());
+		this->m_base.z = std::fmod(this->m_base.z, data.z());
+		this->m_base.w = std::fmod(this->m_base.w, data.w());
 
 		return *this;
 	}
@@ -209,6 +367,8 @@ public:
 
 	float operator[](unsigned int index) const
 	{
+		KOTEK_ASSERT(index != unsigned int(-1),
+			"out of range (probably you passed a negative value)");
 		KOTEK_ASSERT(index <= 3, "out of range");
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -221,6 +381,8 @@ public:
 
 	float& operator[](unsigned int index)
 	{
+		KOTEK_ASSERT(index != unsigned int(-1),
+			"out of range (probably you passed a negative value)");
 		KOTEK_ASSERT(index <= 3, "out of range");
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -237,37 +399,15 @@ public:
 	}
 #endif
 
-	float Get_X(void) const noexcept { return this->m_base.x; }
+	float x(void) const noexcept { return this->m_base.x; }
+	float y(void) const noexcept { return this->m_base.y; }
+	float z(void) const noexcept { return this->m_base.z; }
+	float w(void) const noexcept { return this->m_base.w; }
 
-	float Get_Y(void) const noexcept { return this->m_base.y; }
-
-	float Get_Z(void) const noexcept { return this->m_base.z; }
-
-	float Get_W(void) const noexcept { return this->m_base.w; }
-
-	vector4f& Set_X(float value) noexcept
-	{
-		this->m_base.x = value;
-		return *this;
-	}
-
-	vector4f& Set_Y(float value) noexcept
-	{
-		this->m_base.y = value;
-		return *this;
-	}
-
-	vector4f& Set_Z(float value) noexcept
-	{
-		this->m_base.z = value;
-		return *this;
-	}
-
-	vector4f& Set_W(float value) noexcept
-	{
-		this->m_base.w = value;
-		return *this;
-	}
+	float& x(void) noexcept { return this->m_base.x; }
+	float& y(void) noexcept { return this->m_base.y; }
+	float& z(void) noexcept { return this->m_base.z; }
+	float& w(void) noexcept { return this->m_base.w; }
 
 	vector4f& Set_Base(const base_vec4_t& data) noexcept
 	{

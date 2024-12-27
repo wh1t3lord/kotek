@@ -48,7 +48,7 @@ inline float const* value_ptr(const vector4f& data)
 inline float length(const vector1f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	return sqrt(data.Get_X() * data.Get_X());
+	return sqrt(data.x() * data.x());
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 #endif
 }
@@ -101,7 +101,7 @@ inline float length(const vector4f& data)
 inline float length_squared(const vector1f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	return data.Get_X() * data.Get_X();
+	return data.x() * data.x();
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
 #endif
@@ -154,7 +154,7 @@ inline float distance_squared(const vector2f& from, const vector2f& to)
 inline float distance_squared(const vector3f& from, const vector2f& to)
 {
 	vector3f result(
-		(from.Get_X() - to.Get_X()), (from.Get_Y() - to.Get_Y()), from.Get_Z());
+		(from.x() - to.x()), (from.y() - to.y()), from.z());
 	return length_squared(result);
 }
 
@@ -165,15 +165,15 @@ inline float distance_squared(const vector3f& from, const vector3f& to)
 
 inline float distance_squared(const vector4f& from, const vector2f& to)
 {
-	vector4f result((from.Get_X() - to.Get_X()), (from.Get_Y() - to.Get_Y()),
-		from.Get_Z(), from.Get_W());
+	vector4f result((from.x() - to.x()), (from.y() - to.y()),
+		from.z(), from.w());
 	return length_squared(result);
 }
 
 inline float distance_squared(const vector4f& from, const vector3f& to)
 {
-	vector4f result((from.Get_X() - to.Get_X()), (from.Get_Y() - from.Get_Y()),
-		(from.Get_Z() - to.Get_Z()), from.Get_W());
+	vector4f result((from.x() - to.x()), (from.y() - from.y()),
+		(from.z() - to.z()), from.w());
 
 	return length_squared(result);
 }
@@ -185,7 +185,7 @@ inline float distance_squared(const vector4f& from, const vector4f& to)
 
 inline float dot(const vector1f& left, const vector1f& right)
 {
-	return left.Get_X() * left.Get_X();
+	return left.x() * left.x();
 }
 
 inline float dot(const vector2f& left, const vector2f& right)

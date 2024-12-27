@@ -38,6 +38,141 @@ constexpr long double kMax_LongDouble = std::numeric_limits<long double>::max();
 
 using base_decimal_t = float;
 
+struct matrix4_view_t;
+struct matrix3_view_t;
+struct matrix2_view_t;
+struct matrix1_view_t;
+
+struct matrix1_view_t
+{
+	matrix1_view_t(float* p_values) : m_x(p_values[0]) {}
+
+	#pragma message("TODO: provide implementation with __declspec(property) but keep in mind it is compiler specific extension, my aim was not be dependent on complier's specific features (initially)")
+
+	float x(void) const noexcept { return this->m_x; }
+	float& x(void) noexcept { return this->m_x; }
+
+	float operator[](unsigned int index) const noexcept
+	{
+		KOTEK_ASSERT(index == 0, "out of range");
+		return m_x;
+	}
+
+	float& operator[](unsigned int index) noexcept
+	{
+		KOTEK_ASSERT(index == 0, "out of range");
+		return m_x;
+	}
+
+private:
+	float& m_x;
+};
+
+struct matrix2_view_t
+{
+	matrix2_view_t(float* p_values) : m_x(p_values[0]), m_y(p_values[1]) {}
+
+	float x(void) const noexcept { return this->m_x; }
+	float& x(void) noexcept { return this->m_x; }
+
+	float y(void) const noexcept { return this->m_y; }
+	float& y(void) noexcept { return this->m_y; }
+
+	float operator[](unsigned char index) const
+	{
+		KOTEK_ASSERT(index <= 1, "out of range");
+		float* p_arr = static_cast<float*>(&this->m_x);
+		return p_arr[index];
+	}
+
+	float& operator[](unsigned char index)
+	{
+		KOTEK_ASSERT(index <= 1, "out of range");
+		float* p_arr = static_cast<float*>(&this->m_x);
+		return p_arr[index];
+	}
+
+private:
+	float& m_x;
+	float& m_y;
+};
+
+struct matrix3_view_t
+{
+	matrix3_view_t(float* p_values) :
+		m_x(p_values[0]), m_y(p_values[1]), m_z(p_values[2])
+	{
+	}
+
+	float x(void) const noexcept { return this->m_x; }
+	float& x(void) noexcept { return this->m_x; }
+
+	float y(void) const noexcept { return this->m_y; }
+	float& y(void) noexcept { return this->m_y; }
+
+	float z(void) const noexcept { return this->m_z; }
+	float& z(void) noexcept { return this->m_z; }
+
+	float operator[](unsigned char index) const
+	{
+		KOTEK_ASSERT(index <= 2, "out of range");
+		float* p_arr = static_cast<float*>(&this->m_x);
+		return p_arr[index];
+	}
+
+	float& operator[](unsigned char index)
+	{
+		KOTEK_ASSERT(index <= 2, "out of range");
+		float* p_arr = static_cast<float*>(&this->m_x);
+		return p_arr[index];
+	}
+
+private:
+	float& m_x;
+	float& m_y;
+	float& m_z;
+};
+
+struct matrix4_view_t
+{
+	matrix4_view_t(float* p_values) :
+		m_x(p_values[0]), m_y(p_values[1]), m_z(p_values[2]), m_w(p_values[3])
+	{
+	}
+
+	float x(void) const noexcept { return this->m_x; }
+	float& x(void) noexcept { return this->m_x; }
+
+	float y(void) const noexcept { return this->m_y; }
+	float& y(void) noexcept { return this->m_y; }
+
+	float z(void) const noexcept { return this->m_z; }
+	float& z(void) noexcept { return this->m_z; }
+
+	float w(void) const noexcept { return this->m_w; }
+	float& w(void) noexcept { return this->m_w; }
+
+	float operator[](unsigned char index) const
+	{
+		KOTEK_ASSERT(index <= 3, "out of range");
+		float* p_arr = static_cast<float*>(&this->m_x);
+		return p_arr[index];
+	}
+
+	float& operator[](unsigned char index)
+	{
+		KOTEK_ASSERT(index <= 3, "out of range");
+		float* p_arr = static_cast<float*>(&this->m_x);
+		return p_arr[index];
+	}
+
+private:
+	float& m_x;
+	float& m_y;
+	float& m_z;
+	float& m_w;
+};
+
 // TODO: provide separation for float and double base types
 // without switching user defines what he needs and he can choose what part to
 // disable like disable double or float implementation

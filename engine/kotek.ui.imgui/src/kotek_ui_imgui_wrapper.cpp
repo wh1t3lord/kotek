@@ -18,16 +18,16 @@ void ktkImguiWrapper::EditDragVec2f(
 
 	if (this->CollapsingHeader(label))
 	{
-		float value_x = p_vec->Get_X();
+		float value_x = p_vec->x();
 		if (this->DragFloat("X##Vec2f_X", &value_x))
 		{
-			p_vec->Set_X(value_x);
+			p_vec->x() = value_x;
 		}
 
-		float value_y = p_vec->Get_Y();
+		float value_y = p_vec->y();
 		if (this->DragFloat("Y##Vec2f_Y", &value_y))
 		{
-			p_vec->Set_Y(value_y);
+			p_vec->y() = value_y;
 		}
 	}
 }
@@ -40,22 +40,22 @@ void ktkImguiWrapper::EditDragVec3f(
 
 	if (this->CollapsingHeader(label))
 	{
-		float value_x = p_vec->Get_X();
+		float value_x = p_vec->x();
 		if (this->DragFloat("X##Vec3f_X", &value_x))
 		{
-			p_vec->Set_X(value_x);
+			p_vec->x() = value_x;
 		}
 
-		float value_y = p_vec->Get_Y();
+		float value_y = p_vec->y();
 		if (this->DragFloat("Y##Vec3f_Y", &value_y))
 		{
-			p_vec->Set_Y(value_y);
+			p_vec->y() = value_y;
 		}
 
-		float value_z = p_vec->Get_Z();
+		float value_z = p_vec->z();
 		if (this->DragFloat("Z##Vec3f_Z", &value_z))
 		{
-			p_vec->Set_Z(value_z);
+			p_vec->z() = value_z;
 		}
 	}
 }
@@ -68,28 +68,28 @@ void ktkImguiWrapper::EditDragVec4f(
 
 	if (this->CollapsingHeader(label))
 	{
-		float value_x = p_vec->Get_X();
+		float value_x = p_vec->x();
 		if (this->DragFloat("X##Vec4f_X", &value_x))
 		{
-			p_vec->Set_X(value_x);
+			p_vec->x() = value_x;
 		}
 
-		float value_y = p_vec->Get_Y();
+		float value_y = p_vec->y();
 		if (this->DragFloat("Y##Vec4f_Y", &value_y))
 		{
-			p_vec->Set_Y(value_y);
+			p_vec->y() = value_y;
 		}
 
-		float value_z = p_vec->Get_Z();
+		float value_z = p_vec->z();
 		if (this->DragFloat("Z##Vec4f_Z", &value_z))
 		{
-			p_vec->Set_Z(value_z);
+			p_vec->z() = value_z;
 		}
 
-		float value_w = p_vec->Get_W();
+		float value_w = p_vec->w();
 		if (this->DragFloat("W##Vec4f_W", &value_w))
 		{
-			p_vec->Set_W(value_w);
+			p_vec->w() = value_w;
 		}
 	}
 }
