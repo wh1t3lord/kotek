@@ -401,6 +401,9 @@ public:
 	}
 #endif
 
+#pragma message( \
+	"TODO: provide implementation with __declspec(property) but keep in mind it is compiler specific extension, my aim was not be dependent on complier's specific features (initially)")
+
 	float x(void) const noexcept { return this->m_base.x; }
 	float y(void) const noexcept { return this->m_base.y; }
 	float z(void) const noexcept { return this->m_base.z; }

@@ -47,8 +47,6 @@ struct matrix1_view_t
 {
 	matrix1_view_t(float* p_values) : m_x(p_values[0]) {}
 
-	#pragma message("TODO: provide implementation with __declspec(property) but keep in mind it is compiler specific extension, my aim was not be dependent on complier's specific features (initially)")
-
 	float x(void) const noexcept { return this->m_x; }
 	float& x(void) noexcept { return this->m_x; }
 
