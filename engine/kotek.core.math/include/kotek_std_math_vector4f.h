@@ -14,12 +14,32 @@ public:
 	vector4f(float x, float y, float z) : m_base(x, y, z, 0.0f) {}
 	vector4f(float x, float y, float z, float w) : m_base(x, y, z, w) {}
 
-	vector4f(float* p_arr4) : m_base(p_arr4[0], p_arr4[1], p_arr4[2], p_arr4[3])
-	{
-	}
-	vector4f(const float* p_arr4) :
+	vector4f(float* p_arr4, unsigned char size = 4) :
 		m_base(p_arr4[0], p_arr4[1], p_arr4[2], p_arr4[3])
 	{
+		KOTEK_ASSERT(size > 0 && size <= 4, "pass a valid size");
+
+		if (size == 3)
+		{
+			m_base.w = 0.0f;
+		}
+		else if (size == 2)
+		{
+			m_base.w = 0.0f;
+			m_base.z = 0.0f;
+		}
+		else if (size == 1)
+		{
+			m_base.w = 0.0f;
+			m_base.z = 0.0f;
+			m_base.y = 0.0f;
+		}
+	}
+	vector4f(const float* p_arr4, unsigned char size = 4) :
+		m_base(p_arr4[0], p_arr4[1], p_arr4[2], p_arr4[3])
+	{
+		KOTEK_ASSERT(size > 0 && size <= 4, "pass a valid size!");
+
 	}
 
 	vector4f(const matrix4_view_t& view) :
@@ -699,7 +719,7 @@ inline vector4f operator/(
 inline vector4f operator/(
 	const vector4f& left, const matrix3_view_t& view) noexcept
 {
-	return operator/(left, vector4f(view).w()=1.0f);
+	return operator/(left, vector4f(view).w() = 1.0f);
 }
 
 inline vector4f operator/(
@@ -707,7 +727,7 @@ inline vector4f operator/(
 {
 	vector4f casted(view);
 	casted.w() = 1.0f;
-	casted.z() = 1.0f;	
+	casted.z() = 1.0f;
 	return operator/(left, casted);
 }
 

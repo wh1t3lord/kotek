@@ -14,8 +14,37 @@ public:
 	vector3f(float x, float y, float z) : m_base(x, y, z) {}
 	vector3f(float x, float y, float z, float w) : m_base(x, y, z) {}
 
-	vector3f(float* p_arr3) : m_base(p_arr3[0], p_arr3[1], p_arr3[2]) {}
-	vector3f(const float* p_arr3) : m_base(p_arr3[0], p_arr3[1], p_arr3[2]) {}
+	vector3f(float* p_arr3, unsigned char size = 3) :
+		m_base(p_arr3[0], p_arr3[1], p_arr3[2])
+	{
+		KOTEK_ASSERT(size > 0 && size <= 3, "needed to be as valid value!");
+
+		if (size == 2)
+		{
+			this->m_base.z = 0.0f;
+		}
+		else if (size == 1)
+		{
+			this->m_base.z = 0.0f;
+			this->m_base.y = 0.0f;
+		}
+	}
+
+	vector3f(const float* p_arr3, unsigned char size = 3) :
+		m_base(p_arr3[0], p_arr3[1], p_arr3[2])
+	{
+		KOTEK_ASSERT(size > 0 && size <= 3, "needed to be as valid value!");
+
+		if (size == 2)
+		{
+			this->m_base.z = 0.0f;
+		}
+		else if (size == 1)
+		{
+			this->m_base.z = 0.0f;
+			this->m_base.y = 0.0f;
+		}
+	}
 
 	vector3f(const matrix4_view_t& view) : m_base(view.x(), view.y(), view.z())
 	{
@@ -32,6 +61,30 @@ public:
 	}
 
 	vector3f(const matrix1_view_t& view, float y, float z) :
+		m_base(view.x(), y, z)
+	{
+	}
+
+	vector3f(const matrix4_const_view_t& view) :
+		m_base(view.x(), view.y(), view.z())
+	{
+	}
+	vector3f(const matrix3_const_view_t& view) :
+		m_base(view.x(), view.y(), view.z())
+	{
+	}
+	vector3f(const matrix2_const_view_t& view) :
+		m_base(view.x(), view.y(), 0.0f)
+	{
+	}
+	vector3f(const matrix1_const_view_t& view) : m_base(view.x(), 0.0f, 0.0f) {}
+
+	vector3f(const matrix2_const_view_t& view, float z) :
+		m_base(view.x(), view.y(), z)
+	{
+	}
+
+	vector3f(const matrix1_const_view_t& view, float y, float z) :
 		m_base(view.x(), y, z)
 	{
 	}
@@ -79,6 +132,26 @@ public:
 	}
 
 	vector3f& operator+=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec3_t(data.x(), 0.0f, 0.0f));
+	}
+
+	vector3f& operator+=(const matrix4_const_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator+=(const matrix3_const_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator+=(const matrix2_const_view_t& data) noexcept
+	{
+		return this->operator+=(base_vec3_t(data.x(), data.y(), 0.0f));
+	}
+
+	vector3f& operator+=(const matrix1_const_view_t& data) noexcept
 	{
 		return this->operator+=(base_vec3_t(data.x(), 0.0f, 0.0f));
 	}
@@ -132,6 +205,26 @@ public:
 		return this->operator-=(base_vec3_t(data.x(), 0.0f, 0.0f));
 	}
 
+	vector3f& operator-=(const matrix4_const_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator-=(const matrix3_const_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator-=(const matrix2_const_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec3_t(data.x(), data.y(), 0.0f));
+	}
+
+	vector3f& operator-=(const matrix1_const_view_t& data) noexcept
+	{
+		return this->operator-=(base_vec3_t(data.x(), 0.0f, 0.0f));
+	}
+
 	vector3f& operator-=(const base_vec3_t& data) noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -178,6 +271,26 @@ public:
 	}
 
 	vector3f& operator*=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec3_t(data.x(), 1.0f, 1.0f));
+	}
+
+	vector3f& operator*=(const matrix4_const_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator*=(const matrix3_const_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator*=(const matrix2_const_view_t& data) noexcept
+	{
+		return this->operator*=(base_vec3_t(data.x(), data.y(), 1.0f));
+	}
+
+	vector3f& operator*=(const matrix1_const_view_t& data) noexcept
 	{
 		return this->operator*=(base_vec3_t(data.x(), 1.0f, 1.0f));
 	}
@@ -240,6 +353,26 @@ public:
 	}
 
 	vector3f& operator/=(const matrix1_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec3_t(data.x(), 1.0f, 1.0f));
+	}
+
+	vector3f& operator/=(const matrix4_const_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator/=(const matrix3_const_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec3_t(data.x(), data.y(), data.z()));
+	}
+
+	vector3f& operator/=(const matrix2_const_view_t& data) noexcept
+	{
+		return this->operator/=(base_vec3_t(data.x(), data.y(), 1.0f));
+	}
+
+	vector3f& operator/=(const matrix1_const_view_t& data) noexcept
 	{
 		return this->operator/=(base_vec3_t(data.x(), 1.0f, 1.0f));
 	}
@@ -626,6 +759,62 @@ inline vector3f operator/(
 
 inline vector3f operator/(
 	const matrix1_view_t& view, const vector3f& right) noexcept
+{
+	vector3f casted(view);
+	casted.y() = 1.0f;
+	casted.z() = 1.0f;
+	return operator/(casted, right);
+}
+
+inline vector3f operator/(
+	const vector3f& left, const matrix4_const_view_t& view) noexcept
+{
+	return operator/(left, vector3f(view));
+}
+
+inline vector3f operator/(
+	const vector3f& left, const matrix3_const_view_t& view) noexcept
+{
+	return operator/(left, vector3f(view));
+}
+
+inline vector3f operator/(
+	const vector3f& left, const matrix2_const_view_t& view) noexcept
+{
+	return operator/(left, vector3f(view).z() = 1.0f);
+}
+
+inline vector3f operator/(
+	const vector3f& left, const matrix1_const_view_t& view) noexcept
+{
+	vector3f casted(view);
+	casted.y() = 1.0f;
+	casted.z() = 1.0f;
+	return operator/(left, casted);
+}
+
+inline vector3f operator/(
+	const matrix4_const_view_t& view, const vector3f& right) noexcept
+{
+	return operator/(vector3f(view), right);
+}
+
+inline vector3f operator/(
+	const matrix3_const_view_t& view, const vector3f& right) noexcept
+{
+	return operator/(vector3f(view), right);
+}
+
+inline vector3f operator/(
+	const matrix2_const_view_t& view, const vector3f& right) noexcept
+{
+	vector3f casted(view);
+	casted.z() = 1.0f;
+	return operator/(casted, right);
+}
+
+inline vector3f operator/(
+	const matrix1_const_view_t& view, const vector3f& right) noexcept
 {
 	vector3f casted(view);
 	casted.y() = 1.0f;
