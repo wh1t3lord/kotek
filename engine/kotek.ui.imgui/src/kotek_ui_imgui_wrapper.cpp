@@ -144,64 +144,64 @@ void ktkImguiWrapper::EditDragMat3x3f(
 	{
 		if (this->CollapsingHeader("Row 0"))
 		{
-			float value_x = p_mat->Get_00();
+			float value_x = p_mat->operator[](0)[0];
 			if (this->DragFloat("X (00)", &value_x))
 			{
-				p_mat->Set_00(value_x);
+				p_mat->operator[](0)[0]=(value_x);
 			}
 
-			float value_y = p_mat->Get_01();
+			float value_y = p_mat->operator[](0)[1];
 			if (this->DragFloat("Y (01)", &value_y))
 			{
-				p_mat->Set_01(value_y);
+				p_mat->operator[](0)[1]=(value_y);
 			}
 
-			float value_z = p_mat->Get_02();
+			float value_z = p_mat->operator[](0)[2];
 			if (this->DragFloat("Z (02)", &value_z))
 			{
-				p_mat->Set_02(value_z);
+				p_mat->operator[](0)[2]=(value_z);
 			}
 		}
 
 		if (this->CollapsingHeader("Row 1"))
 		{
-			float value_x = p_mat->Get_10();
+			float value_x = p_mat->operator[](1)[0];
 			if (this->DragFloat("X (10)", &value_x))
 			{
-				p_mat->Set_10(value_x);
+				p_mat->operator[](1)[0]=(value_x);
 			}
 
-			float value_y = p_mat->Get_11();
+			float value_y = p_mat->operator[](1)[1];
 			if (this->DragFloat("Y (11)", &value_y))
 			{
-				p_mat->Set_11(value_y);
+				p_mat->operator[](1)[1]=(value_y);
 			}
 
-			float value_z = p_mat->Get_12();
+			float value_z = p_mat->operator[](1)[2];
 			if (this->DragFloat("Z (12)", &value_z))
 			{
-				p_mat->Set_12(value_z);
+				p_mat->operator[](1)[2]=(value_z);
 			}
 		}
 
 		if (this->CollapsingHeader("Row 2"))
 		{
-			float value_x = p_mat->Get_20();
+			float value_x = p_mat->operator[](2)[0];
 			if (this->DragFloat("X (20)", &value_x))
 			{
-				p_mat->Set_20(value_x);
+				p_mat->operator[](2)[0]=(value_x);
 			}
 
-			float value_y = p_mat->Get_21();
+			float value_y = p_mat->operator[](2)[1];
 			if (this->DragFloat("Y (21)", &value_y))
 			{
-				p_mat->Set_21(value_y);
+				p_mat->operator[](2)[1]=(value_y);
 			}
 
-			float value_z = p_mat->Get_22();
+			float value_z = p_mat->operator[](2)[2];
 			if (this->DragFloat("Z (22)", &value_z))
 			{
-				p_mat->Set_22(value_z);
+				p_mat->operator[](2)[2]=(value_z);
 			}
 		}
 	}
