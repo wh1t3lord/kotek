@@ -103,7 +103,7 @@ All in all, it can be used for serious needs (at some point you need to make a p
 
 #### Linux
 
-##### Ubuntu
+#### Ubuntu
 
 | Ubuntu 14.04 LTS | Ubuntu 16.04 LTS | Ubuntu 18.04 LTS | Ubuntu 20.04 LTS | Ubuntu 22.04 LTS | Ubuntu 24.04 LTS  |
 | ------------- | ------------- |------------- |------------- |------------- |------------- |
