@@ -6,13 +6,49 @@ This project might be useful for those who doesn't want to spend time for making
 
 ## How to build
 
-### Personal computers
+### PC (personal computer)
 
 #### Windows
 
+> You're required to have CMake 3.19.1 version at least
+
+> Also you're required to have stable internet connection otherwise you need to use offline compilation
+
+
+Steps to reproduce:
+
+- git clone https://github.com/wh1t3lord/kotek.git
+- mkdir build
+- cd build
+- cmake ..
+
 #### Linux
 
+> You're required to have CMake 3.19.1 version at least
+
+> Also you're required to have stable internet connection otherwise you need to use offline compilation
+
+
+Steps to reproduce:
+
+- git clone https://github.com/wh1t3lord/kotek.git
+- mkdir build
+- cd build
+- cmake ..
+
 #### MacOS
+
+> You're required to have CMake 3.19.1 version at least
+
+> Also you're required to have stable internet connection otherwise you need to use offline compilation
+
+
+Steps to reproduce:
+
+- git clone https://github.com/wh1t3lord/kotek.git
+- mkdir build
+- cd build
+- cmake ..
 
 ### Phones
 
