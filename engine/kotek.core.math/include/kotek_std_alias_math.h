@@ -47,16 +47,16 @@ struct matrix1_view_t
 {
 	matrix1_view_t(float* p_values) : m_x(p_values[0]) {}
 
-	float x(void) const noexcept { return this->m_x; }
-	float& x(void) noexcept { return this->m_x; }
+	inline float x(void) const noexcept { return this->m_x; }
+	inline float& x(void) noexcept { return this->m_x; }
 
-	float operator[](unsigned int index) const noexcept
+	inline float operator[](unsigned int index) const noexcept
 	{
 		KOTEK_ASSERT(index == 0, "out of range");
 		return m_x;
 	}
 
-	float& operator[](unsigned int index) noexcept
+	inline float& operator[](unsigned int index) noexcept
 	{
 		KOTEK_ASSERT(index == 0, "out of range");
 		return m_x;
@@ -70,20 +70,20 @@ struct matrix2_view_t
 {
 	matrix2_view_t(float* p_values) : m_x(p_values[0]), m_y(p_values[1]) {}
 
-	float x(void) const noexcept { return this->m_x; }
-	float& x(void) noexcept { return this->m_x; }
+	inline float x(void) const noexcept { return this->m_x; }
+	inline float& x(void) noexcept { return this->m_x; }
 
-	float y(void) const noexcept { return this->m_y; }
-	float& y(void) noexcept { return this->m_y; }
+	inline float y(void) const noexcept { return this->m_y; }
+	inline float& y(void) noexcept { return this->m_y; }
 
-	float operator[](unsigned char index) const
+	inline float operator[](unsigned char index) const
 	{
 		KOTEK_ASSERT(index <= 1, "out of range");
 		float* p_arr = static_cast<float*>(&this->m_x);
 		return p_arr[index];
 	}
 
-	float& operator[](unsigned char index)
+	inline float& operator[](unsigned char index)
 	{
 		KOTEK_ASSERT(index <= 1, "out of range");
 		float* p_arr = static_cast<float*>(&this->m_x);
@@ -102,23 +102,23 @@ struct matrix3_view_t
 	{
 	}
 
-	float x(void) const noexcept { return this->m_x; }
-	float& x(void) noexcept { return this->m_x; }
+	inline float x(void) const noexcept { return this->m_x; }
+	inline float& x(void) noexcept { return this->m_x; }
 
-	float y(void) const noexcept { return this->m_y; }
-	float& y(void) noexcept { return this->m_y; }
+	inline float y(void) const noexcept { return this->m_y; }
+	inline float& y(void) noexcept { return this->m_y; }
 
-	float z(void) const noexcept { return this->m_z; }
-	float& z(void) noexcept { return this->m_z; }
+	inline float z(void) const noexcept { return this->m_z; }
+	inline float& z(void) noexcept { return this->m_z; }
 
-	float operator[](unsigned char index) const
+	inline float operator[](unsigned char index) const
 	{
 		KOTEK_ASSERT(index <= 2, "out of range");
 		float* p_arr = static_cast<float*>(&this->m_x);
 		return p_arr[index];
 	}
 
-	float& operator[](unsigned char index)
+	inline float& operator[](unsigned char index)
 	{
 		KOTEK_ASSERT(index <= 2, "out of range");
 		float* p_arr = static_cast<float*>(&this->m_x);
@@ -138,26 +138,26 @@ struct matrix4_view_t
 	{
 	}
 
-	float x(void) const noexcept { return this->m_x; }
-	float& x(void) noexcept { return this->m_x; }
+	inline float x(void) const noexcept { return this->m_x; }
+	inline float& x(void) noexcept { return this->m_x; }
 
-	float y(void) const noexcept { return this->m_y; }
-	float& y(void) noexcept { return this->m_y; }
+	inline float y(void) const noexcept { return this->m_y; }
+	inline float& y(void) noexcept { return this->m_y; }
 
-	float z(void) const noexcept { return this->m_z; }
-	float& z(void) noexcept { return this->m_z; }
+	inline float z(void) const noexcept { return this->m_z; }
+	inline float& z(void) noexcept { return this->m_z; }
 
-	float w(void) const noexcept { return this->m_w; }
-	float& w(void) noexcept { return this->m_w; }
+	inline float w(void) const noexcept { return this->m_w; }
+	inline float& w(void) noexcept { return this->m_w; }
 
-	float operator[](unsigned char index) const
+	inline float operator[](unsigned char index) const
 	{
 		KOTEK_ASSERT(index <= 3, "out of range");
 		float* p_arr = static_cast<float*>(&this->m_x);
 		return p_arr[index];
 	}
 
-	float& operator[](unsigned char index)
+	inline float& operator[](unsigned char index)
 	{
 		KOTEK_ASSERT(index <= 3, "out of range");
 		float* p_arr = static_cast<float*>(&this->m_x);

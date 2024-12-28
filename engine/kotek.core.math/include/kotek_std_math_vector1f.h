@@ -325,6 +325,54 @@ inline vector1f operator+(const vector1f& a, const vector1f& b) noexcept
 #endif
 }
 
+inline vector1f operator+(
+	const vector1f& left, const matrix4_view_t& view) noexcept
+{
+	return operator+(left, vector1f(view));
+}
+
+inline vector1f operator+(
+	const vector1f& left, const matrix3_view_t& view) noexcept
+{
+	return operator+(left, vector1f(view));
+}
+
+inline vector1f operator+(
+	const vector1f& left, const matrix2_view_t& view) noexcept
+{
+	return operator+(left, vector1f(view));
+}
+
+inline vector1f operator+(
+	const vector1f& left, const matrix1_view_t& view) noexcept
+{
+	return operator+(left, vector1f(view));
+}
+
+inline vector1f operator+(
+	const matrix4_view_t& view, const vector1f& right) noexcept
+{
+	return operator+(vector1f(view), right);
+}
+
+inline vector1f operator+(
+	const matrix3_view_t& view, const vector1f& right) noexcept
+{
+	return operator+(vector1f(view), right);
+}
+
+inline vector1f operator+(
+	const matrix2_view_t& view, const vector1f& right) noexcept
+{
+	return operator+(vector1f(view), right);
+}
+
+inline vector1f operator+(
+	const matrix1_view_t& view, const vector1f& right) noexcept
+{
+	return operator+(vector1f(view), right);
+}
+
 inline vector1f operator-(const vector1f& a, const vector1f& b) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -342,6 +390,54 @@ inline vector1f operator-(const vector1f& a, const vector1f& b) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (a.Get_Base() - b.Get_Base());
 #endif
+}
+
+inline vector1f operator-(
+	const vector1f& left, const matrix4_view_t& view) noexcept
+{
+	return operator-(left, vector1f(view));
+}
+
+inline vector1f operator-(
+	const vector1f& left, const matrix3_view_t& view) noexcept
+{
+	return operator-(left, vector1f(view));
+}
+
+inline vector1f operator-(
+	const vector1f& left, const matrix2_view_t& view) noexcept
+{
+	return operator-(left, vector1f(view));
+}
+
+inline vector1f operator-(
+	const vector1f& left, const matrix1_view_t& view) noexcept
+{
+	return operator-(left, vector1f(view));
+}
+
+inline vector1f operator-(
+	const matrix4_view_t& view, const vector1f& right) noexcept
+{
+	return operator-(vector1f(view), right);
+}
+
+inline vector1f operator-(
+	const matrix3_view_t& view, const vector1f& right) noexcept
+{
+	return operator-(vector1f(view), right);
+}
+
+inline vector1f operator-(
+	const matrix2_view_t& view, const vector1f& right) noexcept
+{
+	return operator-(vector1f(view), right);
+}
+
+inline vector1f operator-(
+	const matrix1_view_t& view, const vector1f& right) noexcept
+{
+	return operator-(vector1f(view), right);
 }
 
 inline vector1f operator*(const vector1f& a, const vector1f& b) noexcept
@@ -362,6 +458,53 @@ inline vector1f operator*(const vector1f& a, const vector1f& b) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (a.Get_Base() * b.Get_Base());
 #endif
+}
+
+inline vector1f operator*(
+	const vector1f& left, const matrix4_view_t& view) noexcept
+{
+	return operator*(left, vector1f(view));
+}
+
+inline vector1f operator*(
+	const vector1f& left, const matrix3_view_t& view) noexcept
+{
+	return operator*(left, vector1f(view));
+}
+
+inline vector1f operator*(
+	const vector1f& left, const matrix2_view_t& view) noexcept
+{
+	return operator*(left, vector1f(view));
+}
+
+inline vector1f operator*(const vector1f& left, const matrix1_view_t& view) noexcept
+{
+	return operator*(left, vector1f(view));
+}
+
+inline vector1f operator*(
+	const matrix4_view_t& view, const vector1f& right) noexcept
+{
+	return operator*(vector1f(view), right);
+}
+
+inline vector1f operator*(
+	const matrix3_view_t& view, const vector1f& right) noexcept
+{
+	return operator*(vector1f(view), right);
+}
+
+inline vector1f operator*(
+	const matrix2_view_t& view, const vector1f& right) noexcept
+{
+	return operator*(vector1f(view), right);
+}
+
+inline vector1f operator*(
+	const matrix1_view_t& view, const vector1f& right) noexcept
+{
+	return operator*(vector1f(view), right);
 }
 
 inline vector1f operator*(const vector1f& a, float b) noexcept
@@ -406,6 +549,54 @@ inline vector1f operator/(const vector1f& a, const vector1f& b) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (a.Get_Base() / b.Get_Base());
 #endif
+}
+
+inline vector1f operator/(
+	const vector1f& left, const matrix4_view_t& view) noexcept
+{
+	return operator/(left, vector1f(view));
+}
+
+inline vector1f operator/(
+	const vector1f& left, const matrix3_view_t& view) noexcept
+{
+	return operator/(left, vector1f(view));
+}
+
+inline vector1f operator/(
+	const vector1f& left, const matrix2_view_t& view) noexcept
+{
+	return operator/(left, vector1f(view));
+}
+
+inline vector1f operator/(
+	const vector1f& left, const matrix1_view_t& view) noexcept
+{
+	return operator/(left, vector1f(view));
+}
+
+inline vector1f operator/(
+	const matrix4_view_t& view, const vector1f& right) noexcept
+{
+	return operator/(vector1f(view), right);
+}
+
+inline vector1f operator/(
+	const matrix3_view_t& view, const vector1f& right) noexcept
+{
+	return operator/(vector1f(view), right);
+}
+
+inline vector1f operator/(
+	const matrix2_view_t& view, const vector1f& right) noexcept
+{
+	return operator/(vector1f(view), right);
+}
+
+inline vector1f operator/(
+	const matrix1_view_t& view, const vector1f& right) noexcept
+{
+	return operator/(vector1f(view), right);
 }
 
 inline vector1f operator/(const vector1f& a, float b) noexcept

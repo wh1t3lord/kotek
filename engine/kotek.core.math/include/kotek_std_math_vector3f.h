@@ -311,9 +311,9 @@ public:
 #endif
 	}
 
-	float operator[](unsigned int index) const
+	float operator[](unsigned char index) const
 	{
-		KOTEK_ASSERT(index != unsigned int(-1),
+		KOTEK_ASSERT(index != unsigned char(-1),
 			"out of range (probably you passed a negative number)");
 		KOTEK_ASSERT(index <= 2, "out of range");
 
@@ -322,12 +322,13 @@ public:
 
 		return p_array[index];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	#error provide implementation
 #endif
 	}
 
-	float& operator[](unsigned int index)
+	float& operator[](unsigned char index)
 	{
-		KOTEK_ASSERT(index != unsigned int(-1),
+		KOTEK_ASSERT(index != unsigned char(-1),
 			"out of range (probably you passed a negative number)");
 		KOTEK_ASSERT(index <= 2, "out of range");
 
@@ -335,6 +336,7 @@ public:
 		float* p_array = reinterpret_cast<float*>(&this->m_base);
 		return p_array[index];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	#error provide implementation
 #endif
 	}
 
@@ -345,13 +347,13 @@ public:
 	}
 #endif
 
-	float x(void) const noexcept { return this->m_base.x; }
-	float y(void) const noexcept { return this->m_base.y; }
-	float z(void) const noexcept { return this->m_base.z; }
+	inline float x(void) const noexcept { return this->m_base.x; }
+	inline float y(void) const noexcept { return this->m_base.y; }
+	inline float z(void) const noexcept { return this->m_base.z; }
 
-	float& x(void) noexcept { return this->m_base.x; }
-	float& y(void) noexcept { return this->m_base.y; }
-	float& z(void) noexcept { return this->m_base.z; }
+	inline float& x(void) noexcept { return this->m_base.x; }
+	inline float& y(void) noexcept { return this->m_base.y; }
+	inline float& z(void) noexcept { return this->m_base.z; }
 
 	vector3f& Set_Base(const base_vec3_t& data) noexcept
 	{
@@ -407,6 +409,54 @@ inline vector3f operator-(const vector3f& left, const vector3f& right) noexcept
 #endif
 }
 
+inline vector3f operator-(
+	const vector3f& left, const matrix4_view_t& view) noexcept
+{
+	return operator-(left, vector3f(view));
+}
+
+inline vector3f operator-(
+	const vector3f& left, const matrix3_view_t& view) noexcept
+{
+	return operator-(left, vector3f(view));
+}
+
+inline vector3f operator-(
+	const vector3f& left, const matrix2_view_t& view) noexcept
+{
+	return operator-(left, vector3f(view));
+}
+
+inline vector3f operator-(
+	const vector3f& left, const matrix1_view_t& view) noexcept
+{
+	return operator-(left, vector3f(view));
+}
+
+inline vector3f operator-(
+	const matrix4_view_t& view, const vector3f& right) noexcept
+{
+	return operator-(vector3f(view), right);
+}
+
+inline vector3f operator-(
+	const matrix3_view_t& view, const vector3f& right) noexcept
+{
+	return operator-(vector3f(view), right);
+}
+
+inline vector3f operator-(
+	const matrix2_view_t& view, const vector3f& right) noexcept
+{
+	return operator-(vector3f(view), right);
+}
+
+inline vector3f operator-(
+	const matrix1_view_t& view, const vector3f& right) noexcept
+{
+	return operator-(vector3f(view), right);
+}
+
 inline vector3f operator*(const vector3f& left, const vector3f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -425,6 +475,62 @@ inline vector3f operator*(const vector3f& left, const vector3f& right) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return left.Get_Base() * right.Get_Base();
 #endif
+}
+
+inline vector3f operator*(
+	const vector3f& left, const matrix4_view_t& view) noexcept
+{
+	return operator*(left, vector3f(view));
+}
+
+inline vector3f operator*(
+	const vector3f& left, const matrix3_view_t& view) noexcept
+{
+	return operator*(left, vector3f(view));
+}
+
+inline vector3f operator*(
+	const vector3f& left, const matrix2_view_t& view) noexcept
+{
+	return operator*(left, vector3f(view).z() = 1.0f);
+}
+
+inline vector3f operator*(
+	const vector3f& left, const matrix1_view_t& view) noexcept
+{
+	vector3f casted(view);
+	casted.y() = 1.0f;
+	casted.z() = 1.0f;
+	return operator*(left, casted);
+}
+
+inline vector3f operator*(
+	const matrix4_view_t& view, const vector3f& right) noexcept
+{
+	return operator*(vector3f(view), right);
+}
+
+inline vector3f operator*(
+	const matrix3_view_t& view, const vector3f& right) noexcept
+{
+	return operator*(vector3f(view), right);
+}
+
+inline vector3f operator*(
+	const matrix2_view_t& view, const vector3f& right) noexcept
+{
+	vector3f casted(view);
+	casted.z() = 1.0f;
+	return operator*(casted, right);
+}
+
+inline vector3f operator*(
+	const matrix1_view_t& view, const vector3f& right) noexcept
+{
+	vector3f casted(view);
+	casted.y() = 1.0f;
+	casted.z() = 1.0f;
+	return operator*(casted, right);
 }
 
 inline vector3f operator*(const vector3f& left, float right) noexcept
@@ -469,6 +575,62 @@ inline vector3f operator/(const vector3f& left, const vector3f& right) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return left.Get_Base() / right.Get_Base();
 #endif
+}
+
+inline vector3f operator/(
+	const vector3f& left, const matrix4_view_t& view) noexcept
+{
+	return operator/(left, vector3f(view));
+}
+
+inline vector3f operator/(
+	const vector3f& left, const matrix3_view_t& view) noexcept
+{
+	return operator/(left, vector3f(view));
+}
+
+inline vector3f operator/(
+	const vector3f& left, const matrix2_view_t& view) noexcept
+{
+	return operator/(left, vector3f(view).z() = 1.0f);
+}
+
+inline vector3f operator/(
+	const vector3f& left, const matrix1_view_t& view) noexcept
+{
+	vector3f casted(view);
+	casted.y() = 1.0f;
+	casted.z() = 1.0f;
+	return operator/(left, casted);
+}
+
+inline vector3f operator/(
+	const matrix4_view_t& view, const vector3f& right) noexcept
+{
+	return operator/(vector3f(view), right);
+}
+
+inline vector3f operator/(
+	const matrix3_view_t& view, const vector3f& right) noexcept
+{
+	return operator/(vector3f(view), right);
+}
+
+inline vector3f operator/(
+	const matrix2_view_t& view, const vector3f& right) noexcept
+{
+	vector3f casted(view);
+	casted.z() = 1.0f;
+	return operator/(casted, right);
+}
+
+inline vector3f operator/(
+	const matrix1_view_t& view, const vector3f& right) noexcept
+{
+	vector3f casted(view);
+	casted.y() = 1.0f;
+	casted.z() = 1.0f;
+	return operator/(casted, right);
 }
 
 inline vector3f operator/(const vector3f& left, float right) noexcept

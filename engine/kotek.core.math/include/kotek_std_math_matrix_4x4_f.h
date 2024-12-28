@@ -387,7 +387,7 @@ public:
 
 #endif
 
-	float operator()(ktk::size_t row, ktk::size_t column) const
+	float operator()(unsigned char row, unsigned char column) const
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		return this->m_base.operator()(row, column);
@@ -396,7 +396,7 @@ public:
 #endif
 	}
 
-	float& operator()(ktk::size_t row, ktk::size_t column)
+	float& operator()(unsigned char row, unsigned char column)
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		return this->m_base.operator()(row, column);

@@ -284,9 +284,9 @@ public:
 #endif
 	}
 
-	float operator[](unsigned int index) const
+	float operator[](unsigned char index) const
 	{
-		KOTEK_ASSERT(index != unsigned int(-1),
+		KOTEK_ASSERT(index != unsigned char(-1),
 			"out of range (probably you passed a negative number)");
 		KOTEK_ASSERT(index <= 1, "out of range");
 
@@ -299,9 +299,9 @@ public:
 #endif
 	}
 
-	float& operator[](unsigned int index)
+	float& operator[](unsigned char index)
 	{
-		KOTEK_ASSERT(index != unsigned int(-1),
+		KOTEK_ASSERT(index != unsigned char(-1),
 			"out of range (probably you passed a negative number)");
 		KOTEK_ASSERT(index <= 1, "out of range");
 
@@ -320,11 +320,11 @@ public:
 	}
 #endif
 
-	float x(void) const noexcept { return this->m_base.x; }
-	float y(void) const noexcept { return this->m_base.y; }
+	inline float x(void) const noexcept { return this->m_base.x; }
+	inline float y(void) const noexcept { return this->m_base.y; }
 
-	float& x(void) noexcept { return this->m_base.x; }
-	float& y(void) noexcept { return this->m_base.y; }
+	inline float& x(void) noexcept { return this->m_base.x; }
+	inline float& y(void) noexcept { return this->m_base.y; }
 
 	vector2f& Set_Base(const base_vec2_t& data) noexcept
 	{
@@ -360,6 +360,54 @@ inline vector2f operator+(const vector2f& left, const vector2f& right) noexcept
 #endif
 }
 
+inline vector2f operator+(
+	const vector2f& left, const matrix4_view_t& view) noexcept
+{
+	return operator+(left, vector2f(view));
+}
+
+inline vector2f operator+(
+	const vector2f& left, const matrix3_view_t& view) noexcept
+{
+	return operator+(left, vector2f(view));
+}
+
+inline vector2f operator+(
+	const vector2f& left, const matrix2_view_t& view) noexcept
+{
+	return operator+(left, vector2f(view));
+}
+
+inline vector2f operator+(
+	const vector2f& left, const matrix1_view_t& view) noexcept
+{
+	return operator+(left, vector2f(view));
+}
+
+inline vector2f operator+(
+	const matrix4_view_t& view, const vector2f& right) noexcept
+{
+	return operator+(vector2f(view), right);
+}
+
+inline vector2f operator+(
+	const matrix3_view_t& view, const vector2f& right) noexcept
+{
+	return operator+(vector2f(view), right);
+}
+
+inline vector2f operator+(
+	const matrix2_view_t& view, const vector2f& right) noexcept
+{
+	return operator+(vector2f(view), right);
+}
+
+inline vector2f operator+(
+	const matrix1_view_t& view, const vector2f& right) noexcept
+{
+	return operator+(vector2f(view), right);
+}
+
 inline vector2f operator-(const vector2f& left, const vector2f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -378,6 +426,54 @@ inline vector2f operator-(const vector2f& left, const vector2f& right) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() - right.Get_Base());
 #endif
+}
+
+inline vector2f operator-(
+	const vector2f& left, const matrix4_view_t& view) noexcept
+{
+	return operator-(left, vector2f(view));
+}
+
+inline vector2f operator-(
+	const vector2f& left, const matrix3_view_t& view) noexcept
+{
+	return operator-(left, vector2f(view));
+}
+
+inline vector2f operator-(
+	const vector2f& left, const matrix2_view_t& view) noexcept
+{
+	return operator-(left, vector2f(view));
+}
+
+inline vector2f operator-(
+	const vector2f& left, const matrix1_view_t& view) noexcept
+{
+	return operator-(left, vector2f(view));
+}
+
+inline vector2f operator-(
+	const matrix4_view_t& view, const vector2f& right) noexcept
+{
+	return operator-(vector2f(view), right);
+}
+
+inline vector2f operator-(
+	const matrix3_view_t& view, const vector2f& right) noexcept
+{
+	return operator-(vector2f(view), right);
+}
+
+inline vector2f operator-(
+	const matrix2_view_t& view, const vector2f& right) noexcept
+{
+	return operator-(vector2f(view), right);
+}
+
+inline vector2f operator-(
+	const matrix1_view_t& view, const vector2f& right) noexcept
+{
+	return operator-(vector2f(view), right);
 }
 
 inline vector2f operator*(const vector2f& left, const vector2f& right) noexcept
@@ -399,6 +495,57 @@ inline vector2f operator*(const vector2f& left, const vector2f& right) noexcept
 	return (left.Get_Base() * right.Get_Base());
 #endif
 }
+
+inline vector2f operator*(
+	const vector2f& left, const matrix4_view_t& view) noexcept
+{
+	return operator*(left, vector2f(view));
+}
+
+inline vector2f operator*(
+	const vector2f& left, const matrix3_view_t& view) noexcept
+{
+	return operator*(left, vector2f(view));
+}
+
+inline vector2f operator*(
+	const vector2f& left, const matrix2_view_t& view) noexcept
+{
+	return operator*(left, vector2f(view));
+}
+
+inline vector2f operator*(
+	const vector2f& left, const matrix1_view_t& view) noexcept
+{
+	return operator*(left, vector2f(view));
+}
+
+inline vector2f operator*(
+	const matrix4_view_t& view, const vector2f& right) noexcept
+{
+	return operator*(vector2f(view), right);
+}
+
+inline vector2f operator*(
+	const matrix3_view_t& view, const vector2f& right) noexcept
+{
+	return operator*(vector2f(view), right);
+}
+
+inline vector2f operator*(
+	const matrix2_view_t& view, const vector2f& right) noexcept
+{
+	return operator*(vector2f(view), right);
+}
+
+inline vector2f operator*(
+	const matrix1_view_t& view, const vector2f& right) noexcept
+{
+	vector2f casted(view);
+	casted.y() = 1.0f;
+	return operator*(casted, right);
+}
+
 
 inline vector2f operator*(const vector2f& left, float right) noexcept
 {

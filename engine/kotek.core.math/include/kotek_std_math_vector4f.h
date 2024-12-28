@@ -367,9 +367,9 @@ public:
 #endif
 	}
 
-	float operator[](unsigned int index) const
+	float operator[](unsigned char index) const
 	{
-		KOTEK_ASSERT(index != unsigned int(-1),
+		KOTEK_ASSERT(index != unsigned char(-1),
 			"out of range (probably you passed a negative value)");
 		KOTEK_ASSERT(index <= 3, "out of range");
 
@@ -381,9 +381,9 @@ public:
 #endif
 	}
 
-	float& operator[](unsigned int index)
+	float& operator[](unsigned char index)
 	{
-		KOTEK_ASSERT(index != unsigned int(-1),
+		KOTEK_ASSERT(index != unsigned char(-1),
 			"out of range (probably you passed a negative value)");
 		KOTEK_ASSERT(index <= 3, "out of range");
 
@@ -401,18 +401,15 @@ public:
 	}
 #endif
 
-#pragma message( \
-	"TODO: provide implementation with __declspec(property) but keep in mind it is compiler specific extension, my aim was not be dependent on complier's specific features (initially)")
+	inline float x(void) const noexcept { return this->m_base.x; }
+	inline float y(void) const noexcept { return this->m_base.y; }
+	inline float z(void) const noexcept { return this->m_base.z; }
+	inline float w(void) const noexcept { return this->m_base.w; }
 
-	float x(void) const noexcept { return this->m_base.x; }
-	float y(void) const noexcept { return this->m_base.y; }
-	float z(void) const noexcept { return this->m_base.z; }
-	float w(void) const noexcept { return this->m_base.w; }
-
-	float& x(void) noexcept { return this->m_base.x; }
-	float& y(void) noexcept { return this->m_base.y; }
-	float& z(void) noexcept { return this->m_base.z; }
-	float& w(void) noexcept { return this->m_base.w; }
+	inline float& x(void) noexcept { return this->m_base.x; }
+	inline float& y(void) noexcept { return this->m_base.y; }
+	inline float& z(void) noexcept { return this->m_base.z; }
+	inline float& w(void) noexcept { return this->m_base.w; }
 
 	vector4f& Set_Base(const base_vec4_t& data) noexcept
 	{
@@ -448,6 +445,54 @@ inline vector4f operator+(const vector4f& left, const vector4f& right) noexcept
 #endif
 }
 
+inline vector4f operator+(
+	const vector4f& left, const matrix4_view_t& view) noexcept
+{
+	return operator+(left, vector4f(view));
+}
+
+inline vector4f operator+(
+	const vector4f& left, const matrix3_view_t& view) noexcept
+{
+	return operator+(left, vector4f(view));
+}
+
+inline vector4f operator+(
+	const vector4f& left, const matrix2_view_t& view) noexcept
+{
+	return operator+(left, vector4f(view));
+}
+
+inline vector4f operator+(
+	const vector4f& left, const matrix1_view_t& view) noexcept
+{
+	return operator+(left, vector4f(view));
+}
+
+inline vector4f operator+(
+	const matrix4_view_t& view, const vector4f& right) noexcept
+{
+	return operator+(vector4f(view), right);
+}
+
+inline vector4f operator+(
+	const matrix3_view_t& view, const vector4f& right) noexcept
+{
+	return operator+(vector4f(view), right);
+}
+
+inline vector4f operator+(
+	const matrix2_view_t& view, const vector4f& right) noexcept
+{
+	return operator+(vector4f(view), right);
+}
+
+inline vector4f operator+(
+	const matrix1_view_t& view, const vector4f& right) noexcept
+{
+	return operator+(vector4f(view), right);
+}
+
 inline vector4f operator-(const vector4f& left, const vector4f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -468,6 +513,54 @@ inline vector4f operator-(const vector4f& left, const vector4f& right) noexcept
 #endif
 }
 
+inline vector4f operator-(
+	const vector4f& left, const matrix4_view_t& view) noexcept
+{
+	return operator-(left, vector4f(view));
+}
+
+inline vector4f operator-(
+	const vector4f& left, const matrix3_view_t& view) noexcept
+{
+	return operator-(left, vector4f(view));
+}
+
+inline vector4f operator-(
+	const vector4f& left, const matrix2_view_t& view) noexcept
+{
+	return operator-(left, vector4f(view));
+}
+
+inline vector4f operator-(
+	const vector4f& left, const matrix1_view_t& view) noexcept
+{
+	return operator-(left, vector4f(view));
+}
+
+inline vector4f operator-(
+	const matrix4_view_t& view, const vector4f& right) noexcept
+{
+	return operator-(vector4f(view), right);
+}
+
+inline vector4f operator-(
+	const matrix3_view_t& view, const vector4f& right) noexcept
+{
+	return operator-(vector4f(view), right);
+}
+
+inline vector4f operator-(
+	const matrix2_view_t& view, const vector4f& right) noexcept
+{
+	return operator-(vector4f(view), right);
+}
+
+inline vector4f operator-(
+	const matrix1_view_t& view, const vector4f& right) noexcept
+{
+	return operator-(vector4f(view), right);
+}
+
 inline vector4f operator*(const vector4f& left, const vector4f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -486,6 +579,71 @@ inline vector4f operator*(const vector4f& left, const vector4f& right) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() * right.Get_Base());
 #endif
+}
+
+inline vector4f operator*(
+	const vector4f& left, const matrix4_view_t& view) noexcept
+{
+	return operator*(left, vector4f(view));
+}
+
+inline vector4f operator*(
+	const vector4f& left, const matrix3_view_t& view) noexcept
+{
+	return operator*(left, vector4f(view).w() = 1.0f);
+}
+
+inline vector4f operator*(
+	const vector4f& left, const matrix2_view_t& view) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	return operator*(left, casted);
+}
+
+inline vector4f operator*(
+	const vector4f& left, const matrix1_view_t& view) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	casted.y() = 1.0f;
+	return operator*(left, casted);
+}
+
+inline vector4f operator*(
+	const matrix4_view_t& view, const vector4f& right) noexcept
+{
+	return operator*(vector4f(view), right);
+}
+
+inline vector4f operator*(
+	const matrix3_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+
+	return operator*(casted, right);
+}
+
+inline vector4f operator*(
+	const matrix2_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	return operator*(casted, right);
+}
+
+inline vector4f operator*(
+	const matrix1_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	casted.y() = 1.0f;
+	return operator*(casted, right);
 }
 
 inline vector4f operator*(const vector4f& left, float right) noexcept
@@ -530,6 +688,71 @@ inline vector4f operator/(const vector4f& left, const vector4f& right) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() / right.Get_Base());
 #endif
+}
+
+inline vector4f operator/(
+	const vector4f& left, const matrix4_view_t& view) noexcept
+{
+	return operator/(left, vector4f(view));
+}
+
+inline vector4f operator/(
+	const vector4f& left, const matrix3_view_t& view) noexcept
+{
+	return operator/(left, vector4f(view).w()=1.0f);
+}
+
+inline vector4f operator/(
+	const vector4f& left, const matrix2_view_t& view) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;	
+	return operator/(left, casted);
+}
+
+inline vector4f operator/(
+	const vector4f& left, const matrix1_view_t& view) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	casted.y() = 1.0f;
+	return operator/(left, casted);
+}
+
+inline vector4f operator/(
+	const matrix4_view_t& view, const vector4f& right) noexcept
+{
+	return operator/(vector4f(view), right);
+}
+
+inline vector4f operator/(
+	const matrix3_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	return operator/(casted, right);
+}
+
+inline vector4f operator/(
+	const matrix2_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	return operator/(casted, right);
+}
+
+inline vector4f operator/(
+	const matrix1_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	casted.y() = 1.0f;
+
+	return operator/(casted, right);
 }
 
 inline vector4f operator/(const vector4f& left, float right) noexcept
