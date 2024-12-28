@@ -546,7 +546,6 @@ inline vector2f operator*(
 	return operator*(casted, right);
 }
 
-
 inline vector2f operator*(const vector2f& left, float right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM

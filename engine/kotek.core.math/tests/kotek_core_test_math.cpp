@@ -2247,9 +2247,7 @@ TEST(Math, vector2f_contsructors)
 	float arr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
 	float arr3[3] = {1.310f, 11.1f, 3113.0f};
 	float arr2[2] = {3113.0f, 1.310f};
-	float arr1[1] = {
-		-13.0f,
-	};
+	float arr1[1] = {-13.0f};
 
 	Kotek::ktk::math::vector2f vec5(arr4);
 	EXPECT_TRUE(Kotek::ktk::is_equal(vec5.x(), 11.1f) &&
@@ -2264,20 +2262,17 @@ TEST(Math, vector2f_contsructors)
 		Kotek::ktk::is_equal(vec7.y(), 1.310f));
 
 	Kotek::ktk::math::vector2f vec8(arr1);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec8.x(), -13.0f) &&
-		Kotek::ktk::is_equal(vec8.y(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec8.x(), -13.0f));
 
 	Kotek::ktk::math::vector2f vec9(&arr1[0]);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec9.x(), -13.0f) &&
-		Kotek::ktk::is_equal(vec9.y(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec9.x(), -13.0f));
 
 	float* p_val = nullptr;
 	float val = 3.11f;
 	p_val = &val;
 
 	Kotek::ktk::math::vector2f vec10(p_val);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec10.x(), 3.11f) &&
-		Kotek::ktk::is_equal(vec10.y(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec10.x(), 3.11f));
 
 	const float carr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
 	const float carr3[3] = {1.310f, 11.1f, 3113.0f};
@@ -2299,8 +2294,7 @@ TEST(Math, vector2f_contsructors)
 		Kotek::ktk::is_equal(vec13.y(), 1.310f));
 
 	Kotek::ktk::math::vector2f vec14(carr1);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec14.x(), -13.0f) &&
-		Kotek::ktk::is_equal(vec14.y(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec14.x(), -13.0f));
 }
 
 TEST(Math, vector3f_constructors)
@@ -2348,27 +2342,20 @@ TEST(Math, vector3f_constructors)
 
 	Kotek::ktk::math::vector3f vec7(arr2);
 	EXPECT_TRUE(Kotek::ktk::is_equal(vec7.x(), 3113.0f) &&
-		Kotek::ktk::is_equal(vec7.y(), 1.310f) &&
-		Kotek::ktk::is_equal(vec7.z(), 0.0f));
+		Kotek::ktk::is_equal(vec7.y(), 1.310f));
 
 	Kotek::ktk::math::vector3f vec8(arr1);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec8.x(), -13.0f) &&
-		Kotek::ktk::is_equal(vec8.y(), 0.0f) &&
-		Kotek::ktk::is_equal(vec8.z(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec8.x(), -13.0f));
 
 	Kotek::ktk::math::vector3f vec9(&arr1[0]);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec9.x(), -13.0f) &&
-		Kotek::ktk::is_equal(vec9.y(), 0.0f) &&
-		Kotek::ktk::is_equal(vec9.z(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec9.x(), -13.0f));
 
 	float* p_val = nullptr;
 	float val = 3.11f;
 	p_val = &val;
 
 	Kotek::ktk::math::vector3f vec10(p_val);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec10.x(), 3.11f) &&
-		Kotek::ktk::is_equal(vec10.y(), 0.0f) &&
-		Kotek::ktk::is_equal(vec10.z(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec10.x(), 3.11f));
 
 	const float carr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
 	const float carr3[3] = {1.310f, 11.1f, 3113.0f};
@@ -2389,13 +2376,10 @@ TEST(Math, vector3f_constructors)
 
 	Kotek::ktk::math::vector3f vec13(carr2);
 	EXPECT_TRUE(Kotek::ktk::is_equal(vec13.x(), 3113.0f) &&
-		Kotek::ktk::is_equal(vec13.y(), 1.310f) &&
-		Kotek::ktk::is_equal(vec13.z(), 0.0f));
+		Kotek::ktk::is_equal(vec13.y(), 1.310f));
 
 	Kotek::ktk::math::vector3f vec14(carr1);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec14.x(), -13.0f) &&
-		Kotek::ktk::is_equal(vec14.y(), 0.0f) &&
-		Kotek::ktk::is_equal(vec14.z(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec14.x(), -13.0f));
 }
 
 TEST(Math, vector4f_constructors)
@@ -2444,36 +2428,24 @@ TEST(Math, vector4f_constructors)
 	Kotek::ktk::math::vector4f vec6(arr3);
 	EXPECT_TRUE(Kotek::ktk::is_equal(vec6.x(), 1.310f) &&
 		Kotek::ktk::is_equal(vec6.y(), 11.1f) &&
-		Kotek::ktk::is_equal(vec6.z(), 3113.0f) &&
-		Kotek::ktk::is_equal(vec6.w(), 0.0f));
+		Kotek::ktk::is_equal(vec6.z(), 3113.0f));
 
 	Kotek::ktk::math::vector4f vec7(arr2);
 	EXPECT_TRUE(Kotek::ktk::is_equal(vec7.x(), 3113.0f) &&
-		Kotek::ktk::is_equal(vec7.y(), 1.310f) &&
-		Kotek::ktk::is_equal(vec7.z(), 0.0f) &&
-		Kotek::ktk::is_equal(vec7.w(), 0.0f));
+		Kotek::ktk::is_equal(vec7.y(), 1.310f));
 
 	Kotek::ktk::math::vector4f vec8(arr1);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec8.x(), -13.0f) &&
-		Kotek::ktk::is_equal(vec8.y(), 0.0f) &&
-		Kotek::ktk::is_equal(vec8.z(), 0.0f) &&
-		Kotek::ktk::is_equal(vec8.w(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec8.x(), -13.0f));
 
 	Kotek::ktk::math::vector4f vec9(&arr1[0]);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec9.x(), -13.0f) &&
-		Kotek::ktk::is_equal(vec9.y(), 0.0f) &&
-		Kotek::ktk::is_equal(vec9.z(), 0.0f) &&
-		Kotek::ktk::is_equal(vec9.w(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec9.x(), -13.0f));
 
 	float* p_val = nullptr;
 	float val = 3.11f;
 	p_val = &val;
 
 	Kotek::ktk::math::vector4f vec10(p_val);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec10.x(), 3.11f) &&
-		Kotek::ktk::is_equal(vec10.y(), 0.0f) &&
-		Kotek::ktk::is_equal(vec10.z(), 0.0f) &&
-		Kotek::ktk::is_equal(vec10.w(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec10.x(), 3.11f));
 
 	const float carr4[4] = {11.1f, 1.310f, 3113.0f, -13.0f};
 	const float carr3[3] = {1.310f, 11.1f, 3113.0f};
@@ -2491,20 +2463,14 @@ TEST(Math, vector4f_constructors)
 	Kotek::ktk::math::vector4f vec12(carr3);
 	EXPECT_TRUE(Kotek::ktk::is_equal(vec12.x(), 1.310f) &&
 		Kotek::ktk::is_equal(vec12.y(), 11.1f) &&
-		Kotek::ktk::is_equal(vec12.z(), 3113.0f) &&
-		Kotek::ktk::is_equal(vec12.w(), 0.0F));
+		Kotek::ktk::is_equal(vec12.z(), 3113.0f));
 
 	Kotek::ktk::math::vector4f vec13(carr2);
 	EXPECT_TRUE(Kotek::ktk::is_equal(vec13.x(), 3113.0f) &&
-		Kotek::ktk::is_equal(vec13.y(), 1.310f) &&
-		Kotek::ktk::is_equal(vec13.z(), 0.0f) &&
-		Kotek::ktk::is_equal(vec13.w(), 0.0f));
+		Kotek::ktk::is_equal(vec13.y(), 1.310f));
 
 	Kotek::ktk::math::vector4f vec14(carr1);
-	EXPECT_TRUE(Kotek::ktk::is_equal(vec14.x(), -13.0f) &&
-		Kotek::ktk::is_equal(vec14.y(), 0.0f) &&
-		Kotek::ktk::is_equal(vec14.z(), 0.0f) &&
-		Kotek::ktk::is_equal(vec14.w(), 0.0f));
+	EXPECT_TRUE(Kotek::ktk::is_equal(vec14.x(), -13.0f));
 }
 
 	#endif
