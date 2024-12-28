@@ -97,29 +97,29 @@ All in all, it can be used for serious needs (at some point you need to make a p
 
 #### Windows NT
 
-| Windows XP    | Windows Vista | Windows 7 | Windows 8 | Windows 10 :white_check_mark: | Windows 11 :white_check_mark: |
+| Windows XP :x:    | Windows Vista :x: | Windows 7 :x: | Windows 8 :x: | Windows 10 :white_check_mark: | Windows 11 :white_check_mark: |
 | ------------- | ------------- |------------- |------------- |------------- |------------- |
-| Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  | Supported  | Supported  |
+| Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Supported  | Supported  |
 
 #### Linux
 
 #### Ubuntu
 
-| Ubuntu 14.04 LTS | Ubuntu 16.04 LTS | Ubuntu 18.04 LTS | Ubuntu 20.04 LTS | Ubuntu 22.04 LTS | Ubuntu 24.04 LTS  |
+| Ubuntu 14.04 LTS :x: | Ubuntu 16.04 LTS :x: | Ubuntu 18.04 LTS :x: | Ubuntu 20.04 LTS :x: | Ubuntu 22.04 LTS | Ubuntu 24.04 LTS  |
 | ------------- | ------------- |------------- |------------- |------------- |------------- |
-| Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  | Supported  | Supported  |
+| Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Supported  | Supported  |
 
 #### MacOS
 
-| Mac OS X 10.4 | OS X 10.8 | macOS 10.12 | macOS 10.15 | macOS 11 | macOS 15  |
+| Mac OS X 10.4 :x: | OS X 10.8 :x: | macOS 10.12 :x: | macOS 10.15 :x: | macOS 11 :x: | macOS 15 :x:  |
 | ------------- | ------------- |------------- |------------- |------------- |------------- |
-| Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  |
+| Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  |
 
 #### Android
 
 #### Nintendo Switch 
 
-| Nintendo Switch SDK |  
+| Nintendo Switch SDK :x: |  
 | ------------- |  
 | Not tested, see roadmap  |  
 
@@ -127,43 +127,43 @@ All in all, it can be used for serious needs (at some point you need to make a p
 
 For sane reasons, I want to support and test on modern Playstation systems, but community can provide plugins and implementations for supporting older Playstation versions.
 
-| Playstation 1 :watch: | Playstation 2 :watch: | Playstation 3 | Playstation 4 | Playstation 5 | 
+| Playstation 1 :watch: | Playstation 2 :watch: | Playstation 3 :x: | Playstation 4 :x: | Playstation 5 :x: | 
 | ------------- | ------------- |------------- |------------- |------------- | 
-| Expected community implementation  | Expected community implementation  | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  |  
+| Expected community implementation  | Expected community implementation  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  |  
 
 #### XBox
 
 For sane reasons, I want to support and test on modern XBox systems, but community can provide plugins and implementations for supporting older XBox versions. 
 
-| Xbox :watch: | Xbox 360 :watch: | Xbox One | Xbox Series S | Xbox Series X | 
+| Xbox :watch: | Xbox 360 :watch: | Xbox One :x: | Xbox Series S :x: | Xbox Series X :x: | 
 | ------------- | ------------- |------------- |------------- |------------- | 
-| Expected community implementation  | Expected community implementation  | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  |  
+| Expected community implementation  | Expected community implementation  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  |  
 
 ### Supported Backends
 
 #### Graphics
 
-| DirectX 9 | DirectX 10 | DirectX 11 | DirectX 12 | OpenGL 3.3 :white_check_mark: | OpenGL ES 3.1 :white_check_mark:  | Vulkan |
+| DirectX 9 :x: | DirectX 10 :x: | DirectX 11 :x: | DirectX 12 :x: | OpenGL 3.3 :white_check_mark: | OpenGL ES 3.1 :white_check_mark:  | Vulkan :warning: |
 | ------------- | ------------- |------------- |------------- |------------- |------------- |------------- |
 | Not implemented  | Not implemented  | Not implemented  | Not implemented  | Supported  | Supported  | WIP  | 
 
 #### Animation
 
-| OzzAnimation | Own Embedded implementation |
+| OzzAnimation :warning: | Own Embedded implementation :x: |
 | ------------- |  ------------- | 
 | WIP  |  Not implemented  | 
 
 #### Physics
 
-| Jolt | Bullet | NVIDIA PhysX | Own Embedded implemenetation
+| Jolt :warning: | Bullet :x: | NVIDIA PhysX :x: | Own Embedded implemenetation :x:
 | ------------- |  ------------- |   ------------- |    ------------- | 
 | WIP  |  Not implemented  |   Not implemented  |   Not implemented  |
 
 #### Sound
 
-| Miniaudio | FMOD | Wwise | Own Embedded implemenetation
-| ------------- |  ------------- |   ------------- |    ------------- | 
-| WIP  |  Not implemented  |   Not implemented  |   Not implemented  |
+| Miniaudio :warning: | FMOD :x: | Wwise :x: | 
+| ------------- |  ------------- |   ------------- | 
+| WIP  |  Not implemented  |   Not implemented  |  
 
 ### Architecture design
 
