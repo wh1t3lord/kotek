@@ -107,27 +107,27 @@ For sane reasons, I want to support and test on modern XBox systems, but communi
 
 #### Graphics
 
-| DirectX 9 | DirectX 10 | DirectX 11 | DirectX 12 | OpenGL 3.3+ | OpenGL ES  | Vulkan |
+| DirectX 9 | DirectX 10 | DirectX 11 | DirectX 12 | OpenGL 3.3 | OpenGL ES 3.1  | Vulkan |
 | ------------- | ------------- |------------- |------------- |------------- |------------- |------------- |
-| Not implemented  | Not implemented  | Not implemented  | Supported  | Supported  | Supported  | Supported  | 
+| Not implemented  | Not implemented  | Not implemented  | WIP (planned)  | Supported  | Supported  | WIP  | 
 
 #### Animation
 
 | OzzAnimation | Own Embedded implementation |
 | ------------- |  ------------- | 
-| Supported  |  Not implemented  | 
+| WIP  |  Not implemented  | 
 
 #### Physics
 
 | Jolt | Bullet | NVIDIA PhysX | Own Embedded implemenetation
 | ------------- |  ------------- |   ------------- |    ------------- | 
-| Supported  |  Not implemented  |   Not implemented  |   Not implemented  |
+| WIP  |  Not implemented  |   Not implemented  |   Not implemented  |
 
 #### Sound
 
 | Miniaudio | FMOD | Wwise | Own Embedded implemenetation
 | ------------- |  ------------- |   ------------- |    ------------- | 
-| Supported  |  Not implemented  |   Not implemented  |   Not implemented  |
+| WIP  |  Not implemented  |   Not implemented  |   Not implemented  |
 
 ### Architecture design
 
