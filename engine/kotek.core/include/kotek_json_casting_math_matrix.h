@@ -35,11 +35,11 @@ inline ktk::math::matrix2x2f tag_invoke(
 	const auto& row_1 = two_rows[0].as_array();
 	const auto& row_2 = two_rows[1].as_array();
 
-	float m00 = static_cast<float>(row_1[0].as_double());
-	float m01 = static_cast<float>(row_1[1].as_double());
+	float m00 = static_cast<float>(row_1[0].to_number<float>());
+	float m01 = static_cast<float>(row_1[1].to_number<float>());
 
-	float m10 = static_cast<float>(row_2[0].as_double());
-	float m11 = static_cast<float>(row_2[1].as_double());
+	float m10 = static_cast<float>(row_2[0].to_number<float>());
+	float m11 = static_cast<float>(row_2[1].to_number<float>());
 
 	ktk::math::matrix2x2f result(m00, m01, m10, m11);
 
@@ -76,17 +76,17 @@ inline ktk::math::matrix3x3f tag_invoke(
 	const auto& row_2 = three_rows[1].as_array();
 	const auto& row_3 = three_rows[2].as_array();
 
-	float m00 = static_cast<float>(row_1[0].as_double());
-	float m01 = static_cast<float>(row_1[1].as_double());
-	float m02 = static_cast<float>(row_1[2].as_double());
+	float m00 = static_cast<float>(row_1[0].to_number<float>());
+	float m01 = static_cast<float>(row_1[1].to_number<float>());
+	float m02 = static_cast<float>(row_1[2].to_number<float>());
 
-	float m10 = static_cast<float>(row_2[0].as_double());
-	float m11 = static_cast<float>(row_2[1].as_double());
-	float m12 = static_cast<float>(row_2[2].as_double());
+	float m10 = static_cast<float>(row_2[0].to_number<float>());
+	float m11 = static_cast<float>(row_2[1].to_number<float>());
+	float m12 = static_cast<float>(row_2[2].to_number<float>());
 
-	float m20 = static_cast<float>(row_3[0].as_double());
-	float m21 = static_cast<float>(row_3[1].as_double());
-	float m22 = static_cast<float>(row_3[2].as_double());
+	float m20 = static_cast<float>(row_3[0].to_number<float>());
+	float m21 = static_cast<float>(row_3[1].to_number<float>());
+	float m22 = static_cast<float>(row_3[2].to_number<float>());
 
 	ktk::math::matrix3x3f result(m00, m01, m02, m10, m11, m12, m20, m21, m22);
 
@@ -127,25 +127,25 @@ inline ktk::math::matrix4x4f tag_invoke(
 	const auto& row_3 = four_rows[2].as_array();
 	const auto& row_4 = four_rows[3].as_array();
 
-	float m00 = static_cast<float>(row_1[0].as_double());
-	float m01 = static_cast<float>(row_1[1].as_double());
-	float m02 = static_cast<float>(row_1[2].as_double());
-	float m03 = static_cast<float>(row_1[3].as_double());
+	float m00 = static_cast<float>(row_1[0].to_number<float>());
+	float m01 = static_cast<float>(row_1[1].to_number<float>());
+	float m02 = static_cast<float>(row_1[2].to_number<float>());
+	float m03 = static_cast<float>(row_1[3].to_number<float>());
 
-	float m10 = static_cast<float>(row_2[0].as_double());
-	float m11 = static_cast<float>(row_2[1].as_double());
-	float m12 = static_cast<float>(row_2[2].as_double());
-	float m13 = static_cast<float>(row_2[3].as_double());
+	float m10 = static_cast<float>(row_2[0].to_number<float>());
+	float m11 = static_cast<float>(row_2[1].to_number<float>());
+	float m12 = static_cast<float>(row_2[2].to_number<float>());
+	float m13 = static_cast<float>(row_2[3].to_number<float>());
 
-	float m20 = static_cast<float>(row_3[0].as_double());
-	float m21 = static_cast<float>(row_3[1].as_double());
-	float m22 = static_cast<float>(row_3[2].as_double());
-	float m23 = static_cast<float>(row_3[3].as_double());
+	float m20 = static_cast<float>(row_3[0].to_number<float>());
+	float m21 = static_cast<float>(row_3[1].to_number<float>());
+	float m22 = static_cast<float>(row_3[2].to_number<float>());
+	float m23 = static_cast<float>(row_3[3].to_number<float>());
 
-	float m30 = static_cast<float>(row_4[0].as_double());
-	float m31 = static_cast<float>(row_4[1].as_double());
-	float m32 = static_cast<float>(row_4[2].as_double());
-	float m33 = static_cast<float>(row_4[3].as_double());
+	float m30 = static_cast<float>(row_4[0].to_number<float>());
+	float m31 = static_cast<float>(row_4[1].to_number<float>());
+	float m32 = static_cast<float>(row_4[2].to_number<float>());
+	float m33 = static_cast<float>(row_4[3].to_number<float>());
 
 	ktk::math::matrix4x4f result(m00, m01, m02, m03, m10, m11, m12, m13, m20,
 		m21, m22, m23, m30, m31, m32, m33);
