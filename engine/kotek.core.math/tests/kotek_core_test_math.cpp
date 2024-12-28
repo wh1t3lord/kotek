@@ -1548,22 +1548,22 @@ TEST(Math, matrix4x4f_constructor_values)
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_constructor_copy_base_type)
@@ -1572,22 +1572,22 @@ TEST(Math, matrix4x4f_constructor_copy_base_type)
 		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
 	Kotek::ktk::math::matrix4x4f test(copy);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_constructor_copy_own_type)
@@ -1596,44 +1596,44 @@ TEST(Math, matrix4x4f_constructor_copy_own_type)
 		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
 	Kotek::ktk::math::matrix4x4f test(copy);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_constructor_default)
 {
 	Kotek::ktk::math::matrix4x4f test;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(0.0f, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_assignment_operator_universal_initialization)
@@ -1641,22 +1641,22 @@ TEST(Math, matrix4x4f_assignment_operator_universal_initialization)
 	Kotek::ktk::math::matrix4x4f test = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
 		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test[3][3]));
 }
 
 TEST(Math, matri4x4f_assignment_operator_base_type)
@@ -1666,22 +1666,22 @@ TEST(Math, matri4x4f_assignment_operator_base_type)
 
 	Kotek::ktk::math::matrix4x4f test = base;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_assignment_plus_operator)
@@ -1692,22 +1692,22 @@ TEST(Math, matrix4x4f_assignment_plus_operator)
 	test += {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f,
 		12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(17.0f + 1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(18.0f + 2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(19.0f + 3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(20.0f + 4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(21.0f + 5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(22.0f + 6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(23.0f + 7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(24.0f + 8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f + 9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(26.0f + 10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(27.0f + 11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(28.0f + 12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(29.0f + 13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(30.0f + 14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(31.0f + 15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(32.0f + 16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(17.0f + 1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(18.0f + 2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(19.0f + 3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(20.0f + 4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(21.0f + 5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(22.0f + 6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(23.0f + 7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(24.0f + 8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f + 9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(26.0f + 10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(27.0f + 11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(28.0f + 12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(29.0f + 13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(30.0f + 14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(31.0f + 15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(32.0f + 16.0f, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_assignment_minus_operator)
@@ -1718,22 +1718,22 @@ TEST(Math, matrix4x4f_assignment_minus_operator)
 	test -= {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f,
 		12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(17.0f - 1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(18.0f - 2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(19.0f - 3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(20.0f - 4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(21.0f - 5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(22.0f - 6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(23.0f - 7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(24.0f - 8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f - 9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(26.0f - 10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(27.0f - 11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(28.0f - 12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(29.0f - 13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(30.0f - 14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(31.0f - 15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(32.0f - 16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(17.0f - 1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(18.0f - 2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(19.0f - 3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(20.0f - 4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(21.0f - 5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(22.0f - 6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(23.0f - 7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(24.0f - 8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f - 9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(26.0f - 10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(27.0f - 11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(28.0f - 12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(29.0f - 13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(30.0f - 14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(31.0f - 15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(32.0f - 16.0f, test[3][3]));
 }
 
 // TODO: add overloads for matrix4x3 and other
@@ -1787,22 +1787,22 @@ TEST(Math, matrix4x4f_assignment_multiply_operator_base_decimal)
 
 	test *= value;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f * value, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f * value, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f * value, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f * value, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f * value, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f * value, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f * value, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f * value, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f * value, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f * value, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f * value, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f * value, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f * value, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f * value, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f * value, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f * value, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f * value, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f * value, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f * value, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f * value, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f * value, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f * value, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f * value, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f * value, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f * value, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f * value, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f * value, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f * value, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f * value, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f * value, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f * value, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f * value, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_assignment_divide_operator)
@@ -1839,22 +1839,22 @@ TEST(Math, matrix4x4f_assignment_divide_operator_decimal)
 
 	test /= value;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f * factor, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f * factor, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f * factor, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f * factor, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f * factor, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f * factor, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f * factor, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f * factor, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f * factor, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f * factor, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f * factor, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f * factor, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f * factor, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f * factor, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f * factor, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f * factor, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f * factor, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f * factor, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f * factor, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f * factor, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f * factor, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f * factor, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f * factor, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f * factor, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f * factor, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f * factor, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f * factor, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f * factor, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f * factor, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f * factor, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f * factor, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f * factor, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_unary_plus_operator)
@@ -1864,22 +1864,22 @@ TEST(Math, matrix4x4f_unary_plus_operator)
 
 	test = +test;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_unary_minus_operator)
@@ -1889,22 +1889,22 @@ TEST(Math, matrix4x4f_unary_minus_operator)
 
 	test = -test;
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(-1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(-16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(-16.0f, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_comparison_operator_equal)
@@ -2066,39 +2066,39 @@ TEST(Math, matrix4x4f_setters)
 	Kotek::ktk::math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
 
-	test.Set_00(test.Get_00() + 1.0f);
-	test.Set_01(test.Get_01() + 1.0f);
-	test.Set_02(test.Get_02() + 1.0f);
-	test.Set_03(test.Get_03() + 1.0f);
-	test.Set_10(test.Get_10() + 1.0f);
-	test.Set_11(test.Get_11() + 1.0f);
-	test.Set_12(test.Get_12() + 1.0f);
-	test.Set_13(test.Get_13() + 1.0f);
-	test.Set_20(test.Get_20() + 1.0f);
-	test.Set_21(test.Get_21() + 1.0f);
-	test.Set_22(test.Get_22() + 1.0f);
-	test.Set_23(test.Get_23() + 1.0f);
-	test.Set_30(test.Get_30() + 1.0f);
-	test.Set_31(test.Get_31() + 1.0f);
-	test.Set_32(test.Get_32() + 1.0f);
-	test.Set_33(test.Get_33() + 1.0f);
+	test[0][0] = (test[0][0] + 1.0f);
+	test[0][1] = (test[0][1] + 1.0f);
+	test[0][2] = (test[0][2] + 1.0f);
+	test[0][3] = (test[0][3] + 1.0f);
+	test[1][0] = (test[1][0] + 1.0f);
+	test[1][1] = (test[1][1] + 1.0f);
+	test[1][2] = (test[1][2] + 1.0f);
+	test[1][3] = (test[1][3] + 1.0f);
+	test[2][0] = (test[2][0] + 1.0f);
+	test[2][1] = (test[2][1] + 1.0f);
+	test[2][2] = (test[2][2] + 1.0f);
+	test[2][3] = (test[2][3] + 1.0f);
+	test[3][0] = (test[3][0] + 1.0f);
+	test[3][1] = (test[3][1] + 1.0f);
+	test[3][2] = (test[3][2] + 1.0f);
+	test[3][3] = (test[3][3] + 1.0f);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f + 1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f + 1.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f + 1.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f + 1.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f + 1.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f + 1.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f + 1.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f + 1.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f + 1.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f + 1.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f + 1.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f + 1.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f + 1.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f + 1.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f + 1.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f + 1.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(1.0f + 1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(2.0f + 1.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(3.0f + 1.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(4.0f + 1.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(5.0f + 1.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(6.0f + 1.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(7.0f + 1.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(8.0f + 1.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(9.0f + 1.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(10.0f + 1.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(11.0f + 1.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(12.0f + 1.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(13.0f + 1.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(14.0f + 1.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(15.0f + 1.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(16.0f + 1.0f, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_plus_operator)
@@ -2110,22 +2110,22 @@ TEST(Math, matrix4x4f_plus_operator)
 		Kotek::ktk::math::matrix4x4f(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 			8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(17.0f + 1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(18.0f + 2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(19.0f + 3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(20.0f + 4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(21.0f + 5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(22.0f + 6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(23.0f + 7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(24.0f + 8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f + 9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(26.0f + 10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(27.0f + 11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(28.0f + 12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(29.0f + 13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(30.0f + 14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(31.0f + 15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(32.0f + 16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(17.0f + 1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(18.0f + 2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(19.0f + 3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(20.0f + 4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(21.0f + 5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(22.0f + 6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(23.0f + 7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(24.0f + 8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f + 9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(26.0f + 10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(27.0f + 11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(28.0f + 12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(29.0f + 13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(30.0f + 14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(31.0f + 15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(32.0f + 16.0f, test[3][3]));
 }
 
 TEST(Math, matrix4x4f_minus_operator)
@@ -2137,22 +2137,22 @@ TEST(Math, matrix4x4f_minus_operator)
 		Kotek::ktk::math::matrix4x4f(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
 			8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
 
-	EXPECT_TRUE(Kotek::ktk::is_equal(17.0f - 1.0f, test.Get_00()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(18.0f - 2.0f, test.Get_01()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(19.0f - 3.0f, test.Get_02()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(20.0f - 4.0f, test.Get_03()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(21.0f - 5.0f, test.Get_10()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(22.0f - 6.0f, test.Get_11()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(23.0f - 7.0f, test.Get_12()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(24.0f - 8.0f, test.Get_13()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f - 9.0f, test.Get_20()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(26.0f - 10.0f, test.Get_21()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(27.0f - 11.0f, test.Get_22()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(28.0f - 12.0f, test.Get_23()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(29.0f - 13.0f, test.Get_30()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(30.0f - 14.0f, test.Get_31()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(31.0f - 15.0f, test.Get_32()));
-	EXPECT_TRUE(Kotek::ktk::is_equal(32.0f - 16.0f, test.Get_33()));
+	EXPECT_TRUE(Kotek::ktk::is_equal(17.0f - 1.0f, test[0][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(18.0f - 2.0f, test[0][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(19.0f - 3.0f, test[0][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(20.0f - 4.0f, test[0][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(21.0f - 5.0f, test[1][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(22.0f - 6.0f, test[1][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(23.0f - 7.0f, test[1][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(24.0f - 8.0f, test[1][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(25.0f - 9.0f, test[2][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(26.0f - 10.0f, test[2][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(27.0f - 11.0f, test[2][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(28.0f - 12.0f, test[2][3]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(29.0f - 13.0f, test[3][0]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(30.0f - 14.0f, test[3][1]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(31.0f - 15.0f, test[3][2]));
+	EXPECT_TRUE(Kotek::ktk::is_equal(32.0f - 16.0f, test[3][3]));
 }
 
 TEST(Math, vector1f_constructors)

@@ -103,14 +103,10 @@ inline void tag_invoke(const ktk::json::value_from_tag&,
 
 	ktk::json::array result;
 
-	row_1 = {
-		matrix.Get_00(), matrix.Get_01(), matrix.Get_02(), matrix.Get_03()};
-	row_2 = {
-		matrix.Get_10(), matrix.Get_11(), matrix.Get_12(), matrix.Get_13()};
-	row_3 = {
-		matrix.Get_20(), matrix.Get_21(), matrix.Get_22(), matrix.Get_23()};
-	row_4 = {
-		matrix.Get_30(), matrix.Get_31(), matrix.Get_32(), matrix.Get_33()};
+	row_1 = {matrix[0][0], matrix[0][1], matrix[0][2], matrix[0][3]};
+	row_2 = {matrix[1][0], matrix[1][1], matrix[1][2], matrix[1][3]};
+	row_3 = {matrix[2][0], matrix[2][1], matrix[2][2], matrix[2][3]};
+	row_4 = {matrix[3][0], matrix[3][1], matrix[3][2], matrix[3][3]};
 
 	result.push_back(row_1);
 	result.push_back(row_2);

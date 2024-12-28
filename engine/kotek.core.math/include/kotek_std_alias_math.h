@@ -43,132 +43,295 @@ struct matrix3_view_t;
 struct matrix2_view_t;
 struct matrix1_view_t;
 
-struct matrix1_view_t
+struct matrix1_const_view_t
 {
-	matrix1_view_t(float* p_values) : m_x(p_values[0]) {}
+	matrix1_const_view_t(const float* p_values) : m_p_values(p_values) {}
+	matrix1_const_view_t(float* p_values) : m_p_values(p_values) {}
 
-	inline float x(void) const noexcept { return this->m_x; }
-	inline float& x(void) noexcept { return this->m_x; }
+	inline float x(void) const noexcept { return this->m_p_values[0]; }
+	inline const float& x(void) noexcept { return this->m_p_values[0]; }
 
-	inline float operator[](unsigned int index) const noexcept
+	inline float operator[](unsigned char index) const noexcept
 	{
 		KOTEK_ASSERT(index == 0, "out of range");
-		return m_x;
+		return this->m_p_values[0];
 	}
 
-	inline float& operator[](unsigned int index) noexcept
+	inline const float& operator[](unsigned char index) noexcept
 	{
 		KOTEK_ASSERT(index == 0, "out of range");
-		return m_x;
+		return this->m_p_values[0];
+	}
+
+	inline const float* data(void) const noexcept { return this->m_p_values; }
+
+	inline static constexpr unsigned char size_of(void) noexcept
+	{
+		return sizeof(float[1]);
 	}
 
 private:
-	float& m_x;
+	const float* m_p_values;
+};
+
+struct matrix1_view_t
+{
+	matrix1_view_t(float* p_values) : m_p_values(p_values) {}
+
+	inline float x(void) const noexcept { return this->m_p_values[0]; }
+	inline float& x(void) noexcept { return this->m_p_values[0]; }
+
+	inline float operator[](unsigned char index) const noexcept
+	{
+		KOTEK_ASSERT(index == 0, "out of range");
+		return this->m_p_values[0];
+	}
+
+	inline float& operator[](unsigned char index) noexcept
+	{
+		KOTEK_ASSERT(index == 0, "out of range");
+		return this->m_p_values[0];
+	}
+
+	inline float* data(void) const noexcept { return this->m_p_values; }
+
+	inline static constexpr unsigned char size_of(void) noexcept
+	{
+		return sizeof(float[1]);
+	}
+
+private:
+	float* m_p_values;
+};
+
+struct matrix2_const_view_t
+{
+	matrix2_const_view_t(float* p_values) : m_p_values(p_values) {}
+	matrix2_const_view_t(const float* p_values) : m_p_values(p_values) {}
+
+	inline float x(void) const noexcept { return this->m_p_values[0]; }
+	inline const float& x(void) noexcept { return this->m_p_values[0]; }
+
+	inline float y(void) const noexcept { return this->m_p_values[1]; }
+	inline const float& y(void) noexcept { return this->m_p_values[1]; }
+
+	inline float operator[](unsigned char index) const
+	{
+		KOTEK_ASSERT(index <= 1, "out of range");
+		return this->m_p_values[index];
+	}
+
+	inline const float& operator[](unsigned char index)
+	{
+		KOTEK_ASSERT(index <= 1, "out of range");
+		return this->m_p_values[index];
+	}
+
+	inline const float* data(void) const noexcept { return this->m_p_values; }
+
+	inline static constexpr unsigned char size_of(void) noexcept
+	{
+		return static_cast<unsigned char>(sizeof(const float[2]));
+	}
+
+private:
+	const float* m_p_values;
 };
 
 struct matrix2_view_t
 {
-	matrix2_view_t(float* p_values) : m_x(p_values[0]), m_y(p_values[1]) {}
+	matrix2_view_t(float* p_values) : m_p_values(p_values) {}
 
-	inline float x(void) const noexcept { return this->m_x; }
-	inline float& x(void) noexcept { return this->m_x; }
+	inline float x(void) const noexcept { return this->m_p_values[0]; }
+	inline float& x(void) noexcept { return this->m_p_values[0]; }
 
-	inline float y(void) const noexcept { return this->m_y; }
-	inline float& y(void) noexcept { return this->m_y; }
+	inline float y(void) const noexcept { return this->m_p_values[1]; }
+	inline float& y(void) noexcept { return this->m_p_values[1]; }
 
 	inline float operator[](unsigned char index) const
 	{
 		KOTEK_ASSERT(index <= 1, "out of range");
-		float* p_arr = static_cast<float*>(&this->m_x);
-		return p_arr[index];
+		return this->m_p_values[index];
 	}
 
 	inline float& operator[](unsigned char index)
 	{
 		KOTEK_ASSERT(index <= 1, "out of range");
-		float* p_arr = static_cast<float*>(&this->m_x);
-		return p_arr[index];
+		return this->m_p_values[index];
+	}
+
+	inline float* data(void) const noexcept { return this->m_p_values; }
+
+	inline static constexpr unsigned char size_of(void) noexcept
+	{
+		return static_cast<unsigned char>(sizeof(float[2]));
 	}
 
 private:
-	float& m_x;
-	float& m_y;
+	float* m_p_values;
 };
 
-struct matrix3_view_t
+struct matrix3_const_view_t
 {
-	matrix3_view_t(float* p_values) :
-		m_x(p_values[0]), m_y(p_values[1]), m_z(p_values[2])
-	{
-	}
+	matrix3_const_view_t(const float* p_values) : m_p_values(p_values) {}
 
-	inline float x(void) const noexcept { return this->m_x; }
-	inline float& x(void) noexcept { return this->m_x; }
+	matrix3_const_view_t(float* p_values) : m_p_values(p_values) {}
 
-	inline float y(void) const noexcept { return this->m_y; }
-	inline float& y(void) noexcept { return this->m_y; }
+	inline float x(void) const noexcept { return this->m_p_values[0]; }
+	inline const float& x(void) noexcept { return this->m_p_values[0]; }
 
-	inline float z(void) const noexcept { return this->m_z; }
-	inline float& z(void) noexcept { return this->m_z; }
+	inline float y(void) const noexcept { return this->m_p_values[1]; }
+	inline const float& y(void) noexcept { return this->m_p_values[1]; }
+
+	inline float z(void) const noexcept { return this->m_p_values[2]; }
+	inline const float& z(void) noexcept { return this->m_p_values[2]; }
 
 	inline float operator[](unsigned char index) const
 	{
 		KOTEK_ASSERT(index <= 2, "out of range");
-		float* p_arr = static_cast<float*>(&this->m_x);
-		return p_arr[index];
+		return this->m_p_values[index];
+	}
+
+	inline const float& operator[](unsigned char index)
+	{
+		KOTEK_ASSERT(index <= 2, "out of range");
+		return this->m_p_values[index];
+	}
+
+	inline const float* data(void) const noexcept { return this->m_p_values; }
+
+	inline static constexpr unsigned char size_of(void) noexcept
+	{
+		return sizeof(float[3]);
+	}
+
+private:
+	const float* m_p_values;
+};
+
+/// \~english @brief universal representation of matrix's column or row. Sadly
+/// but some math libraries doesn't have matrix representation as set of
+/// vectors. This class is a representation of row or column for matrix which
+/// dimension size is 3 for a row or a column respectively. In order to bind
+/// data you just can call method data(void) and call static class method
+/// size_of(void). If you just apply sizeof for this class as regulary sizeof
+/// works you won't get the real size of expected vector's dimension size so you
+/// can't map data with method data and compiler's sizeof operator keep this in
+/// mind.
+struct matrix3_view_t
+{
+	matrix3_view_t(float* p_values) : m_p_values(p_values) {}
+
+	inline float x(void) const noexcept { return this->m_p_values[0]; }
+	inline float& x(void) noexcept { return this->m_p_values[0]; }
+
+	inline float y(void) const noexcept { return this->m_p_values[1]; }
+	inline float& y(void) noexcept { return this->m_p_values[1]; }
+
+	inline float z(void) const noexcept { return this->m_p_values[2]; }
+	inline float& z(void) noexcept { return this->m_p_values[2]; }
+
+	inline float operator[](unsigned char index) const
+	{
+		KOTEK_ASSERT(index <= 2, "out of range");
+		return this->m_p_values[index];
 	}
 
 	inline float& operator[](unsigned char index)
 	{
 		KOTEK_ASSERT(index <= 2, "out of range");
-		float* p_arr = static_cast<float*>(&this->m_x);
-		return p_arr[index];
+		return this->m_p_values[index];
+	}
+
+	inline float* data(void) const noexcept { return this->m_p_values; }
+
+	inline static constexpr unsigned char size_of(void) noexcept
+	{
+		return sizeof(float[3]);
 	}
 
 private:
-	float& m_x;
-	float& m_y;
-	float& m_z;
+	float* m_p_values;
+};
+
+struct matrix4_const_view_t
+{
+	matrix4_const_view_t(float* p_values) : m_p_values(p_values) {}
+
+	matrix4_const_view_t(const float* p_values) : m_p_values(p_values) {}
+
+	inline float x(void) const noexcept { return this->m_p_values[0]; }
+	inline const float& x(void) noexcept { return this->m_p_values[0]; }
+
+	inline float y(void) const noexcept { return this->m_p_values[1]; }
+	inline const float& y(void) noexcept { return this->m_p_values[1]; }
+
+	inline float z(void) const noexcept { return this->m_p_values[2]; }
+	inline const float& z(void) noexcept { return this->m_p_values[2]; }
+
+	inline float w(void) const noexcept { return this->m_p_values[3]; }
+	inline const float& w(void) noexcept { return this->m_p_values[3]; }
+
+	inline float operator[](unsigned char index) const
+	{
+		KOTEK_ASSERT(index <= 3, "out of range");
+		return this->m_p_values[index];
+	}
+
+	inline const float& operator[](unsigned char index)
+	{
+		KOTEK_ASSERT(index <= 3, "out of range");
+		return this->m_p_values[index];
+	}
+
+	inline const float* data(void) const noexcept { return this->m_p_values; }
+
+	inline static constexpr unsigned char size_of(void) noexcept
+	{
+		return sizeof(float[4]);
+	}
+
+private:
+	const float* m_p_values;
 };
 
 struct matrix4_view_t
 {
-	matrix4_view_t(float* p_values) :
-		m_x(p_values[0]), m_y(p_values[1]), m_z(p_values[2]), m_w(p_values[3])
-	{
-	}
+	matrix4_view_t(float* p_values) : m_p_values(p_values) {}
 
-	inline float x(void) const noexcept { return this->m_x; }
-	inline float& x(void) noexcept { return this->m_x; }
+	inline float x(void) const noexcept { return this->m_p_values[0]; }
+	inline float& x(void) noexcept { return this->m_p_values[0]; }
 
-	inline float y(void) const noexcept { return this->m_y; }
-	inline float& y(void) noexcept { return this->m_y; }
+	inline float y(void) const noexcept { return this->m_p_values[1]; }
+	inline float& y(void) noexcept { return this->m_p_values[1]; }
 
-	inline float z(void) const noexcept { return this->m_z; }
-	inline float& z(void) noexcept { return this->m_z; }
+	inline float z(void) const noexcept { return this->m_p_values[2]; }
+	inline float& z(void) noexcept { return this->m_p_values[2]; }
 
-	inline float w(void) const noexcept { return this->m_w; }
-	inline float& w(void) noexcept { return this->m_w; }
+	inline float w(void) const noexcept { return this->m_p_values[3]; }
+	inline float& w(void) noexcept { return this->m_p_values[3]; }
 
 	inline float operator[](unsigned char index) const
 	{
 		KOTEK_ASSERT(index <= 3, "out of range");
-		float* p_arr = static_cast<float*>(&this->m_x);
-		return p_arr[index];
+		return this->m_p_values[index];
 	}
 
 	inline float& operator[](unsigned char index)
 	{
 		KOTEK_ASSERT(index <= 3, "out of range");
-		float* p_arr = static_cast<float*>(&this->m_x);
-		return p_arr[index];
+		return this->m_p_values[index];
+	}
+
+	inline float* data(void) const noexcept { return this->m_p_values; }
+
+	inline static constexpr unsigned char size_of(void) noexcept
+	{
+		return sizeof(float[4]);
 	}
 
 private:
-	float& m_x;
-	float& m_y;
-	float& m_z;
-	float& m_w;
+	float* m_p_values;
 };
 
 // TODO: provide separation for float and double base types

@@ -405,14 +405,14 @@ public:
 #endif
 	}
 
-	float* operator[](unsigned char row)
+	matrix4_view_t operator[](unsigned char row)
 	{
 		KOTEK_ASSERT(row != unsigned char(-1),
 			"out of range (probably you passed a negative number)");
 		KOTEK_ASSERT(row <= 3, "out of range");
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return &this->m_base.m[row][0];
+		return matrix4_view_t(&this->m_base.m[row][0]);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		return &this->m_base[row][0];
 #else
@@ -420,14 +420,14 @@ public:
 #endif
 	}
 
-	const float* operator[](unsigned char row) const
+	matrix4_const_view_t operator[](unsigned char row) const
 	{
 		KOTEK_ASSERT(row != unsigned char(-1),
 			"out of range (probably you passed a negative number)");
 		KOTEK_ASSERT(row <= 3, "out of range!");
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return &this->m_base.m[row][0];
+		return matrix4_const_view_t(&this->m_base.m[row][0]);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		return &this->m_base[row][0];
 #else
@@ -444,310 +444,6 @@ public:
 		this->m_base.m[2][2] = 1.0f;
 		this->m_base.m[3][3] = 1.0f;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-#endif
-		return *this;
-	}
-
-	float Get_00(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[0][0];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[0][0];
-#endif
-	}
-
-	float Get_01(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base._12;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[0][1];
-#endif
-	}
-
-	float Get_02(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base._13;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[0][2];
-#endif
-	}
-
-	float Get_03(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base._14;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[0][3];
-#endif
-	}
-
-	float Get_10(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[1][0];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[1][0];
-#endif
-	}
-
-	float Get_11(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[1][1];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[1][1];
-#endif
-	}
-
-	float Get_12(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base._23;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[1][2];
-#endif
-	}
-
-	float Get_13(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base._24;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[1][3];
-#endif
-	}
-
-	float Get_20(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[2][0];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[2][0];
-#endif
-	}
-
-	float Get_21(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[2][1];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[2][1];
-#endif
-	}
-
-	float Get_22(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[2][2];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[2][2];
-#endif
-	}
-
-	float Get_23(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[2][3];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[2][3];
-#endif
-	}
-
-	float Get_30(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[3][0];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[3][0];
-#endif
-	}
-
-	float Get_31(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[3][1];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[3][1];
-#endif
-	}
-
-	float Get_32(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[3][2];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[3][2];
-#endif
-	}
-
-	float Get_33(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return this->m_base.m[3][3];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base[3][3];
-#endif
-	}
-
-	matrix4x4f& Set_00(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[0][0] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[0][0] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_01(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[0][1] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[0][1] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_02(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[0][2] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[0][2] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_03(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[0][3] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[0][3] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_10(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[1][0] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[1][0] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_11(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[1][1] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[1][1] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_12(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[1][2] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[1][2] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_13(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[1][3] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[1][3] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_20(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[2][0] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[2][0] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_21(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[2][1] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[2][1] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_22(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[2][2] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[2][2] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_23(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[2][3] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[2][3] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_30(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[3][0] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[3][0] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_31(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[3][1] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[3][1] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_32(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[3][2] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[3][2] = value;
-#endif
-		return *this;
-	}
-
-	matrix4x4f& Set_33(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		this->m_base.m[3][3] = value;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base[3][3] = value;
 #endif
 		return *this;
 	}
@@ -769,23 +465,15 @@ inline matrix4x4f operator+(
 	const matrix4x4f& left, const matrix4x4f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT4 left_row_0 = {
-		left.Get_00(), left.Get_01(), left.Get_02(), left.Get_03()};
-	DirectX::XMFLOAT4 left_row_1 = {
-		left.Get_10(), left.Get_11(), left.Get_12(), left.Get_13()};
-	DirectX::XMFLOAT4 left_row_2 = {
-		left.Get_20(), left.Get_21(), left.Get_22(), left.Get_23()};
-	DirectX::XMFLOAT4 left_row_3 = {
-		left.Get_30(), left.Get_31(), left.Get_32(), left.Get_33()};
+	DirectX::XMFLOAT4 left_row_0(left[0].data());
+	DirectX::XMFLOAT4 left_row_1(left[1].data());
+	DirectX::XMFLOAT4 left_row_2(left[2].data());
+	DirectX::XMFLOAT4 left_row_3(left[3].data());
 
-	DirectX::XMFLOAT4 right_row_0 = {
-		right.Get_00(), right.Get_01(), right.Get_02(), right.Get_03()};
-	DirectX::XMFLOAT4 right_row_1 = {
-		right.Get_10(), right.Get_11(), right.Get_12(), right.Get_13()};
-	DirectX::XMFLOAT4 right_row_2 = {
-		right.Get_20(), right.Get_21(), right.Get_22(), right.Get_23()};
-	DirectX::XMFLOAT4 right_row_3 = {
-		right.Get_30(), right.Get_31(), right.Get_32(), right.Get_33()};
+	DirectX::XMFLOAT4 right_row_0(right[0].data());
+	DirectX::XMFLOAT4 right_row_1(right[1].data());
+	DirectX::XMFLOAT4 right_row_2(right[2].data());
+	DirectX::XMFLOAT4 right_row_3(right[3].data());
 
 	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat4(&left_row_0);
 	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat4(&left_row_1);
@@ -827,23 +515,15 @@ inline matrix4x4f operator-(
 	const matrix4x4f& left, const matrix4x4f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT4 left_row_0 = {
-		left.Get_00(), left.Get_01(), left.Get_02(), left.Get_03()};
-	DirectX::XMFLOAT4 left_row_1 = {
-		left.Get_10(), left.Get_11(), left.Get_12(), left.Get_13()};
-	DirectX::XMFLOAT4 left_row_2 = {
-		left.Get_20(), left.Get_21(), left.Get_22(), left.Get_23()};
-	DirectX::XMFLOAT4 left_row_3 = {
-		left.Get_30(), left.Get_31(), left.Get_32(), left.Get_33()};
+	DirectX::XMFLOAT4 left_row_0(left[0].data());
+	DirectX::XMFLOAT4 left_row_1(left[1].data());
+	DirectX::XMFLOAT4 left_row_2(left[2].data());
+	DirectX::XMFLOAT4 left_row_3(left[3].data());
 
-	DirectX::XMFLOAT4 right_row_0 = {
-		right.Get_00(), right.Get_01(), right.Get_02(), right.Get_03()};
-	DirectX::XMFLOAT4 right_row_1 = {
-		right.Get_10(), right.Get_11(), right.Get_12(), right.Get_13()};
-	DirectX::XMFLOAT4 right_row_2 = {
-		right.Get_20(), right.Get_21(), right.Get_22(), right.Get_23()};
-	DirectX::XMFLOAT4 right_row_3 = {
-		right.Get_30(), right.Get_31(), right.Get_32(), right.Get_33()};
+	DirectX::XMFLOAT4 right_row_0(right[0].data());
+	DirectX::XMFLOAT4 right_row_1(right[1].data());
+	DirectX::XMFLOAT4 right_row_2(right[2].data());
+	DirectX::XMFLOAT4 right_row_3(right[3].data());
 
 	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat4(&left_row_0);
 	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat4(&left_row_1);
@@ -904,14 +584,10 @@ inline matrix4x4f operator*(
 inline matrix4x4f operator*(const matrix4x4f& left, float value) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT4 left_row_0 = {
-		left.Get_00(), left.Get_01(), left.Get_02(), left.Get_03()};
-	DirectX::XMFLOAT4 left_row_1 = {
-		left.Get_10(), left.Get_11(), left.Get_12(), left.Get_13()};
-	DirectX::XMFLOAT4 left_row_2 = {
-		left.Get_20(), left.Get_21(), left.Get_22(), left.Get_23()};
-	DirectX::XMFLOAT4 left_row_3 = {
-		left.Get_30(), left.Get_31(), left.Get_32(), left.Get_33()};
+	DirectX::XMFLOAT4 left_row_0(left[0].data());
+	DirectX::XMFLOAT4 left_row_1(left[1].data());
+	DirectX::XMFLOAT4 left_row_2(left[2].data());
+	DirectX::XMFLOAT4 left_row_3(left[3].data());
 
 	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat4(&left_row_0);
 	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat4(&left_row_1);
@@ -952,14 +628,10 @@ inline matrix4x4f operator*(float value, const matrix4x4f& right) noexcept
 inline matrix4x4f operator/(const matrix4x4f& left, float value) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT4 left_row_0 = {
-		left.Get_00(), left.Get_01(), left.Get_02(), left.Get_03()};
-	DirectX::XMFLOAT4 left_row_1 = {
-		left.Get_10(), left.Get_11(), left.Get_12(), left.Get_13()};
-	DirectX::XMFLOAT4 left_row_2 = {
-		left.Get_20(), left.Get_21(), left.Get_22(), left.Get_23()};
-	DirectX::XMFLOAT4 left_row_3 = {
-		left.Get_30(), left.Get_31(), left.Get_32(), left.Get_33()};
+	DirectX::XMFLOAT4 left_row_0(left[0].data());
+	DirectX::XMFLOAT4 left_row_1(left[1].data());
+	DirectX::XMFLOAT4 left_row_2(left[2].data());
+	DirectX::XMFLOAT4 left_row_3(left[3].data());
 
 	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat4(&left_row_0);
 	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat4(&left_row_1);
@@ -998,23 +670,15 @@ inline matrix4x4f operator/(
 	const matrix4x4f& left, const matrix4x4f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT4 left_row_0 = {
-		left.Get_00(), left.Get_01(), left.Get_02(), left.Get_03()};
-	DirectX::XMFLOAT4 left_row_1 = {
-		left.Get_10(), left.Get_11(), left.Get_12(), left.Get_13()};
-	DirectX::XMFLOAT4 left_row_2 = {
-		left.Get_20(), left.Get_21(), left.Get_22(), left.Get_23()};
-	DirectX::XMFLOAT4 left_row_3 = {
-		left.Get_30(), left.Get_31(), left.Get_32(), left.Get_33()};
+	DirectX::XMFLOAT4 left_row_0(left[0].data());
+	DirectX::XMFLOAT4 left_row_1(left[1].data());
+	DirectX::XMFLOAT4 left_row_2(left[2].data());
+	DirectX::XMFLOAT4 left_row_3(left[3].data());
 
-	DirectX::XMFLOAT4 right_row_0 = {
-		right.Get_00(), right.Get_01(), right.Get_02(), right.Get_03()};
-	DirectX::XMFLOAT4 right_row_1 = {
-		right.Get_10(), right.Get_11(), right.Get_12(), right.Get_13()};
-	DirectX::XMFLOAT4 right_row_2 = {
-		right.Get_20(), right.Get_21(), right.Get_22(), right.Get_23()};
-	DirectX::XMFLOAT4 right_row_3 = {
-		right.Get_30(), right.Get_31(), right.Get_32(), right.Get_33()};
+	DirectX::XMFLOAT4 right_row_0(right[0].data());
+	DirectX::XMFLOAT4 right_row_1(right[1].data());
+	DirectX::XMFLOAT4 right_row_2(right[2].data());
+	DirectX::XMFLOAT4 right_row_3(right[3].data());
 
 	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat4(&left_row_0);
 	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat4(&left_row_1);
