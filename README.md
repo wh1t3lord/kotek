@@ -10,9 +10,9 @@ This project might be useful for those who doesn't want to spend time for making
 
 #### Windows
 
-> You're required to have CMake 3.19.1 version at least
+> :warning: You're required to have CMake 3.19.1 version at least :warning:
 
-> Also you're required to have stable internet connection otherwise you need to use offline compilation
+> :warning: Also you're required to have stable internet connection otherwise you need to use offline compilation :warning:
 
 
 Steps to reproduce:
@@ -24,9 +24,9 @@ Steps to reproduce:
 
 #### Linux
 
-> You're required to have CMake 3.19.1 version at least
+> :warning: You're required to have CMake 3.19.1 version at least :warning:
 
-> Also you're required to have stable internet connection otherwise you need to use offline compilation
+> :warning: Also you're required to have stable internet connection otherwise you need to use offline compilation :warning:
 
 
 Steps to reproduce:
@@ -38,9 +38,9 @@ Steps to reproduce:
 
 #### MacOS
 
-> You're required to have CMake 3.19.1 version at least
+> :warning: You're required to have CMake 3.19.1 version at least :warning:
 
-> Also you're required to have stable internet connection otherwise you need to use offline compilation
+> :warning: Also you're required to have stable internet connection otherwise you need to use offline compilation :warning:
 
 
 Steps to reproduce:
@@ -97,7 +97,7 @@ All in all, it can be used for serious needs (at some point you need to make a p
 
 #### Windows NT
 
-| Windows XP    | Windows Vista | Windows 7 | Windows 8 | Windows 10 | Windows 11 |
+| Windows XP    | Windows Vista | Windows 7 | Windows 8 | Windows 10 :white_check_mark: | Windows 11 :white_check_mark: |
 | ------------- | ------------- |------------- |------------- |------------- |------------- |
 | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  | Supported  | Supported  |
 
@@ -127,7 +127,7 @@ All in all, it can be used for serious needs (at some point you need to make a p
 
 For sane reasons, I want to support and test on modern Playstation systems, but community can provide plugins and implementations for supporting older Playstation versions.
 
-| Playstation 1 | Playstation 2 | Playstation 3 | Playstation 4 | Playstation 5 | 
+| Playstation 1 :watch: | Playstation 2 :watch: | Playstation 3 | Playstation 4 | Playstation 5 | 
 | ------------- | ------------- |------------- |------------- |------------- | 
 | Expected community implementation  | Expected community implementation  | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  |  
 
@@ -135,7 +135,7 @@ For sane reasons, I want to support and test on modern Playstation systems, but 
 
 For sane reasons, I want to support and test on modern XBox systems, but community can provide plugins and implementations for supporting older XBox versions. 
 
-| Xbox | Xbox 360 | Xbox One | Xbox Series S | Xbox Series X | 
+| Xbox :watch: | Xbox 360 :watch: | Xbox One | Xbox Series S | Xbox Series X | 
 | ------------- | ------------- |------------- |------------- |------------- | 
 | Expected community implementation  | Expected community implementation  | Not tested, see roadmap  | Not tested, see roadmap  | Not tested, see roadmap  |  
 
@@ -143,9 +143,9 @@ For sane reasons, I want to support and test on modern XBox systems, but communi
 
 #### Graphics
 
-| DirectX 9 | DirectX 10 | DirectX 11 | DirectX 12 | OpenGL 3.3 | OpenGL ES 3.1  | Vulkan |
+| DirectX 9 | DirectX 10 | DirectX 11 | DirectX 12 | OpenGL 3.3 :white_check_mark: | OpenGL ES 3.1 :white_check_mark:  | Vulkan |
 | ------------- | ------------- |------------- |------------- |------------- |------------- |------------- |
-| Not implemented  | Not implemented  | Not implemented  | WIP (planned)  | Supported  | Supported  | WIP  | 
+| Not implemented  | Not implemented  | Not implemented  | Not implemented  | Supported  | Supported  | WIP  | 
 
 #### Animation
 
