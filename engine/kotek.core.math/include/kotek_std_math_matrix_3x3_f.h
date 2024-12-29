@@ -2,6 +2,15 @@
 
 #include "kotek_std_alias_math.h"
 
+#include "kotek_std_math_matrix1f_view.h"
+#include "kotek_std_math_matrix2f_view.h"
+#include "kotek_std_math_matrix3f_view.h"
+#include "kotek_std_math_matrix4f_view.h"
+#include "kotek_std_math_matrix1f_const_view.h"
+#include "kotek_std_math_matrix2f_const_view.h"
+#include "kotek_std_math_matrix3f_const_view.h"
+#include "kotek_std_math_matrix4f_const_view.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
@@ -342,14 +351,14 @@ public:
 
 #endif
 
-	matrix3_view_t operator[](unsigned char row)
+	matrix3f_view_t operator[](unsigned char row)
 	{
 		KOTEK_ASSERT(row != unsigned char(-1),
 			"out of range (probably you passed a negative number)");
 		KOTEK_ASSERT(row <= 2, "out of range");
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return matrix3_view_t(&this->m_base.m[row][0]);
+		return matrix3f_view_t(&this->m_base.m[row][0]);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		return &this->m_base[row][0];
 #else
@@ -357,14 +366,14 @@ public:
 #endif
 	}
 
-	matrix3_const_view_t operator[](unsigned char row) const
+	matrix3f_const_view_t operator[](unsigned char row) const
 	{
 		KOTEK_ASSERT(row != unsigned char(-1),
 			"out of range (probably you passed a negative number)");
 		KOTEK_ASSERT(row <= 2, "out of range!");
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return matrix3_const_view_t(&this->m_base.m[row][0]);
+		return matrix3f_const_view_t(&this->m_base.m[row][0]);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		return &this->m_base[row][0];
 #else

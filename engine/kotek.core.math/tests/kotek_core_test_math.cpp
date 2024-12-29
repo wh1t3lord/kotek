@@ -965,8 +965,10 @@ TEST(Math, vector3f_testing_comparison_equal_zeros)
 
 TEST(Math, vector3f_testing_comparison_equal_random)
 {
-	kn_kotek::kn_ktk::kn_math::vector3f test1(150.15125f, 1515.1414f, 14.24141f);
-	kn_kotek::kn_ktk::kn_math::vector3f test2(150.15125f, 1515.1414f, 14.24141f);
+	kn_kotek::kn_ktk::kn_math::vector3f test1(
+		150.15125f, 1515.1414f, 14.24141f);
+	kn_kotek::kn_ktk::kn_math::vector3f test2(
+		150.15125f, 1515.1414f, 14.24141f);
 
 	EXPECT_TRUE(test1 == test2);
 }
@@ -1173,7 +1175,8 @@ TEST(Math, vector4f_testing_constructor_based_on_struct)
 
 TEST(Math, vector4f_testing_copy_constructor)
 {
-	kn_kotek::kn_ktk::kn_math::vector4f vec_original(550.5f, 153.2f, 25.25f, 2525.52f);
+	kn_kotek::kn_ktk::kn_math::vector4f vec_original(
+		550.5f, 153.2f, 25.25f, 2525.52f);
 	kn_kotek::kn_ktk::kn_math::vector4f vec_copy(vec_original);
 
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(vec_original.x(), vec_copy.x()));
@@ -1308,7 +1311,8 @@ TEST(Math, vector4f_testing_modulo_equal_operator_based_on_number)
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(test1.x(), (std::fmod(4.0f, 2.0f))));
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(test1.y(), (std::fmod(6.0f, 2.0f))));
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(test1.z(), (std::fmod(8.0f, 2.0f))));
-	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(test1.w(), (std::fmod(151.0f, 2.0f))));
+	EXPECT_TRUE(
+		kn_kotek::kn_ktk::is_equal(test1.w(), (std::fmod(151.0f, 2.0f))));
 }
 
 TEST(Math, vector4f_testing_modulo_equal_operator_based_on_vector)
@@ -1321,7 +1325,8 @@ TEST(Math, vector4f_testing_modulo_equal_operator_based_on_vector)
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(test1.x(), (std::fmod(4.0f, 2.0f))));
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(test1.y(), (std::fmod(6.0f, 3.0f))));
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(test1.z(), (std::fmod(8.0f, 4.0f))));
-	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(test1.w(), (std::fmod(15.0f, 12.0f))));
+	EXPECT_TRUE(
+		kn_kotek::kn_ktk::is_equal(test1.w(), (std::fmod(15.0f, 12.0f))));
 }
 
 TEST(Math, vector4f_testing_unary_plus_operator)
@@ -1545,8 +1550,9 @@ TEST(Math, vector4f_testing_binary_divide_operator_vector_number)
 
 TEST(Math, matrix4x4f_constructor_values)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(1.0f, test[0][0]));
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(2.0f, test[0][1]));
@@ -1568,8 +1574,9 @@ TEST(Math, matrix4x4f_constructor_values)
 
 TEST(Math, matrix4x4f_constructor_copy_base_type)
 {
-	kn_kotek::kn_ktk::kn_math::base_mat4x4_t copy = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
-		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
+	kn_kotek::kn_ktk::kn_math::base_mat4x4_t copy = {1.0f, 2.0f, 3.0f, 4.0f,
+		5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f};
 	kn_kotek::kn_ktk::kn_math::matrix4x4f test(copy);
 
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(1.0f, test[0][0]));
@@ -1592,8 +1599,9 @@ TEST(Math, matrix4x4f_constructor_copy_base_type)
 
 TEST(Math, matrix4x4f_constructor_copy_own_type)
 {
-	kn_kotek::kn_ktk::kn_math::base_mat4x4_t copy(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
-		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::base_mat4x4_t copy(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 	kn_kotek::kn_ktk::kn_math::matrix4x4f test(copy);
 
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(1.0f, test[0][0]));
@@ -1638,8 +1646,9 @@ TEST(Math, matrix4x4f_constructor_default)
 
 TEST(Math, matrix4x4f_assignment_operator_universal_initialization)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
-		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f};
 
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(1.0f, test[0][0]));
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(2.0f, test[0][1]));
@@ -1661,8 +1670,9 @@ TEST(Math, matrix4x4f_assignment_operator_universal_initialization)
 
 TEST(Math, matri4x4f_assignment_operator_base_type)
 {
-	kn_kotek::kn_ktk::kn_math::base_mat4x4_t base = {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
-		7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
+	kn_kotek::kn_ktk::kn_math::base_mat4x4_t base = {1.0f, 2.0f, 3.0f, 4.0f,
+		5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f};
 
 	kn_kotek::kn_ktk::kn_math::matrix4x4f test = base;
 
@@ -1686,8 +1696,9 @@ TEST(Math, matri4x4f_assignment_operator_base_type)
 
 TEST(Math, matrix4x4f_assignment_plus_operator)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
-		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f,
+		21.0f, 22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+		31.0f, 32.0f);
 
 	test += {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f,
 		12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
@@ -1712,8 +1723,9 @@ TEST(Math, matrix4x4f_assignment_plus_operator)
 
 TEST(Math, matrix4x4f_assignment_minus_operator)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
-		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f,
+		21.0f, 22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+		31.0f, 32.0f);
 
 	test -= {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f,
 		12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
@@ -1739,14 +1751,17 @@ TEST(Math, matrix4x4f_assignment_minus_operator)
 // TODO: add overloads for matrix4x3 and other
 TEST(Math, matrix4x4f_assignment_multiply_operator)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f copy(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
-		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f copy(17.0f, 18.0f, 19.0f, 20.0f,
+		21.0f, 22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+		31.0f, 32.0f);
 
-	kn_kotek::kn_ktk::kn_math::matrix4x4f copy2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
+	kn_kotek::kn_ktk::kn_math::matrix4x4f copy2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f};
 
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
-		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f,
+		21.0f, 22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+		31.0f, 32.0f);
 
 	test *= {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f,
 		12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
@@ -1773,7 +1788,8 @@ TEST(Math, matrix4x4f_assignment_multiply_operator)
 	{
 		for (int j = 0; j < 4; ++j)
 		{
-			EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(data[current_index], test(i, j)));
+			EXPECT_TRUE(
+				kn_kotek::kn_ktk::is_equal(data[current_index], test(i, j)));
 			current_index += 1;
 		}
 	}
@@ -1782,8 +1798,9 @@ TEST(Math, matrix4x4f_assignment_multiply_operator)
 TEST(Math, matrix4x4f_assignment_multiply_operator_base_decimal)
 {
 	kn_kotek::kn_ktk::kn_math::base_decimal_t value = 15.0f;
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	test *= value;
 
@@ -1807,14 +1824,17 @@ TEST(Math, matrix4x4f_assignment_multiply_operator_base_decimal)
 
 TEST(Math, matrix4x4f_assignment_divide_operator)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f copy(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
-		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f copy(17.0f, 18.0f, 19.0f, 20.0f,
+		21.0f, 22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+		31.0f, 32.0f);
 
-	kn_kotek::kn_ktk::kn_math::matrix4x4f copy2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
+	kn_kotek::kn_ktk::kn_math::matrix4x4f copy2{1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f};
 
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
-		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f,
+		21.0f, 22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+		31.0f, 32.0f);
 
 	test /= {1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f,
 		12.0f, 13.0f, 14.0f, 15.0f, 16.0f};
@@ -1823,8 +1843,8 @@ TEST(Math, matrix4x4f_assignment_divide_operator)
 	{
 		for (int j = 0; j < 4; ++j)
 		{
-			EXPECT_TRUE(
-				kn_kotek::kn_ktk::is_equal(copy(i, j) / copy2(i, j), test(i, j)));
+			EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(
+				copy(i, j) / copy2(i, j), test(i, j)));
 		}
 	}
 }
@@ -1832,8 +1852,9 @@ TEST(Math, matrix4x4f_assignment_divide_operator)
 TEST(Math, matrix4x4f_assignment_divide_operator_decimal)
 {
 	kn_kotek::kn_ktk::kn_math::base_decimal_t value = 15.0f;
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	kn_kotek::kn_ktk::kn_math::base_decimal_t factor = 1.f / value;
 
@@ -1859,8 +1880,9 @@ TEST(Math, matrix4x4f_assignment_divide_operator_decimal)
 
 TEST(Math, matrix4x4f_unary_plus_operator)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	test = +test;
 
@@ -1884,8 +1906,9 @@ TEST(Math, matrix4x4f_unary_plus_operator)
 
 TEST(Math, matrix4x4f_unary_minus_operator)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	test = -test;
 
@@ -1909,55 +1932,65 @@ TEST(Math, matrix4x4f_unary_minus_operator)
 
 TEST(Math, matrix4x4f_comparison_operator_equal)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	EXPECT_TRUE(test == test2);
 }
 
 TEST(Math, matrix4x4f_comparison_operator_equal_but_one_is_wrong)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, -16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		-16.0f);
 
 	EXPECT_TRUE((test == test2) == false);
 }
 
 TEST(Math, matrix4x4f_comparison_operator_equal_but_two_is_wrong)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test2(1.0f, 2.0f, -3.0f, 4.0f, 5.0f, 6.0f,
-		7.0f, -8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test2(1.0f, 2.0f, -3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, -8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	EXPECT_TRUE((test == test2) == false);
 }
 
 TEST(Math, matrix4x4f_comparison_operator_not_equal)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, -16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		-16.0f);
 
 	EXPECT_TRUE(test != test2);
 }
 
 TEST(Math, matrix4x4f_comparison_operator_not_equal_two_wrong)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f,
-		-7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, -15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test2(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, -7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, -15.0f,
+		16.0f);
 
 	EXPECT_TRUE(test != test2);
 }
@@ -1965,8 +1998,9 @@ TEST(Math, matrix4x4f_comparison_operator_not_equal_two_wrong)
 		#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 TEST(Math, matrix4x4f_cast_operator_xmmatrix)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	DirectX::XMMATRIX casted = test;
 
@@ -2000,8 +2034,9 @@ TEST(Math, matrix4x4f_cast_operator_xmmatrix)
 
 TEST(Math, matrix4x4f_operator_get_element_by_brackets_read_state)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(1.0f, test(0, 0)));
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(2.0f, test(0, 1)));
@@ -2023,8 +2058,9 @@ TEST(Math, matrix4x4f_operator_get_element_by_brackets_read_state)
 
 TEST(Math, matrix4x4f_operator_get_element_by_brackets_write_state)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	test(0, 0) = test(0, 0) + 1.0f;
 	test(0, 1) = test(0, 1) + 1.0f;
@@ -2063,8 +2099,9 @@ TEST(Math, matrix4x4f_operator_get_element_by_brackets_write_state)
 
 TEST(Math, matrix4x4f_setters)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-		8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+		6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+		16.0f);
 
 	test[0][0] = (test[0][0] + 1.0f);
 	test[0][1] = (test[0][1] + 1.0f);
@@ -2103,12 +2140,14 @@ TEST(Math, matrix4x4f_setters)
 
 TEST(Math, matrix4x4f_plus_operator)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
-		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f,
+		21.0f, 22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+		31.0f, 32.0f);
 
 	test = test +
-		kn_kotek::kn_ktk::kn_math::matrix4x4f(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-			8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+		kn_kotek::kn_ktk::kn_math::matrix4x4f(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+			6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+			16.0f);
 
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(17.0f + 1.0f, test[0][0]));
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(18.0f + 2.0f, test[0][1]));
@@ -2130,12 +2169,14 @@ TEST(Math, matrix4x4f_plus_operator)
 
 TEST(Math, matrix4x4f_minus_operator)
 {
-	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f, 21.0f, 22.0f,
-		23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f, 31.0f, 32.0f);
+	kn_kotek::kn_ktk::kn_math::matrix4x4f test(17.0f, 18.0f, 19.0f, 20.0f,
+		21.0f, 22.0f, 23.0f, 24.0f, 25.0f, 26.0f, 27.0f, 28.0f, 29.0f, 30.0f,
+		31.0f, 32.0f);
 
 	test = test -
-		kn_kotek::kn_ktk::kn_math::matrix4x4f(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f,
-			8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f);
+		kn_kotek::kn_ktk::kn_math::matrix4x4f(1.0f, 2.0f, 3.0f, 4.0f, 5.0f,
+			6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f,
+			16.0f);
 
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(17.0f - 1.0f, test[0][0]));
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(18.0f - 2.0f, test[0][1]));
@@ -2473,6 +2514,118 @@ TEST(Math, vector4f_constructors)
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(vec14.x(), -13.0f));
 }
 
+TEST(Math, matrix4f_view_t_constructors)
+{
+	float p_values[] = {10.0f,20.0f,30.0f,40.0f};
+	kn_kotek::kn_ktk::kn_math::matrix4f_view_t view(p_values);
+
+	EXPECT_TRUE(view.data() != nullptr);
+	EXPECT_TRUE(view.size_of() == sizeof(float[4]));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(view.x(), 10.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(view.y(), 20.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(view.z(), 30.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(view.w(), 40.0f));
+
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(view[0], view.x()));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(view[1], view.y()));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(view[2], view.z()));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(view[3], view.w()));
+}
+
+TEST(Math, matrix4f_view_t_plus_operators)
+{
+	kn_kotek::kn_ktk::kn_math::vector4f vec4(1.0f, 2.0f, 3.0f, 4.0f);
+	kn_kotek::kn_ktk::kn_math::vector3f vec3(3.0f, 7.0f, 9.0f);
+	kn_kotek::kn_ktk::kn_math::vector2f vec2(2.0f, 5.0f);
+	kn_kotek::kn_ktk::kn_math::vector1f vec1(10.0f);
+
+	float p_values[] = {10.0f, 10.0f, 10.0f, 10.0f};
+	kn_kotek::kn_ktk::kn_math::matrix4f_view_t view(p_values);
+
+	auto res4 = view + vec4;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.x(), 11.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.y(), 12.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.z(), 13.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.w(), 14.0f));
+
+	auto res3 = view + vec3;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.x(), 13.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.y(), 17.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.z(), 19.0f));
+
+	auto res2 = view + vec2;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res2.x(), 12.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res2.y(), 15.0f));
+
+	auto res1 = view + vec1;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res1.x(), 20.0f));
+
+	res4 = vec4 + view;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.x(), 11.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.y(), 12.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.z(), 13.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.w(), 14.0f));
+
+	res3 = vec3 + view;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.x(), 13.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.y(), 17.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.z(), 19.0f));
+
+	res2 = vec2 + view;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res2.x(), 12.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res2.y(), 15.0f));
+
+	res1 = vec1 + view;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res1.x(), 20.0f));
+}
+
+TEST(Math, matrix4f_view_t_minus_operators)
+{
+	kn_kotek::kn_ktk::kn_math::vector4f vec4(1.0f, 2.0f, 3.0f, 4.0f);
+	kn_kotek::kn_ktk::kn_math::vector3f vec3(3.0f, 7.0f, 9.0f);
+	kn_kotek::kn_ktk::kn_math::vector2f vec2(2.0f, 5.0f);
+	kn_kotek::kn_ktk::kn_math::vector1f vec1(10.0f);
+
+	float p_values[] = {10.0f, 10.0f, 10.0f, 10.0f};
+	kn_kotek::kn_ktk::kn_math::matrix4f_view_t view(p_values);
+
+	auto res4 = view - vec4;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.x(), 9.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.y(), 8.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.z(), 7.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.w(), 6.0f));
+
+	auto res3 = view - vec3;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.x(), 7.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.y(), 3.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.z(), 1.0f));
+
+	auto res2 = view - vec2;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res2.x(), 8.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res2.y(), 5.0f));
+
+	auto res1 = view - vec1;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res1.x(), 0.0f));
+
+	res4 = vec4 - view;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.x(), -9.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.y(), -8.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.z(), -7.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res4.w(), -6.0f));
+
+	res3 = vec3 - view;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.x(), -7.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.y(), -3.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res3.z(), -1.0f));
+
+	res2 = vec2 - view;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res2.x(), -8.0f));
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res2.y(), -5.0f));
+
+	res1 = vec1 - view;
+	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res1.x(), 0.0f));
+}
+
 	#endif
 #endif
 
@@ -2482,4 +2635,5 @@ void RegisterTests_Math_ForModule_Core()
 #endif
 }
 
-KOTEK_END_NAMESPACE_CORE KOTEK_END_NAMESPACE_KOTEK
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

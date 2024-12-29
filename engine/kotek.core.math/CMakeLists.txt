@@ -68,6 +68,14 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_math_functions_matrix.h"
 	"include/kotek_std_math_functions_numeric.h"
 	"include/kotek_std_math_functions.h"
+	"include/kotek_std_math_matrix4f_view.h"
+	"include/kotek_std_math_matrix3f_view.h"
+	"include/kotek_std_math_matrix2f_view.h"
+	"include/kotek_std_math_matrix1f_view.h"
+	"include/kotek_std_math_matrix4f_const_view.h"
+	"include/kotek_std_math_matrix3f_const_view.h"
+	"include/kotek_std_math_matrix2f_const_view.h"
+	"include/kotek_std_math_matrix1f_const_view.h"
 	"tests/kotek_core_test_math.cpp"
 	"src/main_core_math_dll.cpp")
 

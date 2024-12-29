@@ -2,6 +2,15 @@
 
 #include "kotek_std_alias_math.h"
 
+#include "kotek_std_math_matrix1f_view.h"
+#include "kotek_std_math_matrix2f_view.h"
+#include "kotek_std_math_matrix3f_view.h"
+#include "kotek_std_math_matrix4f_view.h"
+#include "kotek_std_math_matrix1f_const_view.h"
+#include "kotek_std_math_matrix2f_const_view.h"
+#include "kotek_std_math_matrix3f_const_view.h"
+#include "kotek_std_math_matrix4f_const_view.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
@@ -46,45 +55,45 @@ public:
 		}
 	}
 
-	vector3f(const matrix4_view_t& view) : m_base(view.x(), view.y(), view.z())
+	vector3f(const matrix4f_view_t& view) : m_base(view.x(), view.y(), view.z())
 	{
 	}
-	vector3f(const matrix3_view_t& view) : m_base(view.x(), view.y(), view.z())
+	vector3f(const matrix3f_view_t& view) : m_base(view.x(), view.y(), view.z())
 	{
 	}
-	vector3f(const matrix2_view_t& view) : m_base(view.x(), view.y(), 0.0f) {}
-	vector3f(const matrix1_view_t& view) : m_base(view.x(), 0.0f, 0.0f) {}
+	vector3f(const matrix2f_view_t& view) : m_base(view.x(), view.y(), 0.0f) {}
+	vector3f(const matrix1f_view_t& view) : m_base(view.x(), 0.0f, 0.0f) {}
 
-	vector3f(const matrix2_view_t& view, float z) :
+	vector3f(const matrix2f_view_t& view, float z) :
 		m_base(view.x(), view.y(), z)
 	{
 	}
 
-	vector3f(const matrix1_view_t& view, float y, float z) :
+	vector3f(const matrix1f_view_t& view, float y, float z) :
 		m_base(view.x(), y, z)
 	{
 	}
 
-	vector3f(const matrix4_const_view_t& view) :
+	vector3f(const matrix4f_const_view_t& view) :
 		m_base(view.x(), view.y(), view.z())
 	{
 	}
-	vector3f(const matrix3_const_view_t& view) :
+	vector3f(const matrix3f_const_view_t& view) :
 		m_base(view.x(), view.y(), view.z())
 	{
 	}
-	vector3f(const matrix2_const_view_t& view) :
+	vector3f(const matrix2f_const_view_t& view) :
 		m_base(view.x(), view.y(), 0.0f)
 	{
 	}
-	vector3f(const matrix1_const_view_t& view) : m_base(view.x(), 0.0f, 0.0f) {}
+	vector3f(const matrix1f_const_view_t& view) : m_base(view.x(), 0.0f, 0.0f) {}
 
-	vector3f(const matrix2_const_view_t& view, float z) :
+	vector3f(const matrix2f_const_view_t& view, float z) :
 		m_base(view.x(), view.y(), z)
 	{
 	}
 
-	vector3f(const matrix1_const_view_t& view, float y, float z) :
+	vector3f(const matrix1f_const_view_t& view, float y, float z) :
 		m_base(view.x(), y, z)
 	{
 	}
@@ -92,7 +101,7 @@ public:
 	vector3f(const base_vec3_t& data) : m_base(data) {}
 	vector3f(const vector3f& data) : m_base(data.m_base) {}
 
-	vector3f(void) : m_base{} {}
+	vector3f(void) : m_base(0.0f,0.0f,0.0f) {}
 
 	~vector3f(void) = default;
 
@@ -107,7 +116,7 @@ public:
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		DirectX::XMVECTOR v1 = *this;
 		DirectX::XMVECTOR v2 = data;
-		auto result = DirectX::XMVectorAdd(v1, v2);
+		const auto& result = DirectX::XMVectorAdd(v1, v2);
 
 		DirectX::XMStoreFloat3(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -116,42 +125,42 @@ public:
 		return *this;
 	}
 
-	vector3f& operator+=(const matrix4_view_t& data) noexcept
+	vector3f& operator+=(const matrix4f_view_t& data) noexcept
 	{
 		return this->operator+=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator+=(const matrix3_view_t& data) noexcept
+	vector3f& operator+=(const matrix3f_view_t& data) noexcept
 	{
 		return this->operator+=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator+=(const matrix2_view_t& data) noexcept
+	vector3f& operator+=(const matrix2f_view_t& data) noexcept
 	{
 		return this->operator+=(base_vec3_t(data.x(), data.y(), 0.0f));
 	}
 
-	vector3f& operator+=(const matrix1_view_t& data) noexcept
+	vector3f& operator+=(const matrix1f_view_t& data) noexcept
 	{
 		return this->operator+=(base_vec3_t(data.x(), 0.0f, 0.0f));
 	}
 
-	vector3f& operator+=(const matrix4_const_view_t& data) noexcept
+	vector3f& operator+=(const matrix4f_const_view_t& data) noexcept
 	{
 		return this->operator+=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator+=(const matrix3_const_view_t& data) noexcept
+	vector3f& operator+=(const matrix3f_const_view_t& data) noexcept
 	{
 		return this->operator+=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator+=(const matrix2_const_view_t& data) noexcept
+	vector3f& operator+=(const matrix2f_const_view_t& data) noexcept
 	{
 		return this->operator+=(base_vec3_t(data.x(), data.y(), 0.0f));
 	}
 
-	vector3f& operator+=(const matrix1_const_view_t& data) noexcept
+	vector3f& operator+=(const matrix1f_const_view_t& data) noexcept
 	{
 		return this->operator+=(base_vec3_t(data.x(), 0.0f, 0.0f));
 	}
@@ -161,7 +170,7 @@ public:
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		DirectX::XMVECTOR v1 = *this;
 		DirectX::XMVECTOR v2 = DirectX::XMLoadFloat3(&data);
-		auto result = DirectX::XMVectorAdd(v1, v2);
+		const auto& result = DirectX::XMVectorAdd(v1, v2);
 
 		DirectX::XMStoreFloat3(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -175,7 +184,7 @@ public:
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		DirectX::XMVECTOR casted_original = *this;
 		DirectX::XMVECTOR casted_argument = data;
-		auto result =
+		const auto& result =
 			DirectX::XMVectorSubtract(casted_original, casted_argument);
 
 		DirectX::XMStoreFloat3(&this->m_base, result);
@@ -185,42 +194,42 @@ public:
 		return *this;
 	}
 
-	vector3f& operator-=(const matrix4_view_t& data) noexcept
+	vector3f& operator-=(const matrix4f_view_t& data) noexcept
 	{
 		return this->operator-=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator-=(const matrix3_view_t& data) noexcept
+	vector3f& operator-=(const matrix3f_view_t& data) noexcept
 	{
 		return this->operator-=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator-=(const matrix2_view_t& data) noexcept
+	vector3f& operator-=(const matrix2f_view_t& data) noexcept
 	{
 		return this->operator-=(base_vec3_t(data.x(), data.y(), 0.0f));
 	}
 
-	vector3f& operator-=(const matrix1_view_t& data) noexcept
+	vector3f& operator-=(const matrix1f_view_t& data) noexcept
 	{
 		return this->operator-=(base_vec3_t(data.x(), 0.0f, 0.0f));
 	}
 
-	vector3f& operator-=(const matrix4_const_view_t& data) noexcept
+	vector3f& operator-=(const matrix4f_const_view_t& data) noexcept
 	{
 		return this->operator-=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator-=(const matrix3_const_view_t& data) noexcept
+	vector3f& operator-=(const matrix3f_const_view_t& data) noexcept
 	{
 		return this->operator-=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator-=(const matrix2_const_view_t& data) noexcept
+	vector3f& operator-=(const matrix2f_const_view_t& data) noexcept
 	{
 		return this->operator-=(base_vec3_t(data.x(), data.y(), 0.0f));
 	}
 
-	vector3f& operator-=(const matrix1_const_view_t& data) noexcept
+	vector3f& operator-=(const matrix1f_const_view_t& data) noexcept
 	{
 		return this->operator-=(base_vec3_t(data.x(), 0.0f, 0.0f));
 	}
@@ -230,7 +239,7 @@ public:
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		DirectX::XMVECTOR casted_original = *this;
 		DirectX::XMVECTOR casted_argument = DirectX::XMLoadFloat3(&data);
-		auto result =
+		const auto& result =
 			DirectX::XMVectorSubtract(casted_original, casted_argument);
 
 		DirectX::XMStoreFloat3(&this->m_base, result);
@@ -245,7 +254,7 @@ public:
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		DirectX::XMVECTOR casted_original = *this;
 		DirectX::XMVECTOR casted_argument = data;
-		auto result =
+		const auto& result =
 			DirectX::XMVectorMultiply(casted_original, casted_argument);
 
 		DirectX::XMStoreFloat3(&this->m_base, result);
@@ -255,42 +264,42 @@ public:
 		return *this;
 	}
 
-	vector3f& operator*=(const matrix4_view_t& data) noexcept
+	vector3f& operator*=(const matrix4f_view_t& data) noexcept
 	{
 		return this->operator*=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator*=(const matrix3_view_t& data) noexcept
+	vector3f& operator*=(const matrix3f_view_t& data) noexcept
 	{
 		return this->operator*=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator*=(const matrix2_view_t& data) noexcept
+	vector3f& operator*=(const matrix2f_view_t& data) noexcept
 	{
 		return this->operator*=(base_vec3_t(data.x(), data.y(), 1.0f));
 	}
 
-	vector3f& operator*=(const matrix1_view_t& data) noexcept
+	vector3f& operator*=(const matrix1f_view_t& data) noexcept
 	{
 		return this->operator*=(base_vec3_t(data.x(), 1.0f, 1.0f));
 	}
 
-	vector3f& operator*=(const matrix4_const_view_t& data) noexcept
+	vector3f& operator*=(const matrix4f_const_view_t& data) noexcept
 	{
 		return this->operator*=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator*=(const matrix3_const_view_t& data) noexcept
+	vector3f& operator*=(const matrix3f_const_view_t& data) noexcept
 	{
 		return this->operator*=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator*=(const matrix2_const_view_t& data) noexcept
+	vector3f& operator*=(const matrix2f_const_view_t& data) noexcept
 	{
 		return this->operator*=(base_vec3_t(data.x(), data.y(), 1.0f));
 	}
 
-	vector3f& operator*=(const matrix1_const_view_t& data) noexcept
+	vector3f& operator*=(const matrix1f_const_view_t& data) noexcept
 	{
 		return this->operator*=(base_vec3_t(data.x(), 1.0f, 1.0f));
 	}
@@ -314,7 +323,7 @@ public:
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		DirectX::XMVECTOR v1 = *this;
-		auto result = DirectX::XMVectorScale(v1, value);
+		const auto& result = DirectX::XMVectorScale(v1, value);
 
 		DirectX::XMStoreFloat3(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -328,7 +337,7 @@ public:
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		DirectX::XMVECTOR casted_original = *this;
 		DirectX::XMVECTOR casted_argument = data;
-		auto result = DirectX::XMVectorDivide(casted_original, casted_argument);
+		const auto& result = DirectX::XMVectorDivide(casted_original, casted_argument);
 
 		DirectX::XMStoreFloat3(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -337,42 +346,42 @@ public:
 		return *this;
 	}
 
-	vector3f& operator/=(const matrix4_view_t& data) noexcept
+	vector3f& operator/=(const matrix4f_view_t& data) noexcept
 	{
 		return this->operator/=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator/=(const matrix3_view_t& data) noexcept
+	vector3f& operator/=(const matrix3f_view_t& data) noexcept
 	{
 		return this->operator/=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator/=(const matrix2_view_t& data) noexcept
+	vector3f& operator/=(const matrix2f_view_t& data) noexcept
 	{
 		return this->operator/=(base_vec3_t(data.x(), data.y(), 1.0f));
 	}
 
-	vector3f& operator/=(const matrix1_view_t& data) noexcept
+	vector3f& operator/=(const matrix1f_view_t& data) noexcept
 	{
 		return this->operator/=(base_vec3_t(data.x(), 1.0f, 1.0f));
 	}
 
-	vector3f& operator/=(const matrix4_const_view_t& data) noexcept
+	vector3f& operator/=(const matrix4f_const_view_t& data) noexcept
 	{
 		return this->operator/=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator/=(const matrix3_const_view_t& data) noexcept
+	vector3f& operator/=(const matrix3f_const_view_t& data) noexcept
 	{
 		return this->operator/=(base_vec3_t(data.x(), data.y(), data.z()));
 	}
 
-	vector3f& operator/=(const matrix2_const_view_t& data) noexcept
+	vector3f& operator/=(const matrix2f_const_view_t& data) noexcept
 	{
 		return this->operator/=(base_vec3_t(data.x(), data.y(), 1.0f));
 	}
 
-	vector3f& operator/=(const matrix1_const_view_t& data) noexcept
+	vector3f& operator/=(const matrix1f_const_view_t& data) noexcept
 	{
 		return this->operator/=(base_vec3_t(data.x(), 1.0f, 1.0f));
 	}
@@ -382,7 +391,7 @@ public:
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		DirectX::XMVECTOR casted_original = *this;
 		DirectX::XMVECTOR casted_argument = DirectX::XMLoadFloat3(&data);
-		auto result = DirectX::XMVectorDivide(casted_original, casted_argument);
+		const auto& result = DirectX::XMVectorDivide(casted_original, casted_argument);
 
 		DirectX::XMStoreFloat3(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -488,6 +497,9 @@ public:
 	inline float& y(void) noexcept { return this->m_base.y; }
 	inline float& z(void) noexcept { return this->m_base.z; }
 
+	inline const float* data(void) const noexcept { return &this->m_base.x; }
+	inline float* data(void) noexcept { return &this->m_base.x; }
+
 	vector3f& Set_Base(const base_vec3_t& data) noexcept
 	{
 		this->m_base = data;
@@ -507,7 +519,7 @@ inline vector3f operator+(const vector3f& left, const vector3f& right) noexcept
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
 	DirectX::XMVECTOR v2 = right;
-	auto temp = DirectX::XMVectorAdd(v1, v2);
+	const auto& temp = DirectX::XMVectorAdd(v1, v2);
 
 	vector3f result;
 	base_vec3_t data;
@@ -527,7 +539,7 @@ inline vector3f operator-(const vector3f& left, const vector3f& right) noexcept
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
 	DirectX::XMVECTOR v2 = right;
-	auto temp = DirectX::XMVectorSubtract(v1, v2);
+	const auto& temp = DirectX::XMVectorSubtract(v1, v2);
 
 	vector3f result;
 	base_vec3_t data;
@@ -543,49 +555,49 @@ inline vector3f operator-(const vector3f& left, const vector3f& right) noexcept
 }
 
 inline vector3f operator-(
-	const vector3f& left, const matrix4_view_t& view) noexcept
+	const vector3f& left, const matrix4f_view_t& view) noexcept
 {
 	return operator-(left, vector3f(view));
 }
 
 inline vector3f operator-(
-	const vector3f& left, const matrix3_view_t& view) noexcept
+	const vector3f& left, const matrix3f_view_t& view) noexcept
 {
 	return operator-(left, vector3f(view));
 }
 
 inline vector3f operator-(
-	const vector3f& left, const matrix2_view_t& view) noexcept
+	const vector3f& left, const matrix2f_view_t& view) noexcept
 {
 	return operator-(left, vector3f(view));
 }
 
 inline vector3f operator-(
-	const vector3f& left, const matrix1_view_t& view) noexcept
+	const vector3f& left, const matrix1f_view_t& view) noexcept
 {
 	return operator-(left, vector3f(view));
 }
 
 inline vector3f operator-(
-	const matrix4_view_t& view, const vector3f& right) noexcept
+	const matrix4f_view_t& view, const vector3f& right) noexcept
 {
 	return operator-(vector3f(view), right);
 }
 
 inline vector3f operator-(
-	const matrix3_view_t& view, const vector3f& right) noexcept
+	const matrix3f_view_t& view, const vector3f& right) noexcept
 {
 	return operator-(vector3f(view), right);
 }
 
 inline vector3f operator-(
-	const matrix2_view_t& view, const vector3f& right) noexcept
+	const matrix2f_view_t& view, const vector3f& right) noexcept
 {
 	return operator-(vector3f(view), right);
 }
 
 inline vector3f operator-(
-	const matrix1_view_t& view, const vector3f& right) noexcept
+	const matrix1f_view_t& view, const vector3f& right) noexcept
 {
 	return operator-(vector3f(view), right);
 }
@@ -595,7 +607,7 @@ inline vector3f operator*(const vector3f& left, const vector3f& right) noexcept
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
 	DirectX::XMVECTOR v2 = right;
-	auto temp = DirectX::XMVectorMultiply(v1, v2);
+	const auto& temp = DirectX::XMVectorMultiply(v1, v2);
 
 	vector3f result;
 	base_vec3_t data;
@@ -611,25 +623,25 @@ inline vector3f operator*(const vector3f& left, const vector3f& right) noexcept
 }
 
 inline vector3f operator*(
-	const vector3f& left, const matrix4_view_t& view) noexcept
+	const vector3f& left, const matrix4f_view_t& view) noexcept
 {
 	return operator*(left, vector3f(view));
 }
 
 inline vector3f operator*(
-	const vector3f& left, const matrix3_view_t& view) noexcept
+	const vector3f& left, const matrix3f_view_t& view) noexcept
 {
 	return operator*(left, vector3f(view));
 }
 
 inline vector3f operator*(
-	const vector3f& left, const matrix2_view_t& view) noexcept
+	const vector3f& left, const matrix2f_view_t& view) noexcept
 {
 	return operator*(left, vector3f(view).z() = 1.0f);
 }
 
 inline vector3f operator*(
-	const vector3f& left, const matrix1_view_t& view) noexcept
+	const vector3f& left, const matrix1f_view_t& view) noexcept
 {
 	vector3f casted(view);
 	casted.y() = 1.0f;
@@ -638,19 +650,19 @@ inline vector3f operator*(
 }
 
 inline vector3f operator*(
-	const matrix4_view_t& view, const vector3f& right) noexcept
+	const matrix4f_view_t& view, const vector3f& right) noexcept
 {
 	return operator*(vector3f(view), right);
 }
 
 inline vector3f operator*(
-	const matrix3_view_t& view, const vector3f& right) noexcept
+	const matrix3f_view_t& view, const vector3f& right) noexcept
 {
 	return operator*(vector3f(view), right);
 }
 
 inline vector3f operator*(
-	const matrix2_view_t& view, const vector3f& right) noexcept
+	const matrix2f_view_t& view, const vector3f& right) noexcept
 {
 	vector3f casted(view);
 	casted.z() = 1.0f;
@@ -658,7 +670,7 @@ inline vector3f operator*(
 }
 
 inline vector3f operator*(
-	const matrix1_view_t& view, const vector3f& right) noexcept
+	const matrix1f_view_t& view, const vector3f& right) noexcept
 {
 	vector3f casted(view);
 	casted.y() = 1.0f;
@@ -670,7 +682,7 @@ inline vector3f operator*(const vector3f& left, float right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
-	auto temp = DirectX::XMVectorScale(v1, right);
+	const auto& temp = DirectX::XMVectorScale(v1, right);
 
 	vector3f result;
 	base_vec3_t data;
@@ -695,7 +707,7 @@ inline vector3f operator/(const vector3f& left, const vector3f& right) noexcept
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
 	DirectX::XMVECTOR v2 = right;
-	auto temp = DirectX::XMVectorDivide(v1, v2);
+	const auto& temp = DirectX::XMVectorDivide(v1, v2);
 
 	vector3f result;
 	base_vec3_t data;
@@ -711,25 +723,25 @@ inline vector3f operator/(const vector3f& left, const vector3f& right) noexcept
 }
 
 inline vector3f operator/(
-	const vector3f& left, const matrix4_view_t& view) noexcept
+	const vector3f& left, const matrix4f_view_t& view) noexcept
 {
 	return operator/(left, vector3f(view));
 }
 
 inline vector3f operator/(
-	const vector3f& left, const matrix3_view_t& view) noexcept
+	const vector3f& left, const matrix3f_view_t& view) noexcept
 {
 	return operator/(left, vector3f(view));
 }
 
 inline vector3f operator/(
-	const vector3f& left, const matrix2_view_t& view) noexcept
+	const vector3f& left, const matrix2f_view_t& view) noexcept
 {
 	return operator/(left, vector3f(view).z() = 1.0f);
 }
 
 inline vector3f operator/(
-	const vector3f& left, const matrix1_view_t& view) noexcept
+	const vector3f& left, const matrix1f_view_t& view) noexcept
 {
 	vector3f casted(view);
 	casted.y() = 1.0f;
@@ -738,19 +750,19 @@ inline vector3f operator/(
 }
 
 inline vector3f operator/(
-	const matrix4_view_t& view, const vector3f& right) noexcept
+	const matrix4f_view_t& view, const vector3f& right) noexcept
 {
 	return operator/(vector3f(view), right);
 }
 
 inline vector3f operator/(
-	const matrix3_view_t& view, const vector3f& right) noexcept
+	const matrix3f_view_t& view, const vector3f& right) noexcept
 {
 	return operator/(vector3f(view), right);
 }
 
 inline vector3f operator/(
-	const matrix2_view_t& view, const vector3f& right) noexcept
+	const matrix2f_view_t& view, const vector3f& right) noexcept
 {
 	vector3f casted(view);
 	casted.z() = 1.0f;
@@ -758,7 +770,7 @@ inline vector3f operator/(
 }
 
 inline vector3f operator/(
-	const matrix1_view_t& view, const vector3f& right) noexcept
+	const matrix1f_view_t& view, const vector3f& right) noexcept
 {
 	vector3f casted(view);
 	casted.y() = 1.0f;
@@ -767,25 +779,25 @@ inline vector3f operator/(
 }
 
 inline vector3f operator/(
-	const vector3f& left, const matrix4_const_view_t& view) noexcept
+	const vector3f& left, const matrix4f_const_view_t& view) noexcept
 {
 	return operator/(left, vector3f(view));
 }
 
 inline vector3f operator/(
-	const vector3f& left, const matrix3_const_view_t& view) noexcept
+	const vector3f& left, const matrix3f_const_view_t& view) noexcept
 {
 	return operator/(left, vector3f(view));
 }
 
 inline vector3f operator/(
-	const vector3f& left, const matrix2_const_view_t& view) noexcept
+	const vector3f& left, const matrix2f_const_view_t& view) noexcept
 {
 	return operator/(left, vector3f(view).z() = 1.0f);
 }
 
 inline vector3f operator/(
-	const vector3f& left, const matrix1_const_view_t& view) noexcept
+	const vector3f& left, const matrix1f_const_view_t& view) noexcept
 {
 	vector3f casted(view);
 	casted.y() = 1.0f;
@@ -794,19 +806,19 @@ inline vector3f operator/(
 }
 
 inline vector3f operator/(
-	const matrix4_const_view_t& view, const vector3f& right) noexcept
+	const matrix4f_const_view_t& view, const vector3f& right) noexcept
 {
 	return operator/(vector3f(view), right);
 }
 
 inline vector3f operator/(
-	const matrix3_const_view_t& view, const vector3f& right) noexcept
+	const matrix3f_const_view_t& view, const vector3f& right) noexcept
 {
 	return operator/(vector3f(view), right);
 }
 
 inline vector3f operator/(
-	const matrix2_const_view_t& view, const vector3f& right) noexcept
+	const matrix2f_const_view_t& view, const vector3f& right) noexcept
 {
 	vector3f casted(view);
 	casted.z() = 1.0f;
@@ -814,7 +826,7 @@ inline vector3f operator/(
 }
 
 inline vector3f operator/(
-	const matrix1_const_view_t& view, const vector3f& right) noexcept
+	const matrix1f_const_view_t& view, const vector3f& right) noexcept
 {
 	vector3f casted(view);
 	casted.y() = 1.0f;
@@ -826,7 +838,7 @@ inline vector3f operator/(const vector3f& left, float right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
-	auto temp = DirectX::XMVectorScale(v1, 1.f / right);
+	const auto& temp = DirectX::XMVectorScale(v1, 1.f / right);
 
 	vector3f result;
 	base_vec3_t data;

@@ -2,6 +2,15 @@
 
 #include "kotek_std_alias_math.h"
 
+#include "kotek_std_math_matrix1f_view.h"
+#include "kotek_std_math_matrix2f_view.h"
+#include "kotek_std_math_matrix3f_view.h"
+#include "kotek_std_math_matrix4f_view.h"
+#include "kotek_std_math_matrix1f_const_view.h"
+#include "kotek_std_math_matrix2f_const_view.h"
+#include "kotek_std_math_matrix3f_const_view.h"
+#include "kotek_std_math_matrix4f_const_view.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
@@ -9,7 +18,7 @@ KOTEK_BEGIN_NAMESPACE_MATH
 class vector1f
 {
 public:
-	vector1f(void) : m_base{} {}
+	vector1f(void) : m_base(0.0f) {}
 	vector1f(float x) : m_base(x) {}
 
 	vector1f(float x, float y) : m_base(x) {}
@@ -19,15 +28,15 @@ public:
 	vector1f(float* p_arr1, unsigned char size = 1) : m_base(p_arr1[0]) {}
 	vector1f(const float* p_arr1, unsigned char size = 1) : m_base(p_arr1[0]) {}
 
-	vector1f(const matrix4_view_t& view) : m_base(view.x()) {}
-	vector1f(const matrix3_view_t& view) : m_base(view.x()) {}
-	vector1f(const matrix2_view_t& view) : m_base(view.x()) {}
-	vector1f(const matrix1_view_t& view) : m_base(view.x()) {}
+	vector1f(const matrix4f_view_t& view) : m_base(view.x()) {}
+	vector1f(const matrix3f_view_t& view) : m_base(view.x()) {}
+	vector1f(const matrix2f_view_t& view) : m_base(view.x()) {}
+	vector1f(const matrix1f_view_t& view) : m_base(view.x()) {}
 
-	vector1f(const matrix4_const_view_t& view) : m_base(view.x()) {}
-	vector1f(const matrix3_const_view_t& view) : m_base(view.x()) {}
-	vector1f(const matrix2_const_view_t& view) : m_base(view.x()) {}
-	vector1f(const matrix1_const_view_t& view) : m_base(view.x()) {}
+	vector1f(const matrix4f_const_view_t& view) : m_base(view.x()) {}
+	vector1f(const matrix3f_const_view_t& view) : m_base(view.x()) {}
+	vector1f(const matrix2f_const_view_t& view) : m_base(view.x()) {}
+	vector1f(const matrix1f_const_view_t& view) : m_base(view.x()) {}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -68,42 +77,42 @@ public:
 		return *this;
 	}
 
-	vector1f& operator+=(const matrix4_view_t& view) 
+	vector1f& operator+=(const matrix4f_view_t& view)
 	{
 		return this->operator+=(view.x());
 	}
 
-	vector1f& operator+=(const matrix3_view_t& view) 
+	vector1f& operator+=(const matrix3f_view_t& view)
 	{
 		return this->operator+=(view.x());
 	}
 
-	vector1f& operator+=(const matrix2_view_t& view) 
+	vector1f& operator+=(const matrix2f_view_t& view)
 	{
 		return this->operator+=(view.x());
 	}
 
-	vector1f& operator+=(const matrix1_view_t& view) 
+	vector1f& operator+=(const matrix1f_view_t& view)
 	{
 		return this->operator+=(view.x());
 	}
 
-	vector1f& operator+=(const matrix4_const_view_t& view)
+	vector1f& operator+=(const matrix4f_const_view_t& view)
 	{
 		return this->operator+=(view.x());
 	}
 
-	vector1f& operator+=(const matrix3_const_view_t& view)
+	vector1f& operator+=(const matrix3f_const_view_t& view)
 	{
 		return this->operator+=(view.x());
 	}
 
-	vector1f& operator+=(const matrix2_const_view_t& view)
+	vector1f& operator+=(const matrix2f_const_view_t& view)
 	{
 		return this->operator+=(view.x());
 	}
 
-	vector1f& operator+=(const matrix1_const_view_t& view)
+	vector1f& operator+=(const matrix1f_const_view_t& view)
 	{
 		return this->operator+=(view.x());
 	}
@@ -143,42 +152,42 @@ public:
 		return *this;
 	}
 
-	vector1f& operator-=(const matrix4_view_t& view)
+	vector1f& operator-=(const matrix4f_view_t& view)
 	{
 		return this->operator-=(view.x());
 	}
 
-	vector1f& operator-=(const matrix3_view_t& view)
+	vector1f& operator-=(const matrix3f_view_t& view)
 	{
 		return this->operator-=(view.x());
 	}
 
-	vector1f& operator-=(const matrix2_view_t& view)
+	vector1f& operator-=(const matrix2f_view_t& view)
 	{
 		return this->operator-=(view.x());
 	}
 
-	vector1f& operator-=(const matrix1_view_t& view)
+	vector1f& operator-=(const matrix1f_view_t& view)
 	{
 		return this->operator-=(view.x());
 	}
 
-	vector1f& operator-=(const matrix4_const_view_t& view)
+	vector1f& operator-=(const matrix4f_const_view_t& view)
 	{
 		return this->operator-=(view.x());
 	}
 
-	vector1f& operator-=(const matrix3_const_view_t& view)
+	vector1f& operator-=(const matrix3f_const_view_t& view)
 	{
 		return this->operator-=(view.x());
 	}
 
-	vector1f& operator-=(const matrix2_const_view_t& view)
+	vector1f& operator-=(const matrix2f_const_view_t& view)
 	{
 		return this->operator-=(view.x());
 	}
 
-	vector1f& operator-=(const matrix1_const_view_t& view)
+	vector1f& operator-=(const matrix1f_const_view_t& view)
 	{
 		return this->operator-=(view.x());
 	}
@@ -206,43 +215,42 @@ public:
 		return *this;
 	}
 
-	vector1f& operator*=(const matrix4_view_t& view) 
+	vector1f& operator*=(const matrix4f_view_t& view)
 	{
 		return this->operator*=(view.x());
 	}
 
-	vector1f& operator*=(const matrix3_view_t& view) 
+	vector1f& operator*=(const matrix3f_view_t& view)
 	{
 		return this->operator*=(view.x());
 	}
 
-	vector1f& operator*=(const matrix2_view_t& view) 
+	vector1f& operator*=(const matrix2f_view_t& view)
 	{
 		return this->operator*=(view.x());
 	}
 
-	vector1f& operator*=(const matrix1_view_t& view) 
+	vector1f& operator*=(const matrix1f_view_t& view)
 	{
 		return this->operator*=(view.x());
 	}
 
-
-	vector1f& operator*=(const matrix4_const_view_t& view)
+	vector1f& operator*=(const matrix4f_const_view_t& view)
 	{
 		return this->operator*=(view.x());
 	}
 
-	vector1f& operator*=(const matrix3_const_view_t& view)
+	vector1f& operator*=(const matrix3f_const_view_t& view)
 	{
 		return this->operator*=(view.x());
 	}
 
-	vector1f& operator*=(const matrix2_const_view_t& view)
+	vector1f& operator*=(const matrix2f_const_view_t& view)
 	{
 		return this->operator*=(view.x());
 	}
 
-	vector1f& operator*=(const matrix1_const_view_t& view)
+	vector1f& operator*=(const matrix1f_const_view_t& view)
 	{
 		return this->operator*=(view.x());
 	}
@@ -286,42 +294,42 @@ public:
 		return *this;
 	}
 
-	vector1f& operator/=(const matrix4_view_t& view) 
+	vector1f& operator/=(const matrix4f_view_t& view)
 	{
 		return this->operator/=(view.x());
 	}
 
-	vector1f& operator/=(const matrix3_view_t& view) 
+	vector1f& operator/=(const matrix3f_view_t& view)
 	{
 		return this->operator/=(view.x());
 	}
 
-	vector1f& operator/=(const matrix2_view_t& view) 
+	vector1f& operator/=(const matrix2f_view_t& view)
 	{
 		return this->operator/=(view.x());
 	}
 
-	vector1f& operator/=(const matrix1_view_t& view) 
+	vector1f& operator/=(const matrix1f_view_t& view)
 	{
 		return this->operator/=(view.x());
 	}
 
-	vector1f& operator/=(const matrix4_const_view_t& view)
+	vector1f& operator/=(const matrix4f_const_view_t& view)
 	{
 		return this->operator/=(view.x());
 	}
 
-	vector1f& operator/=(const matrix3_const_view_t& view)
+	vector1f& operator/=(const matrix3f_const_view_t& view)
 	{
 		return this->operator/=(view.x());
 	}
 
-	vector1f& operator/=(const matrix2_const_view_t& view)
+	vector1f& operator/=(const matrix2f_const_view_t& view)
 	{
 		return this->operator/=(view.x());
 	}
 
-	vector1f& operator/=(const matrix1_const_view_t& view)
+	vector1f& operator/=(const matrix1f_const_view_t& view)
 	{
 		return this->operator/=(view.x());
 	}
@@ -459,6 +467,24 @@ public:
 #endif
 	}
 
+	inline const float* data(void) const noexcept
+	{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		return &this->m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+		return &this->m_base.x;
+#endif
+	}
+
+	inline float* data(void) noexcept
+	{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		return &this->m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+		return &this->m_base.x;
+#endif
+	}
+
 	vector1f& Set_Base(const base_vec1_t& data) noexcept
 	{
 		this->m_base = data;
@@ -492,97 +518,97 @@ inline vector1f operator+(const vector1f& a, const vector1f& b) noexcept
 }
 
 inline vector1f operator+(
-	const vector1f& left, const matrix4_view_t& view) noexcept
+	const vector1f& left, const matrix4f_view_t& view) noexcept
 {
 	return operator+(left, vector1f(view));
 }
 
 inline vector1f operator+(
-	const vector1f& left, const matrix3_view_t& view) noexcept
+	const vector1f& left, const matrix3f_view_t& view) noexcept
 {
 	return operator+(left, vector1f(view));
 }
 
 inline vector1f operator+(
-	const vector1f& left, const matrix2_view_t& view) noexcept
+	const vector1f& left, const matrix2f_view_t& view) noexcept
 {
 	return operator+(left, vector1f(view));
 }
 
 inline vector1f operator+(
-	const vector1f& left, const matrix1_view_t& view) noexcept
+	const vector1f& left, const matrix1f_view_t& view) noexcept
 {
 	return operator+(left, vector1f(view));
 }
 
 inline vector1f operator+(
-	const matrix4_view_t& view, const vector1f& right) noexcept
+	const matrix4f_view_t& view, const vector1f& right) noexcept
 {
 	return operator+(vector1f(view), right);
 }
 
 inline vector1f operator+(
-	const matrix3_view_t& view, const vector1f& right) noexcept
+	const matrix3f_view_t& view, const vector1f& right) noexcept
 {
 	return operator+(vector1f(view), right);
 }
 
 inline vector1f operator+(
-	const matrix2_view_t& view, const vector1f& right) noexcept
+	const matrix2f_view_t& view, const vector1f& right) noexcept
 {
 	return operator+(vector1f(view), right);
 }
 
 inline vector1f operator+(
-	const matrix1_view_t& view, const vector1f& right) noexcept
+	const matrix1f_view_t& view, const vector1f& right) noexcept
 {
 	return operator+(vector1f(view), right);
 }
 
 inline vector1f operator+(
-	const vector1f& left, const matrix4_const_view_t& view) noexcept
+	const vector1f& left, const matrix4f_const_view_t& view) noexcept
 {
 	return operator+(left, vector1f(view));
 }
 
 inline vector1f operator+(
-	const vector1f& left, const matrix3_const_view_t& view) noexcept
+	const vector1f& left, const matrix3f_const_view_t& view) noexcept
 {
 	return operator+(left, vector1f(view));
 }
 
 inline vector1f operator+(
-	const vector1f& left, const matrix2_const_view_t& view) noexcept
+	const vector1f& left, const matrix2f_const_view_t& view) noexcept
 {
 	return operator+(left, vector1f(view));
 }
 
 inline vector1f operator+(
-	const vector1f& left, const matrix1_const_view_t& view) noexcept
+	const vector1f& left, const matrix1f_const_view_t& view) noexcept
 {
 	return operator+(left, vector1f(view));
 }
 
 inline vector1f operator+(
-	const matrix4_const_view_t& view, const vector1f& right) noexcept
+	const matrix4f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator+(vector1f(view), right);
 }
 
 inline vector1f operator+(
-	const matrix3_const_view_t& view, const vector1f& right) noexcept
+	const matrix3f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator+(vector1f(view), right);
 }
 
 inline vector1f operator+(
-	const matrix2_const_view_t& view, const vector1f& right) noexcept
+	const matrix2f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator+(vector1f(view), right);
 }
 
 inline vector1f operator+(
-	const matrix1_const_view_t& view, const vector1f& right) noexcept
+	const matrix1f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator+(vector1f(view), right);
 }
@@ -607,97 +633,97 @@ inline vector1f operator-(const vector1f& a, const vector1f& b) noexcept
 }
 
 inline vector1f operator-(
-	const vector1f& left, const matrix4_view_t& view) noexcept
+	const vector1f& left, const matrix4f_view_t& view) noexcept
 {
 	return operator-(left, vector1f(view));
 }
 
 inline vector1f operator-(
-	const vector1f& left, const matrix3_view_t& view) noexcept
+	const vector1f& left, const matrix3f_view_t& view) noexcept
 {
 	return operator-(left, vector1f(view));
 }
 
 inline vector1f operator-(
-	const vector1f& left, const matrix2_view_t& view) noexcept
+	const vector1f& left, const matrix2f_view_t& view) noexcept
 {
 	return operator-(left, vector1f(view));
 }
 
 inline vector1f operator-(
-	const vector1f& left, const matrix1_view_t& view) noexcept
+	const vector1f& left, const matrix1f_view_t& view) noexcept
 {
 	return operator-(left, vector1f(view));
 }
 
 inline vector1f operator-(
-	const matrix4_view_t& view, const vector1f& right) noexcept
+	const matrix4f_view_t& view, const vector1f& right) noexcept
 {
 	return operator-(vector1f(view), right);
 }
 
 inline vector1f operator-(
-	const matrix3_view_t& view, const vector1f& right) noexcept
+	const matrix3f_view_t& view, const vector1f& right) noexcept
 {
 	return operator-(vector1f(view), right);
 }
 
 inline vector1f operator-(
-	const matrix2_view_t& view, const vector1f& right) noexcept
+	const matrix2f_view_t& view, const vector1f& right) noexcept
 {
 	return operator-(vector1f(view), right);
 }
 
 inline vector1f operator-(
-	const matrix1_view_t& view, const vector1f& right) noexcept
+	const matrix1f_view_t& view, const vector1f& right) noexcept
 {
 	return operator-(vector1f(view), right);
 }
 
 inline vector1f operator-(
-	const vector1f& left, const matrix4_const_view_t& view) noexcept
+	const vector1f& left, const matrix4f_const_view_t& view) noexcept
 {
 	return operator-(left, vector1f(view));
 }
 
 inline vector1f operator-(
-	const vector1f& left, const matrix3_const_view_t& view) noexcept
+	const vector1f& left, const matrix3f_const_view_t& view) noexcept
 {
 	return operator-(left, vector1f(view));
 }
 
 inline vector1f operator-(
-	const vector1f& left, const matrix2_const_view_t& view) noexcept
+	const vector1f& left, const matrix2f_const_view_t& view) noexcept
 {
 	return operator-(left, vector1f(view));
 }
 
 inline vector1f operator-(
-	const vector1f& left, const matrix1_const_view_t& view) noexcept
+	const vector1f& left, const matrix1f_const_view_t& view) noexcept
 {
 	return operator-(left, vector1f(view));
 }
 
 inline vector1f operator-(
-	const matrix4_const_view_t& view, const vector1f& right) noexcept
+	const matrix4f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator-(vector1f(view), right);
 }
 
 inline vector1f operator-(
-	const matrix3_const_view_t& view, const vector1f& right) noexcept
+	const matrix3f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator-(vector1f(view), right);
 }
 
 inline vector1f operator-(
-	const matrix2_const_view_t& view, const vector1f& right) noexcept
+	const matrix2f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator-(vector1f(view), right);
 }
 
 inline vector1f operator-(
-	const matrix1_const_view_t& view, const vector1f& right) noexcept
+	const matrix1f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator-(vector1f(view), right);
 }
@@ -723,97 +749,97 @@ inline vector1f operator*(const vector1f& a, const vector1f& b) noexcept
 }
 
 inline vector1f operator*(
-	const vector1f& left, const matrix4_view_t& view) noexcept
+	const vector1f& left, const matrix4f_view_t& view) noexcept
 {
 	return operator*(left, vector1f(view));
 }
 
 inline vector1f operator*(
-	const vector1f& left, const matrix3_view_t& view) noexcept
+	const vector1f& left, const matrix3f_view_t& view) noexcept
 {
 	return operator*(left, vector1f(view));
 }
 
 inline vector1f operator*(
-	const vector1f& left, const matrix2_view_t& view) noexcept
+	const vector1f& left, const matrix2f_view_t& view) noexcept
 {
 	return operator*(left, vector1f(view));
 }
 
 inline vector1f operator*(
-	const vector1f& left, const matrix1_view_t& view) noexcept
+	const vector1f& left, const matrix1f_view_t& view) noexcept
 {
 	return operator*(left, vector1f(view));
 }
 
 inline vector1f operator*(
-	const matrix4_view_t& view, const vector1f& right) noexcept
+	const matrix4f_view_t& view, const vector1f& right) noexcept
 {
 	return operator*(vector1f(view), right);
 }
 
 inline vector1f operator*(
-	const matrix3_view_t& view, const vector1f& right) noexcept
+	const matrix3f_view_t& view, const vector1f& right) noexcept
 {
 	return operator*(vector1f(view), right);
 }
 
 inline vector1f operator*(
-	const matrix2_view_t& view, const vector1f& right) noexcept
+	const matrix2f_view_t& view, const vector1f& right) noexcept
 {
 	return operator*(vector1f(view), right);
 }
 
 inline vector1f operator*(
-	const matrix1_view_t& view, const vector1f& right) noexcept
+	const matrix1f_view_t& view, const vector1f& right) noexcept
 {
 	return operator*(vector1f(view), right);
 }
 
 inline vector1f operator*(
-	const vector1f& left, const matrix4_const_view_t& view) noexcept
+	const vector1f& left, const matrix4f_const_view_t& view) noexcept
 {
 	return operator*(left, vector1f(view));
 }
 
 inline vector1f operator*(
-	const vector1f& left, const matrix3_const_view_t& view) noexcept
+	const vector1f& left, const matrix3f_const_view_t& view) noexcept
 {
 	return operator*(left, vector1f(view));
 }
 
 inline vector1f operator*(
-	const vector1f& left, const matrix2_const_view_t& view) noexcept
+	const vector1f& left, const matrix2f_const_view_t& view) noexcept
 {
 	return operator*(left, vector1f(view));
 }
 
 inline vector1f operator*(
-	const vector1f& left, const matrix1_const_view_t& view) noexcept
+	const vector1f& left, const matrix1f_const_view_t& view) noexcept
 {
 	return operator*(left, vector1f(view));
 }
 
 inline vector1f operator*(
-	const matrix4_const_view_t& view, const vector1f& right) noexcept
+	const matrix4f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator*(vector1f(view), right);
 }
 
 inline vector1f operator*(
-	const matrix3_const_view_t& view, const vector1f& right) noexcept
+	const matrix3f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator*(vector1f(view), right);
 }
 
 inline vector1f operator*(
-	const matrix2_const_view_t& view, const vector1f& right) noexcept
+	const matrix2f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator*(vector1f(view), right);
 }
 
 inline vector1f operator*(
-	const matrix1_const_view_t& view, const vector1f& right) noexcept
+	const matrix1f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator*(vector1f(view), right);
 }
@@ -863,97 +889,97 @@ inline vector1f operator/(const vector1f& a, const vector1f& b) noexcept
 }
 
 inline vector1f operator/(
-	const vector1f& left, const matrix4_view_t& view) noexcept
+	const vector1f& left, const matrix4f_view_t& view) noexcept
 {
 	return operator/(left, vector1f(view));
 }
 
 inline vector1f operator/(
-	const vector1f& left, const matrix3_view_t& view) noexcept
+	const vector1f& left, const matrix3f_view_t& view) noexcept
 {
 	return operator/(left, vector1f(view));
 }
 
 inline vector1f operator/(
-	const vector1f& left, const matrix2_view_t& view) noexcept
+	const vector1f& left, const matrix2f_view_t& view) noexcept
 {
 	return operator/(left, vector1f(view));
 }
 
 inline vector1f operator/(
-	const vector1f& left, const matrix1_view_t& view) noexcept
+	const vector1f& left, const matrix1f_view_t& view) noexcept
 {
 	return operator/(left, vector1f(view));
 }
 
 inline vector1f operator/(
-	const matrix4_view_t& view, const vector1f& right) noexcept
+	const matrix4f_view_t& view, const vector1f& right) noexcept
 {
 	return operator/(vector1f(view), right);
 }
 
 inline vector1f operator/(
-	const matrix3_view_t& view, const vector1f& right) noexcept
+	const matrix3f_view_t& view, const vector1f& right) noexcept
 {
 	return operator/(vector1f(view), right);
 }
 
 inline vector1f operator/(
-	const matrix2_view_t& view, const vector1f& right) noexcept
+	const matrix2f_view_t& view, const vector1f& right) noexcept
 {
 	return operator/(vector1f(view), right);
 }
 
 inline vector1f operator/(
-	const matrix1_view_t& view, const vector1f& right) noexcept
+	const matrix1f_view_t& view, const vector1f& right) noexcept
 {
 	return operator/(vector1f(view), right);
 }
 
 inline vector1f operator/(
-	const vector1f& left, const matrix4_const_view_t& view) noexcept
+	const vector1f& left, const matrix4f_const_view_t& view) noexcept
 {
 	return operator/(left, vector1f(view));
 }
 
 inline vector1f operator/(
-	const vector1f& left, const matrix3_const_view_t& view) noexcept
+	const vector1f& left, const matrix3f_const_view_t& view) noexcept
 {
 	return operator/(left, vector1f(view));
 }
 
 inline vector1f operator/(
-	const vector1f& left, const matrix2_const_view_t& view) noexcept
+	const vector1f& left, const matrix2f_const_view_t& view) noexcept
 {
 	return operator/(left, vector1f(view));
 }
 
 inline vector1f operator/(
-	const vector1f& left, const matrix1_const_view_t& view) noexcept
+	const vector1f& left, const matrix1f_const_view_t& view) noexcept
 {
 	return operator/(left, vector1f(view));
 }
 
 inline vector1f operator/(
-	const matrix4_const_view_t& view, const vector1f& right) noexcept
+	const matrix4f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator/(vector1f(view), right);
 }
 
 inline vector1f operator/(
-	const matrix3_const_view_t& view, const vector1f& right) noexcept
+	const matrix3f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator/(vector1f(view), right);
 }
 
 inline vector1f operator/(
-	const matrix2_const_view_t& view, const vector1f& right) noexcept
+	const matrix2f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator/(vector1f(view), right);
 }
 
 inline vector1f operator/(
-	const matrix1_const_view_t& view, const vector1f& right) noexcept
+	const matrix1f_const_view_t& view, const vector1f& right) noexcept
 {
 	return operator/(vector1f(view), right);
 }
