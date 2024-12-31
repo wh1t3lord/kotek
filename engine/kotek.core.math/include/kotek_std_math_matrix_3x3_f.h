@@ -381,6 +381,19 @@ public:
 #endif
 	}
 
+	inline float* data(void) noexcept { return &this->m_base.m[0][0]; }
+	inline const float* data(void) const noexcept
+	{
+		return &this->m_base.m[0][0];
+	}
+
+	inline static constexpr unsigned char size_of(void) noexcept 
+	{
+		static_assert(sizeof(float[3][3]) == sizeof(m_base) &&
+			"we gurantee that base type is equal to float[3][3] by size");
+		return static_cast<unsigned char>(sizeof(float[3][3]));
+	}
+
 	matrix3x3f& Set_Base(const base_mat3x3_t& data) noexcept
 	{
 		this->m_base = data;

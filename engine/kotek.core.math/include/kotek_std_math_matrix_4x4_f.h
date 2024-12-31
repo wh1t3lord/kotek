@@ -457,6 +457,19 @@ public:
 		return *this;
 	}
 
+	inline float* data(void) noexcept { return &this->m_base.m[0][0]; }
+	inline const float* data(void) const noexcept
+	{
+		return &this->m_base.m[0][0];
+	}
+
+	inline static constexpr unsigned char size_of(void) noexcept 
+	{
+		static_assert(sizeof(float[4][4]) == sizeof(m_base) &&
+			"we gurantee that base type is equal to float[4][4] by size");
+		return static_cast<unsigned char>(sizeof(float[4][4]));
+	}
+
 	matrix4x4f& Set_Base(const base_mat4x4_t& data) noexcept
 	{
 		this->m_base = data;
@@ -574,8 +587,8 @@ inline matrix4x4f operator*(
 	const matrix4x4f& left, const matrix4x4f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMMATRIX m1 = left;
-	DirectX::XMMATRIX m2 = right;
+	const DirectX::XMMATRIX& m1 = left;
+	const DirectX::XMMATRIX& m2 = right;
 	auto temp = DirectX::XMMatrixMultiply(m1, m2);
 
 	matrix4x4f result;

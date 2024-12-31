@@ -38,6 +38,21 @@ constexpr long double kMax_LongDouble = std::numeric_limits<long double>::max();
 
 using base_decimal_t = float;
 
+struct matrix4f_view_t;
+struct matrix3f_view_t;
+struct matrix2f_view_t;
+struct matrix1f_view_t;
+
+struct matrix4f_const_view_t;
+struct matrix3f_const_view_t;
+struct matrix2f_const_view_t;
+struct matrix1f_const_view_t;
+
+class vector4f;
+class vector3f;
+class vector2f;
+class vector1f;
+
 // TODO: provide separation for float and double base types
 // without switching user defines what he needs and he can choose what part to
 // disable like disable double or float implementation

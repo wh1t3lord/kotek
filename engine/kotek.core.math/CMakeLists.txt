@@ -77,7 +77,16 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_math_matrix2f_const_view.h"
 	"include/kotek_std_math_matrix1f_const_view.h"
 	"tests/kotek_core_test_math.cpp"
-	"src/main_core_math_dll.cpp")
+	"src/kotek_std_math_vector1f.cpp"
+	"src/kotek_std_math_vector2f.cpp"
+	"src/kotek_std_math_vector3f.cpp"
+	"src/kotek_std_math_vector4f.cpp"
+	"src/kotek_std_math_matrix4f_view.cpp"
+	"src/kotek_std_math_matrix3f_view.cpp"
+	"src/kotek_std_math_matrix2f_view.cpp"
+	"src/kotek_std_math_matrix1f_view.cpp"
+	"src/main_core_math_dll.cpp"
+)
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")

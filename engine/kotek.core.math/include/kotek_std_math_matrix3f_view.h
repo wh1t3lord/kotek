@@ -17,34 +17,85 @@ KOTEK_BEGIN_NAMESPACE_MATH
 /// mind.
 struct matrix3f_view_t
 {
-	matrix3f_view_t(float* p_values) : m_p_values(p_values) {}
+	matrix3f_view_t(float* p_values);
 
-	inline float x(void) const noexcept { return this->m_p_values[0]; }
-	inline float& x(void) noexcept { return this->m_p_values[0]; }
+	float x(void) const noexcept;
+	float& x(void) noexcept;
 
-	inline float y(void) const noexcept { return this->m_p_values[1]; }
-	inline float& y(void) noexcept { return this->m_p_values[1]; }
+	float y(void) const noexcept;
+	float& y(void) noexcept;
 
-	inline float z(void) const noexcept { return this->m_p_values[2]; }
-	inline float& z(void) noexcept { return this->m_p_values[2]; }
+	float z(void) const noexcept;
+	float& z(void) noexcept;
 
-	inline float operator[](unsigned char index) const
-	{
-		KOTEK_ASSERT(index <= 2, "out of range");
-		return this->m_p_values[index];
-	}
+	float operator[](unsigned char index) const;
+	float& operator[](unsigned char index);
 
-	inline float& operator[](unsigned char index)
-	{
-		KOTEK_ASSERT(index <= 2, "out of range");
-		return this->m_p_values[index];
-	}
+	// PLUS
 
-	inline float* data(void) const noexcept { return this->m_p_values; }
+	matrix3f_view_t& operator+=(const vector1f& vec) noexcept;
+	matrix3f_view_t& operator+=(const vector2f& vec) noexcept;
+	matrix3f_view_t& operator+=(const vector3f& vec) noexcept;
+	matrix3f_view_t& operator+=(const vector4f& vec) noexcept;
+	matrix3f_view_t& operator+=(const matrix1f_view_t& vec) noexcept;
+	matrix3f_view_t& operator+=(const matrix1f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator+=(const matrix2f_view_t& vec) noexcept;
+	matrix3f_view_t& operator+=(const matrix2f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator+=(const matrix3f_view_t& vec) noexcept;
+	matrix3f_view_t& operator+=(const matrix3f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator+=(const matrix4f_view_t& vec) noexcept;
+	matrix3f_view_t& operator+=(const matrix4f_const_view_t& vec) noexcept;
+
+	// MINUS
+
+	matrix3f_view_t& operator-=(const vector1f& vec) noexcept;
+	matrix3f_view_t& operator-=(const vector2f& vec) noexcept;
+	matrix3f_view_t& operator-=(const vector3f& vec) noexcept;
+	matrix3f_view_t& operator-=(const vector4f& vec) noexcept;
+	matrix3f_view_t& operator-=(const matrix1f_view_t& vec) noexcept;
+	matrix3f_view_t& operator-=(const matrix1f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator-=(const matrix2f_view_t& vec) noexcept;
+	matrix3f_view_t& operator-=(const matrix2f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator-=(const matrix3f_view_t& vec) noexcept;
+	matrix3f_view_t& operator-=(const matrix3f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator-=(const matrix4f_view_t& vec) noexcept;
+	matrix3f_view_t& operator-=(const matrix4f_const_view_t& vec) noexcept;
+
+	// MULTIPLY
+
+	matrix3f_view_t& operator*=(const vector1f& vec) noexcept;
+	matrix3f_view_t& operator*=(const vector2f& vec) noexcept;
+	matrix3f_view_t& operator*=(const vector3f& vec) noexcept;
+	matrix3f_view_t& operator*=(const vector4f& vec) noexcept;
+	matrix3f_view_t& operator*=(const matrix1f_view_t& vec) noexcept;
+	matrix3f_view_t& operator*=(const matrix1f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator*=(const matrix2f_view_t& vec) noexcept;
+	matrix3f_view_t& operator*=(const matrix2f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator*=(const matrix3f_view_t& vec) noexcept;
+	matrix3f_view_t& operator*=(const matrix3f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator*=(const matrix4f_view_t& vec) noexcept;
+	matrix3f_view_t& operator*=(const matrix4f_const_view_t& vec) noexcept;
+
+	// DIVISION
+
+	matrix3f_view_t& operator/=(const vector1f& vec) noexcept;
+	matrix3f_view_t& operator/=(const vector2f& vec) noexcept;
+	matrix3f_view_t& operator/=(const vector3f& vec) noexcept;
+	matrix3f_view_t& operator/=(const vector4f& vec) noexcept;
+	matrix3f_view_t& operator/=(const matrix1f_view_t& vec) noexcept;
+	matrix3f_view_t& operator/=(const matrix1f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator/=(const matrix2f_view_t& vec) noexcept;
+	matrix3f_view_t& operator/=(const matrix2f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator/=(const matrix3f_view_t& vec) noexcept;
+	matrix3f_view_t& operator/=(const matrix3f_const_view_t& vec) noexcept;
+	matrix3f_view_t& operator/=(const matrix4f_view_t& vec) noexcept;
+	matrix3f_view_t& operator/=(const matrix4f_const_view_t& vec) noexcept;
+
+	float* data(void) const noexcept;
 
 	inline static constexpr unsigned char size_of(void) noexcept
 	{
-		return sizeof(float[3]);
+		return static_cast<unsigned char>(sizeof(float[3]));
 	}
 
 private:
