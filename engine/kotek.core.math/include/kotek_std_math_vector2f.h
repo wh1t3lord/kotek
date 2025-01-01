@@ -31,6 +31,11 @@ public:
 
 	vector2f(const matrix1f_const_view_t& view, float y);
 
+	vector2f(const vector1f& data);
+	vector2f(const vector1f& data, float y);
+	vector2f(const vector3f& data);
+	vector2f(const vector4f& data);
+
 	vector2f(const base_vec2_t& data);
 	vector2f(const vector2f& data);
 	vector2f(void);

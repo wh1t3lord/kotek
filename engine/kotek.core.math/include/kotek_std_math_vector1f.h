@@ -29,6 +29,10 @@ public:
 	vector1f(const matrix2f_const_view_t& view);
 	vector1f(const matrix1f_const_view_t& view);
 
+	vector1f(const vector2f& data);
+	vector1f(const vector3f& data);
+	vector1f(const vector4f& data);
+
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)

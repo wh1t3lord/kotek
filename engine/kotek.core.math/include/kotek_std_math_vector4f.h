@@ -24,6 +24,35 @@ public:
 	vector4f(const matrix3f_view_t& view, float w);
 	vector4f(const matrix2f_view_t& view, float z, float w);
 	vector4f(const matrix1f_view_t& view, float y, float z, float w);
+	vector4f(const matrix1f_view_t& view, float y, float z);
+	vector4f(const matrix1f_view_t& view, float y);
+	vector4f(const matrix2f_view_t& view, float z);
+
+	vector4f(const matrix1f_const_view_t& view);
+	vector4f(const matrix1f_const_view_t& view, float y);
+	vector4f(const matrix1f_const_view_t& view, float y, float z);
+	vector4f(const matrix1f_const_view_t& view, float y, float z, float w);
+
+	vector4f(const matrix2f_const_view_t& view);
+	vector4f(const matrix2f_const_view_t& view, float z);
+	vector4f(const matrix2f_const_view_t& view, float z, float w);
+
+	vector4f(const matrix3f_const_view_t& view);
+	vector4f(const matrix3f_const_view_t& view, float w);
+
+	vector4f(const matrix4f_const_view_t& view);
+
+	vector4f(const vector1f& data);
+	vector4f(const vector1f& data, float y);
+	vector4f(const vector1f& data, float y, float z);
+	vector4f(const vector1f& data, float y, float z, float w);
+	
+	vector4f(const vector2f& data);
+	vector4f(const vector2f& data, float z);
+	vector4f(const vector2f& data, float z, float w);
+
+	vector4f(const vector3f& data);
+	vector4f(const vector3f& data, float w);
 
 	vector4f(const base_vec4_t& data);
 	vector4f(const vector4f& data);
@@ -216,6 +245,54 @@ inline vector4f operator+(
 	return operator+(vector4f(view), right);
 }
 
+inline vector4f operator+(
+	const vector4f& left, const matrix4f_const_view_t& view) noexcept
+{
+	return operator+(left, vector4f(view));
+}
+
+inline vector4f operator+(
+	const vector4f& left, const matrix3f_const_view_t& view) noexcept
+{
+	return operator+(left, vector4f(view));
+}
+
+inline vector4f operator+(
+	const vector4f& left, const matrix2f_const_view_t& view) noexcept
+{
+	return operator+(left, vector4f(view));
+}
+
+inline vector4f operator+(
+	const vector4f& left, const matrix1f_const_view_t& view) noexcept
+{
+	return operator+(left, vector4f(view));
+}
+
+inline vector4f operator+(
+	const matrix4f_const_view_t& view, const vector4f& right) noexcept
+{
+	return operator+(vector4f(view), right);
+}
+
+inline vector4f operator+(
+	const matrix3f_const_view_t& view, const vector4f& right) noexcept
+{
+	return operator+(vector4f(view), right);
+}
+
+inline vector4f operator+(
+	const matrix2f_const_view_t& view, const vector4f& right) noexcept
+{
+	return operator+(vector4f(view), right);
+}
+
+inline vector4f operator+(
+	const matrix1f_const_view_t& view, const vector4f& right) noexcept
+{
+	return operator+(vector4f(view), right);
+}
+
 inline vector4f operator-(const vector4f& left, const vector4f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -284,6 +361,54 @@ inline vector4f operator-(
 	return operator-(vector4f(view), right);
 }
 
+inline vector4f operator-(
+	const vector4f& left, const matrix4f_const_view_t& view) noexcept
+{
+	return operator-(left, vector4f(view));
+}
+
+inline vector4f operator-(
+	const vector4f& left, const matrix3f_const_view_t& view) noexcept
+{
+	return operator-(left, vector4f(view));
+}
+
+inline vector4f operator-(
+	const vector4f& left, const matrix2f_const_view_t& view) noexcept
+{
+	return operator-(left, vector4f(view));
+}
+
+inline vector4f operator-(
+	const vector4f& left, const matrix1f_const_view_t& view) noexcept
+{
+	return operator-(left, vector4f(view));
+}
+
+inline vector4f operator-(
+	const matrix4f_const_view_t& view, const vector4f& right) noexcept
+{
+	return operator-(vector4f(view), right);
+}
+
+inline vector4f operator-(
+	const matrix3f_const_view_t& view, const vector4f& right) noexcept
+{
+	return operator-(vector4f(view), right);
+}
+
+inline vector4f operator-(
+	const matrix2f_const_view_t& view, const vector4f& right) noexcept
+{
+	return operator-(vector4f(view), right);
+}
+
+inline vector4f operator-(
+	const matrix1f_const_view_t& view, const vector4f& right) noexcept
+{
+	return operator-(vector4f(view), right);
+}
+
 inline vector4f operator*(const vector4f& left, const vector4f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -313,7 +438,9 @@ inline vector4f operator*(
 inline vector4f operator*(
 	const vector4f& left, const matrix3f_view_t& view) noexcept
 {
-	return operator*(left, vector4f(view).w() = 1.0f);
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	return operator*(left, casted);
 }
 
 inline vector4f operator*(
@@ -361,6 +488,73 @@ inline vector4f operator*(
 
 inline vector4f operator*(
 	const matrix1f_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	casted.y() = 1.0f;
+	return operator*(casted, right);
+}
+
+inline vector4f operator*(
+	const vector4f& left, const matrix4f_const_view_t& view) noexcept
+{
+	return operator*(left, vector4f(view));
+}
+
+inline vector4f operator*(
+	const vector4f& left, const matrix3f_const_view_t& view) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	return operator*(left, casted);
+}
+
+inline vector4f operator*(
+	const vector4f& left, const matrix2f_const_view_t& view) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	return operator*(left, casted);
+}
+
+inline vector4f operator*(
+	const vector4f& left, const matrix1f_const_view_t& view) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	casted.y() = 1.0f;
+	return operator*(left, casted);
+}
+
+inline vector4f operator*(
+	const matrix4f_const_view_t& view, const vector4f& right) noexcept
+{
+	return operator*(vector4f(view), right);
+}
+
+inline vector4f operator*(
+	const matrix3f_const_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+
+	return operator*(casted, right);
+}
+
+inline vector4f operator*(
+	const matrix2f_const_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	return operator*(casted, right);
+}
+
+inline vector4f operator*(
+	const matrix1f_const_view_t& view, const vector4f& right) noexcept
 {
 	vector4f casted(view);
 	casted.w() = 1.0f;
@@ -422,7 +616,9 @@ inline vector4f operator/(
 inline vector4f operator/(
 	const vector4f& left, const matrix3f_view_t& view) noexcept
 {
-	return operator/(left, vector4f(view).w() = 1.0f);
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	return operator/(left,casted);
 }
 
 inline vector4f operator/(
@@ -469,6 +665,73 @@ inline vector4f operator/(
 
 inline vector4f operator/(
 	const matrix1f_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	casted.y() = 1.0f;
+
+	return operator/(casted, right);
+}
+
+inline vector4f operator/(
+	const vector4f& left, const matrix4f_const_view_t& view) noexcept
+{
+	return operator/(left, vector4f(view));
+}
+
+inline vector4f operator/(
+	const vector4f& left, const matrix3f_const_view_t& view) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	return operator/(left, casted);
+}
+
+inline vector4f operator/(
+	const vector4f& left, const matrix2f_const_view_t& view) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	return operator/(left, casted);
+}
+
+inline vector4f operator/(
+	const vector4f& left, const matrix1f_const_view_t& view) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	casted.y() = 1.0f;
+	return operator/(left, casted);
+}
+
+inline vector4f operator/(
+	const matrix4f_const_view_t& view, const vector4f& right) noexcept
+{
+	return operator/(vector4f(view), right);
+}
+
+inline vector4f operator/(
+	const matrix3f_const_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	return operator/(casted, right);
+}
+
+inline vector4f operator/(
+	const matrix2f_const_view_t& view, const vector4f& right) noexcept
+{
+	vector4f casted(view);
+	casted.w() = 1.0f;
+	casted.z() = 1.0f;
+	return operator/(casted, right);
+}
+
+inline vector4f operator/(
+	const matrix1f_const_view_t& view, const vector4f& right) noexcept
 {
 	vector4f casted(view);
 	casted.w() = 1.0f;

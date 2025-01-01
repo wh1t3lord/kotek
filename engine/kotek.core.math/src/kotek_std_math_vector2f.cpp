@@ -9,6 +9,10 @@
 #include "../include/kotek_std_math_matrix3f_const_view.h"
 #include "../include/kotek_std_math_matrix4f_const_view.h"
 
+#include "../include/kotek_std_math_vector1f.h"
+#include "../include/kotek_std_math_vector3f.h"
+#include "../include/kotek_std_math_vector4f.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
@@ -71,6 +75,14 @@ vector2f::vector2f(const matrix1f_const_view_t& view, float y) :
 	m_base(view.x(), y)
 {
 }
+
+vector2f::vector2f(const vector1f& data) : m_base(data.x(), 0.0f) {}
+
+vector2f::vector2f(const vector1f& data, float y) : m_base(data.x(), y) {}
+
+vector2f::vector2f(const vector3f& data) : m_base(data.x(), data.y()) {}
+
+vector2f::vector2f(const vector4f& data) : m_base(data.x(), data.y()) {}
 
 vector2f::vector2f(const base_vec2_t& data) : m_base(data) {}
 vector2f::vector2f(const vector2f& data) : m_base(data.m_base) {}

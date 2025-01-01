@@ -9,6 +9,10 @@
 #include "../include/kotek_std_math_matrix3f_const_view.h"
 #include "../include/kotek_std_math_matrix4f_const_view.h"
 
+#include "../include/kotek_std_math_vector1f.h"
+#include "../include/kotek_std_math_vector2f.h"
+#include "../include/kotek_std_math_vector3f.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
@@ -76,6 +80,113 @@ vector4f::vector4f(const matrix2f_view_t& view, float z, float w) :
 
 vector4f::vector4f(const matrix1f_view_t& view, float y, float z, float w) :
 	m_base(view.x(), y, z, w)
+{
+}
+
+vector4f::vector4f(const matrix1f_view_t& view, float y, float z) :
+	m_base(view.x(), y, z, 0.0f)
+{
+}
+
+vector4f::vector4f(const matrix1f_view_t& view, float y) :
+	m_base(view.x(), y, 0.0f, 0.0f)
+{
+}
+
+vector4f::vector4f(const matrix2f_view_t& view, float z) :
+	m_base(view.x(), view.y(), z, 0.0f)
+{
+}
+
+vector4f::vector4f(const matrix1f_const_view_t& view) :
+	m_base(view.x(), 0.0f, 0.0f, 0.0f)
+{
+}
+
+vector4f::vector4f(const matrix1f_const_view_t& view, float y) :
+	m_base(view.x(), y, 0.0f, 0.0f)
+{
+}
+
+vector4f::vector4f(const matrix1f_const_view_t& view, float y, float z) :
+	m_base(view.x(), y, z, 0.0f)
+{
+}
+
+vector4f::vector4f(const matrix1f_const_view_t& view, float y, float z,
+	float w) : m_base(view.x(), y, z, w)
+{
+}
+
+vector4f::vector4f(const matrix2f_const_view_t& view) :
+	m_base(view.x(), view.y(), 0.0f, 0.0f)
+{
+}
+
+vector4f::vector4f(const matrix2f_const_view_t& view, float z) :
+	m_base(view.x(), view.y(), z, 0.0f)
+{
+}
+
+vector4f::vector4f(const matrix2f_const_view_t& view, float z, float w) :
+	m_base(view.x(), view.y(), z, w)
+{
+}
+
+vector4f::vector4f(const matrix3f_const_view_t& view) :
+	m_base(view.x(), view.y(), view.z(), 0.0f)
+{
+}
+
+vector4f::vector4f(const matrix3f_const_view_t& view, float w) :
+	m_base(view.x(), view.y(), view.z(), w)
+{
+}
+
+vector4f::vector4f(const matrix4f_const_view_t& view) :
+	m_base(view.x(), view.y(), view.z(), view.w())
+{
+}
+
+vector4f::vector4f(const vector1f& data) : m_base(data.x(), 0.0f, 0.0f, 0.0f) {}
+
+vector4f::vector4f(const vector1f& data, float y) :
+	m_base(data.x(), y, 0.0f, 0.0f)
+{
+}
+
+vector4f::vector4f(const vector1f& data, float y, float z) :
+	m_base(data.x(), y, z, 0.0f)
+{
+}
+
+vector4f::vector4f(const vector1f& data, float y, float z, float w) :
+	m_base(data.x(), y, z, w)
+{
+}
+
+vector4f::vector4f(const vector2f& data) :
+	m_base(data.x(), data.y(), 0.0f, 0.0f)
+{
+}
+
+vector4f::vector4f(const vector2f& data, float z) :
+	m_base(data.x(), data.y(), z, 0.0f)
+{
+}
+
+vector4f::vector4f(const vector2f& data, float z, float w) :
+	m_base(data.x(), data.y(), z, w)
+{
+}
+
+vector4f::vector4f(const vector3f& data) :
+	m_base(data.x(), data.y(), data.z(), 0.0f)
+{
+}
+
+vector4f::vector4f(const vector3f& data, float w) :
+	m_base(data.x(), data.y(), data.z(), w)
 {
 }
 
