@@ -47,6 +47,16 @@ float& matrix3f_view_t::z(void) noexcept
 	return this->m_p_values[2];
 }
 
+void matrix3f_view_t::set(float x, float y, float z) noexcept
+{
+	if (!this->m_p_values)
+		return;
+
+	this->m_p_values[0] = x;
+	this->m_p_values[1] = y;
+	this->m_p_values[2] = z;
+}
+
 float matrix3f_view_t::operator[](unsigned char index) const
 {
 	KOTEK_ASSERT(index <= 2, "out of range");

@@ -28,6 +28,8 @@ struct matrix3f_view_t
 	float z(void) const noexcept;
 	float& z(void) noexcept;
 
+	void set(float x, float y, float z) noexcept;
+
 	float operator[](unsigned char index) const;
 	float& operator[](unsigned char index);
 

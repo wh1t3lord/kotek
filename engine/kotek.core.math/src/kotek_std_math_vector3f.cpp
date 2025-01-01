@@ -550,6 +550,13 @@ float* vector3f::data(void) noexcept
 	return &this->m_base.x;
 }
 
+void vector3f::set(float x, float y, float z) noexcept 
+{
+	this->m_base.x = x;
+	this->m_base.y = y;
+	this->m_base.z = z;
+}
+
 vector3f& vector3f::Set_Base(const base_vec3_t& data) noexcept
 {
 	this->m_base = data;

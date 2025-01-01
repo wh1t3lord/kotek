@@ -29,6 +29,14 @@ float& matrix1f_view_t::x(void) noexcept
 	return this->m_p_values[0];
 }
 
+void matrix1f_view_t::set(float x) noexcept 
+{
+	if (!this->m_p_values)
+		return;
+
+	this->m_p_values[0] = x;
+}
+
 float matrix1f_view_t::operator[](unsigned char index) const noexcept
 {
 	KOTEK_ASSERT(index == 0, "out of range");

@@ -146,6 +146,8 @@ public:
 
 	float* data(void) noexcept;
 
+	void set(float x) noexcept;
+
 	inline static constexpr unsigned char size_of(void) noexcept
 	{
 		static_assert(sizeof(float[1]) == sizeof(m_base) &&

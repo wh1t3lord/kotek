@@ -485,6 +485,12 @@ float* vector2f::data(void) noexcept
 	return &this->m_base.x;
 }
 
+void vector2f::set(float x, float y) 
+{
+	this->m_base.x = x;
+	this->m_base.y = y;
+}
+
 vector2f& vector2f::Set_Base(const base_vec2_t& data) noexcept
 {
 	this->m_base = data;

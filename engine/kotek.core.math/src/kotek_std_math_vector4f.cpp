@@ -663,6 +663,14 @@ float* vector4f::data(void) noexcept
 	return &this->m_base.x;
 }
 
+void vector4f::set(float x, float y, float z, float w)
+{
+	this->m_base.x = x;
+	this->m_base.y = y;
+	this->m_base.z = z;
+	this->m_base.w = w;
+}
+
 vector4f& vector4f::Set_Base(const base_vec4_t& data) noexcept
 {
 	this->m_base = data;

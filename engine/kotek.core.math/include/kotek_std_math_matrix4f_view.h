@@ -22,6 +22,8 @@ struct matrix4f_view_t
 	float w(void) const noexcept;
 	float& w(void) noexcept;
 
+	void set(float x, float y, float z, float w) noexcept;
+
 	float operator[](unsigned char index) const;
 	float& operator[](unsigned char index);
 

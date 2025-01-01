@@ -13,6 +13,8 @@ struct matrix1f_view_t
 	float x(void) const noexcept;
 	float& x(void) noexcept;
 
+	void set(float x) noexcept;
+
 	float operator[](unsigned char index) const noexcept;
 	float& operator[](unsigned char index) noexcept;
 

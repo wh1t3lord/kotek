@@ -495,6 +495,11 @@ float* vector1f::data(void) noexcept
 #endif
 }
 
+void vector1f::set(float x) noexcept
+{
+	this->m_base = x;
+}
+
 vector1f& vector1f::Set_Base(const base_vec1_t& data) noexcept
 {
 	this->m_base = data;

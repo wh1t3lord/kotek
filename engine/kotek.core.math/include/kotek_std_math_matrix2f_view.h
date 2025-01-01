@@ -16,6 +16,8 @@ struct matrix2f_view_t
 	float y(void) const noexcept;
 	float& y(void) noexcept;
 
+	void set(float x, float y) noexcept;
+
 	float operator[](unsigned char index) const;
 
 	float& operator[](unsigned char index);

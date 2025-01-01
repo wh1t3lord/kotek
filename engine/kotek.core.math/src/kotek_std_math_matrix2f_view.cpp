@@ -38,6 +38,15 @@ float& matrix2f_view_t::y(void) noexcept
 	return this->m_p_values[1];
 }
 
+void matrix2f_view_t::set(float x, float y) noexcept 
+{
+	if (!this->m_p_values)
+		return;
+
+	this->m_p_values[0] = x;
+	this->m_p_values[1] = y;
+}
+
 float matrix2f_view_t::operator[](unsigned char index) const
 {
 	KOTEK_ASSERT(index <= 1, "out of range");

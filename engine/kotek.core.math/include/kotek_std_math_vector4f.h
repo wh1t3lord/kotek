@@ -155,6 +155,8 @@ public:
 	const float* data(void) const noexcept;
 	float* data(void) noexcept;
 
+	void set(float x, float y, float z, float w);
+
 	inline static constexpr unsigned char size_of(void) noexcept
 	{
 		static_assert(sizeof(float[4]) == sizeof(m_base) &&
