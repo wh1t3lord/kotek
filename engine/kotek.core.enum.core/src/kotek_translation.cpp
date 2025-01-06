@@ -278,7 +278,8 @@ namespace helper
 		{
 		case eEngineFeatureRenderer::kEngine_Feature_Renderer_DirectX_Latest:
 		{
-			return Translate_EngineSupportedRenderer(eEngineSupportedRenderer::kDirectX_Latest);
+			return Translate_EngineSupportedRenderer(
+				eEngineSupportedRenderer::kDirectX_Latest);
 		}
 		case eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGL_Latest:
 		{
@@ -287,7 +288,8 @@ namespace helper
 		}
 		case eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGLES_Latest:
 		{
-			return Translate_EngineSupportedRenderer(eEngineSupportedRenderer::kOpenGLES_Latest);
+			return Translate_EngineSupportedRenderer(
+				eEngineSupportedRenderer::kOpenGLES_Latest);
 		}
 		case eEngineFeatureRenderer::kEngine_Feature_Renderer_Vulkan_Latest:
 		{
@@ -549,6 +551,394 @@ namespace helper
 		{
 			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_INPUT_TYPE");
 		}
+		}
+	}
+
+	const char* Translate_InputControllerType(eInputControllerType type)
+	{
+		switch (type)
+		{
+		case eInputControllerType::kControllerKeyboard:
+		{
+			return "controller_keyboard";
+		}
+		case eInputControllerType::kControllerMouse:
+		{
+			return "controller_mouse";
+		}
+		case eInputControllerType::kControllerGamepad:
+		{
+			return "controller_gamepad";
+		}
+		case eInputControllerType::kControllerJoystick:
+		{
+			return "controller_joystick";
+		}
+		case eInputControllerType::kControllerUnknown:
+		{
+			return "controller_unknown";
+		}
+		default:
+		{
+			return "UNDEFINED_ENUM_OF_INPUT_CONTROLLER_TYPE";
+		}
+		}
+	}
+
+	const char* Translate_InputControllerMouseData(
+		eInputControllerMouseData type)
+	{
+		switch (type)
+		{
+		case eInputControllerMouseData::kMousePreviousCoordinateX:
+		{
+			return "previous_coordinate_x";
+		}
+		case eInputControllerMouseData::kMoousePreviousCoordinateY:
+		{
+			return "previous_coordinate_y";
+		}
+		case eInputControllerMouseData::kMouseCoordinateX:
+		{
+			return "coordinate_x";
+		}
+		case eInputControllerMouseData::kMouseCoordinateY:
+		{
+			return "coordinate_y";
+		}
+		case eInputControllerMouseData::kMouseSensetivity:
+		{
+			return "sensetivity";
+		}
+		default:
+		{
+			return "UNDEFINED_ENUM_OF_INPUT_CONTROLLER_MOUSE_DATA";
+		}
+		}
+	}
+
+	const char* Translate_InputKeyboardKeys(eInputKeyboardKeys type)
+	{
+		switch (type)
+		{
+		case eInputKeyboardKeys::kKEY_A:
+			return "KEY_A";
+		case eInputKeyboardKeys::kKEY_B:
+			return "KEY_B";
+		case eInputKeyboardKeys::kKEY_C:
+			return "KEY_C";
+		case eInputKeyboardKeys::kKEY_D:
+			return "KEY_D";
+		case eInputKeyboardKeys::kKEY_E:
+			return "KEY_E";
+		case eInputKeyboardKeys::kKEY_F:
+			return "KEY_F";
+		case eInputKeyboardKeys::kKEY_G:
+			return "KEY_G";
+		case eInputKeyboardKeys::kKEY_H:
+			return "KEY_H";
+		case eInputKeyboardKeys::kKEY_I:
+			return "KEY_I";
+		case eInputKeyboardKeys::kKEY_J:
+			return "KEY_J";
+		case eInputKeyboardKeys::kKEY_K:
+			return "KEY_K";
+		case eInputKeyboardKeys::kKEY_L:
+			return "KEY_L";
+		case eInputKeyboardKeys::kKEY_M:
+			return "KEY_M";
+		case eInputKeyboardKeys::kKEY_N:
+			return "KEY_N";
+		case eInputKeyboardKeys::kKEY_O:
+			return "KEY_O";
+		case eInputKeyboardKeys::kKEY_P:
+			return "KEY_P";
+		case eInputKeyboardKeys::kKEY_Q:
+			return "KEY_Q";
+		case eInputKeyboardKeys::kKEY_R:
+			return "KEY_R";
+		case eInputKeyboardKeys::kKEY_S:
+			return "KEY_S";
+		case eInputKeyboardKeys::kKEY_T:
+			return "KEY_T";
+		case eInputKeyboardKeys::kKEY_U:
+			return "KEY_U";
+		case eInputKeyboardKeys::kKEY_V:
+			return "KEY_V";
+		case eInputKeyboardKeys::kKEY_W:
+			return "KEY_W";
+		case eInputKeyboardKeys::kKEY_X:
+			return "KEY_X";
+		case eInputKeyboardKeys::kKEY_Y:
+			return "KEY_Y";
+		case eInputKeyboardKeys::kKEY_Z:
+			return "KEY_Z";
+		case eInputKeyboardKeys::kKEY_UNKNOWN:
+			return "KEY_UNKNOWN";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_KEYBOARD_KEYS";
+		}
+	}
+
+	const char* Translate_InputKeyboardKeysNumbers(
+		eInputKeyboardKeysNumbers type)
+	{
+		switch (type)
+		{
+		case eInputKeyboardKeysNumbers::kKEY_1:
+			return "KEY_1";
+		case eInputKeyboardKeysNumbers::kKEY_2:
+			return "KEY_2";
+		case eInputKeyboardKeysNumbers::kKEY_3:
+			return "KEY_3";
+		case eInputKeyboardKeysNumbers::kKEY_4:
+			return "KEY_4";
+		case eInputKeyboardKeysNumbers::kKEY_5:
+			return "KEY_5";
+		case eInputKeyboardKeysNumbers::kKEY_6:
+			return "KEY_6";
+		case eInputKeyboardKeysNumbers::kKEY_7:
+			return "KEY_7";
+		case eInputKeyboardKeysNumbers::kKEY_8:
+			return "KEY_8";
+		case eInputKeyboardKeysNumbers::kKEY_9:
+			return "KEY_9";
+		case eInputKeyboardKeysNumbers::kKEY_0:
+			return "KEY_0";
+		case eInputKeyboardKeysNumbers::kKEY_NUMBER_UNKNOWN:
+			return "KEY_UNKNOWN";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_KEYBOARD_KEYS_NUMBER";
+		}
+	}
+
+	const char* Translate_InputKeyboardKeysFunctionKeys(
+		eInputKeyboardKeysFunctionKeys type)
+	{
+		switch (type)
+		{
+		case eInputKeyboardKeysFunctionKeys::kKEY_F1:
+			return "KEY_F1";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F2:
+			return "KEY_F2";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F3:
+			return "KEY_F3";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F4:
+			return "KEY_F4";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F5:
+			return "KEY_F5";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F6:
+			return "KEY_F6";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F7:
+			return "KEY_F7";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F8:
+			return "KEY_F8";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F9:
+			return "KEY_F9";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F10:
+			return "KEY_F10";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F11:
+			return "KEY_F11";
+		case eInputKeyboardKeysFunctionKeys::kKEY_F12:
+			return "KEY_F12";
+		case eInputKeyboardKeysFunctionKeys::kKEY_FUNCTION_KEY_UNKNOWN:
+			return "KEY_UNKNOWN";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_KEYBOARD_KEYS_FUNCTION_KEYS";
+		}
+	}
+
+	const char* Translate_InputKeyboardKeysOther(eInputKeyboardKeysOther type)
+	{
+		switch (type)
+		{
+		case eInputKeyboardKeysOther::kKEY_PRTSC:
+			return "KEY_PRTSC";
+		case eInputKeyboardKeysOther::kKEY_PAUSE:
+			return "KEY_PAUSE";
+		case eInputKeyboardKeysOther::kKEY_DEL:
+			return "KEY_DEL";
+		case eInputKeyboardKeysOther::kKEY_END:
+			return "KEY_END";
+		case eInputKeyboardKeysOther::kKEY_INSERT:
+			return "KEY_INSERT";
+		case eInputKeyboardKeysOther::kKEY_HOME:
+			return "KEY_HOME";
+		case eInputKeyboardKeysOther::kKEY_PAGEUP:
+			return "KEY_PAGEUP";
+		case eInputKeyboardKeysOther::kKEY_PAGEDOWN:
+			return "KEY_PAGEDOWN";
+		case eInputKeyboardKeysOther::kKEY_SCROLLLOCK:
+			return "kKEY_SCROLLLOCK";
+		case eInputKeyboardKeysOther::kKEY_ESC:
+			return "kKEY_ESC";
+		case eInputKeyboardKeysOther::kKEY_OTHER_KEY_UNKNOWN:
+			return "KEY_UNKNOWN";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_KEYBOARD_KEYS_OTHER";
+		}
+	}
+
+	const char* Translate_InputKeyboardKeysEnter(eInputKeyboardKeysEnter type)
+	{
+		switch (type)
+		{
+		case eInputKeyboardKeysEnter::kKEY_ENTER:
+			return "KEY_ENTER";
+		case eInputKeyboardKeysEnter::kKEY_ENTER_NUMPAD:
+			return "KEY_NUMPAD_ENTER";
+		case eInputKeyboardKeysEnter::kKEY_ENTER_UNKNOWN:
+			return "KEY_UNKNOWN";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_KEYBOARD_KEYS_ENTER";
+		}
+	}
+
+	const char* Translate_InputKeyboardKeysNumpad(eInputKeyboardKeysNumpad type)
+	{
+		switch (type)
+		{
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_NUMLOCK:
+			return "KEY_NUMPAD_NUMLOCK";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_ENTER:
+			return "KEY_NUMPAD_ENTER";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_SLASH:
+			return "KEY_NUMPAD_SLASH";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_ASTERISK:
+			return "KEY_NUMPAD_ASTERISK";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_1:
+			return "KEY_NUMPAD_1";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_2:
+			return "KEY_NUMPAD_2";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_3:
+			return "KEY_NUMPAD_3";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_4:
+			return "KEY_NUMPAD_4";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_5:
+			return "KEY_NUMPAD_5";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_6:
+			return "KEY_NUMPAD_6";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_7:
+			return "KEY_NUMPAD_7";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_8:
+			return "KEY_NUMPAD_8";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_9:
+			return "KEY_NUMPAD_9";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_0:
+			return "KEY_NUMPAD_0";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_MINUS:
+			return "KEY_NUMPAD_MINUS";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_PLUS:
+			return "KEY_NUMPAD_PLUS";
+		case eInputKeyboardKeysNumpad::kKEY_NUMPAD_UNKNOWN:
+			return "KEY_UNKNOWN";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_KEYBOARD_KEYS_NUMPAD";
+		}
+	}
+
+	const char* Translate_InputKeyboardKeysApplication(
+		eInputKeyboardKeysApplication type)
+	{
+		switch (type)
+		{
+		case eInputKeyboardKeysApplication::kKEY_MENU:
+			return "KEY_MENU";
+		case eInputKeyboardKeysApplication::kKEY_APPLICATION_UNKNOWN:
+			return "KEY_UNKNOWN";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_KEYBOARD_KEYS_APPLICATION";
+		}
+	}
+
+	const char* Translate_InputKeyboardKeysSystem(eInputKeyboardKeysSystem type)
+	{
+		switch (type)
+		{
+		case eInputKeyboardKeysSystem::kKEY_WINDOWS:
+			return "KEY_WINDOWS";
+		case eInputKeyboardKeysSystem::kKEY_SYSTEM_UNKNOWN:
+			return "KEY_UNKNOWN";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_KEYBOARD_KEYS_SYSTEM";
+		}
+	}
+
+	const char* Translate_InputKeyboardCursorControlKeys(
+		eInputKeyboardCursorControlKeys type)
+	{
+		switch (type)
+		{
+		case eInputKeyboardCursorControlKeys::kKEY_ARROW_LEFT:
+			return "KEY_ARROW_LEFT";
+		case eInputKeyboardCursorControlKeys::kKEY_ARROW_UP:
+			return "KEY_ARROW_UP";
+		case eInputKeyboardCursorControlKeys::kKEY_ARROW_RIGHT:
+			return "KEY_ARROW_RIGHT";
+		case eInputKeyboardCursorControlKeys::kKEY_ARROW_DOWN:
+			return "KEY_ARROW_DOWN";
+		case eInputKeyboardCursorControlKeys::kKEY_CURSOR_CONTROL_UNKNOWN:
+			return "KEY_UNKNOWN";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_KEYBOARD_CURSOR_CONTROL_KEYS";
+		}
+	}
+
+	const char* Translate_InputMouseKeys(eInputMouseKeys type)
+	{
+		switch (type)
+		{
+		case eInputMouseKeys::kKey_LeftButton:
+			return "KEY_LEFT";
+		case eInputMouseKeys::kKey_RightButton:
+			return "KEY_RIGHT";
+		case eInputMouseKeys::kKey_MiddleButton:
+			return "KEY_MIDDLE";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_MOUSE_KEYS";
+		}
+	}
+
+	const char* Translate_InputPlatformBackend(eInputPlatformBackend type)
+	{
+		switch (type)
+		{
+		case eInputPlatformBackend::kPlatformBackend_GLFW3:
+			return "GLFW3";
+		case eInputPlatformBackend::kPlatformBackend_SDL2:
+			return "SDL2";
+		case eInputPlatformBackend::kPlatformBackend_SDL3:
+			return "SDL3";
+		case eInputPlatformBackend::kPlatformBackend_WINAPI:
+			return "WINAPI";
+		case eInputPlatformBackend::kPlatformBackend_X11:
+			return "X11";
+		case eInputPlatformBackend::kPlatformBackend_MACOS:
+			return "MACOS";
+		case eInputPlatformBackend::kPlatformBackend_PS1:
+			return "PS1";
+		case eInputPlatformBackend::kPlatformBackend_PS2:
+			return "PS2";
+		case eInputPlatformBackend::kPlatformBackend_PS3:
+			return "PS3";
+		case eInputPlatformBackend::kPlatformBackend_PS4:
+			return "PS4";
+		case eInputPlatformBackend::kPlatformBackend_PS5:
+			return "PS5";
+		case eInputPlatformBackend::kPlatformBackend_PS6:
+			return "PS6";
+		case eInputPlatformBackend::kPlatformBackend_XBOX:
+			return "XBOX";
+		case eInputPlatformBackend::kPlatformBackend_XBOXONE:
+			return "XBOXONE";
+		case eInputPlatformBackend::kPlatformBackend_XBOXSERIESS:
+			return "XBOXSERIES_S";
+		case eInputPlatformBackend::kPlatformBackend_XBOXSERIESX:
+			return "XBOXSERIES_X";
+		case eInputPlatformBackend::kPlatformBackend_NS:
+			return "NS";
+		default:
+			return "UNDEFINED_ENUM_OF_INPUT_PLATFORM_BACKEND";
 		}
 	}
 
@@ -892,7 +1282,8 @@ namespace helper
 	eEngineFeatureRenderer TranslateFromStringToEnum_EngineFeatureRenderer(
 		const ktk::cstring& name)
 	{
-		eEngineFeatureRenderer result{eEngineFeatureRenderer::kEngine_Feature_Renderer_None};
+		eEngineFeatureRenderer result{
+			eEngineFeatureRenderer::kEngine_Feature_Renderer_None};
 
 		if (name.empty())
 			return result;

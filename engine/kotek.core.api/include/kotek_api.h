@@ -266,6 +266,8 @@ public:
 		eFolderIndex id) const noexcept = 0;
 };
 
+enum eInputControllerType;
+
 class ktkIInput
 {
 public:
@@ -274,20 +276,37 @@ public:
 	virtual void Initialize(void) = 0;
 	virtual void Shutdown(void) = 0;
 
-	virtual void SetMouseX(float value) noexcept = 0;
-	virtual float GetMouseX(void) const noexcept = 0;
+	virtual bool Set_ControllerData(eInputControllerType controller_type,
+		unsigned char data_field_index, float data) = 0;
+	virtual float Get_ControllerData(eInputControllerType controller_type,
+		unsigned char data_field_index) = 0;
 
-	virtual void SetMouseY(float value) noexcept = 0;
-	virtual float GetMouseY(void) const noexcept = 0;
+	virtual bool Is_KeyPressed(
+		eInputControllerType controller_type, int keys) = 0;
 
-	virtual void SetMouseLastX(float value) noexcept = 0;
-	virtual float GetMouseLastX(void) const noexcept = 0;
+	virtual bool Is_KeyPressed(eInputControllerType controller_type,
+		unsigned char category, int keys) = 0;
 
-	virtual void SetMouseLastY(float value) noexcept = 0;
-	virtual float GetMouseLastY(void) const noexcept = 0;
+	virtual const char* Get_TextInformationAboutController(
+		eInputControllerType controller_type) = 0;
 
-	virtual void SetMouseSensitivity(float value) noexcept = 0;
-	virtual float GetMouseSensitivity(void) const noexcept = 0;
+	/// @brief fills array with supported controllers
+	/// @param p_array somewhere allocated unsigned char array with size =
+	/// unsigned char[eInputControllerType::kControllerTotalAmountOfEnum]
+	/// @param length_of_array length that user passes for validation if size
+	/// was incorrect you will get an assertion
+	/// @return if system has implementation of this method will return true and
+	/// if was all okay generally otherwise false, in order to check the
+	/// supported controller use eInputControllerType fields as look-up indexer
+	/// and if field of your passed array was set to unsigned char(1) it means
+	/// that controller is supported by engine
+	virtual bool Get_SupportedControllers(
+		unsigned char* p_array, unsigned char length_of_array) = 0;
+
+	virtual const char* Get_PlatformBackendName(void) const = 0;
+
+	// you need to use it in message loop of window
+	virtual void Update(void* p_args) = 0;
 };
 
 class ktkIGameManager
@@ -621,8 +640,7 @@ public:
 		eResourceCachingPolicy type_policy_caching,
 		eResourceLoadingType type_of_loading_resource,
 		const ktk_filesystem_path& resource_path) :
-		m_policy_loading{type_loading},
-		m_policy_caching{type_policy_caching},
+		m_policy_loading{type_loading}, m_policy_caching{type_policy_caching},
 		m_resource_type{type_of_loading_resource}, m_id{ktk::uint32_t(-1)},
 		m_resource_path{resource_path}
 	{
@@ -632,8 +650,7 @@ public:
 		eResourceCachingPolicy type_policy_caching,
 		eResourceLoadingType type_of_loading_resource,
 		const ktk_filesystem_path& resource_path, ktk::uint32_t id) :
-		m_policy_loading{type_loading},
-		m_policy_caching{type_policy_caching},
+		m_policy_loading{type_loading}, m_policy_caching{type_policy_caching},
 		m_resource_type{type_of_loading_resource}, m_id{id},
 		m_resource_path{resource_path}
 	{
@@ -720,8 +737,7 @@ public:
 	ktkResourceWritingRequest(ktk::uint32_t id, eResourceWritingMode mode,
 		eResourceWritingType type, eResourceWritingPolicy policy,
 		const ktk_filesystem_path& path) :
-		m_id{id},
-		m_writing_mode{mode}, m_resource_type{type},
+		m_id{id}, m_writing_mode{mode}, m_resource_type{type},
 		m_filepath_for_writing{path}, m_policy{policy}
 	{
 	}

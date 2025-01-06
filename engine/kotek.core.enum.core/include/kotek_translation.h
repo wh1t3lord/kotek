@@ -4,8 +4,8 @@
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
-
 KOTEK_BEGIN_NAMESPACE_CORE
+
 enum class eFolderIndex;
 enum class eResourceLoadingType;
 enum class eResourceLoadingPolicy;
@@ -19,8 +19,21 @@ enum eEngineFeatureWindow;
 enum class eConsoleCommandIndex;
 enum class eEngineSupportedRenderer;
 enum class eInputType;
-KOTEK_END_NAMESPACE_CORE
+enum eInputControllerType;
+enum eInputControllerMouseData;
+enum eInputKeyboardKeys;
+enum eInputKeyboardKeysNumbers;
+enum eInputKeyboardKeysFunctionKeys;
+enum eInputKeyboardKeysOther;
+enum eInputKeyboardKeysEnter;
+enum eInputKeyboardKeysNumpad;
+enum eInputKeyboardKeysApplication;
+enum eInputKeyboardKeysSystem;
+enum eInputKeyboardCursorControlKeys;
+enum eInputMouseKeys;
+enum eInputPlatformBackend;
 
+KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -28,6 +41,7 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 namespace helper
 {
+	// TODO: provide static implementation especially with const char* implementations because strings live in .TEXT section
 	ktk::cstring Translate_FolderIndex(eFolderIndex type);
 	ktk::cstring Translate_EngineFeature(eEngineFeature type);
 	ktk::cstring Translate_EngineFeatureRender(eEngineFeatureRender type);
@@ -47,6 +61,28 @@ namespace helper
 	ktk::cstring Translate_ConsoleCommandIndex(eConsoleCommandIndex type);
 	ktk::cstring Translate_InputType(eInputType type);
 
+
+	const char* Translate_InputControllerType(eInputControllerType type);
+	const char* Translate_InputControllerMouseData(
+		eInputControllerMouseData type);
+	const char* Translate_InputKeyboardKeys(eInputKeyboardKeys type);
+	const char* Translate_InputKeyboardKeysNumbers(
+		eInputKeyboardKeysNumbers type);
+	const char* Translate_InputKeyboardKeysFunctionKeys(
+		eInputKeyboardKeysFunctionKeys type);
+	const char* Translate_InputKeyboardKeysOther(eInputKeyboardKeysOther type);
+	const char* Translate_InputKeyboardKeysEnter(eInputKeyboardKeysEnter type);
+	const char* Translate_InputKeyboardKeysNumpad(
+		eInputKeyboardKeysNumpad type);
+	const char* Translate_InputKeyboardKeysApplication(
+		eInputKeyboardKeysApplication type);
+	const char* Translate_InputKeyboardKeysSystem(
+		eInputKeyboardKeysSystem type);
+	const char* Translate_InputKeyboardCursorControlKeys(
+		eInputKeyboardCursorControlKeys type);
+	const char* Translate_InputMouseKeys(eInputMouseKeys type);
+	const char* Translate_InputPlatformBackend(eInputPlatformBackend type);
+	
 	/// @brief accepts the form like 'major_version.minor_version', for example
 	/// it parses strings like '1.3', the string is not acceptable like this
 	/// '1'.

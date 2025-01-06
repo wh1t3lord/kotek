@@ -25,6 +25,7 @@ void RegisterAllTests(void)
 	RegisterTests_Translation_ForModule_Enum_Core();
 	RegisterTests_Json_ForModule_Core();
 	RegisterTests_String_ForModule_Core();
+	RegisterTests_Input_ForModule_Core();
 #endif
 }
 

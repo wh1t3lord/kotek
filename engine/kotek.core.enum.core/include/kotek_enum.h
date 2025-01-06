@@ -659,6 +659,9 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	kEndOfEnum
 };
 
+// TODO: not obvious and may conflict with input system better to rename to
+// something like eInputCursorType otherwise specify working field where that
+// enum relates to
 enum class eInputType : ktk::enum_base_t
 {
 	kInputType_Cursor,
@@ -730,6 +733,226 @@ enum class eFileSeekDirectionType : ktk::enum_base_t
 	kSeekDirectionBegin,
 	kEndOfEnum
 };
+
+enum eInputControllerType
+{
+	kControllerKeyboard,
+	kControllerMouse,
+	kControllerGamepad,
+	kControllerJoystick,
+	kControllerTotalAmountOfEnum,
+	kControllerUnknown =
+		kControllerTotalAmountOfEnum // reserved for unspecified devices
+};
+
+/// @brief used classification of keys here:
+/// https://en.wikipedia.org/wiki/Function_key
+enum eInputControllerKeyboardCategory
+{
+	kKeyboardKeysTypeWriter,
+	kKeyboardKeysFunctionKeysState,
+	kKeyboardKeysOtherState,
+	kKeyboardKeysNumbers,
+	kKeyboardKeysApplication,
+	kKeyboardKeysSystem,
+	kKeyboardKeysEnter,
+	kKeyboardKeysNumpad,
+	kKeyboardKeysCursorControlKeys,
+	kKeyboardTotalAmountOfEnum,
+	kKeyboardUnknown = kKeyboardTotalAmountOfEnum
+};
+
+enum eInputControllerMouseData
+{
+	kMousePreviousCoordinateX,
+	kMoousePreviousCoordinateY,
+	kMouseCoordinateX,
+	kMouseCoordinateY,
+	kMouseSensetivity,
+	kControllerMouseDataTotalAmountOfEnum
+};
+
+enum eInputMouseKeys
+{
+	kKey_LeftButton = 1 << 1,
+	kKey_RightButton = 1 << 2,
+	kKey_MiddleButton = 1 << 3, // wheel
+	kKey_MouseUnknown = 0
+};
+
+enum eInputKeyboardKeys
+{
+	kKEY_A = 1 << 1,
+	kKEY_B = 1 << 2,
+	kKEY_C = 1 << 3,
+	kKEY_D = 1 << 4,
+	kKEY_E = 1 << 5,
+	kKEY_F = 1 << 6,
+	kKEY_G = 1 << 7,
+	kKEY_H = 1 << 8,
+	kKEY_I = 1 << 9,
+	kKEY_J = 1 << 10,
+	kKEY_K = 1 << 11,
+	kKEY_L = 1 << 12,
+	kKEY_M = 1 << 13,
+	kKEY_N = 1 << 14,
+	kKEY_O = 1 << 15,
+	kKEY_P = 1 << 16,
+	kKEY_Q = 1 << 17,
+	kKEY_R = 1 << 18,
+	kKEY_S = 1 << 19,
+	kKEY_T = 1 << 20,
+	kKEY_U = 1 << 21,
+	kKEY_V = 1 << 22,
+	kKEY_W = 1 << 23,
+	kKEY_X = 1 << 24,
+	kKEY_Y = 1 << 25,
+	kKEY_Z = 1 << 26,
+	kKEY_UNKNOWN = 0
+};
+
+enum eInputKeyboardKeysNumbers
+{
+	kKEY_1 = 1 << 1,
+	kKEY_2 = 1 << 2,
+	kKEY_3 = 1 << 3,
+	kKEY_4 = 1 << 4,
+	kKEY_5 = 1 << 5,
+	kKEY_6 = 1 << 6,
+	kKEY_7 = 1 << 7,
+	kKEY_8 = 1 << 8,
+	kKEY_9 = 1 << 9,
+	kKEY_0 = 1 << 10,
+	kKEY_MINUS = 1 << 11,
+	kKEY_PLUS = 1 << 12,
+	kKEY_NUMBER_UNKNOWN = 0
+};
+
+enum eInputKeyboardKeysFunctionKeys
+{
+	kKEY_F1 = 1 << 1,
+	kKEY_F2 = 1 << 2,
+	kKEY_F3 = 1 << 3,
+	kKEY_F4 = 1 << 4,
+	kKEY_F5 = 1 << 5,
+	kKEY_F6 = 1 << 6,
+	kKEY_F7 = 1 << 7,
+	kKEY_F8 = 1 << 8,
+	kKEY_F9 = 1 << 9,
+	kKEY_F10 = 1 << 10,
+	kKEY_F11 = 1 << 11,
+	kKEY_F12 = 1 << 12,
+	kKEY_FUNCTION_KEY_UNKNOWN = 0
+};
+
+enum eInputKeyboardKeysOther
+{
+	kKEY_PRTSC = 1 << 1,
+	kKEY_PAUSE = 1 << 2,
+	kKEY_DEL = 1 << 3,
+	kKEY_END = 1 << 4,
+	kKEY_INSERT = 1 << 5,
+	kKEY_HOME = 1 << 6,
+	kKEY_PAGEUP = 1 << 7,
+	kKEY_PAGEDOWN = 1 << 8,
+	kKEY_SCROLLLOCK = 1 << 9,
+	kKEY_ESC = 1 << 10,
+	kKEY_SPACE = 1 << 11,
+	kKEY_LEFT_SHIFT = 1 << 12,
+	kKEY_RIGHT_SHIFT = 1 << 13,
+	kKEY_LEFT_CONTROL = 1 << 14,
+	kKEY_RIGHT_CONTROL = 1 << 15,
+	kKEY_APOSTROPHE = 1 << 16, // '
+	kKEY_COMMA = 1 << 17,      // ,
+	kKEY_PERIOD = 1 << 18,     // .
+	kKEY_SLASH = 1 << 19,      // /
+	kKEY_BACKSLASH = 1 << 20,
+	KKEY_SEMICOLON = 1 << 21,
+	kKEY_EQUAL = 1 << 22,
+	kKEY_LEFT_BRACKET = 1 << 23,
+	kKEY_RIGHT_BRACKET = 1 << 24,
+	kKEY_GRAVE_ACCENT = 1 << 25,
+	kKEY_ESCAPE = 1 << 26,
+	kKEY_TAB = 1 << 27,
+	kKEY_BACKSPACE = 1 << 28,
+	kKEY_OTHER_KEY_UNKNOWN = 0
+};
+
+enum eInputKeyboardKeysEnter
+{
+	kKEY_ENTER = 1 << 1,
+	kKEY_ENTER_NUMPAD = 1 << 2,
+	kKEY_ENTER_UNKNOWN = 0
+};
+
+enum eInputKeyboardKeysNumpad
+{
+	kKEY_NUMPAD_NUMLOCK = 1 << 1,
+	kKEY_NUMPAD_ENTER = 1 << 2,
+	kKEY_NUMPAD_SLASH = 1 << 3,    // "/"
+	kKEY_NUMPAD_ASTERISK = 1 << 4, // "*"
+	kKEY_NUMPAD_1 = 1 << 5,
+	kKEY_NUMPAD_2 = 1 << 6,
+	kKEY_NUMPAD_3 = 1 << 7,
+	kKEY_NUMPAD_4 = 1 << 8,
+	kKEY_NUMPAD_5 = 1 << 9,
+	kKEY_NUMPAD_6 = 1 << 10,
+	kKEY_NUMPAD_7 = 1 << 11,
+	kKEY_NUMPAD_8 = 1 << 12,
+	kKEY_NUMPAD_9 = 1 << 13,
+	kKEY_NUMPAD_0 = 1 << 14,
+	kKEY_NUMPAD_MINUS = 1 << 15,
+	kKEY_NUMPAD_PLUS = 1 << 16,
+	kKEY_NUMPAD_UNKNOWN = 0
+};
+
+enum eInputKeyboardKeysApplication
+{
+	kKEY_MENU = 1 << 1,
+	kKEY_APPLICATION_UNKNOWN = 0
+};
+
+enum eInputKeyboardKeysSystem
+{
+	kKEY_WINDOWS = 1 << 1,
+	kKEY_SYSTEM_UNKNOWN = 0
+};
+
+enum eInputKeyboardCursorControlKeys
+{
+	kKEY_ARROW_LEFT = 1 << 1,
+	kKEY_ARROW_UP = 1 << 2,
+	kKEY_ARROW_RIGHT = 1 << 3,
+	kKEY_ARROW_DOWN = 1 << 4,
+	kKEY_CURSOR_CONTROL_UNKNOWN = 0
+};
+
+enum eInputPlatformBackend
+{
+	kPlatformBackend_GLFW3,
+	kPlatformBackend_SDL2,
+	kPlatformBackend_SDL3,
+	kPlatformBackend_WINAPI,
+	kPlatformBackend_X11,
+	kPlatformBackend_MACOS,
+	kPlatformBackend_PS1,
+	kPlatformBackend_PS2,
+	kPlatformBackend_PS3,
+	kPlatformBackend_PS4,
+	kPlatformBackend_PS5,
+	kPlatformBackend_PS6,
+	kPlatformBackend_XBOX,
+	kPlatformBackend_XBOX360,
+	kPlatformBackend_XBOXONE,
+	kPlatformBackend_XBOXSERIESS,
+	kPlatformBackend_XBOXSERIESX,
+	kPlatformBackend_NS, // Nintendo Switch
+	kPlatformBackend_Unknown
+};
+
+static_assert(eInputKeyboardKeysEnter::kKEY_ENTER_NUMPAD ==
+		eInputKeyboardKeysNumpad::kKEY_NUMPAD_ENTER &&
+	"must be equal otherwise the conflict exists");
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK
