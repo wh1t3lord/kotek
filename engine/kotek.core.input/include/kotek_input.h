@@ -10,7 +10,8 @@ KOTEK_BEGIN_NAMESPACE_CORE
 struct ktkInputPlatformBackendArgs_GLFW3
 {
 	const eInputPlatformBackend backend =
-		eInputPlatformBackend::kPlatformBackend_GLFW3; 
+		eInputPlatformBackend::kPlatformBackend_GLFW3;
+	eInputControllerType controller = eInputControllerType::kControllerUnknown;
 	int scancode;
 	int key;
 	int action;
@@ -21,12 +22,14 @@ struct ktkInputPlatformBackendArgs_WINAPI
 {
 	const eInputPlatformBackend backend =
 		eInputPlatformBackend::kPlatformBackend_WINAPI;
+	eInputControllerType controller = eInputControllerType::kControllerUnknown;
 };
 
 struct ktkInputPlatformBackendArgs_X11
 {
 	const eInputPlatformBackend backend =
 		eInputPlatformBackend::kPlatformBackend_X11;
+	eInputControllerType controller = eInputControllerType::kControllerUnknown;
 };
 
 class ktkInput : public ktkIInput
@@ -38,17 +41,16 @@ public:
 	void Initialize(void) override;
 	void Shutdown(void) override;
 
-	 bool Set_ControllerData(eInputControllerType controller_type,
+	bool Set_ControllerData(eInputControllerType controller_type,
 		unsigned char data_field_index, float data) override;
-	 float Get_ControllerData(eInputControllerType controller_type,
+	float Get_ControllerData(eInputControllerType controller_type,
 		unsigned char data_field_index) override;
 
-	 bool Is_KeyPressed(
-		eInputControllerType controller_type, int keys) override;
-	 bool Is_KeyPressed(eInputControllerType controller_type,
-		 unsigned char category, int keys) override;
+	bool Is_KeyPressed(eInputControllerType controller_type, int keys) override;
+	bool Is_KeyPressed(eInputControllerType controller_type,
+		unsigned char category, int keys) override;
 
-	 const char* Get_TextInformationAboutController(
+	const char* Get_TextInformationAboutController(
 		eInputControllerType controller_type) override;
 
 	/// @brief fills array with supported controllers
@@ -61,16 +63,21 @@ public:
 	/// supported controller use eInputControllerType fields as look-up indexer
 	/// and if field of your passed array was set to unsigned char(1) it means
 	/// that controller is supported by engine
-	 bool Get_SupportedControllers(
+	bool Get_SupportedControllers(
 		unsigned char* p_array, unsigned char size_of_array) override;
 
-	 const char* Get_PlatformBackendName(void) const override;
+	const char* Get_PlatformBackendName(void) const override;
 
-	 void Update(void* p_args) override;
+	void Update(void* p_args) override;
+
+private:
+	void Update_Controller(void* p_args, eInputPlatformBackend backend, eInputControllerType controller_type);
+	void Update_Keyboard(void* p_args, eInputPlatformBackend backend);
+	void Update_Mouse(void* p_args, eInputPlatformBackend backend);
 
 private:
 	unsigned char m_controller_mouse_key_states;
-	
+
 	unsigned char m_controller_keyboard_key_cursor_control_states;
 	unsigned char m_controller_keyboard_key_system_states;
 	unsigned char m_controller_keyboard_key_application_states;

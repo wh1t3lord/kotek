@@ -31,6 +31,7 @@ TEST(Input, SingleShotUpdate)
 	ktkInput input;
 	input.Initialize();
 	ktkInputPlatformBackendArgs_GLFW3 args;
+	args.controller = eInputControllerType::kControllerKeyboard;
 	input.Update(&args);
 
 	input.Shutdown();

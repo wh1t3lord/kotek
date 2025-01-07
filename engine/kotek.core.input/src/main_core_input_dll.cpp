@@ -30,7 +30,7 @@ bool DeserializeModule_Core_Input(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core_Input(ktkMainManager* p_manager)
 {
-	ktkInput* p_instance = dynamic_cast<ktkInput*>(p_manager->GetInput());
+	ktkInput* p_instance = dynamic_cast<ktkInput*>(p_manager->Get_Input());
 
 	KOTEK_ASSERT(p_instance,
 		"you must get a valid pointer of ktkInput. Otherwise you got a "

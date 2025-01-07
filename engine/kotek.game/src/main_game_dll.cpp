@@ -175,7 +175,7 @@ namespace Engine
 		KOTEK_ASSERT(p_main_manager->GetFileSystem(),
 			"you didn't initialize filesystem manager field in main "
 			"manager");
-		KOTEK_ASSERT(p_main_manager->GetInput(),
+		KOTEK_ASSERT(p_main_manager->Get_Input(),
 			"you didn't initialize input manager field in "
 			"main manager");
 

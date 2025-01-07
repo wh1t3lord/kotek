@@ -51,7 +51,7 @@ void ktkMainManager::Set_Input(ktkIInput* p_instance) noexcept
 	this->m_p_manager_input = p_instance;
 }
 
-ktkIInput* ktkMainManager::GetInput(void) const noexcept
+ktkIInput* ktkMainManager::Get_Input(void) const noexcept
 {
 	return this->m_p_manager_input;
 }

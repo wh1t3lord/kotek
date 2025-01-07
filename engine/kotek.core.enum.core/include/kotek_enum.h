@@ -656,6 +656,12 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 	 */
 	kConsoleCommand_SDK_SetFeature_AddComponentsToEntity_ThatRequiredForCreation,
 
+	kConsoleCommand_SDK_ShowWindow,
+	kConsoleCommand_SDK_HideWindow,
+
+	// prints as list of registered windows
+	kConsoleCommand_SDK_PrintRegisteredWindows,
+
 	kEndOfEnum
 };
 
@@ -808,6 +814,8 @@ enum eInputKeyboardKeys
 	kKEY_X = 1 << 24,
 	kKEY_Y = 1 << 25,
 	kKEY_Z = 1 << 26,
+	kKEY_CAPS_LOCK = 1 << 27,
+	kKEY_SCROLL_LOCK = 1 << 28,
 	kKEY_UNKNOWN = 0
 };
 
@@ -909,6 +917,10 @@ enum eInputKeyboardKeysNumpad
 enum eInputKeyboardKeysApplication
 {
 	kKEY_MENU = 1 << 1,
+	kKEY_LEFT_ALT = 1 << 2,
+	kKEY_RIGHT_ALT = 1 << 3,
+	kKEY_LEFT_SUPER = 1 << 4,
+	kKEY_RIGHT_SUPER = 1 << 5,
 	kKEY_APPLICATION_UNKNOWN = 0
 };
 

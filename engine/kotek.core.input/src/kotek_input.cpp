@@ -376,478 +376,472 @@ const char* ktkInput::Get_PlatformBackendName(void) const
 }
 
 /*
-* 
-* 
-* GLFW3 BACKEND
-* 
-* 
-*/
-int p_glfw3_keyboard_keys_to_input[] = {
-	-1, // 0
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
+ *
+ *
+ * GLFW3 BACKEND
+ *
+ *
+ */
+int p_glfw3_keyboard_keys_to_input[] = {-1, // 0
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	-1, // 31
-	eInputKeyboardKeysOther::kKEY_SPACE,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	eInputKeyboardKeysOther::kKEY_APOSTROPHE,
-	-1,
-	-1,
-	-1,
-	-1,
-	eInputKeyboardKeysOther::kKEY_COMMA,
-	eInputKeyboardKeysNumbers::kKEY_MINUS,
-	eInputKeyboardKeysOther::kKEY_PERIOD,
-	eInputKeyboardKeysOther::kKEY_SLASH,
-	eInputKeyboardKeysNumbers::kKEY_0,
-	eInputKeyboardKeysNumbers::kKEY_1,
-	eInputKeyboardKeysNumbers::kKEY_2,
-	eInputKeyboardKeysNumbers::kKEY_3,
-	eInputKeyboardKeysNumbers::kKEY_4,
-	eInputKeyboardKeysNumbers::kKEY_5,
-	eInputKeyboardKeysNumbers::kKEY_6,
-	eInputKeyboardKeysNumbers::kKEY_7,
-	eInputKeyboardKeysNumbers::kKEY_8,
-	eInputKeyboardKeysNumbers::kKEY_9,
-	-1,
-	eInputKeyboardKeysOther::KKEY_SEMICOLON,
-	-1,
-	eInputKeyboardKeysOther::kKEY_EQUAL,
-	-1,
-	-1,
-	-1,
-	eInputKeyboardKeys::kKEY_A,
-	eInputKeyboardKeys::kKEY_B,
-	eInputKeyboardKeys::kKEY_C,
-	eInputKeyboardKeys::kKEY_D,
-	eInputKeyboardKeys::kKEY_E,
-	eInputKeyboardKeys::kKEY_F,
-	eInputKeyboardKeys::kKEY_G,
-	eInputKeyboardKeys::kKEY_H,
-	eInputKeyboardKeys::kKEY_I,
-	eInputKeyboardKeys::kKEY_J,
-	eInputKeyboardKeys::kKEY_K,
-	eInputKeyboardKeys::kKEY_L,
-	eInputKeyboardKeys::kKEY_M,
-	eInputKeyboardKeys::kKEY_N,
-	eInputKeyboardKeys::kKEY_O,
-	eInputKeyboardKeys::kKEY_P,
-	eInputKeyboardKeys::kKEY_Q,
-	eInputKeyboardKeys::kKEY_R,
-	eInputKeyboardKeys::kKEY_S,
-	eInputKeyboardKeys::kKEY_T,
-	eInputKeyboardKeys::kKEY_U,
-	eInputKeyboardKeys::kKEY_V,
-	eInputKeyboardKeys::kKEY_W,
-	eInputKeyboardKeys::kKEY_X,
-	eInputKeyboardKeys::kKEY_Y,
-	eInputKeyboardKeys::kKEY_Z,
-	eInputKeyboardKeysOther::kKEY_LEFT_BRACKET,
+	eInputKeyboardKeysOther::kKEY_SPACE, -1, -1, -1, -1, -1, -1,
+	eInputKeyboardKeysOther::kKEY_APOSTROPHE, -1, -1, -1, -1,
+	eInputKeyboardKeysOther::kKEY_COMMA, eInputKeyboardKeysNumbers::kKEY_MINUS,
+	eInputKeyboardKeysOther::kKEY_PERIOD, eInputKeyboardKeysOther::kKEY_SLASH,
+	eInputKeyboardKeysNumbers::kKEY_0, eInputKeyboardKeysNumbers::kKEY_1,
+	eInputKeyboardKeysNumbers::kKEY_2, eInputKeyboardKeysNumbers::kKEY_3,
+	eInputKeyboardKeysNumbers::kKEY_4, eInputKeyboardKeysNumbers::kKEY_5,
+	eInputKeyboardKeysNumbers::kKEY_6, eInputKeyboardKeysNumbers::kKEY_7,
+	eInputKeyboardKeysNumbers::kKEY_8, eInputKeyboardKeysNumbers::kKEY_9, -1,
+	eInputKeyboardKeysOther::KKEY_SEMICOLON, -1,
+	eInputKeyboardKeysOther::kKEY_EQUAL, -1, -1, -1, eInputKeyboardKeys::kKEY_A,
+	eInputKeyboardKeys::kKEY_B, eInputKeyboardKeys::kKEY_C,
+	eInputKeyboardKeys::kKEY_D, eInputKeyboardKeys::kKEY_E,
+	eInputKeyboardKeys::kKEY_F, eInputKeyboardKeys::kKEY_G,
+	eInputKeyboardKeys::kKEY_H, eInputKeyboardKeys::kKEY_I,
+	eInputKeyboardKeys::kKEY_J, eInputKeyboardKeys::kKEY_K,
+	eInputKeyboardKeys::kKEY_L, eInputKeyboardKeys::kKEY_M,
+	eInputKeyboardKeys::kKEY_N, eInputKeyboardKeys::kKEY_O,
+	eInputKeyboardKeys::kKEY_P, eInputKeyboardKeys::kKEY_Q,
+	eInputKeyboardKeys::kKEY_R, eInputKeyboardKeys::kKEY_S,
+	eInputKeyboardKeys::kKEY_T, eInputKeyboardKeys::kKEY_U,
+	eInputKeyboardKeys::kKEY_V, eInputKeyboardKeys::kKEY_W,
+	eInputKeyboardKeys::kKEY_X, eInputKeyboardKeys::kKEY_Y,
+	eInputKeyboardKeys::kKEY_Z, eInputKeyboardKeysOther::kKEY_LEFT_BRACKET,
 	eInputKeyboardKeysOther::kKEY_BACKSLASH,
-	eInputKeyboardKeysOther::kKEY_RIGHT_BRACKET,
-	-1,
-	-1,
+	eInputKeyboardKeysOther::kKEY_RIGHT_BRACKET, -1, -1,
 	eInputKeyboardKeysOther::kKEY_GRAVE_ACCENT, // 96
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	eInputKeyboardKeysOther::kKEY_ESCAPE,
-	eInputKeyboardKeysEnter::kKEY_ENTER,
-	eInputKeyboardKeysOther::kKEY_TAB,
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, -1, -1, -1, eInputKeyboardKeysOther::kKEY_ESCAPE,
+	eInputKeyboardKeysEnter::kKEY_ENTER, eInputKeyboardKeysOther::kKEY_TAB,
 	eInputKeyboardKeysOther::kKEY_BACKSPACE,
-	eInputKeyboardKeysOther::kKEY_INSERT,
-	eInputKeyboardKeysOther::kKEY_DEL,
+	eInputKeyboardKeysOther::kKEY_INSERT, eInputKeyboardKeysOther::kKEY_DEL,
 	eInputKeyboardCursorControlKeys::kKEY_ARROW_RIGHT,
 	eInputKeyboardCursorControlKeys::kKEY_ARROW_LEFT,
 	eInputKeyboardCursorControlKeys::kKEY_ARROW_DOWN,
 	eInputKeyboardCursorControlKeys::kKEY_ARROW_UP,
 	eInputKeyboardKeysOther::kKEY_PAGEUP,
-	eInputKeyboardKeysOther::kKEY_PAGEDOWN,
-	eInputKeyboardKeysOther::kKEY_HOME,
-	eInputKeyboardKeysOther::kKEY_END,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-	-1,
-};
+	eInputKeyboardKeysOther::kKEY_PAGEDOWN, eInputKeyboardKeysOther::kKEY_HOME,
+	eInputKeyboardKeysOther::kKEY_END, // 269
+	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
+	eInputKeyboardKeys::kKEY_CAPS_LOCK, // 280
+	eInputKeyboardKeys::kKEY_SCROLL_LOCK,
+	eInputKeyboardKeysNumpad::kKEY_NUMPAD_NUMLOCK,
+	eInputKeyboardKeysOther::kKEY_PRTSC, eInputKeyboardKeysOther::kKEY_PAUSE,
+	-1, -1, -1, -1, -1, eInputKeyboardKeysFunctionKeys::kKEY_F1,
+	eInputKeyboardKeysFunctionKeys::kKEY_F2,
+	eInputKeyboardKeysFunctionKeys::kKEY_F3,
+	eInputKeyboardKeysFunctionKeys::kKEY_F4,
+	eInputKeyboardKeysFunctionKeys::kKEY_F5,
+	eInputKeyboardKeysFunctionKeys::kKEY_F6,
+	eInputKeyboardKeysFunctionKeys::kKEY_F7,
+	eInputKeyboardKeysFunctionKeys::kKEY_F8,
+	eInputKeyboardKeysFunctionKeys::kKEY_F9,
+	eInputKeyboardKeysFunctionKeys::kKEY_F10,
+	eInputKeyboardKeysFunctionKeys::kKEY_F11,
+	eInputKeyboardKeysFunctionKeys::kKEY_F12,
+	-1, // F13
+	-1, // F14
+	-1, // F15
+	-1, // F16
+	-1, // F17
+	-1, // F18
+	-1, // F19
+	-1, // F20
+	-1, // F21
+	-1, // F22
+	-1, // F23
+	-1, // F24
+	-1, // F25
+	-1, -1, -1, -1, -1,
+	-1, // KP_0
+	-1, // KP_1
+	-1, // KP_2
+	-1, // KP_3
+	-1, // KP_4
+	-1, // KP_5
+	-1, // KP_6
+	-1, // KP_7
+	-1, // KP_8
+	-1, // KP_9
+	-1, // KP_DECIMAL
+	-1, // KP_DIVIDE
+	-1, // KP_MULTIPLY
+	-1, // KP_SUBTRACT
+	-1, // KP_ADD
+	-1, // KP_ENTER
+	-1, // KP_EQUAL
+	-1, -1, -1, eInputKeyboardKeysOther::kKEY_LEFT_SHIFT,
+	eInputKeyboardKeysOther::kKEY_LEFT_CONTROL,
+	eInputKeyboardKeysApplication::kKEY_LEFT_ALT, -1,
+	eInputKeyboardKeysOther::kKEY_RIGHT_SHIFT,
+	eInputKeyboardKeysOther::kKEY_RIGHT_CONTROL,
+	eInputKeyboardKeysApplication::kKEY_RIGHT_ALT, -1,
+	eInputKeyboardKeysApplication::kKEY_MENU};
 
-int p_glfw3_mouse_key_to_input[] = {eInputMouseKeys::kKey_LeftButton, eInputMouseKeys::kKey_RightButton, eInputMouseKeys::kKey_MiddleButton, -1, -1, -1, -1, -1};
+int p_glfw3_mouse_key_to_input[] = {eInputMouseKeys::kKey_LeftButton,
+	eInputMouseKeys::kKey_RightButton, eInputMouseKeys::kKey_MiddleButton, -1,
+	-1, -1, -1, -1};
 
+eInputControllerKeyboardCategory p_glfw3_keyboard_key_to_category[] = {
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // 0
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // 31
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumbers,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState, // 96
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysEnter,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysCursorControlKeys,
+	eInputControllerKeyboardCategory::kKeyboardKeysCursorControlKeys,
+	eInputControllerKeyboardCategory::kKeyboardKeysCursorControlKeys,
+	eInputControllerKeyboardCategory::kKeyboardKeysCursorControlKeys,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState, // 269
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter, // 280
+	eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter,
+	eInputControllerKeyboardCategory::kKeyboardKeysNumpad,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState,
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F13
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F14
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F15
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F16
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F17
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F18
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F19
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F20
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F21
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F22
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F23
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F24
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // F25
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_0
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_1
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_2
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_3
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_4
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_5
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_6
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_7
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_8
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_9
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_DECIMAL
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_DIVIDE
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_MULTIPLY
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_SUBTRACT
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_ADD
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_ENTER
+	eInputControllerKeyboardCategory::kKeyboardUnknown, // KP_EQUAL
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysApplication,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysOtherState,
+	eInputControllerKeyboardCategory::kKeyboardKeysApplication,
+	eInputControllerKeyboardCategory::kKeyboardUnknown,
+	eInputControllerKeyboardCategory::kKeyboardKeysApplication};
 
 void ktkInput::Update(void* args)
 {
@@ -861,6 +855,255 @@ void ktkInput::Update(void* args)
 	{
 		ktkInputPlatformBackendArgs_GLFW3* p_args =
 			static_cast<ktkInputPlatformBackendArgs_GLFW3*>(args);
+
+		KOTEK_ASSERT(
+			p_args->controller != eInputControllerType::kControllerUnknown,
+			"you must initialize args where you call this method!");
+
+		this->Update_Controller(p_args, p_args->backend, p_args->controller);
+
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_SDL2:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_SDL3:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_WINAPI:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_X11:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_MACOS:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS1:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS2:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS3:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS4:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS5:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS6:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_XBOX:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_XBOX360:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_XBOXONE:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_XBOXSERIESS:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_XBOXSERIESX:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_NS:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	}
+}
+
+void ktkInput::Update_Controller(
+	void* p_args, eInputPlatformBackend backend, eInputControllerType controller_type)
+{
+	KOTEK_ASSERT(p_args, "must be valid args");
+	KOTEK_ASSERT(controller_type != eInputControllerType::kControllerUnknown,
+		"must be valid controller!");
+
+	switch (controller_type)
+	{
+	case eInputControllerType::kControllerKeyboard:
+	{
+		this->Update_Keyboard(p_args, backend);
+		break;
+	}
+	case eInputControllerType::kControllerMouse:
+	{
+		this->Update_Mouse(p_args, backend);
+		break;
+	}
+	case eInputControllerType::kControllerGamepad:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputControllerType::kControllerJoystick:
+	{
+		KOTEK_ASSERT(false, "not implemented!");
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "unhanled code register your type");
+		break;
+	}
+	}
+}
+
+void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
+{
+	switch (backend)
+	{
+	case eInputPlatformBackend::kPlatformBackend_GLFW3:
+	{
+		ktkInputPlatformBackendArgs_GLFW3* p_args =
+			static_cast<ktkInputPlatformBackendArgs_GLFW3*>(p_raw_args);
+
+		KOTEK_ASSERT(
+			p_args->controller != eInputControllerType::kControllerUnknown,
+			"you must initialize args where you call this method!");
+
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_SDL2:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_SDL3:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_WINAPI:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_X11:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_MACOS:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS1:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS2:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS3:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS4:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS5:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_PS6:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_XBOX:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_XBOX360:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_XBOXONE:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_XBOXSERIESS:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_XBOXSERIESX:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	case eInputPlatformBackend::kPlatformBackend_NS:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		break;
+	}
+	}
+}
+
+void ktkInput::Update_Mouse(void* p_raw_args, eInputPlatformBackend backend)
+{
+	switch (backend)
+	{
+	case eInputPlatformBackend::kPlatformBackend_GLFW3:
+	{
+		ktkInputPlatformBackendArgs_GLFW3* p_args =
+			static_cast<ktkInputPlatformBackendArgs_GLFW3*>(p_raw_args);
+
+		KOTEK_ASSERT(
+			p_args->controller != eInputControllerType::kControllerUnknown,
+			"you must initialize args where you call this method!");
 
 		break;
 	}

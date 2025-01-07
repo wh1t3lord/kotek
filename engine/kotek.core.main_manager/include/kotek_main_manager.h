@@ -42,7 +42,7 @@ public:
 	void Set_FileSystem(ktkIFileSystem* p_instance) noexcept;
 
 	void Set_Input(ktkIInput* p_instance) noexcept;
-	ktkIInput* GetInput(void) const noexcept;
+	ktkIInput* Get_Input(void) const noexcept;
 
 	ktkIGameManager* GetGameManager(void) const noexcept;
 	void SetGameManager(ktkIGameManager* p_game_manager) noexcept;
