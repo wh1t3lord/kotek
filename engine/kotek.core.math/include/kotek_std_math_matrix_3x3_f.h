@@ -177,42 +177,13 @@ public:
 		return *this;
 	}
 
+	// TODO: provide preprocessor for user implementation here like
+	// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 	matrix3x3f& operator/=(const matrix3x3f& data) noexcept
 	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat3(
-			reinterpret_cast<const DirectX::XMFLOAT3*>(&this->m_base._11));
-		DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat3(
-			reinterpret_cast<const DirectX::XMFLOAT3*>(&this->m_base._21));
-		DirectX::XMVECTOR row_original_2 = DirectX::XMLoadFloat3(
-			reinterpret_cast<const DirectX::XMFLOAT3*>(&this->m_base._31));
-
-		DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat3(
-			reinterpret_cast<const DirectX::XMFLOAT3*>(&data.m_base._11));
-		DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat3(
-			reinterpret_cast<const DirectX::XMFLOAT3*>(&data.m_base._21));
-		DirectX::XMVECTOR row_argument_2 = DirectX::XMLoadFloat3(
-			reinterpret_cast<const DirectX::XMFLOAT3*>(&data.m_base._31));
-
-		row_original_0 =
-			DirectX::XMVectorDivide(row_original_0, row_argument_0);
-		row_original_1 =
-			DirectX::XMVectorDivide(row_original_1, row_argument_1);
-		row_original_2 =
-			DirectX::XMVectorDivide(row_original_2, row_argument_2);
-
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._11),
-			row_original_0);
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._21),
-			row_original_1);
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base._31),
-			row_original_2);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base /= data.m_base;
-#endif
+		KOTEK_ASSERT(false,
+			"formally it is undefined function in mathematics, if it is needed "
+			"provide own version of a such operation");
 		return *this;
 	}
 
@@ -387,7 +358,7 @@ public:
 		return &this->m_base.m[0][0];
 	}
 
-	inline static constexpr unsigned char size_of(void) noexcept 
+	inline static constexpr unsigned char size_of(void) noexcept
 	{
 		static_assert(sizeof(float[3][3]) == sizeof(m_base) &&
 			"we gurantee that base type is equal to float[3][3] by size");
@@ -584,46 +555,15 @@ inline matrix3x3f operator/(const matrix3x3f& left, float value) noexcept
 #endif
 }
 
+// TODO: provide preprocessor for user implementation here like
+// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 inline matrix3x3f operator/(
 	const matrix3x3f& left, const matrix3x3f& right) noexcept
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT3 left_row_0(left[0].data());
-	DirectX::XMFLOAT3 left_row_1(left[1].data());
-	DirectX::XMFLOAT3 left_row_2(left[2].data());
-
-	DirectX::XMFLOAT3 right_row_0(right[0].data());
-	DirectX::XMFLOAT3 right_row_1(right[1].data());
-	DirectX::XMFLOAT3 right_row_2(right[2].data());
-
-	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat3(&left_row_0);
-	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat3(&left_row_1);
-	DirectX::XMVECTOR row_original_2 = DirectX::XMLoadFloat3(&left_row_2);
-
-	DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat3(&right_row_0);
-	DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat3(&right_row_1);
-	DirectX::XMVECTOR row_argument_2 = DirectX::XMLoadFloat3(&right_row_2);
-
-	row_original_0 = DirectX::XMVectorDivide(row_original_0, row_argument_0);
-	row_original_1 = DirectX::XMVectorDivide(row_original_1, row_argument_1);
-	row_original_2 = DirectX::XMVectorDivide(row_original_2, row_argument_2);
-
-	matrix3x3f result;
-
-	DirectX::XMStoreFloat3(
-		reinterpret_cast<DirectX::XMFLOAT3*>(&result.Get_Base()._11),
-		row_original_0);
-	DirectX::XMStoreFloat3(
-		reinterpret_cast<DirectX::XMFLOAT3*>(&result.Get_Base()._21),
-		row_original_1);
-	DirectX::XMStoreFloat3(
-		reinterpret_cast<DirectX::XMFLOAT3*>(&result.Get_Base()._31),
-		row_original_2);
-
-	return result;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-	return (left.Get_Base() / right.Get_Base());
-#endif
+	KOTEK_ASSERT(false,
+		"formally it is undefined function in mathematics, if it is needed "
+		"provide own version of a such operation");
+	return matrix3x3f();
 }
 
 KOTEK_END_NAMESPACE_MATH

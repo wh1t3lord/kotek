@@ -163,33 +163,13 @@ public:
 		return *this;
 	}
 
+	// TODO: provide preprocessor for user implementation here like
+	// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 	matrix2x2f& operator/=(const matrix2x2f& data) noexcept
 	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._11));
-		DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._21));
-
-		DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._11));
-		DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._21));
-
-		row_original_0 =
-			DirectX::XMVectorDivide(row_original_0, row_argument_0);
-		row_original_1 =
-			DirectX::XMVectorDivide(row_original_1, row_argument_1);
-
-		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&this->m_base._11),
-			row_original_0);
-		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&this->m_base._21),
-			row_original_1);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base /= data.m_base;
-#endif
+		KOTEK_ASSERT(false,
+			"formally it is undefined function in mathematics, if it is needed "
+			"provide own version of a such operation");
 		return *this;
 	}
 
@@ -591,38 +571,15 @@ inline matrix2x2f operator/(const matrix2x2f& left, float value) noexcept
 #endif
 }
 
+// TODO: provide preprocessor for user implementation here like
+// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 inline matrix2x2f operator/(
 	const matrix2x2f& left, const matrix2x2f& right) noexcept
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT2 left_row_0 = {left.Get_00(), left.Get_01()};
-	DirectX::XMFLOAT2 left_row_1 = {left.Get_10(), left.Get_11()};
-
-	DirectX::XMFLOAT2 right_row_0 = {right.Get_00(), right.Get_01()};
-	DirectX::XMFLOAT2 right_row_1 = {right.Get_10(), right.Get_11()};
-
-	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(&left_row_0);
-	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(&left_row_1);
-
-	DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat2(&right_row_0);
-	DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat2(&right_row_1);
-
-	row_original_0 = DirectX::XMVectorDivide(row_original_0, row_argument_0);
-	row_original_1 = DirectX::XMVectorDivide(row_original_1, row_argument_1);
-
-	matrix2x2f result;
-
-	DirectX::XMStoreFloat2(
-		reinterpret_cast<DirectX::XMFLOAT2*>(&result.Get_Base()._11),
-		row_original_0);
-	DirectX::XMStoreFloat2(
-		reinterpret_cast<DirectX::XMFLOAT2*>(&result.Get_Base()._21),
-		row_original_1);
-
-	return result;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-	return (left.Get_Base() / right.Get_Base());
-#endif
+	KOTEK_ASSERT(false,
+		"formally it is undefined function in mathematics, if it is needed "
+		"provide own version of a such operation");
+	return matrix2x2f();
 }
 
 KOTEK_END_NAMESPACE_MATH

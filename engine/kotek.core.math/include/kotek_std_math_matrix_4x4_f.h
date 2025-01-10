@@ -188,51 +188,13 @@ public:
 		return *this;
 	}
 
+	// TODO: provide preprocessor for user implementation here like
+	// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 	matrix4x4f& operator/=(const matrix4x4f& data) noexcept
 	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat4(
-			reinterpret_cast<const DirectX::XMFLOAT4*>(&this->m_base.m[0][0]));
-		DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat4(
-			reinterpret_cast<const DirectX::XMFLOAT4*>(&this->m_base.m[1][0]));
-		DirectX::XMVECTOR row_original_2 = DirectX::XMLoadFloat4(
-			reinterpret_cast<const DirectX::XMFLOAT4*>(&this->m_base.m[2][0]));
-		DirectX::XMVECTOR row_original_3 = DirectX::XMLoadFloat4(
-			reinterpret_cast<const DirectX::XMFLOAT4*>(&this->m_base.m[3][0]));
-
-		DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat4(
-			reinterpret_cast<const DirectX::XMFLOAT4*>(&data.m_base.m[0][0]));
-		DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat4(
-			reinterpret_cast<const DirectX::XMFLOAT4*>(&data.m_base.m[1][0]));
-		DirectX::XMVECTOR row_argument_2 = DirectX::XMLoadFloat4(
-			reinterpret_cast<const DirectX::XMFLOAT4*>(&data.m_base.m[2][0]));
-		DirectX::XMVECTOR row_argument_3 = DirectX::XMLoadFloat4(
-			reinterpret_cast<const DirectX::XMFLOAT4*>(&data.m_base.m[3][0]));
-
-		row_original_0 =
-			DirectX::XMVectorDivide(row_original_0, row_argument_0);
-		row_original_1 =
-			DirectX::XMVectorDivide(row_original_1, row_argument_1);
-		row_original_2 =
-			DirectX::XMVectorDivide(row_original_2, row_argument_2);
-		row_original_3 =
-			DirectX::XMVectorDivide(row_original_3, row_argument_3);
-
-		DirectX::XMStoreFloat4(
-			reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[0][0]),
-			row_original_0);
-		DirectX::XMStoreFloat4(
-			reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[1][0]),
-			row_original_1);
-		DirectX::XMStoreFloat4(
-			reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[2][0]),
-			row_original_2);
-		DirectX::XMStoreFloat4(
-			reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[3][0]),
-			row_original_3);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base /= data.m_base;
-#endif
+		KOTEK_ASSERT(false,
+			"formally it is undefined function in mathematics, if it is needed "
+			"provide own version of a such operation");
 		return *this;
 	}
 
@@ -463,7 +425,7 @@ public:
 		return &this->m_base.m[0][0];
 	}
 
-	inline static constexpr unsigned char size_of(void) noexcept 
+	inline static constexpr unsigned char size_of(void) noexcept
 	{
 		static_assert(sizeof(float[4][4]) == sizeof(m_base) &&
 			"we gurantee that base type is equal to float[4][4] by size");
@@ -688,54 +650,15 @@ inline matrix4x4f operator/(const matrix4x4f& left, float value) noexcept
 #endif
 }
 
+// TODO: provide preprocessor for user implementation here like
+// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 inline matrix4x4f operator/(
 	const matrix4x4f& left, const matrix4x4f& right) noexcept
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT4 left_row_0(left[0].data());
-	DirectX::XMFLOAT4 left_row_1(left[1].data());
-	DirectX::XMFLOAT4 left_row_2(left[2].data());
-	DirectX::XMFLOAT4 left_row_3(left[3].data());
-
-	DirectX::XMFLOAT4 right_row_0(right[0].data());
-	DirectX::XMFLOAT4 right_row_1(right[1].data());
-	DirectX::XMFLOAT4 right_row_2(right[2].data());
-	DirectX::XMFLOAT4 right_row_3(right[3].data());
-
-	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat4(&left_row_0);
-	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat4(&left_row_1);
-	DirectX::XMVECTOR row_original_2 = DirectX::XMLoadFloat4(&left_row_2);
-	DirectX::XMVECTOR row_original_3 = DirectX::XMLoadFloat4(&left_row_3);
-
-	DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat4(&right_row_0);
-	DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat4(&right_row_1);
-	DirectX::XMVECTOR row_argument_2 = DirectX::XMLoadFloat4(&right_row_2);
-	DirectX::XMVECTOR row_argument_3 = DirectX::XMLoadFloat4(&right_row_3);
-
-	row_original_0 = DirectX::XMVectorDivide(row_original_0, row_argument_0);
-	row_original_1 = DirectX::XMVectorDivide(row_original_1, row_argument_1);
-	row_original_2 = DirectX::XMVectorDivide(row_original_2, row_argument_2);
-	row_original_3 = DirectX::XMVectorDivide(row_original_3, row_argument_3);
-
-	matrix4x4f result;
-
-	DirectX::XMStoreFloat4(
-		reinterpret_cast<DirectX::XMFLOAT4*>(&result.Get_Base().m[0][0]),
-		row_original_0);
-	DirectX::XMStoreFloat4(
-		reinterpret_cast<DirectX::XMFLOAT4*>(&result.Get_Base().m[1][0]),
-		row_original_1);
-	DirectX::XMStoreFloat4(
-		reinterpret_cast<DirectX::XMFLOAT4*>(&result.Get_Base().m[2][0]),
-		row_original_2);
-	DirectX::XMStoreFloat4(
-		reinterpret_cast<DirectX::XMFLOAT4*>(&result.Get_Base().m[3][0]),
-		row_original_3);
-
-	return result;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-	return (left.Get_Base() / right.Get_Base());
-#endif
+	KOTEK_ASSERT(false,
+		"formally it is undefined function in mathematics, if it is needed "
+	    "provide own version of a such operation");
+	return matrix4x4f();
 }
 
 KOTEK_END_NAMESPACE_MATH
