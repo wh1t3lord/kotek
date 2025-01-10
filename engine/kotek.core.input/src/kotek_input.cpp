@@ -283,6 +283,46 @@ bool ktkInput::Is_KeyPressed(
 	}
 }
 
+bool ktkInput::Is_KeyPressed(
+	eInputControllerType controller_type, eInputAllKeys key)
+{
+	return false;
+}
+
+bool ktkInput::Is_KeyHolding(eInputControllerType controller_type, int keys)
+{
+	return false;
+}
+
+bool ktkInput::Is_KeyHolding(
+	eInputControllerType controller_type, unsigned char category, int keys)
+{
+	return false;
+}
+
+bool ktkInput::Is_KeyHolding(
+	eInputControllerType controller_type, eInputAllKeys key)
+{
+	return false;
+}
+
+bool ktkInput::Is_KeyReleased(eInputControllerType controller_type, int keys)
+{
+	return false;
+}
+
+bool ktkInput::Is_KeyReleased(
+	eInputControllerType controller_type, unsigned char category, int keys)
+{
+	return false;
+}
+
+bool ktkInput::Is_KeyReleased(
+	eInputControllerType controller_type, eInputAllKeys key)
+{
+	return false;
+}
+
 const char* ktkInput::Get_TextInformationAboutController(
 	eInputControllerType controller_type)
 {
@@ -488,8 +528,8 @@ int p_glfw3_keyboard_keys_to_input[] = {-1, // 0
 	eInputKeyboardKeysApplication::kKEY_RIGHT_ALT, -1,
 	eInputKeyboardKeysApplication::kKEY_MENU};
 
-int p_glfw3_mouse_key_to_input[] = {eInputMouseKeys::kKey_LeftButton,
-	eInputMouseKeys::kKey_RightButton, eInputMouseKeys::kKey_MiddleButton, -1,
+int p_glfw3_mouse_key_to_input[] = {eInputMouseKeys::kKEY_LeftButton,
+	eInputMouseKeys::kKEY_RightButton, eInputMouseKeys::kKEY_MiddleButton, -1,
 	-1, -1, -1, -1};
 
 eInputControllerKeyboardCategory p_glfw3_keyboard_key_to_category[] = {

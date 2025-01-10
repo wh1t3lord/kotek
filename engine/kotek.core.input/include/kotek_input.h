@@ -50,6 +50,26 @@ public:
 	bool Is_KeyPressed(eInputControllerType controller_type,
 		unsigned char category, int keys) override;
 
+	bool Is_KeyPressed(
+		eInputControllerType controller_type, eInputAllKeys key) override;
+
+	bool Is_KeyHolding(eInputControllerType controller_type, int keys) override;
+
+	bool Is_KeyHolding(eInputControllerType controller_type,
+		unsigned char category, int keys) override;
+
+	bool Is_KeyHolding(
+		eInputControllerType controller_type, eInputAllKeys key) override;
+
+	bool Is_KeyReleased(
+		eInputControllerType controller_type, int keys) override;
+
+	bool Is_KeyReleased(eInputControllerType controller_type,
+		unsigned char category, int keys) override;
+
+	bool Is_KeyReleased(
+		eInputControllerType controller_type, eInputAllKeys key) override;
+
 	const char* Get_TextInformationAboutController(
 		eInputControllerType controller_type) override;
 
@@ -71,7 +91,8 @@ public:
 	void Update(void* p_args) override;
 
 private:
-	void Update_Controller(void* p_args, eInputPlatformBackend backend, eInputControllerType controller_type);
+	void Update_Controller(void* p_args, eInputPlatformBackend backend,
+		eInputControllerType controller_type);
 	void Update_Keyboard(void* p_args, eInputPlatformBackend backend);
 	void Update_Mouse(void* p_args, eInputPlatformBackend backend);
 

@@ -888,11 +888,11 @@ namespace helper
 	{
 		switch (type)
 		{
-		case eInputMouseKeys::kKey_LeftButton:
+		case eInputMouseKeys::kKEY_LeftButton:
 			return "KEY_LEFT";
-		case eInputMouseKeys::kKey_RightButton:
+		case eInputMouseKeys::kKEY_RightButton:
 			return "KEY_RIGHT";
-		case eInputMouseKeys::kKey_MiddleButton:
+		case eInputMouseKeys::kKEY_MiddleButton:
 			return "KEY_MIDDLE";
 		default:
 			return "UNDEFINED_ENUM_OF_INPUT_MOUSE_KEYS";
