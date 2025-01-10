@@ -226,6 +226,9 @@ public:
 	virtual void Shutdown(void) = 0;
 	virtual void Resize(void) = 0;
 	virtual const char* Get_Name(void) const noexcept = 0;
+
+	virtual const kun_kotek kun_ktk vector<ktkISDKUIElement*>&
+	Get_UIImGuiElements(void) const = 0;
 };
 
 class ktkIFileSystem
