@@ -32,6 +32,7 @@ enum eInputKeyboardKeysSystem;
 enum eInputKeyboardCursorControlKeys;
 enum eInputMouseKeys;
 enum eInputPlatformBackend;
+enum eInputAllKeys;
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK
@@ -82,6 +83,7 @@ namespace helper
 		eInputKeyboardCursorControlKeys type);
 	const char* Translate_InputMouseKeys(eInputMouseKeys type);
 	const char* Translate_InputPlatformBackend(eInputPlatformBackend type);
+	const char* Translate_InputAllKeys(eInputAllKeys type);
 	
 	/// @brief accepts the form like 'major_version.minor_version', for example
 	/// it parses strings like '1.3', the string is not acceptable like this

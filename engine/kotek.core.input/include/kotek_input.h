@@ -75,6 +75,9 @@ public:
 
 	void Update(void* p_args) override;
 
+	bool WriteKeyAsStringToBuffer_IfPressed(eInputControllerType controller, char* p_buffer,
+		kun_ktk size_t length_of_buffer) override;
+
 private:
 	void Update_Controller(void* p_args, eInputPlatformBackend backend,
 		eInputControllerType controller_type);
@@ -87,6 +90,8 @@ private:
 	/// @param field from eInputAllKeys enum
 	/// @return -1 means no category for controller; -2 means error;
 	int Convert_AllKeysToCategory(eInputAllKeys field);
+
+	void Determine_Platform(void);
 
 private:
 	unsigned char m_controller_mouse_key_pressed;

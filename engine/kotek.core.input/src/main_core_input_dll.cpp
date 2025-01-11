@@ -15,6 +15,7 @@ bool InitializeModule_Core_Input(ktkMainManager* p_manager)
 	}
 
 	p_manager->Set_Input(new ktkInput());
+	p_manager->Get_Input()->Initialize();
 
 	return true;
 }
@@ -35,6 +36,8 @@ bool ShutdownModule_Core_Input(ktkMainManager* p_manager)
 	KOTEK_ASSERT(p_instance,
 		"you must get a valid pointer of ktkInput. Otherwise you got a "
 		"different type at all!!");
+	
+	p_instance->Shutdown();
 
 	delete p_instance;
 
