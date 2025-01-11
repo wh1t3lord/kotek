@@ -285,33 +285,6 @@ public:
 	virtual float Get_ControllerData(eInputControllerType controller_type,
 		unsigned char data_field_index) = 0;
 
-	/// @brief this is used for controllers (mouse, joystick, gamepads...) where
-	/// category is not defined or buttons lower than 30
-	/// @param controller_type you can use any field, but for keyboard it will
-	/// check only if you passed category where buttons are type writing letters
-	/// A-Z
-	/// @param keys constructed result from enum (if you mix enum from different
-	/// key category for keyboard the result is undefined behaviour)
-	/// @return if key(s) was pressed means true otherwise false. Pressed means
-	/// that it checks only first frame when this method was requested in code
-	/// after that checking they key can be checked for release or holding
-	/// states.
-	virtual bool Is_KeyPressed(
-		eInputControllerType controller_type, int keys) = 0;
-
-	/// @brief detailed version of Is_KeyPressed with int argument means you can
-	/// pass a category and specify needed buttons of huge controller that has
-	/// more than 30 buttons
-	/// @param controller_type controller that has defined categories
-	/// @param category specified category
-	/// @param keys flags aka united keys e.g. kKEY_A | kKEY_B | kKEY_C
-	/// @return if key(s) was pressed means true otherwise false. Pressed means
-	/// that it checks only first frame when this method was requested in code
-	/// after that checking they key can be checked for release or holding
-	/// states.
-	virtual bool Is_KeyPressed(eInputControllerType controller_type,
-		unsigned char category, int keys) = 0;
-
 	/// @brief simplified version (but you can't unite that buttons as you do
 	/// with enum flags with | bitshift operator) of Is_KeyPressed where you can
 	/// use any key but only one per calling from eInputAllKeys enum
@@ -326,20 +299,9 @@ public:
 	virtual bool Is_KeyPressed(
 		eInputControllerType controller_type, eInputAllKeys key) = 0;
 
-	virtual bool Is_KeyHolding(
-		eInputControllerType controller_type, int keys) = 0;
-
+	// TODO: add preprocessor for frames count as default arg
 	virtual bool Is_KeyHolding(eInputControllerType controller_type,
-		unsigned char category, int keys) = 0;
-
-	virtual bool Is_KeyHolding(
-		eInputControllerType controller_type, eInputAllKeys key) = 0;
-
-	virtual bool Is_KeyReleased(
-		eInputControllerType controller_type, int keys) = 0;
-
-	virtual bool Is_KeyReleased(eInputControllerType controller_type,
-		unsigned char category, int keys) = 0;
+		eInputAllKeys key, unsigned char frames = 16) = 0;
 
 	virtual bool Is_KeyReleased(
 		eInputControllerType controller_type, eInputAllKeys key) = 0;

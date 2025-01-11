@@ -46,26 +46,11 @@ public:
 	float Get_ControllerData(eInputControllerType controller_type,
 		unsigned char data_field_index) override;
 
-	bool Is_KeyPressed(eInputControllerType controller_type, int keys) override;
-	bool Is_KeyPressed(eInputControllerType controller_type,
-		unsigned char category, int keys) override;
-
 	bool Is_KeyPressed(
 		eInputControllerType controller_type, eInputAllKeys key) override;
 
-	bool Is_KeyHolding(eInputControllerType controller_type, int keys) override;
-
-	bool Is_KeyHolding(eInputControllerType controller_type,
-		unsigned char category, int keys) override;
-
 	bool Is_KeyHolding(
-		eInputControllerType controller_type, eInputAllKeys key) override;
-
-	bool Is_KeyReleased(
-		eInputControllerType controller_type, int keys) override;
-
-	bool Is_KeyReleased(eInputControllerType controller_type,
-		unsigned char category, int keys) override;
+		eInputControllerType controller_type, eInputAllKeys key, unsigned char frames=16) override;
 
 	bool Is_KeyReleased(
 		eInputControllerType controller_type, eInputAllKeys key) override;
@@ -96,23 +81,46 @@ private:
 	void Update_Keyboard(void* p_args, eInputPlatformBackend backend);
 	void Update_Mouse(void* p_args, eInputPlatformBackend backend);
 
-private:
-	unsigned char m_controller_mouse_key_states;
+	int Convert_AllKeysToFlags(eInputAllKeys field);
 
-	unsigned char m_controller_keyboard_key_cursor_control_states;
-	unsigned char m_controller_keyboard_key_system_states;
-	unsigned char m_controller_keyboard_key_application_states;
-	unsigned char m_controller_keyboard_key_enter_states;
-	int m_controller_keyboard_key_numpad_states;
-	int m_controller_keyboard_key_other_states;
-	int m_controller_keyboard_key_function_states;
-	int m_controller_keyboard_key_numbers_states;
-	int m_controller_keyboard_key_typewriter;
+	/// @brief returns -1 means no category for controller, -2 means error
+	/// @param field from eInputAllKeys enum
+	/// @return -1 means no category for controller; -2 means error;
+	int Convert_AllKeysToCategory(eInputAllKeys field);
+
+private:
+	unsigned char m_controller_mouse_key_pressed;
+	unsigned char m_controller_mouse_key_released;
+
+	// keyboard //
+	unsigned char m_controller_keyboard_key_cursor_control_pressed;
+	unsigned char m_controller_keyboard_key_cursor_control_released;
+
+	unsigned char m_controller_keyboard_key_system_pressed;
+	unsigned char m_controller_keyboard_key_system_released;
+
+	unsigned char m_controller_keyboard_key_application_pressed;
+	unsigned char m_controller_keyboard_key_application_released;
+
+	unsigned char m_controller_keyboard_key_enter_pressed;
+	unsigned char m_controller_keyboard_key_enter_released;
+
+	int m_controller_keyboard_key_numpad_pressed;
+	int m_controller_keyboard_key_numpad_released;
+	int m_controller_keyboard_key_other_pressed;
+	int m_controller_keyboard_key_other_released;
+	int m_controller_keyboard_key_function_pressed;
+	int m_controller_keyboard_key_function_released;
+	int m_controller_keyboard_key_numbers_pressed;
+	int m_controller_keyboard_key_numbers_released;
+	int m_controller_keyboard_key_typewriter_pressed;
+	int m_controller_keyboard_key_typewriter_released;
 
 	eInputPlatformBackend m_current_platform;
 
 	float m_controller_mouse_data
 		[eInputControllerMouseData::kControllerMouseDataTotalAmountOfEnum];
+	unsigned char m_controller_key_ticks[eInputAllKeys::kCA_KEY_END_ENUM];
 };
 
 KOTEK_END_NAMESPACE_CORE

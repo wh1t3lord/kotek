@@ -26,12 +26,14 @@ TEST(Input, CheckDevices)
 	input.Shutdown();
 }
 
-TEST(Input, SingleShotUpdate) 
+TEST(Input, SingleShotUpdate_GLFW3) 
 {
 	ktkInput input;
 	input.Initialize();
 	ktkInputPlatformBackendArgs_GLFW3 args;
 	args.controller = eInputControllerType::kControllerKeyboard;
+	args.action = 0;
+	args.key = 0;
 	input.Update(&args);
 
 	input.Shutdown();

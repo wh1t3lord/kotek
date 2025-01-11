@@ -790,7 +790,7 @@ enum eInputMouseKeys
 /// ControllerGamepad; CJ = ControllerJoystick; CA = ControllerAny;
 enum eInputAllKeys
 {
-	kCK_KEY_A = 1,
+	kCK_KEY_A,
 	kCK_KEY_B,
 	kCK_KEY_C,
 	kCK_KEY_D,
@@ -862,7 +862,7 @@ enum eInputAllKeys
 	kCK_KEY_PERIOD,
 	kCK_KEY_SLASH,
 	kCK_KEY_BACKSLASH,
-	KCK_KEY_SEMICOLON,
+	kCK_KEY_SEMICOLON,
 	kCK_KEY_EQUAL,
 	kCK_KEY_LEFT_BRACKET,
 	kCK_KEY_RIGHT_BRACKET,
@@ -898,7 +898,11 @@ enum eInputAllKeys
 	kCK_KEY_ARROW_UP,
 	kCK_KEY_ARROW_RIGHT,
 	kCK_KEY_ARROW_DOWN,
-	kCA_KEY_UNKNOWN = 0 // kCA = kControllerAny
+	kCM_KEY_LEFT,
+	kCM_KEY_RIGHT,
+	kCM_KEY_MIDDLE,
+	kCA_KEY_END_ENUM,
+	kCA_KEY_UNKNOWN = -1 // kCA = kControllerAny
 };
 
 enum eInputKeyboardKeys

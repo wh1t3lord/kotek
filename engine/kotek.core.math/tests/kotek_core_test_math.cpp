@@ -1822,6 +1822,7 @@ TEST(Math, matrix4x4f_assignment_multiply_operator_base_decimal)
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(16.0f * value, test[3][3]));
 }
 
+/* divide operator for matrix is undefined by default (cause it is mathematics lol)
 TEST(Math, matrix4x4f_assignment_divide_operator)
 {
 	kn_kotek::kn_ktk::kn_math::matrix4x4f copy(17.0f, 18.0f, 19.0f, 20.0f,
@@ -1848,6 +1849,7 @@ TEST(Math, matrix4x4f_assignment_divide_operator)
 		}
 	}
 }
+*/
 
 TEST(Math, matrix4x4f_assignment_divide_operator_decimal)
 {
