@@ -100,7 +100,11 @@ private:
 
 	void Determine_Platform(void);
 
+	void Update_ReleasedKeys(void);
+
 private:
+	bool m_need_to_updated_released_keys;
+
 	unsigned char m_controller_mouse_key_pressed;
 	unsigned char m_controller_mouse_key_released;
 

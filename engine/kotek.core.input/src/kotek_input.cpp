@@ -10,7 +10,8 @@ KOTEK_BEGIN_NAMESPACE_CORE
 constexpr unsigned char _kTickCantBeHigher = 3;
 
 ktkInput::ktkInput(void) :
-	m_controller_mouse_key_pressed{}, m_controller_mouse_key_released{},
+	m_need_to_updated_released_keys{}, m_controller_mouse_key_pressed{},
+	m_controller_mouse_key_released{},
 	m_controller_keyboard_key_cursor_control_pressed{},
 	m_controller_keyboard_key_cursor_control_released{},
 	m_controller_keyboard_key_system_pressed{},
@@ -488,6 +489,170 @@ bool ktkInput::Is_KeyHolding(eInputControllerType controller_type,
 bool ktkInput::Is_KeyReleased(
 	eInputControllerType controller_type, eInputAllKeys key)
 {
+	KOTEK_ASSERT(this->m_current_platform !=
+			eInputPlatformBackend::kPlatformBackend_Unknown,
+		"you forgot to call ::Initialize method!");
+
+	if (this->m_current_platform ==
+		eInputPlatformBackend::kPlatformBackend_Unknown)
+		return false;
+
+	unsigned char ticks = this->m_controller_key_ticks[key];
+
+	static_assert(
+		std::is_same<std::remove_const<decltype(_kTickCantBeHigher)>::type,
+			std::remove_reference<
+				decltype(this->m_controller_key_ticks[0])>::type>::value,
+		"you change types, fix please!");
+
+	switch (controller_type)
+	{
+	case eInputControllerType::kControllerKeyboard:
+	{
+		int category = this->Convert_AllKeysToCategory(key);
+		int flag = this->Convert_AllKeysToFlags(key);
+
+		KOTEK_ASSERT(category > -1,
+			"something is wrong, keyboard has > 30 buttons as controller");
+
+		switch (static_cast<eInputControllerKeyboardCategory>(category))
+		{
+		case eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_typewriter_released, flag);
+
+			if (!this->m_need_to_updated_released_keys)
+				this->m_need_to_updated_released_keys = status;
+
+			return status;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_function_released, flag);
+
+			if (!this->m_need_to_updated_released_keys)
+				this->m_need_to_updated_released_keys = status;
+
+			return status;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysOtherState:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_other_released, flag);
+
+			if (!this->m_need_to_updated_released_keys)
+				this->m_need_to_updated_released_keys = status;
+
+			return status;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysNumbers:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_numbers_released, flag);
+
+			if (!this->m_need_to_updated_released_keys)
+				this->m_need_to_updated_released_keys = status;
+
+			return status;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysApplication:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_application_released, flag);
+
+			if (!this->m_need_to_updated_released_keys)
+				this->m_need_to_updated_released_keys = status;
+
+			return status;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysSystem:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_system_released, flag);
+
+			if (!this->m_need_to_updated_released_keys)
+				this->m_need_to_updated_released_keys = status;
+
+			return status;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysEnter:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_enter_released, flag);
+
+			if (!this->m_need_to_updated_released_keys)
+				this->m_need_to_updated_released_keys = status;
+
+			return status;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysNumpad:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_numpad_released, flag);
+
+			if (!this->m_need_to_updated_released_keys)
+				this->m_need_to_updated_released_keys = status;
+
+			return status;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysCursorControlKeys:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_cursor_control_released, flag);
+
+			if (!this->m_need_to_updated_released_keys)
+				this->m_need_to_updated_released_keys = status;
+
+			return status;
+		}
+		default:
+		{
+			KOTEK_ASSERT(false, "you forgot to register a new situation!");
+			return false;
+		}
+		}
+	}
+	case eInputControllerType::kControllerMouse:
+	{
+#ifdef KOTEK_DEBUG
+		int category = this->Convert_AllKeysToCategory(key);
+		KOTEK_ASSERT(
+			category == -1, "no category for this controller must be!");
+		KOTEK_ASSERT(this->Convert_AllKeysToFlags(key) <=
+				std::numeric_limits<
+					decltype(this->m_controller_mouse_key_pressed)>::max(),
+			"overflow, something is wrong, maybe make your type larger?");
+#endif
+
+		unsigned char flag = this->Convert_AllKeysToFlags(key);
+
+		bool status =
+			KOTEK_CHECK_FLAG(this->m_controller_mouse_key_released, flag);
+
+		if (!this->m_need_to_updated_released_keys)
+			this->m_need_to_updated_released_keys = status;
+
+		return status;
+	}
+	case eInputControllerType::kControllerGamepad:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		return false;
+	}
+	case eInputControllerType::kControllerJoystick:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		return false;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "unhandled enum, you forgot to register");
+		return false;
+	}
+	}
+
 	return false;
 }
 
@@ -600,6 +765,8 @@ void ktkInput::Update(void)
 				this->m_controller_key_ticks[i] += 1;
 		}
 	}
+
+	this->Update_ReleasedKeys();
 }
 
 /*
@@ -3100,6 +3267,64 @@ void ktkInput::Determine_Platform(void)
 #elif defined(KOTEK_USE_PLATFORM_MACOS)
 	#error not implemented
 #endif
+}
+
+void ktkInput::Update_ReleasedKeys(void)
+{
+	if (!this->m_need_to_updated_released_keys)
+		return;
+
+	if (this->m_controller_keyboard_key_application_released)
+	{
+		this->m_controller_keyboard_key_application_released = 0;
+	}
+
+	if (this->m_controller_keyboard_key_cursor_control_released)
+	{
+		this->m_controller_keyboard_key_cursor_control_released = 0;
+	}
+
+	if (this->m_controller_keyboard_key_enter_released)
+	{
+		this->m_controller_keyboard_key_enter_released = 0;
+	}
+
+	if (this->m_controller_keyboard_key_function_released)
+	{
+		this->m_controller_keyboard_key_function_released = 0;
+	}
+
+	if (this->m_controller_keyboard_key_numbers_released)
+	{
+		this->m_controller_keyboard_key_numbers_released = 0;
+	}
+
+	if (this->m_controller_keyboard_key_numpad_released)
+	{
+		this->m_controller_keyboard_key_numpad_released = 0;
+	}
+
+	if (this->m_controller_keyboard_key_other_released)
+	{
+		this->m_controller_keyboard_key_other_released = 0;
+	}
+
+	if (this->m_controller_keyboard_key_system_released)
+	{
+		this->m_controller_keyboard_key_system_released = 0;
+	}
+
+	if (this->m_controller_keyboard_key_typewriter_released)
+	{
+		this->m_controller_keyboard_key_typewriter_released = 0;
+	}
+
+	if (this->m_controller_mouse_key_released)
+	{
+		this->m_controller_mouse_key_released = 0;
+	}
+
+	this->m_need_to_updated_released_keys = false;
 }
 
 KOTEK_END_NAMESPACE_CORE
