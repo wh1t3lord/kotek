@@ -78,6 +78,9 @@ public:
 	bool WriteKeyAsStringToBuffer_IfPressed(eInputControllerType controller, char* p_buffer,
 		kun_ktk size_t length_of_buffer) override;
 
+	bool WriteKeyAsStringToBuffer_IfHolding(eInputControllerType controller,
+		char* p_buffer, kun_ktk size_t length_of_buffer) override;
+
 private:
 	void Update_Controller(void* p_args, eInputPlatformBackend backend,
 		eInputControllerType controller_type);

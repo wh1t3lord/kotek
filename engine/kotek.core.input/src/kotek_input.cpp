@@ -155,144 +155,6 @@ float ktkInput::Get_ControllerData(
 	}
 }
 
-/*
-bool ktkInput::Is_KeyPressed(eInputControllerType controller_type, int keys)
-{
-    KOTEK_ASSERT(this->m_current_platform !=
-            eInputPlatformBackend::kPlatformBackend_Unknown,
-        "you forgot to call ::Initialize method!");
-
-    if (this->m_current_platform ==
-        eInputPlatformBackend::kPlatformBackend_Unknown)
-        return false;
-
-    switch (controller_type)
-    {
-    case eInputControllerType::kControllerKeyboard:
-    {
-        return this->m_controller_keyboard_key_typewriter_pressed & keys;
-    }
-    case eInputControllerType::kControllerMouse:
-    {
-        return (this->m_controller_mouse_key_pressed & keys);
-    }
-    case eInputControllerType::kControllerGamepad:
-    {
-        KOTEK_ASSERT(false, "not implemented");
-        return false;
-    }
-    case eInputControllerType::kControllerJoystick:
-    {
-        KOTEK_ASSERT(false, "not implemented");
-        return false;
-    }
-    default:
-    {
-        KOTEK_ASSERT(false, "unhandled enum, you forgot to register");
-        return false;
-    }
-    }
-}
-
-bool ktkInput::Is_KeyPressed(
-    eInputControllerType controller_type, unsigned char category, int keys)
-{
-    KOTEK_ASSERT(this->m_current_platform !=
-            eInputPlatformBackend::kPlatformBackend_Unknown,
-        "you forgot to call ::Initialize method!");
-
-    if (this->m_current_platform ==
-        eInputPlatformBackend::kPlatformBackend_Unknown)
-        return false;
-
-    switch (controller_type)
-    {
-    case eInputControllerType::kControllerKeyboard:
-    {
-        eInputControllerKeyboardCategory casted_category =
-            static_cast<eInputControllerKeyboardCategory>(category);
-
-        switch (casted_category)
-        {
-        case eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter:
-        {
-            return (this->m_controller_keyboard_key_typewriter_pressed & keys);
-        }
-        case eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState:
-        {
-            return (this->m_controller_keyboard_key_function_pressed & keys);
-        }
-        case eInputControllerKeyboardCategory::kKeyboardKeysOtherState:
-        {
-            return (this->m_controller_keyboard_key_other_pressed & keys);
-        }
-        case eInputControllerKeyboardCategory::kKeyboardKeysNumbers:
-        {
-            return (this->m_controller_keyboard_key_numbers_pressed & keys);
-        }
-        case eInputControllerKeyboardCategory::kKeyboardKeysApplication:
-        {
-            KOTEK_ASSERT(keys <= std::numeric_limits<unsigned char>::max(),
-                "can't be you passed wrong enum flags");
-            return (this->m_controller_keyboard_key_application_pressed & keys);
-        }
-        case eInputControllerKeyboardCategory::kKeyboardKeysSystem:
-        {
-            KOTEK_ASSERT(keys <= std::numeric_limits<unsigned char>::max(),
-                "can't be you passed wrong enum flags");
-
-            return (this->m_controller_keyboard_key_system_pressed & keys);
-        }
-        case eInputControllerKeyboardCategory::kKeyboardKeysEnter:
-        {
-            KOTEK_ASSERT(keys <= std::numeric_limits<unsigned char>::max(),
-                "can't be you passed wrong enum flags");
-            return (this->m_controller_keyboard_key_enter_pressed & keys);
-        }
-        case eInputControllerKeyboardCategory::kKeyboardKeysNumpad:
-        {
-            return (this->m_controller_keyboard_key_numbers_pressed & keys);
-        }
-        case eInputControllerKeyboardCategory::kKeyboardKeysCursorControlKeys:
-        {
-            KOTEK_ASSERT(keys <= std::numeric_limits<unsigned char>::max(),
-                "can't be you passed wrong enum flags");
-            return (
-                this->m_controller_keyboard_key_cursor_control_pressed & keys);
-        }
-        default:
-        {
-            KOTEK_ASSERT(
-                false, "unhandled code, you forgot to register category!");
-            return false;
-        }
-        }
-    }
-    case eInputControllerType::kControllerMouse:
-    {
-        KOTEK_ASSERT(keys <= std::numeric_limits<unsigned char>::max(),
-            "can't be, you passed wrong enum flags");
-        return (this->m_controller_mouse_key_pressed & keys);
-    }
-    case eInputControllerType::kControllerGamepad:
-    {
-        KOTEK_ASSERT(false, "not implemented");
-        return false;
-    }
-    case eInputControllerType::kControllerJoystick:
-    {
-        KOTEK_ASSERT(false, "not implemented");
-        return false;
-    }
-    default:
-    {
-        KOTEK_ASSERT(false, "unhanleded enum, you forgot to register");
-        return false;
-    }
-    }
-}
-*/
-
 bool ktkInput::Is_KeyPressed(
 	eInputControllerType controller_type, eInputAllKeys key)
 {
@@ -462,6 +324,134 @@ bool ktkInput::Is_KeyPressed(
 bool ktkInput::Is_KeyHolding(eInputControllerType controller_type,
 	eInputAllKeys key, unsigned char frames)
 {
+	KOTEK_ASSERT(this->m_current_platform !=
+			eInputPlatformBackend::kPlatformBackend_Unknown,
+		"you forgot to call ::Initialize method!");
+
+	if (this->m_current_platform ==
+		eInputPlatformBackend::kPlatformBackend_Unknown)
+		return false;
+
+	unsigned char ticks = this->m_controller_key_ticks[key];
+
+	switch (controller_type)
+	{
+	case eInputControllerType::kControllerKeyboard:
+	{
+		int category = this->Convert_AllKeysToCategory(key);
+		int flag = this->Convert_AllKeysToFlags(key);
+
+		KOTEK_ASSERT(category > -1,
+			"something is wrong, keyboard has > 30 buttons as controller");
+
+		switch (static_cast<eInputControllerKeyboardCategory>(category))
+		{
+		case eInputControllerKeyboardCategory::kKeyboardKeysTypeWriter:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_typewriter_pressed, flag);
+
+			return status && ticks >= frames;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_function_pressed, flag);
+
+			return status && ticks >= frames;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysOtherState:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_other_pressed, flag);
+
+			return status && ticks >= frames;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysNumbers:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_numbers_pressed, flag);
+
+			return status && ticks >= frames;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysApplication:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_application_pressed, flag);
+
+			return status && ticks >= frames;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysSystem:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_system_pressed, flag);
+
+			return status && ticks >= frames;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysEnter:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_enter_pressed, flag);
+
+			return status && ticks >= frames;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysNumpad:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_numpad_pressed, flag);
+
+			return status && ticks >= frames;
+		}
+		case eInputControllerKeyboardCategory::kKeyboardKeysCursorControlKeys:
+		{
+			bool status = KOTEK_CHECK_FLAG(
+				this->m_controller_keyboard_key_cursor_control_pressed, flag);
+
+			return status && ticks >= frames;
+		}
+		default:
+		{
+			KOTEK_ASSERT(false, "you forgot to register a new situation!");
+			return false;
+		}
+		}
+	}
+	case eInputControllerType::kControllerMouse:
+	{
+#ifdef KOTEK_DEBUG
+		int category = this->Convert_AllKeysToCategory(key);
+		KOTEK_ASSERT(
+			category == -1, "no category for this controller must be!");
+		KOTEK_ASSERT(this->Convert_AllKeysToFlags(key) <=
+				std::numeric_limits<
+					decltype(this->m_controller_mouse_key_pressed)>::max(),
+			"overflow, something is wrong, maybe make your type larger?");
+#endif
+
+		unsigned char flag = this->Convert_AllKeysToFlags(key);
+
+		bool status =
+			KOTEK_CHECK_FLAG(this->m_controller_mouse_key_pressed, flag);
+
+		return status && ticks >= frames;
+	}
+	case eInputControllerType::kControllerGamepad:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		return false;
+	}
+	case eInputControllerType::kControllerJoystick:
+	{
+		KOTEK_ASSERT(false, "not implemented");
+		return false;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "unhandled enum, you forgot to register");
+		return false;
+	}
+	}
+
 	return false;
 }
 
@@ -1351,7 +1341,177 @@ bool ktkInput::WriteKeyAsStringToBuffer_IfPressed(
 	if (length_of_buffer == 0 || kun_ktk size_t(-1) == length_of_buffer)
 		return result;
 
-	p_buffer[0] = '\0';
+	switch (controller)
+	{
+	case eInputControllerType::kControllerKeyboard:
+	{
+		// only kCK = Controller keyboard keys only
+		unsigned char keys[] = {eInputAllKeys::kCK_KEY_A,
+			eInputAllKeys::kCK_KEY_B, eInputAllKeys::kCK_KEY_C,
+			eInputAllKeys::kCK_KEY_D, eInputAllKeys::kCK_KEY_E,
+			eInputAllKeys::kCK_KEY_F, eInputAllKeys::kCK_KEY_G,
+			eInputAllKeys::kCK_KEY_H, eInputAllKeys::kCK_KEY_I,
+			eInputAllKeys::kCK_KEY_J, eInputAllKeys::kCK_KEY_K,
+			eInputAllKeys::kCK_KEY_L, eInputAllKeys::kCK_KEY_M,
+			eInputAllKeys::kCK_KEY_N, eInputAllKeys::kCK_KEY_O,
+			eInputAllKeys::kCK_KEY_P, eInputAllKeys::kCK_KEY_Q,
+			eInputAllKeys::kCK_KEY_R, eInputAllKeys::kCK_KEY_S,
+			eInputAllKeys::kCK_KEY_T, eInputAllKeys::kCK_KEY_U,
+			eInputAllKeys::kCK_KEY_V, eInputAllKeys::kCK_KEY_W,
+			eInputAllKeys::kCK_KEY_X, eInputAllKeys::kCK_KEY_Y,
+			eInputAllKeys::kCK_KEY_Z, eInputAllKeys::kCK_KEY_CAPS_LOCK,
+			eInputAllKeys::kCK_KEY_SCROLL_LOCK, eInputAllKeys::kCK_KEY_1,
+			eInputAllKeys::kCK_KEY_2, eInputAllKeys::kCK_KEY_3,
+			eInputAllKeys::kCK_KEY_4, eInputAllKeys::kCK_KEY_5,
+			eInputAllKeys::kCK_KEY_6, eInputAllKeys::kCK_KEY_7,
+			eInputAllKeys::kCK_KEY_8, eInputAllKeys::kCK_KEY_9,
+			eInputAllKeys::kCK_KEY_0, eInputAllKeys::kCK_KEY_MINUS,
+			eInputAllKeys::kCK_KEY_PLUS, eInputAllKeys::kCK_KEY_F1,
+			eInputAllKeys::kCK_KEY_F2, eInputAllKeys::kCK_KEY_F3,
+			eInputAllKeys::kCK_KEY_F4, eInputAllKeys::kCK_KEY_F5,
+			eInputAllKeys::kCK_KEY_F6, eInputAllKeys::kCK_KEY_F7,
+			eInputAllKeys::kCK_KEY_F8, eInputAllKeys::kCK_KEY_F9,
+			eInputAllKeys::kCK_KEY_F10, eInputAllKeys::kCK_KEY_F11,
+			eInputAllKeys::kCK_KEY_F12, eInputAllKeys::kCK_KEY_PRTSC,
+			eInputAllKeys::kCK_KEY_PAUSE, eInputAllKeys::kCK_KEY_DEL,
+			eInputAllKeys::kCK_KEY_END, eInputAllKeys::kCK_KEY_INSERT,
+			eInputAllKeys::kCK_KEY_HOME, eInputAllKeys::kCK_KEY_PAGEUP,
+			eInputAllKeys::kCK_KEY_PAGEDOWN, eInputAllKeys::kCK_KEY_SCROLLLOCK,
+			eInputAllKeys::kCK_KEY_ESC, eInputAllKeys::kCK_KEY_SPACE,
+			eInputAllKeys::kCK_KEY_LEFT_SHIFT,
+			eInputAllKeys::kCK_KEY_RIGHT_SHIFT,
+			eInputAllKeys::kCK_KEY_LEFT_CONTROL,
+			eInputAllKeys::kCK_KEY_RIGHT_CONTROL,
+			eInputAllKeys::kCK_KEY_APOSTROPHE, eInputAllKeys::kCK_KEY_COMMA,
+			eInputAllKeys::kCK_KEY_PERIOD, eInputAllKeys::kCK_KEY_SLASH,
+			eInputAllKeys::kCK_KEY_BACKSLASH, eInputAllKeys::kCK_KEY_SEMICOLON,
+			eInputAllKeys::kCK_KEY_EQUAL, eInputAllKeys::kCK_KEY_LEFT_BRACKET,
+			eInputAllKeys::kCK_KEY_RIGHT_BRACKET,
+			eInputAllKeys::kCK_KEY_GRAVE_ACCENT, eInputAllKeys::kCK_KEY_ESCAPE,
+			eInputAllKeys::kCK_KEY_TAB, eInputAllKeys::kCK_KEY_BACKSPACE,
+			eInputAllKeys::kCK_KEY_ENTER, eInputAllKeys::kCK_KEY_ENTER_NUMPAD,
+			eInputAllKeys::kCK_KEY_NUMPAD_NUMLOCK,
+			eInputAllKeys::kCK_KEY_NUMPAD_ENTER,
+			eInputAllKeys::kCK_KEY_NUMPAD_SLASH,
+			eInputAllKeys::kCK_KEY_NUMPAD_ASTERISK,
+			eInputAllKeys::kCK_KEY_NUMPAD_1, eInputAllKeys::kCK_KEY_NUMPAD_2,
+			eInputAllKeys::kCK_KEY_NUMPAD_3, eInputAllKeys::kCK_KEY_NUMPAD_4,
+			eInputAllKeys::kCK_KEY_NUMPAD_5, eInputAllKeys::kCK_KEY_NUMPAD_6,
+			eInputAllKeys::kCK_KEY_NUMPAD_7, eInputAllKeys::kCK_KEY_NUMPAD_8,
+			eInputAllKeys::kCK_KEY_NUMPAD_9, eInputAllKeys::kCK_KEY_NUMPAD_0,
+			eInputAllKeys::kCK_KEY_NUMPAD_MINUS,
+			eInputAllKeys::kCK_KEY_NUMPAD_PLUS, eInputAllKeys::kCK_KEY_MENU,
+			eInputAllKeys::kCK_KEY_LEFT_ALT, eInputAllKeys::kCK_KEY_RIGHT_ALT,
+			eInputAllKeys::kCK_KEY_LEFT_SUPER,
+			eInputAllKeys::kCK_KEY_RIGHT_SUPER, eInputAllKeys::kCK_KEY_WINDOWS,
+			eInputAllKeys::kCK_KEY_ARROW_LEFT, eInputAllKeys::kCK_KEY_ARROW_UP,
+			eInputAllKeys::kCK_KEY_ARROW_RIGHT,
+			eInputAllKeys::kCK_KEY_ARROW_DOWN};
+
+		constexpr auto _kArrayLength = sizeof(keys) / sizeof(keys[0]);
+
+		result = true;
+
+		size_t current_length = strlen(p_buffer);
+
+		for (unsigned char i = 0; i < _kArrayLength; ++i)
+		{
+			if (this->Is_KeyPressed(
+					controller, static_cast<eInputAllKeys>(keys[i])))
+			{
+				const char* pKeyName = helper::Translate_InputAllKeys(
+					static_cast<eInputAllKeys>(keys[i]));
+				KOTEK_ASSERT(pKeyName,
+					"can't be lol! Translate_ function must returned "
+					"translated or default failed translated argument it can't "
+					"reference to nullptr");
+
+				current_length += strlen(pKeyName);
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				// TODO: provide wrapper for this method
+				strcpy(p_buffer + strlen(p_buffer), pKeyName);
+
+				current_length += strlen(";");
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				strcpy(p_buffer + strlen(p_buffer), ";");
+			}
+		}
+
+		return result;
+	}
+	case eInputControllerType::kControllerMouse:
+	{
+		result = true;
+
+		unsigned char keys[] = {eInputAllKeys::kCM_KEY_LEFT,
+			eInputAllKeys::kCM_KEY_RIGHT, eInputAllKeys::kCM_KEY_MIDDLE};
+
+		constexpr auto _kArrayLength = sizeof(keys) / sizeof(keys[0]);
+
+		size_t current_length = strlen(p_buffer);
+
+		for (unsigned char i = 0; i < _kArrayLength; ++i)
+		{
+			if (this->Is_KeyPressed(
+					controller, static_cast<eInputAllKeys>(keys[i])))
+			{
+				const char* pKeyName = helper::Translate_InputAllKeys(
+					static_cast<eInputAllKeys>(keys[i]));
+				KOTEK_ASSERT(pKeyName,
+					"can't be lol! Translate_ function must returned "
+					"translated or default failed translated argument it can't "
+					"reference to nullptr");
+
+				current_length += strlen(pKeyName);
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				strcpy(p_buffer + strlen(p_buffer), pKeyName);
+
+				current_length += strlen(";");
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				strcpy(p_buffer + strlen(p_buffer), ";");
+			}
+		}
+
+		return result;
+	}
+	case eInputControllerType::kControllerGamepad:
+	{
+		KOTEK_ASSERT(false, "not implemented!");
+		return result;
+	}
+	case eInputControllerType::kControllerJoystick:
+	{
+		KOTEK_ASSERT(false, "not implemented!");
+		return result;
+	}
+	}
+
+	return result;
+}
+
+bool ktkInput::WriteKeyAsStringToBuffer_IfHolding(
+	eInputControllerType controller, char* p_buffer,
+	kun_ktk size_t length_of_buffer)
+{
+	bool result = false;
+
+	if (!p_buffer)
+		return result;
+
+	if (length_of_buffer == 0 || kun_ktk size_t(-1) == length_of_buffer)
+		return result;
 
 	switch (controller)
 	{
@@ -1424,11 +1584,11 @@ bool ktkInput::WriteKeyAsStringToBuffer_IfPressed(
 
 		result = true;
 
-		size_t current_length = 0;
+		size_t current_length = strlen(p_buffer);
 
 		for (unsigned char i = 0; i < _kArrayLength; ++i)
 		{
-			if (this->Is_KeyPressed(
+			if (this->Is_KeyHolding(
 					controller, static_cast<eInputAllKeys>(keys[i])))
 			{
 				const char* pKeyName = helper::Translate_InputAllKeys(
@@ -1441,16 +1601,16 @@ bool ktkInput::WriteKeyAsStringToBuffer_IfPressed(
 				current_length += strlen(pKeyName);
 
 				if (current_length >= length_of_buffer)
-				{
 					break;
-				}
 
-				kun_kotek kun_ktk memory::memcpy(
-					p_buffer + strlen(p_buffer), pKeyName, strlen(pKeyName));
+				strcpy(p_buffer + strlen(p_buffer), pKeyName);
 
 				current_length += strlen(";");
-				kun_kotek kun_ktk memory::memcpy(
-					p_buffer + strlen(p_buffer), ";", strlen(";"));
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				strcpy(p_buffer + strlen(p_buffer), ";");
 			}
 		}
 
@@ -1459,6 +1619,42 @@ bool ktkInput::WriteKeyAsStringToBuffer_IfPressed(
 	case eInputControllerType::kControllerMouse:
 	{
 		result = true;
+
+		unsigned char keys[] = {eInputAllKeys::kCM_KEY_LEFT,
+			eInputAllKeys::kCM_KEY_RIGHT, eInputAllKeys::kCM_KEY_MIDDLE};
+
+		constexpr auto _kArrayLength = sizeof(keys) / sizeof(keys[0]);
+
+		size_t current_length = strlen(p_buffer);
+
+		for (unsigned char i = 0; i < _kArrayLength; ++i)
+		{
+			if (this->Is_KeyHolding(
+					controller, static_cast<eInputAllKeys>(keys[i])))
+			{
+				const char* pKeyName = helper::Translate_InputAllKeys(
+					static_cast<eInputAllKeys>(keys[i]));
+				KOTEK_ASSERT(pKeyName,
+					"can't be lol! Translate_ function must returned "
+					"translated or default failed translated argument it can't "
+					"reference to nullptr");
+
+				current_length += strlen(pKeyName);
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				strcpy(p_buffer + strlen(p_buffer), pKeyName);
+
+				current_length += strlen(";");
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				strcpy(p_buffer + strlen(p_buffer), ";");
+			}
+		}
+
 		return result;
 	}
 	case eInputControllerType::kControllerGamepad:
@@ -1513,6 +1709,10 @@ void ktkInput::Update_Controller(void* p_args, eInputPlatformBackend backend,
 	}
 }
 
+constexpr unsigned char _kGLFWActionPress = 1;
+constexpr unsigned char _kGLFWActionRelease = 0;
+constexpr unsigned char _kGLFWActionRepeat = 2;
+
 void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 {
 	switch (backend)
@@ -1526,18 +1726,14 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 			p_args->controller != eInputControllerType::kControllerUnknown,
 			"you must initialize args where you call this method!");
 
-		constexpr unsigned char _kGLFWActionPress = 1;
-		constexpr unsigned char _kGLFWActionRelease = 0;
-		constexpr unsigned char _kGLFWActionRepeat = 2;
+		eInputControllerKeyboardCategory category =
+			p_glfw3_keyboard_key_to_category[p_args->key];
+		int converted_key = p_glfw3_keyboard_keys_to_input[p_args->key];
 
 		switch (p_args->action)
 		{
 		case _kGLFWActionRelease:
 		{
-			eInputControllerKeyboardCategory category =
-				p_glfw3_keyboard_key_to_category[p_args->key];
-			int converted_key = p_glfw3_keyboard_keys_to_input[p_args->key];
-
 			if (converted_key == -1)
 				return;
 
@@ -1609,10 +1805,6 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 		}
 		case _kGLFWActionPress:
 		{
-			eInputControllerKeyboardCategory category =
-				p_glfw3_keyboard_key_to_category[p_args->key];
-			int converted_key = p_glfw3_keyboard_keys_to_input[p_args->key];
-
 			if (converted_key == -1)
 				return;
 
@@ -1755,18 +1947,18 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 		}
 		case _kGLFWActionRepeat:
 		{
-			static_assert(sizeof(this->m_controller_key_ticks[0]) ==
-					sizeof(unsigned char) &&
+			static_assert(
+				std::is_same<
+					std::remove_reference<
+						decltype(this->m_controller_key_ticks[0])>::type,
+					unsigned char>::value &&
 				"did you change type? If yes fix the below line and this "
 				"assert "
 				"after");
 
 			constexpr auto _kMaxTickAmount =
-				std::numeric_limits<unsigned char>::max();
-
-			eInputControllerKeyboardCategory category =
-				p_glfw3_keyboard_key_to_category[p_args->key];
-			int converted_key = p_glfw3_keyboard_keys_to_input[p_args->key];
+				std::numeric_limits<std::remove_reference<
+					decltype(this->m_controller_key_ticks[0])>::type>::max();
 
 			if (converted_key == -1)
 				return;
@@ -1947,6 +2139,78 @@ void ktkInput::Update_Mouse(void* p_raw_args, eInputPlatformBackend backend)
 		KOTEK_ASSERT(
 			p_args->controller != eInputControllerType::kControllerUnknown,
 			"you must initialize args where you call this method!");
+
+		int converted_key = p_glfw3_mouse_key_to_input[p_args->key];
+
+		switch (p_args->action)
+		{
+		case _kGLFWActionRelease:
+		{
+			if (converted_key == -1)
+				return;
+
+			eInputAllKeys converted_all_key = static_cast<eInputAllKeys>(
+				p_glfw3_mouse_key_to_all_keys[p_args->key]);
+			this->m_controller_key_ticks[static_cast<int>(converted_all_key)] =
+				0;
+
+			KOTEK_SET_FLAG(
+				this->m_controller_mouse_key_released, converted_key);
+			KOTEK_REMOVE_FLAG(
+				this->m_controller_mouse_key_pressed, converted_key);
+
+			KOTEK_MESSAGE("mouse = release");
+
+			break;
+		}
+		case _kGLFWActionPress:
+		{
+			if (converted_key == -1)
+				return;
+
+			eInputAllKeys converted_all_key = static_cast<eInputAllKeys>(
+				p_glfw3_mouse_key_to_all_keys[p_args->key]);
+
+			KOTEK_SET_FLAG(this->m_controller_mouse_key_pressed, converted_key);
+			KOTEK_REMOVE_FLAG(
+				this->m_controller_mouse_key_released, converted_key);
+
+			this->m_controller_key_ticks[converted_all_key] += 1;
+
+			break;
+		}
+		case _kGLFWActionRepeat:
+		{
+			static_assert(
+				std::is_same<
+					std::remove_reference<
+						decltype(this->m_controller_key_ticks[0])>::type,
+					unsigned char>::value &&
+				"did you change type? If yes fix the below line and this "
+				"assert "
+				"after");
+
+			constexpr auto _kMaxTickAmount =
+				std::numeric_limits<std::remove_reference<
+					decltype(this->m_controller_key_ticks[0])>::type>::max();
+
+			if (converted_key == -1)
+				return;
+
+			eInputAllKeys converted_all_key = static_cast<eInputAllKeys>(
+				p_glfw3_mouse_key_to_all_keys[p_args->key]);
+
+			this->m_controller_key_ticks[converted_all_key] = _kMaxTickAmount;
+
+			break;
+		}
+		default:
+		{
+			KOTEK_ASSERT(
+				false, "new api? unhanlded action from keyboard callback");
+			break;
+		}
+		}
 
 		break;
 	}

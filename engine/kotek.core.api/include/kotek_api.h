@@ -328,6 +328,9 @@ public:
 		eInputControllerType controller, char* p_buffer,
 		kun_ktk size_t length_of_buffer) = 0;
 
+	virtual bool WriteKeyAsStringToBuffer_IfHolding(eInputControllerType controller,
+		char* p_buffer, kun_ktk size_t length_of_buffer) = 0;
+
 	// you need to use it in message loop of window
 	virtual void Update(void* p_args) = 0;
 };
