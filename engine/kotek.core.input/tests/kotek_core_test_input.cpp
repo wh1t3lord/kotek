@@ -34,7 +34,7 @@ TEST(Input, SingleShotUpdate_GLFW3)
 	args.controller = eInputControllerType::kControllerKeyboard;
 	args.action = 0;
 	args.key = 0;
-	input.Update(&args);
+	input.Update_Controller(&args);
 
 	input.Shutdown();
 }

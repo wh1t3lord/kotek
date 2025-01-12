@@ -73,12 +73,16 @@ public:
 
 	const char* Get_PlatformBackendName(void) const override;
 
-	void Update(void* p_args) override;
+	void Update(void) override;
+	void Update_Controller(void* p_args) override;
 
 	bool WriteKeyAsStringToBuffer_IfPressed(eInputControllerType controller, char* p_buffer,
 		kun_ktk size_t length_of_buffer) override;
 
 	bool WriteKeyAsStringToBuffer_IfHolding(eInputControllerType controller,
+		char* p_buffer, kun_ktk size_t length_of_buffer) override;
+
+	bool WriteKeyAsStringToBuffer_IfReleased(eInputControllerType controller,
 		char* p_buffer, kun_ktk size_t length_of_buffer) override;
 
 private:

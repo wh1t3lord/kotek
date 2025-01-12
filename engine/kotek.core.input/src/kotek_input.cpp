@@ -7,6 +7,8 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+constexpr unsigned char _kTickCantBeHigher = 3;
+
 ktkInput::ktkInput(void) :
 	m_controller_mouse_key_pressed{}, m_controller_mouse_key_released{},
 	m_controller_keyboard_key_cursor_control_pressed{},
@@ -168,7 +170,11 @@ bool ktkInput::Is_KeyPressed(
 
 	unsigned char ticks = this->m_controller_key_ticks[key];
 
-	constexpr unsigned char _kTickCantBeHigher = 2;
+	static_assert(
+		std::is_same<std::remove_const<decltype(_kTickCantBeHigher)>::type,
+			std::remove_reference<
+				decltype(this->m_controller_key_ticks[0])>::type>::value,
+		"you change types, fix please!");
 
 	switch (controller_type)
 	{
@@ -187,9 +193,6 @@ bool ktkInput::Is_KeyPressed(
 			bool status = KOTEK_CHECK_FLAG(
 				this->m_controller_keyboard_key_typewriter_pressed, flag);
 
-			if (status)
-				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
-
 			return status && ticks < _kTickCantBeHigher;
 		}
 		case eInputControllerKeyboardCategory::kKeyboardKeysFunctionKeysState:
@@ -198,7 +201,10 @@ bool ktkInput::Is_KeyPressed(
 				this->m_controller_keyboard_key_function_pressed, flag);
 
 			if (status)
-				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			{
+				if (ticks <= _kTickCantBeHigher)
+					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			}
 
 			return status && ticks < _kTickCantBeHigher;
 		}
@@ -208,7 +214,10 @@ bool ktkInput::Is_KeyPressed(
 				this->m_controller_keyboard_key_other_pressed, flag);
 
 			if (status)
-				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			{
+				if (ticks <= _kTickCantBeHigher)
+					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			}
 
 			return status && ticks < _kTickCantBeHigher;
 		}
@@ -218,7 +227,10 @@ bool ktkInput::Is_KeyPressed(
 				this->m_controller_keyboard_key_numbers_pressed, flag);
 
 			if (status)
-				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			{
+				if (ticks <= _kTickCantBeHigher)
+					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			}
 
 			return status && ticks < _kTickCantBeHigher;
 		}
@@ -228,7 +240,10 @@ bool ktkInput::Is_KeyPressed(
 				this->m_controller_keyboard_key_application_pressed, flag);
 
 			if (status)
-				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			{
+				if (ticks <= _kTickCantBeHigher)
+					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			}
 
 			return status && ticks < _kTickCantBeHigher;
 		}
@@ -238,7 +253,10 @@ bool ktkInput::Is_KeyPressed(
 				this->m_controller_keyboard_key_system_pressed, flag);
 
 			if (status)
-				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			{
+				if (ticks <= _kTickCantBeHigher)
+					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			}
 
 			return status && ticks < _kTickCantBeHigher;
 		}
@@ -248,7 +266,10 @@ bool ktkInput::Is_KeyPressed(
 				this->m_controller_keyboard_key_enter_pressed, flag);
 
 			if (status)
-				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			{
+				if (ticks <= _kTickCantBeHigher)
+					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			}
 
 			return status && ticks < _kTickCantBeHigher;
 		}
@@ -258,7 +279,10 @@ bool ktkInput::Is_KeyPressed(
 				this->m_controller_keyboard_key_numpad_pressed, flag);
 
 			if (status)
-				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			{
+				if (ticks <= _kTickCantBeHigher)
+					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			}
 
 			return status && ticks < _kTickCantBeHigher;
 		}
@@ -268,7 +292,10 @@ bool ktkInput::Is_KeyPressed(
 				this->m_controller_keyboard_key_cursor_control_pressed, flag);
 
 			if (status)
-				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			{
+				if (ticks <= _kTickCantBeHigher)
+					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+			}
 
 			return status && ticks < _kTickCantBeHigher;
 		}
@@ -297,7 +324,10 @@ bool ktkInput::Is_KeyPressed(
 			KOTEK_CHECK_FLAG(this->m_controller_mouse_key_pressed, flag);
 
 		if (status)
-			this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+		{
+			if (ticks <= _kTickCantBeHigher)
+				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+		}
 
 		return status && ticks < _kTickCantBeHigher;
 	}
@@ -551,6 +581,25 @@ const char* ktkInput::Get_PlatformBackendName(void) const
 		return "NOT_INITIALIZED";
 
 	return helper::Translate_InputPlatformBackend(this->m_current_platform);
+}
+
+void ktkInput::Update(void)
+{
+	// in order to provide for user the checking of pressed method like it means
+	// if button was pressed only once per frame! We need to manually update on
+	// next frame the pressed value if it was pressed because on Press we pluses
+	// 1 and it means if tick is not zero we pressed the button but we validate
+	// this situation for being 'once' otherwise there's no other options for
+	// making pressing once checking valid
+	for (unsigned char i = eInputAllKeys::kCK_KEY_A;
+		 i < eInputAllKeys::kCA_KEY_END_ENUM; ++i)
+	{
+		if (this->m_controller_key_ticks[i])
+		{
+			if (this->m_controller_key_ticks[i] < _kTickCantBeHigher)
+				this->m_controller_key_ticks[i] += 1;
+		}
+	}
 }
 
 /*
@@ -1219,7 +1268,7 @@ eInputControllerKeyboardCategory p_glfw3_keyboard_key_to_category[] = {
 	eInputControllerKeyboardCategory::kKeyboardUnknown,
 	eInputControllerKeyboardCategory::kKeyboardKeysApplication};
 
-void ktkInput::Update(void* args)
+void ktkInput::Update_Controller(void* args)
 {
 	eInputPlatformBackend backend;
 
@@ -1672,6 +1721,177 @@ bool ktkInput::WriteKeyAsStringToBuffer_IfHolding(
 	return result;
 }
 
+bool ktkInput::WriteKeyAsStringToBuffer_IfReleased(
+	eInputControllerType controller, char* p_buffer,
+	kun_ktk size_t length_of_buffer)
+{
+	bool result = false;
+
+	if (!p_buffer)
+		return result;
+
+	if (length_of_buffer == 0 || kun_ktk size_t(-1) == length_of_buffer)
+		return result;
+
+	switch (controller)
+	{
+	case eInputControllerType::kControllerKeyboard:
+	{
+		// only kCK = Controller keyboard keys only
+		unsigned char keys[] = {eInputAllKeys::kCK_KEY_A,
+			eInputAllKeys::kCK_KEY_B, eInputAllKeys::kCK_KEY_C,
+			eInputAllKeys::kCK_KEY_D, eInputAllKeys::kCK_KEY_E,
+			eInputAllKeys::kCK_KEY_F, eInputAllKeys::kCK_KEY_G,
+			eInputAllKeys::kCK_KEY_H, eInputAllKeys::kCK_KEY_I,
+			eInputAllKeys::kCK_KEY_J, eInputAllKeys::kCK_KEY_K,
+			eInputAllKeys::kCK_KEY_L, eInputAllKeys::kCK_KEY_M,
+			eInputAllKeys::kCK_KEY_N, eInputAllKeys::kCK_KEY_O,
+			eInputAllKeys::kCK_KEY_P, eInputAllKeys::kCK_KEY_Q,
+			eInputAllKeys::kCK_KEY_R, eInputAllKeys::kCK_KEY_S,
+			eInputAllKeys::kCK_KEY_T, eInputAllKeys::kCK_KEY_U,
+			eInputAllKeys::kCK_KEY_V, eInputAllKeys::kCK_KEY_W,
+			eInputAllKeys::kCK_KEY_X, eInputAllKeys::kCK_KEY_Y,
+			eInputAllKeys::kCK_KEY_Z, eInputAllKeys::kCK_KEY_CAPS_LOCK,
+			eInputAllKeys::kCK_KEY_SCROLL_LOCK, eInputAllKeys::kCK_KEY_1,
+			eInputAllKeys::kCK_KEY_2, eInputAllKeys::kCK_KEY_3,
+			eInputAllKeys::kCK_KEY_4, eInputAllKeys::kCK_KEY_5,
+			eInputAllKeys::kCK_KEY_6, eInputAllKeys::kCK_KEY_7,
+			eInputAllKeys::kCK_KEY_8, eInputAllKeys::kCK_KEY_9,
+			eInputAllKeys::kCK_KEY_0, eInputAllKeys::kCK_KEY_MINUS,
+			eInputAllKeys::kCK_KEY_PLUS, eInputAllKeys::kCK_KEY_F1,
+			eInputAllKeys::kCK_KEY_F2, eInputAllKeys::kCK_KEY_F3,
+			eInputAllKeys::kCK_KEY_F4, eInputAllKeys::kCK_KEY_F5,
+			eInputAllKeys::kCK_KEY_F6, eInputAllKeys::kCK_KEY_F7,
+			eInputAllKeys::kCK_KEY_F8, eInputAllKeys::kCK_KEY_F9,
+			eInputAllKeys::kCK_KEY_F10, eInputAllKeys::kCK_KEY_F11,
+			eInputAllKeys::kCK_KEY_F12, eInputAllKeys::kCK_KEY_PRTSC,
+			eInputAllKeys::kCK_KEY_PAUSE, eInputAllKeys::kCK_KEY_DEL,
+			eInputAllKeys::kCK_KEY_END, eInputAllKeys::kCK_KEY_INSERT,
+			eInputAllKeys::kCK_KEY_HOME, eInputAllKeys::kCK_KEY_PAGEUP,
+			eInputAllKeys::kCK_KEY_PAGEDOWN, eInputAllKeys::kCK_KEY_SCROLLLOCK,
+			eInputAllKeys::kCK_KEY_ESC, eInputAllKeys::kCK_KEY_SPACE,
+			eInputAllKeys::kCK_KEY_LEFT_SHIFT,
+			eInputAllKeys::kCK_KEY_RIGHT_SHIFT,
+			eInputAllKeys::kCK_KEY_LEFT_CONTROL,
+			eInputAllKeys::kCK_KEY_RIGHT_CONTROL,
+			eInputAllKeys::kCK_KEY_APOSTROPHE, eInputAllKeys::kCK_KEY_COMMA,
+			eInputAllKeys::kCK_KEY_PERIOD, eInputAllKeys::kCK_KEY_SLASH,
+			eInputAllKeys::kCK_KEY_BACKSLASH, eInputAllKeys::kCK_KEY_SEMICOLON,
+			eInputAllKeys::kCK_KEY_EQUAL, eInputAllKeys::kCK_KEY_LEFT_BRACKET,
+			eInputAllKeys::kCK_KEY_RIGHT_BRACKET,
+			eInputAllKeys::kCK_KEY_GRAVE_ACCENT, eInputAllKeys::kCK_KEY_ESCAPE,
+			eInputAllKeys::kCK_KEY_TAB, eInputAllKeys::kCK_KEY_BACKSPACE,
+			eInputAllKeys::kCK_KEY_ENTER, eInputAllKeys::kCK_KEY_ENTER_NUMPAD,
+			eInputAllKeys::kCK_KEY_NUMPAD_NUMLOCK,
+			eInputAllKeys::kCK_KEY_NUMPAD_ENTER,
+			eInputAllKeys::kCK_KEY_NUMPAD_SLASH,
+			eInputAllKeys::kCK_KEY_NUMPAD_ASTERISK,
+			eInputAllKeys::kCK_KEY_NUMPAD_1, eInputAllKeys::kCK_KEY_NUMPAD_2,
+			eInputAllKeys::kCK_KEY_NUMPAD_3, eInputAllKeys::kCK_KEY_NUMPAD_4,
+			eInputAllKeys::kCK_KEY_NUMPAD_5, eInputAllKeys::kCK_KEY_NUMPAD_6,
+			eInputAllKeys::kCK_KEY_NUMPAD_7, eInputAllKeys::kCK_KEY_NUMPAD_8,
+			eInputAllKeys::kCK_KEY_NUMPAD_9, eInputAllKeys::kCK_KEY_NUMPAD_0,
+			eInputAllKeys::kCK_KEY_NUMPAD_MINUS,
+			eInputAllKeys::kCK_KEY_NUMPAD_PLUS, eInputAllKeys::kCK_KEY_MENU,
+			eInputAllKeys::kCK_KEY_LEFT_ALT, eInputAllKeys::kCK_KEY_RIGHT_ALT,
+			eInputAllKeys::kCK_KEY_LEFT_SUPER,
+			eInputAllKeys::kCK_KEY_RIGHT_SUPER, eInputAllKeys::kCK_KEY_WINDOWS,
+			eInputAllKeys::kCK_KEY_ARROW_LEFT, eInputAllKeys::kCK_KEY_ARROW_UP,
+			eInputAllKeys::kCK_KEY_ARROW_RIGHT,
+			eInputAllKeys::kCK_KEY_ARROW_DOWN};
+
+		constexpr auto _kArrayLength = sizeof(keys) / sizeof(keys[0]);
+
+		result = true;
+
+		size_t current_length = strlen(p_buffer);
+
+		for (unsigned char i = 0; i < _kArrayLength; ++i)
+		{
+			if (this->Is_KeyReleased(
+					controller, static_cast<eInputAllKeys>(keys[i])))
+			{
+				const char* pKeyName = helper::Translate_InputAllKeys(
+					static_cast<eInputAllKeys>(keys[i]));
+				KOTEK_ASSERT(pKeyName,
+					"can't be lol! Translate_ function must returned "
+					"translated or default failed translated argument it can't "
+					"reference to nullptr");
+
+				current_length += strlen(pKeyName);
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				strcpy(p_buffer + strlen(p_buffer), pKeyName);
+
+				current_length += strlen(";");
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				strcpy(p_buffer + strlen(p_buffer), ";");
+			}
+		}
+
+		return result;
+	}
+	case eInputControllerType::kControllerMouse:
+	{
+		result = true;
+
+		unsigned char keys[] = {eInputAllKeys::kCM_KEY_LEFT,
+			eInputAllKeys::kCM_KEY_RIGHT, eInputAllKeys::kCM_KEY_MIDDLE};
+
+		constexpr auto _kArrayLength = sizeof(keys) / sizeof(keys[0]);
+
+		size_t current_length = strlen(p_buffer);
+
+		for (unsigned char i = 0; i < _kArrayLength; ++i)
+		{
+			if (this->Is_KeyReleased(
+					controller, static_cast<eInputAllKeys>(keys[i])))
+			{
+				const char* pKeyName = helper::Translate_InputAllKeys(
+					static_cast<eInputAllKeys>(keys[i]));
+				KOTEK_ASSERT(pKeyName,
+					"can't be lol! Translate_ function must returned "
+					"translated or default failed translated argument it can't "
+					"reference to nullptr");
+
+				current_length += strlen(pKeyName);
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				strcpy(p_buffer + strlen(p_buffer), pKeyName);
+
+				current_length += strlen(";");
+
+				if (current_length >= length_of_buffer)
+					break;
+
+				strcpy(p_buffer + strlen(p_buffer), ";");
+			}
+		}
+
+		return result;
+	}
+	case eInputControllerType::kControllerGamepad:
+	{
+		KOTEK_ASSERT(false, "not implemented!");
+		return result;
+	}
+	case eInputControllerType::kControllerJoystick:
+	{
+		KOTEK_ASSERT(false, "not implemented!");
+		return result;
+	}
+	}
+
+	return result;
+}
+
 void ktkInput::Update_Controller(void* p_args, eInputPlatformBackend backend,
 	eInputControllerType controller_type)
 {
@@ -1758,39 +1978,84 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 			case eInputControllerKeyboardCategory::
 				kKeyboardKeysFunctionKeysState:
 			{
+				KOTEK_SET_FLAG(
+					this->m_controller_keyboard_key_function_released,
+					converted_key);
+				KOTEK_REMOVE_FLAG(
+					this->m_controller_keyboard_key_function_pressed,
+					converted_key);
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysOtherState:
 			{
+				KOTEK_SET_FLAG(this->m_controller_keyboard_key_other_released,
+					converted_key);
+				KOTEK_REMOVE_FLAG(this->m_controller_keyboard_key_other_pressed,
+					converted_key);
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysNumbers:
 			{
+				KOTEK_SET_FLAG(this->m_controller_keyboard_key_numbers_released,
+					converted_key);
+				KOTEK_REMOVE_FLAG(
+					this->m_controller_keyboard_key_numbers_pressed,
+					converted_key);
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysApplication:
 			{
+				KOTEK_SET_FLAG(
+					this->m_controller_keyboard_key_application_released,
+					converted_key);
+				KOTEK_REMOVE_FLAG(
+					this->m_controller_keyboard_key_application_pressed,
+					converted_key);
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysSystem:
 			{
+				KOTEK_SET_FLAG(this->m_controller_keyboard_key_system_released,
+					converted_key);
+				KOTEK_REMOVE_FLAG(
+					this->m_controller_keyboard_key_system_pressed,
+					converted_key);
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysEnter:
 			{
+				KOTEK_SET_FLAG(this->m_controller_keyboard_key_enter_released,
+					converted_key);
+				KOTEK_REMOVE_FLAG(this->m_controller_keyboard_key_enter_pressed,
+					converted_key);
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysNumpad:
 			{
+				KOTEK_SET_FLAG(this->m_controller_keyboard_key_numpad_released,
+					converted_key);
+				KOTEK_REMOVE_FLAG(
+					this->m_controller_keyboard_key_numpad_pressed,
+					converted_key);
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::
 				kKeyboardKeysCursorControlKeys:
 			{
-				break;
-			}
-			case eInputControllerKeyboardCategory::kKeyboardTotalAmountOfEnum:
-			{
+				KOTEK_SET_FLAG(
+					this->m_controller_keyboard_key_cursor_control_released,
+					converted_key);
+				KOTEK_REMOVE_FLAG(
+					this->m_controller_keyboard_key_cursor_control_pressed,
+					converted_key);
+
 				break;
 			}
 			default:
@@ -1822,8 +2087,7 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 					this->m_controller_keyboard_key_typewriter_released,
 					converted_key);
 
-				this->m_controller_key_ticks[static_cast<int>(
-					converted_all_key)] += 1;
+				this->m_controller_key_ticks[(converted_all_key)] += 1;
 
 				break;
 			}
@@ -1836,8 +2100,7 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 					this->m_controller_keyboard_key_function_released,
 					converted_key);
 
-				this->m_controller_key_ticks[static_cast<int>(
-					converted_all_key)] += 1;
+				this->m_controller_key_ticks[(converted_all_key)] += 1;
 
 				break;
 			}
@@ -1849,8 +2112,7 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 					this->m_controller_keyboard_key_other_released,
 					converted_key);
 
-				this->m_controller_key_ticks[static_cast<int>(
-					converted_all_key)] += 1;
+				this->m_controller_key_ticks[(converted_all_key)] += 1;
 
 				break;
 			}
@@ -1862,8 +2124,7 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 					this->m_controller_keyboard_key_numbers_released,
 					converted_key);
 
-				this->m_controller_key_ticks[static_cast<int>(
-					converted_all_key)] += 1;
+				this->m_controller_key_ticks[(converted_all_key)] += 1;
 
 				break;
 			}
@@ -1876,8 +2137,7 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 					this->m_controller_keyboard_key_application_released,
 					converted_key);
 
-				this->m_controller_key_ticks[static_cast<int>(
-					converted_all_key)] += 1;
+				this->m_controller_key_ticks[(converted_all_key)] += 1;
 
 				break;
 			}
@@ -1889,8 +2149,7 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 					this->m_controller_keyboard_key_system_released,
 					converted_key);
 
-				this->m_controller_key_ticks[static_cast<int>(
-					converted_all_key)] += 1;
+				this->m_controller_key_ticks[(converted_all_key)] += 1;
 
 				break;
 			}
@@ -1902,8 +2161,7 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 					this->m_controller_keyboard_key_enter_released,
 					converted_key);
 
-				this->m_controller_key_ticks[static_cast<int>(
-					converted_all_key)] += 1;
+				this->m_controller_key_ticks[(converted_all_key)] += 1;
 
 				break;
 			}
@@ -1915,8 +2173,7 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 					this->m_controller_keyboard_key_numpad_released,
 					converted_key);
 
-				this->m_controller_key_ticks[static_cast<int>(
-					converted_all_key)] += 1;
+				this->m_controller_key_ticks[(converted_all_key)] += 1;
 
 				break;
 			}
@@ -1930,8 +2187,7 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 					this->m_controller_keyboard_key_cursor_control_released,
 					converted_key);
 
-				this->m_controller_key_ticks[static_cast<int>(
-					converted_all_key)] += 1;
+				this->m_controller_key_ticks[(converted_all_key)] += 1;
 
 				break;
 			}
@@ -1976,47 +2232,111 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 						converted_key) == true,
 					"can't be!");
 
-				this->m_controller_key_ticks[static_cast<int>(
-					converted_all_key)] = _kMaxTickAmount;
+				this->m_controller_key_ticks[converted_all_key] =
+					_kMaxTickAmount;
 
 				break;
 			}
 			case eInputControllerKeyboardCategory::
 				kKeyboardKeysFunctionKeysState:
 			{
+				KOTEK_ASSERT(
+					KOTEK_CHECK_FLAG(
+						this->m_controller_keyboard_key_function_pressed,
+						converted_key) == true,
+					"can't be!");
+
+				this->m_controller_key_ticks[converted_all_key] =
+					_kMaxTickAmount;
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysOtherState:
 			{
+				KOTEK_ASSERT(KOTEK_CHECK_FLAG(
+								 this->m_controller_keyboard_key_other_pressed,
+								 converted_key) == true,
+					"can't be!");
+
+				this->m_controller_key_ticks[converted_all_key] =
+					_kMaxTickAmount;
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysNumbers:
 			{
+				KOTEK_ASSERT(
+					KOTEK_CHECK_FLAG(
+						this->m_controller_keyboard_key_numbers_pressed,
+						converted_key) == true,
+					"can't be!");
+
+				this->m_controller_key_ticks[converted_all_key] =
+					_kMaxTickAmount;
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysApplication:
 			{
+				KOTEK_ASSERT(
+					KOTEK_CHECK_FLAG(
+						this->m_controller_keyboard_key_application_pressed,
+						converted_key) == true,
+					"can't be!");
+
+				this->m_controller_key_ticks[converted_all_key] =
+					_kMaxTickAmount;
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysSystem:
 			{
+				KOTEK_ASSERT(KOTEK_CHECK_FLAG(
+								 this->m_controller_keyboard_key_system_pressed,
+								 converted_key) == true,
+					"can't be!");
+
+				this->m_controller_key_ticks[converted_all_key] =
+					_kMaxTickAmount;
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysEnter:
 			{
+				KOTEK_ASSERT(KOTEK_CHECK_FLAG(
+								 this->m_controller_keyboard_key_enter_pressed,
+								 converted_key) == true,
+					"can't be!");
+
+				this->m_controller_key_ticks[converted_all_key] =
+					_kMaxTickAmount;
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::kKeyboardKeysNumpad:
 			{
+				KOTEK_ASSERT(KOTEK_CHECK_FLAG(
+								 this->m_controller_keyboard_key_numpad_pressed,
+								 converted_key) == true,
+					"can't be!");
+
+				this->m_controller_key_ticks[converted_all_key] =
+					_kMaxTickAmount;
+
 				break;
 			}
 			case eInputControllerKeyboardCategory::
 				kKeyboardKeysCursorControlKeys:
 			{
-				break;
-			}
-			case eInputControllerKeyboardCategory::kKeyboardTotalAmountOfEnum:
-			{
+				KOTEK_ASSERT(
+					KOTEK_CHECK_FLAG(
+						this->m_controller_keyboard_key_cursor_control_pressed,
+						converted_key) == true,
+					"can't be!");
+
+				this->m_controller_key_ticks[converted_all_key] =
+					_kMaxTickAmount;
+
 				break;
 			}
 			default:
@@ -2158,8 +2478,6 @@ void ktkInput::Update_Mouse(void* p_raw_args, eInputPlatformBackend backend)
 				this->m_controller_mouse_key_released, converted_key);
 			KOTEK_REMOVE_FLAG(
 				this->m_controller_mouse_key_pressed, converted_key);
-
-			KOTEK_MESSAGE("mouse = release");
 
 			break;
 		}
