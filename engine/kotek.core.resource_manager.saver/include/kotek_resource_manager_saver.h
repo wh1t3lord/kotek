@@ -85,7 +85,7 @@ protected:
 private:
 	ktk_unordered_map<kun_ktk uint32_t,
 		std::pair<kun_ktk cfstream, kun_ktk kun_mt atomic<bool>>,
-		KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL>
+		KOTEK_DEF_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL>
 		m_writers;
 
 	// TODO: think how to replace for placement new and make it more useful

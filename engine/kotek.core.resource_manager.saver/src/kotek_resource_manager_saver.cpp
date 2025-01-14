@@ -18,13 +18,11 @@ void ktkResourceSaverManager::Initialize(
 	this->Set_Saver(eResourceLoadingType::kText,
 		new ktkResourceSaverFile_Text(p_main_manager));
 
-#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	for (unsigned int i = 0; i < KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL;
-		 ++i)
+	for (unsigned int i = 0;
+		 i < KOTEK_DEF_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL; ++i)
 	{
 		this->m_writers[i].second = true;
 	}
-#endif
 }
 
 void ktkResourceSaverManager::Shutdown(void)
@@ -189,7 +187,8 @@ bool ktkResourceSaverManager::Open(const ktk_filesystem_path& path,
 
 		file->open(path.c_str(), om);
 		result = file->good();
-		KOTEK_ASSERT(result, "failed to open file: [{}]; error: {}", path, strerror(errno));
+		KOTEK_ASSERT(result, "failed to open file: [{}]; error: {}", path,
+			strerror(errno));
 
 		this->m_writers.at(id).second = false;
 
@@ -219,8 +218,8 @@ void ktkResourceSaverManager::Write(
 	}
 }
 
-void ktkResourceSaverManager::Write(
-	kun_ktk uint32_t resource_id, const char* p_string, kun_ktk size_t size) noexcept
+void ktkResourceSaverManager::Write(kun_ktk uint32_t resource_id,
+	const char* p_string, kun_ktk size_t size) noexcept
 {
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such thing!");
@@ -588,8 +587,8 @@ void ktkResourceSaverManager::Write(
 	}
 }
 
-void ktkResourceSaverManager::Seekg(
-	kun_ktk uint32_t resource_id, kun_ktk size_t bytes, eFileSeekDirectionType type)
+void ktkResourceSaverManager::Seekg(kun_ktk uint32_t resource_id,
+	kun_ktk size_t bytes, eFileSeekDirectionType type)
 {
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such file: {}", resource_id);
@@ -627,8 +626,8 @@ void ktkResourceSaverManager::Seekg(
 	}
 }
 
-void ktkResourceSaverManager::Seekp(
-	kun_ktk uint32_t resource_id, kun_ktk size_t bytes, eFileSeekDirectionType type)
+void ktkResourceSaverManager::Seekp(kun_ktk uint32_t resource_id,
+	kun_ktk size_t bytes, eFileSeekDirectionType type)
 {
 	KOTEK_ASSERT(this->m_writers.find(resource_id) != this->m_writers.end(),
 		"can't find a such file: {}", resource_id);
@@ -722,7 +721,7 @@ void ktkResourceSaverManager::Read(
 bool ktkResourceSaverManager::Is_Open(kun_ktk uint32_t resource_id) noexcept
 {
 	KOTEK_ASSERT(resource_id != kun_ktk uint32_t(-1), "must be valid!");
-	
+
 	kun_ktk kun_mt lock_guard<kun_ktk kun_mt mutex> lock_guard{this->m_mutex};
 
 	bool result{};
@@ -771,7 +770,7 @@ kun_ktk uint32_t ktkResourceSaverManager::GenerateFileID(void) noexcept
 	// KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL it means value is invalid
 	// because we initialize from [0,
 	// KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL - 1]
-	kun_ktk uint32_t result{KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL};
+	kun_ktk uint32_t result{KOTEK_DEF_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL};
 
 #ifdef KOTEK_DEBUG
 	bool is_any_avaiable = false;
@@ -799,7 +798,7 @@ kun_ktk uint32_t ktkResourceSaverManager::GenerateFileID(void) noexcept
 		"failed to obtain any avaiable file for writing. It means that engine "
 		"doesn't have any freed file, allocate more! Current file pool size "
 		"is: [{}]",
-		KOTEK_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL);
+		KOTEK_DEF_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL);
 #endif
 
 	return result;

@@ -6,7 +6,7 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 // TODO: add helper namespace for translating this enum
-enum class eFolderIndex : ktk::enum_base_t
+enum class eFolderIndex : kun_ktk enum_base_t
 {
 	kFolderIndex_Root,
 	kFolderIndex_Gamedata,
@@ -31,7 +31,7 @@ enum class eFolderIndex : ktk::enum_base_t
 	kEndOfEnum
 };
 
-enum class eResourceLoadingType : ktk::enum_base_t
+enum class eResourceLoadingType : kun_ktk enum_base_t
 {
 	kText,
 	kTexture,
@@ -47,7 +47,7 @@ enum class eResourceLoadingType : ktk::enum_base_t
 	kUnknown = -1
 };
 
-enum class eResourceWritingType : ktk::enum_base_t
+enum class eResourceWritingType : kun_ktk enum_base_t
 {
 	kText,
 	kTexture,
@@ -55,28 +55,42 @@ enum class eResourceWritingType : ktk::enum_base_t
 	kUnknown = -1
 };
 
-enum class eResourceLoadingPolicy : ktk::enum_base_t
+enum class eResourceReadingType : kun_ktk enum_base_t
+{
+	kText,
+	kEndOfEnum,
+	kUnknown = -1
+};
+
+enum class eResourceLoadingPolicy : kun_ktk enum_base_t
 {
 	kAsync,
 	kSync,
 	kEndOfEnum
 };
 
-enum class eResourceWritingPolicy : ktk::enum_base_t
+enum class eResourceReadingPolicy : kun_ktk enum_base_t
 {
 	kAsync,
 	kSync,
 	kEndOfEnum
 };
 
-enum class eResourceCachingPolicy : ktk::enum_base_t
+enum class eResourceWritingPolicy : kun_ktk enum_base_t
+{
+	kAsync,
+	kSync,
+	kEndOfEnum
+};
+
+enum class eResourceCachingPolicy : kun_ktk enum_base_t
 {
 	kCache,
 	kWithoutCache,
 	kEndOfEnum
 };
 
-enum class eResourceWritingMode : ktk::enum_base_t
+enum class eResourceWritingMode : kun_ktk enum_base_t
 {
 	/// @brief ios::app
 	kAppend,
@@ -87,7 +101,7 @@ enum class eResourceWritingMode : ktk::enum_base_t
 	kEndOfEnum
 };
 
-enum class eWindowTitleType : ktk::enum_base_t
+enum class eWindowTitleType : kun_ktk enum_base_t
 {
 	// probably all possible cases for output in window's title
 	kTitle_ApplicationName,
@@ -392,7 +406,7 @@ enum eEngineFeatureSDK
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureSDK);
 
 /// @brief
-enum class eEngineSupportedRenderer : ktk::enum_base_t
+enum class eEngineSupportedRenderer : kun_ktk enum_base_t
 {
 	kDirectX_7,
 	kDirectX_8,
@@ -553,7 +567,7 @@ KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRender);
  * The difference between two that one executes right now the second just pushes
  * to queue and executes on next tick.
  */
-enum class eConsoleCommandIndex : ktk::enum_base_t
+enum class eConsoleCommandIndex : kun_ktk enum_base_t
 {
 	// (int width, int height)
 	kConsoleCommand_Resize,
@@ -668,7 +682,7 @@ enum class eConsoleCommandIndex : ktk::enum_base_t
 // TODO: not obvious and may conflict with input system better to rename to
 // something like eInputCursorType otherwise specify working field where that
 // enum relates to
-enum class eInputType : ktk::enum_base_t
+enum class eInputType : kun_ktk enum_base_t
 {
 	kInputType_Cursor,
 	kInputType_HiddenCursor,
@@ -677,7 +691,7 @@ enum class eInputType : ktk::enum_base_t
 	kEndOfEnum
 };
 
-enum class eResourceWritingDataType : ktk::enum_base_t
+enum class eResourceWritingDataType : kun_ktk enum_base_t
 {
 	kInt8_t,
 	kInt16_t,
@@ -704,7 +718,7 @@ enum class eResourceWritingDataType : ktk::enum_base_t
 	kUnknown = -1
 };
 
-enum class eFileWritingControlCharacterType : ktk::enum_base_t
+enum class eFileWritingControlCharacterType : kun_ktk enum_base_t
 {
 	/// @brief just a white space aka " "
 	kSpace,
@@ -715,7 +729,7 @@ enum class eFileWritingControlCharacterType : ktk::enum_base_t
 	kEndOfEnum
 };
 
-enum class eResourceHowToWriteData : ktk::enum_base_t
+enum class eResourceHowToWriteData : kun_ktk enum_base_t
 {
 	kNone,
 	kUseEndlAfterWrite,
@@ -725,14 +739,14 @@ enum class eResourceHowToWriteData : ktk::enum_base_t
 	kUnknown = -1
 };
 
-enum class eFolderVisibilityType : ktk::enum_base_t
+enum class eFolderVisibilityType : kun_ktk enum_base_t
 {
 	kVisible,
 	kHidden,
 	kEndOfEnum
 };
 
-enum class eFileSeekDirectionType : ktk::enum_base_t
+enum class eFileSeekDirectionType : kun_ktk enum_base_t
 {
 	kSeekDirectionEnd,
 	kSeekdDirectionCurrent,

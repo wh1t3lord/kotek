@@ -550,6 +550,22 @@ public:
 	virtual bool Load(const ktk_filesystem_path& path,
 		kun_core ktkResourceHandle object_from_construct) noexcept = 0;
 
+	virtual bool Open(const ktk_filesystem_path& path,
+		eResourceReadingType resource_type, eResourceReadingPolicy policy,
+		kun_ktk uint32_t id) noexcept = 0;
+	virtual void Seekg(kun_ktk uint32_t resource_id, kun_ktk size_t bytes,
+		eFileSeekDirectionType type) = 0;
+	virtual kun_ktk size_t Tellg(kun_ktk uint32_t resource_id) = 0;
+	virtual void Read(
+		kun_ktk uint32_t resource_id, char* p_buffer, kun_ktk size_t size) = 0;
+	virtual bool Is_Open(kun_ktk uint32_t resource_id) noexcept = 0;
+	virtual bool Close(kun_ktk uint32_t id) noexcept = 0;
+	/// \~english @brief seeks for available instance of ofstream and returns
+	/// its id
+	/// @param
+	/// @return
+	virtual kun_ktk uint32_t GenerateFileID(void) noexcept = 0;
+
 protected:
 	virtual eResourceLoadingType DetectResourceTypeByFileFormat(
 		const ktk_filesystem_path& path) noexcept = 0;
@@ -757,17 +773,75 @@ private:
 	ktk_filesystem_path m_resource_path;
 };
 
+class ktkResourceReadingRequest
+{
+public:
+	ktkResourceReadingRequest() :
+		m_id{},
+		m_resource_type{kun_kotek kun_core eResourceReadingType::kUnknown},
+		m_policy{kun_kotek kun_core eResourceReadingPolicy::kSync}
+	{
+	}
+
+	ktkResourceReadingRequest(kun_ktk uint32_t id, eResourceReadingType type,
+		eResourceReadingPolicy policy, const ktk_filesystem_path& path) :
+		m_id{id}, m_resource_type{type}, m_filepath_for_writing{path},
+		m_policy{policy}
+	{
+	}
+	~ktkResourceReadingRequest() = default;
+
+	eResourceReadingType Get_ResourceType(void) const noexcept
+	{
+		return this->m_resource_type;
+	}
+
+	ktkResourceReadingRequest& Set_ResourceType(
+		eResourceReadingType type) noexcept
+	{
+		this->m_resource_type = type;
+		return *this;
+	}
+
+	kun_ktk uint32_t Get_ID(void) const noexcept { return this->m_id; }
+	void Set_ID(kun_ktk uint32_t id) noexcept { this->m_id = id; }
+
+	const ktk_filesystem_path& Get_Path(void) const noexcept
+	{
+		return this->m_filepath_for_writing;
+	}
+
+	ktkResourceReadingRequest& Set_Path(
+		const ktk_filesystem_path& path) noexcept
+	{
+		this->m_filepath_for_writing = path;
+		return *this;
+	}
+
+	eResourceReadingPolicy Get_Policy(void) const noexcept
+	{
+		return this->m_policy;
+	}
+
+private:
+	kun_ktk uint32_t m_id;
+	eResourceReadingType m_resource_type;
+	eResourceReadingPolicy m_policy;
+	ktk_filesystem_path m_filepath_for_writing;
+};
+
 class ktkResourceWritingRequest
 {
 public:
 	ktkResourceWritingRequest() :
-		m_id{}, m_writing_mode{Kotek::Core::eResourceWritingMode::kNew_Trunc},
-		m_resource_type{Kotek::Core::eResourceWritingType::kUnknown},
-		m_policy{Kotek::Core::eResourceWritingPolicy::kSync}
+		m_id{},
+		m_writing_mode{kun_kotek kun_core eResourceWritingMode::kNew_Trunc},
+		m_resource_type{kun_kotek kun_core eResourceWritingType::kUnknown},
+		m_policy{kun_kotek kun_core eResourceWritingPolicy::kSync}
 	{
 	}
 
-	ktkResourceWritingRequest(ktk::uint32_t id, eResourceWritingMode mode,
+	ktkResourceWritingRequest(kun_ktk uint32_t id, eResourceWritingMode mode,
 		eResourceWritingType type, eResourceWritingPolicy policy,
 		const ktk_filesystem_path& path) :
 		m_id{id}, m_writing_mode{mode}, m_resource_type{type},
@@ -800,8 +874,8 @@ public:
 		return *this;
 	}
 
-	ktk::uint32_t Get_ID(void) const noexcept { return this->m_id; }
-	void Set_ID(ktk::uint32_t id) noexcept { this->m_id = id; }
+	kun_ktk uint32_t Get_ID(void) const noexcept { return this->m_id; }
+	void Set_ID(kun_ktk uint32_t id) noexcept { this->m_id = id; }
 
 	const ktk_filesystem_path& Get_Path(void) const noexcept
 	{
@@ -821,7 +895,7 @@ public:
 	}
 
 private:
-	ktk::uint32_t m_id;
+	kun_ktk uint32_t m_id;
 	eResourceWritingMode m_writing_mode;
 	eResourceWritingType m_resource_type;
 	eResourceWritingPolicy m_policy;
@@ -902,6 +976,7 @@ public:
 		const ktkLoadingRequest& request) noexcept = 0;
 
 	virtual void Open(const ktkResourceWritingRequest& request) noexcept = 0;
+	virtual void Open(const ktkResourceReadingRequest& request) noexcept = 0;
 
 	virtual void Write(
 		ktk::uint32_t resource_id, const char* p_string) noexcept = 0;
@@ -946,7 +1021,15 @@ public:
 	virtual bool Is_Open(ktk::uint32_t resource_id) = 0;
 	virtual void Close(ktk::uint32_t resource_id) noexcept = 0;
 
-	virtual ktk::uint32_t GenerateFileID(void) noexcept = 0;
+	/// \~english @brief uses ktkIResourceSaverManager for generating resource
+	/// (file) ID
+	/// @return resource ID forktkIResourceSaverManager
+	virtual kun_ktk uint32_t GenerateFileIDFor_Writing() noexcept = 0;
+
+	/// \~english @brief uses ktkIResourceLoaderManager for generating resource
+	/// (file) ID
+	/// @return resouce ID for ktkIResourceLoaderManager
+	virtual kun_ktk uint32_t GenerateFileIDFor_Reading() noexcept = 0;
 
 	virtual void Set_ResourceLoader(
 		ktkIResourceLoaderManager* p_instance) noexcept = 0;
