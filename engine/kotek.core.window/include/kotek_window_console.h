@@ -27,8 +27,8 @@ public:
 	/// manager for creating file for reading (log file)
 	/// @param p_window
 	/// @param p_manager
-	void Initialize(ktkIWindow* p_window, ktkIResourceManager* p_manager, const ktk_filesystem_path& full_path_to_log_file);
-	void Shutdown(ktkIResourceManager* p_manager);
+	void Initialize(ktkIWindow* p_window, ktkIResourceManager* p_manager,
+		const ktk_filesystem_path& full_path_to_log_file);
 
 	void Update();
 	void Render();

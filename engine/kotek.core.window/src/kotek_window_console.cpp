@@ -62,17 +62,12 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 				full_path_to_log_file);
 
 			p_manager->Open(request);
+
+
+			KOTEK_ASSERT(p_manager->Is_Open(this->m_file_reader_id), "failed to open file, check your OS, your file disk, your file and the folder properties (previliges)");
+
+
 		}
-	}
-}
-
-void ktkWindowConsole::Shutdown(ktkIResourceManager* p_manager)
-{
-	KOTEK_ASSERT(p_manager, "must be valid manager");
-
-	if (p_manager)
-	{
-		p_manager->Close(this->m_file_reader_id);
 	}
 }
 
