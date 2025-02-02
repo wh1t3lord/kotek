@@ -16,16 +16,16 @@ constexpr int _kEditHeight = 20;
 
 struct ktkPrivateImpl
 {
+	COLORREF m_color_text;
+	COLORREF m_color_background;
+	kun_ktk uint32_t m_file_resource_id;
+	kun_core ktkIResourceLoaderManager* m_p_reader;
 	HWND m_p_handle;
 	HWND m_p_handle_console;
 	HWND m_p_handle_edit_box;
 	HFONT m_p_handle_edit_box_font;
 	WNDPROC m_p_old_edit_box_callback;
 	HBRUSH m_p_handle_brush_console_background;
-	COLORREF m_color_text;
-	COLORREF m_color_background;
-	kun_ktk uint32_t m_file_resource_id;
-	kun_core ktkIResourceLoaderManager* m_p_reader;
 	kun_ktk size_t m_file_total_size;
 	kun_ktk size_t m_file_current_offset;
 	char m_p_view_buffer[KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE];
