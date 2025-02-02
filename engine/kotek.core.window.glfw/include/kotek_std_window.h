@@ -42,7 +42,7 @@ public:
 	int GetWidth(void) const noexcept override;
 	int GetHeight(void) const noexcept override;
 	void* GetHandle(void) const noexcept override;
-
+	void* Get_OSData(void) noexcept override;
 	void Initialize(Core::eEngineSupportedRenderer version) override;
  
 	void Shutdown(void) override;
@@ -64,6 +64,7 @@ private:
 	int m_screen_size_width;
 	int m_screen_size_height;
 	GLFWwindow* m_p_window;
+	void* m_p_os_data;
     ktk::unordered_map<ktk::enum_base_t, ktk::cstring> m_titles;
 };
 

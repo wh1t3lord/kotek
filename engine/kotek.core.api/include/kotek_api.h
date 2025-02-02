@@ -558,8 +558,12 @@ public:
 	virtual kun_ktk size_t Tellg(kun_ktk uint32_t resource_id) = 0;
 	virtual void Read(
 		kun_ktk uint32_t resource_id, char* p_buffer, kun_ktk size_t size) = 0;
+	virtual void Clear(kun_ktk uint32_t resource_id,
+		eFileIOState state = eFileIOState::kStateGood) = 0;
+	virtual bool EndOfFile(kun_ktk uint32_t resource_id) = 0;
 	virtual bool Is_Open(kun_ktk uint32_t resource_id) noexcept = 0;
 	virtual bool Close(kun_ktk uint32_t id) noexcept = 0;
+	virtual kun_ktk streamsize_t Gcount(kun_ktk uint32_t id) noexcept = 0;
 	/// \~english @brief seeks for available instance of ofstream and returns
 	/// its id
 	/// @param
@@ -1019,7 +1023,8 @@ public:
 	virtual void Read(
 		ktk::uint32_t resource_id, char* p_buffer, ktk::size_t size) = 0;
 	virtual bool Is_Open(ktk::uint32_t resource_id) = 0;
-	virtual void Close(ktk::uint32_t resource_id) noexcept = 0;
+	virtual void Close_Saver(ktk::uint32_t resource_id) noexcept = 0;
+	virtual void Close_Loader(kun_ktk uint32_t resource_id) noexcept = 0;
 
 	/// \~english @brief uses ktkIResourceSaverManager for generating resource
 	/// (file) ID
@@ -1104,6 +1109,7 @@ public:
 	virtual void Initialize(void) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual void* Get(const char* p_logger_name) = 0;
+	virtual void Flush_All(void) = 0;
 };
 
 class ktkIEngineConfig
@@ -1235,6 +1241,7 @@ public:
 	/// @param
 	/// @return
 	virtual void* GetHandle(void) const noexcept = 0;
+	virtual void* Get_OSData(void) noexcept = 0;
 	virtual void Initialize(Core::eEngineSupportedRenderer version) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual void PollEvents(void) = 0;
@@ -1399,6 +1406,17 @@ public:
 	virtual bool BeginChild(ImGuiID id, const ImVec2& size = ImVec2(0, 0),
 		bool border = false, ImGuiWindowFlags flags = 0) = 0;
 	virtual void EndChild() = 0;
+
+	virtual bool IsWindowAppearing() = 0;
+	virtual bool IsWindowCollapsed() = 0;
+	virtual bool IsWindowFocused(ImGuiFocusedFlags flags = 0) = 0;
+	virtual bool IsWindowHovered(ImGuiHoveredFlags flags = 0) = 0;
+
+	virtual ImDrawList* GetWindowDrawList() = 0;
+	virtual ImVec2 GetWindowPos() = 0;
+	virtual ImVec2 GetWindowSize() = 0;
+	virtual float GetWindowWidth() = 0;
+	virtual float GetWindowHeight() = 0;
 
 	virtual void SetNextWindowPos(const ImVec2& pos, ImGuiCond cond = 0,
 		const ImVec2& pivot = ImVec2(0, 0)) = 0;

@@ -56,4 +56,10 @@
 	// glad uses only in private form, like you initialize in appropriate
 	// kotek.render.glx.x version
 	#endif
+
+	struct ktkWin32OSData
+	{
+		HWND hWnd = NULL;
+		HINSTANCE hInstance = NULL;
+	};
 #endif

@@ -593,6 +593,42 @@ void ktkImguiWrapper::EndChild()
 {
 	::ImGui::EndChild();
 }
+bool ktkImguiWrapper::IsWindowAppearing()
+{
+	return ::ImGui::IsWindowAppearing();
+}
+bool ktkImguiWrapper::IsWindowCollapsed()
+{
+	return ::ImGui::IsWindowCollapsed();
+}
+bool ktkImguiWrapper::IsWindowFocused(ImGuiFocusedFlags flags)
+{
+	return ::ImGui::IsWindowFocused(flags);
+}
+bool ktkImguiWrapper::IsWindowHovered(ImGuiHoveredFlags flags)
+{
+	return ::ImGui::IsWindowHovered(flags);
+}
+ImDrawList* ktkImguiWrapper::GetWindowDrawList()
+{
+	return ::ImGui::GetWindowDrawList();
+}
+ImVec2 ktkImguiWrapper::GetWindowPos()
+{
+	return ::ImGui::GetWindowPos();
+}
+ImVec2 ktkImguiWrapper::GetWindowSize()
+{
+	return ::ImGui::GetWindowSize();
+}
+float ktkImguiWrapper::GetWindowWidth()
+{
+	return ::ImGui::GetWindowWidth();
+}
+float ktkImguiWrapper::GetWindowHeight()
+{
+	return ::ImGui::GetWindowHeight();
+}
 void ktkImguiWrapper::SetNextWindowPos(
 	const ImVec2& pos, ImGuiCond cond, const ImVec2& pivot)
 {

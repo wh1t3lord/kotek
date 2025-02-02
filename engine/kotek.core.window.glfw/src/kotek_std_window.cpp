@@ -5,7 +5,8 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 ktkWindow::ktkWindow(void) :
-	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr}
+	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr},
+	m_p_os_data{nullptr}
 {
 	this->SetStringToTitle(
 		static_cast<ktk::enum_base_t>(eWindowTitleType::kTitle_ApplicationName),
@@ -17,10 +18,16 @@ ktkWindow::ktkWindow(const ktk::ustring& title_name) :
 {
 	this->SetStringToTitle(
 		static_cast<ktk::enum_base_t>(eWindowTitleType::kTitle_ApplicationName),
-        reinterpret_cast<const char*>(title_name.c_str()));
+		reinterpret_cast<const char*>(title_name.c_str()));
 }
 
-ktkWindow::~ktkWindow(void) {}
+ktkWindow::~ktkWindow(void) 
+{
+	if (this->m_p_os_data)
+	{
+		delete this->m_p_os_data;
+	}
+}
 
 void ktkWindow::CloseWindow(void) noexcept
 {
@@ -90,7 +97,12 @@ void* ktkWindow::GetHandle(void) const noexcept
 	return this->m_p_window;
 }
 
-void ktkWindow::Initialize(Core::eEngineSupportedRenderer version) 
+void* ktkWindow::Get_OSData(void) noexcept
+{
+	return this->m_p_os_data;
+}
+
+void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 {
 	if (version >= Core::eEngineSupportedRenderer::kOpenGL_1_0 &&
 		version <= Core::eEngineSupportedRenderer::kOpenGL_Latest)
@@ -103,7 +115,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 
 		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
 			"you must pass a valid version of OpenGL what you want to "
-		    "initialize "
+			"initialize "
 			"for");
 
 		switch (version)
@@ -318,7 +330,10 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 		{
 			const char* p_test{};
 			glfwGetError(&p_test);
-			KOTEK_ASSERT(false, "can't create GLFW window, reason: {} (probably your forgot to put libEGL.dll into folder)", p_test);
+			KOTEK_ASSERT(false,
+				"can't create GLFW window, reason: {} (probably your forgot to "
+				"put libEGL.dll into folder)",
+				p_test);
 			glfwTerminate();
 			return;
 		}
@@ -334,7 +349,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 
 		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
 			"you must pass a valid version of DirectX what you want to "
-		    "initialize "
+			"initialize "
 			"for");
 
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -362,7 +377,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 
 		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
 			"you must pass a valid version of DirectX what you want to "
-		    "initialize "
+			"initialize "
 			"for");
 
 		glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
@@ -379,6 +394,23 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			return;
 		}
 	}
+
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	this->m_p_os_data = new ktkWin32OSData();
+	ktkWin32OSData* p_casted_impl =
+		static_cast<ktkWin32OSData*>(this->m_p_os_data);
+	p_casted_impl->hWnd = glfwGetWin32Window(this->m_p_window);
+
+	KOTEK_ASSERT(p_casted_impl->hWnd, "must exist!");
+
+	p_casted_impl->hInstance = GetModuleHandleA(NULL);
+
+	KOTEK_ASSERT(p_casted_impl->hInstance, "must be defined!");
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+	#error not implemented
+#else
+	#error unknown platform
+#endif
 }
 
 void ktkWindow::Shutdown(void)
@@ -402,7 +434,7 @@ void ktkWindow::MakeContextCurrent(void) noexcept
 		const char* description_error{};
 		if (glfwGetError(&description_error))
 		{
-            KOTEK_MESSAGE("{}", description_error);
+			KOTEK_MESSAGE("{}", description_error);
 		}
 #endif
 	}
@@ -416,7 +448,7 @@ void ktkWindow::PollEvents(void)
 	const char* description_error{};
 	if (glfwGetError(&description_error))
 	{
-        KOTEK_MESSAGE("{}", description_error);
+		KOTEK_MESSAGE("{}", description_error);
 	}
 #endif
 }
@@ -450,7 +482,7 @@ void ktkWindow::RemoveStringFromTitle(ktk::enum_base_t id) noexcept
 
 ktk::cstring ktkWindow::GetTitle(void) const noexcept
 {
-    ktk::cstring result;
+	ktk::cstring result;
 
 	for (const auto& [id, string] : this->m_titles)
 	{
@@ -463,7 +495,7 @@ ktk::cstring ktkWindow::GetTitle(void) const noexcept
 	return result;
 }
 
-void ktkWindow::Set_InputType(ktk::enum_base_t type) noexcept 
+void ktkWindow::Set_InputType(ktk::enum_base_t type) noexcept
 {
 	Kotek::Core::eInputType input = static_cast<Kotek::Core::eInputType>(type);
 
@@ -513,7 +545,7 @@ void ktkWindow::ObtainInformationAboutDisplay(void)
 	{
 		const char* message;
 		glfwGetError(&message);
-        KOTEK_ASSERT(false, "{}", message);
+		KOTEK_ASSERT(false, "{}", message);
 		return;
 	}
 

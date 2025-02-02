@@ -28,8 +28,10 @@ public:
 	/// @param p_window
 	/// @param p_manager
 	void Initialize(ktkIWindow* p_window, ktkIResourceManager* p_manager,
+		ktkIInput* p_input, ktkILogger* p_logger,
+		int imgui_mainmenubar_height,
 		const ktk_filesystem_path& full_path_to_log_file);
-
+	void Shutdown();
 	void Update();
 	void Render();
 
@@ -39,8 +41,10 @@ public:
 private:
 	bool m_show;
 	kun_ktk uint32_t m_file_reader_id;
+	ktkIResourceManager* m_p_manager_resource;
+	ktkIInput* m_p_input;
+	ktkILogger* m_p_logger;
 	void* m_p_private_impl;
-	char m_p_view_buffer[KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE];
 };
 
 KOTEK_END_NAMESPACE_CORE

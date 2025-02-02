@@ -6,119 +6,54 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 // TODO: add helper namespace for translating this enum
-enum class eFolderIndex : kun_ktk enum_base_t
-{
-	kFolderIndex_Root,
-	kFolderIndex_Gamedata,
-	kFolderIndex_Configs,
-	kFolderIndex_Scripts,
-	kFolderIndex_Textures,
-	kFolderIndex_Shaders,
-	kFolderIndex_Shaders_GLSL,
-	kFolderIndex_Shaders_HLSL,
-	kFolderIndex_Shaders_WEBGPU,
-	kFolderindex_Shaders_SPV,
-	kFolderIndex_Models,
-	kFolderIndex_Sounds,
-	kFolderIndex_Levels,
-	kFolderIndex_AI,
-	kFolderIndex_UserData_Tests,
-	kFolderIndex_UserData_ShaderCache,
-	kFolderIndex_UserData_SDK,
-	kFolderIndex_UserData_SDK_Settings,
-	kFolderIndex_UserData_SDK_Scenes,
-	kFolderIndex_UserData,
-	kEndOfEnum
-};
+enum class eFolderIndex : kun_ktk enum_base_t{kFolderIndex_Root,
+	kFolderIndex_Gamedata, kFolderIndex_Configs, kFolderIndex_Scripts,
+	kFolderIndex_Textures, kFolderIndex_Shaders, kFolderIndex_Shaders_GLSL,
+	kFolderIndex_Shaders_HLSL, kFolderIndex_Shaders_WEBGPU,
+	kFolderindex_Shaders_SPV, kFolderIndex_Models, kFolderIndex_Sounds,
+	kFolderIndex_Levels, kFolderIndex_AI, kFolderIndex_UserData_Tests,
+	kFolderIndex_UserData_ShaderCache, kFolderIndex_UserData_SDK,
+	kFolderIndex_UserData_SDK_Settings, kFolderIndex_UserData_SDK_Scenes,
+	kFolderIndex_UserData, kEndOfEnum};
 
-enum class eResourceLoadingType : kun_ktk enum_base_t
-{
-	kText,
-	kTexture,
-	kModel,
-	kModelStatic_Triangle,
-	kModelStatic_Box,
-	kModelStatic_Sphere,
-	kSound,
-	kVideo,
-	kDLL,
-	kAutoDetect,
-	kEndOfEnum,
-	kUnknown = -1
-};
+enum class eResourceLoadingType : kun_ktk enum_base_t{kText, kTexture, kModel,
+	kModelStatic_Triangle, kModelStatic_Box, kModelStatic_Sphere, kSound,
+	kVideo, kDLL, kAutoDetect, kEndOfEnum, kUnknown = -1};
 
-enum class eResourceWritingType : kun_ktk enum_base_t
-{
-	kText,
-	kTexture,
-	kEndOfEnum,
-	kUnknown = -1
-};
+enum class eResourceWritingType : kun_ktk enum_base_t{
+	kText, kTexture, kEndOfEnum, kUnknown = -1};
 
-enum class eResourceReadingType : kun_ktk enum_base_t
-{
-	kText,
-	kEndOfEnum,
-	kUnknown = -1
-};
+enum class eResourceReadingType : kun_ktk enum_base_t{
+	kText, kEndOfEnum, kUnknown = -1};
 
-enum class eResourceLoadingPolicy : kun_ktk enum_base_t
-{
-	kAsync,
-	kSync,
-	kEndOfEnum
-};
+enum class eResourceLoadingPolicy : kun_ktk enum_base_t{
+	kAsync, kSync, kEndOfEnum};
 
-enum class eResourceReadingPolicy : kun_ktk enum_base_t
-{
-	kAsync,
-	kSync,
-	kEndOfEnum
-};
+enum class eResourceReadingPolicy : kun_ktk enum_base_t{
+	kAsync, kSync, kEndOfEnum};
 
-enum class eResourceWritingPolicy : kun_ktk enum_base_t
-{
-	kAsync,
-	kSync,
-	kEndOfEnum
-};
+enum class eResourceWritingPolicy : kun_ktk enum_base_t{
+	kAsync, kSync, kEndOfEnum};
 
-enum class eResourceCachingPolicy : kun_ktk enum_base_t
-{
-	kCache,
-	kWithoutCache,
-	kEndOfEnum
-};
+enum class eResourceCachingPolicy : kun_ktk enum_base_t{
+	kCache, kWithoutCache, kEndOfEnum};
 
-enum class eResourceWritingMode : kun_ktk enum_base_t
-{
-	/// @brief ios::app
+enum class eResourceWritingMode : kun_ktk enum_base_t{/// @brief ios::app
 	kAppend,
 	/// @brief ios::in | ios::out
 	kNew,
 	/// @brief ios::in | ios::out | ios::trunc
-	kNew_Trunc,
-	kEndOfEnum
-};
+	kNew_Trunc, kEndOfEnum};
 
-enum class eWindowTitleType : kun_ktk enum_base_t
-{
+enum class eWindowTitleType : kun_ktk enum_base_t{
 	// probably all possible cases for output in window's title
-	kTitle_ApplicationName,
-	kTitle_Time,
-	kTitle_GitVersion,
-	kTitle_ApplicationVersion,
-	kTitle_CurrentSceneName,
+	kTitle_ApplicationName, kTitle_Time, kTitle_GitVersion,
+	kTitle_ApplicationVersion, kTitle_CurrentSceneName,
 	// that star * when scene was changed
-	kTitle_CurrentSceneEditStatus,
-	kTitle_FPS,
-	kTitle_Ping,
-	kTitle_PlayerName,
-	kTitle_EntitiesCount,
-	kTitle_CurrentLevelName,
+	kTitle_CurrentSceneEditStatus, kTitle_FPS, kTitle_Ping, kTitle_PlayerName,
+	kTitle_EntitiesCount, kTitle_CurrentLevelName,
 
-	kEndOfEnum
-};
+	kEndOfEnum};
 
 /// \~russian @brief Данное перечисление определяет какие возможности
 /// имеет движок.
@@ -406,52 +341,21 @@ enum eEngineFeatureSDK
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureSDK);
 
 /// @brief
-enum class eEngineSupportedRenderer : kun_ktk enum_base_t
-{
-	kDirectX_7,
-	kDirectX_8,
-	kDirectX_9,
-	kDirectX_10,
-	kDirectX_11,
-	kDirectX_12,
+enum class eEngineSupportedRenderer : kun_ktk enum_base_t{kDirectX_7,
+	kDirectX_8, kDirectX_9, kDirectX_10, kDirectX_11, kDirectX_12,
 	kDirectX_Latest = kDirectX_12,
 
-	kVulkan_1_0,
-	kVulkan_1_1,
-	kVulkan_1_2,
-	kVulkan_1_3,
+	kVulkan_1_0, kVulkan_1_1, kVulkan_1_2, kVulkan_1_3,
 	kVulkan_Latest = kVulkan_1_3,
 
-	kOpenGLES_1,
-	kOpenGLES_2,
-	kOpenGLES_3_0,
-	kOpenGLES_3_1,
-	kOpenGLES_3_2,
+	kOpenGLES_1, kOpenGLES_2, kOpenGLES_3_0, kOpenGLES_3_1, kOpenGLES_3_2,
 	kOpenGLES_Latest = kOpenGLES_3_2,
 
-	kOpenGL_1_0,
-	kOpenGL_1_1,
-	kOpenGL_1_2,
-	kOpenGL_1_3,
-	kOpenGL_1_4,
-	kOpenGL_1_5,
-	kOpenGL_2_0,
-	kOpenGL_2_1,
-	kOpenGL_3_0,
-	kOpenGL_3_1,
-	kOpenGL_3_2,
-	kOpenGL_3_3,
-	kOpenGL_4_0,
-	kOpenGL_4_1,
-	kOpenGL_4_2,
-	kOpenGL_4_3,
-	kOpenGL_4_4,
-	kOpenGL_4_5,
-	kOpenGL_4_6,
-	kOpenGL_Latest = kOpenGL_4_6,
-	kEndOfEnum,
-	kUnknown = -1
-};
+	kOpenGL_1_0, kOpenGL_1_1, kOpenGL_1_2, kOpenGL_1_3, kOpenGL_1_4,
+	kOpenGL_1_5, kOpenGL_2_0, kOpenGL_2_1, kOpenGL_3_0, kOpenGL_3_1,
+	kOpenGL_3_2, kOpenGL_3_3, kOpenGL_4_0, kOpenGL_4_1, kOpenGL_4_2,
+	kOpenGL_4_3, kOpenGL_4_4, kOpenGL_4_5, kOpenGL_4_6,
+	kOpenGL_Latest = kOpenGL_4_6, kEndOfEnum, kUnknown = -1};
 
 enum eEngineFeatureRenderer
 {
@@ -567,15 +471,11 @@ KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRender);
  * The difference between two that one executes right now the second just pushes
  * to queue and executes on next tick.
  */
-enum class eConsoleCommandIndex : kun_ktk enum_base_t
-{
-	// (int width, int height)
+enum class eConsoleCommandIndex : kun_ktk enum_base_t{// (int width, int height)
 	kConsoleCommand_Resize,
 
-	kConsoleCommand_App_Close,
-	kConsoleCommand_App_Hide,
-	kConsoleCommand_App_Show,
-	kConsoleCommand_App_AddTextToExistedWindowTitle,
+	kConsoleCommand_App_Close, kConsoleCommand_App_Hide,
+	kConsoleCommand_App_Show, kConsoleCommand_App_AddTextToExistedWindowTitle,
 
 	kConsoleCommand_Input_Type,
 
@@ -587,172 +487,125 @@ enum class eConsoleCommandIndex : kun_ktk enum_base_t
 	kConsoleCommand_ResourceManager_Write,
 	kConsoleCommand_ResourceManager_FinishWriting,
 
-	kConsoleCommand_SDK_LoadScene,
-	kConsoleCommand_SDK_SaveScene,
-	kConsoleCommand_SDK_Redo,
-	kConsoleCommand_SDK_Undo,
-	kConsoleCommand_SDK_CloseCurrentScene,
-	kConsoleCommand_SDK_StartSimulate,
-	kConsoleCommand_SDK_StopSimulate,
-	kConsoleCommand_SDK_SelectEntity,
+	kConsoleCommand_SDK_LoadScene, kConsoleCommand_SDK_SaveScene,
+	kConsoleCommand_SDK_Redo, kConsoleCommand_SDK_Undo,
+	kConsoleCommand_SDK_CloseCurrentScene, kConsoleCommand_SDK_StartSimulate,
+	kConsoleCommand_SDK_StopSimulate, kConsoleCommand_SDK_SelectEntity,
 	kConsoleCommand_SDK_DeleteComponentFromEntity,
 	kConsoleCommand_SDK_CreateComponentForEntity,
-	kConsoleCommand_SDK_CreateEntity,
-	kConsoleCommand_SDK_DeleteEntity,
+	kConsoleCommand_SDK_CreateEntity, kConsoleCommand_SDK_DeleteEntity,
 
 	/**
-	 * \~english @brief Defines functionality to your log window when issued it
-	 * must send message to log
-	 */
+     * \~english @brief Defines functionality to your log window when issued it
+     * must send message to log
+     */
 	kConsoleCommand_SDK_SendMessageToLogWindow,
 
 	/**
-	 * \~english @brief Sends warning message (in my opinion it could be yellow
-	 * color) to log window so it depends on your implementation how you will do
-	 * that in your 'business logic'
-	 */
+     * \~english @brief Sends warning message (in my opinion it could be yellow
+     * color) to log window so it depends on your implementation how you will do
+     * that in your 'business logic'
+     */
 	kConsoleCommand_SDK_SendMessageWarningToLogWindow,
 
 	/**
-	 * \~english @brief Sends error message (in my opinion it could be red
-	 * color) to log window so it depends on your implementation how you will do
-	 * that in your 'business logic'
-	 */
+     * \~english @brief Sends error message (in my opinion it could be red
+     * color) to log window so it depends on your implementation how you will do
+     * that in your 'business logic'
+     */
 	kConsoleCommand_SDK_SendMessageErrorToLogWindow,
 
 	/**
-	 * \~english @brief Sends info message (in my opinion it could be blue
-	 * color) to log window so it depends on your implementation how you will do
-	 * that in your 'business logic'
-	 */
+     * \~english @brief Sends info message (in my opinion it could be blue
+     * color) to log window so it depends on your implementation how you will do
+     * that in your 'business logic'
+     */
 	kConsoleCommand_SDK_SendMessageInfoToLogWindow,
 
 	/**
-	 * \~english @brief Sends grey message to log window so it depends on your
-	 * implementation how you will do that in your 'business logic'. Of course
-	 * we could define a such enum like SendNotImportantMessageToLogWindow but
-	 * you know it is really hard to define from that perspective it is just
-	 * grey and user can define in his engine what he wants to see it could be
-	 * not important or message from physics or anything else
-	 */
+     * \~english @brief Sends grey message to log window so it depends on your
+     * implementation how you will do that in your 'business logic'. Of course
+     * we could define a such enum like SendNotImportantMessageToLogWindow but
+     * you know it is really hard to define from that perspective it is just
+     * grey and user can define in his engine what he wants to see it could be
+     * not important or message from physics or anything else
+     */
 	kConsoleCommand_SDK_SendMessageGreyToLogWindow,
 
 	/**
-	 * \~english @brief As you see it means we want to show modal window that
-	 * define that window that asks us about what we want to do with current
-	 * scene save and close or just close scene without saving what we have in
-	 * all editors about editing something we can save and close our application
-	 * or we can close our application without saving our editing instance
-	 */
+     * \~english @brief As you see it means we want to show modal window that
+     * define that window that asks us about what we want to do with current
+     * scene save and close or just close scene without saving what we have in
+     * all editors about editing something we can save and close our application
+     * or we can close our application without saving our editing instance
+     */
 	kConsoleCommand_SDK_ShowModalWindow_SaveAndCloseOrCloseScene,
 
 	/**
-	 * \~english @brief it means that we have some component like
-	 * component_camera, but we say that component_camera can't exist without
-	 * component_input because it is pointless to have camera input especially
-	 * in your editor, so for that case define components that are required for
-	 * creation of component_camera in our case it is component_input. So when
-	 * we want to add component_camera have two ways like we just print warning
-	 * message that we can't create that component because you don't have the
-	 * required one (e.g. component_input) or we can automatically can
-	 * components that are required for creation so it means when we add
-	 * component_camera we automatically create component_input without any
-	 * notifications so sometimes it could be useful, but user doesn't to enable
-	 * a such feature like we provide a such thing that he always must see what
-	 * components are required. But I guess it is pointless to have a such thing
-	 * like you need always manually add required components instead of
-	 * 'automatization', but who knows who wants to add a such things through
-	 * this way...
-	 *
-	 * @warning You need to interpret that like you enable or disable feature so
-	 * it doesn't mean that it issues some code that adds components to entity,
-	 * no it is about some flag enable/disable state.
-	 */
+     * \~english @brief it means that we have some component like
+     * component_camera, but we say that component_camera can't exist without
+     * component_input because it is pointless to have camera input especially
+     * in your editor, so for that case define components that are required for
+     * creation of component_camera in our case it is component_input. So when
+     * we want to add component_camera have two ways like we just print warning
+     * message that we can't create that component because you don't have the
+     * required one (e.g. component_input) or we can automatically can
+     * components that are required for creation so it means when we add
+     * component_camera we automatically create component_input without any
+     * notifications so sometimes it could be useful, but user doesn't to enable
+     * a such feature like we provide a such thing that he always must see what
+     * components are required. But I guess it is pointless to have a such thing
+     * like you need always manually add required components instead of
+     * 'automatization', but who knows who wants to add a such things through
+     * this way...
+     *
+     * @warning You need to interpret that like you enable or disable feature so
+     * it doesn't mean that it issues some code that adds components to entity,
+     * no it is about some flag enable/disable state.
+     */
 	kConsoleCommand_SDK_SetFeature_AddComponentsToEntity_ThatRequiredForCreation,
 
-	kConsoleCommand_SDK_ShowWindow,
-	kConsoleCommand_SDK_HideWindow,
+	kConsoleCommand_SDK_ShowWindow, kConsoleCommand_SDK_HideWindow,
 
 	// prints as list of registered windows
 	kConsoleCommand_SDK_PrintRegisteredWindows,
 
-	kEndOfEnum
-};
+	kEndOfEnum};
 
 // TODO: not obvious and may conflict with input system better to rename to
 // something like eInputCursorType otherwise specify working field where that
 // enum relates to
-enum class eInputType : kun_ktk enum_base_t
-{
-	kInputType_Cursor,
-	kInputType_HiddenCursor,
-	kInputType_DisabledCursor,
+enum class eInputType : kun_ktk enum_base_t{kInputType_Cursor,
+	kInputType_HiddenCursor, kInputType_DisabledCursor,
 
-	kEndOfEnum
-};
+	kEndOfEnum};
 
-enum class eResourceWritingDataType : kun_ktk enum_base_t
-{
-	kInt8_t,
-	kInt16_t,
-	kInt32_t,
-	kInt64_t,
-	kInt128_t,
-	kUInt8_t,
-	kUInt16_t,
-	kUInt32_t,
-	kUInt64_t,
-	kUInt128_t,
-	kSize_t,
-	kFloat_t,
-	kDouble_t,
-	kPIntWithSize_t,
-	kPUIntWithSize_t,
-	kPFloatWithSize_t,
-	kPDoubleWithSize_t,
-	kPChar_t,
-	kPUChar_t,
-	kPUCharWithSize_t,
-	kPCharWithSize_t,
-	kEndOfEnum,
-	kUnknown = -1
-};
+enum class eResourceWritingDataType : kun_ktk enum_base_t{kInt8_t, kInt16_t,
+	kInt32_t, kInt64_t, kInt128_t, kUInt8_t, kUInt16_t, kUInt32_t, kUInt64_t,
+	kUInt128_t, kSize_t, kFloat_t, kDouble_t, kPIntWithSize_t, kPUIntWithSize_t,
+	kPFloatWithSize_t, kPDoubleWithSize_t, kPChar_t, kPUChar_t,
+	kPUCharWithSize_t, kPCharWithSize_t, kEndOfEnum, kUnknown = -1};
 
-enum class eFileWritingControlCharacterType : kun_ktk enum_base_t
-{
+enum class eFileWritingControlCharacterType : kun_ktk enum_base_t{
 	/// @brief just a white space aka " "
 	kSpace,
 	/// @brief aka std::endl
 	kNewLine,
 	/// @brief aka std::flush
-	kFlush,
-	kEndOfEnum
-};
+	kFlush, kEndOfEnum};
 
-enum class eResourceHowToWriteData : kun_ktk enum_base_t
-{
-	kNone,
-	kUseEndlAfterWrite,
-	kUseSpaceAfterWrite,
-	kUseSpaceAndEndlAfterWrite,
-	kEndOfEnum,
-	kUnknown = -1
-};
+enum class eResourceHowToWriteData : kun_ktk enum_base_t{kNone,
+	kUseEndlAfterWrite, kUseSpaceAfterWrite, kUseSpaceAndEndlAfterWrite,
+	kEndOfEnum, kUnknown = -1};
 
-enum class eFolderVisibilityType : kun_ktk enum_base_t
-{
-	kVisible,
-	kHidden,
-	kEndOfEnum
-};
+enum class eFolderVisibilityType : kun_ktk enum_base_t{
+	kVisible, kHidden, kEndOfEnum};
 
-enum class eFileSeekDirectionType : kun_ktk enum_base_t
-{
-	kSeekDirectionEnd,
-	kSeekdDirectionCurrent,
-	kSeekDirectionBegin,
-	kEndOfEnum
-};
+enum class eFileIOState : kun_ktk enum_base_t{
+	kStateEOF, kStateFail, kStateBad, kStateGood};
+
+enum class eFileSeekDirectionType : kun_ktk enum_base_t{
+	kSeekDirectionEnd, kSeekdDirectionCurrent, kSeekDirectionBegin, kEndOfEnum};
 
 enum eInputControllerType
 {

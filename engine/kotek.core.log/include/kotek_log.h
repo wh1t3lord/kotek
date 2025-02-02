@@ -28,6 +28,7 @@ public:
 	void* Get(const char* p_logger_name) override;
 
 	void Set(spdlog::logger* p_logger, const char* p_logger_name);
+	void Flush_All(void) override;
 
 private:
 #ifdef KOTEK_USE_LOG_LIBRARY_SPDLOG

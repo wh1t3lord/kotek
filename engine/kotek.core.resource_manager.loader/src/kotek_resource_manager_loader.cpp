@@ -204,7 +204,18 @@ void ktkResourceLoaderManager::Seekg(kun_ktk uint32_t resource_id,
 		}
 		}
 
+#ifdef KOTEK_DEBUG
+		bool eof_state = file.eof();
+#endif
+
 		file.seekg(bytes, direction);
+
+#ifdef KOTEK_DEBUG
+		KOTEK_ASSERT(file.good(),
+			"[std::ifstream] failed to seekg = [errno:{}:{}], did you reach "
+			"eof and forgot to .clear call? [eof={}]",
+			strerror(errno), errno, eof_state);
+#endif
 	}
 }
 
@@ -219,7 +230,18 @@ kun_ktk size_t ktkResourceLoaderManager::Tellg(kun_ktk uint32_t resource_id)
 	{
 		auto& file = this->m_readers.at(resource_id).first;
 
+#ifdef KOTEK_DEBUG
+		bool eof_state = file.eof();
+#endif
+
 		result = file.tellg();
+
+#ifdef KOTEK_DEBUG
+		KOTEK_ASSERT(file.good(),
+			"[std::ifstream] failed to tellg = [errno:{}:{}], did you reach "
+			"eof and forgot to .clear call? [eof={}]",
+			strerror(errno), errno, eof_state);
+#endif
 	}
 
 	return result;
@@ -236,6 +258,67 @@ void ktkResourceLoaderManager::Read(
 		auto& file = this->m_readers.at(resource_id).first;
 		file.read(p_buffer, size);
 	}
+}
+
+void ktkResourceLoaderManager::Clear(
+	kun_ktk uint32_t resource_id, eFileIOState state)
+{
+	KOTEK_ASSERT(resource_id != kun_ktk uint32_t(-1), "must be valid number!");
+	KOTEK_ASSERT(
+		this->m_readers.find(resource_id) != this->m_readers.end(), "must be found");
+
+	if (this->m_readers.find(resource_id) != this->m_readers.end())
+	{
+		auto& file = this->m_readers.at(resource_id).first;
+
+		std::ifstream::iostate converted_state = std::ifstream::failbit;
+		switch (state)
+		{
+		case eFileIOState::kStateEOF:
+		{
+			converted_state = std::ifstream::eofbit;
+			break;
+		}
+		case eFileIOState::kStateFail:
+		{
+			converted_state = std::ifstream::failbit;
+			break;
+		}
+		case eFileIOState::kStateBad:
+		{
+			converted_state = std::ifstream::badbit;
+			break;
+		}
+		case eFileIOState::kStateGood:
+		{
+			converted_state = std::ifstream::goodbit;
+			break;
+		}
+		default:
+		{
+			KOTEK_ASSERT(
+				false, "unregistered state please report to developers!");
+		}
+		}
+
+		file.clear(converted_state);
+	}
+
+}
+
+bool ktkResourceLoaderManager::EndOfFile(kun_ktk uint32_t resource_id)
+{
+	KOTEK_ASSERT(
+		resource_id != kun_ktk uint32_t(-1), "must be a valid number!");
+	KOTEK_ASSERT(this->m_readers.find(resource_id) != this->m_readers.end(),
+		"must be valid!");
+
+	if (this->m_readers.find(resource_id) != this->m_readers.end())
+	{
+		return this->m_readers.at(resource_id).first.eof();
+	}
+
+	return false;
 }
 
 bool ktkResourceLoaderManager::Is_Open(kun_ktk uint32_t resource_id) noexcept
@@ -275,6 +358,23 @@ bool ktkResourceLoaderManager::Close(kun_ktk uint32_t id) noexcept
 	}
 
 	return result;
+}
+
+kun_ktk streamsize_t ktkResourceLoaderManager::Gcount(
+	kun_ktk uint32_t id) noexcept
+{
+	KOTEK_ASSERT(id != kun_ktk uint32_t(-1), "must be valid number!");
+	KOTEK_ASSERT(this->m_readers.empty() == false, "early calling!");
+
+	if (this->m_readers.empty() == false)
+	{
+		if (this->m_readers.find(id) != this->m_readers.end())
+		{
+			return this->m_readers.at(id).first.gcount();
+		}
+	}
+
+	return 0;
 }
 
 kun_ktk uint32_t ktkResourceLoaderManager::GenerateFileID(void) noexcept

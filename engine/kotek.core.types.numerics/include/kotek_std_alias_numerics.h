@@ -25,6 +25,7 @@ using flag_t = unsigned int;
 using float_t = float;
 using double_t = double;
 using long_double_t = long double;
+using streamsize_t = std::streamsize;
 
 namespace chrono = std::chrono;
 namespace chrono_literals = std::chrono_literals;
@@ -46,7 +47,7 @@ using enum_base_t = KUN_KOTEK KUN_KTK enum_base_t;
 using float_t = KUN_KOTEK KUN_KTK float_t;
 using double_t = KUN_KOTEK KUN_KTK double_t;
 using long_double_t = KUN_KOTEK KUN_KTK long_double_t;
-
+using streamsize_t = KUN_KOTEK KUN_KTK streamsize_t;
 namespace chrono = KUN_KOTEK KUN_KTK chrono;
 namespace chrono_literals = KUN_KOTEK KUN_KTK chrono_literals;
 

@@ -50,6 +50,16 @@ void ktkLogger::Set(spdlog::logger* p_logger, const char* p_logger_name)
 		}
 	}
 }
+void ktkLogger::Flush_All(void)
+{
+	#ifdef KOTEK_USE_LOG_LIBRARY_BOOST
+	#elif defined(KOTEK_USE_LOG_LIBRARY_SPDLOG)
+	if (m_pLoggerMain)
+	{
+		m_pLoggerMain->flush();
+	}
+	#endif
+}
 KOTEK_END_NAMESPACE_CORE
 
 spdlog::logger* _pLoggerMain{};
@@ -65,7 +75,7 @@ spdlog::logger* Get_LoggerMsvcOutput()
 	return _pLoggerMsvcOutput;
 }
 
-void Set_LoggerMain(void* p_logger) 
+void Set_LoggerMain(void* p_logger)
 {
 	_pLoggerMain = static_cast<spdlog::logger*>(p_logger);
 }

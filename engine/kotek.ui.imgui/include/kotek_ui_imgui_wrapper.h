@@ -115,6 +115,17 @@ public:
 		bool border = false, ImGuiWindowFlags flags = 0) override;
 	void EndChild() override;
 
+	bool IsWindowAppearing() override;
+	bool IsWindowCollapsed() override;
+	bool IsWindowFocused(ImGuiFocusedFlags flags = 0) override;
+	bool IsWindowHovered(ImGuiHoveredFlags flags = 0) override;
+
+	ImDrawList* GetWindowDrawList() override;
+	ImVec2 GetWindowPos() override;
+	ImVec2 GetWindowSize() override;
+	float GetWindowWidth() override;
+	float GetWindowHeight() override;
+
 	void SetNextWindowPos(const ImVec2& pos, ImGuiCond cond = 0,
 		const ImVec2& pivot = ImVec2(0, 0)) override;
 	void SetNextWindowSize(const ImVec2& size, ImGuiCond cond = 0) override;
