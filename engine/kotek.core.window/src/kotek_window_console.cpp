@@ -14,7 +14,7 @@ constexpr unsigned int _kConsoleEditBoxLimitTextSize = 128;
 
 constexpr COLORREF _kConsoleBackgroundEncodedColor = RGB(153, 102, 204);
 constexpr COLORREF _kConsoleTextEncodedColor = RGB(255, 250, 250);
-constexpr int _kConsoleHeight = 200;
+constexpr int _kConsoleHeight = 384;
 constexpr int _kEditHeight = 20;
 
 struct ktkPrivateImpl
@@ -115,11 +115,12 @@ LRESULT CALLBACK ConsoleWndProc(
 		}
 		else
 		{
+			auto diff_end = p_impl->m_file_total_size -
+				KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE;
 			p_impl->m_file_current_offset = std::clamp<kun_ktk size_t>(
 				p_impl->m_file_current_offset + scroll, 0,
 				std::max<kun_ktk size_t>(0,
-					p_impl->m_file_total_size -
-						KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE));
+					diff_end));
 		}
 
 		if (p_impl)
