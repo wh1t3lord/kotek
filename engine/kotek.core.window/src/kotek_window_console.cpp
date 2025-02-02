@@ -16,6 +16,7 @@ constexpr int _kEditHeight = 20;
 
 struct ktkPrivateImpl
 {
+	bool m_edit_box_send_command;
 	COLORREF m_color_text;
 	COLORREF m_color_background;
 	kun_ktk uint32_t m_file_resource_id;
@@ -28,6 +29,7 @@ struct ktkPrivateImpl
 	HBRUSH m_p_handle_brush_console_background;
 	kun_ktk size_t m_file_total_size;
 	kun_ktk size_t m_file_current_offset;
+	char m_p_edit_box_content[_kConsoleEditBoxLimitTextSize];
 	char m_p_view_buffer[KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE];
 };
 
@@ -174,15 +176,15 @@ LRESULT CALLBACK EditWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	{
 		if (wParam == VK_RETURN)
 		{
-			char content[_kConsoleEditBoxLimitTextSize] = {0};
-
-			GetWindowTextA(hWnd, content, _kConsoleEditBoxLimitTextSize);
-			SetWindowTextA(hWnd, "");
-
 			if (p_impl)
 			{
-				// TODO: implement sending command
+				GetWindowTextA(hWnd, p_impl->m_p_edit_box_content,
+					_kConsoleEditBoxLimitTextSize);
+
+				p_impl->m_edit_box_send_command = true;
 			}
+
+			SetWindowTextA(hWnd, "");
 
 			return 0;
 		}
@@ -284,6 +286,7 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 		p_impl->m_file_resource_id = -1;
 		p_impl->m_file_current_offset = 0;
 		p_impl->m_file_total_size = 0;
+		p_impl->m_edit_box_send_command = false;
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 	#error not implemented
 #else
@@ -544,6 +547,20 @@ void ktkWindowConsole::Update()
 
 		if (this->m_show)
 		{
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+			ktkPrivateImpl* p_impl =
+				static_cast<ktkPrivateImpl*>(this->m_p_private_impl);
+
+			if (p_impl->m_edit_box_send_command)
+			{
+				// TODO: implement sending command
+				p_impl->m_edit_box_send_command = false;
+			}
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+	#error not implemented
+#else
+	#error unknown platform
+#endif
 		}
 	}
 }
