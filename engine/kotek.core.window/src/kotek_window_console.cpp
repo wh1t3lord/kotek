@@ -5,14 +5,11 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
 
-constexpr const char* _kConsoleWindowClassName =
-	"KotekConsoleViewerWndClassName";
-constexpr const char* _kConsoleEditBoxWindowClassName =
-	"KotekConsoleEditBoxWndClassName";
 constexpr const char* _kConsoleWindowFontName = "Consolas";
 constexpr unsigned int _kConsoleEditBoxLimitTextSize = 128;
 
-constexpr COLORREF _kConsoleBackgroundEncodedColor = RGB(153, 102, 204);
+constexpr COLORREF _kConsoleBackgroundEncodedColor = RGB(123, 104, 238);
+constexpr COLORREF _kConsoleEditboxBackgroundEndcodedColor = RGB(110, 91, 225);
 constexpr COLORREF _kConsoleTextEncodedColor = RGB(255, 250, 250);
 constexpr int _kConsoleHeight = 384;
 constexpr int _kEditHeight = 20;
@@ -119,8 +116,7 @@ LRESULT CALLBACK ConsoleWndProc(
 				KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE;
 			p_impl->m_file_current_offset = std::clamp<kun_ktk size_t>(
 				p_impl->m_file_current_offset + scroll, 0,
-				std::max<kun_ktk size_t>(0,
-					diff_end));
+				std::max<kun_ktk size_t>(0, diff_end));
 		}
 
 		if (p_impl)
@@ -151,6 +147,13 @@ LRESULT CALLBACK ConsoleWndProc(
 
 		break;
 	}
+	case WM_CTLCOLOREDIT:
+	{
+		HDC hdc = (HDC)wParam;
+		SetTextColor(hdc, _kConsoleTextEncodedColor);
+		SetBkColor(hdc, _kConsoleEditboxBackgroundEndcodedColor);
+		return (LRESULT)p_impl->m_p_handle_brush_console_background;
+	}
 	default:
 	{
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -163,24 +166,60 @@ LRESULT CALLBACK EditWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	ktkPrivateImpl* p_impl = reinterpret_cast<ktkPrivateImpl*>(
 		GetWindowLongPtr(hWnd, GWLP_USERDATA));
 
+	KOTEK_ASSERT(p_impl, "must be valid!");
+
 	switch (uMsg)
 	{
 	case WM_KEYDOWN:
 	{
 		if (wParam == VK_RETURN)
 		{
+			char content[_kConsoleEditBoxLimitTextSize] = {0};
+
+			GetWindowTextA(hWnd, content, _kConsoleEditBoxLimitTextSize);
+			SetWindowTextA(hWnd, "");
+
+			if (p_impl)
+			{
+				// TODO: implement sending command
+			}
+
+			return 0;
+		}
+		else if (wParam == VK_TAB)
+		{
+			SetFocus(GetParent(GetParent(hWnd)));
+			return 0;
 		}
 
 		break;
 	}
-	case WM_KILLFOCUS:
+	case WM_CHAR:
 	{
-		InvalidateRect(GetParent(hWnd), NULL, TRUE);
+		if (wParam == VK_RETURN)
+		{
+			// prevents beep annoying sound
+			return 0;
+		}
+		else if (wParam == VK_TAB)
+		{
+			// prevents beep annoying sound
+			return 0;
+		}
+
 		break;
 	}
 	}
 
-	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+	WNDPROC p_proc = DefWindowProc;
+
+	if (p_impl)
+	{
+		if (p_impl->m_p_old_edit_box_callback)
+			p_proc = p_impl->m_p_old_edit_box_callback;
+	}
+
+	return CallWindowProc(p_proc, hWnd, uMsg, wParam, lParam);
 }
 
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
@@ -314,56 +353,52 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 					KOTEK_ASSERT(p_impl->m_p_handle_brush_console_background,
 						"failed to create brush! (console background)");
 
-					WNDCLASSA subClass = {};
-					subClass.lpszClassName = _kConsoleWindowClassName;
-					subClass.hInstance = p_main_window_data->hInstance;
-					subClass.lpfnWndProc = ConsoleWndProc;
-					subClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-					subClass.hbrBackground =
-						p_impl->m_p_handle_brush_console_background;
-					subClass.style = CS_HREDRAW | CS_VREDRAW;
-					RegisterClassA(&subClass);
-
-					p_impl->m_p_handle_console =
-						CreateWindowA(_kConsoleWindowClassName, NULL,
-							WS_CHILD | WS_BORDER | SS_NOTIFY, 0, 0, 0, 0,
-							p_impl->m_p_handle, NULL,
-							p_main_window_data->hInstance, NULL);
+					p_impl->m_p_handle_console = CreateWindowA("STATIC", NULL,
+						WS_CHILD | WS_BORDER | SS_NOTIFY, 0, 0, 0, 0,
+						p_impl->m_p_handle, NULL, p_main_window_data->hInstance,
+						NULL);
 
 					KOTEK_ASSERT(p_impl->m_p_handle_console,
 						"failed to create console subwindow! GetLastError={}",
 						GetLastError());
 
-					WNDCLASSA editClass = {};
-					editClass.lpszClassName = _kConsoleEditBoxWindowClassName;
-					editClass.hInstance = p_main_window_data->hInstance;
-					editClass.lpfnWndProc = EditWndProc;
-					editClass.hCursor = LoadCursor(NULL, IDC_IBEAM);
-					editClass.hbrBackground =
-						p_impl->m_p_handle_brush_console_background;
-					editClass.style = CS_HREDRAW | CS_VREDRAW;
-					RegisterClassA(&editClass);
+					if (!p_impl->m_p_handle_console)
+						return;
 
-					p_impl->m_p_handle_edit_box =
-						CreateWindowA(_kConsoleEditBoxWindowClassName, NULL,
-							WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, 0, 0, 0, 0,
-							p_impl->m_p_handle, NULL,
-							p_main_window_data->hInstance, NULL);
+					p_impl->m_p_handle_edit_box = CreateWindowA("EDIT", NULL,
+						WS_CHILD | WS_BORDER | ES_AUTOHSCROLL, 0, 0, 0, 0,
+						p_impl->m_p_handle_console, NULL,
+						p_main_window_data->hInstance, NULL);
 
 					KOTEK_ASSERT(p_impl->m_p_handle_edit_box,
 						"failed to create edit box subwindow! GetLastError={}",
 						GetLastError());
 
-					SendMessageA(p_impl->m_p_handle_edit_box, EM_SETLIMITTEXT,
-						_kConsoleEditBoxLimitTextSize - 1, 0);
-					SendMessageA(
-						p_impl->m_p_handle_edit_box, WM_SETFONT, NULL, TRUE);
+					if (p_impl)
+					{
+						if (p_impl->m_p_handle_edit_box)
+						{
+							SendMessageA(p_impl->m_p_handle_edit_box,
+								EM_SETLIMITTEXT,
+								_kConsoleEditBoxLimitTextSize - 1, 0);
 
-					p_impl->m_p_old_edit_box_callback =
-						(WNDPROC)SetWindowLongPtr(p_impl->m_p_handle_edit_box,
-							GWLP_WNDPROC, (LONG_PTR)EditWndProc);
-					SetWindowLongPtr(p_impl->m_p_handle_console, GWLP_WNDPROC,
-						(LONG_PTR)ConsoleWndProc);
+							SetWindowLongPtr(p_impl->m_p_handle_edit_box,
+								GWLP_USERDATA, (LONG_PTR)p_impl);
+
+							p_impl->m_p_old_edit_box_callback =
+								(WNDPROC)SetWindowLongPtr(
+									p_impl->m_p_handle_edit_box, GWLP_WNDPROC,
+									(LONG_PTR)EditWndProc);
+						}
+
+						if (p_impl->m_p_handle_console)
+						{
+							SetWindowLongPtr(p_impl->m_p_handle_console,
+								GWLP_USERDATA, (LONG_PTR)p_impl);
+							SetWindowLongPtr(p_impl->m_p_handle_console,
+								GWLP_WNDPROC, (LONG_PTR)ConsoleWndProc);
+						}
+					}
 
 					p_impl->m_p_handle_edit_box_font =
 						CreateFontA(16, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE,
@@ -376,30 +411,31 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 						"creation: [{}]",
 						_kConsoleWindowFontName);
 
+					if (p_impl)
+					{
+						if (p_impl->m_p_handle_edit_box &&
+							p_impl->m_p_handle_edit_box_font)
+						{
+							SendMessageA(p_impl->m_p_handle_edit_box,
+								WM_SETFONT,
+								(WPARAM)p_impl->m_p_handle_edit_box_font, TRUE);
+						}
+					}
+
 					RECT rt_main_window;
 					if (GetWindowRect(p_impl->m_p_handle, &rt_main_window))
 					{
-						int width = rt_main_window.right - rt_main_window.left;
-						SetWindowPos(p_impl->m_p_handle_console, NULL, 0,
-							imgui_heightmainmenubar, width, _kConsoleHeight,
-							SWP_NOZORDER);
-						SetWindowPos(p_impl->m_p_handle_edit_box, NULL, 0,
-							_kConsoleHeight + imgui_heightmainmenubar, width,
-							_kEditHeight, SWP_NOZORDER);
-					}
-
-					if (p_impl)
-					{
-						if (p_impl->m_p_handle_edit_box)
+						if (p_impl->m_p_handle_console &&
+							p_impl->m_p_handle_edit_box)
 						{
-							SetWindowLongPtr(p_impl->m_p_handle_edit_box,
-								GWLP_USERDATA, (LONG_PTR)p_impl);
-						}
-
-						if (p_impl->m_p_handle_console)
-						{
-							SetWindowLongPtr(p_impl->m_p_handle_console,
-								GWLP_USERDATA, (LONG_PTR)p_impl);
+							int width =
+								rt_main_window.right - rt_main_window.left;
+							SetWindowPos(p_impl->m_p_handle_console, NULL, 0,
+								imgui_heightmainmenubar, width, _kConsoleHeight,
+								SWP_NOZORDER);
+							SetWindowPos(p_impl->m_p_handle_edit_box, NULL, 0,
+								_kConsoleHeight - _kEditHeight, width,
+								_kEditHeight, SWP_NOZORDER);
 						}
 					}
 
