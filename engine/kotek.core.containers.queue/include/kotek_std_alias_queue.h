@@ -16,7 +16,7 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
-template <typename Type, size_t NotInUseArgument = 0>
+template <typename Type, unsigned char NotInUseArgument = 0>
 using queue = std::queue<Type, deque<Type>>;
 #else
 #endif
@@ -29,12 +29,11 @@ using static_queue = etl::queue<Type, Size>;
 
 KOTEK_END_NAMESPACE_KTK
 
-template <typename Type, size_t NotInUseArgument = 0>
+template <typename Type, unsigned char NotInUseArgument = 0>
 using queue_t = KUN_KOTEK KUN_KTK queue<Type, NotInUseArgument>;
 
 template <typename Type, size_t Size>
 using static_queue_t = KUN_KOTEK KUN_KTK static_queue<Type, Size>;
-
 
 KOTEK_END_NAMESPACE_KOTEK
 

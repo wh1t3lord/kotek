@@ -247,7 +247,7 @@ ktkWindowConsole::~ktkWindowConsole()
 
 void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 	ktkIResourceManager* p_manager, ktkIInput* p_input, ktkILogger* p_logger,
-	int imgui_heightmainmenubar,
+	ktkIConsole* p_console, int imgui_heightmainmenubar,
 	const ktk_filesystem_path& full_path_to_log_file)
 {
 	KOTEK_ASSERT(p_window, "must be valid");
@@ -255,6 +255,7 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 	KOTEK_ASSERT(p_manager, "must be valid");
 	KOTEK_ASSERT(p_input, "must be valid!");
 	KOTEK_ASSERT(p_logger, "must be valid!");
+	KOTEK_ASSERT(p_console, "must be valid!");
 	KOTEK_ASSERT(!full_path_to_log_file.empty(), "can't be empty!");
 
 	this->m_p_manager_resource = p_manager;
@@ -561,16 +562,6 @@ void ktkWindowConsole::Update()
 #else
 	#error unknown platform
 #endif
-		}
-	}
-}
-
-void ktkWindowConsole::Render()
-{
-	if (this->m_p_private_impl)
-	{
-		if (this->m_show)
-		{
 		}
 	}
 }

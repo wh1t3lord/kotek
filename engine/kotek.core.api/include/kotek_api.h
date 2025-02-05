@@ -1073,6 +1073,9 @@ public:
 
 	virtual void Initialize(void) = 0;
 	virtual void Shutdown(void) = 0;
+
+	virtual bool Push_Command(const char* p_text) = 0;
+	virtual bool Execute_Command(const char* p_text) = 0;
 };
 
 class ktkIProfiler

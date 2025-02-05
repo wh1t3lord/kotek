@@ -28,12 +28,11 @@ public:
 	/// @param p_window
 	/// @param p_manager
 	void Initialize(ktkIWindow* p_window, ktkIResourceManager* p_manager,
-		ktkIInput* p_input, ktkILogger* p_logger,
+		ktkIInput* p_input, ktkILogger* p_logger, ktkIConsole* p_console,
 		int imgui_mainmenubar_height,
 		const ktk_filesystem_path& full_path_to_log_file);
 	void Shutdown();
 	void Update();
-	void Render();
 
 	void Show();
 	void Hide();
@@ -44,6 +43,7 @@ private:
 	ktkIResourceManager* m_p_manager_resource;
 	ktkIInput* m_p_input;
 	ktkILogger* m_p_logger;
+	ktkIConsole* m_p_console;
 	void* m_p_private_impl;
 };
 

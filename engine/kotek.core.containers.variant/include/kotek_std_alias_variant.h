@@ -36,3 +36,18 @@ template <typename... Args>
 using static_variant_t = KUN_KOTEK KUN_KTK static_variant<Args...>;
 
 KOTEK_END_NAMESPACE_KOTEK
+
+#if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \
+	defined(KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS)
+
+	#define ktk_variant kun_kotek kun_ktk static_variant
+	#define KTK_VARIANT kun_kotek kun_ktk static_variant
+	#define ktkVariant kun_kotek kun_ktk static_variant
+
+#else
+
+	#define ktk_variant kun_kotek kun_ktk variant
+	#define KTK_VARIANT kun_kotek kun_ktk variant
+	#define ktkVariant kun_kotek kun_ktk variant
+
+#endif

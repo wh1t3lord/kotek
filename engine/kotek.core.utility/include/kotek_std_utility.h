@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kotek.core.constants.math/include/kotek_core_constants_math.h>
+#include "kotek_std_utility_variant.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK

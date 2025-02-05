@@ -22,7 +22,7 @@ std::size_t hash_value(const ktk::ustring& instance);
 void to_lower(cstring& str);
 cstring to_lower(const cstring& str);
 int sprintf(char* const p_string, const std::size_t buffer_count,
-	char const* const p_format,...);
+	char const* const p_format, ...);
 #else
 #endif
 
@@ -119,3 +119,107 @@ using static_cstring_view_t = KUN_KOTEK KUN_KTK static_cstring_view;
 using static_ustring_view_t = KUN_KOTEK KUN_KTK static_ustring_view;
 
 KOTEK_END_NAMESPACE_KOTEK
+
+#if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \
+	defined(KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS)
+
+	#define ktk_cstring kun_kotek kun_ktk static_cstring
+	#define KTK_CSTRING kun_kotek kun_ktk static_cstring
+	#define ktkCString kun_kotek kun_ktk static_cstring
+
+	#define ktk_cstring_view kun_kotek kun_ktk static_cstring_view
+	#define KTK_CSTRING_VIEW kun_kotek kun_ktk static_cstring_view
+	#define ktkCStringView kun_kotek kun_ktk static_cstring_view
+
+	#define ktk_wstring kun_kotek kun_ktk static_wstring
+	#define KTK_WSTRING kun_kotek kun_ktk static_wstring
+	#define ktkWString kun_kotek kun_ktk static_wstring
+
+	#define ktk_wstring_view kun_kotek kun_ktk static_wstring_view
+	#define KTK_WSTRING_VIEW kun_kotek kun_ktk static_wstring_view
+	#define ktkWStringView kun_kotek kun_ktk static_wstring_view
+
+	#define ktk_u8string kun_kotek kun_ktk static_u8string
+	#define KTK_U8STRING kun_kotek kun_ktk static_u8string
+	#define ktkU8String kun_kotek kun_ktk static_u8string
+
+	#define ktk_u8string_view kun_kotek kun_ktk static_u8string_view
+	#define KTK_U8STRING_VIEW kun_kotek kun_ktk static_u8string_view
+	#define ktkU8StringView kun_kotek kun_ktk static_u8string_view
+
+	#define ktk_u16string kun_kotek kun_ktk static_u16string
+	#define KTK_U16STRING kun_kotek kun_ktk static_u16string
+	#define ktkU16String kun_kotek kun_ktk static_u16string
+
+	#define ktk_u16string_view kun_kotek kun_ktk static_u16string_view
+	#define KTK_U16STRING_VIEW kun_kotek kun_ktk static_u16string_view
+	#define ktkU16StringView kun_kotek kun_ktk static_u16string_view
+
+	#define ktk_u32string kun_kotek kun_ktk static_u32string
+	#define KTK_U32STRING kun_kotek kun_ktk static_u32string
+	#define ktkU32String kun_kotek kun_ktk static_u32string
+
+	#define ktk_u32string_view kun_kotek kun_ktk static_u32string_view
+	#define KTK_U32STRING_VIEW kun_kotek kun_ktk static_u32string_view
+	#define ktkU32StringView kun_kotek kun_ktk static_u32string_view
+
+	#define ktk_ustring kun_kotek kun_ktk static_ustring
+	#define KTK_USTRING kun_kotek kun_ktk static_ustring
+	#define ktkUString kun_kotek kun_ktk static_ustring
+
+	#define ktk_ustring_view kun_kotek kun_ktk static_ustring_view
+	#define KTK_USTRING_VIEW kun_kotek kun_ktk static_ustring_view
+	#define ktkUStringView kun_kotek kun_ktk static_ustring_view
+
+#else
+
+	#define ktk_string kun_kotek kun_ktk cstring
+	#define KTK_STRING kun_kotek kun_ktk cstring
+	#define ktkString kun_kotek kun_ktk cstring
+
+	#define ktk_string_view kun_kotek kun_ktk cstring_view
+	#define KTK_STRING_VIEW kun_kotek kun_ktk cstring_view
+	#define ktkStringView kun_kotek kun_ktk cstring_view
+
+	#define ktk_wstring kun_kotek kun_ktk wstring
+	#define KTK_WSTRING kun_kotek kun_ktk wstring
+	#define ktkWString kun_kotek kun_ktk wstring
+
+	#define ktk_wstring_view kun_kotek kun_ktk wstring_view
+	#define KTK_WSTRING_VIEW kun_kotek kun_ktk wstring_view
+	#define ktkWStringView kun_kotek kun_ktk wstring_view
+
+	#define ktk_u8string kun_kotek kun_ktk u8string
+	#define KTK_U8STRING kun_kotek kun_ktk u8string
+	#define ktkU8String kun_kotek kun_ktk u8string
+
+	#define ktk_u8string_view kun_kotek kun_ktk u8string_view
+	#define KTK_U8STRING_VIEW kun_kotek kun_ktk u8string_view
+	#define ktkU8StringView kun_kotek kun_ktk u8string_view
+
+	#define ktk_u16string kun_kotek kun_ktk u16string
+	#define KTK_U16STRING kun_kotek kun_ktk u16string
+	#define ktkU16String kun_kotek kun_ktk u16string
+
+	#define ktk_u16string_view kun_kotek kun_ktk u16string_view
+	#define KTK_U16STRING_VIEW kun_kotek kun_ktk u16string_view
+	#define ktkU16StringView kun_kotek kun_ktk u16string_view
+
+	#define ktk_u32string kun_kotek kun_ktk u32string
+	#define KTK_U32STRING kun_kotek kun_ktk u32string
+	#define ktkU32String kun_kotek kun_ktk u32string
+
+	#define ktk_u32string_view kun_kotek kun_ktk u32string_view
+	#define KTK_U32STRING_VIEW kun_kotek kun_ktk u32string_view
+	#define ktkU32String kun_kotek kun_ktk u32string_view
+
+	#define ktk_ustring kun_kotek kun_ktk ustring
+	#define KTK_USTRING kun_kotek kun_ktk ustring
+	#define ktkUString kun_kotek kun_ktk ustring
+
+	#define ktk_ustring_view kun_kotek kun_ktk ustring_view
+	#define KTK_USTRING_VIEW kun_kotek kun_ktk ustring_view
+	#define ktkUStringView kun_kotek kun_ktk ustring_view
+
+
+#endif
