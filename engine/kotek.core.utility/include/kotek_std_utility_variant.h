@@ -128,7 +128,7 @@ constexpr std::string_view type_name()
 	constexpr std::string_view suffix = "]";
 #elif defined(_MSC_VER)
 	std::string_view p = __FUNCSIG__;
-	constexpr std::string_view prefix = "std::string_view __cdecl type_name<";
+	constexpr std::string_view prefix = "type_name<";
 	constexpr std::string_view suffix = ">(void)";
 #else
 	std::string_view p = "unknown";
