@@ -2,7 +2,7 @@
 
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 #include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
-#include <kotek.core.api/include/kotek_api.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 
 #ifdef KOTEK_USE_LOG_LIBRARY_BOOST
 	#ifdef KOTEK_USE_BOOST_LIBRARY

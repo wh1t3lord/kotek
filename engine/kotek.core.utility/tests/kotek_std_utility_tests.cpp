@@ -1,6 +1,7 @@
 ﻿#include "../include/kotek_core_utility.h"
 #include <kotek.core.defines.static.tests/include/kotek_core_defines_static_tests.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
+#include <kotek.core.defines_dependent.message\include\kotek_core_defines_dependent_message.h>
 #include <gtest/gtest.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -128,7 +129,7 @@ TEST(Utility, vfunction_ptr_lambda)
 	auto p_lambda = []() -> bool { return false; };
 	using myVar = std::variant<std::monostate>;
 
-	kun_kotek kun_ktk ifunction<myVar, bool>* p_interface =
+	kun_kotek kun_ktk ivfunction<myVar, bool>* p_interface =
 		kun_kotek kun_ktk make_vfunction_ptr<myVar>(p_lambda);
 
 	EXPECT_FALSE((*p_interface)(
@@ -382,6 +383,463 @@ TEST(CallableTraitsTest, CallableDetection)
 		<< "Member function pointer should be callable.";
 	EXPECT_FALSE(kun_kotek kun_ktk is_callable_v<int>)
 		<< "int is not callable.";
+}
+
+// Test cases
+TEST(Utility, is_tuple_check)
+{
+	// Basic tuples
+	static_assert(kun_kotek kun_ktk is_tuple_v<std::tuple<>>);
+	static_assert(kun_kotek kun_ktk is_tuple_v<std::tuple<int>>);
+	static_assert(kun_kotek kun_ktk is_tuple_v<std::tuple<int, float>>);
+	static_assert(
+		kun_kotek kun_ktk is_tuple_v<std::tuple<int, float, std::string>>);
+
+	// Const/volatile qualified tuples
+	static_assert(kun_kotek kun_ktk is_tuple_v<const std::tuple<int>>);
+	static_assert(kun_kotek kun_ktk is_tuple_v<volatile std::tuple<int>>);
+	static_assert(kun_kotek kun_ktk is_tuple_v<const volatile std::tuple<int>>);
+
+	// Nested tuples
+	static_assert(kun_kotek kun_ktk is_tuple_v<std::tuple<std::tuple<int>>>);
+	static_assert(
+		kun_kotek kun_ktk is_tuple_v<std::tuple<int, std::tuple<float>>>);
+
+	// Negative tests
+	static_assert(!kun_kotek kun_ktk is_tuple_v<int>);
+	static_assert(!kun_kotek kun_ktk is_tuple_v<void>);
+	static_assert(!kun_kotek kun_ktk is_tuple_v<std::string>);
+	static_assert(!kun_kotek kun_ktk is_tuple_v<std::pair<int, int>>);
+	static_assert(!kun_kotek kun_ktk is_tuple_v<std::array<int, 5>>);
+
+	struct NotATuple
+	{
+	};
+	static_assert(!kun_kotek kun_ktk is_tuple_v<NotATuple>);
+}
+
+TEST(Utility, is_in_variant_check)
+{
+	// Basic type checks
+	using BasicVariant = std::variant<int, float, double>;
+	static_assert(kun_kotek kun_ktk is_in_variant_v<int, BasicVariant>);
+	static_assert(kun_kotek kun_ktk is_in_variant_v<float, BasicVariant>);
+	static_assert(kun_kotek kun_ktk is_in_variant_v<double, BasicVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<char, BasicVariant>);
+	static_assert(
+		!kun_kotek kun_ktk is_in_variant_v<std::string, BasicVariant>);
+
+	// Check with cv-qualified types
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<const int, BasicVariant>);
+	static_assert(
+		!kun_kotek kun_ktk is_in_variant_v<volatile float, BasicVariant>);
+	static_assert(!kun_kotek kun_ktk
+					  is_in_variant_v<const volatile double, BasicVariant>);
+
+	// Complex types
+	using ComplexVariant =
+		std::variant<std::string, std::vector<int>, std::tuple<int, float>>;
+	static_assert(
+		kun_kotek kun_ktk is_in_variant_v<std::string, ComplexVariant>);
+	static_assert(
+		kun_kotek kun_ktk is_in_variant_v<std::vector<int>, ComplexVariant>);
+	static_assert(kun_kotek kun_ktk
+			is_in_variant_v<std::tuple<int, float>, ComplexVariant>);
+	static_assert(
+		!kun_kotek kun_ktk is_in_variant_v<std::vector<float>, ComplexVariant>);
+	static_assert(!kun_kotek kun_ktk
+					  is_in_variant_v<std::tuple<float, int>, ComplexVariant>);
+
+	// Reference types
+	using RefVariant = std::variant<int&, const float&, std::string&>;
+	static_assert(kun_kotek kun_ktk is_in_variant_v<int&, RefVariant>);
+	static_assert(kun_kotek kun_ktk is_in_variant_v<const float&, RefVariant>);
+	static_assert(kun_kotek kun_ktk is_in_variant_v<std::string&, RefVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<double&, RefVariant>);
+
+	// Empty variant
+	using EmptyVariant = std::variant<>;
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<int, EmptyVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<void, EmptyVariant>);
+
+	// Monostate
+	using MonostateVariant = std::variant<std::monostate, int>;
+	static_assert(
+		kun_kotek kun_ktk is_in_variant_v<std::monostate, MonostateVariant>);
+	static_assert(kun_kotek kun_ktk is_in_variant_v<int, MonostateVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<float, MonostateVariant>);
+
+	// Custom types
+	struct CustomType
+	{
+	};
+	using CustomVariant = std::variant<CustomType, int>;
+	static_assert(kun_kotek kun_ktk is_in_variant_v<CustomType, CustomVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<float, CustomVariant>);
+}
+
+TEST(Utility, is_variant_check)
+{
+	// Basic variants
+	static_assert(kun_kotek kun_ktk is_variant_v<std::variant<int>>);
+	static_assert(kun_kotek kun_ktk is_variant_v<std::variant<int, float>>);
+	static_assert(
+		kun_kotek kun_ktk is_variant_v<std::variant<int, float, double>>);
+	static_assert(kun_kotek kun_ktk is_variant_v<std::variant<std::string>>);
+
+	// Empty variant
+	static_assert(kun_kotek kun_ktk is_variant_v<std::variant<>>);
+
+	// Variant with monostate
+	static_assert(kun_kotek kun_ktk is_variant_v<std::variant<std::monostate>>);
+	static_assert(
+		kun_kotek kun_ktk is_variant_v<std::variant<std::monostate, int>>);
+
+	// CV-qualified variants
+	static_assert(kun_kotek kun_ktk is_variant_v<const std::variant<int>>);
+	static_assert(kun_kotek kun_ktk is_variant_v<volatile std::variant<int>>);
+	static_assert(
+		kun_kotek kun_ktk is_variant_v<const volatile std::variant<int>>);
+
+	// Complex types in variants
+	static_assert(
+		kun_kotek kun_ktk is_variant_v<std::variant<std::vector<int>>>);
+	static_assert(
+		kun_kotek kun_ktk is_variant_v<std::variant<std::tuple<int, float>>>);
+	static_assert(
+		kun_kotek kun_ktk is_variant_v<std::variant<std::array<int, 5>>>);
+	static_assert(kun_kotek kun_ktk
+			is_variant_v<std::variant<std::map<int, std::string>>>);
+
+	// Reference types in variants
+	static_assert(kun_kotek kun_ktk is_variant_v<std::variant<int&>>);
+	static_assert(kun_kotek kun_ktk is_variant_v<std::variant<const int&>>);
+	static_assert(kun_kotek kun_ktk is_variant_v<std::variant<int&&>>);
+
+	// Nested variants
+	static_assert(
+		kun_kotek kun_ktk is_variant_v<std::variant<std::variant<int>>>);
+	static_assert(
+		kun_kotek kun_ktk is_variant_v<std::variant<int, std::variant<float>>>);
+
+	// Custom types
+	struct CustomType
+	{
+	};
+	static_assert(kun_kotek kun_ktk is_variant_v<std::variant<CustomType>>);
+	static_assert(
+		kun_kotek kun_ktk is_variant_v<std::variant<CustomType, int>>);
+
+	// Negative tests - not variants
+	static_assert(!kun_kotek kun_ktk is_variant_v<int>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<void>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<std::string>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<std::vector<int>>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<std::tuple<int>>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<std::array<int, 5>>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<CustomType>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<int*>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<int&>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<const int>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<std::function<void()>>);
+
+	// Pointer to variant is not a variant
+	static_assert(!kun_kotek kun_ktk is_variant_v<std::variant<int>*>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<const std::variant<int>*>);
+
+	// Reference to variant is not a variant
+	static_assert(!kun_kotek kun_ktk is_variant_v<std::variant<int>&>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<const std::variant<int>&>);
+	static_assert(!kun_kotek kun_ktk is_variant_v<std::variant<int>&&>);
+}
+
+TEST(Utility, are_args_in_variant_check)
+{
+	using MyVariant = std::variant<int, float, double, std::string>;
+
+	// Single argument tests
+	static_assert(
+		kun_kotek kun_ktk are_args_in_variant<std::tuple<int>, MyVariant>());
+	static_assert(
+		kun_kotek kun_ktk are_args_in_variant<std::tuple<float>, MyVariant>());
+	static_assert(kun_kotek kun_ktk
+			are_args_in_variant<std::tuple<std::string>, MyVariant>());
+	static_assert(
+		!kun_kotek kun_ktk are_args_in_variant<std::tuple<char>, MyVariant>());
+
+	// Multiple arguments tests
+	static_assert(kun_kotek kun_ktk
+			are_args_in_variant<std::tuple<int, float>, MyVariant>());
+	static_assert(kun_kotek kun_ktk
+			are_args_in_variant<std::tuple<double, std::string>, MyVariant>());
+	static_assert(kun_kotek kun_ktk
+			are_args_in_variant<std::tuple<int, float, double>, MyVariant>());
+	static_assert(!kun_kotek kun_ktk
+					  are_args_in_variant<std::tuple<int, char>, MyVariant>());
+
+	// Empty tuple test
+	static_assert(
+		kun_kotek kun_ktk are_args_in_variant<std::tuple<>, MyVariant>());
+
+	// CV-qualified types
+	static_assert(!kun_kotek kun_ktk
+					  are_args_in_variant<std::tuple<const int>, MyVariant>());
+	static_assert(
+		!kun_kotek kun_ktk
+			are_args_in_variant<std::tuple<volatile float>, MyVariant>());
+	static_assert(!kun_kotek kun_ktk are_args_in_variant<
+				  std::tuple<const volatile double>, MyVariant>());
+
+	// Complex variant
+	using ComplexVariant =
+		std::variant<std::vector<int>, std::tuple<int, float>>;
+	static_assert(
+		kun_kotek kun_ktk are_args_in_variant<std::tuple<std::vector<int>>,
+			ComplexVariant>());
+	static_assert(kun_kotek kun_ktk are_args_in_variant<
+		std::tuple<std::tuple<int, float>>, ComplexVariant>());
+	static_assert(
+		!kun_kotek kun_ktk are_args_in_variant<std::tuple<std::vector<float>>,
+			ComplexVariant>());
+}
+
+TEST(Utility, is_in_variant_check2)
+{
+	using MyVariant = std::variant<int, float, double, std::string>;
+
+	// Basic type checks
+	static_assert(kun_kotek kun_ktk is_in_variant_v<int, MyVariant>);
+	static_assert(kun_kotek kun_ktk is_in_variant_v<float, MyVariant>);
+	static_assert(kun_kotek kun_ktk is_in_variant_v<double, MyVariant>);
+	static_assert(kun_kotek kun_ktk is_in_variant_v<std::string, MyVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<char, MyVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<unsigned int, MyVariant>);
+
+	// CV-qualified types
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<const int, MyVariant>);
+	static_assert(
+		!kun_kotek kun_ktk is_in_variant_v<volatile float, MyVariant>);
+	static_assert(
+		!kun_kotek kun_ktk is_in_variant_v<const volatile double, MyVariant>);
+
+	// Complex variant
+	using ComplexVariant =
+		std::variant<std::vector<int>, std::tuple<int, float>>;
+	static_assert(
+		kun_kotek kun_ktk is_in_variant_v<std::vector<int>, ComplexVariant>);
+	static_assert(kun_kotek kun_ktk
+			is_in_variant_v<std::tuple<int, float>, ComplexVariant>);
+	static_assert(
+		!kun_kotek kun_ktk is_in_variant_v<std::vector<float>, ComplexVariant>);
+	static_assert(!kun_kotek kun_ktk
+					  is_in_variant_v<std::tuple<float, int>, ComplexVariant>);
+
+	// Reference types
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<int&, MyVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<const float&, MyVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<double&&, MyVariant>);
+
+	// Pointer types
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<int*, MyVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<const float*, MyVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<void*, MyVariant>);
+
+	// Empty variant
+	using EmptyVariant = std::variant<>;
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<int, EmptyVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<void, EmptyVariant>);
+
+	// Variant with std::monostate
+	using MonostateVariant = std::variant<std::monostate, int>;
+	static_assert(
+		kun_kotek kun_ktk is_in_variant_v<std::monostate, MonostateVariant>);
+	static_assert(kun_kotek kun_ktk is_in_variant_v<int, MonostateVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<float, MonostateVariant>);
+
+	// Custom types
+	struct CustomType
+	{
+	};
+	using CustomVariant = std::variant<CustomType, int>;
+	static_assert(kun_kotek kun_ktk is_in_variant_v<CustomType, CustomVariant>);
+	static_assert(!kun_kotek kun_ktk is_in_variant_v<float, CustomVariant>);
+}
+
+TEST(Utility, are_callable_args_in_variant_check)
+{
+	using MyVariant = std::variant<int, float, double, std::string>;
+
+	// Regular functions
+	auto func1 = [](int) {};
+	static_assert(
+		kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(func1));
+
+	auto func2 = [](int, float) {};
+	static_assert(
+		kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(func2));
+
+	auto func3 = [](char) {}; // char is not in variant
+	static_assert(
+		!kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(func3));
+
+	// No arguments
+	auto func_no_args = []() {};
+	static_assert(kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(
+		func_no_args));
+
+	// Function objects
+	struct Functor1
+	{
+		void operator()(int, float) {}
+	};
+	static_assert(
+		kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(Functor1{}));
+
+	struct Functor2
+	{
+		void operator()(char) {} // char is not in variant
+	};
+	static_assert(
+		!kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(Functor2{}));
+
+	// Complex variant
+	using ComplexVariant =
+		std::variant<std::vector<int>, std::tuple<int, float>>;
+	auto complex_func1 = [](std::vector<int>) {};
+	auto complex_func2 = [](std::tuple<int, float>) {};
+	auto complex_func3 = [](std::vector<float>) {}; // not in variant
+
+	static_assert(
+		kun_kotek kun_ktk are_callable_args_in_variant<ComplexVariant>(
+			complex_func1));
+	static_assert(
+		kun_kotek kun_ktk are_callable_args_in_variant<ComplexVariant>(
+			complex_func2));
+	static_assert(
+		!kun_kotek kun_ktk are_callable_args_in_variant<ComplexVariant>(
+			complex_func3));
+
+	// Reference and pointer types
+	auto ref_func1 = [](int&) {};
+	auto ref_func2 = [](const float&) {};
+	auto ptr_func = [](int*) {};
+	static_assert(
+		!kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(ref_func1));
+	static_assert(
+		!kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(ref_func2));
+	static_assert(
+		!kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(ptr_func));
+
+	// Multiple arguments with different combinations
+	auto multi_func1 = [](int, float, double) {};
+	auto multi_func2 = [](std::string, int, float) {};
+	auto multi_func3 = [](int, char, float) {}; // char is not in variant
+
+	static_assert(
+		kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(multi_func1));
+	static_assert(
+		kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(multi_func2));
+	static_assert(!kun_kotek kun_ktk are_callable_args_in_variant<MyVariant>(
+		multi_func3));
+}
+
+TEST(Utility, check_args_test)
+{
+	using RuntimeVariant = std::variant<int, float, double, std::string>;
+	using CompileTimeVariant =
+		std::variant<int, float, double, std::string_view>;
+
+	// Compile-time tests with std::array
+	{
+		// Valid arguments
+		constexpr std::array<CompileTimeVariant, 3> valid_args = {
+			CompileTimeVariant{42}, CompileTimeVariant{3.14f},
+			CompileTimeVariant{std::string_view{"test"}}};
+
+		static_assert(kun_kotek kun_ktk
+				check_args<std::tuple<int, float, std::string_view>>(
+					valid_args));
+
+		// Invalid arguments (wrong order)
+		constexpr std::array invalid_args{CompileTimeVariant{3.14f},
+			CompileTimeVariant{42},
+			CompileTimeVariant{std::string_view{"test"}}};
+
+		static_assert(!kun_kotek kun_ktk
+						  check_args<std::tuple<int, float, std::string_view>>(
+							  invalid_args));
+
+		// Empty tuple with empty array
+		constexpr std::array<CompileTimeVariant, 0> empty_args{};
+		static_assert(kun_kotek kun_ktk check_args<std::tuple<>>(empty_args));
+	}
+
+	// Runtime tests with std::vector
+	{
+		// Valid arguments
+		std::vector<RuntimeVariant> valid_args{RuntimeVariant{42},
+			RuntimeVariant{3.14f}, RuntimeVariant{std::string{"test"}}};
+
+		EXPECT_TRUE(
+			(kun_kotek kun_ktk check_args<std::tuple<int, float, std::string>>(
+				valid_args)));
+
+		// Invalid arguments (wrong type)
+		std::vector<RuntimeVariant> invalid_args{RuntimeVariant{42},
+			RuntimeVariant{3.14}, // double instead of float
+			RuntimeVariant{std::string{"test"}}};
+
+		EXPECT_FALSE(
+			(kun_kotek kun_ktk check_args<std::tuple<int, float, std::string>>(
+				invalid_args)));
+
+		// Invalid arguments (wrong size)
+		std::vector<RuntimeVariant> wrong_size_args{
+			RuntimeVariant{42}, RuntimeVariant{3.14f}};
+
+		EXPECT_FALSE(
+			(kun_kotek kun_ktk check_args<std::tuple<int, float, std::string>>(
+				wrong_size_args)));
+
+		// Empty tuple with empty vector
+		std::vector<RuntimeVariant> empty_args;
+		EXPECT_TRUE((kun_kotek kun_ktk check_args<std::tuple<>>(empty_args)));
+	}
+
+	// Complex types
+	{
+		using ComplexRuntimeVariant =
+			std::variant<std::vector<int>, std::tuple<int, float>>;
+		std::vector<ComplexRuntimeVariant> complex_args{
+			ComplexRuntimeVariant{std::vector<int>{1, 2, 3}},
+			ComplexRuntimeVariant{std::tuple<int, float>{42, 3.14f}}};
+
+		EXPECT_TRUE((kun_kotek kun_ktk check_args<
+			std::tuple<std::vector<int>, std::tuple<int, float>>>(
+			complex_args)));
+	}
+}
+
+TEST(Utility, type_info_test)
+{
+	using MyTuple = std::tuple<int, float, std::string_view>;
+	using MyVariant = std::variant<int, double, std::string_view>;
+	using VectorContainer = std::vector<MyVariant>;
+	using ArrayContainer = std::array<MyVariant, 3>;
+
+	constexpr auto tuple_info =
+		kun_kotek kun_ktk get_tuple_type_info<MyTuple>();
+	constexpr auto vector_info =
+		kun_kotek kun_ktk get_variant_container_type_info<VectorContainer>();
+	constexpr auto array_info =
+		kun_kotek kun_ktk get_variant_container_type_info<ArrayContainer>();
+
+	KOTEK_MESSAGE_S(
+		"tuple type info: {}", 2048, std::string_view(tuple_info.data()));
+	KOTEK_MESSAGE_S(
+		"vector type info: {}", 2048, std::string_view(vector_info.data()));
+	KOTEK_MESSAGE_S(
+		"array type info: {}", 2048, std::string_view(array_info.data()));
 }
 
 	#endif

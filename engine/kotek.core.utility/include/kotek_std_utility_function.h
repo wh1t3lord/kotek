@@ -2,7 +2,7 @@
 
 #include <kotek.core.containers.vector\include\kotek_core_containers_vector.h>
 #include <kotek.core.containers.string\include\kotek_core_containers_string.h>
-
+#include <kotek.core.defines_dependent.message\include\kotek_core_defines_dependent_message.h>
 #include "kotek_std_utility_variant.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -266,8 +266,6 @@ struct is_callable_impl
 template <typename T>
 inline constexpr bool is_callable_v = is_callable_impl<T>::value;
 
-
-
 template <typename VariantType, typename ReturnType, typename... Args,
 	std::size_t... I>
 bool _call_function_impl(const std::function<ReturnType(Args...)>& f,
@@ -284,20 +282,27 @@ bool call(const std::function<ReturnType(Args...)>& f,
 {
 	if (args.size() != sizeof...(Args))
 	{
-		KOTEK_MESSAGE_WARNING("passed wrong amount of "
-							  "arguments, expected: [{}] | passed: [{}]",
-			sizeof...(Args), args.size());
+		KOTEK_MESSAGE_WARNING_S("passed wrong amount of "
+								"arguments, expected: [{}] | passed: [{}]",
+			512, sizeof...(Args), args.size());
 		return false;
 	}
 
 	return _call_function_impl(f, args, std::index_sequence_for<Args...>{});
 }
 
+template <typename Variant, typename Func>
+constexpr bool are_callable_args_in_variant(Func)
+{
+	return are_args_in_variant<typename function_traits<Func>::args_tuple,
+		Variant>();
+}
+
 template <typename VariantType, typename ReturnType>
-class ifunction
+class ivfunction
 {
 public:
-	virtual ~ifunction() {}
+	virtual ~ivfunction() {}
 
 	static_assert(std::is_unsigned_v<KOTEK_DEF_CONSOLE_TYPE_FOR_ARGUMENT_COUNT>,
 		"your specified type must be arithmetic e.g. numeric and unsigned "
@@ -315,7 +320,7 @@ public:
 };
 
 template <typename VariantType, typename FunctionType>
-class vfunction : public ifunction<VariantType,
+class vfunction : public ivfunction<VariantType,
 					  typename function_traits<FunctionType>::ret_t>
 {
 public:
@@ -329,6 +334,9 @@ public:
 		"developers!");
 	static_assert(is_callable_v<FunctionType>,
 		"you must pass a function not any other type");
+	static_assert(are_args_in_variant<args_t, VariantType>(),
+		"your variant must contain same types as in your callable function "
+		"(object) instance");
 
 public:
 	vfunction(FunctionType& func) : m_callback{func} {}
@@ -361,6 +369,28 @@ public:
 				std::tuple_size_v<args_t>);
 
 		result_t result_empty{};
+
+		bool validation = check_args<args_t>(args);
+
+		// it means that variant has types that's needed to our function_t
+		// signature like if function is int,float,double that means each
+		// element of vector has in the order types as defined in function
+		// args[0]=int; args[1]=float; args[2]=double
+		// that means we can safely (at least in terms of evaluation) use these
+		// arguments for calling
+		if (validation)
+		{
+		}
+#ifdef KOTEK_DEBUG
+		else
+		{
+			KOTEK_MESSAGE_WARNING_S(
+				"your variant vector contains wrong types in wrong order that "
+				"are different to function signature: function sinagute[{}] | "
+				"your arguments[{}]",
+				2048);
+		}
+#endif
 
 		return result_empty;
 	}

@@ -1105,16 +1105,6 @@ public:
 	virtual void Shutdown(void) = 0;
 };
 
-class ktkILogger
-{
-public:
-	virtual ~ktkILogger(void) {}
-	virtual void Initialize(void) = 0;
-	virtual void Shutdown(void) = 0;
-	virtual void* Get(const char* p_logger_name) = 0;
-	virtual void Flush_All(void) = 0;
-};
-
 class ktkIEngineConfig
 {
 public:

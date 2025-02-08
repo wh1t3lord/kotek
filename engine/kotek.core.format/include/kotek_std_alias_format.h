@@ -4,7 +4,6 @@
 // FMT library from that project
 
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
-#include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
@@ -37,22 +36,6 @@ struct std::formatter<kun_kotek kun_ktk ustring, char>
 		#else
 		return std::format_to(ctx.out(), "{}", str.c_str());
 		#endif
-	}
-};
-
-template <>
-struct std::formatter<ktk_filesystem_path, char>
-{
-	template <typename ParseContext>
-	constexpr inline auto parse(ParseContext& ctx)
-	{
-		return ctx.begin();
-	}
-
-	inline auto format(ktk_filesystem_path const& str, auto& ctx) const
-	{
-		return std::format_to(ctx.out(), "{}",
-			reinterpret_cast<const char*>(str.u8string().c_str()));
 	}
 };
 
@@ -94,24 +77,6 @@ struct fmt::formatter<kun_kotek kun_ktk ustring, char>
 	#else
 		return fmt::format_to(ctx.out(), "{}", str.c_str());
 	#endif
-	}
-};
-
-template <>
-struct fmt::formatter<kun_kotek kun_ktk filesystem::path, char>
-{
-	template <typename ParseContext>
-	constexpr inline auto parse(ParseContext& ctx)
-	{
-		return ctx.begin();
-	}
-
-	template <typename FormatContext>
-	inline auto format(
-		kun_kotek kun_ktk filesystem::path const& str, FormatContext& ctx)
-	{
-		return fmt::format_to(ctx.out(), u8"{}",
-			kun_kotek kun_ktk ustring(str.u8string().c_str()));
 	}
 };
 #else

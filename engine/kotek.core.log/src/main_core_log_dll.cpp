@@ -1,6 +1,6 @@
 #include "../include/kotek_core_log.h"
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
-#include <kotek.core.api/include/kotek_api_no_std.h>
+#include <kotek.core.api/include/kotek_api.h>
 
 #ifdef KOTEK_USE_LOG_LIBRARY_BOOST
 	#ifdef KOTEK_USE_BOOST_LIBRARY

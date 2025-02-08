@@ -727,17 +727,20 @@ enum class directory_options : uint16_t
 inline directory_options operator&(
 	const directory_options& left, const directory_options& right)
 {
-	return static_cast<directory_options>(static_cast<uint16_t>(left) & static_cast<uint16_t>(right));
+	return static_cast<directory_options>(
+		static_cast<uint16_t>(left) & static_cast<uint16_t>(right));
 }
 
 inline perms operator|(const perms& left, const perms& right)
 {
-	return static_cast<perms>(static_cast<uint16_t>(left) | static_cast<uint16_t>(right));
+	return static_cast<perms>(
+		static_cast<uint16_t>(left) | static_cast<uint16_t>(right));
 }
 
 inline perms operator&(const perms& left, const perms& right)
 {
-	return static_cast<perms>(static_cast<uint16_t>(left) & static_cast<uint16_t>(right));
+	return static_cast<perms>(
+		static_cast<uint16_t>(left) & static_cast<uint16_t>(right));
 }
 
 class file_status
@@ -1469,8 +1472,7 @@ private:
 
 inline directory_entry::directory_entry(
 	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p) :
-	_path(p),
-	_file_size(static_cast<uintmax_t>(-1))
+	_path(p), _file_size(static_cast<uintmax_t>(-1))
 		#ifndef KOTEK_USE_PLATFORM_WINDOWS
 	,
 	_hard_link_count(static_cast<uintmax_t>(-1))
@@ -1747,8 +1749,7 @@ private:
 	public:
 		impl(const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
 			directory_options options) :
-			_base(p),
-			_options(options), _dirHandle(INVALID_HANDLE_VALUE)
+			_base(p), _options(options), _dirHandle(INVALID_HANDLE_VALUE)
 		{
 			if (!_base.empty())
 			{
@@ -1885,15 +1886,13 @@ inline directory_iterator::directory_iterator(
 
 inline directory_iterator::directory_iterator(
 	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
-	directory_options options) :
-	_impl(new impl(p, options))
+	directory_options options) : _impl(new impl(p, options))
 {
 }
 
 inline directory_iterator::directory_iterator(
 	const static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& p,
-	std::error_code& ec) noexcept :
-	_impl(new impl(p, directory_options::none))
+	std::error_code& ec) noexcept : _impl(new impl(p, directory_options::none))
 {
 	if (_impl->_ec)
 	{
@@ -1918,8 +1917,7 @@ inline directory_iterator::directory_iterator(const directory_iterator& rhs) :
 }
 
 inline directory_iterator::directory_iterator(directory_iterator&& rhs) noexcept
-	:
-	_impl(std::move(rhs._impl))
+	: _impl(std::move(rhs._impl))
 {
 }
 
@@ -2121,8 +2119,7 @@ inline static_path<Size>::static_path(const cstring& str) :
 template <size_t Size>
 template <class InputIteratorType>
 inline static_path<Size>::static_path(
-	InputIteratorType first, InputIteratorType last) :
-	m_buffer(first, last)
+	InputIteratorType first, InputIteratorType last) : m_buffer(first, last)
 {
 }
 
@@ -3704,3 +3701,53 @@ inline bool static_path<Size>::is_relative() const
 KOTEK_END_NAMESPACE_FILESYSTEM
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
+
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	#include <format>
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+	#include <fmt/core.h>
+	#include <fmt/format.h>
+	#include <fmt/xchar.h>
+#else
+	#error Unknown platform we cant know status about your format library
+#endif
+
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+
+	#ifdef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
+template <>
+struct std::formatter<ktk_filesystem_path, char>
+{
+	template <typename ParseContext>
+	constexpr inline auto parse(ParseContext& ctx)
+	{
+		return ctx.begin();
+	}
+
+	inline auto format(ktk_filesystem_path const& str, auto& ctx) const
+	{
+		return std::format_to(ctx.out(), "{}",
+			reinterpret_cast<const char*>(str.u8string().c_str()));
+	}
+};
+	#endif
+
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+template <>
+struct fmt::formatter<kun_kotek kun_ktk filesystem::path, char>
+{
+	template <typename ParseContext>
+	constexpr inline auto parse(ParseContext& ctx)
+	{
+		return ctx.begin();
+	}
+
+	template <typename FormatContext>
+	inline auto format(
+		kun_kotek kun_ktk filesystem::path const& str, FormatContext& ctx)
+	{
+		return fmt::format_to(ctx.out(), u8"{}",
+			kun_kotek kun_ktk ustring(str.u8string().c_str()));
+	}
+};
+#endif

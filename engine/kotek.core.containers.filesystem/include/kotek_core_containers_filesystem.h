@@ -1,6 +1,5 @@
 #pragma once
 
-#include <kotek.core.containers.filesystem.path/include/kotek_core_containers_filesystem_path.h>
 #include "kotek_std_alias_filesystem.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
