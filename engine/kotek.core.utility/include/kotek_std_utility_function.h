@@ -266,19 +266,20 @@ struct is_callable_impl
 template <typename T>
 inline constexpr bool is_callable_v = is_callable_impl<T>::value;
 
-template <typename VariantType, typename ReturnType, typename... Args,
-	std::size_t... I>
+template <typename VariantType, typename ContainerType, typename ReturnType,
+	typename... Args, std::size_t... I>
 bool _call_function_impl(const std::function<ReturnType(Args...)>& f,
-	const std::vector<VariantType>& args, std::index_sequence<I...>)
+	const ContainerType& args, std::index_sequence<I...>)
 {
 	// If an element in args does not hold the expected type,
 	// std::get<T>(...) will throw std::bad_variant_access.
 	return f(std::get<Args>(args[I])...);
 }
 
-template <typename VariantType, typename ReturnType, typename... Args>
-bool call(const std::function<ReturnType(Args...)>& f,
-	const std::vector<VariantType>& args)
+template <typename VariantType, typename ContainerType, typename ReturnType,
+	typename... Args>
+bool call(
+	const std::function<ReturnType(Args...)>& f, const ContainerType& args)
 {
 	if (args.size() != sizeof...(Args))
 	{
@@ -288,7 +289,8 @@ bool call(const std::function<ReturnType(Args...)>& f,
 		return false;
 	}
 
-	return _call_function_impl(f, args, std::index_sequence_for<Args...>{});
+	return _call_function_impl<VariantType, ContainerType, ReturnType, Args...>(
+		f, args, std::index_sequence_for<Args...>{});
 }
 
 template <typename Variant, typename Func>
@@ -311,9 +313,6 @@ public:
 
 	virtual KOTEK_DEF_CONSOLE_TYPE_FOR_ARGUMENT_COUNT
 	argument_count() const = 0;
-
-	virtual ReturnType operator()(const ktk_vector<ktk_cstring_view,
-		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) = 0;
 
 	virtual ReturnType operator()(const ktk_vector<VariantType,
 		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) = 0;
@@ -348,13 +347,6 @@ public:
 			std::tuple_size_v<args_t>);
 	}
 
-	inline result_t operator()(const ktk_vector<ktk_cstring_view,
-		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) override
-	{
-		result_t result_empty{};
-		return result_empty;
-	}
-
 	inline result_t operator()(const ktk_vector<VariantType,
 		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) override
 	{
@@ -370,6 +362,24 @@ public:
 
 		result_t result_empty{};
 
+		if (args.size() != _kMaxArguments)
+		{
+			bool is_less = args.size() < _kMaxArguments;
+
+			if (is_less)
+			{
+				KOTEK_MESSAGE_WARNING("you passed less arguments than expected: expected[{}] | passed[{}]", _kMaxArguments, args.size());
+			}
+			else
+			{
+				KOTEK_MESSAGE_WARNING("you passed more arguments than "
+				                      "expected: expected[{}] | passed[{}]",
+					_kMaxArguments, args.size());
+			}
+
+			return result_empty;
+		}
+
 		bool validation = check_args<args_t>(args);
 
 		// it means that variant has types that's needed to our function_t
@@ -380,6 +390,13 @@ public:
 		// arguments for calling
 		if (validation)
 		{
+			return std::apply(
+				[this, args]<typename... Args>(Args&&... _args) -> result_t
+				{
+					return call<VariantType, decltype(args), result_t, Args...>(
+						m_callback, args);
+				},
+				args_t());
 		}
 #ifdef KOTEK_DEBUG
 		else
@@ -388,7 +405,7 @@ public:
 				"your variant vector contains wrong types in wrong order that "
 				"are different to function signature: function sinagute[{}] | "
 				"your arguments[{}]",
-				2048, std::string_view(get_tuple_type_info<args_t>().data()));
+				2048, ktk_cstring_view(get_tuple_type_info<args_t>().data()), ktk_cstring_view(get_variant_container_types(args).data()));
 		}
 #endif
 
