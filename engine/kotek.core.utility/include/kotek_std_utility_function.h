@@ -388,7 +388,7 @@ public:
 				"your variant vector contains wrong types in wrong order that "
 				"are different to function signature: function sinagute[{}] | "
 				"your arguments[{}]",
-				2048);
+				2048, std::string_view(get_tuple_type_info<args_t>().data()));
 		}
 #endif
 

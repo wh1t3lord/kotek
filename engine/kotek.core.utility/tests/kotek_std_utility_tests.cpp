@@ -820,7 +820,7 @@ TEST(Utility, check_args_test)
 	}
 }
 
-TEST(Utility, type_info_test)
+TEST(Utility, type_info_of_type)
 {
 	using MyTuple = std::tuple<int, float, std::string_view>;
 	using MyVariant = std::variant<int, double, std::string_view>;
@@ -835,11 +835,64 @@ TEST(Utility, type_info_test)
 		kun_kotek kun_ktk get_variant_container_type_info<ArrayContainer>();
 
 	KOTEK_MESSAGE_S(
-		"tuple type info: {}", 2048, std::string_view(tuple_info.data()));
+		"tuple type info: {}", 1024, std::string_view(tuple_info.data()));
 	KOTEK_MESSAGE_S(
-		"vector type info: {}", 2048, std::string_view(vector_info.data()));
+		"vector type info: {}", 1024, std::string_view(vector_info.data()));
 	KOTEK_MESSAGE_S(
-		"array type info: {}", 2048, std::string_view(array_info.data()));
+		"array type info: {}", 1024, std::string_view(array_info.data()));
+}
+
+TEST(Utility, type_info_test)
+{
+	// Compile-time tests
+	using CompileTimeVariant =
+		std::variant<int, float, double, std::string_view>;
+	constexpr std::array<CompileTimeVariant, 3> array_container{
+		CompileTimeVariant{42}, CompileTimeVariant{3.14f},
+		CompileTimeVariant{std::string_view{"test"}}};
+
+	constexpr auto array_types =
+		kun_kotek kun_ktk print_variant_container_types(array_container);
+	KOTEK_MESSAGE_S(
+		"Array types: {}", 1024, std::string_view(array_types.data()));
+
+	// Runtime tests
+	using RuntimeVariant = std::variant<int, float, double, std::string>;
+	std::vector<RuntimeVariant> vector_container{RuntimeVariant{42},
+		RuntimeVariant{3.14f}, RuntimeVariant{std::string{"test"}}};
+
+	auto vector_types =
+		kun_kotek kun_ktk print_variant_container_types(vector_container);
+	KOTEK_MESSAGE_S(
+		"Vector types: {}", 1024, std::string_view(vector_types.data()));
+
+	// Test different order in vector
+	vector_container = {RuntimeVariant{std::string{"first"}},
+		RuntimeVariant{1.0}, RuntimeVariant{123}};
+
+	vector_types =
+		kun_kotek kun_ktk print_variant_container_types(vector_container);
+	KOTEK_MESSAGE_S("Vector types (reordered): {}", 1024,
+		std::string_view(vector_types.data()));
+
+	// Test empty vector
+	std::vector<RuntimeVariant> empty_vector;
+	vector_types =
+		kun_kotek kun_ktk print_variant_container_types(empty_vector);
+	KOTEK_MESSAGE_S(
+		"Empty vector types: {}", 1024, std::string_view(vector_types.data()));
+
+	// Test complex types in vector
+	using ComplexVariant =
+		std::variant<std::vector<int>, std::tuple<int, float>>;
+	std::vector<ComplexVariant> complex_vector{
+		ComplexVariant{std::vector<int>{1, 2, 3}},
+		ComplexVariant{std::tuple<int, float>{42, 3.14f}}};
+
+	vector_types =
+		kun_kotek kun_ktk print_variant_container_types(complex_vector);
+	KOTEK_MESSAGE_S("Complex vector types: {}", 1024,
+		std::string_view(vector_types.data()));
 }
 
 	#endif

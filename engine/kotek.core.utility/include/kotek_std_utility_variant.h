@@ -210,5 +210,38 @@ constexpr std::array<char, 512> get_variant_container_type_info()
 	return buffer;
 }
 
+template <typename Container>
+constexpr std::array<char, 512> print_variant_container_types(
+	const Container& container)
+{
+	std::array<char, 512> buffer = {};
+	size_t pos = 0;
+
+	for (size_t i = 0; i < container.size(); ++i)
+	{
+		const auto& variant = container[i];
+		std::visit(
+			[&buffer, &pos](const auto& value)
+			{
+				constexpr std::string_view type = kun_kotek kun_ktk
+				type_name<std::decay_t<decltype(value)>>();
+				for (char c : type)
+				{
+					buffer[pos++] = c;
+				}
+			},
+			variant);
+
+		if (i < container.size() - 1)
+		{
+			buffer[pos++] = ',';
+			buffer[pos++] = ' ';
+		}
+	}
+
+	buffer[pos] = '\0';
+	return buffer;
+}
+
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
