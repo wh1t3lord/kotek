@@ -21,6 +21,7 @@ struct ktkPrivateImpl
 	COLORREF m_color_background;
 	kun_ktk uint32_t m_file_resource_id;
 	kun_core ktkIResourceLoaderManager* m_p_reader;
+	kun_core ktkWindowConsole* m_p_owner;
 	HWND m_p_handle;
 	HWND m_p_handle_console;
 	HWND m_p_handle_edit_box;
@@ -156,6 +157,43 @@ LRESULT CALLBACK ConsoleWndProc(
 		SetBkColor(hdc, _kConsoleEditboxBackgroundEndcodedColor);
 		return (LRESULT)p_impl->m_p_handle_brush_console_background;
 	}
+	case WM_KEYDOWN:
+	{
+		if (wParam == VK_ESCAPE)
+		{
+			KOTEK_ASSERT(p_impl->m_p_owner, "must be initialized!");
+
+			if (p_impl)
+			{
+				if (p_impl->m_p_owner)
+				{
+					p_impl->m_p_owner->Hide();
+				}
+			}
+
+			return 0;
+		}
+
+		break;
+	}
+	case WM_CHAR:
+	{
+		// prevents beep annoying sound
+		if (wParam == VK_RETURN)
+		{
+			return 0;
+		}
+		else if (wParam == VK_TAB)
+		{
+			return 0;
+		}
+		else if (wParam == VK_ESCAPE)
+		{
+			return 0;
+		}
+
+		break;
+	}
 	default:
 	{
 		return DefWindowProc(hWnd, message, wParam, lParam);
@@ -195,19 +233,27 @@ LRESULT CALLBACK EditWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 			SetFocus(GetParent(GetParent(hWnd)));
 			return 0;
 		}
+		else if (wParam == VK_ESCAPE)
+		{
+			SetFocus(GetParent(hWnd));
+			return 0;
+		}
 
 		break;
 	}
 	case WM_CHAR:
 	{
+		// prevents beep annoying sound
 		if (wParam == VK_RETURN)
 		{
-			// prevents beep annoying sound
 			return 0;
 		}
 		else if (wParam == VK_TAB)
 		{
-			// prevents beep annoying sound
+			return 0;
+		}
+		else if (wParam == VK_ESCAPE)
+		{
 			return 0;
 		}
 
@@ -233,8 +279,9 @@ LRESULT CALLBACK EditWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 #endif
 
 ktkWindowConsole::ktkWindowConsole() :
-	m_show{}, m_file_reader_id{kun_ktk uint32_t(-1)}, m_p_manager_resource{},
-	m_p_input{}, m_p_logger{}, m_p_console{}, m_p_private_impl{}
+	m_show{}, m_is_issued_hide{}, m_is_issued_show{},
+	m_file_reader_id{kun_ktk uint32_t(-1)}, m_p_manager_resource{}, m_p_input{},
+	m_p_logger{}, m_p_console{}, m_p_private_impl{}
 {
 }
 
@@ -287,6 +334,7 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 		p_impl->m_p_handle_brush_console_background = NULL;
 		p_impl->m_color_text = RGB(255, 250, 250);
 		p_impl->m_p_reader = NULL;
+		p_impl->m_p_owner = NULL;
 		p_impl->m_file_resource_id = -1;
 		p_impl->m_file_current_offset = 0;
 		p_impl->m_file_total_size = 0;
@@ -305,6 +353,7 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 
 			p_impl->m_file_resource_id = this->m_file_reader_id;
 			p_impl->m_p_reader = p_manager->Get_ResourceLoader();
+			p_impl->m_p_owner = this;
 
 			kun_kotek kun_core ktkResourceReadingRequest request(
 				this->m_file_reader_id,
@@ -478,75 +527,26 @@ void ktkWindowConsole::Update()
 			{
 				this->m_show = !this->m_show;
 
-#ifdef KOTEK_USE_PLATFORM_WINDOWS
-				ktkPrivateImpl* p_impl =
-					static_cast<ktkPrivateImpl*>(this->m_p_private_impl);
-
-				if (this->m_show)
-				{
-					KOTEK_ASSERT(
-						p_impl->m_p_handle_console, "must be initialized!");
-					KOTEK_ASSERT(
-						p_impl->m_p_handle_edit_box, "must be initialized!");
-
-					KOTEK_ASSERT(p_impl->m_p_reader, "must be initialized!");
-
-					if (p_impl->m_p_reader)
-					{
-						KOTEK_ASSERT(this->m_p_logger, "must be initialized!");
-
-						if (this->m_p_logger)
-						{
-							this->m_p_logger->Flush_All();
-						}
-
-						if (p_impl->m_p_reader->EndOfFile(
-								p_impl->m_file_resource_id))
-						{
-							p_impl->m_p_reader->Clear(
-								p_impl->m_file_resource_id);
-						}
-
-						p_impl->m_p_reader->Seekg(p_impl->m_file_resource_id, 0,
-							kun_core eFileSeekDirectionType::kSeekDirectionEnd);
-						p_impl->m_file_total_size = p_impl->m_p_reader->Tellg(
-							p_impl->m_file_resource_id);
-						p_impl->m_file_current_offset =
-							p_impl->m_file_total_size -
-							KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE;
-						p_impl->m_p_reader->Seekg(p_impl->m_file_resource_id,
-							p_impl->m_file_current_offset,
-							kun_core
-								eFileSeekDirectionType::kSeekDirectionBegin);
-						p_impl->m_p_reader->Read(p_impl->m_file_resource_id,
-							p_impl->m_p_view_buffer,
-							KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
-						p_impl->m_p_view_buffer[p_impl->m_p_reader->Gcount(
-							p_impl->m_file_resource_id)] = '\0';
-					}
-
-					ShowWindow(p_impl->m_p_handle_console, SW_SHOW);
-					ShowWindow(p_impl->m_p_handle_edit_box, SW_SHOW);
-
-					InvalidateRect(p_impl->m_p_handle_console, NULL, TRUE);
-					InvalidateRect(p_impl->m_p_handle_edit_box, NULL, TRUE);
-				}
-				else
-				{
-					KOTEK_ASSERT(
-						p_impl->m_p_handle_console, "must be initialized!");
-					KOTEK_ASSERT(
-						p_impl->m_p_handle_edit_box, "must be initialized!");
-
-					ShowWindow(p_impl->m_p_handle_console, SW_HIDE);
-					ShowWindow(p_impl->m_p_handle_edit_box, SW_HIDE);
-				}
-#elif defined(KOTEK_USE_PLATFORM_LINUX)
-	#error not implemented
-#else
-	#error unknown platform
-#endif
+				this->Impl_ShowOrHide(this->m_show);
 			}
+		}
+
+		if (this->m_is_issued_show)
+		{
+			KOTEK_ASSERT(!this->m_is_issued_hide,
+				"can't be, it means code logic is broken!");
+
+			this->Impl_ShowOrHide(true);
+			this->m_is_issued_show = false;
+		}
+
+		if (this->m_is_issued_hide)
+		{
+			KOTEK_ASSERT(!this->m_is_issued_show,
+				"can't be, it means code logic is broken!");
+
+			this->Impl_ShowOrHide(false);
+			this->m_is_issued_hide = false;
 		}
 
 		if (this->m_show)
@@ -576,12 +576,82 @@ void ktkWindowConsole::Update()
 
 void ktkWindowConsole::Show()
 {
+	this->m_is_issued_hide = false;
 	this->m_show = true;
+	this->m_is_issued_show = true;
 }
 
 void ktkWindowConsole::Hide()
 {
+	this->m_is_issued_show = false;
 	this->m_show = false;
+	this->m_is_issued_hide = true;
+}
+
+void ktkWindowConsole::Impl_ShowOrHide(bool show)
+{
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	ktkPrivateImpl* p_impl =
+		static_cast<ktkPrivateImpl*>(this->m_p_private_impl);
+
+	if (show)
+	{
+		KOTEK_ASSERT(p_impl->m_p_handle_console, "must be initialized!");
+		KOTEK_ASSERT(p_impl->m_p_handle_edit_box, "must be initialized!");
+
+		KOTEK_ASSERT(p_impl->m_p_reader, "must be initialized!");
+
+		if (p_impl->m_p_reader)
+		{
+			KOTEK_ASSERT(this->m_p_logger, "must be initialized!");
+
+			if (this->m_p_logger)
+			{
+				this->m_p_logger->Flush_All();
+			}
+
+			if (p_impl->m_p_reader->EndOfFile(p_impl->m_file_resource_id))
+			{
+				p_impl->m_p_reader->Clear(p_impl->m_file_resource_id);
+			}
+
+			p_impl->m_p_reader->Seekg(p_impl->m_file_resource_id, 0,
+				kun_core eFileSeekDirectionType::kSeekDirectionEnd);
+			p_impl->m_file_total_size =
+				p_impl->m_p_reader->Tellg(p_impl->m_file_resource_id);
+			p_impl->m_file_current_offset = p_impl->m_file_total_size -
+				KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE;
+			p_impl->m_p_reader->Seekg(p_impl->m_file_resource_id,
+				p_impl->m_file_current_offset,
+				kun_core eFileSeekDirectionType::kSeekDirectionBegin);
+			p_impl->m_p_reader->Read(p_impl->m_file_resource_id,
+				p_impl->m_p_view_buffer,
+				KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
+			p_impl->m_p_view_buffer[p_impl->m_p_reader->Gcount(
+				p_impl->m_file_resource_id)] = '\0';
+		}
+
+		ShowWindow(p_impl->m_p_handle_console, SW_SHOW);
+		ShowWindow(p_impl->m_p_handle_edit_box, SW_SHOW);
+
+		SetFocus(p_impl->m_p_handle_edit_box);
+
+		InvalidateRect(p_impl->m_p_handle_console, NULL, TRUE);
+		InvalidateRect(p_impl->m_p_handle_edit_box, NULL, TRUE);
+	}
+	else
+	{
+		KOTEK_ASSERT(p_impl->m_p_handle_console, "must be initialized!");
+		KOTEK_ASSERT(p_impl->m_p_handle_edit_box, "must be initialized!");
+
+		ShowWindow(p_impl->m_p_handle_console, SW_HIDE);
+		ShowWindow(p_impl->m_p_handle_edit_box, SW_HIDE);
+	}
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+	#error not implemented
+#else
+	#error unknown platform
+#endif
 }
 
 KOTEK_END_NAMESPACE_CORE
