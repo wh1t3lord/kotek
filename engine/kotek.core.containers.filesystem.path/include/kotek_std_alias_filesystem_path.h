@@ -3,7 +3,6 @@
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 #include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
 #include <kotek.core.containers.string/include/kotek_std_string.h>
-#include <kotek.core.utility/include/kotek_core_utility.h>
 #include <kotek.core.os/include/kotek_core_os.h>
 
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
@@ -30,12 +29,23 @@
 // KOTEK_USE_NAMESPACE_KTK is used
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
+
+/// @brief returns OPPOSITE separator depends on OS. For example, if your OS is
+/// windows and you pass a '\\' separator it will return a '/' separator because
+/// '\\' is preferred separator on WindowsNT platforms and thus opposite
+/// separator for Windows will be '/'.
+/// @param separator '/' and '\\' as accepted argument values for function
+/// @return depends on platform and passed separator. Function CHECKS the value
+/// of separator and if it is not preferred value that expected than function
+/// returns passed argument
+char fs_give_opposite_to_preferred_separator(char separator);
+
 KOTEK_BEGIN_NAMESPACE_FILESYSTEM
 
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 	#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 
-template <size_t Size>
+template <std::size_t Size>
 class static_path
 {
 public:
@@ -320,6 +330,7 @@ public:
 	static_path<Size>& operator=(char8_t str);
 	static_path<Size>& operator=(const static_cstring_view& view);
 	static_path<Size>& operator=(const static_u8string_view& view);
+	static_path<Size>& operator=(const std::string_view& view);
 
 	static_path<Size>& assign(string_type&& source);
 	static_path<Size>& assign(const static_path<Size>& path);
@@ -2170,6 +2181,13 @@ inline static_path<Size>& static_path<Size>::operator=(
 	const static_u8string_view& view)
 {
 	return this->operator=(reinterpret_cast<const char*>(view.data()));
+}
+
+template<size_t Size>
+inline static_path<Size>& static_path<Size>::operator=(
+	const std::string_view& view)
+{
+	return this->operator=(view.data());
 }
 
 template <size_t Size>

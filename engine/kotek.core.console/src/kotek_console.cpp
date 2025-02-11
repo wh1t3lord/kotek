@@ -5,11 +5,25 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 ktkConsole::ktkConsole(void) {}
 
-ktkConsole::~ktkConsole(void) {}
+ktkConsole::~ktkConsole(void)
+{
+	KOTEK_ASSERT(
+		this->m_storage.empty(), "you forgot to deallocate the storage!");
+}
 
-void ktkConsole::Initialize(void)
+void ktkConsole::Initialize(
+	const console_user_callback_enum_translation_t& translating_callback)
 {
 	KOTEK_MESSAGE("console is initialized!");
+
+	if (!translating_callback)
+	{
+		KOTEK_MESSAGE_WARNING(
+			"you didn't pass or passed invalid callback for translating enums. "
+			"Calling functions from console is not accessible!");
+	}
+
+	this->m_user_callback_enum_translation = translating_callback;
 }
 
 void ktkConsole::Flush(void)
@@ -18,9 +32,11 @@ void ktkConsole::Flush(void)
 	{
 		auto& pair = this->m_buffer.front();
 		auto& argument = pair.first;
-		auto& callback = pair.second;
+		auto& p_callback = pair.second;
 
-		bool status = callback(argument);
+		KOTEK_ASSERT(p_callback, "must be valid allocated pointer!");
+
+		bool status = (*p_callback)(argument);
 
 		KOTEK_ASSERT(status, "invalid calling for console command");
 
@@ -28,40 +44,111 @@ void ktkConsole::Flush(void)
 	}
 }
 
-void ktkConsole::Parse_ConsoleCommandAsString(const char* p_text) 
+bool ktkConsole::Parse_ConsoleCommandAsString(
+	ParsingData& result, const char* p_text)
 {
 	KOTEK_ASSERT(p_text, "must be valid string!");
 
+	bool status = true;
+
 	if (p_text)
 	{
-		ktk_cstring_view view(p_text);
+		ktk_cstring_view input(p_text);
 
-		if (view.empty() == false)
+		auto is_ws = [](char c) { return c == ' ' || c == '\t' || c == '\n'; };
+
+		if (input.empty() == false)
 		{
-			
+			// Find the opening parenthesis.
+			auto openParen = input.find('(');
+			if (openParen == std::string_view::npos)
+			{
+				KOTEK_MESSAGE_WARNING(
+					"failed to parse function calling: Missing '(' in function "
+					"call. Your input string: [{}]",
+					p_text);
+				status = false;
+				return status;
+			}
+
+			// Extract and trim the function name.
+			auto funcName = input.substr(0, openParen);
+			while (!funcName.empty() && is_ws(funcName.front()))
+				funcName.remove_prefix(1);
+			while (!funcName.empty() && is_ws(funcName.back()))
+				funcName.remove_suffix(1);
+			result.function_name = funcName;
+
+			// Find the closing parenthesis.
+			auto closeParen = input.rfind(')');
+			if (closeParen == std::string_view::npos || closeParen < openParen)
+			{
+				KOTEK_MESSAGE_WARNING(
+					"failed to parse function calling: Missing ')' in function "
+					"call. Your input string: [{}]",
+					p_text);
+
+				status = false;
+				return status;
+			}
+			// Get the arguments string.
+			auto argsStr =
+				input.substr(openParen + 1, closeParen - openParen - 1);
+
+			// Parse the arguments.
+			std::size_t start = 0;
+			while (start < argsStr.size())
+			{
+				while (start < argsStr.size() && is_ws(argsStr[start]))
+					++start;
+				if (start >= argsStr.size())
+					break;
+
+				std::size_t end = start;
+				bool inQuotes = false;
+				while (end < argsStr.size())
+				{
+					char c = argsStr[end];
+					if (c == '"')
+						inQuotes = !inQuotes;
+					else if (c == ',' && !inQuotes)
+						break;
+					++end;
+				}
+				auto token = argsStr.substr(start, end - start);
+				while (!token.empty() && is_ws(token.front()))
+					token.remove_prefix(1);
+				while (!token.empty() && is_ws(token.back()))
+					token.remove_suffix(1);
+
+				result.args.push_back(token);
+				start = end + 1;
+			}
+		}
+		else
+		{
+			status = false;
 		}
 	}
+	else
+	{
+		status = false;
+	}
+
+	return status;
 }
 
-void ktkConsole::Shutdown(void) {}
-
-void ktkConsole::Register_Command(
-	ktk::enum_base_t id, const ktk::console_command_t& p_function) noexcept
+void ktkConsole::Shutdown(void)
 {
-	if (this->m_storage.find(id) != this->m_storage.end())
+	for (auto& pair : this->m_storage)
 	{
-		KOTEK_MESSAGE("you can't add command[{}] which is existed in storage",
-			static_cast<ktk::enum_base_t>(id));
-		return;
+		if (pair.second)
+		{
+			delete pair.second;
+		}
 	}
 
-	if (p_function == nullptr)
-	{
-		KOTEK_MESSAGE("can't register and invalid command");
-		return;
-	}
-
-	this->m_storage[id] = p_function;
+	this->m_storage.clear();
 }
 
 void ktkConsole::Push_Command(
@@ -91,19 +178,89 @@ void ktkConsole::Execute_Command(
 		return;
 	}
 
-	bool status = this->m_storage.at(id)(data);
+	bool status = (*this->m_storage.at(id))(data);
 
 	KOTEK_ASSERT(status, "command was issued not correctly");
 }
 
 bool ktkConsole::Push_Command(const char* p_text)
 {
-	return false;
+	bool successful{};
+	if (!this->m_user_callback_enum_translation)
+		return successful;
+
+	ParsingData data;
+
+	successful = this->Parse_ConsoleCommandAsString(data, p_text);
+
+	if (successful)
+	{
+		eConsoleCommandIndex function_id = static_cast<eConsoleCommandIndex>(
+			this->m_user_callback_enum_translation(data.function_name.data()));
+
+		successful = static_cast<int>(function_id) != -1;
+
+		if (successful)
+		{
+			KOTEK_ASSERT(this->m_storage.find(static_cast<kun_ktk enum_base_t>(
+							 function_id)) != this->m_storage.end(),
+				"can't be!");
+
+			if (this->m_storage.find(static_cast<kun_ktk enum_base_t>(
+					function_id)) != this->m_storage.end())
+			{
+				auto p_callback = this->m_storage.at(
+					static_cast<kun_ktk enum_base_t>(function_id));
+
+				KOTEK_ASSERT(
+					p_callback, "invalid pointer can't be, memory corruption?");
+
+				if (p_callback)
+				{
+					auto args_variant = p_callback->Parse(data.args);
+
+					this->Push_Command(
+						static_cast<kun_ktk enum_base_t>(function_id),
+						args_variant);
+				}
+			}
+			else
+			{
+				KOTEK_MESSAGE_WARNING(
+					"your translation function returned supposedly correct "
+					"value but there's no a such function in storage so it "
+					"means you didn't register or some internal error? Key: {} "
+					"Function Name: {}",
+					static_cast<kun_ktk enum_base_t>(function_id),
+					data.function_name);
+			}
+		}
+		else
+		{
+			KOTEK_MESSAGE_WARNING(
+				"you didn't register function name for console translation: {}",
+				data.function_name);
+		}
+	}
+
+	return successful;
 }
 
 bool ktkConsole::Execute_Command(const char* p_text)
 {
-	return false;
+	bool successful{};
+	if (!this->m_user_callback_enum_translation)
+		return successful;
+
+	ParsingData data;
+
+	successful = this->Parse_ConsoleCommandAsString(data, p_text);
+
+	if (successful)
+	{
+	}
+
+	return successful;
 }
 
 KOTEK_END_NAMESPACE_CORE

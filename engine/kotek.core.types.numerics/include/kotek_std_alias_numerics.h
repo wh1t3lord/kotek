@@ -30,6 +30,10 @@ using streamsize_t = std::streamsize;
 namespace chrono = std::chrono;
 namespace chrono_literals = std::chrono_literals;
 
+static_assert(!std::is_unsigned_v<enum_base_t>,
+	"you must specify this type as signed type, because of system's legacy "
+    "(and rational approach for defining enums)");
+
 KOTEK_END_NAMESPACE_KTK
 
 using uint64_t = KUN_KOTEK KUN_KTK uint64_t;

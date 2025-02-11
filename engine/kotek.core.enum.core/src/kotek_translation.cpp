@@ -499,6 +499,7 @@ namespace helper
 		}
 	}
 
+	// todo: use code generation through preprocessors
 	ktk::cstring Translate_ConsoleCommandIndex(eConsoleCommandIndex type)
 	{
 		switch (type)
@@ -520,9 +521,9 @@ namespace helper
 		{
 			return KOTEK_TEXTU("Render_UploadAllResourcesToGPU");
 		}
-		case eConsoleCommandIndex::kConsoleCommand_Resize:
+		case eConsoleCommandIndex::kConsoleCommand_Render_Resize:
 		{
-			return KOTEK_TEXTU("Resize");
+			return KOTEK_TEXTU("Render_Resize");
 		}
 		default:
 		{

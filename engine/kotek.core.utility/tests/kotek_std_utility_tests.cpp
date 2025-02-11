@@ -900,8 +900,9 @@ TEST(Utility, fill_vector_variant_test)
 
 	auto result = kun_kotek kun_ktk
 		fill_vector_variant<std::variant<int, float, double, std::string>,
-			std::vector<std::variant<int, float, double, std::string>>, int,
-			float, double, std::string>(input);
+			std::vector<std::variant<int, float, double, std::string>>,
+			std::vector<std::string_view>, int, float, double, std::string>(
+			input);
 
 	EXPECT_EQ(result.size(), 4);
 	EXPECT_TRUE(std::holds_alternative<int>(result[0]));
@@ -919,8 +920,8 @@ TEST(Utility, fill_vector_variant_test)
 		"not_a_number", "not_b_number", "not_c_number"};
 
 	(kun_kotek kun_ktk fill_vector_variant<std::variant<int, float, double>,
-		std::vector<std::variant<int, float, double>>, int, float, double>(
-		invalid_input));
+		std::vector<std::variant<int, float, double>>,
+		std::vector<std::string_view>, int, float, double>(invalid_input));
 }
 
 	#endif

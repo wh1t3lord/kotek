@@ -472,28 +472,52 @@ KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRender);
  * to queue and executes on next tick.
  */
 enum class eConsoleCommandIndex : kun_ktk enum_base_t{// (int width, int height)
-	kConsoleCommand_Resize,
+	kConsoleCommand_App_Close,
+	/// @brief
+	kConsoleCommand_App_Hide,
+	/// @brief
+	kConsoleCommand_App_Show,
+	/// @brief
+	kConsoleCommand_App_AddTextToExistedWindowTitle,
+	kConsoleCommand_App_Resize, // todo: implement this, note that render_resize
+								// is about render target but app resize it is
+								// about the window itself
+	kConsoleCommand_App_Pause,
 
-	kConsoleCommand_App_Close, kConsoleCommand_App_Hide,
-	kConsoleCommand_App_Show, kConsoleCommand_App_AddTextToExistedWindowTitle,
-
+	/// @brief
 	kConsoleCommand_Input_Type,
 
 	kConsoleCommand_Render_UploadAllResourcesToGPU,
 	kConsoleCommand_Render_CalculateBoundingPrimitive,
+	kConsoleCommand_Render_Resize,
 
 	kConsoleCommand_ResourceManager_Load,
 	kConsoleCommand_ResourceManager_OpenForWriting,
 	kConsoleCommand_ResourceManager_Write,
 	kConsoleCommand_ResourceManager_FinishWriting,
-
-	kConsoleCommand_SDK_LoadScene, kConsoleCommand_SDK_SaveScene,
-	kConsoleCommand_SDK_Redo, kConsoleCommand_SDK_Undo,
-	kConsoleCommand_SDK_CloseCurrentScene, kConsoleCommand_SDK_StartSimulate,
-	kConsoleCommand_SDK_StopSimulate, kConsoleCommand_SDK_SelectEntity,
+	/// @brief
+	kConsoleCommand_SDK_LoadScene,
+	/// @brief
+	kConsoleCommand_SDK_SaveScene,
+	/// @brief
+	kConsoleCommand_SDK_Redo,
+	/// @brief
+	kConsoleCommand_SDK_Undo,
+	/// @brief
+	kConsoleCommand_SDK_CloseCurrentScene,
+	/// @brief
+	kConsoleCommand_SDK_StartSimulate,
+	/// @brief
+	kConsoleCommand_SDK_StopSimulate,
+	/// @brief
+	kConsoleCommand_SDK_SelectEntity,
+	/// @brief
 	kConsoleCommand_SDK_DeleteComponentFromEntity,
+	/// @brief
 	kConsoleCommand_SDK_CreateComponentForEntity,
-	kConsoleCommand_SDK_CreateEntity, kConsoleCommand_SDK_DeleteEntity,
+	kConsoleCommand_SDK_CreateEntity,
+	/// @brief
+	kConsoleCommand_SDK_DeleteEntity,
 
 	/**
      * \~english @brief Defines functionality to your log window when issued it
@@ -565,7 +589,9 @@ enum class eConsoleCommandIndex : kun_ktk enum_base_t{// (int width, int height)
      */
 	kConsoleCommand_SDK_SetFeature_AddComponentsToEntity_ThatRequiredForCreation,
 
-	kConsoleCommand_SDK_ShowWindow, kConsoleCommand_SDK_HideWindow,
+	kConsoleCommand_SDK_ShowWindow,
+	/// @brief
+	kConsoleCommand_SDK_HideWindow,
 
 	// prints as list of registered windows
 	kConsoleCommand_SDK_PrintRegisteredWindows,

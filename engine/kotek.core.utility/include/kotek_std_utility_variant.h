@@ -2,6 +2,10 @@
 
 #include <kotek.core.containers.variant\include\kotek_core_containers_variant.h>
 #include <kotek.core.defines_dependent.assert\include\kotek_core_defines_dependent_assert.h>
+#include <kotek.core.containers.filesystem.path\include\kotek_core_containers_filesystem_path.h>
+#include <kotek.core.api\include\kotek_api_resource_manager.h>
+#include <kotek.core.containers.shared_ptr\include\kotek_core_containers_shared_ptr.h>
+
 // #include
 // <kotek.core.containers.string\include\kotek_core_containers_string.h>
 
@@ -270,13 +274,22 @@ template <std::size_t N>
 struct is_char_array<std::array<char, N>> : std::true_type
 {
 	static constexpr std::size_t size = N;
+	static constexpr bool is_fs = false;
 };
 
 #ifdef KOTEK_USE_LIBRARY_TYPE_EMB
 template <std::size_t N>
-struct is_char_array<kun_kotek kun_ktk static_cstring<N>> : std::true_type
+struct is_char_array<static_cstring<N>> : std::true_type
 {
 	static constexpr std::size_t size = N;
+	static constexpr bool is_fs = false;
+};
+
+template <std::size_t N>
+struct is_char_array<kun_filesystem static_path<N>> : std::true_type
+{
+	static constexpr std::size_t size = N;
+	static constexpr bool is_fs = true;
 };
 #endif
 
@@ -296,6 +309,9 @@ struct char_array_tag
 {
 };
 struct string_tag
+{
+};
+struct char_string_pointer_tag
 {
 };
 struct custom_tag
@@ -322,6 +338,8 @@ constexpr auto select_tag()
 		return char_array_tag{};
 	else if constexpr (std::is_same_v<T, std::string>)
 		return string_tag{};
+	else if constexpr (std::is_same_v<T, const char*>)
+		return char_string_pointer_tag{};
 	else
 		return custom_tag{};
 }
@@ -426,10 +444,19 @@ T convert_impl(std::string_view str, bool& status, char_array_tag)
 {
 	constexpr std::size_t candidate_size = is_char_array<T>::size;
 	std::size_t required = next_power_of_2(str.size());
-	if (required == candidate_size)
+	if (required == candidate_size || (is_char_array<T>::is_fs))
 	{
 		T arr{};
-		std::copy(str.begin(), str.end(), arr.begin());
+
+		if constexpr (is_char_array<T>::is_fs)
+		{
+			arr = str;
+		}
+		else
+		{
+			std::copy(str.begin(), str.end(), arr.begin());
+		}
+
 		return arr;
 	}
 
@@ -448,6 +475,12 @@ T convert_impl(std::string_view str, bool& status, string_tag)
 	return T(str);
 }
 
+template <typename T>
+T convert_impl(std::string_view str, bool& status, char_string_pointer_tag)
+{
+	return T(str.data());
+}
+
 // -- Custom conversion: This must be specialized by the user for any custom
 // type.
 template <typename T>
@@ -458,6 +491,40 @@ T convert_impl(std::string_view, bool& status, custom_tag)
 		"convert_impl for your type.");
 }
 
+template <>
+inline kun_kotek kun_core ktkLoadingRequest
+convert_impl<kun_kotek kun_core ktkLoadingRequest>(
+	std::string_view str, bool& status, custom_tag)
+{
+	kun_kotek kun_core ktkLoadingRequest result;
+
+	KOTEK_ASSERT(false, "not implemented!");
+
+	return result;
+}
+
+template <>
+inline kun_kotek kun_ktk shared_ptr<kun_kotek kun_core ktkResourceHandle>
+convert_impl<
+	kun_kotek kun_ktk shared_ptr<kun_kotek kun_core ktkResourceHandle>>(
+	std::string_view str, bool& status, custom_tag)
+{
+	int simple_resource;
+	const char* _kTypeName = typeid(simple_resource).name();
+	const char* _kFunctionName = __FUNCTION__;
+	const char* _kFileName = __FILE__;
+
+	KOTEK_ASSERT(false, "not implemented!");
+
+	return std::make_shared<kun_kotek kun_core ktkResourceHandle>(
+		&simple_resource, false
+#ifdef KOTEK_DEBUG
+		,
+		_kTypeName, _kFunctionName, _kFileName
+#endif
+	);
+}
+
 // The generic conversion function that dispatches based on T.
 template <typename T>
 T convert_from_string(std::string_view str, bool& status)
@@ -465,37 +532,31 @@ T convert_from_string(std::string_view str, bool& status)
 	return convert_impl<T>(str, status, select_tag<T>());
 }
 
-template <typename Variant, typename Container, typename... Ts>
-Container fill_vector_variant(const std::vector<std::string_view>& input)
+template <typename Variant, typename ReturnContainer, typename InputContainer,
+	typename... Ts>
+ReturnContainer fill_vector_variant(const InputContainer& input)
 {
 	static_assert((is_in_variant_v<Ts, Variant> && ...),
 		"All candidate types must be among the alternatives of the Variant "
 		"type.");
+
 	if (input.size() != sizeof...(Ts))
 	{
-#ifdef KOTEK_DEBUG
-		KOTEK_ASSERT(false,
-			"the input argument size must be equal to types for casting like "
-			"int,double,float = ['1', '3.2', '3.3f']. Expected: [{}] Passed: "
-			"[{}]",
-			sizeof...(Ts), input.size());
-#else
 		KOTEK_MESSAGE_WARNING(
 			"the input argument size must be equal to types for casting like "
 			"int,double,float = ['1', '3.2', '3.3f']. Expected: [{}] Passed: "
 			"[{}]",
 			sizeof...(Ts), input.size());
-#endif
-		return Container{};
+		return ReturnContainer{};
 	}
 
-	Container result;
+	ReturnContainer result;
 
 	// Helper lambda: for each candidate type, convert the corresponding input
 	// string.
 	auto push_conversion = [&]<typename T>(T, std::size_t element_index)
 	{
-		std::string_view str = input[element_index];
+		std::string_view str = input[element_index].data();
 
 		// we suppose that our convert operation was successful
 		bool status = true;

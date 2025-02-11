@@ -28,6 +28,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_std_utility.cpp"
 	"include/kotek_std_utility_variant.h"
 	"include/kotek_std_utility_function.h"
+	"include/kotek_std_utility_hash.h"
 	"include/kotek_core_utility.h"
 	${to_include_unit_tests}
 	"src/main_core_utility_dll.cpp"
@@ -54,5 +55,6 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.variant)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.function)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.filesystem.path)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.message)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)

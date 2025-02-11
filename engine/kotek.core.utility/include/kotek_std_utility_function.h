@@ -314,6 +314,11 @@ public:
 	virtual KOTEK_DEF_CONSOLE_TYPE_FOR_ARGUMENT_COUNT
 	argument_count() const = 0;
 
+	virtual ktk_vector<VariantType,
+		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>
+	Parse(const ktk_vector<ktk_cstring_view,
+		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) const = 0;
+
 	virtual ReturnType operator()(const ktk_vector<VariantType,
 		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) = 0;
 };
@@ -347,6 +352,25 @@ public:
 			std::tuple_size_v<args_t>);
 	}
 
+	inline ktk_vector<VariantType,
+		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>
+	Parse(const ktk_vector<ktk_cstring_view,
+		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) const override
+	{
+		ktk_vector<VariantType, KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>
+			result;
+
+		result = std::apply(
+			[result, args]<typename... Args>(Args... _args)
+			{
+				return fill_vector_variant<VariantType, decltype(result),
+					decltype(args), Args...>(args);
+			},
+			args_t());
+
+		return result;
+	}
+
 	inline result_t operator()(const ktk_vector<VariantType,
 		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) override
 	{
@@ -368,12 +392,14 @@ public:
 
 			if (is_less)
 			{
-				KOTEK_MESSAGE_WARNING("you passed less arguments than expected: expected[{}] | passed[{}]", _kMaxArguments, args.size());
+				KOTEK_MESSAGE_WARNING("you passed less arguments than "
+									  "expected: expected[{}] | passed[{}]",
+					_kMaxArguments, args.size());
 			}
 			else
 			{
 				KOTEK_MESSAGE_WARNING("you passed more arguments than "
-				                      "expected: expected[{}] | passed[{}]",
+									  "expected: expected[{}] | passed[{}]",
 					_kMaxArguments, args.size());
 			}
 
@@ -405,7 +431,8 @@ public:
 				"your variant vector contains wrong types in wrong order that "
 				"are different to function signature: function sinagute[{}] | "
 				"your arguments[{}]",
-				2048, ktk_cstring_view(get_tuple_type_info<args_t>().data()), ktk_cstring_view(get_variant_container_types(args).data()));
+				2048, ktk_cstring_view(get_tuple_type_info<args_t>().data()),
+				ktk_cstring_view(get_variant_container_types(args).data()));
 		}
 #endif
 

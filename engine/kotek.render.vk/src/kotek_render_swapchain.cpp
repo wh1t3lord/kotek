@@ -221,8 +221,10 @@ namespace Kotek
 						p_main_manager->GetGameManager()
 							->GetConsole()
 							->Execute_Command(
-                            static_cast<Kotek::ktk::enum_base_t>(Core::eConsoleCommandIndex::kConsoleCommand_Resize),
-                            {width, height});
+								static_cast<Kotek::ktk::enum_base_t>(
+									Core::eConsoleCommandIndex::
+										kConsoleCommand_Render_Resize),
+								{width, height});
 					}
 					else
 					{
@@ -475,5 +477,5 @@ namespace Kotek
 			}
 
 		} // namespace vk
-	}     // namespace Render
+	} // namespace Render
 } // namespace Kotek
