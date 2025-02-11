@@ -41,8 +41,9 @@ class ktkConsole : public ktkIConsole
 {
 	struct ParsingData
 	{
-		ktk_cstring_view function_name;
-		ktk_vector<ktk_cstring_view,
+		// TODO: make preprocessor for that please KOTEK_DEF_CONSOLE_FUNCTION_MAX_LENGTH_NAME
+		char function_name[32]{};
+		ktk_vector<std::string_view,
 			KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>
 			args;
 	};

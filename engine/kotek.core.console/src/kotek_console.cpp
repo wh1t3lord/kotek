@@ -38,10 +38,17 @@ void ktkConsole::Flush(void)
 
 		bool status = (*p_callback)(argument);
 
-		KOTEK_ASSERT(status, "invalid calling for console command");
+#ifdef KOTEK_DEBUG
+		KOTEK_ASSERT(status, "failed to execute console command");
+#endif
 
 		this->m_buffer.pop();
 	}
+}
+
+constexpr bool is_ws(char c)
+{
+	return c == ' ' || c == '\t' || c == '\n';
 }
 
 bool ktkConsole::Parse_ConsoleCommandAsString(
@@ -53,9 +60,7 @@ bool ktkConsole::Parse_ConsoleCommandAsString(
 
 	if (p_text)
 	{
-		ktk_cstring_view input(p_text);
-
-		auto is_ws = [](char c) { return c == ' ' || c == '\t' || c == '\n'; };
+		std::string_view input(p_text);
 
 		if (input.empty() == false)
 		{
@@ -77,7 +82,26 @@ bool ktkConsole::Parse_ConsoleCommandAsString(
 				funcName.remove_prefix(1);
 			while (!funcName.empty() && is_ws(funcName.back()))
 				funcName.remove_suffix(1);
-			result.function_name = funcName;
+			
+			constexpr size_t _kFunctionNameLengthString =
+				sizeof(result.function_name) / sizeof(result.function_name[0]);
+
+			if (funcName.size() >= _kFunctionNameLengthString)
+			{
+#ifdef KOTEK_DEBUG
+				KOTEK_ASSERT(false,
+					"failed to parse function name: {} != max[{}]",
+					funcName.size(), _kFunctionNameLengthString);
+#else
+				KOTEK_MESSAGE_WARNING(
+					"your function name is too long for "
+					"parsing, the max length of string: {} (input size: {})",
+					_kFunctionNameLengthString, funcName.size());
+#endif
+			}
+
+			std::memcpy(
+				result.function_name, funcName.data(), funcName.size());
 
 			// Find the closing parenthesis.
 			auto closeParen = input.rfind(')');
@@ -196,7 +220,7 @@ bool ktkConsole::Push_Command(const char* p_text)
 	if (successful)
 	{
 		eConsoleCommandIndex function_id = static_cast<eConsoleCommandIndex>(
-			this->m_user_callback_enum_translation(data.function_name.data()));
+			this->m_user_callback_enum_translation(data.function_name));
 
 		successful = static_cast<int>(function_id) != -1;
 

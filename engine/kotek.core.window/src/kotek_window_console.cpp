@@ -161,6 +161,8 @@ LRESULT CALLBACK ConsoleWndProc(
 		return DefWindowProc(hWnd, message, wParam, lParam);
 	}
 	}
+
+	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
 LRESULT CALLBACK EditWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -232,7 +234,7 @@ LRESULT CALLBACK EditWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 ktkWindowConsole::ktkWindowConsole() :
 	m_show{}, m_file_reader_id{kun_ktk uint32_t(-1)}, m_p_manager_resource{},
-	m_p_input{}, m_p_logger{}, m_p_private_impl{}
+	m_p_input{}, m_p_logger{}, m_p_console{}, m_p_private_impl{}
 {
 }
 
@@ -261,6 +263,7 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 	this->m_p_manager_resource = p_manager;
 	this->m_p_input = p_input;
 	this->m_p_logger = p_logger;
+	this->m_p_console = p_console;
 
 	if (p_window)
 	{
@@ -554,7 +557,12 @@ void ktkWindowConsole::Update()
 
 			if (p_impl->m_edit_box_send_command)
 			{
-				// TODO: implement sending command
+				if (this->m_p_console)
+				{
+					this->m_p_console->Push_Command(
+						p_impl->m_p_edit_box_content);
+				}
+
 				p_impl->m_edit_box_send_command = false;
 			}
 #elif defined(KOTEK_USE_PLATFORM_LINUX)

@@ -312,11 +312,11 @@ public:
 		"represent a number in any other possible ways...");
 
 	virtual KOTEK_DEF_CONSOLE_TYPE_FOR_ARGUMENT_COUNT
-	argument_count() const = 0;
+	Get_ArgumentCount() const = 0;
 
 	virtual ktk_vector<VariantType,
 		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>
-	Parse(const ktk_vector<ktk_cstring_view,
+	Parse(const ktk_vector<std::string_view,
 		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) const = 0;
 
 	virtual ReturnType operator()(const ktk_vector<VariantType,
@@ -346,7 +346,7 @@ public:
 	vfunction(FunctionType& func) : m_callback{func} {}
 	~vfunction() {}
 
-	KOTEK_DEF_CONSOLE_TYPE_FOR_ARGUMENT_COUNT argument_count() const override
+	KOTEK_DEF_CONSOLE_TYPE_FOR_ARGUMENT_COUNT Get_ArgumentCount() const override
 	{
 		return static_cast<KOTEK_DEF_CONSOLE_TYPE_FOR_ARGUMENT_COUNT>(
 			std::tuple_size_v<args_t>);
@@ -354,7 +354,7 @@ public:
 
 	inline ktk_vector<VariantType,
 		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>
-	Parse(const ktk_vector<ktk_cstring_view,
+	Parse(const ktk_vector<std::string_view,
 		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) const override
 	{
 		ktk_vector<VariantType, KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>

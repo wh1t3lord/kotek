@@ -275,6 +275,8 @@ struct is_char_array<std::array<char, N>> : std::true_type
 {
 	static constexpr std::size_t size = N;
 	static constexpr bool is_fs = false;
+	static constexpr bool is_std_array = true;
+	static constexpr bool is_static_cstring = false;
 };
 
 #ifdef KOTEK_USE_LIBRARY_TYPE_EMB
@@ -283,6 +285,8 @@ struct is_char_array<static_cstring<N>> : std::true_type
 {
 	static constexpr std::size_t size = N;
 	static constexpr bool is_fs = false;
+	static constexpr bool is_std_array = false;
+	static constexpr bool is_static_cstring = true;
 };
 
 template <std::size_t N>
@@ -290,6 +294,8 @@ struct is_char_array<kun_filesystem static_path<N>> : std::true_type
 {
 	static constexpr std::size_t size = N;
 	static constexpr bool is_fs = true;
+	static constexpr bool is_std_array = false;
+	static constexpr bool is_static_cstring = false;
 };
 #endif
 
@@ -442,29 +448,34 @@ T convert_impl(std::string_view str, bool& status, floating_tag)
 template <typename T>
 T convert_impl(std::string_view str, bool& status, char_array_tag)
 {
-	constexpr std::size_t candidate_size = is_char_array<T>::size;
-	std::size_t required = next_power_of_2(str.size());
-	if (required == candidate_size || (is_char_array<T>::is_fs))
+	T arr{};
+
+	constexpr auto _kMaxLength = is_char_array<T>::size;
+
+	if (str.size() > _kMaxLength)
 	{
-		T arr{};
-
-		if constexpr (is_char_array<T>::is_fs)
-		{
-			arr = str;
-		}
-		else
-		{
-			std::copy(str.begin(), str.end(), arr.begin());
-		}
-
+		KOTEK_MESSAGE_WARNING(
+			"Conversion to fixed-size char array failed to due overflow. "
+		    "Analyzed string: [{}] Size: {} Max Size: {}",
+			str, str.size(), _kMaxLength);
+		status = false;
 		return arr;
 	}
 
-	status = false;
-	T arr{};
-	KOTEK_MESSAGE_WARNING(
-		"Conversion to fixed–size char array failed. Analyzed string: [{}]",
-		str);
+	if constexpr (is_char_array<T>::is_fs)
+	{
+		arr = str;
+	}
+	else if constexpr (is_char_array<T>::is_static_cstring)
+	{
+		arr.append(str.data(), str.size());
+	}
+	else
+	{
+		// for std::array
+		std::copy(str.begin(), str.end(), arr.begin());
+	}
+
 	return arr;
 }
 
@@ -556,7 +567,7 @@ ReturnContainer fill_vector_variant(const InputContainer& input)
 	// string.
 	auto push_conversion = [&]<typename T>(T, std::size_t element_index)
 	{
-		std::string_view str = input[element_index].data();
+		std::string_view str = input[element_index];
 
 		// we suppose that our convert operation was successful
 		bool status = true;
