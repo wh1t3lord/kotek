@@ -12,10 +12,13 @@ namespace gles
 
 	ktkRenderDevice::~ktkRenderDevice(void) {}
 
-	void ktkRenderDevice::Initialize(Core::ktkMainManager* p_main_manager) 
+	void ktkRenderDevice::Initialize(Core::ktkMainManager* p_main_manager)
 	{
 		p_main_manager->Get_WindowManager()->ActiveWindow_MakeContextCurrent();
-		
+
+		// todo: make universal function for getprocs like what if we use sdl
+		// and etc so based on window library (or if it doesn't present) use
+		// preprocessor for passing this function to glad
 		int version = gladLoadGLES2Loader(
 			reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
 

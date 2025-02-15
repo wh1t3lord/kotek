@@ -173,6 +173,20 @@ LRESULT CALLBACK ConsoleWndProc(
 
 			return 0;
 		}
+		else if (wParam == VK_OEM_3)
+		{
+			KOTEK_ASSERT(p_impl->m_p_owner, "must be initialized!");
+
+			if (p_impl)
+			{
+				if (p_impl->m_p_owner)
+				{
+					p_impl->m_p_owner->Hide();
+				}
+			}
+
+			return 0;
+		}
 
 		break;
 	}
