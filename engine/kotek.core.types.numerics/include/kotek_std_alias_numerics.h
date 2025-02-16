@@ -32,7 +32,9 @@ namespace chrono_literals = std::chrono_literals;
 
 static_assert(!std::is_unsigned_v<enum_base_t>,
 	"you must specify this type as signed type, because of system's legacy "
-    "(and rational approach for defining enums)");
+	"(and rational approach for defining enums)");
+
+constexpr enum_base_t kInvalidEnumBase = enum_base_t(-1);
 
 KOTEK_END_NAMESPACE_KTK
 

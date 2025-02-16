@@ -123,6 +123,28 @@ struct ktkDrawIndexIndirectCommand
 	GLuint m_reserved_must_be_zero;
 };
 
+struct ktkDrawElementsIndirectCommand
+{
+	/// @brief \~english you need to specify elements (e.g. indecies that's
+	/// using for drawing)
+	unsigned int count;
+	/// @brief \~english current amount of instances for drawing (instancing)
+	unsigned int instanceCount;
+	/// @brief \~english offset for element buffer where indecies were uploaded
+	unsigned int firstIndex;
+	/// @brief \~english offset for array buffer where vertecies were uploaded
+	int baseVertex;
+	unsigned int baseInstance;
+};
+
+struct ktkDrawArraysIndirectCommand
+{
+	unsigned int count;
+	unsigned int instanceCount;
+	unsigned int firstVertex;
+	unsigned int baseInstance;
+};
+
 class ktkVertex
 {
 public:
@@ -157,16 +179,16 @@ public:
 	ktkGeometry(kun_ktk enum_base_t geometry_type,
 		const kun_ktk vector<kun_ktk kun_math vec3f_t>& vertex_data,
 		const kun_ktk vector<kun_ktk uint32_t>& index_data) :
-		m_geometry_type{geometry_type},
-		m_vertex_data{vertex_data}, m_index_data{index_data}
+		m_geometry_type{geometry_type}, m_vertex_data{vertex_data},
+		m_index_data{index_data}
 	{
 	}
 
 	ktkGeometry(kun_ktk cstring geometry_type,
 		const kun_ktk vector<kun_ktk kun_math vec3f_t>& vertex_data,
 		const kun_ktk vector<kun_ktk uint32_t>& index_data) :
-		m_geometry_type{geometry_type},
-		m_vertex_data{vertex_data}, m_index_data{index_data}
+		m_geometry_type{geometry_type}, m_vertex_data{vertex_data},
+		m_index_data{index_data}
 	{
 	}
 

@@ -4,12 +4,21 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
 ktkRenderBuffer::ktkRenderBuffer() :
+#ifdef KOTEK_DEBUG
+	m_is_shutdown_was_called{},
+#endif
+
 	m_is_reallocation{}, m_target{}, m_p_allocator{}
 {
 }
 
-ktkRenderBuffer::~ktkRenderBuffer() 
+ktkRenderBuffer::~ktkRenderBuffer()
 {
+#ifdef KOTEK_DEBUG
+	KOTEK_ASSERT(this->m_is_shutdown_was_called,
+		"you forgot to call shutdown for buffer", this->m_description_name);
+#endif
+
 	if (this->m_p_allocator)
 	{
 		delete this->m_p_allocator;
@@ -18,14 +27,17 @@ ktkRenderBuffer::~ktkRenderBuffer()
 }
 
 void ktkRenderBuffer::Initialize(ktk::size_t memory_size,
-	const ktk::cstring& debug_name, GLenum target,
-	Core::eRenderStatistics stat_type, GLuint index_binding_in_shader) noexcept
+	const ktk_cstring<64>& debug_name, GLenum target,
+	Core::eRenderStatistics stat_type, GLenum usage,
+	GLuint index_binding_in_shader) noexcept
 {
 	KOTEK_ASSERT(memory_size > 0, "you must pass a valid amount of memory");
 	KOTEK_ASSERT(
 		debug_name.empty() == false, "you must pass a not empty string");
 
+#ifdef KOTEK_DEBUG
 	this->m_description_name = debug_name;
+#endif
 
 	// TODO: implement reallocation
 	if (this->m_is_reallocation == false)
@@ -37,7 +49,7 @@ void ktkRenderBuffer::Initialize(ktk::size_t memory_size,
 		glBindBuffer(target, id);
 		KOTEK_GL_ASSERT();
 
-		glBufferData(target, memory_size, nullptr, GL_STATIC_DRAW);
+		glBufferData(target, memory_size, nullptr, usage);
 		KOTEK_GL_ASSERT();
 
 		if (index_binding_in_shader != GLuint(-1))
@@ -51,7 +63,7 @@ void ktkRenderBuffer::Initialize(ktk::size_t memory_size,
 		}
 
 		this->m_target = target;
-		this->m_handles.push_back(id);
+		this->m_handle = id;
 	}
 
 	this->m_p_allocator = new OffsetAllocator::Allocator(memory_size);
@@ -71,17 +83,14 @@ void ktkRenderBuffer::Shutdown(void)
 	KOTEK_MESSAGE("Destroying: {} [{}]", this->m_description_name,
 		static_cast<double>(this->m_stats.Get_AllocatedMemory()) /
 			(1024.0 * 1024.0));
+	this->m_is_shutdown_was_called = true;
 #endif
 
-	for (auto id : this->m_handles)
-	{
-		glDeleteBuffers(1, &id);
-		KOTEK_GL_ASSERT();
-	}
+	glDeleteBuffers(1, &this->m_handle);
+	KOTEK_GL_ASSERT();
 }
 
-OffsetAllocator::Allocation ktkRenderBuffer::AllocateOffset(
-	ktk::size_t mem)
+OffsetAllocator::Allocation ktkRenderBuffer::AllocateOffset(ktk::size_t mem)
 {
 	this->m_stats.Set_FreeMemory(this->m_stats.Get_AllocatedMemory() - mem);
 	this->m_stats.Set_UsedMemory(
@@ -99,16 +108,14 @@ void ktkRenderBuffer::FreeOffset(const OffsetAllocator::Allocation& info)
 	this->m_p_allocator->deallocate(info);
 }
 
-const ktk::cstring& ktkRenderBuffer::Get_DescriptionName(
-	void) const noexcept
+const ktk_cstring<64>& ktkRenderBuffer::Get_DescriptionName(void) const noexcept
 {
 	return this->m_description_name;
 }
 
-const ktk::vector<GLuint>& ktkRenderBuffer::Get_Handles(
-	void) const noexcept
+GLuint ktkRenderBuffer::Get_Handle(void) const noexcept
 {
-	return this->m_handles;
+	return this->m_handle;
 }
 
 GLenum ktkRenderBuffer::Get_Target(void) const noexcept
