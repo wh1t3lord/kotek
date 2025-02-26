@@ -46,6 +46,10 @@ public:
 	vector3f(const vector1f& data, float y, float z);
 	vector3f(const vector2f& data, float z);
 
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	vector3f(const DirectX::XMVECTOR& xmvec);
+#endif
+
 	vector3f(void);
 
 	~vector3f(void) = default;
@@ -127,7 +131,7 @@ public:
 	float* data(void) noexcept;
 
 	void set(float x, float y, float z) noexcept;
-	
+
 	inline static constexpr unsigned char size_of(void) noexcept
 	{
 		static_assert(sizeof(float[3]) == sizeof(m_base) &&

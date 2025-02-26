@@ -56,6 +56,11 @@ public:
 
 	vector4f(const base_vec4_t& data);
 	vector4f(const vector4f& data);
+
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	vector4f(const DirectX::XMVECTOR& vec);
+	#endif
+
 	vector4f(void);
 
 	~vector4f(void) = default;

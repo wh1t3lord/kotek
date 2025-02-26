@@ -153,8 +153,7 @@ inline float distance_squared(const vector2f& from, const vector2f& to)
 
 inline float distance_squared(const vector3f& from, const vector2f& to)
 {
-	vector3f result(
-		(from.x() - to.x()), (from.y() - to.y()), from.z());
+	vector3f result((from.x() - to.x()), (from.y() - to.y()), from.z());
 	return length_squared(result);
 }
 
@@ -165,8 +164,8 @@ inline float distance_squared(const vector3f& from, const vector3f& to)
 
 inline float distance_squared(const vector4f& from, const vector2f& to)
 {
-	vector4f result((from.x() - to.x()), (from.y() - to.y()),
-		from.z(), from.w());
+	vector4f result(
+		(from.x() - to.x()), (from.y() - to.y()), from.z(), from.w());
 	return length_squared(result);
 }
 
@@ -224,6 +223,38 @@ inline float dot(const vector4f& left, const vector4f& right)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
+#endif
+}
+
+inline vector1f normalize(const vector1f& vec)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return vector1f(1.0f);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline vector2f normalize(const vector2f& vec)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMVector2Normalize(vec);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline vector3f normalize(const vector3f& vec)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMVector3Normalize(vec);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline vector4f normalize(const vector4f& vec)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMVector4Normalize(vec);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 #endif
 }
 

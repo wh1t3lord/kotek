@@ -86,6 +86,15 @@ vector2f::vector2f(const vector4f& data) : m_base(data.x(), data.y()) {}
 
 vector2f::vector2f(const base_vec2_t& data) : m_base(data) {}
 vector2f::vector2f(const vector2f& data) : m_base(data.m_base) {}
+
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+vector2f::vector2f(const DirectX::XMVECTOR& vec) 
+{
+	DirectX::XMStoreFloat2(&this->m_base, vec);
+}
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+
 vector2f::vector2f(void) : m_base(0.0f, 0.0f) {}
 
 vector2f& vector2f::operator=(const vector2f& data) noexcept
@@ -398,7 +407,7 @@ vector2f vector2f::operator-() const noexcept
 	return vector2f(-this->m_base.x, -this->m_base.y);
 }
 
-bool vector2f::operator==(const vector2f & data) const noexcept
+bool vector2f::operator==(const vector2f& data) const noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR casted_original = *this;
@@ -485,7 +494,7 @@ float* vector2f::data(void) noexcept
 	return &this->m_base.x;
 }
 
-void vector2f::set(float x, float y) 
+void vector2f::set(float x, float y)
 {
 	this->m_base.x = x;
 	this->m_base.y = y;

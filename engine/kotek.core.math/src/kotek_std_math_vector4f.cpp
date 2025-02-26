@@ -192,6 +192,14 @@ vector4f::vector4f(const vector3f& data, float w) :
 
 vector4f::vector4f(const base_vec4_t& data) : m_base(data) {}
 vector4f::vector4f(const vector4f& data) : m_base(data.m_base) {}
+
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+vector4f::vector4f(const DirectX::XMVECTOR& vec) 
+{
+	DirectX::XMStoreFloat4(&this->m_base, vec);
+}
+#endif
+
 vector4f::vector4f(void) : m_base(0.0f, 0.0f, 0.0f, 0.0f) {}
 
 vector4f& vector4f::operator=(const vector4f& data) noexcept

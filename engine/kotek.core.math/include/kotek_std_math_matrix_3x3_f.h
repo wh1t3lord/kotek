@@ -25,6 +25,13 @@ public:
 	}
 	matrix3x3f(const base_mat3x3_t& data) : m_base(data) {}
 	matrix3x3f(const matrix3x3f& data) : m_base(data.m_base) {}
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	matrix3x3f(const DirectX::XMMATRIX& data)
+	{
+		DirectX::XMStoreFloat3x3(&this->m_base, data);
+	}
+#endif
+
 	matrix3x3f(void) : m_base{} {}
 
 	~matrix3x3f(void) = default;

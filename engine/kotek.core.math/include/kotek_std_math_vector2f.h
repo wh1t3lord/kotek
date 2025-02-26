@@ -38,6 +38,12 @@ public:
 
 	vector2f(const base_vec2_t& data);
 	vector2f(const vector2f& data);
+
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	vector2f(const DirectX::XMVECTOR& vec);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+
 	vector2f(void);
 
 	~vector2f(void) = default;

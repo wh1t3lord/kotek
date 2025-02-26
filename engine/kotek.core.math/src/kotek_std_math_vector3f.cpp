@@ -114,16 +114,28 @@ vector3f::vector3f(const vector1f& data) : m_base(data.x(), 0.0f, 0.0f) {}
 
 vector3f::vector3f(const vector2f& data) : m_base(data.x(), data.y(), 0.0f) {}
 
-vector3f::vector3f(const vector4f& data) :
-	m_base(data.x(), data.y(), data.z())
+vector3f::vector3f(const vector4f& data) : m_base(data.x(), data.y(), data.z())
 {
 }
 
 vector3f::vector3f(const vector1f& data, float y) : m_base(data.x(), y, 0.0f) {}
 
-vector3f::vector3f(const vector1f& data, float y, float z) : m_base(data.x(), y,z) {}
+vector3f::vector3f(const vector1f& data, float y, float z) :
+	m_base(data.x(), y, z)
+{
+}
 
-vector3f::vector3f(const vector2f& data, float z) : m_base(data.x(), data.y(), z) {}
+vector3f::vector3f(const vector2f& data, float z) :
+	m_base(data.x(), data.y(), z)
+{
+}
+
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+vector3f::vector3f(const DirectX::XMVECTOR& xmvec)
+{
+	DirectX::XMStoreFloat3(&this->m_base, xmvec);
+}
+#endif
 
 vector3f::vector3f(void) : m_base(0.0f, 0.0f, 0.0f) {}
 
@@ -550,7 +562,7 @@ float* vector3f::data(void) noexcept
 	return &this->m_base.x;
 }
 
-void vector3f::set(float x, float y, float z) noexcept 
+void vector3f::set(float x, float y, float z) noexcept
 {
 	this->m_base.x = x;
 	this->m_base.y = y;

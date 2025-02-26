@@ -360,6 +360,9 @@ namespace gl
 			{
 				p_command->instanceCount += 1;
 			}
+
+			glBindBuffer(this->m_p_draw_indirect_commands->Get_Target(), 0);
+			KOTEK_GL_ASSERT();
 		}
 
 		/*
@@ -527,7 +530,7 @@ namespace gl
 		kun_ktk uint32_t result = -1;
 
 		for (kun_ktk uint32_t i = 0;
-			 i < KOTEK_DEF_RENDER_INDIRECT_DRAWING_TOTAL_COMMANDS; ++i)
+			i < KOTEK_DEF_RENDER_INDIRECT_DRAWING_TOTAL_COMMANDS; ++i)
 		{
 			if (!this->m_free_slots_of_indirect_commands[i])
 			{

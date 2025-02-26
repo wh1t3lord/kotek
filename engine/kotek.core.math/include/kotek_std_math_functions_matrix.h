@@ -64,6 +64,23 @@ inline float const* value_ptr(const matrix4x4f& data)
 #endif
 }
 
+inline matrix3x3f transpose(const matrix3x3f& mat)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMMatrixTranspose(mat);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline matrix4x4f transpose(const matrix4x4f& mat)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMMatrixTranspose(mat);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+
+#endif
+}
+
 // double
 
 KOTEK_END_NAMESPACE_MATH KOTEK_END_NAMESPACE_KTK KOTEK_END_NAMESPACE_KOTEK
