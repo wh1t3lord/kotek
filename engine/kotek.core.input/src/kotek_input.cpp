@@ -464,7 +464,7 @@ bool ktkInput::Is_KeyHolding(eInputControllerType controller_type,
 		bool status =
 			KOTEK_CHECK_FLAG(this->m_controller_mouse_key_pressed, flag);
 
-		return status && ticks >= frames;
+		return status && ticks >= 1;
 	}
 	case eInputControllerType::kControllerGamepad:
 	{
@@ -706,7 +706,7 @@ bool ktkInput::Get_SupportedControllers(
 		if (nResult != (UINT)-1)
 		{
 			for (unsigned char i = 0;
-				 i < static_cast<unsigned char>(nNumOfDevices); ++i)
+				i < static_cast<unsigned char>(nNumOfDevices); ++i)
 			{
 				if (pDevices[i].dwType == RIM_TYPEKEYBOARD)
 				{
@@ -757,7 +757,7 @@ void ktkInput::Update(void)
 	// this situation for being 'once' otherwise there's no other options for
 	// making pressing once checking valid
 	for (unsigned char i = eInputAllKeys::kCK_KEY_A;
-		 i < eInputAllKeys::kCA_KEY_END_ENUM; ++i)
+		i < eInputAllKeys::kCA_KEY_END_ENUM; ++i)
 	{
 		if (this->m_controller_key_ticks[i])
 		{
@@ -2371,9 +2371,8 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 		case _kGLFWActionRepeat:
 		{
 			static_assert(
-				std::is_same<
-					std::remove_reference<
-						decltype(this->m_controller_key_ticks[0])>::type,
+				std::is_same<std::remove_reference<decltype(this
+									 ->m_controller_key_ticks[0])>::type,
 					unsigned char>::value &&
 				"did you change type? If yes fix the below line and this "
 				"assert "
@@ -2653,23 +2652,9 @@ void ktkInput::Update_Mouse(void* p_raw_args, eInputPlatformBackend backend)
 			if (converted_key == -1)
 				return;
 
-			eInputAllKeys converted_all_key = static_cast<eInputAllKeys>(
-				p_glfw3_mouse_key_to_all_keys[p_args->key]);
-
-			KOTEK_SET_FLAG(this->m_controller_mouse_key_pressed, converted_key);
-			KOTEK_REMOVE_FLAG(
-				this->m_controller_mouse_key_released, converted_key);
-
-			this->m_controller_key_ticks[converted_all_key] += 1;
-
-			break;
-		}
-		case _kGLFWActionRepeat:
-		{
 			static_assert(
-				std::is_same<
-					std::remove_reference<
-						decltype(this->m_controller_key_ticks[0])>::type,
+				std::is_same<std::remove_reference<decltype(this
+									 ->m_controller_key_ticks[0])>::type,
 					unsigned char>::value &&
 				"did you change type? If yes fix the below line and this "
 				"assert "
@@ -2679,13 +2664,14 @@ void ktkInput::Update_Mouse(void* p_raw_args, eInputPlatformBackend backend)
 				std::numeric_limits<std::remove_reference<
 					decltype(this->m_controller_key_ticks[0])>::type>::max();
 
-			if (converted_key == -1)
-				return;
-
 			eInputAllKeys converted_all_key = static_cast<eInputAllKeys>(
 				p_glfw3_mouse_key_to_all_keys[p_args->key]);
 
-			this->m_controller_key_ticks[converted_all_key] = _kMaxTickAmount;
+			KOTEK_SET_FLAG(this->m_controller_mouse_key_pressed, converted_key);
+			KOTEK_REMOVE_FLAG(
+				this->m_controller_mouse_key_released, converted_key);
+
+			this->m_controller_key_ticks[converted_all_key] += 1;
 
 			break;
 		}
