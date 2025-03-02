@@ -516,8 +516,6 @@ void ktkWindow::Set_InputType(ktk::enum_base_t type) noexcept
 		{
 			glfwSetInputMode(
 				this->m_p_window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-			KOTEK_TRACE("Enable disabled cursor!");
 		}
 
 		break;
