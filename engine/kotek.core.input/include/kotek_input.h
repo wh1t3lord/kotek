@@ -38,22 +38,24 @@ public:
 	ktkInput(void);
 	~ktkInput(void);
 
-	void Initialize(void) override;
+	void Initialize(eInputPlatformBackend backend) override;
 	void Shutdown(void) override;
 
 	bool Set_ControllerData(eInputControllerType controller_type,
 		unsigned char data_field_index, float data) override;
 	float Get_ControllerData(eInputControllerType controller_type,
-		unsigned char data_field_index) override;
+		unsigned char data_field_index) const override;
+
+	void Set_ControllerUpdate(eInputControllerType controller_type) override;
 
 	bool Is_KeyPressed(
-		eInputControllerType controller_type, eInputAllKeys key) override;
+		eInputControllerType controller_type, eInputAllKeys key) const override;
 
 	bool Is_KeyHolding(
-		eInputControllerType controller_type, eInputAllKeys key, unsigned char frames=16) override;
+		eInputControllerType controller_type, eInputAllKeys key, unsigned char frames=16) const override;
 
 	bool Is_KeyReleased(
-		eInputControllerType controller_type, eInputAllKeys key) override;
+		eInputControllerType controller_type, eInputAllKeys key) const override;
 
 	const char* Get_TextInformationAboutController(
 		eInputControllerType controller_type) override;
@@ -85,20 +87,21 @@ public:
 	bool WriteKeyAsStringToBuffer_IfReleased(eInputControllerType controller,
 		char* p_buffer, kun_ktk size_t length_of_buffer) override;
 
+	eInputControllerType Get_ControllerTypeByKey(
+		eInputAllKeys key) const override;
+
 private:
 	void Update_Controller(void* p_args, eInputPlatformBackend backend,
 		eInputControllerType controller_type);
 	void Update_Keyboard(void* p_args, eInputPlatformBackend backend);
 	void Update_Mouse(void* p_args, eInputPlatformBackend backend);
 
-	int Convert_AllKeysToFlags(eInputAllKeys field);
+	int Convert_AllKeysToFlags(eInputAllKeys field) const;
 
 	/// @brief returns -1 means no category for controller, -2 means error
 	/// @param field from eInputAllKeys enum
 	/// @return -1 means no category for controller; -2 means error;
-	int Convert_AllKeysToCategory(eInputAllKeys field);
-
-	void Determine_Platform(void);
+	int Convert_AllKeysToCategory(eInputAllKeys field) const;
 
 	void Update_ReleasedKeys(void);
 
@@ -134,6 +137,8 @@ private:
 
 	eInputPlatformBackend m_current_platform;
 
+	bool m_need_to_update_controllers
+		[eInputControllerType::kControllerTotalAmountOfEnum];
 	float m_controller_mouse_data
 		[eInputControllerMouseData::kControllerMouseDataTotalAmountOfEnum];
 	unsigned char m_controller_key_ticks[eInputAllKeys::kCA_KEY_END_ENUM];

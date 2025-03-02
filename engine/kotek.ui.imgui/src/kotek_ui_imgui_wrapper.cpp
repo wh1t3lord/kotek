@@ -855,6 +855,11 @@ void ktkImguiWrapper::Separator()
 	::ImGui::Separator();
 }
 
+void ktkImguiWrapper::SeparatorText(const char* p_text) 
+{
+	::ImGui::SeparatorText(p_text);
+}
+
 void ktkImguiWrapper::SameLine(float offset_from_start_x, float spacing)
 {
 	::ImGui::SameLine(offset_from_start_x, spacing);

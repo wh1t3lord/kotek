@@ -663,10 +663,14 @@ enum eInputControllerKeyboardCategory
 
 enum eInputControllerMouseData
 {
-	kMousePreviousCoordinateX,
-	kMoousePreviousCoordinateY,
-	kMouseCoordinateX,
-	kMouseCoordinateY,
+	kMousePreviousCoordinateXInPixels,
+	kMousePreviousCoordinateYInPixels,
+	kMouseCoordinateXInPixels,
+	kMouseCoordinateYInPixels,
+	kMouseCoordinateXNormalized,
+	kMouseCoordinateYNormalized,
+	kMouseDeltaX,
+	kMouseDeltaY,
 	kMouseSensetivity,
 	kControllerMouseDataTotalAmountOfEnum
 };

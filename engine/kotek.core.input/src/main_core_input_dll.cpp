@@ -15,7 +15,6 @@ bool InitializeModule_Core_Input(ktkMainManager* p_manager)
 	}
 
 	p_manager->Set_Input(new ktkInput());
-	p_manager->Get_Input()->Initialize();
 
 	return true;
 }

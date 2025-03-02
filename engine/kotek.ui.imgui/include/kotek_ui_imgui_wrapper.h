@@ -190,6 +190,7 @@ public:
 	const ImVec4& GetStyleColorVec4(ImGuiCol idx) override;
 
 	void Separator() override;
+	void SeparatorText(const char* p_text) override;
 	void SameLine(
 		float offset_from_start_x = 0.0f, float spacing = -1.0f) override;
 	void NewLine() override;

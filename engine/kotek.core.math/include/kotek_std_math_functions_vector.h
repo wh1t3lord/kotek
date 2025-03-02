@@ -200,6 +200,30 @@ inline float dot(const vector2f& left, const vector2f& right)
 #endif
 }
 
+inline vector2f cross(const vector2f& left, const vector2f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMVector2Cross(left, right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline vector2f cross(const vector2f& left, const vector3f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMVector2Cross(left, right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline vector2f cross(const vector2f& left, const vector4f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMVector2Cross(left, right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
 inline float dot(const vector3f& left, const vector3f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -213,6 +237,22 @@ inline float dot(const vector3f& left, const vector3f& right)
 #endif
 }
 
+inline vector3f cross(const vector3f& left, const vector3f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMVector3Cross(left, right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline vector3f cross(const vector3f& left, const vector4f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMVector3Cross(left, right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
 inline float dot(const vector4f& left, const vector4f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -223,6 +263,22 @@ inline float dot(const vector4f& left, const vector4f& right)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
+#endif
+}
+
+inline vector4f cross(const vector4f& left, const vector3f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMVector3Cross(left, right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#endif
+}
+
+inline vector4f cross(const vector4f& left, const vector4f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return DirectX::XMVector3Cross(left, right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 #endif
 }
 

@@ -591,21 +591,29 @@ namespace helper
 	{
 		switch (type)
 		{
-		case eInputControllerMouseData::kMousePreviousCoordinateX:
+		case eInputControllerMouseData::kMousePreviousCoordinateXInPixels:
 		{
-			return "previous_coordinate_x";
+			return "previous_coordinate_x (pixels)";
 		}
-		case eInputControllerMouseData::kMoousePreviousCoordinateY:
+		case eInputControllerMouseData::kMousePreviousCoordinateYInPixels:
 		{
-			return "previous_coordinate_y";
+			return "previous_coordinate_y (pixels)";
 		}
-		case eInputControllerMouseData::kMouseCoordinateX:
+		case eInputControllerMouseData::kMouseCoordinateXInPixels:
 		{
-			return "coordinate_x";
+			return "coordinate_x (pixels)";
 		}
-		case eInputControllerMouseData::kMouseCoordinateY:
+		case eInputControllerMouseData::kMouseCoordinateYInPixels:
 		{
-			return "coordinate_y";
+			return "coordinate_y (pixels)";
+		}
+		case eInputControllerMouseData::kMouseCoordinateXNormalized:
+		{
+			return "coordinate_x (normalized)";
+		}
+		case eInputControllerMouseData::kMouseCoordinateYNormalized:
+		{
+			return "coordinate_y (normalized)";
 		}
 		case eInputControllerMouseData::kMouseSensetivity:
 		{

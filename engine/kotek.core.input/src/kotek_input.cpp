@@ -31,21 +31,30 @@ ktkInput::ktkInput(void) :
 	m_controller_keyboard_key_typewriter_pressed{},
 	m_controller_keyboard_key_typewriter_released{},
 	m_current_platform{eInputPlatformBackend::kPlatformBackend_Unknown},
-	m_controller_mouse_data{}
+	m_need_to_update_controllers{}, m_controller_mouse_data{}
 {
 }
 
 ktkInput::~ktkInput(void) {}
 
-void ktkInput::Initialize(void)
+void ktkInput::Initialize(eInputPlatformBackend backend)
 {
-	this->Determine_Platform();
+	static_assert(
+		std::is_same<std::remove_const<decltype(_kTickCantBeHigher)>::type,
+			std::remove_reference<
+				decltype(this->m_controller_key_ticks[0])>::type>::value,
+		"you change types, fix please!");
+
+	this->m_current_platform = backend;
 
 	kun_kotek kun_ktk memory::memset(
 		this->m_controller_key_ticks, 0, sizeof(this->m_controller_key_ticks));
 }
 
-void ktkInput::Shutdown(void) {}
+void ktkInput::Shutdown(void) 
+{
+	this->m_current_platform = eInputPlatformBackend::kPlatformBackend_Unknown;
+}
 
 bool ktkInput::Set_ControllerData(eInputControllerType controller_type,
 	unsigned char data_field_index, float data)
@@ -105,7 +114,7 @@ bool ktkInput::Set_ControllerData(eInputControllerType controller_type,
 }
 
 float ktkInput::Get_ControllerData(
-	eInputControllerType controller_type, unsigned char data_field_index)
+	eInputControllerType controller_type, unsigned char data_field_index) const
 {
 	KOTEK_ASSERT(this->m_current_platform !=
 			eInputPlatformBackend::kPlatformBackend_Unknown,
@@ -158,8 +167,16 @@ float ktkInput::Get_ControllerData(
 	}
 }
 
+void ktkInput::Set_ControllerUpdate(eInputControllerType controller_type)
+{
+	if (controller_type < eInputControllerType::kControllerTotalAmountOfEnum)
+	{
+		this->m_need_to_update_controllers[controller_type] = true;
+	}
+}
+
 bool ktkInput::Is_KeyPressed(
-	eInputControllerType controller_type, eInputAllKeys key)
+	eInputControllerType controller_type, eInputAllKeys key) const
 {
 	KOTEK_ASSERT(this->m_current_platform !=
 			eInputPlatformBackend::kPlatformBackend_Unknown,
@@ -171,12 +188,6 @@ bool ktkInput::Is_KeyPressed(
 
 	unsigned char ticks = this->m_controller_key_ticks[key];
 
-	static_assert(
-		std::is_same<std::remove_const<decltype(_kTickCantBeHigher)>::type,
-			std::remove_reference<
-				decltype(this->m_controller_key_ticks[0])>::type>::value,
-		"you change types, fix please!");
-
 	switch (controller_type)
 	{
 	case eInputControllerType::kControllerKeyboard:
@@ -186,6 +197,8 @@ bool ktkInput::Is_KeyPressed(
 
 		KOTEK_ASSERT(category > -1,
 			"something is wrong, keyboard has > 30 buttons as controller");
+
+		using cast_tick_t = decltype(this->m_controller_key_ticks[0])&;
 
 		switch (static_cast<eInputControllerKeyboardCategory>(category))
 		{
@@ -204,7 +217,10 @@ bool ktkInput::Is_KeyPressed(
 			if (status)
 			{
 				if (ticks <= _kTickCantBeHigher)
-					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+				{
+					(volatile unsigned char&)(this
+							->m_controller_key_ticks[key]) = _kTickCantBeHigher;
+				}
 			}
 
 			return status && ticks < _kTickCantBeHigher;
@@ -217,7 +233,8 @@ bool ktkInput::Is_KeyPressed(
 			if (status)
 			{
 				if (ticks <= _kTickCantBeHigher)
-					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+					(volatile unsigned char&)this->m_controller_key_ticks[key] =
+						_kTickCantBeHigher;
 			}
 
 			return status && ticks < _kTickCantBeHigher;
@@ -230,7 +247,8 @@ bool ktkInput::Is_KeyPressed(
 			if (status)
 			{
 				if (ticks <= _kTickCantBeHigher)
-					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+					(volatile unsigned char&)this->m_controller_key_ticks[key] =
+						_kTickCantBeHigher;
 			}
 
 			return status && ticks < _kTickCantBeHigher;
@@ -243,7 +261,8 @@ bool ktkInput::Is_KeyPressed(
 			if (status)
 			{
 				if (ticks <= _kTickCantBeHigher)
-					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+					(volatile unsigned char&)this->m_controller_key_ticks[key] =
+						_kTickCantBeHigher;
 			}
 
 			return status && ticks < _kTickCantBeHigher;
@@ -256,7 +275,8 @@ bool ktkInput::Is_KeyPressed(
 			if (status)
 			{
 				if (ticks <= _kTickCantBeHigher)
-					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+					(volatile unsigned char&)this->m_controller_key_ticks[key] =
+						_kTickCantBeHigher;
 			}
 
 			return status && ticks < _kTickCantBeHigher;
@@ -269,7 +289,8 @@ bool ktkInput::Is_KeyPressed(
 			if (status)
 			{
 				if (ticks <= _kTickCantBeHigher)
-					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+					(volatile unsigned char&)this->m_controller_key_ticks[key] =
+						_kTickCantBeHigher;
 			}
 
 			return status && ticks < _kTickCantBeHigher;
@@ -282,7 +303,8 @@ bool ktkInput::Is_KeyPressed(
 			if (status)
 			{
 				if (ticks <= _kTickCantBeHigher)
-					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+					(volatile unsigned char&)this->m_controller_key_ticks[key] =
+						_kTickCantBeHigher;
 			}
 
 			return status && ticks < _kTickCantBeHigher;
@@ -295,7 +317,8 @@ bool ktkInput::Is_KeyPressed(
 			if (status)
 			{
 				if (ticks <= _kTickCantBeHigher)
-					this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+					(volatile unsigned char&)this->m_controller_key_ticks[key] =
+						_kTickCantBeHigher;
 			}
 
 			return status && ticks < _kTickCantBeHigher;
@@ -327,7 +350,8 @@ bool ktkInput::Is_KeyPressed(
 		if (status)
 		{
 			if (ticks <= _kTickCantBeHigher)
-				this->m_controller_key_ticks[key] = _kTickCantBeHigher;
+				(volatile unsigned char&)this->m_controller_key_ticks[key] =
+					_kTickCantBeHigher;
 		}
 
 		return status && ticks < _kTickCantBeHigher;
@@ -353,7 +377,7 @@ bool ktkInput::Is_KeyPressed(
 }
 
 bool ktkInput::Is_KeyHolding(eInputControllerType controller_type,
-	eInputAllKeys key, unsigned char frames)
+	eInputAllKeys key, unsigned char frames) const
 {
 	KOTEK_ASSERT(this->m_current_platform !=
 			eInputPlatformBackend::kPlatformBackend_Unknown,
@@ -487,7 +511,7 @@ bool ktkInput::Is_KeyHolding(eInputControllerType controller_type,
 }
 
 bool ktkInput::Is_KeyReleased(
-	eInputControllerType controller_type, eInputAllKeys key)
+	eInputControllerType controller_type, eInputAllKeys key) const
 {
 	KOTEK_ASSERT(this->m_current_platform !=
 			eInputPlatformBackend::kPlatformBackend_Unknown,
@@ -498,12 +522,6 @@ bool ktkInput::Is_KeyReleased(
 		return false;
 
 	unsigned char ticks = this->m_controller_key_ticks[key];
-
-	static_assert(
-		std::is_same<std::remove_const<decltype(_kTickCantBeHigher)>::type,
-			std::remove_reference<
-				decltype(this->m_controller_key_ticks[0])>::type>::value,
-		"you change types, fix please!");
 
 	switch (controller_type)
 	{
@@ -523,7 +541,7 @@ bool ktkInput::Is_KeyReleased(
 				this->m_controller_keyboard_key_typewriter_released, flag);
 
 			if (!this->m_need_to_updated_released_keys)
-				this->m_need_to_updated_released_keys = status;
+				(volatile bool&)this->m_need_to_updated_released_keys = status;
 
 			return status;
 		}
@@ -533,7 +551,7 @@ bool ktkInput::Is_KeyReleased(
 				this->m_controller_keyboard_key_function_released, flag);
 
 			if (!this->m_need_to_updated_released_keys)
-				this->m_need_to_updated_released_keys = status;
+				(volatile bool&)this->m_need_to_updated_released_keys = status;
 
 			return status;
 		}
@@ -543,7 +561,7 @@ bool ktkInput::Is_KeyReleased(
 				this->m_controller_keyboard_key_other_released, flag);
 
 			if (!this->m_need_to_updated_released_keys)
-				this->m_need_to_updated_released_keys = status;
+				(volatile bool&)this->m_need_to_updated_released_keys = status;
 
 			return status;
 		}
@@ -553,7 +571,7 @@ bool ktkInput::Is_KeyReleased(
 				this->m_controller_keyboard_key_numbers_released, flag);
 
 			if (!this->m_need_to_updated_released_keys)
-				this->m_need_to_updated_released_keys = status;
+				(volatile bool&)this->m_need_to_updated_released_keys = status;
 
 			return status;
 		}
@@ -563,7 +581,7 @@ bool ktkInput::Is_KeyReleased(
 				this->m_controller_keyboard_key_application_released, flag);
 
 			if (!this->m_need_to_updated_released_keys)
-				this->m_need_to_updated_released_keys = status;
+				(volatile bool&)this->m_need_to_updated_released_keys = status;
 
 			return status;
 		}
@@ -573,7 +591,7 @@ bool ktkInput::Is_KeyReleased(
 				this->m_controller_keyboard_key_system_released, flag);
 
 			if (!this->m_need_to_updated_released_keys)
-				this->m_need_to_updated_released_keys = status;
+				(volatile bool&)this->m_need_to_updated_released_keys = status;
 
 			return status;
 		}
@@ -583,7 +601,7 @@ bool ktkInput::Is_KeyReleased(
 				this->m_controller_keyboard_key_enter_released, flag);
 
 			if (!this->m_need_to_updated_released_keys)
-				this->m_need_to_updated_released_keys = status;
+				(volatile bool&)this->m_need_to_updated_released_keys = status;
 
 			return status;
 		}
@@ -593,7 +611,7 @@ bool ktkInput::Is_KeyReleased(
 				this->m_controller_keyboard_key_numpad_released, flag);
 
 			if (!this->m_need_to_updated_released_keys)
-				this->m_need_to_updated_released_keys = status;
+				(volatile bool&)this->m_need_to_updated_released_keys = status;
 
 			return status;
 		}
@@ -603,7 +621,7 @@ bool ktkInput::Is_KeyReleased(
 				this->m_controller_keyboard_key_cursor_control_released, flag);
 
 			if (!this->m_need_to_updated_released_keys)
-				this->m_need_to_updated_released_keys = status;
+				(volatile bool&)this->m_need_to_updated_released_keys = status;
 
 			return status;
 		}
@@ -632,7 +650,7 @@ bool ktkInput::Is_KeyReleased(
 			KOTEK_CHECK_FLAG(this->m_controller_mouse_key_released, flag);
 
 		if (!this->m_need_to_updated_released_keys)
-			this->m_need_to_updated_released_keys = status;
+			(volatile bool&)this->m_need_to_updated_released_keys = status;
 
 		return status;
 	}
@@ -767,6 +785,35 @@ void ktkInput::Update(void)
 	}
 
 	this->Update_ReleasedKeys();
+
+	if (this->m_need_to_update_controllers
+			[eInputControllerType::kControllerMouse])
+	{
+		this->m_controller_mouse_data[eInputControllerMouseData::kMouseDeltaX] =
+			this->m_controller_mouse_data
+				[eInputControllerMouseData::kMouseCoordinateXInPixels] -
+			this->m_controller_mouse_data
+				[eInputControllerMouseData::kMousePreviousCoordinateXInPixels];
+
+		this->m_controller_mouse_data[eInputControllerMouseData::kMouseDeltaY] =
+			this->m_controller_mouse_data
+				[eInputControllerMouseData::kMouseCoordinateYInPixels] -
+			this->m_controller_mouse_data
+				[eInputControllerMouseData::kMousePreviousCoordinateYInPixels];
+	}
+	else
+	{
+		this->m_controller_mouse_data[eInputControllerMouseData::kMouseDeltaX] =
+			0.0f;
+		this->m_controller_mouse_data[eInputControllerMouseData::kMouseDeltaY] =
+			0.0f;
+	}
+
+	for (unsigned char i = 0;
+		i < eInputControllerType::kControllerTotalAmountOfEnum; ++i)
+	{
+		this->m_need_to_update_controllers[i] = false;
+	}
 }
 
 /*
@@ -1442,6 +1489,19 @@ void ktkInput::Update_Controller(void* args)
 	kun_kotek kun_ktk memory::memcpy(
 		&backend, args, sizeof(eInputPlatformBackend));
 
+	KOTEK_ASSERT(backend == this->m_current_platform,
+		"you initialized this input instance for different platform, can't "
+		"proceed any logic futher!");
+
+	if (backend != this->m_current_platform)
+	{
+		KOTEK_MESSAGE_WARNING("Can't update input, because you initialized for "
+							  "different platform, current: [{}] passed: [{}]",
+			helper::Translate_InputPlatformBackend(this->m_current_platform),
+			helper::Translate_InputPlatformBackend(backend));
+		return;
+	}
+
 	switch (backend)
 	{
 	case eInputPlatformBackend::kPlatformBackend_GLFW3:
@@ -1562,7 +1622,7 @@ bool ktkInput::WriteKeyAsStringToBuffer_IfPressed(
 	case eInputControllerType::kControllerKeyboard:
 	{
 		// only kCK = Controller keyboard keys only
-		unsigned char keys[] = {eInputAllKeys::kCK_KEY_A,
+		constexpr unsigned char keys[] = {eInputAllKeys::kCK_KEY_A,
 			eInputAllKeys::kCK_KEY_B, eInputAllKeys::kCK_KEY_C,
 			eInputAllKeys::kCK_KEY_D, eInputAllKeys::kCK_KEY_E,
 			eInputAllKeys::kCK_KEY_F, eInputAllKeys::kCK_KEY_G,
@@ -2057,6 +2117,32 @@ bool ktkInput::WriteKeyAsStringToBuffer_IfReleased(
 	}
 
 	return result;
+}
+
+eInputControllerType ktkInput::Get_ControllerTypeByKey(eInputAllKeys key) const
+{
+	static_assert(
+		eInputAllKeys::kCM_KEY_LEFT - 1 == eInputAllKeys::kCK_KEY_ARROW_DOWN,
+		"keyboard keys or mouse keys were updated, check other if down below "
+		"please");
+
+	if (key >= eInputAllKeys::kCK_KEY_A &&
+		key <= eInputAllKeys::kCK_KEY_ARROW_DOWN)
+	{
+		return eInputControllerType::kControllerKeyboard;
+	}
+	else if (key >= eInputAllKeys::kCM_KEY_LEFT &&
+		key <= eInputAllKeys::kCM_KEY_MIDDLE)
+	{
+		return eInputControllerType::kControllerMouse;
+	}
+	else
+	{
+		KOTEK_ASSERT(false,
+			"undefined behaviour, because there's no supprted controller "
+			"type!");
+		return eInputControllerType::kControllerUnknown;
+	}
 }
 
 void ktkInput::Update_Controller(void* p_args, eInputPlatformBackend backend,
@@ -2773,7 +2859,7 @@ void ktkInput::Update_Mouse(void* p_raw_args, eInputPlatformBackend backend)
 	}
 }
 
-int ktkInput::Convert_AllKeysToFlags(eInputAllKeys field)
+int ktkInput::Convert_AllKeysToFlags(eInputAllKeys field) const
 {
 	switch (field)
 	{
@@ -3008,7 +3094,7 @@ int ktkInput::Convert_AllKeysToFlags(eInputAllKeys field)
 	}
 }
 
-int ktkInput::Convert_AllKeysToCategory(eInputAllKeys field)
+int ktkInput::Convert_AllKeysToCategory(eInputAllKeys field) const
 {
 	switch (field)
 	{
@@ -3242,17 +3328,6 @@ int ktkInput::Convert_AllKeysToCategory(eInputAllKeys field)
 		return -2;
 	}
 	}
-}
-
-void ktkInput::Determine_Platform(void)
-{
-#ifdef KOTEK_USE_PLATFORM_WINDOWS
-	this->m_current_platform = eInputPlatformBackend::kPlatformBackend_WINAPI;
-#elif defined(KOTEK_USE_PLATFORM_LINUX)
-	#error not implemented
-#elif defined(KOTEK_USE_PLATFORM_MACOS)
-	#error not implemented
-#endif
 }
 
 void ktkInput::Update_ReleasedKeys(void)

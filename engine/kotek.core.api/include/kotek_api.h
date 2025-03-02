@@ -223,13 +223,16 @@ class ktkIInput
 public:
 	virtual ~ktkIInput(void) {}
 
-	virtual void Initialize(void) = 0;
+	virtual void Initialize(eInputPlatformBackend backend) = 0;
 	virtual void Shutdown(void) = 0;
 
 	virtual bool Set_ControllerData(eInputControllerType controller_type,
 		unsigned char data_field_index, float data) = 0;
 	virtual float Get_ControllerData(eInputControllerType controller_type,
-		unsigned char data_field_index) = 0;
+		unsigned char data_field_index) const = 0;
+
+	virtual void Set_ControllerUpdate(
+		eInputControllerType controller_type) = 0;
 
 	/// @brief simplified version (but you can't unite that buttons as you do
 	/// with enum flags with | bitshift operator) of Is_KeyPressed where you can
@@ -243,14 +246,14 @@ public:
 	/// after that checking they key can be checked for release or holding
 	/// states.
 	virtual bool Is_KeyPressed(
-		eInputControllerType controller_type, eInputAllKeys key) = 0;
+		eInputControllerType controller_type, eInputAllKeys key) const = 0;
 
 	// TODO: add preprocessor for frames count as default arg
 	virtual bool Is_KeyHolding(eInputControllerType controller_type,
-		eInputAllKeys key, unsigned char frames = 16) = 0;
+		eInputAllKeys key, unsigned char frames = 16) const = 0;
 
 	virtual bool Is_KeyReleased(
-		eInputControllerType controller_type, eInputAllKeys key) = 0;
+		eInputControllerType controller_type, eInputAllKeys key) const = 0;
 
 	virtual const char* Get_TextInformationAboutController(
 		eInputControllerType controller_type) = 0;
@@ -286,6 +289,8 @@ public:
 
 	// you need to use it in message loop of window
 	virtual void Update_Controller(void* p_args) = 0;
+
+	virtual eInputControllerType Get_ControllerTypeByKey(eInputAllKeys key) const = 0;
 };
 
 class ktkIGameManager
@@ -1190,6 +1195,7 @@ public:
 	virtual const ImVec4& GetStyleColorVec4(ImGuiCol idx) = 0;
 
 	virtual void Separator() = 0;
+	virtual void SeparatorText(const char* p_text) = 0;
 	virtual void SameLine(
 		float offset_from_start_x = 0.0f, float spacing = -1.0f) = 0;
 	virtual void NewLine() = 0;

@@ -91,6 +91,9 @@ inline static_cstring<Size> convert_wchar_to_char(const wstring_view& str)
 KOTEK_END_NAMESPACE_KTK
 
 using cstring_t = KUN_KOTEK KUN_KTK cstring;
+using cstring_view_t = KUN_KOTEK KUN_KTK cstring_view;
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 
 template <KUN_KOTEK KUN_KTK size_t Size>
 using static_u8string_t = KUN_KOTEK KUN_KTK static_u8string<Size>;
@@ -117,6 +120,8 @@ using static_u32string_view_t = KUN_KOTEK KUN_KTK static_u32string_view;
 using static_wstring_view_t = KUN_KOTEK KUN_KTK static_wstring_view;
 using static_cstring_view_t = KUN_KOTEK KUN_KTK static_cstring_view;
 using static_ustring_view_t = KUN_KOTEK KUN_KTK static_ustring_view;
+
+#endif
 
 KOTEK_END_NAMESPACE_KOTEK
 
@@ -220,6 +225,5 @@ KOTEK_END_NAMESPACE_KOTEK
 	#define ktk_ustring_view kun_kotek kun_ktk ustring_view
 	#define KTK_USTRING_VIEW kun_kotek kun_ktk ustring_view
 	#define ktkUStringView kun_kotek kun_ktk ustring_view
-
 
 #endif

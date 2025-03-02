@@ -10,14 +10,14 @@ KOTEK_BEGIN_NAMESPACE_CORE
 TEST(Input, InitializationAndShutdown)
 {
 	ktkInput input;
-	input.Initialize();
+	input.Initialize(eInputPlatformBackend::kPlatformBackend_GLFW3);
 	input.Shutdown();
 }
 
 TEST(Input, CheckDevices)
 {
 	ktkInput input;
-	input.Initialize();
+	input.Initialize(eInputPlatformBackend::kPlatformBackend_GLFW3);
 
 	unsigned char devices[eInputControllerType::kControllerTotalAmountOfEnum];
 
@@ -29,7 +29,7 @@ TEST(Input, CheckDevices)
 TEST(Input, SingleShotUpdate_GLFW3) 
 {
 	ktkInput input;
-	input.Initialize();
+	input.Initialize(eInputPlatformBackend::kPlatformBackend_GLFW3);
 	ktkInputPlatformBackendArgs_GLFW3 args;
 	args.controller = eInputControllerType::kControllerKeyboard;
 	args.action = 0;
