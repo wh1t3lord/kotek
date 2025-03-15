@@ -104,7 +104,7 @@ inline void tag_invoke(const ktk::json::value_from_tag&,
 	ktk::json::value& write_to, const ktk::math::quaternionf& data)
 {
 	ktk::json::array result = {
-		data.Get_X(), data.Get_Y(), data.Get_Z(), data.Get_W()};
+		data.x(), data.y(), data.z(), data.w()};
 
 	write_to = result;
 }

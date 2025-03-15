@@ -3,12 +3,12 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
-inline constexpr unsigned int fnv1a_32(std::string_view str)
+inline constexpr size_t fnv1a_32(std::string_view str)
 {
-	unsigned int hash = 2166136261u;
+	size_t hash = 2166136261u;
 	for (char c : str)
 	{
-		hash ^= static_cast<unsigned int>(c);
+		hash ^= static_cast<size_t>(c);
 		hash *= 16777619u;
 	}
 	return hash;

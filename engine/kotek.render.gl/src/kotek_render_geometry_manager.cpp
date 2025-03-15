@@ -251,6 +251,12 @@ namespace gl
 		*/
 
 		if (this->m_indirect_commands_by_enum[static_geometry_type]
+				.indirect_buffer_offset_index != kun_ktk enum_base_t(-1))
+		{
+			static_geometry_type += 1;
+		}
+
+		if (this->m_indirect_commands_by_enum[static_geometry_type]
 				.indirect_buffer_offset_index == kun_ktk enum_base_t(-1))
 		{
 			kun_ktk uint32_t freed_offset =
@@ -297,9 +303,25 @@ namespace gl
 					p_command->instanceCount = 1;
 					p_command->count = data_i.size();
 					p_command->baseVertex =
-						instance.offset_vertex_buffer.offset;
-					p_command->firstIndex = instance.offset_index_buffer.offset;
-					p_command->baseInstance = 0;
+						instance.offset_vertex_buffer.offset /
+						sizeof(ktkVertex);
+					p_command->firstIndex =
+						instance.offset_index_buffer.offset /
+						sizeof(kun_ktk uint32_t);
+					p_command->baseInstance = 100;
+
+					glUnmapBuffer(
+						this->m_p_draw_indirect_commands->Get_Target());
+					KOTEK_GL_ASSERT();
+
+					p_command =
+						(ktkDrawElementsIndirectCommand*)glMapBufferRange(
+							this->m_p_draw_indirect_commands->Get_Target(),
+							freed_offset *
+								sizeof(ktkDrawElementsIndirectCommand),
+							sizeof(ktkDrawElementsIndirectCommand),
+							GL_MAP_READ_BIT);
+					KOTEK_GL_ASSERT();
 
 					glUnmapBuffer(
 						this->m_p_draw_indirect_commands->Get_Target());
@@ -348,10 +370,20 @@ namespace gl
 				this->m_indirect_commands_by_enum[static_geometry_type];
 
 			ktkDrawElementsIndirectCommand* p_command = nullptr;
+
+			/*
 			glGetBufferSubData(this->m_p_draw_indirect_commands->Get_Target(),
+			    instance.indirect_buffer_offset_index *
+			        sizeof(ktkDrawElementsIndirectCommand),
+			    sizeof(ktkDrawElementsIndirectCommand), &p_command);
+			KOTEK_GL_ASSERT();
+			*/
+
+			p_command = (ktkDrawElementsIndirectCommand*)glMapBufferRange(
+				this->m_p_draw_indirect_commands->Get_Target(),
 				instance.indirect_buffer_offset_index *
 					sizeof(ktkDrawElementsIndirectCommand),
-				sizeof(ktkDrawElementsIndirectCommand), p_command);
+				sizeof(ktkDrawElementsIndirectCommand), GL_MAP_WRITE_BIT);
 			KOTEK_GL_ASSERT();
 
 			KOTEK_ASSERT(p_command, "failed to get memory from gpu");
@@ -360,6 +392,9 @@ namespace gl
 			{
 				p_command->instanceCount += 1;
 			}
+
+			glUnmapBuffer(this->m_p_draw_indirect_commands->Get_Target());
+			KOTEK_GL_ASSERT();
 
 			glBindBuffer(this->m_p_draw_indirect_commands->Get_Target(), 0);
 			KOTEK_GL_ASSERT();

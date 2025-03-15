@@ -160,10 +160,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 
 		quaternionf& operator%=(const quaternionf& data) noexcept
         {
-			this->m_base.x = std::fmod(this->m_base.x, data.Get_X());
-			this->m_base.y = std::fmod(this->m_base.y, data.Get_Y());
-			this->m_base.z = std::fmod(this->m_base.z, data.Get_Z());
-			this->m_base.w = std::fmod(this->m_base.w, data.Get_W());
+			this->m_base.x = std::fmod(this->m_base.x, data.x());
+			this->m_base.y = std::fmod(this->m_base.y, data.y());
+			this->m_base.z = std::fmod(this->m_base.z, data.z());
+			this->m_base.w = std::fmod(this->m_base.w, data.w());
 			return *this;
 		}
 
@@ -209,49 +209,17 @@ KOTEK_BEGIN_NAMESPACE_MATH
 		}
 #endif
 
-		float Get_X(void) const noexcept
-        {
-            return this->m_base.x;
-		}
+		float x(void) const noexcept { return this->m_base.x; }
+		float& x(void) noexcept { return this->m_base.x; }
 
-		float Get_Y(void) const noexcept
-        {
-			return this->m_base.y;
-		}
+		float y(void) const noexcept { return this->m_base.y; }
+		float& y(void) noexcept { return this->m_base.y; }
 
-		float Get_Z(void) const noexcept
-        {
-			return this->m_base.z;
-		}
+		float z(void) const noexcept { return this->m_base.z; }
+		float& z(void) noexcept { return this->m_base.z; }
 
-		float Get_W(void) const noexcept
-        {
-			return this->m_base.w;
-		}
-
-		quaternionf& Set_X(float value) noexcept
-		{
-			this->m_base.x = value;
-			return *this;
-		}
-
-		quaternionf& Set_Y(float value) noexcept
-		{
-			this->m_base.y = value;
-			return *this;
-		}
-
-		quaternionf& Set_Z(float value) noexcept
-		{
-			this->m_base.z = value;
-			return *this;
-		}
-
-		quaternionf& Set_W(float value) noexcept
-		{
-			this->m_base.w = value;
-			return *this;
-		}
+		float w(void) const noexcept { return this->m_base.w; }
+		float& w(void) noexcept { return this->m_base.w; }
 
 		quaternionf& Set_Base(const base_quat_t& data) noexcept
 		{

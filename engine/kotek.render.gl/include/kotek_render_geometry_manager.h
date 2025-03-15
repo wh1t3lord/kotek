@@ -98,7 +98,7 @@ private:
 	ktk::unordered_map<ktk::enum_base_t, OffsetAllocator::Allocation>
 		m_index_buffer_offsets;
 	ktk::unordered_map<ktk::enum_base_t, OffsetAllocator::Allocation>
-		m_draw_commands_buffer_offets;
+		m_draw_commands_buffer_offsets;
 	ktk::unordered_map<ktk::enum_base_t, ktk::size_t> m_geometry_type;
 
 	ktk::mt::queue<ktkGeometry> m_queue_for_upload;

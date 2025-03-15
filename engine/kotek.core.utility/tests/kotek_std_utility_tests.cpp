@@ -924,6 +924,405 @@ TEST(Utility, fill_vector_variant_test)
 		std::vector<std::string_view>, int, float, double>(invalid_input));
 }
 
+TEST(Utility, hash_constexpr) 
+{
+	using namespace std::string_view_literals;
+
+	// Test basic hash computation
+	constexpr std::string_view transform = "transform"sv;
+	constexpr std::string_view renderable = "renderable"sv;
+	constexpr std::string_view camera = "camera"sv;
+	constexpr std::string_view light = "light"sv;
+	constexpr std::string_view physics = "physics"sv;
+	constexpr std::string_view audio = "audio"sv;
+
+	// Use the existing fnv1a_32 function from the codebase
+	constexpr kun_kotek kun_ktk size_t hash_transform = kun_kotek kun_ktk fnv1a_32(transform);
+	constexpr kun_kotek kun_ktk size_t hash_renderable =
+		kun_kotek kun_ktk fnv1a_32(renderable);
+	constexpr kun_kotek kun_ktk size_t hash_camera =
+		kun_kotek kun_ktk fnv1a_32(camera);
+	constexpr kun_kotek kun_ktk size_t hash_light =
+		kun_kotek kun_ktk fnv1a_32(light);
+	constexpr kun_kotek kun_ktk size_t hash_physics =
+		kun_kotek kun_ktk fnv1a_32(physics);
+	constexpr kun_kotek kun_ktk size_t hash_audio =
+		kun_kotek kun_ktk fnv1a_32(audio);
+
+	// Test same string produces same hash
+	constexpr std::string_view transform_2 = "transform"sv;
+	constexpr kun_kotek kun_ktk size_t hash_transform_2 =
+		kun_kotek kun_ktk fnv1a_32(transform_2);
+	static_assert(hash_transform == hash_transform_2,
+		"Same string must produce same hash");
+
+	// Test different strings produce different hashes
+	static_assert(hash_transform != hash_renderable,
+		"Hash collision between transform and renderable");
+	static_assert(hash_transform != hash_camera,
+		"Hash collision between transform and camera");
+	static_assert(hash_transform != hash_light,
+		"Hash collision between transform and light");
+	static_assert(hash_transform != hash_physics,
+		"Hash collision between transform and physics");
+	static_assert(hash_transform != hash_audio,
+		"Hash collision between transform and audio");
+
+	static_assert(hash_renderable != hash_camera,
+		"Hash collision between renderable and camera");
+	static_assert(hash_renderable != hash_light,
+		"Hash collision between renderable and light");
+	static_assert(hash_renderable != hash_physics,
+		"Hash collision between renderable and physics");
+	static_assert(hash_renderable != hash_audio,
+		"Hash collision between renderable and audio");
+
+	static_assert(
+		hash_camera != hash_light, "Hash collision between camera and light");
+	static_assert(hash_camera != hash_physics,
+		"Hash collision between camera and physics");
+	static_assert(
+		hash_camera != hash_audio, "Hash collision between camera and audio");
+
+	static_assert(
+		hash_light != hash_physics, "Hash collision between light and physics");
+	static_assert(
+		hash_light != hash_audio, "Hash collision between light and audio");
+
+	static_assert(
+		hash_physics != hash_audio, "Hash collision between physics and audio");
+
+	// Display hash values for verification
+	KOTEK_MESSAGE("Hash values:");
+	KOTEK_MESSAGE("transform: {}", hash_transform);
+	KOTEK_MESSAGE("renderable: {}", hash_renderable);
+	KOTEK_MESSAGE("camera: {}", hash_camera);
+	KOTEK_MESSAGE("light: {}", hash_light);
+	KOTEK_MESSAGE("physics: {}", hash_physics);
+	KOTEK_MESSAGE("audio: {}", hash_audio);
+}
+
+TEST(Utility, DrillingCompilerHashTest) 
+{
+	using namespace std::string_view_literals;
+
+	// ==================== COMPONENT NAMES ====================
+	constexpr std::array<std::string_view, 50> component_names = {
+		// Common game components
+		"transform"sv, "renderable"sv, "camera"sv, "light"sv, "physics"sv,
+		"audio"sv, "animation"sv, "input"sv, "health"sv, "damage"sv,
+		"collision"sv, "trigger"sv, "navigation"sv, "pathfinding"sv,
+		"inventory"sv, "character"sv, "enemy"sv, "player"sv, "projectile"sv,
+		"particle"sv, "script"sv, "network"sv, "ui"sv, "text"sv, "sprite"sv,
+		"model"sv, "rigidbody"sv, "joint"sv, "constraint"sv, "material"sv,
+		"mesh"sv, "texture"sv, "shader"sv, "terrain"sv, "vegetation"sv,
+		"water"sv, "skybox"sv, "atmosphere"sv, "vehicle"sv, "weapon"sv,
+		"armor"sv, "consumable"sv, "quest"sv, "dialogue"sv, "interaction"sv,
+		"ai"sv, "behavior"sv, "state"sv, "timer"sv, "lifecycle"sv};
+
+	// ==================== CONFIG SECTION NAMES ====================
+	constexpr std::array<std::string_view, 40> config_sections = {
+		// Engine configuration sections
+		"engine"sv, "rendering"sv, "graphics"sv, "audio"sv, "input"sv,
+		"network"sv, "physics"sv, "resources"sv, "memory"sv, "threading"sv,
+		"scripting"sv, "debug"sv, "optimization"sv, "logging"sv, "paths"sv,
+		"platform"sv, "window"sv, "display"sv, "performance"sv, "quality"sv,
+		"shadows"sv, "lighting"sv, "postprocessing"sv, "textures"sv, "models"sv,
+		"animations"sv, "particles"sv, "sounds"sv, "music"sv, "controls"sv,
+		"keybindings"sv, "gamepad"sv, "mouse"sv, "keyboard"sv, "touch"sv,
+		"gameplay"sv, "saving"sv, "loading"sv, "preferences"sv};
+
+	// ==================== EVENT NAMES ====================
+	constexpr std::array<std::string_view, 30> event_names = {
+		// Common engine events
+		"on_start"sv, "on_update"sv, "on_fixed_update"sv, "on_late_update"sv,
+		"on_render"sv, "on_collision_enter"sv, "on_collision_exit"sv,
+		"on_trigger_enter"sv, "on_trigger_exit"sv, "on_destroy"sv,
+		"on_enable"sv, "on_disable"sv, "on_pause"sv, "on_resume"sv,
+		"on_key_down"sv, "on_key_up"sv, "on_mouse_down"sv, "on_mouse_up"sv,
+		"on_mouse_move"sv, "on_touch_begin"sv, "on_touch_end"sv, "on_gesture"sv,
+		"on_focus_gain"sv, "on_focus_lost"sv, "on_level_load"sv,
+		"on_level_unload"sv, "on_save"sv, "on_load"sv, "on_quit"sv,
+		"on_error"sv};
+
+	// ==================== RESOURCE PATHS ====================
+	constexpr std::array<std::string_view, 25> resource_paths = {
+		// Common resource paths
+		"textures/diffuse"sv, "textures/normal"sv, "textures/specular"sv,
+		"textures/emission"sv, "models/characters"sv, "models/environment"sv,
+		"models/weapons"sv, "models/vehicles"sv, "audio/sfx"sv, "audio/music"sv,
+		"audio/voices"sv, "audio/ambient"sv, "shaders/vertex"sv,
+		"shaders/fragment"sv, "shaders/compute"sv, "shaders/geometry"sv,
+		"data/levels"sv, "data/quests"sv, "data/items"sv, "data/npcs"sv,
+		"scripts/game"sv, "scripts/ui"sv, "scripts/ai"sv, "scripts/cutscenes"sv,
+		"scripts/events"sv};
+
+	// ==================== SYSTEM NAMES ====================
+	constexpr std::array<std::string_view, 20> system_names = {// Engine systems
+		"render_system"sv, "physics_system"sv, "audio_system"sv,
+		"input_system"sv, "animation_system"sv, "collision_system"sv,
+		"particle_system"sv, "ai_system"sv, "script_system"sv,
+		"networking_system"sv, "ui_system"sv, "resource_system"sv,
+		"event_system"sv, "scene_system"sv, "camera_system"sv,
+		"lighting_system"sv, "navigation_system"sv, "inventory_system"sv,
+		"dialogue_system"sv, "quest_system"sv};
+
+	// ==================== SPECIAL CASES ====================
+	// Different character cases to test case sensitivity
+	constexpr std::array<std::string_view, 10> case_variants = {"Transform"sv,
+		"TRANSFORM"sv, "transform"sv, "Renderable"sv, "RENDERABLE"sv,
+		"renderable"sv, "PhysicsSystem"sv, "PHYSICS_SYSTEM"sv,
+		"physics_system"sv, "physicsSystem"sv};
+
+	// Empty and very short strings
+	constexpr std::array<std::string_view, 5> edge_cases = {
+		""sv, "a"sv, "ab"sv, "abc"sv, "1234"sv};
+
+	// Very long strings to test hash distribution
+	constexpr std::array<std::string_view, 5> long_strings = {
+		"very_long_component_name_that_exceeds_normal_length_for_testing_hash_distribution"sv,
+		"another_extremely_long_string_for_testing_hash_function_with_many_characters_included"sv,
+		"configuration_section_with_a_detailed_and_specific_purpose_that_is_verbose_in_nature"sv,
+		"resource_path_with_multiple_directories_and_subdirectories_to_test_forward_slash_handling"sv,
+		"event_handler_callback_registration_for_complex_interaction_management_in_the_engine_core"sv};
+
+	// Similar strings that differ slightly
+	constexpr std::array<std::string_view, 10> similar_strings = {
+		"transform_component"sv, "transform_system"sv, "transform_data"sv,
+		"physics_component"sv, "physics_system"sv, "physics_data"sv,
+		"resource_load"sv, "resource_unload"sv, "resource_reload"sv,
+		"resource_manager"sv};
+
+	// Strings with special characters
+	constexpr std::array<std::string_view, 10> special_chars = {
+		"component/transform"sv, "component/renderable"sv, "config.rendering"sv,
+		"config.physics"sv, "event:on_collision"sv, "event:on_trigger"sv,
+		"resource-texture"sv, "resource-model"sv, "system.update()"sv,
+		"system.render()"sv};
+
+	// Combined array of all test strings
+	constexpr std::array<std::string_view,
+		component_names.size() + config_sections.size() + event_names.size() +
+			resource_paths.size() + system_names.size() + case_variants.size() +
+			edge_cases.size() + long_strings.size() + similar_strings.size() +
+			special_chars.size()>
+		all_strings = []()
+	{
+		std::array<std::string_view,
+			component_names.size() + config_sections.size() +
+				event_names.size() + resource_paths.size() +
+				system_names.size() + case_variants.size() + edge_cases.size() +
+				long_strings.size() + similar_strings.size() +
+				special_chars.size()>
+			result = {};
+
+		size_t index = 0;
+
+		// Copy all arrays into the combined array
+		for (auto& str : component_names)
+			result[index++] = str;
+		for (auto& str : config_sections)
+			result[index++] = str;
+		for (auto& str : event_names)
+			result[index++] = str;
+		for (auto& str : resource_paths)
+			result[index++] = str;
+		for (auto& str : system_names)
+			result[index++] = str;
+		for (auto& str : case_variants)
+			result[index++] = str;
+		for (auto& str : edge_cases)
+			result[index++] = str;
+		for (auto& str : long_strings)
+			result[index++] = str;
+		for (auto& str : similar_strings)
+			result[index++] = str;
+		for (auto& str : special_chars)
+			result[index++] = str;
+
+		return result;
+	}();
+
+	// ==================== HASH CALCULATIONS ====================
+	// Calculate all hashes at compile time
+	constexpr auto all_hashes = []()
+	{
+		std::array<kun_kotek kun_ktk size_t, all_strings.size()> hashes = {};
+		for (size_t i = 0; i < all_strings.size(); ++i)
+		{
+			hashes[i] = kun_kotek kun_ktk fnv1a_32(all_strings[i]);
+		}
+		return hashes;
+	}();
+
+	// ==================== COLLISION DETECTION ====================
+	// Check for any collisions at compile time
+	constexpr bool has_collision = []()
+	{
+		for (size_t i = 0; i < all_hashes.size(); ++i)
+		{
+			for (size_t j = i + 1; j < all_hashes.size(); ++j)
+			{
+				if (all_hashes[i] == all_hashes[j] &&
+					all_strings[i] != all_strings[j])
+				{
+					return true; // Collision detected
+				}
+			}
+		}
+		return false; // No collisions
+	}();
+
+	static_assert(!has_collision, "Hash collision detected in fnv1a_32!");
+
+	// ==================== RUNTIME VERIFICATION ====================
+	// Also verify at runtime and print detailed information
+	KOTEK_MESSAGE(
+		"Verifying {} strings for hash collisions", all_strings.size());
+
+	// Count unique hashes using a sorted array approach
+	std::array<kun_kotek kun_ktk size_t, all_strings.size()> hash_values;
+	for (size_t i = 0; i < all_strings.size(); ++i)
+	{
+		hash_values[i] = kun_kotek kun_ktk fnv1a_32(all_strings[i]);
+	}
+
+	// Sort the hashes to make duplicates adjacent
+	std::sort(hash_values.begin(), hash_values.end());
+
+	// Count unique hashes by comparing adjacent elements
+	kun_kotek kun_ktk size_t unique_hash_count =
+		1; // Start with 1 for the first hash
+	for (size_t i = 1; i < hash_values.size(); ++i)
+	{
+		if (hash_values[i] != hash_values[i - 1])
+		{
+			unique_hash_count++;
+		}
+	}
+
+	KOTEK_MESSAGE("Found {} unique hashes from {} strings", unique_hash_count,
+		all_strings.size());
+
+	// Count unique strings (also using an array)
+	std::array<std::string_view, all_strings.size()> unique_strings_arr;
+	kun_kotek kun_ktk size_t unique_strings_count = 0;
+
+	for (auto& str : all_strings)
+	{
+		bool found = false;
+		for (size_t i = 0; i < unique_strings_count; ++i)
+		{
+			if (str == unique_strings_arr[i])
+			{
+				found = true;
+				break;
+			}
+		}
+		if (!found)
+		{
+			unique_strings_arr[unique_strings_count++] = str;
+		}
+	}
+
+	KOTEK_MESSAGE("Expected {} unique hashes (based on unique strings)",
+		unique_strings_count);
+
+	EXPECT_EQ(unique_hash_count, unique_strings_count)
+		<< "Number of unique hashes should match number of unique strings";
+
+	// Detailed check for any runtime collisions
+	bool runtime_collision_found = false;
+	for (size_t i = 0; i < all_strings.size(); ++i)
+	{
+		for (size_t j = i + 1; j < all_strings.size(); ++j)
+		{
+			if (all_strings[i] != all_strings[j])
+			{ // Different strings
+				auto hash_i = kun_kotek kun_ktk fnv1a_32(all_strings[i]);
+				auto hash_j = kun_kotek kun_ktk fnv1a_32(all_strings[j]);
+
+				if (hash_i == hash_j)
+				{
+					runtime_collision_found = true;
+					KOTEK_MESSAGE_WARNING("Hash collision detected: '{}' and "
+					                      "'{}' both hash to {}",
+						all_strings[i], all_strings[j], hash_i);
+				}
+			}
+		}
+	}
+
+	EXPECT_FALSE(runtime_collision_found)
+		<< "No collisions should be found at runtime";
+
+	// ==================== HASH DISTRIBUTION ANALYSIS ====================
+	// Analyze hash distribution (bit patterns)
+	constexpr size_t NUM_BITS = sizeof(kun_kotek kun_ktk size_t) * 8;
+	std::array<int, NUM_BITS> bit_counts = {};
+
+	for (auto hash : all_hashes)
+	{
+		for (size_t bit = 0; bit < NUM_BITS; ++bit)
+		{
+			if ((hash & (1ULL << bit)) != 0)
+			{
+				bit_counts[bit]++;
+			}
+		}
+	}
+
+	// Calculate bit distribution stats
+	double avg_bits = 0;
+	int min_bits = all_hashes.size();
+	int max_bits = 0;
+	double bit_variance = 0;
+
+	for (size_t bit = 0; bit < NUM_BITS; ++bit)
+	{
+		avg_bits += bit_counts[bit];
+		min_bits = std::min(min_bits, bit_counts[bit]);
+		max_bits = std::max(max_bits, bit_counts[bit]);
+	}
+	avg_bits /= NUM_BITS;
+
+	for (size_t bit = 0; bit < NUM_BITS; ++bit)
+	{
+		bit_variance +=
+			(bit_counts[bit] - avg_bits) * (bit_counts[bit] - avg_bits);
+	}
+	bit_variance /= NUM_BITS;
+
+	double bit_stddev = std::sqrt(bit_variance);
+
+	KOTEK_MESSAGE("Hash bit distribution stats:");
+	KOTEK_MESSAGE("  Average bits set: {:.2f}", avg_bits);
+	KOTEK_MESSAGE("  Min bits set: {}", min_bits);
+	KOTEK_MESSAGE("  Max bits set: {}", max_bits);
+	KOTEK_MESSAGE("  Bit standard deviation: {:.2f}", bit_stddev);
+
+	// Expect reasonable bit distribution
+	double expected_avg = all_hashes.size() / 2.0;
+	double tolerance = expected_avg * 0.3; // Allow 30% deviation
+	EXPECT_NEAR(avg_bits, expected_avg, tolerance)
+		<< "Bit distribution should be roughly balanced";
+
+	// ==================== INDIVIDUAL HASH VERIFICATION ====================
+	// Verify specific important strings hash consistently
+	KOTEK_MESSAGE("Verifying important string hashes:");
+	for (auto& component :
+		{"transform"sv, "physics"sv, "renderable"sv, "camera"sv, "light"sv})
+	{
+		kun_kotek kun_ktk size_t hash = kun_kotek kun_ktk fnv1a_32(component);
+		KOTEK_MESSAGE("  '{}' hash: {:#x}", component, hash);
+	}
+
+	// Test passes if all assertions pass!
+	KOTEK_MESSAGE(
+		"fnv1a_32 hash function passed all collision tests for {} strings!",
+		all_strings.size());
+}
+
 	#endif
 #endif
 

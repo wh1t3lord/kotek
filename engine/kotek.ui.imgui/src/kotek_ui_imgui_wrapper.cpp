@@ -16,16 +16,17 @@ void ktkImguiWrapper::EditDragVec2f(
 	if (p_vec == nullptr)
 		return;
 
-	if (this->CollapsingHeader(label))
+	this->SeparatorText(label);
+
 	{
 		float value_x = p_vec->x();
-		if (this->DragFloat("X##Vec2f_X", &value_x))
+		if (this->DragFloat("X##EditDragVec2f", &value_x))
 		{
 			p_vec->x() = value_x;
 		}
 
 		float value_y = p_vec->y();
-		if (this->DragFloat("Y##Vec2f_Y", &value_y))
+		if (this->DragFloat("Y##EditDragVec2f", &value_y))
 		{
 			p_vec->y() = value_y;
 		}
@@ -38,22 +39,23 @@ void ktkImguiWrapper::EditDragVec3f(
 	if (p_vec == nullptr)
 		return;
 
-	if (this->CollapsingHeader(label))
+	this->SeparatorText(label);
+
 	{
 		float value_x = p_vec->x();
-		if (this->DragFloat("X##Vec3f_X", &value_x))
+		if (this->DragFloat("X##EditDragVec3f", &value_x))
 		{
 			p_vec->x() = value_x;
 		}
 
 		float value_y = p_vec->y();
-		if (this->DragFloat("Y##Vec3f_Y", &value_y))
+		if (this->DragFloat("Y##EditDragVec3f", &value_y))
 		{
 			p_vec->y() = value_y;
 		}
 
 		float value_z = p_vec->z();
-		if (this->DragFloat("Z##Vec3f_Z", &value_z))
+		if (this->DragFloat("Z##EditDragVec3f", &value_z))
 		{
 			p_vec->z() = value_z;
 		}
@@ -66,28 +68,29 @@ void ktkImguiWrapper::EditDragVec4f(
 	if (p_vec == nullptr)
 		return;
 
-	if (this->CollapsingHeader(label))
+	this->SeparatorText(label);
+
 	{
 		float value_x = p_vec->x();
-		if (this->DragFloat("X##Vec4f_X", &value_x))
+		if (this->DragFloat("X##EditDragVec4f", &value_x))
 		{
 			p_vec->x() = value_x;
 		}
 
 		float value_y = p_vec->y();
-		if (this->DragFloat("Y##Vec4f_Y", &value_y))
+		if (this->DragFloat("Y##EditDragVec4f", &value_y))
 		{
 			p_vec->y() = value_y;
 		}
 
 		float value_z = p_vec->z();
-		if (this->DragFloat("Z##Vec4f_Z", &value_z))
+		if (this->DragFloat("Z##EditDragVec4f", &value_z))
 		{
 			p_vec->z() = value_z;
 		}
 
 		float value_w = p_vec->w();
-		if (this->DragFloat("W##Vec4f_W", &value_w))
+		if (this->DragFloat("W##EditDragVec4f", &value_w))
 		{
 			p_vec->w() = value_w;
 		}
@@ -100,36 +103,31 @@ void ktkImguiWrapper::EditDragMat2x2f(
 	if (p_mat == nullptr)
 		return;
 
-	if (this->CollapsingHeader(label))
-	{
-		if (this->CollapsingHeader("Row 0"))
-		{
-			float value_x = p_mat->Get_00();
-			if (this->DragFloat("X (00)", &value_x))
-			{
-				p_mat->Set_00(value_x);
-			}
+	this->SeparatorText(label);
 
-			float value_y = p_mat->Get_01();
-			if (this->DragFloat("Y (01)", &value_y))
-			{
-				p_mat->Set_01(value_y);
-			}
+	{
+		float value_x = p_mat->Get_00();
+		if (this->DragFloat("X##EditDragMat2x2f_00", &value_x))
+		{
+			p_mat->Set_00(value_x);
+		}
+		this->SameLine();
+		float value_y = p_mat->Get_01();
+		if (this->DragFloat("Y##EditDragMat2x2f_01", &value_y))
+		{
+			p_mat->Set_01(value_y);
 		}
 
-		if (this->CollapsingHeader("Row 1"))
+		value_x = p_mat->Get_10();
+		if (this->DragFloat("X##EditDragMat2x2f_10", &value_x))
 		{
-			float value_x = p_mat->Get_10();
-			if (this->DragFloat("X (10)", &value_x))
-			{
-				p_mat->Set_10(value_x);
-			}
-
-			float value_y = p_mat->Get_11();
-			if (this->DragFloat("Y (11)", &value_y))
-			{
-				p_mat->Set_11(value_y);
-			}
+			p_mat->Set_10(value_x);
+		}
+		this->SameLine();
+		value_y = p_mat->Get_11();
+		if (this->DragFloat("Y##EditDragMat2x2f_11", &value_y))
+		{
+			p_mat->Set_11(value_y);
 		}
 	}
 }
@@ -140,69 +138,61 @@ void ktkImguiWrapper::EditDragMat3x3f(
 	if (p_mat == nullptr)
 		return;
 
-	if (this->CollapsingHeader(label))
+	this->SeparatorText(label);
+
 	{
-		if (this->CollapsingHeader("Row 0"))
+		float value_x = p_mat->operator[](0)[0];
+		if (this->DragFloat("X##EditDragMat3x3f_00", &value_x))
 		{
-			float value_x = p_mat->operator[](0)[0];
-			if (this->DragFloat("X (00)", &value_x))
-			{
-				p_mat->operator[](0)[0]=(value_x);
-			}
-
-			float value_y = p_mat->operator[](0)[1];
-			if (this->DragFloat("Y (01)", &value_y))
-			{
-				p_mat->operator[](0)[1]=(value_y);
-			}
-
-			float value_z = p_mat->operator[](0)[2];
-			if (this->DragFloat("Z (02)", &value_z))
-			{
-				p_mat->operator[](0)[2]=(value_z);
-			}
+			p_mat->operator[](0)[0] = (value_x);
+		}
+		this->SameLine();
+		float value_y = p_mat->operator[](0)[1];
+		if (this->DragFloat("Y##EditDragMat3x3f_01", &value_y))
+		{
+			p_mat->operator[](0)[1] = (value_y);
+		}
+		this->SameLine();
+		float value_z = p_mat->operator[](0)[2];
+		if (this->DragFloat("Z##EditDragMat3x3f_02", &value_z))
+		{
+			p_mat->operator[](0)[2] = (value_z);
 		}
 
-		if (this->CollapsingHeader("Row 1"))
+		value_x = p_mat->operator[](1)[0];
+		if (this->DragFloat("X##EditDragMat3x3f_10", &value_x))
 		{
-			float value_x = p_mat->operator[](1)[0];
-			if (this->DragFloat("X (10)", &value_x))
-			{
-				p_mat->operator[](1)[0]=(value_x);
-			}
-
-			float value_y = p_mat->operator[](1)[1];
-			if (this->DragFloat("Y (11)", &value_y))
-			{
-				p_mat->operator[](1)[1]=(value_y);
-			}
-
-			float value_z = p_mat->operator[](1)[2];
-			if (this->DragFloat("Z (12)", &value_z))
-			{
-				p_mat->operator[](1)[2]=(value_z);
-			}
+			p_mat->operator[](1)[0] = (value_x);
+		}
+		this->SameLine();
+		value_y = p_mat->operator[](1)[1];
+		if (this->DragFloat("Y##EditDragMat3x3f_11", &value_y))
+		{
+			p_mat->operator[](1)[1] = (value_y);
+		}
+		this->SameLine();
+		value_z = p_mat->operator[](1)[2];
+		if (this->DragFloat("Z##EditDragMat3x3f_12", &value_z))
+		{
+			p_mat->operator[](1)[2] = (value_z);
 		}
 
-		if (this->CollapsingHeader("Row 2"))
+		value_x = p_mat->operator[](2)[0];
+		if (this->DragFloat("X##EditDragMat3x3f_20", &value_x))
 		{
-			float value_x = p_mat->operator[](2)[0];
-			if (this->DragFloat("X (20)", &value_x))
-			{
-				p_mat->operator[](2)[0]=(value_x);
-			}
-
-			float value_y = p_mat->operator[](2)[1];
-			if (this->DragFloat("Y (21)", &value_y))
-			{
-				p_mat->operator[](2)[1]=(value_y);
-			}
-
-			float value_z = p_mat->operator[](2)[2];
-			if (this->DragFloat("Z (22)", &value_z))
-			{
-				p_mat->operator[](2)[2]=(value_z);
-			}
+			p_mat->operator[](2)[0] = (value_x);
+		}
+		this->SameLine();
+		value_y = p_mat->operator[](2)[1];
+		if (this->DragFloat("Y##EditDragMat3x3f_21", &value_y))
+		{
+			p_mat->operator[](2)[1] = (value_y);
+		}
+		this->SameLine();
+		value_z = p_mat->operator[](2)[2];
+		if (this->DragFloat("Z##EditDragMat3x3f_22", &value_z))
+		{
+			p_mat->operator[](2)[2] = (value_z);
 		}
 	}
 }
@@ -213,114 +203,103 @@ void ktkImguiWrapper::EditDragMat4x4f(
 	if (p_mat == nullptr)
 		return;
 
-	if (this->CollapsingHeader(label))
+	this->SeparatorText(label);
+
 	{
-		if (this->CollapsingHeader("Row 0"))
+		float value_x = p_mat->operator[](0)[0];
+		if (this->DragFloat("X##EditDragMat4x4f_00", &value_x))
 		{
-			float value_x = p_mat->operator[](0)[0];
-			if (this->DragFloat("X (00)", &value_x))
-			{
-				p_mat->operator[](0)[0]=(value_x);
-			}
-
-			float value_y = p_mat->operator[](0)[1];
-			if (this->DragFloat("Y (01)", &value_y))
-			{
-				p_mat->operator[](0)[1]=(value_y);
-			}
-
-			float value_z = p_mat->operator[](0)[2];
-			if (this->DragFloat("Z (02)", &value_z))
-			{
-				p_mat->operator[](0)[2]=(value_z);
-			}
-
-			float value_w = p_mat->operator[](0)[3];
-			if (this->DragFloat("W (03)", &value_w))
-			{
-				p_mat->operator[](0)[3]=(value_w);
-			}
+			p_mat->operator[](0)[0] = (value_x);
+		}
+		this->SameLine();
+		float value_y = p_mat->operator[](0)[1];
+		if (this->DragFloat("Y##EditDragMat4x4f_01", &value_y))
+		{
+			p_mat->operator[](0)[1] = (value_y);
+		}
+		this->SameLine();
+		float value_z = p_mat->operator[](0)[2];
+		if (this->DragFloat("Z##EditDragMat4x4f_02", &value_z))
+		{
+			p_mat->operator[](0)[2] = (value_z);
+		}
+		this->SameLine();
+		float value_w = p_mat->operator[](0)[3];
+		if (this->DragFloat("W##EditDragMat4x4f_03", &value_w))
+		{
+			p_mat->operator[](0)[3] = (value_w);
 		}
 
-		if (this->CollapsingHeader("Row 1"))
+		value_x = p_mat->operator[](1)[0];
+		if (this->DragFloat("X##EditDragMat4x4f_10", &value_x))
 		{
-			float value_x = p_mat->operator[](1)[0];
-			if (this->DragFloat("X (10)", &value_x))
-			{
-				p_mat->operator[](1)[0]=(value_x);
-			}
-
-			float value_y = p_mat->operator[](1)[1];
-			if (this->DragFloat("Y (11)", &value_y))
-			{
-				p_mat->operator[](1)[1]=(value_y);
-			}
-
-			float value_z = p_mat->operator[](1)[2];
-			if (this->DragFloat("Z (12)", &value_z))
-			{
-				p_mat->operator[](1)[2]=(value_z);
-			}
-
-			float value_w = p_mat->operator[](1)[3];
-			if (this->DragFloat("W (13)", &value_w))
-			{
-				p_mat->operator[](1)[3]=(value_w);
-			}
+			p_mat->operator[](1)[0] = (value_x);
+		}
+		this->SameLine();
+		value_y = p_mat->operator[](1)[1];
+		if (this->DragFloat("Y##EditDragMat4x4f_11", &value_y))
+		{
+			p_mat->operator[](1)[1] = (value_y);
+		}
+		this->SameLine();
+		value_z = p_mat->operator[](1)[2];
+		if (this->DragFloat("Z##EditDragMat4x4f_12", &value_z))
+		{
+			p_mat->operator[](1)[2] = (value_z);
+		}
+		this->SameLine();
+		value_w = p_mat->operator[](1)[3];
+		if (this->DragFloat("W##EditDragMat4x4f_13", &value_w))
+		{
+			p_mat->operator[](1)[3] = (value_w);
 		}
 
-		if (this->CollapsingHeader("Row 2"))
+		value_x = p_mat->operator[](2)[0];
+		if (this->DragFloat("X##EditDragMat4x4f_20", &value_x))
 		{
-			float value_x = p_mat->operator[](2)[0];
-			if (this->DragFloat("X (20)", &value_x))
-			{
-				p_mat->operator[](2)[0]=(value_x);
-			}
-
-			float value_y = p_mat->operator[](2)[1];
-			if (this->DragFloat("Y (21)", &value_y))
-			{
-				p_mat->operator[](2)[1]=(value_y);
-			}
-
-			float value_z = p_mat->operator[](2)[2];
-			if (this->DragFloat("Z (22)", &value_z))
-			{
-				p_mat->operator[](2)[2]=(value_z);
-			}
-
-			float value_w = p_mat->operator[](2)[3];
-			if (this->DragFloat("W (23)", &value_w))
-			{
-				p_mat->operator[](2)[3]=(value_w);
-			}
+			p_mat->operator[](2)[0] = (value_x);
+		}
+		this->SameLine();
+		value_y = p_mat->operator[](2)[1];
+		if (this->DragFloat("Y##EditDragMat4x4f_21", &value_y))
+		{
+			p_mat->operator[](2)[1] = (value_y);
+		}
+		this->SameLine();
+		value_z = p_mat->operator[](2)[2];
+		if (this->DragFloat("Z##EditDragMat4x4f_22", &value_z))
+		{
+			p_mat->operator[](2)[2] = (value_z);
+		}
+		this->SameLine();
+		value_w = p_mat->operator[](2)[3];
+		if (this->DragFloat("W##EditDragMat4x4f_23", &value_w))
+		{
+			p_mat->operator[](2)[3] = (value_w);
 		}
 
-		if (this->CollapsingHeader("Row 4"))
+		value_x = p_mat->operator[](3)[0];
+		if (this->DragFloat("X##EditDragMat4x4f_30", &value_x))
 		{
-			float value_x = p_mat->operator[](3)[0];
-			if (this->DragFloat("X (30)", &value_x))
-			{
-				p_mat->operator[](3)[0]=(value_x);
-			}
-
-			float value_y = p_mat->operator[](3)[1];
-			if (this->DragFloat("Y (31)", &value_y))
-			{
-				p_mat->operator[](3)[1]=(value_y);
-			}
-
-			float value_z = p_mat->operator[](3)[2];
-			if (this->DragFloat("Z (32)", &value_z))
-			{
-				p_mat->operator[](3)[2]=(value_z);
-			}
-
-			float value_w = p_mat->operator[](3)[3];
-			if (this->DragFloat("W (33)", &value_w))
-			{
-				p_mat->operator[](3)[3]=(value_w);
-			}
+			p_mat->operator[](3)[0] = (value_x);
+		}
+		this->SameLine();
+		value_y = p_mat->operator[](3)[1];
+		if (this->DragFloat("Y##EditDragMat4x4f_31", &value_y))
+		{
+			p_mat->operator[](3)[1] = (value_y);
+		}
+		this->SameLine();
+		value_z = p_mat->operator[](3)[2];
+		if (this->DragFloat("Z##EditDragMat4x4f_32", &value_z))
+		{
+			p_mat->operator[](3)[2] = (value_z);
+		}
+		this->SameLine();
+		value_w = p_mat->operator[](3)[3];
+		if (this->DragFloat("W##EditDragMat4x4f_33", &value_w))
+		{
+			p_mat->operator[](3)[3] = (value_w);
 		}
 	}
 }
@@ -331,30 +310,31 @@ void ktkImguiWrapper::EditDragQuatf(
 	if (p_quat == nullptr)
 		return;
 
-	if (this->CollapsingHeader(label))
+	this->SeparatorText(label);
+
 	{
-		float value_x = p_quat->Get_X();
-		if (this->DragFloat("X", &value_x))
+		float value_x = p_quat->x();
+		if (this->DragFloat("X##editdragquatf", &value_x))
 		{
-			p_quat->Set_X(value_x);
+			p_quat->x() = value_x;
 		}
 
-		float value_y = p_quat->Get_Y();
-		if (this->DragFloat("Y", &value_y))
+		float value_y = p_quat->y();
+		if (this->DragFloat("Y##editdragquatf", &value_y))
 		{
-			p_quat->Set_Y(value_y);
+			p_quat->y() = value_y;
 		}
 
-		float value_z = p_quat->Get_Z();
-		if (this->DragFloat("Z", &value_z))
+		float value_z = p_quat->z();
+		if (this->DragFloat("Z##editdragquatf", &value_z))
 		{
-			p_quat->Set_Z(value_z);
+			p_quat->z() = value_z;
 		}
 
-		float value_w = p_quat->Get_W();
-		if (this->DragFloat("W", &value_w))
+		float value_w = p_quat->w();
+		if (this->DragFloat("W##editdragquatf", &value_w))
 		{
-			p_quat->Set_W(value_w);
+			p_quat->w() = value_w;
 		}
 	}
 }
@@ -855,7 +835,7 @@ void ktkImguiWrapper::Separator()
 	::ImGui::Separator();
 }
 
-void ktkImguiWrapper::SeparatorText(const char* p_text) 
+void ktkImguiWrapper::SeparatorText(const char* p_text)
 {
 	::ImGui::SeparatorText(p_text);
 }

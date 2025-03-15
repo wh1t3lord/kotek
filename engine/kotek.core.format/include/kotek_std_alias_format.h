@@ -55,7 +55,20 @@ struct std::formatter<kun_kotek kun_ktk static_cstring_view, char>
 	}
 };
 
-#include "kotek_formatter_static_cstring.h"
+template <size_t N>
+struct std::formatter<kun_kotek kun_ktk static_cstring<N>, char>
+{
+	template <typename ParseContext>
+	constexpr auto parse(ParseContext& ctx)
+	{
+		return ctx.begin();
+	}
+
+	auto format(kun_kotek kun_ktk static_cstring<N> const& str, auto& ctx) const
+	{
+		return std::format_to(ctx.out(), "{}", str.c_str());
+	}
+};
 
 	#endif
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
