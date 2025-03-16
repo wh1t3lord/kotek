@@ -34,6 +34,7 @@ if (WIN32)
 		#endif
 
 		#define KOTEK_WINDOW_LIBRARY_NAME ${KOTEK_WINDOW_LIBRARY_NAME}
+		#define VK_USE_PLATFORM_WIN32_KHR
 	#endif
 	")
 else()

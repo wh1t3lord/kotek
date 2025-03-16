@@ -12,8 +12,8 @@
 	#include <winioctl.h>
 
 	#ifdef KOTEK_USE_VULKAN
-		#define VK_USE_PLATFORM_WIN32_KHR
 		#include <vulkan/vulkan.h>
+		#include <vulkan/vulkan.hpp>
 	#endif
 
 	#ifdef KOTEK_USE_DIRECTX
@@ -57,9 +57,9 @@
 	// kotek.render.glx.x version
 	#endif
 
-	struct ktkWin32OSData
-	{
-		HWND hWnd = NULL;
-		HINSTANCE hInstance = NULL;
-	};
+struct ktkWin32OSData
+{
+	HWND hWnd = NULL;
+	HINSTANCE hInstance = NULL;
+};
 #endif
