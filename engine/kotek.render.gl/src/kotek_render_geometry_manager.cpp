@@ -74,7 +74,7 @@ namespace gl
 		this->m_p_index_buffer->Initialize(vertex_buffer_memory,
 			"single index buffer", GL_ELEMENT_ARRAY_BUFFER,
 			kun_core eRenderStatistics::kStat_Buffer_Index, GL_DYNAMIC_DRAW);
-
+		
 		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(ktkVertex), 0);
 		KOTEK_GL_ASSERT();
 
@@ -96,7 +96,7 @@ namespace gl
 		KOTEK_GL_ASSERT();
 
 		ktkDrawElementsIndirectCommand
-			commands[KOTEK_DEF_RENDER_INDIRECT_DRAWING_TOTAL_COMMANDS];
+			commands[KOTEK_DEF_RENDER_GL_ES_INDIRECT_DRAWING_TOTAL_COMMANDS];
 		std::memset(commands, 0, sizeof(commands));
 
 		glBufferSubData(this->m_p_draw_indirect_commands->Get_Target(), 0,
@@ -565,7 +565,7 @@ namespace gl
 		kun_ktk uint32_t result = -1;
 
 		for (kun_ktk uint32_t i = 0;
-			i < KOTEK_DEF_RENDER_INDIRECT_DRAWING_TOTAL_COMMANDS; ++i)
+			i < KOTEK_DEF_RENDER_GL_ES_INDIRECT_DRAWING_TOTAL_COMMANDS; ++i)
 		{
 			if (!this->m_free_slots_of_indirect_commands[i])
 			{

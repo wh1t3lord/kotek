@@ -26,9 +26,9 @@ ktkRenderBuffer::~ktkRenderBuffer()
 	}
 }
 
-void ktkRenderBuffer::Initialize(ktk::size_t memory_size,
+void ktkRenderBuffer::Initialize(kun_ktk size_t memory_size,
 	const ktk_cstring<64>& debug_name, GLenum target,
-	Core::eRenderStatistics stat_type, GLenum usage,
+	kun_core eRenderStatistics stat_type, GLenum usage,
 	GLuint index_binding_in_shader) noexcept
 {
 	KOTEK_ASSERT(memory_size > 0, "you must pass a valid amount of memory");

@@ -4,6 +4,7 @@
 #include <kotek.core.constants.ecs/include/kotek_core_constants_ecs.h>
 #include <kotek.core.constants.string/include/kotek_core_constants_string.h>
 #include <kotek.core.constants.window/include/kotek_core_constants_window.h>
+#include <kotek.core.constants.render/include/kotek_core_constants_render.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE

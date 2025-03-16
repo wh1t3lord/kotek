@@ -18,6 +18,7 @@ bool InitializeModule_Core_Constants(ktkMainManager* p_manager)
 	InitializeModule_Core_Constants_Window(p_manager);
 	InitializeModule_Core_Constants_ECS(p_manager);
 	InitializeModule_Core_Constants_String(p_manager);
+	InitializeModule_Core_Constants_Render(p_manager);
 
 	return true;
 }
@@ -28,6 +29,7 @@ bool ShutdownModule_Core_Constants(ktkMainManager* p_manager)
 	ShutdownModule_Core_Constants_Window(p_manager);
 	ShutdownModule_Core_Constants_ECS(p_manager);
 	ShutdownModule_Core_Constants_String(p_manager);
+	ShutdownModule_Core_Constants_Render(p_manager);
 
 	return true;
 }
@@ -38,7 +40,7 @@ bool SerializeModule_Core_Constants(ktkMainManager* p_manager)
 	SerializeModule_Core_Constants_Window(p_manager);
 	SerializeModule_Core_Constants_ECS(p_manager);
 	SerializeModule_Core_Constants_String(p_manager);
-
+	SerializeModule_Core_Constants_Render(p_manager);
 	return true;
 }
 
@@ -48,7 +50,8 @@ bool DeserializeModule_Core_Constants(ktkMainManager* p_manager)
 	DeserializeModule_Core_Constants_Window(p_manager);
 	DeserializeModule_Core_Constants_ECS(p_manager);
 	DeserializeModule_Core_Constants_String(p_manager);
-
+	DeserializeModule_Core_Constants_Render(p_manager);
+	
 	return true;
 }
 

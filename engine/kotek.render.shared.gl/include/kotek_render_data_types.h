@@ -238,6 +238,11 @@ private:
 	kun_ktk vector<kun_ktk uint32_t> m_index_data;
 };
 
+constexpr unsigned char kVertexInputAttribute_Position = 0;
+constexpr unsigned char kVertexInputAttribute_UV = 1;
+constexpr unsigned char kVertexInputAttribute_DrawID = 3;
+constexpr unsigned char kVertexInputAttribute_BaseInstance = 4;
+
 KOTEK_END_NAMESPACE_RENDER_GL
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK

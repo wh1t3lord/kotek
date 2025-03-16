@@ -14,7 +14,7 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 namespace helper
 {
-	ktk::cstring Translate_StaticGeometryType(eStaticGeometryType type);
+	const char* Translate_StaticGeometryType(eStaticGeometryType type);
 }
 
 KOTEK_END_NAMESPACE_CORE
