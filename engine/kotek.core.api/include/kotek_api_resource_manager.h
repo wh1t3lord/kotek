@@ -9,28 +9,34 @@ KOTEK_BEGIN_NAMESPACE_CORE
 class ktkLoadingRequest
 {
 public:
-	ktkLoadingRequest(eResourceLoadingPolicy type_loading,
+	ktkLoadingRequest(eResourceThreadingPolicy type_threading,
+		eResourceLoadingPolicy type_loading,
 		eResourceCachingPolicy type_policy_caching,
 		eResourceLoadingType type_of_loading_resource,
 		const ktk_filesystem_path& resource_path) :
-		m_policy_loading{type_loading}, m_policy_caching{type_policy_caching},
+		m_policy_threading{type_threading}, m_policy_loading{type_loading},
+		m_policy_caching{type_policy_caching},
 		m_resource_type{type_of_loading_resource}, m_id{ktk::uint32_t(-1)},
 		m_resource_path{resource_path}
 	{
 	}
 
-	ktkLoadingRequest(eResourceLoadingPolicy type_loading,
+	ktkLoadingRequest(eResourceThreadingPolicy type_threading,
+		eResourceLoadingPolicy type_loading,
 		eResourceCachingPolicy type_policy_caching,
 		eResourceLoadingType type_of_loading_resource,
 		const ktk_filesystem_path& resource_path, ktk::uint32_t id) :
-		m_policy_loading{type_loading}, m_policy_caching{type_policy_caching},
+		m_policy_threading{type_threading}, m_policy_loading{type_loading},
+		m_policy_caching{type_policy_caching},
 		m_resource_type{type_of_loading_resource}, m_id{id},
 		m_resource_path{resource_path}
 	{
 	}
 
 	ktkLoadingRequest(void) :
-		m_policy_caching{}, m_policy_loading{eResourceLoadingPolicy::kAsync},
+		m_policy_caching{},
+		m_policy_threading{eResourceThreadingPolicy::kAsync},
+		m_policy_loading{eResourceLoadingPolicy::kWhole},
 		m_resource_type{eResourceLoadingType::kAutoDetect}, m_id{}
 	{
 	}
@@ -41,6 +47,11 @@ public:
 	{
 		this->m_policy_loading = policy;
 		return *this;
+	}
+
+	eResourceThreadingPolicy Get_ThreadingPolicy(void) const noexcept
+	{
+		return this->m_policy_threading;
 	}
 
 	eResourceLoadingPolicy Get_LoadingPolicy(void) const noexcept
@@ -90,6 +101,7 @@ public:
 	ktk::uint32_t Get_EntityID(void) const noexcept { return this->m_id; }
 
 private:
+	eResourceThreadingPolicy m_policy_threading;
 	eResourceLoadingPolicy m_policy_loading;
 	eResourceCachingPolicy m_policy_caching;
 	eResourceLoadingType m_resource_type;

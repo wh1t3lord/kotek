@@ -8,6 +8,7 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 enum class eFolderIndex;
 enum class eResourceLoadingType;
+enum class eResourceThreadingPolicy;
 enum class eResourceLoadingPolicy;
 enum class eResourceCachingPolicy;
 enum eEngineFeature;
@@ -57,6 +58,8 @@ namespace helper
 	ktk::cstring Translate_EngineSupportedRenderer(
 		eEngineSupportedRenderer type);
 	ktk::cstring Translate_ResourceLoadingType(eResourceLoadingType type);
+	const char* Translate_ResourceThreadingPolicy(
+		eResourceThreadingPolicy type);
 	ktk::cstring Translate_ResourceLoadingPolicy(eResourceLoadingPolicy type);
 	ktk::cstring Translate_ResourceCachingPolicy(eResourceCachingPolicy type);
 	ktk::cstring Translate_ConsoleCommandIndex(eConsoleCommandIndex type);

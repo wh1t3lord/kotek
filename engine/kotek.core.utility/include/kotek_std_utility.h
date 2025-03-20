@@ -30,6 +30,14 @@ T align_down(T val, T alignment) KOTEK_CPP_KEYWORD_NOEXCEPT
 class ktkUint8GeneratorID
 {
 public:
+	ktkUint8GeneratorID(kun_ktk uint8_t max_size) 
+	{
+		for (kun_ktk uint8_t i = 0; i < max_size; ++i)
+		{
+			this->m_storage.push(i);
+		}
+	}
+
 	ktkUint8GeneratorID()
 	{
 		constexpr kun_ktk uint8_t _kMaxSize =
@@ -37,7 +45,7 @@ public:
 
 		for (kun_ktk uint8_t i = 0; i < _kMaxSize; ++i)
 		{
-			this->m_storage.push(static_cast<kun_ktk uint8_t>(i));
+			this->m_storage.push(i);
 		}
 	}
 

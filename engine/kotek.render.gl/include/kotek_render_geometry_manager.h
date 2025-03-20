@@ -71,6 +71,23 @@ public:
 
 	GLuint Get_CurrentIndirectCommandsInUse() const;
 
+	kun_ktk uint8_t Allocate_BufferIndirectCommands(
+		kun_ktk uint16_t commands_count,
+		kun_ktk size_t cmd_size = sizeof(ktkDrawElementsIndirectCommand));
+
+	template <kun_ktk uint8_t Size>
+	kun_ktk uint8_t Allocate_BufferVertex(kun_ktk size_t allocation_size,
+		const ktkVertexSemanticData (&vertex_semantic_sizes)[Size]);
+
+	kun_ktk uint8_t Allocate_BufferIndex(kun_ktk size_t allocation_size);
+
+	kun_ktk uint8_t Allocate_VAO(kun_ktk uint8_t buffer_vertex_id,
+		kun_ktk uint8_t buffer_elements_id = kRender_Buffer_InvalidID);
+
+	GLuint Get_BufferVertexHandle(kun_ktk uint8_t id) const noexcept;
+	GLuint Get_BufferIndexHandle(kun_ktk uint8_t id) const noexcept;
+	GLuint Get_VAOHandle(kun_ktk uint8_t id) const noexcept;
+
 private:
 	void FreeOffset(ktk::uint32_t id);
 
@@ -88,6 +105,12 @@ private:
 	//	m_indirect_commands_models_by_enum;
 
 	ktk_render_indirect_commands_by_enum_t m_indirect_commands_by_enum;
+
+	ktk_array<GLuint, KOTEK_DEF_RENDER_GL_GEOMETRY_MANAGER_MAX_BUFFERS_COUNT>
+		m_buffers_vao;
+	ktk_array<ktkRenderBuffer*,
+		KOTEK_DEF_RENDER_GL_GEOMETRY_MANAGER_MAX_BUFFERS_COUNT>
+		m_buffers_vbo;
 
 	ktk::unordered_map<ktk::cstring, gl::ktkDrawIndexIndirectCommand>
 		m_indirect_commands_models_by_path;

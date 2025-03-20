@@ -62,6 +62,9 @@ void ktkRenderBuffer::Initialize(kun_ktk size_t memory_size,
 #endif
 		}
 
+		glBindBuffer(target, 0);
+		KOTEK_GL_ASSERT();
+
 		this->m_target = target;
 		this->m_handle = id;
 	}

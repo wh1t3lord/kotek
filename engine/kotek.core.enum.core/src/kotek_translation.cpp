@@ -461,17 +461,36 @@ namespace helper
 		}
 	}
 
+	const char* Translate_ResourceThreadingPolicy(eResourceThreadingPolicy type)
+	{
+		switch (type)
+		{
+		case eResourceThreadingPolicy::kAsync:
+		{
+			return KOTEK_TEXTU("Async");
+		}
+		case eResourceThreadingPolicy::kSync:
+		{
+			return KOTEK_TEXTU("Sync");
+		}
+		default:
+		{
+			return KOTEK_TEXTU("UNDEFINED_ENUM_OF_RESOURCE_THREADING_POLICTY");
+		}
+		}
+	}
+
 	ktk::cstring Translate_ResourceLoadingPolicy(eResourceLoadingPolicy type)
 	{
 		switch (type)
 		{
-		case eResourceLoadingPolicy::kAsync:
+		case eResourceLoadingPolicy::kWhole:
 		{
-			return KOTEK_TEXTU("Async");
+			return KOTEK_TEXTU("Whole");
 		}
-		case eResourceLoadingPolicy::kSync:
+		case eResourceLoadingPolicy::kStream:
 		{
-			return KOTEK_TEXTU("Sync");
+			return KOTEK_TEXTU("Stream");
 		}
 		default:
 		{

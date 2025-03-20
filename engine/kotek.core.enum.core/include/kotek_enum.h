@@ -27,6 +27,9 @@ enum class eResourceReadingType : kun_ktk enum_base_t{
 	kText, kEndOfEnum, kUnknown = -1};
 
 enum class eResourceLoadingPolicy : kun_ktk enum_base_t{
+	kWhole, kStream, kEndOfEnum};
+
+enum class eResourceThreadingPolicy : kun_ktk enum_base_t{
 	kAsync, kSync, kEndOfEnum};
 
 enum class eResourceReadingPolicy : kun_ktk enum_base_t{

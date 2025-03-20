@@ -55,6 +55,7 @@ private:
 	OffsetAllocator::Allocator* m_p_allocator;
 	ktkRenderStats m_stats;
 	GLuint m_handle;
+
 #ifdef KOTEK_DEBUG
 	ktk_cstring<64> m_description_name;
 #endif
