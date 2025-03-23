@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include "kotek_sdk_ui_element.h"
 #include <kotek.core.enum/include/kotek_core_enum.h>
 #include <kotek.core.types.numerics/include/kotek_core_types_numerics.h>
@@ -10,6 +9,8 @@
 #include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
+#include <kotek.core.containers.io/include/kotek_core_containers_io.h>
+
 #include "kotek_api_resource_manager.h"
 
 // TODO: add ifdef for appropriate things
@@ -231,8 +232,7 @@ public:
 	virtual float Get_ControllerData(eInputControllerType controller_type,
 		unsigned char data_field_index) const = 0;
 
-	virtual void Set_ControllerUpdate(
-		eInputControllerType controller_type) = 0;
+	virtual void Set_ControllerUpdate(eInputControllerType controller_type) = 0;
 
 	/// @brief simplified version (but you can't unite that buttons as you do
 	/// with enum flags with | bitshift operator) of Is_KeyPressed where you can
@@ -290,7 +290,8 @@ public:
 	// you need to use it in message loop of window
 	virtual void Update_Controller(void* p_args) = 0;
 
-	virtual eInputControllerType Get_ControllerTypeByKey(eInputAllKeys key) const = 0;
+	virtual eInputControllerType Get_ControllerTypeByKey(
+		eInputAllKeys key) const = 0;
 };
 
 class ktkIGameManager
@@ -501,26 +502,6 @@ public:
 	virtual bool Load(const ktk_filesystem_path& path,
 		kun_core ktkResourceHandle object_from_construct) noexcept = 0;
 
-	virtual bool Open(const ktk_filesystem_path& path,
-		eResourceReadingType resource_type, eResourceReadingPolicy policy,
-		kun_ktk uint32_t id) noexcept = 0;
-	virtual void Seekg(kun_ktk uint32_t resource_id, kun_ktk size_t bytes,
-		eFileSeekDirectionType type) = 0;
-	virtual kun_ktk size_t Tellg(kun_ktk uint32_t resource_id) = 0;
-	virtual void Read(
-		kun_ktk uint32_t resource_id, char* p_buffer, kun_ktk size_t size) = 0;
-	virtual void Clear(kun_ktk uint32_t resource_id,
-		eFileIOState state = eFileIOState::kStateGood) = 0;
-	virtual bool EndOfFile(kun_ktk uint32_t resource_id) = 0;
-	virtual bool Is_Open(kun_ktk uint32_t resource_id) noexcept = 0;
-	virtual bool Close(kun_ktk uint32_t id) noexcept = 0;
-	virtual kun_ktk streamsize_t Gcount(kun_ktk uint32_t id) noexcept = 0;
-	/// \~english @brief seeks for available instance of ofstream and returns
-	/// its id
-	/// @param
-	/// @return
-	virtual kun_ktk uint32_t GenerateFileID(void) noexcept = 0;
-
 protected:
 	virtual eResourceLoadingType DetectResourceTypeByFileFormat(
 		const ktk_filesystem_path& path) noexcept = 0;
@@ -577,58 +558,6 @@ public:
 
 	virtual bool Save(const ktk_filesystem_path& path,
 		kun_core ktkResourceHandle data) noexcept = 0;
-
-	virtual bool Open(const ktk_filesystem_path& path,
-		eResourceWritingType resource_type, eResourceWritingPolicy policy,
-		eResourceWritingMode mode, ktk::uint32_t id) noexcept = 0;
-	virtual void Write(
-		ktk::uint32_t resource_id, const char* p_string) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const char* p_string,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id,
-		const unsigned char* p_raw_memory) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id,
-		const unsigned char* p_raw_memory, ktk::size_t size) noexcept = 0;
-	virtual void Write(
-		ktk::uint32_t resource_id, ktk::int32_t value) noexcept = 0;
-	virtual void Write(
-		ktk::uint32_t resource_id, ktk::float_t value) noexcept = 0;
-	virtual void Write(
-		ktk::uint32_t resource_id, ktk::double_t value) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::int32_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::uint32_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::float_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::double_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::int8_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::int16_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id,
-		Core::eFileWritingControlCharacterType type) noexcept = 0;
-	virtual void Write(
-		ktk::uint32_t resource_id, ktk::size_t value) noexcept = 0;
-	virtual void Seekg(ktk::uint32_t resource_id, ktk::size_t bytes,
-		eFileSeekDirectionType type) = 0;
-	virtual void Seekp(ktk::uint32_t resource_id, ktk::size_t bytes,
-		eFileSeekDirectionType type) = 0;
-	virtual ktk::size_t Tellp(ktk::uint32_t resource_id) = 0;
-	virtual ktk::size_t Tellg(ktk::uint32_t resource_id) = 0;
-	virtual void Read(
-		ktk::uint32_t resource_id, char* p_buffer, ktk::size_t size) = 0;
-	virtual bool Is_Open(ktk::uint32_t resource_id) noexcept = 0;
-	virtual bool Close(ktk::uint32_t id) noexcept = 0;
-
-	/// \~english @brief seeks for available instance of ofstream and returns
-	/// its id
-	/// @param
-	/// @return
-	virtual ktk::uint32_t GenerateFileID(void) noexcept = 0;
 
 protected:
 	virtual eResourceLoadingType DetectResourceTypeByFileFormat(
@@ -693,62 +622,11 @@ public:
 	virtual kun_ktk shared_ptr<ktkResourceHandle> Load(
 		const ktkLoadingRequest& request) noexcept = 0;
 
-	virtual void Open(const ktkResourceWritingRequest& request) noexcept = 0;
-	virtual void Open(const ktkResourceReadingRequest& request) noexcept = 0;
-
-	virtual void Write(
-		ktk::uint32_t resource_id, const char* p_string) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const char* p_string,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id,
-		const unsigned char* p_raw_memory) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id,
-		const unsigned char* p_raw_memory, ktk::size_t size) noexcept = 0;
-	virtual void Write(
-		ktk::uint32_t resource_id, ktk::int32_t value) noexcept = 0;
-	virtual void Write(
-		ktk::uint32_t resource_id, ktk::float_t value) noexcept = 0;
-	virtual void Write(
-		ktk::uint32_t resource_id, ktk::double_t value) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::int32_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::uint32_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::float_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::double_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::int8_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::int16_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id, const ktk::uint16_t* p_arr,
-		ktk::size_t size) noexcept = 0;
-	virtual void Write(ktk::uint32_t resource_id,
-		Core::eFileWritingControlCharacterType) noexcept = 0;
-	virtual void Write(
-		ktk::uint32_t resource_id, ktk::size_t value) noexcept = 0;
-	virtual void Seekg(ktk::uint32_t resource_id, ktk::size_t bytes,
-		eFileSeekDirectionType type) = 0;
-	virtual void Seekp(ktk::uint32_t resource_id, ktk::size_t bytes,
-		eFileSeekDirectionType type) = 0;
-	virtual ktk::size_t Tellp(ktk::uint32_t resource_id) = 0;
-	virtual ktk::size_t Tellg(ktk::uint32_t resource_id) = 0;
-	virtual void Read(
-		ktk::uint32_t resource_id, char* p_buffer, ktk::size_t size) = 0;
-	virtual bool Is_Open(ktk::uint32_t resource_id) = 0;
-	virtual void Close_Saver(ktk::uint32_t resource_id) noexcept = 0;
-	virtual void Close_Loader(kun_ktk uint32_t resource_id) noexcept = 0;
-
-	/// \~english @brief uses ktkIResourceSaverManager for generating resource
-	/// (file) ID
-	/// @return resource ID forktkIResourceSaverManager
-	virtual kun_ktk uint32_t GenerateFileIDFor_Writing() noexcept = 0;
-
-	/// \~english @brief uses ktkIResourceLoaderManager for generating resource
-	/// (file) ID
-	/// @return resouce ID for ktkIResourceLoaderManager
-	virtual kun_ktk uint32_t GenerateFileIDFor_Reading() noexcept = 0;
+	virtual kun_ktk cfstream* Open_FileStream(
+		const ktkResourceFileStreamRequest& request,
+		std::ios_base::openmode om = std::ios::in | std::ios::out |
+			std::ios::trunc) noexcept = 0;
+	virtual void Close_FileStream(kun_ktk cfstream* p_fstream) noexcept = 0;
 
 	virtual void Set_ResourceLoader(
 		ktkIResourceLoaderManager* p_instance) noexcept = 0;

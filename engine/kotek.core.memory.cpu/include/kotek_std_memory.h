@@ -24,6 +24,7 @@
 	#define KOTEK_USE_MEMORY_ALLOCATOR_CLASS std::allocator
 #endif
 
+#include "offsetAllocator.hpp"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK

@@ -13,3 +13,4 @@ add_library(${PROJECT_NAME} STATIC
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.resource_manager.loader)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.resource_manager.saver)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.resource_manager.streaming)

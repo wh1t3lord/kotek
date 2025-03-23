@@ -50,8 +50,6 @@ set(to_include_managers_files
     "src/kotek_render_buffer.cpp"
     "include/kotek_render_geometry_manager.h"
     "src/kotek_render_geometry_manager.cpp"
-    "include/offsetAllocator.hpp"
-    "src/offsetAllocator.cpp"
 )
 
 set(to_include_core_files

@@ -109,6 +109,84 @@ private:
 	ktk_filesystem_path m_resource_path;
 };
 
+/// @brief \~english request for loading or saving asset
+struct ktkResourceAssetRequest
+{
+	ktkResourceAssetRequest(eResourceThreadingPolicy type_threading,
+		eResourceLoadingPolicy type_loading,
+		eResourceCachingPolicy type_policy_caching,
+		eResourceLoadingType type_of_loading_resource,
+		const ktk_filesystem_path& resource_path) :
+		entity_id{kun_ktk uint32_t(-1)}, resource_path{resource_path}
+	{
+	}
+
+	ktkResourceAssetRequest(eResourceThreadingPolicy type_threading,
+		eResourceLoadingPolicy type_loading,
+		eResourceCachingPolicy type_policy_caching,
+		eResourceLoadingType type_of_loading_resource,
+		const ktk_filesystem_path& resource_path, kun_ktk uint32_t id) :
+		entity_id{id}, resource_path{resource_path}
+	{
+	}
+
+	ktkResourceAssetRequest(void) : entity_id{} {}
+
+	~ktkResourceAssetRequest() = default;
+
+	eResourceRequestThreadingPolicy policy_threading;
+	eResourceRequestCachingPolicy policy_caching;
+	eResourceRequestOperationType operation_type;
+	eResourceRequestResourceType resource_type;
+
+	kun_ktk uint32_t entity_id;
+	ktk_filesystem_path resource_path;
+};
+
+/// @brief \~english provides I/O API for user
+struct ktkResourceFileStreamRequest
+{
+	ktkResourceFileStreamRequest() :
+		operation_type{eResourceRequestOperationType::kEndOfEnum},
+		resource_type{eResourceRequestResourceType::kUnknown}
+	{
+	}
+
+	~ktkResourceFileStreamRequest() = default;
+
+	eResourceRequestOperationType operation_type;
+	eResourceRequestResourceType resource_type;
+	ktk_filesystem_path path_to_file;
+};
+
+class ktkResourceChunk
+{
+public:
+	ktkResourceChunk() {}
+	~ktkResourceChunk() {}
+
+	kun_ktk uint32_t GetRemaningChunks() const
+	{
+		return this->total_chunks_count - this->current_chunk_index;
+	}
+
+	bool is_final;
+	bool is_loaded;
+	bool is_need_to_load_next_chunk;
+
+	kun_ktk uint32_t current_chunk_index;
+	kun_ktk uint32_t total_chunks_count;
+};
+
+class ktkResourceResponse
+{
+public:
+	ktkResourceResponse() : pChunk{} {}
+	~ktkResourceResponse() {}
+
+	ktkResourceChunk* pChunk;
+};
+
 class ktkResourceReadingRequest
 {
 public:

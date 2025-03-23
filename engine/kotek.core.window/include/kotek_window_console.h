@@ -44,7 +44,7 @@ private:
 	bool m_show;
 	bool m_is_issued_hide;
 	bool m_is_issued_show;
-	kun_ktk uint32_t m_file_reader_id;
+	kun_ktk cfstream* m_p_log_reader;
 	ktkIResourceManager* m_p_manager_resource;
 	ktkIInput* m_p_input;
 	ktkILogger* m_p_logger;

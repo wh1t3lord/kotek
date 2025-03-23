@@ -29,22 +29,6 @@ public:
 	bool Load(const ktk_filesystem_path& path,
 		kun_core ktkResourceHandle object_from_construct) noexcept override;
 
-	bool Open(const ktk_filesystem_path& path,
-		eResourceReadingType resource_type, eResourceReadingPolicy policy,
-		kun_ktk uint32_t id) noexcept override;
-	void Seekg(kun_ktk uint32_t resource_id, kun_ktk size_t bytes,
-		eFileSeekDirectionType type) override;
-	kun_ktk size_t Tellg(kun_ktk uint32_t resource_id) override;
-	void Read(kun_ktk uint32_t resource_id, char* p_buffer,
-		kun_ktk size_t size) override;
-	void Clear(kun_ktk uint32_t resource_id, eFileIOState state = eFileIOState::kStateGood) override;
-	bool EndOfFile(
-		kun_ktk uint32_t resource_id) override;
-	bool Is_Open(kun_ktk uint32_t resource_id) noexcept override;
-	bool Close(kun_ktk uint32_t id) noexcept override;
-	kun_ktk streamsize_t Gcount(kun_ktk uint32_t id) noexcept override;
-	kun_ktk uint32_t GenerateFileID(void) noexcept override;
-
 protected:
 	eResourceLoadingType DetectResourceTypeByFileFormat(
 		const ktk_filesystem_path& path) noexcept override;

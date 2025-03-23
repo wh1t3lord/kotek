@@ -2,6 +2,8 @@
 
 #include <kotek.core.resource_manager.loader/include/kotek_core_resource_manager_loader.h>
 #include <kotek.core.resource_manager.saver/include/kotek_core_resource_manager_saver.h>
+#include <kotek.core.resource_manager.streaming\include\kotek_core_resource_manager_streaming.h>
+
 #include "kotek_resource_manager.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK

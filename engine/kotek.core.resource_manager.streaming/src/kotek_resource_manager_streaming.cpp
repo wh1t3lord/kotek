@@ -1,0 +1,9 @@
+#include "../include/kotek_resource_manager_streaming.h"
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+
+
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

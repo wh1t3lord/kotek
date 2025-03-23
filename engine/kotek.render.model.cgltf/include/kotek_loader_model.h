@@ -26,7 +26,7 @@ public:
 
 private:
 	Core::ktkIFileSystem* m_p_filesystem;
-	ktk::unordered_map<ktk::cstring, Core::ktkIResourceLoader*> m_loaders;
+	ktk::unordered_map<std::string_view, Core::ktkIResourceLoader*> m_loaders;
 };
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK

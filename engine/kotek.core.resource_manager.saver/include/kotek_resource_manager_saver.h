@@ -33,51 +33,6 @@ public:
 	bool Save(
 		const ktk_filesystem_path& path, kun_core ktkResourceHandle data) noexcept override;
 
-	bool Open(const ktk_filesystem_path& path,
-		eResourceWritingType resource_type, eResourceWritingPolicy policy,
-		eResourceWritingMode mode, kun_ktk uint32_t id) noexcept override;
-	void Write(
-		kun_ktk uint32_t resource_id, const char* p_string) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, const char* p_string,
-		kun_ktk size_t size) noexcept override;
-	void Write(kun_ktk uint32_t resource_id,
-		const unsigned char* p_raw_memory) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, const unsigned char* p_raw_memory,
-		kun_ktk size_t size) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, kun_ktk int32_t value) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, kun_ktk float_t value) noexcept override;
-	void Write(
-		kun_ktk uint32_t resource_id, kun_ktk double_t value) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, const kun_ktk int32_t* p_arr,
-		kun_ktk size_t size) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, const kun_ktk uint32_t* p_arr,
-		kun_ktk size_t size) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, const kun_ktk float_t* p_arr,
-		kun_ktk size_t size) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, const kun_ktk double_t* p_arr,
-		kun_ktk size_t size) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, const kun_ktk int8_t* p_arr,
-		kun_ktk size_t size) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, const kun_ktk int16_t* p_arr,
-		kun_ktk size_t size) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, const kun_ktk uint16_t* p_arr,
-		kun_ktk size_t size) noexcept override;
-	void Write(kun_ktk uint32_t resource_id,
-		Core::eFileWritingControlCharacterType type) noexcept override;
-	void Write(kun_ktk uint32_t resource_id, kun_ktk size_t value) noexcept override;
-	void Seekg(kun_ktk uint32_t resource_id, kun_ktk size_t bytes,
-		eFileSeekDirectionType type) override;
-	void Seekp(kun_ktk uint32_t resource_id, kun_ktk size_t bytes,
-		eFileSeekDirectionType type) override;
-	kun_ktk size_t Tellp(kun_ktk uint32_t resource_id) override;
-	kun_ktk size_t Tellg(kun_ktk uint32_t resource_id) override;
-	void Read(
-		kun_ktk uint32_t resource_id, char* p_buffer, kun_ktk size_t size) override;
-	bool Is_Open(kun_ktk uint32_t resource_id) noexcept override;
-	bool Close(kun_ktk uint32_t id) noexcept override;
-
-	kun_ktk uint32_t GenerateFileID(void) noexcept override;
-
 protected:
 	eResourceLoadingType DetectResourceTypeByFileFormat(
 		const ktk_filesystem_path& path) noexcept override;

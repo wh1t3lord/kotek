@@ -82,4 +82,7 @@ using base_quat_t = base_vec4_t;
 
 KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK
+
+namespace math = KUN_KOTEK KUN_KTK KN_MATH;
+
 KOTEK_END_NAMESPACE_KOTEK

@@ -16,6 +16,19 @@ enum class eFolderIndex : kun_ktk enum_base_t{kFolderIndex_Root,
 	kFolderIndex_UserData_SDK_Settings, kFolderIndex_UserData_SDK_Scenes,
 	kFolderIndex_UserData, kEndOfEnum};
 
+enum class eResourceRequestOperationType : kun_ktk enum_base_t{
+	kLoad, kSave, kEndOfEnum};
+
+enum class eResourceRequestResourceType : kun_ktk enum_base_t{kText, kTexture,
+	kModel, kModelStatic_Triangle, kModelStatic_Box, kModelStatic_Sphere,
+	kSound, kVideo, kDLL, kAutoDetect, kBinary, kEndOfEnum, kUnknown = -1};
+
+enum class eResourceRequestThreadingPolicy : kun_ktk enum_base_t{
+	kAsync, kSync, kEndOfEnum};
+
+enum class eResourceRequestCachingPolicy : kun_ktk enum_base_t{
+	kCached, kNotCached, kEndOfEnum};
+
 enum class eResourceLoadingType : kun_ktk enum_base_t{kText, kTexture, kModel,
 	kModelStatic_Triangle, kModelStatic_Box, kModelStatic_Sphere, kSound,
 	kVideo, kDLL, kAutoDetect, kEndOfEnum, kUnknown = -1};

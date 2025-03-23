@@ -33,8 +33,10 @@ message("[${PROJECT_NAME}]: memory allocator for CPU = ${KOTEK_MEMORY_ALLOCATOR_
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_memory.h"
 	"include/kotek_core_memory_cpu.h" 
+	"include/offsetAllocator.hpp"
 	"src/main_core_memory_cpu_dll.cpp"
 	"src/kotek_std_memory.cpp"
+	"src/offsetAllocator.cpp"
 )
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
