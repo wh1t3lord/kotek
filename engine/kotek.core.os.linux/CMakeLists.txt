@@ -31,7 +31,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_os.h"
 	"include/kotek_core_os_linux.h"
 	"src/main_core_os_linux_dll.cpp")
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/os/vendor")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.linux)
 

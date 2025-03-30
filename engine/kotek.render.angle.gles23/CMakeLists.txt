@@ -70,7 +70,7 @@ add_library(${PROJECT_NAME} STATIC
     ${to_include_module_files}
     ${to_include_memory_management_files}
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/gl gles/vendor")
 source_group("Render Graph/Simplified" FILES ${to_include_render_graph_simplified_files})
 source_group("Managers" FILES ${to_include_managers_files})
 source_group("Core" FILES ${to_include_core_files})
@@ -152,18 +152,21 @@ if (WIN32)
     if (EXISTS "../../vcpkg/installed/x64-windows/debug/bin/libEGL.dll" AND EXISTS "../../vcpkg/installed/x64-windows/bin/libEGL.dll")
         set(copy_local_command_debug_1 ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../vcpkg/installed/x64-windows/debug/bin/libEGL.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/) 
         set(copy_local_command_debug_2 ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../vcpkg/installed/x64-windows/debug/bin/libEGL.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/) 
-        
+        set(copy_local_command_debug_3 ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../vcpkg/installed/x64-windows/debug/bin/libGLESv2.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Debug/) 
+
         set(copy_local_command_release_1 ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../vcpkg/installed/x64-windows/bin/libEGL.dll" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
         set(copy_local_command_release_2 ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../vcpkg/installed/x64-windows/bin/libEGL.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
-
+        set(copy_local_command_release_3 ${CMAKE_COMMAND} -E copy_if_different "${PROJECT_SOURCE_DIR}/../../vcpkg/installed/x64-windows/bin/libGLESv2.pdb" ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/)
 
         add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
 
         COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_1}>"
         COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_2}>"
+        COMMAND "$<$<CONFIG:Debug>:${copy_local_command_debug_3}>"
 
         COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_1}>"
         COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_2}>"
+        COMMAND "$<$<CONFIG:Release>:${copy_local_command_release_3}>"
 
         COMMAND_EXPAND_LISTS
 

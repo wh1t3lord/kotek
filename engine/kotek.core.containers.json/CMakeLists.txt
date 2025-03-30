@@ -28,7 +28,8 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_std_json.cpp"
 	"include/kotek_core_containers_json.h"
 	"src/main_core_containers_json_dll.cpp")
-
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
 if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()

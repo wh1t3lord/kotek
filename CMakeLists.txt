@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.19.3)
 project(kotek.engine)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 message("[${PROJECT_NAME}]: CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}")
 message("[${PROJECT_NAME}]: CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}")
 
@@ -12,6 +13,17 @@ if ("${CMAKE_BUILD_TYPE}" STREQUAL "")
 	set(CMAKE_BUILD_TYPE Debug)
 	message("[${PROJECT_NAME}]: Setting build type to: ${CMAKE_BUILD_TYPE}")
 endif()
+
+#### OVERRIDING PROJECT NAMES ####
+
+if ("${KOTEK_PROJECT_NAME_OVERRIDE_KOTEK}" STREQUAL "")
+	set(KOTEK_PROJECT_NAME_OVERRIDE_KOTEK "kotek")
+	message("[${PROJECT_NAME}]: Setting default name for kotek.exe folder: ${KOTEK_PROJECT_NAME_OVERRIDE_KOTEK}")
+else()
+	message("[${PROJECT_NAME}]: Your overriden kotek.exe [${KOTEK_PROJECT_NAME_OVERRIDE_KOTEK}]")
+endif()
+
+#### OVERRIDING PROJECT NAMES ####
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "")
 	set(KOTEK_DEPS_FOLDER_ENABLE "ON" CACHE INTERNAL "")
@@ -223,4 +235,6 @@ add_subdirectory("engine/kotek.render.angle.gles23")
 
 add_subdirectory("engine/kotek.exe")
 
-set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT kotek)
+# TODO: when CMake will fix that we can restore but for now we can't use this due to breaking USE_FOLDERS feature...
+# TODO2: Rename cmake default filter folder CMakePredefinedTargets as just plain 'targets' word
+#set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT kotek)

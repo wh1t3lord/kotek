@@ -36,7 +36,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_format.h"
 	"include/kotek_core_format.h"
 	"src/main_core_format_dll.cpp")
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.filesystem.path)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.text)

@@ -10,4 +10,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_containers_pair.h"
 	"src/main_core_containers_pair_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

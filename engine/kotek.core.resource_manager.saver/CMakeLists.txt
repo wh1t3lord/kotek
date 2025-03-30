@@ -10,7 +10,8 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_resource_manager_saver.h"
 	"src/kotek_resource_manager_saver.cpp"
 	"src/main_core_resource_manager_saver_dll.cpp")
-
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/resource management")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)

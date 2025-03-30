@@ -55,7 +55,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_containers_string_dll.cpp"
 	"src/kotek_std_string.cpp")
 
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
 if(MSVC)
     target_compile_options(${PROJECT_NAME} PUBLIC "/Zc:__cplusplus")
 endif()

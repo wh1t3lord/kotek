@@ -18,6 +18,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_std_window.cpp"
 	"src/main_core_window_glfw_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/window management/vendor")
 if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()

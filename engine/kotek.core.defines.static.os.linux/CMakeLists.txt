@@ -56,7 +56,8 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
 	"include/kotek_core_defines_static_os_linux.h"
 	"src/main_core_defines_static_os_linux_dll.cpp")
-
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/independent")
 if (UNIX)
     target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
 endif()

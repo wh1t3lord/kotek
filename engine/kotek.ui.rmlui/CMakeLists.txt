@@ -14,7 +14,8 @@ add_library(${PROJECT_NAME} STATIC
 
 	"include/kotek_ui_rmlui.h"
 	"src/main_ui_rmlui_dll.cpp")
-
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
 if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()

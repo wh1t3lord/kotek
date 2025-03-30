@@ -30,7 +30,7 @@ T align_down(T val, T alignment) KOTEK_CPP_KEYWORD_NOEXCEPT
 class ktkUint8GeneratorID
 {
 public:
-	ktkUint8GeneratorID(kun_ktk uint8_t max_size) 
+	ktkUint8GeneratorID(kun_ktk uint8_t max_size)
 	{
 		for (kun_ktk uint8_t i = 0; i < max_size; ++i)
 		{
@@ -98,5 +98,34 @@ bool is_equal(long double a, long double b,
 	long double relative_difference_factor = kun_ktk kMin_Long_Double)
 	KOTEK_CPP_KEYWORD_NOEXCEPT;
 
+template <std::size_t N>
+struct ktkFixedStringTemplateWrapper
+{
+	char str[N];
+
+	inline constexpr ktkFixedStringTemplateWrapper(const char (&s)[N])
+	{
+		for (std::size_t i = 0; i < N; ++i)
+			str[i] = s[i];
+	}
+
+	// Equality operator for if constexpr comparisons.
+	inline constexpr bool operator==(
+		const ktkFixedStringTemplateWrapper& other) const
+	{
+		for (std::size_t i = 0; i < N; ++i)
+		{
+			if (str[i] != other.str[i])
+				return false;
+		}
+		return true;
+	}
+};
+
 KOTEK_END_NAMESPACE_KTK
+
+template <std::size_t Length>
+using templated_constexpr_string_t =
+	kun_ktk ktkFixedStringTemplateWrapper<Length>;
+
 KOTEK_END_NAMESPACE_KOTEK

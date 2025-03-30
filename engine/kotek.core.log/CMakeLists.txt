@@ -25,6 +25,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_log.h"
 	"src/main_core_log_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)

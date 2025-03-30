@@ -1235,6 +1235,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_defines_static_cpp.h"
 	"src/main_core_defines_static_cpp_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/independent")
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
 
 if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")

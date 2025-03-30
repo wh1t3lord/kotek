@@ -54,7 +54,7 @@ add_library(${PROJECT_NAME} STATIC
     ${to_include_module_files}
     ${to_include_memory_management_files}
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render")
 source_group("Render Graph/Simplified" FILES ${to_include_render_graph_simplified_files})
 source_group("Managers" FILES ${to_include_managers_files})
 source_group("Core" FILES ${to_include_core_files})

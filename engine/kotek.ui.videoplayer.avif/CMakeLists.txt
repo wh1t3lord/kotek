@@ -28,7 +28,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_ui_videoplayer.h"
 	"src/kotek_ui_videoplayer.cpp"
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 

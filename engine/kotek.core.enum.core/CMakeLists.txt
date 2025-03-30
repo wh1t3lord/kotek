@@ -29,7 +29,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_enum_core_dll.cpp"
 	"tests/kotek_core_enum_core_test_translation.cpp"
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/enum")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
 

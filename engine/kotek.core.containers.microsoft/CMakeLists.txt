@@ -9,4 +9,5 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_containers_microsoft.h"
 	"src/main_core_containers_microsoft_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers/vendor/microsoft")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.microsoft.wrl.comptr)

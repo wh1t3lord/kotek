@@ -22,7 +22,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_callbacks.h"
 	"src/main_game_dll.cpp"
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/user dll loading")
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)

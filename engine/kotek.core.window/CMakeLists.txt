@@ -14,4 +14,5 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_core_window_dll.cpp"
 )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/window management")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window.glfw)

@@ -9,6 +9,8 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_containers_multithreading.h"
 	"src/main_core_containers_multithreading_dll.cpp")
 
+
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers/multithreading")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.multithreading.atomic)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.multithreading.mutex)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.multithreading.shared_mutex)

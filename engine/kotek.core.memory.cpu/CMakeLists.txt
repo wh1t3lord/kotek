@@ -38,7 +38,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_std_memory.cpp"
 	"src/offsetAllocator.cpp"
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/memory")
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
 		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")

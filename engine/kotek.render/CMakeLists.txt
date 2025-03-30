@@ -36,4 +36,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.vk)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.software)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.angle.gles23)
 
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "Kotek/Render")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render")

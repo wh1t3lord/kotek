@@ -11,7 +11,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render_model.h"
 	"src/main_render_model_dll.cpp"
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/model loaders")
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)

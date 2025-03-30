@@ -47,7 +47,8 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_preprocessors.h"
 	"include/kotek_core_defines_static_tests.h"
 	"src/main_core_defines_static_tests_dll.cpp")
-
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/independent")
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

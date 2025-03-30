@@ -45,7 +45,8 @@ add_library(${PROJECT_NAME} STATIC
 	"src/imgui_widgets.cpp"
 	"src/kotek_ui_imgui_wrapper.cpp"
 	"src/main_ui_imgui_dll.cpp")
-
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)

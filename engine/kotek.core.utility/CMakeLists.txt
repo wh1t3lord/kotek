@@ -33,7 +33,7 @@ add_library(${PROJECT_NAME} STATIC
 	${to_include_unit_tests}
 	"src/main_core_utility_dll.cpp"
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
 		target_link_libraries(${PROJECT_NAME} PUBLIC 

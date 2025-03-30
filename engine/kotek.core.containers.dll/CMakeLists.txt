@@ -26,7 +26,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_dll.h"
 	"include/kotek_core_containers_dll.h"
 	"src/main_core_containers_dll_dll.cpp")
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")

@@ -11,6 +11,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_engine_config.h"
 	"src/main_core_engine_config_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()

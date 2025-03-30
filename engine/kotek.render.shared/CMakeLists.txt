@@ -13,7 +13,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render_shared.h"
 	"src/main_render_shared_dll.cpp"
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render")
 if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()

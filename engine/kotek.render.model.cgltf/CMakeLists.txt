@@ -22,6 +22,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_render_model_cgltf_dll.cpp"
 )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/model loaders/vendor")
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")

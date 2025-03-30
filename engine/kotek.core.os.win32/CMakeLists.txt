@@ -50,6 +50,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_os_win32.h"
 	"src/main_core_os_win32_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/os/vendor")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.win32)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)
 

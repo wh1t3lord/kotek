@@ -10,10 +10,11 @@
 bool isUserCallbackUpdateFunctionContainsLoop = false;
 
 #ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
-using ktkUserCallbackInitialize = bool(Kotek::Core::ktkMainManager*);
-using ktkUserCallbackShutdown = bool(Kotek::Core::ktkMainManager*);
-using ktkUserCallbackUpdate = void(Kotek::Core::ktkMainManager*);
-using ktkUserCallbackInitializeRender = bool(Kotek::Core::ktkMainManager*);
+using ktkUserCallbackInitialize = bool(kun_kotek kun_core ktkMainManager*);
+using ktkUserCallbackShutdown = bool(kun_kotek kun_core ktkMainManager*);
+using ktkUserCallbackUpdate = void(kun_kotek kun_core ktkMainManager*);
+using ktkUserCallbackInitializeRender = bool(
+	kun_kotek kun_core ktkMainManager*);
 
 Kotek::ktk::function<ktkUserCallbackInitialize>
 	p_user_callback_initialize_game_library;
@@ -286,6 +287,12 @@ namespace Engine
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.10");
 	#elif (_MSC_VER == 1941)
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.11");
+	#elif (_MSC_VER == 1942)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.12");
+	#elif (_MSC_VER == 1943)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.13");
+	#elif (_MSC_VER == 1944)
+		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.14");
 	#endif
 
 #endif
@@ -297,7 +304,7 @@ namespace Engine
 	{
 		// TODO: remember status from every calling you can't return hardcoded
 		// true result...
-		Core::SerializeModule_Core(p_main_manager);
+		kun_core SerializeModule_Core(p_main_manager);
 
 		return true;
 	}
@@ -311,7 +318,7 @@ namespace Engine
 		}
 
 		// TODO: remember status from every calling
-		Core::DeserializeModule_Core(p_manager);
+		kun_core DeserializeModule_Core(p_manager);
 
 		return true;
 	}
@@ -398,7 +405,7 @@ namespace Engine
 			p_main_manager->Get_Splash()->Set_Progress();
 		}
 
-		Core::InitializeModule_Core(p_main_manager);
+		kun_core InitializeModule_Core(p_main_manager);
 
 		// TODO: must gurantee that write/read operations are not in
 		// InitializeStage, InitializeStage only initializes and validates and
@@ -407,11 +414,11 @@ namespace Engine
 		Deserialize_Engine(p_main_manager);
 
 		// TODO: restore when you implement ImGui
-		Game::registerCommands(p_main_manager);
+		kun_game registerCommands(p_main_manager);
 
-		Game::InitializeModule_Game(p_main_manager);
+		kun_game InitializeModule_Game(p_main_manager);
 
-		UI::InitializeModule_UI(p_main_manager);
+		kun_ui InitializeModule_UI(p_main_manager);
 
 #ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 		if (p_user_callback_initialize_render_from_game_library)

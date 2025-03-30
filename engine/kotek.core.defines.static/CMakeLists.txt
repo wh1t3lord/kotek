@@ -9,6 +9,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_defines_static.h"
 	"src/main_core_defines_static_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/independent")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.git)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)

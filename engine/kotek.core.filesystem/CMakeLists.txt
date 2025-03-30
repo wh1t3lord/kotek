@@ -10,7 +10,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_filesystem.cpp"
 	"include/kotek_core_filesystem.h"
 	"src/main_core_filesystem_dll.cpp")
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/filesystem")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.filesystem.file_text)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)

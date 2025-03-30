@@ -27,6 +27,8 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_containers_filesystem_path.h"
 	"src/main_core_containers_filesystem_path_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")

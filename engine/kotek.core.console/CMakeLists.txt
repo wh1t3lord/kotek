@@ -15,6 +15,8 @@ if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)

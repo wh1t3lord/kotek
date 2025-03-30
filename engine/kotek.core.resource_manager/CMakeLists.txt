@@ -11,6 +11,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_resource_manager.cpp"
 	"src/main_core_resource_manager_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/resource management")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.resource_manager.loader)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.resource_manager.saver)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.resource_manager.streaming)

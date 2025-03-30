@@ -9,6 +9,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_dependent_preprocessors.h"
 	"include/kotek_core_defines_dependent_text.h"
 	"src/main_core_defines_dependent_text_dll.cpp")
-
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/dependent")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.string)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)

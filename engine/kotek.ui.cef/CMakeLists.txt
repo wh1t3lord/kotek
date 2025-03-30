@@ -21,6 +21,6 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_ui_cef.h"
 	${IMPLEMENTATION_FILES_CEF}
 	"src/main_ui_cef_dll.cpp")
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)

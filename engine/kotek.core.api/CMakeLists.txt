@@ -15,6 +15,8 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_sdk_ui_element.h"
 )
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.shared_ptr)

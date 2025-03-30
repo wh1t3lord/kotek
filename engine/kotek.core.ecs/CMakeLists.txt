@@ -21,6 +21,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_ecs.h"
 	"src/main_core_ecs_dll.cpp")
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)

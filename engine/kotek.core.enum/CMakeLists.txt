@@ -11,6 +11,6 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_enum.h" 
 	"src/main_core_enum_dll.cpp"
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/enum")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum.core)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum.render)

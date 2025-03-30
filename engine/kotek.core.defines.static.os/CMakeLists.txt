@@ -8,7 +8,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_defines_static_os.h"
 	"src/main_core_defines_static_os_dll.cpp")
-
+    
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/independent")
 if (WIN32)
     target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.win32)
 endif()

@@ -27,7 +27,8 @@ add_library(${PROJECT_NAME} STATIC
 	"tests/kotek_core_resource_manager_test_streaming.cpp"
 	"src/kotek_resource_manager_streaming.cpp"
 	"src/main_core_resource_manager_streaming_dll.cpp")
-
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/resource management")
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
 		target_link_libraries(${PROJECT_NAME} PUBLIC 

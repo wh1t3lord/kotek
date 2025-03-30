@@ -79,7 +79,7 @@ add_library(${PROJECT_NAME} STATIC
     ${to_include_module_files}
     ${to_include_memory_management_files}
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/gl gles")
 if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()

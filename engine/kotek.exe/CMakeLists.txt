@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.19.3)
 
-project(kotek VERSION 1 LANGUAGES CXX)
+project(${KOTEK_PROJECT_NAME_OVERRIDE_KOTEK} VERSION 1 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -90,5 +90,8 @@ if ("${KOTEK_MEMORY_LEAK_DETECTION}" STREQUAL "ON")
     else()
     endif()
 endif()
+
+#set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/exe")
+#set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT ${PROJECT_NAME})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.game)

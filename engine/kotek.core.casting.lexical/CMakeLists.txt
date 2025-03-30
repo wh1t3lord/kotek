@@ -38,4 +38,5 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 	endif()
 endif()
 
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/casting")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

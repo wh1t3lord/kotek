@@ -17,6 +17,6 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_enum_render_dx.h" 
 	"src/main_core_enum_render_dx_dll.cpp"
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/enum")
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.dx)

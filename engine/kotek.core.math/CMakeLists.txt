@@ -87,7 +87,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_std_math_matrix1f_view.cpp"
 	"src/main_core_math_dll.cpp"
 )
-
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
 		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glm_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")

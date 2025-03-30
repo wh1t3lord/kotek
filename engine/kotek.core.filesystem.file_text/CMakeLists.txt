@@ -18,7 +18,8 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_file_text.cpp"
 	"include/kotek_core_filesystem_file_text.h"
 	"src/main_core_filesystem_file_text_dll.cpp")
-
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/filesystem")
 if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
