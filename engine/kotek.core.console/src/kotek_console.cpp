@@ -82,7 +82,7 @@ bool ktkConsole::Parse_ConsoleCommandAsString(
 				funcName.remove_prefix(1);
 			while (!funcName.empty() && is_ws(funcName.back()))
 				funcName.remove_suffix(1);
-			
+
 			constexpr size_t _kFunctionNameLengthString =
 				sizeof(result.function_name) / sizeof(result.function_name[0]);
 
@@ -100,8 +100,7 @@ bool ktkConsole::Parse_ConsoleCommandAsString(
 #endif
 			}
 
-			std::memcpy(
-				result.function_name, funcName.data(), funcName.size());
+			std::memcpy(result.function_name, funcName.data(), funcName.size());
 
 			// Find the closing parenthesis.
 			auto closeParen = input.rfind(')');
@@ -176,12 +175,12 @@ void ktkConsole::Shutdown(void)
 }
 
 void ktkConsole::Push_Command(
-	ktk::enum_base_t id, ktk::console_command_args_t data) noexcept
+	kun_ktk enum_base_t id, kun_ktk console_command_args_t data) noexcept
 {
 	if (this->m_storage.find(id) == this->m_storage.end())
 	{
 		KOTEK_MESSAGE("can't find command by id: [{}]",
-			static_cast<ktk::enum_base_t>(id));
+			static_cast<kun_ktk enum_base_t>(id));
 		return;
 	}
 
@@ -193,12 +192,12 @@ void ktkConsole::Push_Command(
 }
 
 void ktkConsole::Execute_Command(
-	ktk::enum_base_t id, ktk::console_command_args_t data) noexcept
+	kun_ktk enum_base_t id, kun_ktk console_command_args_t data) noexcept
 {
 	if (this->m_storage.find(id) == this->m_storage.end())
 	{
-		KOTEK_MESSAGE(
-			"can't find command by id [{}]", static_cast<ktk::enum_base_t>(id));
+		KOTEK_MESSAGE("can't find command by id [{}]",
+			static_cast<kun_ktk enum_base_t>(id));
 		return;
 	}
 
