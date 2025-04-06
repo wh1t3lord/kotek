@@ -19,7 +19,7 @@ public:
 	ktkGameUI_RMLUI(void);
 	~ktkGameUI_RMLUI(void);
 
-	void Initialize(Core::ktkIEngineConfig* p_config,
+	void Initialize(Core::ktkIFrameworkConfig* p_config,
 		void* p_os_window_handle, int width, int height) noexcept override;
 	void Shutdown(void) noexcept override;
 

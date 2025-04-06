@@ -14,7 +14,7 @@ class ktkIRenderDevice;
 class ktkIRenderResourceManager;
 class ktkIRenderSwapchain;
 class ktkIRenderer;
-class ktkIEngineConfig;
+class ktkIFrameworkConfig;
 class ktkIWindowManager;
 class ktkIImguiWrapper;
 class ktkIGameUIManager;
@@ -67,8 +67,8 @@ public:
 
 	void setRenderSwapchainManager(ktkIRenderSwapchain* pointer) noexcept;
 
-	void Set_EngineConfig(ktkIEngineConfig* pointer) noexcept;
-	ktkIEngineConfig* Get_EngineConfig(void) const noexcept;
+	void Set_EngineConfig(ktkIFrameworkConfig* pointer) noexcept;
+	ktkIFrameworkConfig* Get_EngineConfig(void) const noexcept;
 
 	ktkIWindowManager* Get_WindowManager(void) const noexcept;
 	void Set_WindowManager(ktkIWindowManager* p_window_manager) noexcept;
@@ -94,7 +94,7 @@ public:
 private:
 	int m_argc;
 	char** m_argv;
-	ktkIEngineConfig* m_p_manager_config;
+	ktkIFrameworkConfig* m_p_manager_config;
 	ktkIRenderer* m_p_manager_renderer;
 	ktkIGameManager* m_p_game_manager;
 	ktkIResourceManager* m_p_resource_manager;

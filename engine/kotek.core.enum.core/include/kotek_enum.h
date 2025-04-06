@@ -132,7 +132,7 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 /// // Где уже в коде СДК и каких-то его реализаций
 ///
 /// bool ExecuteSomeCode_ButCheckIfSDKFeatureIsEnabled() {
-///		Kotek::Core::ktkIEngineConfig* p_config =
+///		Kotek::Core::ktkIFrameworkConfig* p_config =
 /// p_main_manager->Get_EngineConfig();
 ///
 ///		if (p_config->IsFeatureEnabled(kEngine_Feature_SDK)) {
@@ -195,7 +195,7 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 ///		// probably interface is often used, but we make it more obvious
 /// with ktkEngineConfig instance
 ///		// and you obtained Kotek::Core::ktkMainManager*
-///(p_main_manager) somewhere too! Kotek::Core::ktkIEngineConfig*
+///(p_main_manager) somewhere too! Kotek::Core::ktkIFrameworkConfig*
 /// p_config = p_main_manager->Get_EngineConfig();
 ///
 ///		p_config->SetFeatureStatus(Kotek::Core::eEngineFeature::kEngine_Feature_SDK,
@@ -208,7 +208,7 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 /// some window
 ///
 /// bool ExecuteSomeCode_ButCheckIfSDKFeatureIsEnabled() {
-///		Kotek::Core::ktkIEngineConfig* p_config =
+///		Kotek::Core::ktkIFrameworkConfig* p_config =
 /// p_main_manager->Get_EngineConfig();
 ///
 ///		if (p_config->IsFeatureEnabled(kEngine_Feature_SDK)) {

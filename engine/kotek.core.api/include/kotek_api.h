@@ -173,9 +173,6 @@ public:
 	virtual void Shutdown(void) = 0;
 	virtual void Resize(void) = 0;
 	virtual const char* Get_Name(void) const noexcept = 0;
-
-	virtual const kun_kotek kun_ktk vector<ktkISDKUIElement*>&
-	Get_UIImGuiElements(void) const = 0;
 };
 
 class ktkIFileSystem
@@ -701,10 +698,10 @@ public:
 	virtual void Shutdown(void) = 0;
 };
 
-class ktkIEngineConfig
+class ktkIFrameworkConfig
 {
 public:
-	virtual ~ktkIEngineConfig(void) {}
+	virtual ~ktkIFrameworkConfig(void) {}
 
 	virtual void Initialize(void) = 0;
 	virtual void Shutdown(void) = 0;
@@ -868,7 +865,7 @@ class ktkIGameUIManager
 public:
 	virtual ~ktkIGameUIManager(void) {}
 
-	virtual void Initialize(ktkIEngineConfig* p_config,
+	virtual void Initialize(ktkIFrameworkConfig* p_config,
 		void* p_os_window_handle, int width, int height) noexcept = 0;
 
 	virtual void Render(void) noexcept = 0;

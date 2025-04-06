@@ -31,6 +31,12 @@ bool ShutdownModule_Core_Memory_CPU(ktkMainManager* p_manager)
 {
 #ifdef KOTEK_USE_MEMORY_LEAK_DETECTION_CRT
 #endif
+
+#ifdef KOTEK_DEBUG
+	assert(kun_kotek kun_ktk memory::___counter_debug.allocation_count == 0 &&
+		"memory leak detected!");
+#endif
+
 	return true;
 }
 

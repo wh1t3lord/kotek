@@ -42,8 +42,18 @@ namespace memory
 	char* strndup(const char* str, size_t n);
 	void* memcpy(void* p_dest, void* p_src, kun_ktk size_t count);
 	void* memcpy(void* p_dest, const void* p_src, kun_ktk size_t count);
-	void* memset(void* p_dest,
-		int value, kun_ktk size_t bytes);
+	void* memset(void* p_dest, int value, kun_ktk size_t bytes);
+
+	struct ktkMemoryAllocationCounter
+	{
+		std::atomic<uint32_t> new_count = 0;
+		std::atomic<uint32_t> delete_count = 0;
+		std::atomic<uint32_t> allocation_count = 0;
+	};
+
+#ifdef KOTEK_DEBUG
+	extern ktkMemoryAllocationCounter ___counter_debug;
+#endif
 
 } // namespace memory
 

@@ -3,9 +3,42 @@
 
 #include <stdlib.h>
 
+#ifdef KOTEK_DEBUG
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+namespace memory
+{
+	ktkMemoryAllocationCounter ___counter_debug;
+}
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK
+#endif
+
 #ifdef KOTEK_PLATFORM_WINDOWS
 	#ifdef KOTEK_USE_MEMORY_ALLOCATOR_CPU_MIMALLOC
 		#include <mimalloc-new-delete.h>
+	#else
+
+void* operator new(std::size_t n) throw(std::bad_alloc)
+{
+		#ifdef KOTEK_DEBUG
+	kun_kotek kun_ktk memory::___counter_debug.new_count++;
+	kun_kotek kun_ktk memory::___counter_debug.allocation_count++;
+		#endif
+
+	return ::operator new(n);
+}
+
+void operator delete(void* p) throw()
+{
+		#ifdef KOTEK_DEBUG
+	kun_kotek kun_ktk memory::___counter_debug.delete_count++;
+	kun_kotek kun_ktk memory::___counter_debug.allocation_count--;
+		#endif
+
+	::operator delete(p);
+}
+
 	#endif
 #endif
 
@@ -88,7 +121,7 @@ namespace memory
 		return std::memcpy(p_dest, p_src, count);
 	}
 
-	void* memcpy(void* p_dest, const void* p_src, kun_ktk size_t count) 
+	void* memcpy(void* p_dest, const void* p_src, kun_ktk size_t count)
 	{
 		return std::memcpy(p_dest, p_src, count);
 	}

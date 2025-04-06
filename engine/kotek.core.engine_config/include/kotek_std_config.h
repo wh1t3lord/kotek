@@ -15,9 +15,9 @@ KOTEK_BEGIN_NAMESPACE_CORE
 // TODO: implement unit test for testing all methods about flags and class in
 // general!
 /**
- * Implementation class of ktkIEngineConfig interface.
+ * Implementation class of ktkIFrameworkConfig interface.
  */
-class ktkEngineConfig : public ktkIEngineConfig
+class ktkEngineConfig : public ktkIFrameworkConfig
 {
 public:
 	/**

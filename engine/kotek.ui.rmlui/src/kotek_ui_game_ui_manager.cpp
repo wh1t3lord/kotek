@@ -19,7 +19,7 @@ ktkGameUI_RMLUI::~ktkGameUI_RMLUI(void)
 #endif
 }
 
-void ktkGameUI_RMLUI::Initialize(Core::ktkIEngineConfig* p_config,
+void ktkGameUI_RMLUI::Initialize(Core::ktkIFrameworkConfig* p_config,
 	void* p_os_window_handle, int width, int height) noexcept
 {
 #ifdef KOTEK_USE_RMLUI_LIBRARY
