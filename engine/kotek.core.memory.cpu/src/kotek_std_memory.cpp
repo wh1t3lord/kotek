@@ -22,20 +22,16 @@ KOTEK_END_NAMESPACE_KOTEK
 		#ifdef KOTEK_DEBUG
 void* operator new(std::size_t n) throw(std::bad_alloc)
 {
-			#ifdef KOTEK_DEBUG
 	kun_kotek kun_ktk memory::___counter_debug.new_count++;
 	kun_kotek kun_ktk memory::___counter_debug.allocation_count++;
-			#endif
 
 	return std::malloc(n);
 }
 
 void operator delete(void* p) throw()
 {
-			#ifdef KOTEK_DEBUG
 	kun_kotek kun_ktk memory::___counter_debug.delete_count++;
 	kun_kotek kun_ktk memory::___counter_debug.allocation_count--;
-			#endif
 
 	std::free(p);
 }
