@@ -19,25 +19,27 @@ KOTEK_END_NAMESPACE_KOTEK
 		#include <mimalloc-new-delete.h>
 	#else
 
+		#ifdef KOTEK_DEBUG
 void* operator new(std::size_t n) throw(std::bad_alloc)
 {
-		#ifdef KOTEK_DEBUG
+			#ifdef KOTEK_DEBUG
 	kun_kotek kun_ktk memory::___counter_debug.new_count++;
 	kun_kotek kun_ktk memory::___counter_debug.allocation_count++;
-		#endif
+			#endif
 
-	return ::operator new(n);
+	return std::malloc(n);
 }
 
 void operator delete(void* p) throw()
 {
-		#ifdef KOTEK_DEBUG
+			#ifdef KOTEK_DEBUG
 	kun_kotek kun_ktk memory::___counter_debug.delete_count++;
 	kun_kotek kun_ktk memory::___counter_debug.allocation_count--;
-		#endif
+			#endif
 
-	::operator delete(p);
+	std::free(p);
 }
+		#endif
 
 	#endif
 #endif
