@@ -40,12 +40,23 @@ public:
 		ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
 			KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>&
 			passes);
+
+	const ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
+		KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>&
+	Get_Passes(void) const noexcept;
+
+	ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
+		KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>&
+	Get_Passes(void) noexcept;
+
+	bool Is_Initialized(void) const noexcept override;
 	void Shutdown(void) override;
 
 	void Update_All(void);
 	void Render_All(void);
 
 private:
+	bool m_is_initialized;
 	// TODO: make a constant for pre-allocating passes
 	ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
 		KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>

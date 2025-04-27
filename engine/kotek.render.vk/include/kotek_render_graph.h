@@ -47,6 +47,7 @@ namespace Kotek
 				~ktkRenderGraph(void);
 
 				void Initialize(kun_core ktkMainManager* p_main_manager, kun_core ktkIRenderResourceManager* p_resource_manager) override;
+				bool Is_Initialized(void) const noexcept override;
 				void Shutdown(void) override;
 
 				void UpdateAll(void);

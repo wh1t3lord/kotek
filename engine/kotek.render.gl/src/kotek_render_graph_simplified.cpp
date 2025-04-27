@@ -5,7 +5,7 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 KOTEK_BEGIN_NAMESPACE_RENDER_GL
 
-ktkRenderGraphSimplified::ktkRenderGraphSimplified(void) {}
+ktkRenderGraphSimplified::ktkRenderGraphSimplified(void) : m_is_initialized{} {}
 ktkRenderGraphSimplified::~ktkRenderGraphSimplified(void) {}
 
 void ktkRenderGraphSimplified::Add_Pass(
@@ -44,6 +44,8 @@ void ktkRenderGraphSimplified::Initialize(
 				p_main_manager, p_resource_render_manager);
 		}
 	}
+
+	this->m_is_initialized = true;
 }
 
 void ktkRenderGraphSimplified::Initialize(
@@ -83,6 +85,8 @@ void ktkRenderGraphSimplified::Initialize(
 			this->m_passes.push_back(p_pass);
 		}
 	}
+
+	this->m_is_initialized = true;
 }
 
 void ktkRenderGraphSimplified::Initialize(
@@ -96,6 +100,26 @@ void ktkRenderGraphSimplified::Initialize(
 
 	this->Initialize(p_main_manager, p_resource_render_manager, passes.data(),
 		passes.size());
+}
+
+const ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
+	KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>&
+ktkRenderGraphSimplified::Get_Passes(void) const noexcept
+{
+	return this->m_passes;
+}
+
+ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
+	KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>&
+ktkRenderGraphSimplified::Get_Passes(void) noexcept
+{
+	return this->m_passes;
+}
+
+
+bool ktkRenderGraphSimplified::Is_Initialized(void) const noexcept
+{
+	return this->m_is_initialized;
 }
 
 void ktkRenderGraphSimplified::Shutdown(void)
@@ -115,6 +139,8 @@ void ktkRenderGraphSimplified::Shutdown(void)
 	}
 
 	this->m_passes.clear();
+
+	this->m_is_initialized = false;
 }
 
 void ktkRenderGraphSimplified::Update_All(void)

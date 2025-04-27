@@ -163,6 +163,8 @@ public:
 	virtual void Initialize(kun_core ktkMainManager* p_main_manager,
 		kun_core ktkIRenderResourceManager*) = 0;
 	virtual void Shutdown(void) = 0;
+
+	virtual bool Is_Initialized(void) const noexcept = 0;
 };
 
 class ktkIRenderer

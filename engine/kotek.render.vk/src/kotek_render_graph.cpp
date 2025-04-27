@@ -45,6 +45,11 @@ namespace Kotek
 			{
 			}
 
+			bool ktkRenderGraph::Is_Initialized(void) const noexcept
+			{
+				return false;
+			}
+
 			void ktkRenderGraph::Shutdown(void)
 			{
 				KOTEK_CPU_PROFILE();
