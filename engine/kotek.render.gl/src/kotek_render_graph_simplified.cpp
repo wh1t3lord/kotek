@@ -20,6 +20,17 @@ void ktkRenderGraphSimplified::Add_Pass(
 	this->m_passes.push_back(p_allocated_pass);
 }
 
+void ktkRenderGraphSimplified::Add_Passes(
+	const ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
+		KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>& passes)
+{
+	KOTEK_ASSERT(passes.empty(),
+		"passing empty vector it is not supposed to be, at least just add "
+	    "present pass!");
+
+	this->m_passes = passes;
+}
+
 void ktkRenderGraphSimplified::Initialize(
 	kun_core ktkMainManager* p_main_manager,
 	kun_core ktkIRenderResourceManager* p_resource_render_manager)

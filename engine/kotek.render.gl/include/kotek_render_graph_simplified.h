@@ -29,6 +29,8 @@ public:
 	~ktkRenderGraphSimplified(void);
 
 	void Add_Pass(ktkRenderGraphSimplifiedRenderPass* p_allocated_pass);
+	void Add_Passes(const ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
+		KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>& passes);
 
 	void Initialize(kun_core ktkMainManager* p_main_manager,
 		kun_core ktkIRenderResourceManager* p_resource_render_manager) override;
