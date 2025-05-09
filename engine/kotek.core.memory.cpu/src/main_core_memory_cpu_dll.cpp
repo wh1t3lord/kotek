@@ -33,6 +33,15 @@ bool ShutdownModule_Core_Memory_CPU(ktkMainManager* p_manager)
 #endif
 
 #ifdef KOTEK_DEBUG
+	std::printf("[ShutdownModule_Core_Memory_CPU]: allocation_count == %d "
+	            "new_count == %d "
+				"delete_count == %d | %s \n",
+		kun_kotek kun_ktk memory::___counter_debug.allocation_count.load(),
+		kun_kotek kun_ktk memory::___counter_debug.new_count.load(),
+		kun_kotek kun_ktk memory::___counter_debug.delete_count.load(),
+		kun_kotek kun_ktk memory::___counter_debug.allocation_count != 0
+			? "MEMORY LEAKS EXIST!"
+			: "NO MEMORY LEAKS :)");
 	assert(kun_kotek kun_ktk memory::___counter_debug.allocation_count == 0 &&
 		"memory leak detected!");
 #endif

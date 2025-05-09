@@ -4,6 +4,13 @@
 #include <stdlib.h>
 
 #ifdef KOTEK_DEBUG
+
+	#ifdef KOTEK_PLATFORM_WINDOWS
+		#include <Windows.h>
+		#include <DbgHelp.h>
+		#pragma comment(lib, "DbgHelp")
+	#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 namespace memory
@@ -24,6 +31,35 @@ void* operator new(std::size_t n) throw(std::bad_alloc)
 {
 	kun_kotek kun_ktk memory::___counter_debug.new_count++;
 	kun_kotek kun_ktk memory::___counter_debug.allocation_count++;
+
+			#ifdef KOTEK_PLATFORM_WINDOWS
+
+	// TODO: implement stacktrace and detailed memory leak system
+	STACKFRAME64 fm;
+	CONTEXT ctxt;
+	RtlCaptureContext(&ctxt);
+	std::memset(&fm, 0, sizeof(STACKFRAME64));
+
+	BOOL status = StackWalk64(IMAGE_FILE_MACHINE_AMD64, GetCurrentProcess(),
+		GetCurrentThread(), &fm, &ctxt, NULL, SymFunctionTableAccess64,
+		SymGetModuleBase64, NULL);
+
+	if (status == TRUE)
+	{
+		char buffer_name[2048];
+		IMAGEHLP_SYMBOL64 symbol;
+		symbol.SizeOfStruct = sizeof(IMAGEHLP_SYMBOL64);
+		symbol.MaxNameLength = 2048;
+		DWORD64 displacement = 0;
+		SymGetSymFromAddr64(GetCurrentProcess(), (ULONG64)fm.AddrPC.Offset,
+			&displacement, &symbol);
+		UnDecorateSymbolName(
+			symbol.Name, buffer_name, symbol.MaxNameLength, UNDNAME_COMPLETE);
+
+		float a = 0; 
+	}
+
+			#endif
 
 	return std::malloc(n);
 }

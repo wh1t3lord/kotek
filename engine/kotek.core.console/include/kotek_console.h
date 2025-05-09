@@ -32,6 +32,7 @@ using console_command_base_t = ktk_vector<console_command_variant_t,
 
 using console_command_args_t = const console_command_base_t&;
 using console_command_signature_function_t = bool(console_command_args_t);
+
 using console_command_t = kun_ktk ivfunction<console_command_variant_t, bool>*;
 
 KOTEK_END_NAMESPACE_KTK
@@ -41,7 +42,8 @@ class ktkConsole : public ktkIConsole
 {
 	struct ParsingData
 	{
-		// TODO: make preprocessor for that please KOTEK_DEF_CONSOLE_FUNCTION_MAX_LENGTH_NAME
+		// TODO: make preprocessor for that please
+		// KOTEK_DEF_CONSOLE_FUNCTION_MAX_LENGTH_NAME
 		char function_name[32]{};
 		ktk_vector<std::string_view,
 			KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>
@@ -71,6 +73,11 @@ public:
 		this->m_storage[id] =
 			kun_ktk make_vfunction_ptr<kun_ktk console_command_variant_t>(
 				p_function);
+
+#ifdef KOTEK_DEBUG
+		if (this->m_storage.at(id))
+			this->m_storage[id]->Set_Data(id);
+#endif
 	}
 
 	void Push_Command(

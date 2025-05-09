@@ -321,6 +321,18 @@ public:
 
 	virtual ReturnType operator()(const ktk_vector<VariantType,
 		KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>& args) = 0;
+
+#ifdef KOTEK_DEBUG
+	// in terms of kotek this method was created only for debug purposes in
+	// reality you have to keep this class without any additional data except
+	// for function_t field
+	virtual kun_ktk enum_base_t Get_Data(void) const noexcept = 0;
+
+	// in terms of kotek this method was created only for debug purposes in
+	// reality you have to keep this class without any additional data except
+	// for function_t field
+	virtual void Set_Data(kun_ktk enum_base_t data) noexcept = 0;
+#endif
 };
 
 template <typename VariantType, typename FunctionType>
@@ -343,7 +355,15 @@ public:
 		"(object) instance");
 
 public:
-	vfunction(FunctionType& func) : m_callback{func} {}
+	vfunction(FunctionType& func) :
+		m_callback{func}
+#ifdef KOTEK_DEBUG
+		,
+		m_data{}
+#endif
+	{
+	}
+
 	~vfunction() {}
 
 	KOTEK_DEF_CONSOLE_TYPE_FOR_ARGUMENT_COUNT Get_ArgumentCount() const override
@@ -439,8 +459,24 @@ public:
 		return result_empty;
 	}
 
+#ifdef KOTEK_DEBUG
+	inline void Set_Data(kun_ktk enum_base_t data) noexcept override
+	{
+		this->m_data = data;
+	}
+
+	inline kun_ktk enum_base_t Get_Data(void) const noexcept override
+	{
+		return this->m_data;
+	}
+#endif
+
 private:
 	function_t m_callback;
+
+#ifdef KOTEK_DEBUG
+	kun_ktk enum_base_t m_data;
+#endif
 };
 
 template <typename VariantType, typename F>

@@ -39,7 +39,7 @@ void ktkConsole::Flush(void)
 		bool status = (*p_callback)(argument);
 
 #ifdef KOTEK_DEBUG
-		KOTEK_ASSERT(status, "failed to execute console command");
+		KOTEK_ASSERT(status, "failed to execute console command: ConsoleCommandIndex[{}]", p_callback->Get_Data());
 #endif
 
 		this->m_buffer.pop();
