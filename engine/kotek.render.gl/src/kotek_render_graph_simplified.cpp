@@ -24,7 +24,7 @@ void ktkRenderGraphSimplified::Add_Passes(
 	const ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
 		KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>& passes)
 {
-	KOTEK_ASSERT(passes.empty(),
+	KOTEK_ASSERT(!passes.empty(),
 		"passing empty vector it is not supposed to be, at least just add "
 	    "present pass!");
 
