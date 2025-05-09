@@ -35,6 +35,7 @@ void* operator new(std::size_t n) throw(std::bad_alloc)
 			#ifdef KOTEK_PLATFORM_WINDOWS
 
 	// TODO: implement stacktrace and detailed memory leak system
+	/*
 	STACKFRAME64 fm;
 	CONTEXT ctxt;
 	RtlCaptureContext(&ctxt);
@@ -57,7 +58,7 @@ void* operator new(std::size_t n) throw(std::bad_alloc)
 			symbol.Name, buffer_name, symbol.MaxNameLength, UNDNAME_COMPLETE);
 
 		float a = 0; 
-	}
+	}*/
 
 			#endif
 
