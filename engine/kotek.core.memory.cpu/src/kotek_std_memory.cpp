@@ -7,18 +7,7 @@
 
 	#ifdef KOTEK_PLATFORM_WINDOWS
 		#include <Windows.h>
-		#include <DbgHelp.h>
-		#pragma comment(lib, "DbgHelp")
 	#endif
-
-KOTEK_BEGIN_NAMESPACE_KOTEK
-KOTEK_BEGIN_NAMESPACE_KTK
-namespace memory
-{
-	ktkMemoryAllocationCounter ___counter_debug;
-}
-KOTEK_END_NAMESPACE_KTK
-KOTEK_END_NAMESPACE_KOTEK
 #endif
 
 #ifdef KOTEK_PLATFORM_WINDOWS
@@ -27,51 +16,129 @@ KOTEK_END_NAMESPACE_KOTEK
 	#else
 
 		#ifdef KOTEK_DEBUG
-void* operator new(std::size_t n) throw(std::bad_alloc)
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+namespace memory
 {
-	kun_kotek kun_ktk memory::___counter_debug.new_count++;
-	kun_kotek kun_ktk memory::___counter_debug.allocation_count++;
-
-			#ifdef KOTEK_PLATFORM_WINDOWS
-
-	// TODO: implement stacktrace and detailed memory leak system
-	/*
-	STACKFRAME64 fm;
-	CONTEXT ctxt;
-	RtlCaptureContext(&ctxt);
-	std::memset(&fm, 0, sizeof(STACKFRAME64));
-
-	BOOL status = StackWalk64(IMAGE_FILE_MACHINE_AMD64, GetCurrentProcess(),
-		GetCurrentThread(), &fm, &ctxt, NULL, SymFunctionTableAccess64,
-		SymGetModuleBase64, NULL);
-
-	if (status == TRUE)
+	ktkMemoryAllocationCounter* get_counter()
 	{
-		char buffer_name[2048];
-		IMAGEHLP_SYMBOL64 symbol;
-		symbol.SizeOfStruct = sizeof(IMAGEHLP_SYMBOL64);
-		symbol.MaxNameLength = 2048;
-		DWORD64 displacement = 0;
-		SymGetSymFromAddr64(GetCurrentProcess(), (ULONG64)fm.AddrPC.Offset,
-			&displacement, &symbol);
-		UnDecorateSymbolName(
-			symbol.Name, buffer_name, symbol.MaxNameLength, UNDNAME_COMPLETE);
+		static HANDLE hMap = ::CreateFileMapping(INVALID_HANDLE_VALUE, nullptr,
+			PAGE_READWRITE, 0, sizeof(ktkMemoryAllocationCounter),
+			L"Local\\MyMemoryCounter");
+		static bool first = true;
+		auto ptr =
+			reinterpret_cast<ktkMemoryAllocationCounter*>(::MapViewOfFile(hMap,
+				FILE_MAP_WRITE, 0, 0, sizeof(ktkMemoryAllocationCounter)));
+		if (first)
+		{
+			// zero-initialize only once
+			new (ptr) ktkMemoryAllocationCounter;
+			first = false;
+		}
+		return ptr;
+	}
+} // namespace memory
 
-		float a = 0; 
-	}*/
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK
 
-			#endif
-
-	return std::malloc(n);
-}
-
-void operator delete(void* p) throw()
+// no inline, required by [replacement.functions]/3
+void* operator new(std::size_t sz)
 {
-	kun_kotek kun_ktk memory::___counter_debug.delete_count++;
-	kun_kotek kun_ktk memory::___counter_debug.allocation_count--;
+	if (sz == 0)
+		++sz; // avoid std::malloc(0) which may return nullptr on success
 
-	std::free(p);
+	if (void* ptr = std::malloc(sz))
+	{
+		auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+		if (p_counter)
+		{
+			p_counter->new_count.fetch_add(1);
+			p_counter->allocation_count.fetch_add(1);
+		}
+
+		return ptr;
+	}
+
+	throw std::bad_alloc{}; // required by [new.delete.single]/3
 }
+
+// no inline, required by [replacement.functions]/3
+void* operator new[](std::size_t sz)
+{
+	if (sz == 0)
+		++sz; // avoid std::malloc(0) which may return nullptr on success
+
+	if (void* ptr = std::malloc(sz))
+	{
+		auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+		if (p_counter)
+		{
+			p_counter->new_brackets_count.fetch_add(1);
+			p_counter->allocation_count.fetch_add(1);
+		}
+
+		return ptr;
+	}
+
+	throw std::bad_alloc{}; // required by [new.delete.single]/3
+}
+
+void operator delete(void* ptr) noexcept
+{
+	auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+	if (p_counter)
+	{
+		p_counter->delete_count.fetch_add(1);
+		p_counter->allocation_count.fetch_sub(1);
+	}
+
+	std::free(ptr);
+}
+
+void operator delete(void* ptr, std::size_t size) noexcept
+{
+	auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+	if (p_counter)
+	{
+		p_counter->delete_count.fetch_add(1);
+		p_counter->allocation_count.fetch_sub(1);
+	}
+
+	std::free(ptr);
+}
+
+void operator delete[](void* ptr) noexcept
+{
+	auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+	if (p_counter)
+	{
+		p_counter->delete_brackets_count.fetch_add(1);
+		p_counter->allocation_count.fetch_sub(1);
+	}
+
+	std::free(ptr);
+}
+
+void operator delete[](void* ptr, std::size_t size) noexcept
+{
+	auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+	if (p_counter)
+	{
+		p_counter->delete_brackets_count.fetch_add(1);
+		p_counter->allocation_count.fetch_sub(1);
+	}
+
+	std::free(ptr);
+}
+
 		#endif
 
 	#endif

@@ -46,14 +46,17 @@ namespace memory
 
 	struct ktkMemoryAllocationCounter
 	{
+		ktkMemoryAllocationCounter() {}
+		~ktkMemoryAllocationCounter() {}
+
 		std::atomic<uint32_t> new_count = 0;
+		std::atomic<uint32_t> new_brackets_count = 0;
 		std::atomic<uint32_t> delete_count = 0;
+		std::atomic<uint32_t> delete_brackets_count = 0;
 		std::atomic<uint32_t> allocation_count = 0;
 	};
 
-#ifdef KOTEK_DEBUG
-	extern ktkMemoryAllocationCounter ___counter_debug;
-#endif
+	ktkMemoryAllocationCounter* get_counter();
 
 } // namespace memory
 
