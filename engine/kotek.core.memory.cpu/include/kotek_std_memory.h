@@ -57,6 +57,7 @@ namespace memory
 	};
 
 	ktkMemoryAllocationCounter* get_counter();
+	void printLeaks();
 
 } // namespace memory
 
