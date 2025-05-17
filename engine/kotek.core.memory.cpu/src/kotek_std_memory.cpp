@@ -40,39 +40,111 @@ static std::mutex& g_allocMutex()
 	return *m;
 }
 
+static std::recursive_mutex g_mcounter;
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 namespace memory
 {
 	ktkMemoryAllocationCounter* get_counter()
 	{
-		static HANDLE hMap = ::CreateFileMapping(INVALID_HANDLE_VALUE, nullptr,
-			PAGE_READWRITE, 0, sizeof(ktkMemoryAllocationCounter),
-			L"Local\\ktkMemoryAllocationCounter");
+		static wchar_t names_mapping[256][256]{};
+		static char names_modules[256][512]{};
+		static HANDLE handles[256]{};
+
 		static bool first = true;
+
+		std::lock_guard<std::recursive_mutex> guard(g_mcounter);
+
+		char module_name[sizeof(ktkMemoryAllocationCounter::module_name)];
+
+		HMODULE hMod = nullptr;
+		if (!::GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+					GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+				reinterpret_cast<LPCSTR>(&get_counter), &hMod))
+		{
+			throw std::runtime_error("GetModuleHandleEx failed");
+		}
+
+		DWORD len = ::GetModuleFileNameA(hMod, module_name,
+			static_cast<DWORD>(sizeof(ktkMemoryAllocationCounter::module_name) /
+				sizeof(decltype(ktkMemoryAllocationCounter::module_name[0]))));
+
+		constexpr auto _kModulesSize =
+			sizeof(names_modules) / sizeof(names_modules[0]);
+
+		wchar_t* p_mapping_name{};
+		char* p_module_name{};
+		int index{-1};
+		for (int i = 0; i < _kModulesSize; ++i)
+		{
+			if (!strcmp(module_name, names_modules[i]))
+			{
+				p_mapping_name = names_mapping[i];
+				p_module_name = names_modules[i];
+				index = i;
+				break;
+			}
+			else
+			{
+				if (index == -1 && handles[i] == nullptr)
+				{
+					index = i;
+				}
+			}
+		}
+
+		HANDLE hMap = NULL;
+		if (!p_mapping_name && index != -1)
+		{
+			const char* last_slash = strrchr(module_name, '\\');
+			if (!last_slash)
+				last_slash = strrchr(module_name, '/');
+			const char* fname_start = last_slash ? last_slash + 1 : module_name;
+
+			// 3) Copy into a fixed-size char buffer
+			char filename[128] = {0};
+			size_t fname_len = strlen(fname_start);
+			if (fname_len >= sizeof(filename))
+				throw std::runtime_error("Filename too long");
+			memcpy(filename, fname_start, fname_len + 1); // +1 to copy the '\0'
+
+			// 4) Convert to wide-char
+			wchar_t wFilename[128] = {0};
+			size_t converted = 0;
+			errno_t err =
+				mbstowcs_s(&converted, wFilename, filename, _TRUNCATE);
+			if (err != 0 || converted == 0)
+				throw std::runtime_error("Filename conversion failed");
+
+			// 5) Build your final string
+			wchar_t p_temp[256] = {0};
+			wsprintf(p_temp, L"Local\\ktkMemoryAllocationCounter_%s_%d",
+				wFilename, index);
+
+			handles[index] = ::CreateFileMapping(INVALID_HANDLE_VALUE, nullptr,
+				PAGE_READWRITE, 0, sizeof(ktkMemoryAllocationCounter), p_temp);
+			std::memcpy(names_mapping[index], p_temp, sizeof(p_temp));
+			std::memcpy(names_modules[index], module_name, sizeof(module_name));
+		}
+
+		hMap = handles[index];
+		assert(hMap && "can't be invalid here");
+
 		auto ptr =
 			reinterpret_cast<ktkMemoryAllocationCounter*>(::MapViewOfFile(hMap,
 				FILE_MAP_WRITE, 0, 0, sizeof(ktkMemoryAllocationCounter)));
+
 		if (first)
 		{
 			// zero-initialize only once
 			new (ptr) ktkMemoryAllocationCounter;
-			ptr->current_process = reinterpret_cast<size_t>(GetCurrentProcess());
-
-			HMODULE hMod = nullptr;
-			if (!::GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
-						GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
-					reinterpret_cast<LPCSTR>(&get_counter), &hMod))
-			{
-				throw std::runtime_error("GetModuleHandleEx failed");
-			}
-
-			DWORD len = ::GetModuleFileNameA(hMod, ptr->module_name,
-				static_cast<DWORD>(sizeof(ptr->module_name) /
-					sizeof(decltype(ptr->module_name[0]))));
-
+			ptr->current_process =
+				reinterpret_cast<size_t>(GetCurrentProcess());
+			std::memcpy(ptr->module_name, module_name, sizeof(module_name));
 			first = false;
 		}
+
 		return ptr;
 	}
 
@@ -124,54 +196,70 @@ namespace memory
 			std::printf("[%s]: %s \n", ptr->module_name, "NO MEMORY LEAKS :)");
 		}
 
-		assert(!is_memory_leaks && map.empty() && "memory leak detected!");
-
-		std::filesystem::path temp(ptr->module_name);
-		std::fstream log(
-			("report_memleak_" + temp.filename().string() + ".txt"),
-			std::ios::out | std::ios::trunc);
-		assert(log.good() && "failed to create log file!");
-
-		for (auto const& [ptr, info] : map)
 		{
-			log << "LEAK at " << ptr << ", allocated from:\n";
-
-			std::cerr << "LEAK at " << ptr << ", allocated from:\n";
-			USHORT framecount = info.frameCount;
-
-			for (USHORT i = 0; i < framecount; ++i)
+			if (is_memory_leaks)
 			{
-				DWORD64 addr = (DWORD64)info.frames[i];
-				char nameBuf[sizeof(SYMBOL_INFO) + 256] = {};
-				auto sym = reinterpret_cast<SYMBOL_INFO*>(nameBuf);
-				sym->SizeOfStruct = sizeof(SYMBOL_INFO);
-				sym->MaxNameLen = 255;
-				DWORD64 displacement = 0;
-				if (SymFromAddr(GetCurrentProcess(), addr, &displacement, sym))
-				{
-					if (i < 4 ||
-						(i > info.frameCount - 4 && i < info.frameCount))
-					{
-						std::cerr << "  " << sym->Name << " + 0x" << std::hex
-								  << displacement << std::dec << "\n";
-					}
-					log << "  " << sym->Name << " + 0x" << std::hex
-						<< displacement << std::dec << "\n";
-				}
-				else
-				{
-					if (i < 4 ||
-						(i > info.frameCount - 4 && i < info.frameCount))
-					{
-						std::cerr << "  [0x" << std::hex << addr << std::dec
-								  << "]\n";
-					}
+				std::filesystem::path temp(ptr->module_name);
+				std::fstream log(
+					("report_memleak_" + temp.filename().string() + ".txt"),
+					std::ios::out | std::ios::trunc);
+				assert(log.good() && "failed to create log file!");
 
-					log << "  [0x" << std::hex << addr << std::dec << "]\n";
+				log << "stats: "
+					<< "allocation_count=" << ptr->allocation_count.load()
+					<< " new=" << ptr->new_count.load()
+					<< " new[]=" << ptr->new_brackets_count.load()
+					<< " delete=" << ptr->delete_count.load()
+					<< " delete[]=" << ptr->delete_brackets_count.load();
+
+				for (auto const& [ptr, info] : map)
+				{
+					log << "LEAK at " << ptr << ", allocated from:\n";
+
+					std::cerr << "LEAK at " << ptr << ", allocated from:\n";
+					USHORT framecount = info.frameCount;
+
+					for (USHORT i = 0; i < framecount; ++i)
+					{
+						DWORD64 addr = (DWORD64)info.frames[i];
+						char nameBuf[sizeof(SYMBOL_INFO) + 256] = {};
+						auto sym = reinterpret_cast<SYMBOL_INFO*>(nameBuf);
+						sym->SizeOfStruct = sizeof(SYMBOL_INFO);
+						sym->MaxNameLen = 255;
+						DWORD64 displacement = 0;
+						if (SymFromAddr(
+								GetCurrentProcess(), addr, &displacement, sym))
+						{
+							if (i < 4 ||
+								(i > info.frameCount - 4 &&
+									i < info.frameCount))
+							{
+								std::cerr << "  " << sym->Name << " + 0x"
+										  << std::hex << displacement
+										  << std::dec << "\n";
+							}
+							log << "  " << sym->Name << " + 0x" << std::hex
+								<< displacement << std::dec << "\n";
+						}
+						else
+						{
+							if (i < 4 ||
+								(i > info.frameCount - 4 &&
+									i < info.frameCount))
+							{
+								std::cerr << "  [0x" << std::hex << addr
+										  << std::dec << "]\n";
+							}
+
+							log << "  [0x" << std::hex << addr << std::dec
+								<< "]\n";
+						}
+					}
 				}
+				log.close();
 			}
 		}
-		log.close();
+		assert(!is_memory_leaks && map.empty() && "memory leak detected!");
 	}
 } // namespace memory
 
