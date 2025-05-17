@@ -294,6 +294,8 @@ namespace Engine
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.13");
 	#elif (_MSC_VER == 1944)
 		KOTEK_MESSAGE("Compiled with: Visual Studio 2022 version 17.14");
+	#else
+		#error update this preprocessor and add new _MSC_VER
 	#endif
 
 #endif
