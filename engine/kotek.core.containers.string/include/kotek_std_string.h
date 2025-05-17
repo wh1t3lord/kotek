@@ -84,7 +84,13 @@ inline static_cstring<Size> convert_wchar_to_char(const wstring_view& str)
 
 	ktk::size_t written;
 	static_cstring<Size> stack{};
-	wcstombs_s(&written, stack.data(), Size, str.data(), str.size());
+
+	{
+		char temp[Size];
+		wcstombs_s(&written, temp, Size, str.data(), str.size());
+		stack = temp;
+	}
+
 	return stack;
 }
 

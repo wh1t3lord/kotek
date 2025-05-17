@@ -80,13 +80,14 @@ namespace Game
 			"you can't have an invalid name of library, because you need "
 			"to load it!!!");
 
-		auto path_to_user_dll = ktk::dll::program_location().parent_path();
+		kun_kotek static_path_t path_to_user_dll;
+		{
+			auto root_path = ktk::dll::program_location().parent_path();
+			path_to_user_dll = root_path.c_str();
+			path_to_user_dll /= field_library_name;
+		}
 
-		path_to_user_dll /=
-			reinterpret_cast<const char*>(field_library_name.c_str());
-
-		p_main_manager->Get_EngineConfig()->Set_UserLibrary(
-			path_to_user_dll.c_str());
+		p_main_manager->Get_EngineConfig()->Set_UserLibrary(path_to_user_dll);
 		auto* p_user_dll = static_cast<ktk::dll::shared_library*>(
 			p_main_manager->Get_EngineConfig()->Get_UserLibrary());
 
