@@ -82,7 +82,7 @@ namespace Game
 
 		kun_kotek static_path_t path_to_user_dll;
 		{
-			auto root_path = ktk::dll::program_location().parent_path();
+			const auto& root_path = ktk::dll::program_location().parent_path();
 			path_to_user_dll = root_path.c_str();
 			path_to_user_dll /= field_library_name;
 		}

@@ -105,9 +105,9 @@ All in all, it can be used for serious needs (at some point you need to make a p
 
 #### Ubuntu
 
-| Ubuntu 14.04 LTS :x: | Ubuntu 16.04 LTS :x: | Ubuntu 18.04 LTS :x: | Ubuntu 20.04 LTS :x: | Ubuntu 22.04 LTS | Ubuntu 24.04 LTS  |
+| Ubuntu 14.04 LTS :x: | Ubuntu 16.04 LTS :x: | Ubuntu 18.04 LTS :x: | Ubuntu 20.04 LTS :x: | Ubuntu 22.04 LTS :warning: | Ubuntu 24.04 LTS :warning: |
 | ------------- | ------------- |------------- |------------- |------------- |------------- |
-| Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Supported  | Supported  |
+| Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | Not tested (implemented), see roadmap  | WIP  | WIP  |
 
 #### MacOS
 
