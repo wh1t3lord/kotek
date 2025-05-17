@@ -46,7 +46,7 @@ namespace memory
 	{
 		static HANDLE hMap = ::CreateFileMapping(INVALID_HANDLE_VALUE, nullptr,
 			PAGE_READWRITE, 0, sizeof(ktkMemoryAllocationCounter),
-			L"Local\\MyMemoryCounter");
+			L"Local\\ktkMemoryAllocationCounter");
 		static bool first = true;
 		auto ptr =
 			reinterpret_cast<ktkMemoryAllocationCounter*>(::MapViewOfFile(hMap,
