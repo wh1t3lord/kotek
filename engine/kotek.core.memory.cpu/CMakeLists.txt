@@ -92,7 +92,5 @@ else()
 	endif()
 endif()
 
-
-
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)

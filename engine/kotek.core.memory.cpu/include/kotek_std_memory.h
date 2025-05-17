@@ -49,11 +49,13 @@ namespace memory
 		ktkMemoryAllocationCounter() {}
 		~ktkMemoryAllocationCounter() {}
 
-		std::atomic<uint32_t> new_count = 0;
-		std::atomic<uint32_t> new_brackets_count = 0;
-		std::atomic<uint32_t> delete_count = 0;
-		std::atomic<uint32_t> delete_brackets_count = 0;
-		std::atomic<uint32_t> allocation_count = 0;
+		std::atomic<int32_t> new_count = 0;
+		std::atomic<int32_t> new_brackets_count = 0;
+		std::atomic<int32_t> delete_count = 0;
+		std::atomic<int32_t> delete_brackets_count = 0;
+		std::atomic<int32_t> allocation_count = 0;
+		size_t current_process;
+		char module_name[512]{};
 	};
 
 	ktkMemoryAllocationCounter* get_counter();

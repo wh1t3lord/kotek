@@ -9,11 +9,12 @@
 	#else
 
 		#ifdef KOTEK_DEBUG
-
+			#define __PLACEMENT_NEW_INLINE
 			#include <unordered_map>
 			#include <vector>
 			#include <mutex>
-
+			#include <filesystem>
+			#include <fstream>
 			#include <Windows.h>
 			#include <DbgHelp.h>
 			#include <iostream>
@@ -28,7 +29,8 @@ struct AllocInfo
 
 static std::unordered_map<void*, AllocInfo>& g_allocMap()
 {
-	static std::unordered_map<void*, AllocInfo>* map = new std::unordered_map<void*, AllocInfo>;
+	static std::unordered_map<void*, AllocInfo>* map =
+		new std::unordered_map<void*, AllocInfo>;
 	return *map;
 }
 
@@ -55,6 +57,20 @@ namespace memory
 		{
 			// zero-initialize only once
 			new (ptr) ktkMemoryAllocationCounter;
+			ptr->current_process = reinterpret_cast<size_t>(GetCurrentProcess());
+
+			HMODULE hMod = nullptr;
+			if (!::GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
+						GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+					reinterpret_cast<LPCSTR>(&get_counter), &hMod))
+			{
+				throw std::runtime_error("GetModuleHandleEx failed");
+			}
+
+			DWORD len = ::GetModuleFileNameA(hMod, ptr->module_name,
+				static_cast<DWORD>(sizeof(ptr->module_name) /
+					sizeof(decltype(ptr->module_name[0]))));
+
 			first = false;
 		}
 		return ptr;
@@ -70,11 +86,56 @@ namespace memory
 
 	void printLeaks()
 	{
-		std::lock_guard<std::mutex> lk(g_allocMutex());
+		// std::lock_guard<std::mutex> lk(g_allocMutex());
 		SymInitialize(GetCurrentProcess(), nullptr, TRUE);
 		const auto& map = g_allocMap();
+		auto* ptr = get_counter();
+
+		bool is_memory_leaks = false;
+		auto count = ptr->allocation_count.load();
+		if (count < 0)
+		{
+			count += (ptr->delete_count - ptr->new_count);
+
+			if (count != 0)
+			{
+				count += (ptr->delete_brackets_count - ptr->new_brackets_count);
+			}
+
+			is_memory_leaks = count != 0;
+		}
+		else
+		{
+			is_memory_leaks = count != 0;
+		}
+
+		if (is_memory_leaks)
+		{
+			std::printf("[%s]: allocation_count == %d "
+						"new == %d "
+						"delete == %d new[] == %d delete[] == %d | %s \n",
+				ptr->module_name, ptr->allocation_count.load(),
+				ptr->new_count.load(), ptr->delete_count.load(),
+				ptr->new_brackets_count.load(),
+				ptr->delete_brackets_count.load(), "MEMORY LEAKS EXIST!");
+		}
+		else
+		{
+			std::printf("[%s]: %s \n", ptr->module_name, "NO MEMORY LEAKS :)");
+		}
+
+		assert(!is_memory_leaks && map.empty() && "memory leak detected!");
+
+		std::filesystem::path temp(ptr->module_name);
+		std::fstream log(
+			("report_memleak_" + temp.filename().string() + ".txt"),
+			std::ios::out | std::ios::trunc);
+		assert(log.good() && "failed to create log file!");
+
 		for (auto const& [ptr, info] : map)
 		{
+			log << "LEAK at " << ptr << ", allocated from:\n";
+
 			std::cerr << "LEAK at " << ptr << ", allocated from:\n";
 			USHORT framecount = info.frameCount;
 
@@ -88,16 +149,29 @@ namespace memory
 				DWORD64 displacement = 0;
 				if (SymFromAddr(GetCurrentProcess(), addr, &displacement, sym))
 				{
-					std::cerr << "  " << sym->Name << " + 0x" << std::hex
-							  << displacement << std::dec << "\n";
+					if (i < 4 ||
+						(i > info.frameCount - 4 && i < info.frameCount))
+					{
+						std::cerr << "  " << sym->Name << " + 0x" << std::hex
+								  << displacement << std::dec << "\n";
+					}
+					log << "  " << sym->Name << " + 0x" << std::hex
+						<< displacement << std::dec << "\n";
 				}
 				else
 				{
-					std::cerr << "  [0x" << std::hex << addr << std::dec
-							  << "]\n";
+					if (i < 4 ||
+						(i > info.frameCount - 4 && i < info.frameCount))
+					{
+						std::cerr << "  [0x" << std::hex << addr << std::dec
+								  << "]\n";
+					}
+
+					log << "  [0x" << std::hex << addr << std::dec << "]\n";
 				}
 			}
 		}
+		log.close();
 	}
 } // namespace memory
 
@@ -178,6 +252,218 @@ void* operator new[](std::size_t sz)
 	throw std::bad_alloc{}; // required by [new.delete.single]/3
 }
 
+void* operator new(std::size_t size, std::align_val_t align)
+{
+	auto ptr = _aligned_malloc(size, static_cast<std::size_t>(align));
+
+	if (ptr)
+	{
+		auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+		if (!s_inNew)
+		{
+			if (p_counter)
+			{
+				p_counter->new_count.fetch_add(1);
+				p_counter->allocation_count.fetch_add(1);
+			}
+
+			s_inNew = true;
+			{
+				std::lock_guard<std::mutex> lock(g_allocMutex());
+				AllocInfo info;
+				info.frameCount =
+					CaptureStackBackTrace(0, AllocInfo::MAX_FRAMES,
+						reinterpret_cast<PVOID*>(info.frames), nullptr);
+				g_allocMap()[ptr] = info;
+			}
+			s_inNew = false;
+		}
+
+		return ptr;
+	}
+
+	throw std::bad_alloc{};
+}
+
+void* operator new[](std::size_t size, std::align_val_t align)
+{
+	auto ptr = _aligned_malloc(size, static_cast<std::size_t>(align));
+
+	if (ptr)
+	{
+		auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+		if (!s_inNew)
+		{
+			if (p_counter)
+			{
+				p_counter->new_brackets_count.fetch_add(1);
+				p_counter->allocation_count.fetch_add(1);
+			}
+
+			s_inNew = true;
+
+			{
+				std::lock_guard<std::mutex> lock(g_allocMutex());
+				AllocInfo info;
+				info.frameCount =
+					CaptureStackBackTrace(0, AllocInfo::MAX_FRAMES,
+						reinterpret_cast<PVOID*>(info.frames), nullptr);
+				g_allocMap()[ptr] = info;
+			}
+
+			s_inNew = false;
+		}
+
+		return ptr;
+	}
+
+	throw std::bad_alloc{};
+}
+
+void* operator new(std::size_t sz, const std::nothrow_t& tag)
+{
+	if (sz == 0)
+		++sz; // avoid std::malloc(0) which may return nullptr on success
+
+	if (void* ptr = std::malloc(sz))
+	{
+		auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+		if (!s_inNew)
+		{
+			if (p_counter)
+			{
+				p_counter->new_count.fetch_add(1);
+				p_counter->allocation_count.fetch_add(1);
+			}
+
+			s_inNew = true;
+			{
+				std::lock_guard<std::mutex> lock(g_allocMutex());
+				AllocInfo info;
+				info.frameCount =
+					CaptureStackBackTrace(0, AllocInfo::MAX_FRAMES,
+						reinterpret_cast<PVOID*>(info.frames), nullptr);
+				g_allocMap()[ptr] = info;
+			}
+			s_inNew = false;
+		}
+
+		return ptr;
+	}
+
+	return nullptr;
+}
+
+void* operator new[](std::size_t sz, const std::nothrow_t& tag)
+{
+	if (sz == 0)
+		++sz; // avoid std::malloc(0) which may return nullptr on success
+
+	if (void* ptr = std::malloc(sz))
+	{
+		auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+		if (p_counter)
+		{
+			if (!s_inNew)
+			{
+				p_counter->new_brackets_count.fetch_add(1);
+				p_counter->allocation_count.fetch_add(1);
+
+				s_inNew = true;
+				{
+					std::lock_guard<std::mutex> lock(g_allocMutex());
+					AllocInfo info;
+					info.frameCount =
+						CaptureStackBackTrace(0, AllocInfo::MAX_FRAMES,
+							reinterpret_cast<PVOID*>(info.frames), nullptr);
+					g_allocMap()[ptr] = info;
+				}
+				s_inNew = false;
+			}
+		}
+
+		return ptr;
+	}
+
+	return nullptr;
+}
+
+void* operator new(std::size_t size, std::align_val_t align,
+	const std::nothrow_t& tag) noexcept
+{
+	auto ptr = _aligned_malloc(size, static_cast<std::size_t>(align));
+
+	if (ptr)
+	{
+		auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+		if (!s_inNew)
+		{
+			if (p_counter)
+			{
+				p_counter->new_count.fetch_add(1);
+				p_counter->allocation_count.fetch_add(1);
+			}
+
+			s_inNew = true;
+			{
+				std::lock_guard<std::mutex> lock(g_allocMutex());
+				AllocInfo info;
+				info.frameCount =
+					CaptureStackBackTrace(0, AllocInfo::MAX_FRAMES,
+						reinterpret_cast<PVOID*>(info.frames), nullptr);
+				g_allocMap()[ptr] = info;
+			}
+			s_inNew = false;
+		}
+
+		return ptr;
+	}
+
+	return nullptr;
+}
+
+void* operator new[](std::size_t size, std::align_val_t align,
+	const std::nothrow_t& tag) noexcept
+{
+	auto ptr = _aligned_malloc(size, static_cast<std::size_t>(align));
+
+	if (ptr)
+	{
+		auto* p_counter = kun_kotek kun_ktk memory::get_counter();
+
+		if (!s_inNew)
+		{
+			if (p_counter)
+			{
+				p_counter->new_brackets_count.fetch_add(1);
+				p_counter->allocation_count.fetch_add(1);
+			}
+
+			s_inNew = true;
+
+			{
+				std::lock_guard<std::mutex> lock(g_allocMutex());
+				AllocInfo info;
+				info.frameCount =
+					CaptureStackBackTrace(0, AllocInfo::MAX_FRAMES,
+						reinterpret_cast<PVOID*>(info.frames), nullptr);
+				g_allocMap()[ptr] = info;
+			}
+
+			s_inNew = false;
+		}
+
+		return ptr;
+	}
+
+	return nullptr;
+}
+
 void operator delete(void* ptr) noexcept
 {
 	auto* p_counter = kun_kotek kun_ktk memory::get_counter();
@@ -192,11 +478,11 @@ void operator delete(void* ptr) noexcept
 			s_inNew = true;
 			{
 				std::lock_guard<std::mutex> lock(g_allocMutex());
-			//	auto it = g_allocMap().find(ptr);
-			//	if (it != g_allocMap().end())
-			//	{
-					g_allocMap().erase(ptr);
-			//	}
+				//	auto it = g_allocMap().find(ptr);
+				//	if (it != g_allocMap().end())
+				//	{
+				g_allocMap().erase(ptr);
+				//	}
 			}
 			s_inNew = false;
 		}
@@ -220,11 +506,11 @@ void operator delete(void* ptr, std::size_t size) noexcept
 			{
 				std::lock_guard<std::mutex> lock(g_allocMutex());
 				auto& map = g_allocMap();
-			//	auto it = map.find(ptr);
-			//	if (it != g_allocMap().end())
-			//	{
-					g_allocMap().erase(ptr);
-			//	}
+				//	auto it = map.find(ptr);
+				//	if (it != g_allocMap().end())
+				//	{
+				g_allocMap().erase(ptr);
+				//	}
 			}
 			s_inNew = false;
 		}
@@ -247,10 +533,10 @@ void operator delete[](void* ptr) noexcept
 			s_inNew = true;
 			{
 				std::lock_guard<std::mutex> lock(g_allocMutex());
-			//	auto it = g_allocMap().find(ptr);
-			//	if (it != g_allocMap().end())
-			//	{
-					g_allocMap().erase(ptr);
+				//	auto it = g_allocMap().find(ptr);
+				//	if (it != g_allocMap().end())
+				//	{
+				g_allocMap().erase(ptr);
 				//}
 			}
 			s_inNew = false;
@@ -274,10 +560,10 @@ void operator delete[](void* ptr, std::size_t size) noexcept
 			s_inNew = true;
 			{
 				std::lock_guard<std::mutex> lock(g_allocMutex());
-			//	auto it = g_allocMap().find(ptr);
-			//	if (it != g_allocMap().end())
-			//	{
-					g_allocMap().erase(ptr);
+				//	auto it = g_allocMap().find(ptr);
+				//	if (it != g_allocMap().end())
+				//	{
+				g_allocMap().erase(ptr);
 				//}
 			}
 			s_inNew = false;

@@ -66,7 +66,8 @@ LRESULT CALLBACK ConsoleWndProc(
 		{
 			if (p_impl->m_p_reader)
 			{
-				if (p_impl->p_log_file_reader && p_impl->p_log_file_reader->is_open())
+				if (p_impl->p_log_file_reader &&
+					p_impl->p_log_file_reader->is_open())
 				{
 					RECT textArea = rc;
 					textArea.left += 2;
@@ -126,24 +127,28 @@ LRESULT CALLBACK ConsoleWndProc(
 		{
 			if (p_impl->m_p_reader)
 			{
-				if (p_impl->p_log_file_reader && p_impl->p_log_file_reader->is_open())
+				if (p_impl->p_log_file_reader &&
+					p_impl->p_log_file_reader->is_open())
 				{
 					if (p_impl->p_log_file_reader->eof())
 					{
 						p_impl->p_log_file_reader->clear();
 					}
 
-				//	p_impl->m_p_reader->Seekg(p_impl->m_file_resource_id,
-				//		p_impl->m_file_current_offset,
-				//		kun_core eFileSeekDirectionType::kSeekDirectionBegin);
+					//	p_impl->m_p_reader->Seekg(p_impl->m_file_resource_id,
+					//		p_impl->m_file_current_offset,
+					//		kun_core
+					//eFileSeekDirectionType::kSeekDirectionBegin);
 					p_impl->p_log_file_reader->seekg(
 						p_impl->m_file_current_offset, std::ios_base::beg);
-				//	p_impl->m_p_reader->Read(p_impl->m_file_resource_id,
-				//		p_impl->m_p_view_buffer,
-				//		KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
+					//	p_impl->m_p_reader->Read(p_impl->m_file_resource_id,
+					//		p_impl->m_p_view_buffer,
+					//		KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
 					p_impl->p_log_file_reader->read(p_impl->m_p_view_buffer,
 						KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
-					p_impl->m_p_view_buffer[p_impl->p_log_file_reader->gcount()] = '\0';
+					p_impl
+						->m_p_view_buffer[p_impl->p_log_file_reader->gcount()] =
+						'\0';
 				}
 			}
 		}
@@ -368,13 +373,13 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 			p_impl->m_p_reader = p_manager->Get_ResourceLoader();
 			p_impl->m_p_owner = this;
 
-		//	kun_kotek kun_core ktkResourceReadingRequest request(
-		//		this->m_file_reader_id,
-		//		kun_kotek kun_core eResourceReadingType::kText,
-		//		kun_kotek kun_core eResourceReadingPolicy::kSync,
-		//		full_path_to_log_file);
+			//	kun_kotek kun_core ktkResourceReadingRequest request(
+			//		this->m_file_reader_id,
+			//		kun_kotek kun_core eResourceReadingType::kText,
+			//		kun_kotek kun_core eResourceReadingPolicy::kSync,
+			//		full_path_to_log_file);
 
-		//	p_manager->Open(request);
+			//	p_manager->Open(request);
 
 			ktkResourceFileStreamRequest request;
 
@@ -393,12 +398,12 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 
 			if (is_open)
 			{
-	//			p_impl->m_p_reader->Seekg(this->m_file_reader_id, 0,
-	//				kun_core eFileSeekDirectionType::kSeekDirectionEnd);
+				//			p_impl->m_p_reader->Seekg(this->m_file_reader_id, 0,
+				//				kun_core
+				//eFileSeekDirectionType::kSeekDirectionEnd);
 				p_impl->p_log_file_reader->seekg(0, std::ios_base::end);
 
-				p_impl->m_file_total_size =
-					p_impl->p_log_file_reader->tellg();
+				p_impl->m_file_total_size = p_impl->p_log_file_reader->tellg();
 
 				if (p_impl->m_file_total_size >
 					KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE)
@@ -412,19 +417,20 @@ void ktkWindowConsole::Initialize(ktkIWindow* p_window,
 					p_impl->m_file_current_offset = 0;
 				}
 
-			//	p_impl->m_p_reader->Seekg(this->m_file_reader_id,
-			//		p_impl->m_file_current_offset,
-			//		kun_core eFileSeekDirectionType::kSeekDirectionBegin);
+				//	p_impl->m_p_reader->Seekg(this->m_file_reader_id,
+				//		p_impl->m_file_current_offset,
+				//		kun_core eFileSeekDirectionType::kSeekDirectionBegin);
 
 				p_impl->p_log_file_reader->seekg(
 					p_impl->m_file_current_offset, std::ios_base::beg);
 
-			//	p_impl->m_p_reader->Read(this->m_file_reader_id,
-			//		p_impl->m_p_view_buffer,
-			//		KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
+				//	p_impl->m_p_reader->Read(this->m_file_reader_id,
+				//		p_impl->m_p_view_buffer,
+				//		KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
 				p_impl->p_log_file_reader->read(p_impl->m_p_view_buffer,
 					KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
-				p_impl->m_p_view_buffer[p_impl->p_log_file_reader->gcount()] = '\0';
+				p_impl->m_p_view_buffer[p_impl->p_log_file_reader->gcount()] =
+					'\0';
 			}
 
 			if (p_window)
@@ -540,7 +546,30 @@ void ktkWindowConsole::Shutdown()
 {
 	if (this->m_p_manager_resource)
 	{
-		//this->m_p_manager_resource->Close_Loader(this->m_file_reader_id);
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+		if (this->m_p_private_impl)
+		{
+			ktkPrivateImpl* p_impl =
+				static_cast<ktkPrivateImpl*>(this->m_p_private_impl);
+
+			if (p_impl)
+			{
+				BOOL nStatus = DestroyWindow(p_impl->m_p_handle_console);
+				KOTEK_ASSERT(nStatus, "failed to close window! GetLastError()={}", GetLastError());
+
+			//	nStatus = DestroyWindow(p_impl->m_p_handle_edit_box);
+			//	KOTEK_ASSERT(nStatus,
+			//		"failed to close window! GetLastError()={}",
+			//		GetLastError());
+			}
+		}
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+	#error not implemented
+#else
+	#error unknown platform
+#endif
+
+		// this->m_p_manager_resource->Close_Loader(this->m_file_reader_id);
 		this->m_p_manager_resource->Close_FileStream(this->m_p_log_reader);
 	}
 }
@@ -640,31 +669,30 @@ void ktkWindowConsole::Impl_ShowOrHide(bool show)
 				this->m_p_logger->Flush_All();
 			}
 
-		//	if (p_impl->m_p_reader->EndOfFile(p_impl->m_file_resource_id))
-		//	{
-		//		p_impl->m_p_reader->Clear(p_impl->m_file_resource_id);
-		//	}
+			//	if (p_impl->m_p_reader->EndOfFile(p_impl->m_file_resource_id))
+			//	{
+			//		p_impl->m_p_reader->Clear(p_impl->m_file_resource_id);
+			//	}
 
 			if (p_impl->p_log_file_reader->eof())
 			{
 				p_impl->p_log_file_reader->clear();
 			}
 
-		//	p_impl->m_p_reader->Seekg(p_impl->m_file_resource_id, 0,
-		//		kun_core eFileSeekDirectionType::kSeekDirectionEnd);
+			//	p_impl->m_p_reader->Seekg(p_impl->m_file_resource_id, 0,
+			//		kun_core eFileSeekDirectionType::kSeekDirectionEnd);
 			p_impl->p_log_file_reader->seekg(0, std::ios_base::end);
-			p_impl->m_file_total_size =
-				p_impl->p_log_file_reader->tellg();
+			p_impl->m_file_total_size = p_impl->p_log_file_reader->tellg();
 			p_impl->m_file_current_offset = p_impl->m_file_total_size -
 				KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE;
-		//	p_impl->m_p_reader->Seekg(p_impl->m_file_resource_id,
-		//		p_impl->m_file_current_offset,
-		//		kun_core eFileSeekDirectionType::kSeekDirectionBegin);
+			//	p_impl->m_p_reader->Seekg(p_impl->m_file_resource_id,
+			//		p_impl->m_file_current_offset,
+			//		kun_core eFileSeekDirectionType::kSeekDirectionBegin);
 			p_impl->p_log_file_reader->seekg(
 				p_impl->m_file_current_offset, std::ios_base::beg);
-		//	p_impl->m_p_reader->Read(p_impl->m_file_resource_id,
-		//		p_impl->m_p_view_buffer,
-		//		KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
+			//	p_impl->m_p_reader->Read(p_impl->m_file_resource_id,
+			//		p_impl->m_p_view_buffer,
+			//		KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
 			p_impl->p_log_file_reader->read(p_impl->m_p_view_buffer,
 				KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE);
 			p_impl->m_p_view_buffer[p_impl->p_log_file_reader->gcount()] = '\0';
