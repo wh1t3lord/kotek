@@ -77,7 +77,7 @@ Steps to reproduce:
 - Ability to replace any existed thing in engine;
 - No ANY Global variables in whole solution (Except for external libraries);
 
-And many other features. It will sound huge only when you understand the amount of code what was written ha-ha :slightly_smiling_face:. 
+And many other features. 
 
 ### Motivation
 
@@ -185,6 +185,6 @@ Just click on discord button.
 
 ## Alternative translation pages
 
-- [Русский](documentation/git/ru/README.md)
-- [Polska](documentation/git/pl/README.md)
-- [Ελληνική](documentation/git/gr/README.md)
+- [Русский](doc/git/ru/README.md)
+- [Polska](doc/git/pl/README.md)
+- [Ελληνική](doc/git/gr/README.md)
