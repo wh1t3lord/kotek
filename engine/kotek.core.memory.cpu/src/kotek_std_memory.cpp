@@ -231,8 +231,8 @@ namespace memory
 								GetCurrentProcess(), addr, &displacement, sym))
 						{
 							if (i < 4 ||
-								(i > info.frameCount - 4 &&
-									i < info.frameCount))
+								(i > info.frameCount - 10 &&
+									i < info.frameCount - 6))
 							{
 								std::cerr << "  " << sym->Name << " + 0x"
 										  << std::hex << displacement
@@ -244,8 +244,8 @@ namespace memory
 						else
 						{
 							if (i < 4 ||
-								(i > info.frameCount - 4 &&
-									i < info.frameCount))
+								(i > info.frameCount - 10 &&
+									i < info.frameCount - 6))
 							{
 								std::cerr << "  [0x" << std::hex << addr
 										  << std::dec << "]\n";
