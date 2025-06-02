@@ -40,5 +40,5 @@ user_data/
 !cmake/*.config
 [Nn]uget/
 cmake/**/packages.config
-engine/**/kotek_std_preprocessors.h
+src/**/kotek_std_preprocessors.h
 kotek_formatter_static_cstring.h
