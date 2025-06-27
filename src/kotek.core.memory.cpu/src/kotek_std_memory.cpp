@@ -1,6 +1,6 @@
 #include "../include/kotek_std_memory.h"
 #include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
-
+#include <kotek.core.defines.static.tests/include/kotek_core_defines_static_tests.h>
 #include <stdlib.h>
 
 #ifdef KOTEK_PLATFORM_WINDOWS
@@ -174,11 +174,11 @@ namespace memory
 				count += (ptr->delete_brackets_count - ptr->new_brackets_count);
 			}
 
-			is_memory_leaks = count != 0;
+			is_memory_leaks = count != 0 || !(map.empty());
 		}
 		else
 		{
-			is_memory_leaks = count != 0;
+			is_memory_leaks = count != 0 || !(map.empty());
 		}
 
 		if (is_memory_leaks)
@@ -259,7 +259,21 @@ namespace memory
 				log.close();
 			}
 		}
-		assert(!is_memory_leaks && map.empty() && "memory leak detected!");
+
+				// todo: provide proreprocessor for finding by name module for
+				// now just hardcoded
+
+				// friendly reminder that google's unit test library contains
+				// memory leaks so kinda supressing this due to low possibility
+				// of making mistakes in framework allocations, but when unit
+				// tests disabled we force to check framework and user's engine
+				// for detecting leaks
+
+			#ifdef KOTEK_USE_TESTS
+		if (!strstr(ptr->module_name, "kotek.exe"))
+			#endif
+
+			assert(!is_memory_leaks && map.empty() && "memory leak detected!");
 	}
 } // namespace memory
 
