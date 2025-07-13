@@ -36,8 +36,8 @@ public:
 	ktkISDKUIElement(void) {}
 	virtual ~ktkISDKUIElement(void) {}
 
-	virtual void initialize(void) = 0;
-	virtual void shutdown(void) = 0;
+	virtual void Initialize(void) = 0;
+	virtual void Shutdown(void) = 0;
 	virtual void Draw(ktkMainManager* p_main_manager) = 0;
 	virtual int Get_ID(void) const = 0;
 	virtual void Show(void) = 0;

@@ -6,7 +6,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Freetype CONFIG REQUIRED)
-find_package(RmlUi 6.0 CONFIG REQUIRED)
+find_package(RmlUi CONFIG REQUIRED)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_ui_game_ui_manager.h"
