@@ -122,6 +122,14 @@ struct ktkFixedStringTemplateWrapper
 	}
 };
 
+/// @brief not for user
+void __set_thread_name(unsigned int thread_id, const char* p_name);
+
+/// @brief you must call this inside scope of thread's function execution
+/// @param name passed string that will be copied internally, string must be
+/// valid
+void set_thread_name(const char* name);
+
 KOTEK_END_NAMESPACE_KTK
 
 template <std::size_t Length>

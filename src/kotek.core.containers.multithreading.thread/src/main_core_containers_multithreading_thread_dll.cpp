@@ -9,7 +9,7 @@ bool InitializeModule_Core_Containers_MultiThreading_Thread(
 {
 	if (p_manager->Get_Splash())
 	{
-		p_manager->Get_Splash()->Set_Text("[core]: init [containers][multithreaading][thread]");
+		p_manager->Get_Splash()->Set_Text("[core]: init [containers][multithreading][thread]");
 		p_manager->Get_Splash()->Set_Progress();
 	}
 

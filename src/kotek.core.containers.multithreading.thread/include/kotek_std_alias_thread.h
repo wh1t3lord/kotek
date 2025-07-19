@@ -15,6 +15,7 @@ using thread = std::thread;
 namespace this_thread = std::this_thread;
 #else
 #endif
+
 KOTEK_END_NAMESPACE_MT
 KOTEK_END_NAMESPACE_KTK
 

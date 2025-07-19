@@ -22,6 +22,15 @@ bool noexceptFunc() noexcept
 	return true;
 }
 
+TEST(Utility, thread_naming) 
+{
+	std::thread kek([] {
+		kun_ktk set_thread_name("kek");	
+	});
+
+	kek.join();
+}
+
 TEST(Utility, function_traits)
 {
 	using myFunc_traits = kun_kotek kun_ktk function_traits<decltype(myFunc)>;
