@@ -32,10 +32,7 @@ class ktkResourceStreamingManager
 		kun_kotek kun_ktk kun_mt mutex mtx;
 		kun_kotek kun_ktk kun_mt condition_variable cv;
 
-		void reset() 
-		{}
-
-
+		void reset();
 	};
 
 public:
@@ -46,7 +43,7 @@ public:
 	void Shutdown();
 
 private:
-	Context ctxs[KOTEK_DEF_MAX_RESOURCE_STREAMING_REQUESTS];
+	Context m_contextes[KOTEK_DEF_MAX_RESOURCE_STREAMING_REQUESTS];
 };
 
 KOTEK_END_NAMESPACE_CORE
