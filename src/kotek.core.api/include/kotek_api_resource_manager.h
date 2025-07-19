@@ -178,13 +178,63 @@ public:
 	kun_ktk uint32_t total_chunks_count;
 };
 
-class ktkResourceResponse
+class ktkResourceRequest
 {
 public:
-	ktkResourceResponse() : pChunk{} {}
+	ktkResourceRequest(eResourceRequestOperationType type) : m_type{type} {}
+	ktkResourceRequest() {}
+	~ktkResourceRequest() {}
+
+private:
+	eResourceRequestOperationType m_type;
+	eResourceRequestResourceType m_resource_type;
+	ktk_filesystem_path m_path_to_file;
+};
+
+struct ktkResourceResponse
+{
+	friend class StreamingManager;
+
+	ktkResourceResponse() :
+		m_ready{}, m_data{}, m_total_chunks{}, m_current_chunk{}
+	{
+	}
 	~ktkResourceResponse() {}
 
-	ktkResourceChunk* pChunk;
+	bool is_ready(void) const noexcept
+	{
+		bool result{};
+		if (!m_ready)
+			return result;
+
+		result = *m_ready;
+
+		return result;
+	}
+
+	unsigned char* get_data(void) const { return m_data; }
+
+	size_t get_total_chunks(void) const
+	{
+		if (!m_total_chunks)
+			return 0;
+
+		return *m_total_chunks;
+	}
+
+	size_t get_current_chunk(void) const
+	{
+		if (!m_current_chunk)
+			return 0;
+
+		return *m_current_chunk;
+	}
+
+private:
+	bool* m_ready;           // Pointer to chunk readiness flag
+	unsigned char* m_data;   // Pointer to chunk data
+	size_t* m_total_chunks;  // Total chunks in the stream
+	size_t* m_current_chunk; // Current chunk index (0-based)
 };
 
 class ktkResourceReadingRequest

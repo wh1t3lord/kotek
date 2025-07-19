@@ -9,6 +9,7 @@
 #include <kotek.core.containers.multithreading.shared_mutex/include/kotek_core_containers_multithreading_shared_mutex.h>
 #include <kotek.core.containers.multithreading.thread/include/kotek_core_containers_multithreading_thread.h>
 #include <kotek.core.containers.multithreading.queue/include/kotek_core_containers_multithreading_queue.h>
+#include <kotek.core.containers.multithreading.condition_variable/include/kotek_core_containers_multithreading_condition_variable.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
