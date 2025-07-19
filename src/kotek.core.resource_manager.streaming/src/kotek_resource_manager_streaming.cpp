@@ -44,7 +44,7 @@ ktkResourceSaveResponse ktkResourceStreamingManager::Save(
 
 void ktkResourceStreamingManager::Process_Requests()
 {
-	kun_ktk set_thread_name("streaming processing queue thread");
+	kun_ktk set_thread_name("[kotek] streaming processing queue thread");
 
 	while (true)
 	{
