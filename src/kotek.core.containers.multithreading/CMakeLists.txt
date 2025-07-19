@@ -18,3 +18,4 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.multithreadin
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.multithreading.thread)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.multithreading.tbb)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.multithreading.queue)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.multithreading.condition_variable)
