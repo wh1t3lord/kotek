@@ -35,6 +35,7 @@ bool InitializeModule_Render_ANGLE_GLES23(
 		p_main_manager->Get_Splash()->Set_Progress(-1.0f);
 	}
 
+	// todo: wut, too expensive better to use task manager...
 	kun_kotek kun_ktk kun_mt thread close_splash(
 		[p_main_manager]()
 		{

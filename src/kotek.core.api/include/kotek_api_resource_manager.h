@@ -181,8 +181,21 @@ public:
 class ktkResourceRequest
 {
 public:
-	ktkResourceRequest(eResourceRequestOperationType type) : m_type{type} {}
-	ktkResourceRequest() {}
+	ktkResourceRequest(eResourceRequestOperationType type,
+		const ktk_filesystem_path& path,
+		eResourceRequestResourceType resource_type =
+			eResourceRequestResourceType::kAutoDetect) :
+		m_type{type}, m_resource_type{resource_type}, m_path_to_file{}
+	{
+	}
+
+	ktkResourceRequest() :
+		m_type{eResourceRequestOperationType::kLoad},
+		m_resource_type{eResourceRequestResourceType::kAutoDetect},
+		m_path_to_file{}
+	{
+	}
+
 	~ktkResourceRequest() {}
 
 private:
@@ -191,15 +204,15 @@ private:
 	ktk_filesystem_path m_path_to_file;
 };
 
-struct ktkResourceResponse
+struct ktkResourceLoadResponse
 {
 	friend class StreamingManager;
 
-	ktkResourceResponse() :
+	ktkResourceLoadResponse() :
 		m_ready{}, m_data{}, m_total_chunks{}, m_current_chunk{}
 	{
 	}
-	~ktkResourceResponse() {}
+	~ktkResourceLoadResponse() {}
 
 	bool is_ready(void) const noexcept
 	{
@@ -235,6 +248,16 @@ private:
 	unsigned char* m_data;   // Pointer to chunk data
 	size_t* m_total_chunks;  // Total chunks in the stream
 	size_t* m_current_chunk; // Current chunk index (0-based)
+};
+
+struct ktkResourceSaveResponse
+{
+	friend class StreamingManager;
+
+	ktkResourceSaveResponse() {}
+	~ktkResourceSaveResponse() {}
+
+private:
 };
 
 class ktkResourceReadingRequest
