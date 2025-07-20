@@ -4,7 +4,7 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkResourceStreamingManager::ktkResourceStreamingManager() {}
+ktkResourceStreamingManager::ktkResourceStreamingManager() : m_p_filesystem{} {}
 
 ktkResourceStreamingManager::~ktkResourceStreamingManager()
 {
@@ -14,8 +14,14 @@ ktkResourceStreamingManager::~ktkResourceStreamingManager()
 	}
 }
 
-void ktkResourceStreamingManager::Initialize()
+void ktkResourceStreamingManager::Initialize(ktkIFileSystem* p_filesystem)
 {
+	KOTEK_ASSERT(p_filesystem,
+		"you must pass a valid filesystem otherwise streaming manager can't be "
+	    "initialized!");
+
+	this->m_p_filesystem = p_filesystem;
+
 	this->m_thread_processing = kun_kotek kun_ktk kun_mt thread(
 		&ktkResourceStreamingManager::Process_Requests, this);
 }
@@ -45,6 +51,9 @@ ktkResourceSaveResponse ktkResourceStreamingManager::Save(
 void ktkResourceStreamingManager::Process_Requests()
 {
 	kun_ktk set_thread_name("[kotek] streaming processing queue thread");
+
+	if (!this->m_p_filesystem)
+		return;
 
 	while (true)
 	{

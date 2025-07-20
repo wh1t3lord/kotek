@@ -43,7 +43,7 @@ public:
 	~ktkResourceStreamingManager();
 
 	// starts worker thread
-	void Initialize();
+	void Initialize(ktkIFileSystem* p_filesystem);
 	void Shutdown();
 
 	ktkResourceLoadResponse Load(const ktkResourceRequest& request);
@@ -56,6 +56,7 @@ private:
 	void Process_Requests();
 
 private:
+	ktkIFileSystem* m_p_filesystem;
 	Context m_contextes[KOTEK_DEF_MAX_RESOURCE_STREAMING_REQUESTS];
 	ktk_queue<ktkResourceRequest, KOTEK_DEF_MAX_RESOURCE_STREAMING_REQUESTS>
 		m_queue;

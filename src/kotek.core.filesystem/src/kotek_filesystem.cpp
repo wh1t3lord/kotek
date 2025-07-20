@@ -9,7 +9,7 @@ ktkFileSystem::~ktkFileSystem(void) {}
 void ktkFileSystem::Initialize(void)
 {
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	KOTEK_ASSERT(ktk::filesystem::current_path().u8string().size() <=
+	KOTEK_ASSERT(kun_ktk filesystem::current_path().u8string().size() <=
 			KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH,
 		"overflow current_path().size() > "
 		"KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH({})",
@@ -17,10 +17,10 @@ void ktkFileSystem::Initialize(void)
 
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Root] =
 		reinterpret_cast<char*>(
-			ktk::filesystem::current_path().u8string().data());
+			kun_ktk filesystem::current_path().u8string().data());
 #else
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Root] =
-		ktk::filesystem::current_path();
+		kun_ktk filesystem::current_path();
 #endif
 
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -56,7 +56,7 @@ ktk_filesystem_path ktkFileSystem::GetFolderByEnum(
 	if (this->m_storage_paths.find(id) == this->m_storage_paths.end())
 	{
 		KOTEK_MESSAGE(
-			"can't find path by id[{}]", static_cast<ktk::enum_base_t>(id));
+			"can't find path by id[{}]", static_cast<kun_ktk enum_base_t>(id));
 	}
 
 	return this->m_storage_paths
@@ -75,7 +75,7 @@ bool ktkFileSystem::IsValidPath(const ktk_filesystem_path& path) const noexcept
 		return false;
 	}
 
-	return ktk::filesystem::exists(path);
+	return kun_ktk filesystem::exists(path);
 }
 
 bool ktkFileSystem::CreateDirectoryImpl(
@@ -93,13 +93,13 @@ bool ktkFileSystem::CreateDirectoryImpl(
 		return false;
 	}
 
-	return ktk::filesystem::create_directory(path);
+	return kun_ktk filesystem::create_directory(path);
 }
 
-ktk::ustring ktkFileSystem::ReadFile(
+kun_ktk ustring ktkFileSystem::Read_File(
 	const ktk_filesystem_path& path_to_file) const noexcept
 {
-	ktk::ustring result;
+	kun_ktk ustring result;
 
 	if (this->IsValidPath(path_to_file) == false)
 	{
@@ -108,12 +108,12 @@ ktk::ustring ktkFileSystem::ReadFile(
 		return result;
 	}
 
-	ktk::ifstream file(path_to_file.c_str());
+	kun_ktk ifstream file(path_to_file.c_str());
 
 	if (file.good())
 	{
 		result.assign(
-			ktk::istreambuf_iterator(file), ktk::istreambuf_iterator());
+			kun_ktk istreambuf_iterator(file), kun_ktk istreambuf_iterator());
 	}
 	else
 	{
@@ -149,7 +149,7 @@ bool ktkFileSystem::Read_File(char*& p_buffer, size_t& length_of_buffer,
 	if (file.good())
 	{
 		//	return_static_string_buffer.assign(
-		//	ktk::istreambuf_iterator(file), ktk::istreambuf_iterator());
+		//	kun_ktk istreambuf_iterator(file), kun_ktk istreambuf_iterator());
 
 		file.seekg(0, kun_ktk ios::end);
 		auto size_of_text = file.tellg();
@@ -214,7 +214,7 @@ void ktkFileSystem::Create_Directory(
 }
 
 bool ktkFileSystem::AddGamedataFolderToStorage(const ktk_filesystem_path& path,
-	eFolderIndex id, const ktk::cstring& folder_name) noexcept
+	eFolderIndex id, const kun_ktk cstring& folder_name) noexcept
 {
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 	KOTEK_ASSERT(path.u8string().size() <= KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH,
@@ -225,7 +225,7 @@ bool ktkFileSystem::AddGamedataFolderToStorage(const ktk_filesystem_path& path,
 	if (this->m_storage_paths.find(id) != this->m_storage_paths.end())
 	{
 		KOTEK_MESSAGE("this path {} is existed in storage, can't add",
-			static_cast<ktk::enum_base_t>(id));
+			static_cast<kun_ktk enum_base_t>(id));
 		return false;
 	}
 

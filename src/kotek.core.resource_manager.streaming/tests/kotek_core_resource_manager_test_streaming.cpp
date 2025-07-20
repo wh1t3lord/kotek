@@ -16,6 +16,13 @@ TEST(Core, resource_streaming_initialize)
 	manager.Shutdown();
 }
 
+TEST(Core, resource_streaming_loading) 
+{
+	ktkResourceStreamingManager manager;
+	manager.Initialize();
+	manager.Shutdown();
+}
+
 	#endif
 #endif
 

@@ -45,10 +45,8 @@ public:
 
 	bool IsValidPath(const ktk_filesystem_path& path) const noexcept override;
 
-	// TODO: think about multithreading and probably it is better to move to
-	// resource manager loader/saver
 	/*!
-	 * \brief readFile reads to ktk::ustring all content of file
+	 * \brief readFile reads to kun_ktk ustring all content of file
 	 * \param path_to_file your valid path to file, you should use file
 	 * system to navigate file by calling getFolderByEnum
 	 *
@@ -58,7 +56,7 @@ public:
 	 *
 	 * \return ktk::ustring
 	 */
-	ktk::ustring ReadFile(
+	kun_ktk ustring Read_File(
 		const ktk_filesystem_path& path_to_file) const noexcept override;
 
 	// static implementation
@@ -68,11 +66,11 @@ public:
 				absolute_path_to_file) noexcept override;
 
 	void Create_Directory(const ktk_filesystem_path& path,
-		Core::eFolderVisibilityType type) override;
+		eFolderVisibilityType type) override;
 
 private:
 	bool AddGamedataFolderToStorage(const ktk_filesystem_path& path,
-		eFolderIndex id, const ktk::cstring& folder_name) noexcept;
+		eFolderIndex id, const kun_ktk cstring& folder_name) noexcept;
 
 	void ValidateFolders(void) noexcept;
 
@@ -82,9 +80,9 @@ private:
 
 private:
 	ktk_unordered_map<eFolderIndex,
-		ktk::static_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>,
+		kun_ktk static_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>,
 		static_cast<size_t>(
-			static_cast<ktk::enum_base_t>(eFolderIndex::kEndOfEnum) - 1)>
+			static_cast<kun_ktk enum_base_t>(eFolderIndex::kEndOfEnum) - 1)>
 		m_storage_paths;
 	// for static string buffer implementation of Read_File
 	kun_ktk static_cstring<2048> m_reserved_buffer;

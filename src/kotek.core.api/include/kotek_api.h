@@ -192,7 +192,7 @@ public:
 
 	// TODO: check todo in implementation class ktkFileSystem and it is
 	// a temporary virtual function delete it
-	virtual ktk::ustring ReadFile(
+	virtual kun_ktk ustring Read_File(
 		const ktk_filesystem_path& absolute_path_to_file) const noexcept = 0;
 
 	// be careful! this method's purpose is only on stack and for stack
