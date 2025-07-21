@@ -58,3 +58,32 @@ KOTEK_END_NAMESPACE_KOTEK
 	#define ktkArray KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK array
 	#define KTK_ARRAY KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK array
 #endif
+
+#ifdef KOTEK_USE_LIBRARY_TYPE_EMB
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_array<bool, 1>, ktk_array<bool, 1>>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ postfix it means that "
+	"this array "
+	"container is expected as static_array implementation");
+#elif defined(KOTEK_USE_LIBRARY_TYPE_DYN)
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk array<bool, 1>, ktk_array<bool, 1>>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ postfix and hybrid_ "
+	"postfix it means that "
+	"this array"
+	"container is expected as array implementation");
+#elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_array<bool, 1>, ktk_array<bool, 1>>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ postfix it means that "
+	"this array "
+	"container is expected as hybrid_array implementation");
+#else
+	#error unknown configuration, kotek supports three configurations of std library: DYN (dynamic), EMB (static), HYB (hybrid)
+#endif

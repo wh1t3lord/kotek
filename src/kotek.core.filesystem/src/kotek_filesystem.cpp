@@ -6,6 +6,44 @@ ktkFileSystem::ktkFileSystem(void) {}
 
 ktkFileSystem::~ktkFileSystem(void) {}
 
+ktkFileSystemFileHandleType ktkFileSystem::Begin_Stream(
+	const ktk_filesystem_path& path_to_file,
+	size_t stream_step /*= KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE*/)
+{
+}
+
+void ktkFileSystem::Stream(const ktkFileSystemFileHandleType file_handle,
+	kun_ktk uint8_t*& p_buffer, kun_ktk size_t buffer_size)
+{
+}
+
+void ktkFileSystem::End_Stream(const ktkFileSystemFileHandleType file_handle) {}
+
+bool ktkFileSystem::Is_AnyAvailableFiles(void) const noexcept
+{
+	return this->m_current_in_use_files.load() < this->m_files.size();
+}
+
+ktkFileSystemFileHandleType ktkFileSystem::Get_AvailableFile(void) const
+{
+	ktkFileSystemFileHandleType result = kFileSystemInvalidFileHandleType;
+
+	if (!this->Is_AnyAvailableFiles())
+	{
+		// trying linearly search but honestly we could optimize it at some
+		// point (maybe)
+		for (const ktkFileHandleImpl& file : this->m_files)
+		{
+			if (!file.is_in_use.load())
+			{
+				result = reinterpret_cast<ktkFileSystemFileHandleType>(&file);
+			}
+		}
+	}
+
+	return result;
+}
+
 void ktkFileSystem::Initialize(void)
 {
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -18,26 +56,41 @@ void ktkFileSystem::Initialize(void)
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Root] =
 		reinterpret_cast<char*>(
 			kun_ktk filesystem::current_path().u8string().data());
-#else
+
+#elif defined(KOTEK_USE_STD_LIBRARY_DYNAMIC_CONTAINERS) || \
+	defined(KOTEK_USE_STD_LIBRARY_HYBRID_CONTAINERS)
 	this->m_storage_paths[eFolderIndex::kFolderIndex_Root] =
 		kun_ktk filesystem::current_path();
+
+	#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+	static_assert(std::is_same_v<kun_ktk static_vector<ktkFileHandleImpl,
+									 KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE>,
+					  std::remove_cv_t<decltype(m_files)>> == false,
+		"something is very wrong and you can't have a static container while "
+		"it is supposed to be dynamic or hybrid container type");
+	#endif
+
+	// hybrid containers by default do reserve if possible due to allocation
+	// heuristic policy of std containers based on pmr storage usage
+	if constexpr (std::is_same_v<kun_ktk vector<ktkFileHandleImpl,
+									 KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE>,
+					  std::remove_cv_t<decltype(m_files)>>)
+	{
+		this->m_files.reserve(KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE);
+	}
+#else
+	#error unknown configuration, kotek supports only static, dynamic or hybrid containers and their implementations
 #endif
 
-#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 	KOTEK_MESSAGE("root path: [{}]",
 		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root).c_str());
-#else
-	KOTEK_MESSAGE("root path: [{}]",
-		this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root));
-#endif
 
-	bool is_valid_path =
-		this->IsValidPath(this->m_storage_paths
-							  .at(eFolderIndex::kFolderIndex_Root)
+	bool is_valid_path = this->IsValidPath(this->m_storage_paths
+			.at(eFolderIndex::kFolderIndex_Root)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-							  .c_str()
+			.c_str()
 #endif
-		);
+	);
 	KOTEK_ASSERT(is_valid_path, "your path must be valid!");
 
 	this->ValidateFolders();
@@ -96,16 +149,15 @@ bool ktkFileSystem::CreateDirectoryImpl(
 	return kun_ktk filesystem::create_directory(path);
 }
 
-kun_ktk ustring ktkFileSystem::Read_File(
-	const ktk_filesystem_path& path_to_file) const noexcept
+bool ktkFileSystem::Read_File(const ktk_filesystem_path& path_to_file,
+	kun_ktk ustring& result) const noexcept
 {
-	kun_ktk ustring result;
-
+	bool status{};
 	if (this->IsValidPath(path_to_file) == false)
 	{
 		KOTEK_MESSAGE_WARNING("can't load file by following path: [{}]",
 			reinterpret_cast<const char*>(path_to_file.u8string().c_str()));
-		return result;
+		return status;
 	}
 
 	kun_ktk ifstream file(path_to_file.c_str());
@@ -114,18 +166,21 @@ kun_ktk ustring ktkFileSystem::Read_File(
 	{
 		result.assign(
 			kun_ktk istreambuf_iterator(file), kun_ktk istreambuf_iterator());
+
+		status = true;
 	}
 	else
 	{
 		KOTEK_MESSAGE("something is wrong while reading file: [{}]",
 			reinterpret_cast<const char*>(path_to_file.u8string().c_str()));
-		return result;
+		return status;
 	}
 
-	return result;
+	return status;
 }
 
-bool ktkFileSystem::Read_File(char*& p_buffer, size_t& length_of_buffer,
+bool ktkFileSystem::Read_File(kun_ktk uint8_t*& p_buffer,
+	size_t& length_of_buffer,
 	const kun_ktk kun_filesystem static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>&
 		absolute_path_to_file) noexcept
 {
@@ -157,7 +212,7 @@ bool ktkFileSystem::Read_File(char*& p_buffer, size_t& length_of_buffer,
 
 		if (size_of_text <= length_of_buffer)
 		{
-			file.read(p_buffer, size_of_text);
+			file.read(reinterpret_cast<char*>(p_buffer), size_of_text);
 			length_of_buffer = size_of_text;
 			if (file)
 			{
@@ -271,16 +326,15 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 #endif
 
 	bool status = this->IsValidPath(this->m_storage_paths
-										.at(eFolderIndex::kFolderIndex_DataGame)
+			.at(eFolderIndex::kFolderIndex_DataGame)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-										.c_str()
+			.c_str()
 #endif
 	);
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataGame)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -300,8 +354,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataGame_Configs)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -321,13 +374,12 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir =
-			this->CreateDirectoryImpl(this->m_storage_paths
-										  .at(eFolderIndex::kFolderIndex_DataGame_Models)
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_DataGame_Models)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-										  .c_str()
+				.c_str()
 #endif
-			);
+		);
 		KOTEK_ASSERT(status_dir, "can't create directory");
 	}
 
@@ -342,8 +394,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataGame_Textures)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -363,8 +414,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataGame_Shaders)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -386,13 +436,12 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir =
-			this->CreateDirectoryImpl(this->m_storage_paths
-										  .at(eFolderIndex::kFolderIndex_DataGame_AI)
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_DataGame_AI)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-										  .c_str()
+				.c_str()
 #endif
-			);
+		);
 		KOTEK_ASSERT(status_dir, "can't create directory for ai");
 	}
 
@@ -407,13 +456,12 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir =
-			this->CreateDirectoryImpl(this->m_storage_paths
-										  .at(eFolderIndex::kFolderIndex_DataGame_Levels)
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
+				.at(eFolderIndex::kFolderIndex_DataGame_Levels)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-										  .c_str()
+				.c_str()
 #endif
-			);
+		);
 		KOTEK_ASSERT(status_dir, "can't create directory for levels");
 	}
 
@@ -428,8 +476,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataGame_Shaders_GLSL)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -449,8 +496,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataGame_Shaders_HLSL)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -470,8 +516,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataGame_Shaders_SPV)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -488,12 +533,12 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 			.c_str()
 #endif
 			,
-		eFolderIndex::kFolderIndex_DataGame_Shaders_WEBGPU, KOTEK_TEXTU("webgpu"));
+		eFolderIndex::kFolderIndex_DataGame_Shaders_WEBGPU,
+		KOTEK_TEXTU("webgpu"));
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataGame_Shaders_WEBGPU)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -514,8 +559,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataUser)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -536,8 +580,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataUser_ShaderCache)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -558,8 +601,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataUser_SDK)
 
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -582,8 +624,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataUser_SDK_Settings)
 
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
@@ -606,8 +647,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataUser_SDK_Scenes)
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()
@@ -630,8 +670,7 @@ void ktkFileSystem::ValidateFolders(void) noexcept
 
 	if (status == false)
 	{
-		auto status_dir = this->CreateDirectoryImpl(
-			this->m_storage_paths
+		auto status_dir = this->CreateDirectoryImpl(this->m_storage_paths
 				.at(eFolderIndex::kFolderIndex_DataUser_Tests)
 	#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 				.c_str()

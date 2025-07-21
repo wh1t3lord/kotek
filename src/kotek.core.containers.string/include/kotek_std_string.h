@@ -233,3 +233,250 @@ KOTEK_END_NAMESPACE_KOTEK
 	#define ktkUStringView kun_kotek kun_ktk ustring_view
 
 #endif
+
+#ifdef KOTEK_USE_LIBRARY_TYPE_EMB
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_cstring<1>, ktk_cstring<1>>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this cstring "
+	"container is expected as static_cstring implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_u8string<1>, ktk_u8string<1>>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this u8string "
+	"container is expected as static_u8string implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_u16string<1>, ktk_u16string<1>>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this u16string "
+	"container is expected as static_u16string implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_u32string<1>, ktk_u32string<1>>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this u32string "
+	"container is expected as static_u32string implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_wstring<1>, ktk_wstring<1>>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this wstring "
+	"container is expected as static_wstring implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_cstring_view, ktk_cstring_view>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this cstring_view "
+	"container is expected as static_cstring_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_u8string_view, ktk_u8string_view>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this u8string_view "
+	"container is expected as static_u8string_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_u16string_view, ktk_u16string_view>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this u16string_view "
+	"container is expected as static_u16string_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_u32string_view, ktk_u32string_view>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this u32string_view "
+	"container is expected as static_u32string_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_wstring_view, ktk_wstring_view>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this wstring_view "
+	"container is expected as static_wstring_view implementation");
+#elif defined(KOTEK_USE_LIBRARY_TYPE_DYN)
+static_assert(std::is_same_v<kun_kotek kun_ktk cstring<1>, ktk_cstring<1>>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+	"prefix it means that "
+	"this cstring "
+	"container is expected as cstring implementation");
+
+static_assert(std::is_same_v<kun_kotek kun_ktk u8string<1>, ktk_u8string<1>>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+	"prefix it means that "
+	"this u8string "
+	"container is expected as u8string implementation");
+
+static_assert(std::is_same_v<kun_kotek kun_ktk u16string<1>, ktk_u16string<1>>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+	"prefix it means that "
+	"this u16string "
+	"container is expected as u16string implementation");
+
+static_assert(std::is_same_v<kun_kotek kun_ktk u32string<1>, ktk_u32string<1>>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+	"prefix it means that "
+	"this u32string "
+	"container is expected as u32string implementation");
+
+static_assert(std::is_same_v<kun_kotek kun_ktk wstring<1>, ktk_wstring<1>>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+	"prefix it means that "
+	"this wstring "
+	"container is expected as wstring implementation");
+
+static_assert(std::is_same_v<kun_kotek kun_ktk cstring_view, ktk_cstring_view>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+    "prefix it means that "
+	"this cstring_view "
+	"container is expected as cstring_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk u8string_view, ktk_u8string_view>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+    "prefix it means that "
+	"this u8string_view "
+	"container is expected as u8string_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk u16string_view, ktk_u16string_view>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+    "prefix it means that "
+	"this u16string_view "
+	"container is expected as u16string_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk u32string_view, ktk_u32string_view>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+    "prefix it means that "
+	"this u32string_view "
+	"container is expected as u32string_view implementation");
+
+static_assert(std::is_same_v<kun_kotek kun_ktk wstring_view, ktk_wstring_view>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+    "prefix it means that "
+	"this wstring_view "
+	"container is expected as wstring_view implementation");
+#elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_cstring<1>, ktk_cstring<1>>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this cstring "
+	"container is expected as hybrid_cstring implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_u8string<1>, ktk_u8string<1>>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this u8string "
+	"container is expected as hybrid_u8string implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_u16string<1>, ktk_u16string<1>>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this u16string "
+	"container is expected as hybrid_u16string implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_u32string<1>, ktk_u32string<1>>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this u32string "
+	"container is expected as hybrid_u32string implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_wstring<1>, ktk_wstring<1>>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this wstring "
+	"container is expected as hybrid_wstring implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_cstring_view, ktk_cstring_view>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this cstring_view "
+	"container is expected as hybrid_cstring_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_u8string_view, ktk_u8string_view>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this u8string_view "
+	"container is expected as hybrid_u8string_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_u16string_view, ktk_u16string_view>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this u16string_view "
+	"container is expected as hybrid_u16string_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_u32string_view, ktk_u32string_view>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this u32string_view "
+	"container is expected as hybrid_u32string_view implementation");
+
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_wstring_view, ktk_wstring_view>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this wstring_view "
+	"container is expected as hybrid_wstring_view implementation");
+#else
+	#error unknown configuration, kotek supports three configurations: DYN (dynamic), EMB (static), HYB (hybrid)
+#endif

@@ -38,7 +38,7 @@ endif()
 
 if ("${KOTEK_LIBRARY_TYPE}" STREQUAL "")
 	set(KOTEK_LIBRARY_TYPE "EMB" CACHE INTERNAL "")
-	message("[${PROJECT_NAME}]: library development - ${KOTEK_LIBRARY_TYPE} (EMB is embedded and DYN is dynamic, check documentation about these definitions)")
+	message("[${PROJECT_NAME}]: library development - ${KOTEK_LIBRARY_TYPE} (EMB is embedded and DYN is dynamic and HYB is hybrid, check documentation about these definitions)")
 endif()
 
 message("[${PROJECT_NAME}]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}'")
@@ -79,6 +79,16 @@ endif()
 if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "")
 	set(KOTEK_STD_LIBRARY_STATIC_CONTAINERS "ON" CACHE INTERNAL "")
 	message("[${PROJECT_NAME}]: static containers are enabled by default!")
+endif()
+
+if ("${KOTEK_STD_LIBRARY_HYBRID_CONTAINERS}" STREQUAL "")
+	set(KOTEK_STD_LIBRARY_HYBRID_CONTAINERS "ON" CACHE INTERNAL "")
+	message("[${PROJECT_NAME}]: hybrid containers are enabled by default!")
+endif()
+
+if ("${KOTEK_STD_LIBRARY_DYNAMIC_CONTAINERS}" STREQUAL "")
+	set(KOTEK_STD_LIBRARY_DYNAMIC_CONTAINERS "ON" CACHE INTERNAL "")
+	message("[${PROJECT_NAME}]: dynamic containers are enabled by default!")
 endif()
 
 if ("${KOTEK_STARTUP_RENDERER}" STREQUAL "")

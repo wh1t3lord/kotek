@@ -21,6 +21,7 @@ using size_t = std::size_t;
 using ptrdiff_t = std::ptrdiff_t;
 using enum_base_t = int;
 using flag_t = unsigned int;
+using uintptr_t = std::uintptr_t;
 
 using float_t = float;
 using double_t = double;
@@ -49,6 +50,7 @@ using int8_t = KUN_KOTEK KUN_KTK int8_t;
 using size_t = KUN_KOTEK KUN_KTK size_t;
 using ptrdiff_t = KUN_KOTEK KUN_KTK ptrdiff_t;
 using enum_base_t = KUN_KOTEK KUN_KTK enum_base_t;
+using uintptr_t = KUN_KOTEK KUN_KTK uintptr_t;
 
 using float_t = KUN_KOTEK KUN_KTK float_t;
 using double_t = KUN_KOTEK KUN_KTK double_t;

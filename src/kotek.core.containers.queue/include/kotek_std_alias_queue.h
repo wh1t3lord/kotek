@@ -50,3 +50,32 @@ KOTEK_END_NAMESPACE_KOTEK
 	#define KTK_QUEUE KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK queue
 	#define ktkQueue KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK queue
 #endif
+
+#ifdef KOTEK_USE_LIBRARY_TYPE_EMB
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk static_queue<bool, 1>, ktk_queue<bool, 1>>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ prefix it means that "
+	"this queue "
+	"container is expected as static_queue implementation");
+#elif defined(KOTEK_USE_LIBRARY_TYPE_DYN)
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk queue<bool, 1>, ktk_queue<bool, 1>>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
+	"prefix it means that "
+	"this queue "
+	"container is expected as queue implementation");
+#elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk hybrid_queue<bool, 1>, ktk_queue<bool, 1>>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ prefix it means that "
+	"this queue "
+	"container is expected as hybrid_queue implementation");
+#else
+	#error unknown configuration, kotek supports three configurations: DYN (dynamic), EMB (static), HYB (hybrid)
+#endif

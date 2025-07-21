@@ -33,10 +33,12 @@ protected:
 	eResourceLoadingType DetectResourceTypeByFileFormat(
 		const ktk_filesystem_path& path) noexcept override;
 
-	ktk_unordered_map < kun_ktk uint32_t,
-		std::pair<kun_ktk ifstream, kun_ktk kun_mt atomic<bool>>,
-			KOTEK_DEF_RESOURCE_LOADER_MANAGER_SIZE_FILE_POOL>
-			m_readers;
+//	ktk_unordered_map < kun_ktk uint32_t,
+//		std::pair<kun_ktk ifstream, kun_ktk kun_mt atomic<bool>>,
+//			KOTEK_DEF_RESOURCE_LOADER_MANAGER_SIZE_FILE_POOL>
+//			m_readers;
+
+	// todo: readers can be allocated only from filesystem as any instance of fstream classes that operate over FILE thing
 
 	ktk_unordered_map<eResourceLoadingType, ktkIResourceLoader*,
 		KOTEK_DEF_RESOURCE_LOADERS_TYPE_MAX_COUNT>

@@ -30,18 +30,20 @@ public:
 	ktkIResourceSaver* Get_Saver(
 		eResourceLoadingType resource_type) const noexcept override;
 
-	bool Save(
-		const ktk_filesystem_path& path, kun_core ktkResourceHandle data) noexcept override;
+	bool Save(const ktk_filesystem_path& path,
+		kun_core ktkResourceHandle data) noexcept override;
 
 protected:
 	eResourceLoadingType DetectResourceTypeByFileFormat(
 		const ktk_filesystem_path& path) noexcept override;
 
 private:
-	ktk_unordered_map<kun_ktk uint32_t,
-		std::pair<kun_ktk cfstream, kun_ktk kun_mt atomic<bool>>,
-		KOTEK_DEF_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL>
-		m_writers;
+	//	ktk_unordered_map<kun_ktk uint32_t,
+	//		std::pair<kun_ktk cfstream, kun_ktk kun_mt atomic<bool>>,
+	//		KOTEK_DEF_RESOURCE_SAVER_MANAGER_SIZE_FILE_POOL>
+	//		m_writers;
+
+	// writers can be allocated only from filesystem e.g. fstreams
 
 	// TODO: think how to replace for placement new and make it more useful
 	ktk_unordered_map<eResourceLoadingType, ktkIResourceSaver*,

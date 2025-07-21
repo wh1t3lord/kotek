@@ -177,6 +177,10 @@ public:
 	virtual const char* Get_Name(void) const noexcept = 0;
 };
 
+using ktkFileSystemFileHandleType = kun_ktk uintptr_t;
+constexpr ktkFileSystemFileHandleType kFileSystemInvalidFileHandleType =
+	ktkFileSystemFileHandleType(0);
+
 class ktkIFileSystem
 {
 public:
@@ -192,8 +196,8 @@ public:
 
 	// TODO: check todo in implementation class ktkFileSystem and it is
 	// a temporary virtual function delete it
-	virtual kun_ktk ustring Read_File(
-		const ktk_filesystem_path& absolute_path_to_file) const noexcept = 0;
+	virtual bool Read_File(
+		const ktk_filesystem_path& path_to_file, kun_ktk ustring& output_result) const noexcept = 0;
 
 	// be careful! this method's purpose is only on stack and for stack
 	// purposes! You should copy the content of p_buffer and (if updated)
@@ -206,10 +210,10 @@ public:
 	// (std::string class). So pointer of p_buffer and value of length_of_buffer
 	// can be changed and that means they use data from predefined string in
 	// filesystem, but it depends on user implementation tbh
-	virtual bool Read_File(char*& p_buffer, size_t& length_of_buffer,
+	virtual bool Read_File(kun_ktk uint8_t*& p_buffer, size_t& length_of_buffer,
 		const kun_ktk kun_filesystem
 			static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>&
-				absolute_path_to_file) noexcept = 0;
+				path_to_file) noexcept = 0;
 
 	virtual ktk_filesystem_path GetFolderByEnum(
 		eFolderIndex id) const noexcept = 0;

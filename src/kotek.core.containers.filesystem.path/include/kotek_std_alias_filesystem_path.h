@@ -168,7 +168,7 @@ public:
 					i = this->m_prefix;
 				}
 				else if (auto extracted_symbol = *i++;
-						 (extracted_symbol == '/' || extracted_symbol == '\\'))
+					(extracted_symbol == '/' || extracted_symbol == '\\'))
 				{
 					if (i != this->m_last && (*i == '/' || *i == '\\'))
 					{
@@ -1090,18 +1090,17 @@ inline static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH> resolveSymlink(
 			case IO_REPARSE_TAG_SYMLINK:
 			{
 				static_wstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH> printName(
-					&reparseData.SymbolicLinkReparseBuffer
-						 .PathBuffer[reparseData.SymbolicLinkReparseBuffer
-										 .PrintNameOffset /
-							 sizeof(WCHAR)],
+					&reparseData.SymbolicLinkReparseBuffer.PathBuffer
+						[reparseData.SymbolicLinkReparseBuffer.PrintNameOffset /
+							sizeof(WCHAR)],
 					reparseData.SymbolicLinkReparseBuffer.PrintNameLength /
 						sizeof(WCHAR));
 
 				static_wstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH> substituteName(
 					&reparseData.SymbolicLinkReparseBuffer
-						 .PathBuffer[reparseData.SymbolicLinkReparseBuffer
-										 .SubstituteNameOffset /
-							 sizeof(WCHAR)],
+						.PathBuffer[reparseData.SymbolicLinkReparseBuffer
+										.SubstituteNameOffset /
+							sizeof(WCHAR)],
 					reparseData.SymbolicLinkReparseBuffer.SubstituteNameLength /
 						sizeof(WCHAR));
 				/*
@@ -2000,6 +1999,8 @@ inline directory_iterator end(const directory_iterator& iter) noexcept
 	#error todo: implement
 #endif // KOTEK_USE_NOT_CUSTOM_LIBRARY
 
+using path = std::filesystem::path;
+
 KOTEK_END_NAMESPACE_FILESYSTEM
 KOTEK_END_NAMESPACE_KTK
 
@@ -2029,6 +2030,36 @@ KOTEK_END_NAMESPACE_KOTEK
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK std::filesystem::path
 	#define KTK_FILESYSTEM_PATH \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK std::filesystem::path
+#endif
+
+#ifdef KOTEK_USE_LIBRARY_TYPE_EMB
+static_assert(std::is_same_v<kun_kotek kun_ktk kun_filesystem
+								 static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>,
+				  ktk_filesystem_path>,
+	"If library type was defined as EMB (aka static) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with static_ postfix it means that "
+	"this path "
+	"container is expected as static_path implementation");
+#elif defined(KOTEK_USE_LIBRARY_TYPE_DYN)
+static_assert(
+	std::is_same_v<kun_kotek kun_ktk kun_filesystem path, ktk_filesystem_path>,
+	"If library type was defined as DYN (aka dynamic) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE WITHOUT static_ postfix and dynamic_ "
+	"postfix it means that "
+	"this path "
+	"container is expected as path implementation");
+#elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
+static_assert(std::is_same_v<kun_kotek kun_ktk kun_filesystem hybrid_path,
+				  ktk_filesystem_path>,
+	"If library type was defined as HYB (aka hybrid) it means that all "
+	"containers that "
+	"kotek framework provides to use ARE with hybrid_ postfix it means that "
+	"this path "
+	"container is expected as hybrid_path implementation");
+#else
+	#error unknown configuration, kotek supports three configurations: DYN (dynamic), EMB (static), HYB (hybrid)
 #endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -2183,7 +2214,7 @@ inline static_path<Size>& static_path<Size>::operator=(
 	return this->operator=(reinterpret_cast<const char*>(view.data()));
 }
 
-template<size_t Size>
+template <size_t Size>
 inline static_path<Size>& static_path<Size>::operator=(
 	const std::string_view& view)
 {
