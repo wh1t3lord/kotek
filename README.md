@@ -24,7 +24,7 @@ Kotek Engine is a modern, extensible C++ framework designed to facilitate the cr
 - cd build
 - cmake ..
 
-## Features
+## ✨ Features
 
 1.	**Modular Design and Project Separation**
 >	Each component (core, API, casting, filesystem, resource manager, input, rendering, UI, etc.) is organized into its own project. This promotes independent development, testing, and maintenance.
