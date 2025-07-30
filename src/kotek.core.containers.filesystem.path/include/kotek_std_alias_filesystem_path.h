@@ -2,7 +2,7 @@
 
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 #include <kotek.core.defines.static.os/include/kotek_core_defines_static_os.h>
-#include <kotek.core.containers.string/include/kotek_std_string.h>
+#include <kotek.core.containers.string/include/kotek_core_containers_string.h>
 #include <kotek.core.os/include/kotek_core_os.h>
 
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY

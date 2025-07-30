@@ -40,6 +40,8 @@ endif()
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_vector.h"
 	"include/kotek_core_containers_vector.h"
+	"include/kotek_std_alias_hybrid_vector.h"
+	"include/kotek_std_alias_static_vector.h"
 	"src/main_core_containers_vector_dll.cpp")
 	
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")

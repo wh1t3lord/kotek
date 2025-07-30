@@ -7,6 +7,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_queue.h"
+	"include/kotek_std_alias_hybrid_queue.h"
+	"include/kotek_std_alias_static_queue.h"
 	"include/kotek_core_containers_queue.h"
 	"src/main_core_containers_queue_dll.cpp")
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")

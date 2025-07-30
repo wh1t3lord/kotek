@@ -39,6 +39,8 @@ endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_unordered_set.h"
+	"include/kotek_std_alias_hybrid_unordered_set.h"
+	"include/kotek_std_alias_static_unordered_set.h"
 	"include/kotek_core_containers_unordered_set.h"
 	"src/main_core_containers_unordered_set_dll.cpp")
 	

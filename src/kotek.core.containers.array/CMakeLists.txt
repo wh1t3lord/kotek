@@ -39,6 +39,7 @@ endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_array.h"
+	"include/kotek_std_alias_static_array.h"
 	"include/kotek_core_containers_array.h"
 	"src/main_core_containers_array_dll.cpp")
 

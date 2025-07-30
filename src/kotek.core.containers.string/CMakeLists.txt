@@ -50,10 +50,12 @@ endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"tests/kotek_core_test_string.cpp"
-	"include/kotek_std_string.h"
+	"include/kotek_std_alias_string.h"
+	"include/kotek_std_alias_static_string.h"
+	"include/kotek_std_alias_hybrid_string.h"
 	"include/kotek_core_containers_string.h"
 	"src/main_core_containers_string_dll.cpp"
-	"src/kotek_std_string.cpp")
+	"src/kotek_std_alias_string.cpp")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
 if(MSVC)

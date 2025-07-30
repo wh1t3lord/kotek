@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kotek_std_string.h"
+#include "kotek_std_alias_string.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE

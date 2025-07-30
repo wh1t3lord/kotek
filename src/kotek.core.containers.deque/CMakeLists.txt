@@ -39,6 +39,8 @@ endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_std_alias_deque.h"
+	"include/kotek_std_alias_hybrid_deque.h"
+	"include/kotek_std_alias_static_deque.h"
 	"include/kotek_core_containers_deque.h"
 	"src/main_core_containers_deque_dll.cpp")
 

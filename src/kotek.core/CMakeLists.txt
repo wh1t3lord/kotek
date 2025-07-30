@@ -42,6 +42,14 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON")
 		"tests/kotek_core_test_filesystem.cpp"
 		"tests/kotek_core_test_json.cpp"
 		"tests/kotek_core_test_string.cpp"
+		"tests/kotek_core_test_container_deque.cpp"
+		"tests/kotek_core_test_container_vector.cpp"
+		"tests/kotek_core_test_container_unordered_set.cpp"
+		"tests/kotek_core_test_container_unordered_map.cpp"
+		"tests/kotek_core_test_container_set.cpp"
+		"tests/kotek_core_test_container_queue.cpp"
+		"tests/kotek_core_test_container_map.cpp"
+		"tests/kotek_core_test_container_list.cpp"
 	)
 elseif("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "OFF")
 	# TODO: add support for own projects for unit testing
