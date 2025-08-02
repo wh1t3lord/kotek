@@ -430,7 +430,54 @@ private:
 
 	struct layout_no_prealloc_t
 	{
-		layout_no_prealloc_t() : con() {}
+		layout_no_prealloc_t() : con{} {}
+
+		explicit layout_no_prealloc_t(size_type count) : con{count} {}
+
+		layout_no_prealloc_t(size_type count, const Type& value) :
+			con{count, value}
+		{
+		}
+
+		template <class InputIt>
+		layout_no_prealloc_t(InputIt first, InputIt last) : con{first, last}
+		{
+		}
+
+		template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
+			typename = __hv_container_namespace::enable_if_t<
+				(ElementCount >= ElementCount2 || Realloc == true) &&
+				__hv_container_namespace::is_same_v<Type, Type2>>>
+		layout_no_prealloc_t(
+			const hybrid_vector_impl<Type2, ElementCount2, Realloc2>& other) :
+			con{other.container()}
+		{
+		}
+
+		layout_no_prealloc_t(
+			const hybrid_vector_impl<Type, ElementCount, Realloc, __hv_Size>&
+				other) : con{other.container()}
+		{
+		}
+
+		template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
+			typename = __hv_container_namespace::enable_if_t<
+				(ElementCount >= ElementCount2 || Realloc == true) &&
+				__hv_container_namespace::is_same_v<Type, Type2>>>
+		layout_no_prealloc_t(
+			hybrid_vector_impl<Type2, ElementCount2, Realloc2>&& other) :
+			con{__hv_container_namespace::move(other.container_move())}
+		{
+		}
+
+		layout_no_prealloc_t(
+			hybrid_vector_impl<Type, ElementCount, Realloc, __hv_Size>&&
+				other) noexcept :
+			con{__hv_container_namespace::move(other.container_move())}
+		{
+		}
+
+		layout_no_prealloc_t(__hv_il_t<Type> init) : con{init} {}
 
 		container_type con;
 	};
