@@ -1,4 +1,4 @@
-#include "../include/kotek_std_string.h"
+#include "../include/kotek_std_alias_string.h"
 
 #include <kotek.core.containers.hash/include/kotek_core_containers_hash.h>
 
