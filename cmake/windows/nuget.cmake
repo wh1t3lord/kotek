@@ -2,13 +2,27 @@ if (WIN32)
     find_program(NUGET_COMMAND nuget)
     if(NOT NUGET_COMMAND)
         message("NuGet not found in PATH!")
-        message("Downloading NuGet...")
         if(NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/nuget")
-            execute_process(COMMAND ${CMAKE_COMMAND} -E make_directory "${CMAKE_CURRENT_SOURCE_DIR}/nuget")
-            file(DOWNLOAD https://dist.nuget.org/win-x86-commandline/latest/nuget.exe
-                "${CMAKE_CURRENT_SOURCE_DIR}/nuget/nuget.exe")
+            message("Downloading NuGet...")
+
+            file(MAKE_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/nuget")
+
+            file(DOWNLOAD 
+                https://dist.nuget.org/win-x86-commandline/latest/nuget.exe 
+                "${CMAKE_CURRENT_SOURCE_DIR}/nuget/nuget.exe"
+                STATUS nuget_download_status
+                LOG nuget_download_status_log
+            )
+            list(GET nuget_download_status 0 status_code_download_nuget)
+            list(GET nuget_download_status 1 status_code_download_nuget_error_string)
+
+            if(NOT status_code_download_nuget EQUAL 0)
+                message(FATAL_ERROR "Download failed: ${status_code_download_nuget_error_string}\nDownload log: ${nuget_download_status_log}")
+            else()
+                message(STATUS "Download succeeded: ${CMAKE_CURRENT_SOURCE_DIR}/nuget/nuget.exe")
+            endif()
         endif()
-        set(NUGET_COMMAND "${CMAKE_BINARY_DIR}/nuget/nuget.exe")
+        set(NUGET_COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/nuget/nuget.exe")
         message("NuGet downloaded: ${NUGET_COMMAND}")
     else()
         message("NuGet found: ${NUGET_COMMAND}")
@@ -137,12 +151,17 @@ if (WIN32)
             message("Making config usable for nuget")
             
             if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/packages.config")
-               # message("removing existing packages.config, because we don't need it")
+                message(STATUS "removing existing packages.config, because we don't need it")
                 file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/packages.config)
             endif()
 
             if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/nuget")
-                file(REMOVE_RECURSE ${CMAKE_CURRENT_SOURCE_DIR}/nuget)
+                if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages")
+                    message(STATUS "Invalidating cache packages of nuget")
+                    file(REMOVE_RECURSE ${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages)
+                    file(REMOVE ${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages)
+                    message(STATUS "Invalidation completed")
+                endif()
             endif()
             
             
@@ -186,7 +205,8 @@ if (WIN32)
 			# So we need to fix that mistake
 
 			file(GLOB nuget_packages RELATIVE ${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages  ${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages/Kotek.Packages.*)
-			
+			message("${nuget_packages}")
+            message("${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages/")
 			foreach (folder_name IN LISTS nuget_packages)
 				if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages/${folder_name}")
 					if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/nuget/packages/${folder_name}/runtimes")

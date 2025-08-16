@@ -1,7 +1,7 @@
-message("Downloading vcpkg for downloading big packages because of nuget limitations...")
+message(STATUS "Downloading vcpkg for downloading big packages because of nuget limitations...")
 
 if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
-    message("You didn't have vcpkg so we clone it")
+    message(STATUS "You didn't have vcpkg so we clone it")
     execute_process(COMMAND "git" clone https://github.com/microsoft/vcpkg.git WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
