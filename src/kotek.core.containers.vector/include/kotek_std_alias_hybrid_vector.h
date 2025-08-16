@@ -5,6 +5,7 @@
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 	#include <boost/container/pmr/vector.hpp>
+	#include <memory_resource>
 #elif defined(KOTEK_USE_STD_LIBRARY)
 	#include <vector>
 	#include <memory_resource>

@@ -5,6 +5,7 @@
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 	#include <boost/unordered/unordered_set.hpp>
+	#include <unordered_set>
 	#include <memory_resource>
 #elif defined(KOTEK_USE_STD_LIBRARY)
 	#include <unordered_set>
@@ -178,44 +179,13 @@ public:
 			std::is_same_v<Type, Type2>>>
 	hybrid_unordered_set(
 		const hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&
-			other) :
-		m_pool{(ElementCount == 0) ? nullptr : m_memory,
-			(ElementCount == 0) ? 0 : __hus_Size,
-			Realloc ? std::pmr::get_default_resource()
-					: std::pmr::null_memory_resource()},
-		set{other.container(), &m_pool}
+			other) : mem(other)
 	{
-		if constexpr (ElementCount > 0)
-		{
-			set.reserve(ElementCount);
-		}
 	}
 
-	hybrid_unordered_set(const hybrid_unordered_set& other) :
-		m_pool{(ElementCount == 0) ? nullptr : m_memory,
-			(ElementCount == 0) ? 0 : __hus_Size,
-			Realloc ? std::pmr::get_default_resource()
-					: std::pmr::null_memory_resource()},
-		set{other.set, &m_pool}
-	{
-		if constexpr (ElementCount > 0)
-		{
-			set.reserve(ElementCount);
-		}
-	}
+	hybrid_unordered_set(const hybrid_unordered_set& other) : mem(other) {}
 
-	hybrid_unordered_set(hybrid_unordered_set&& other) :
-		m_pool{(ElementCount == 0) ? nullptr : m_memory,
-			(ElementCount == 0) ? 0 : __hus_Size,
-			Realloc ? std::pmr::get_default_resource()
-					: std::pmr::null_memory_resource()},
-		set{std::move(other.set), &m_pool}
-	{
-		if constexpr (ElementCount > 0)
-		{
-			set.reserve(ElementCount);
-		}
-	}
+	hybrid_unordered_set(hybrid_unordered_set&& other) : mem(other) {}
 
 	template <typename Type2, typename H2, typename P2,
 		std::size_t ElementCount2, bool Realloc2,
@@ -224,59 +194,25 @@ public:
 			std::is_same_v<Type, Type2>>>
 	hybrid_unordered_set(
 		hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&& other) :
-		m_pool{(ElementCount == 0) ? nullptr : m_memory,
-			(ElementCount == 0) ? 0 : __hus_Size,
-			Realloc ? std::pmr::get_default_resource()
-					: std::pmr::null_memory_resource()},
-		set{std::move(other.container_move_out()), &m_pool}
+		mem(other)
 	{
-		if constexpr (ElementCount > 0)
-		{
-			set.reserve(ElementCount);
-		}
 	}
 
 	hybrid_unordered_set(std::initializer_list<value_type> init,
 		size_type bucket_count, const H& hash = H(),
 		const key_equal& equal = key_equal()) :
-		m_pool{(ElementCount == 0) ? nullptr : m_memory,
-			(ElementCount == 0) ? 0 : __hus_Size,
-			Realloc ? std::pmr::get_default_resource()
-					: std::pmr::null_memory_resource()},
-		set{init, bucket_count, hash, equal, &m_pool}
+		mem(init, bucket_count, hash, equal)
 	{
-		if constexpr (ElementCount > 0)
-		{
-			set.reserve(ElementCount);
-		}
-	}
-
-	hybrid_unordered_set(
-		std::initializer_list<value_type> init, size_type bucket_count) :
-		m_pool{(ElementCount == 0) ? nullptr : m_memory,
-			(ElementCount == 0) ? 0 : __hus_Size,
-			Realloc ? std::pmr::get_default_resource()
-					: std::pmr::null_memory_resource()},
-		set(init, bucket_count, H(), key_equal(), &m_pool)
-	{
-		if constexpr (ElementCount > 0)
-		{
-			set.reserve(ElementCount);
-		}
 	}
 
 	hybrid_unordered_set(std::initializer_list<value_type> init,
-		size_type bucket_count, const H& hash) :
-		m_pool{(ElementCount == 0) ? nullptr : m_memory,
-			(ElementCount == 0) ? 0 : __hus_Size,
-			Realloc ? std::pmr::get_default_resource()
-					: std::pmr::null_memory_resource()},
-		set(init, bucket_count, hash, key_equal(), &m_pool)
+		size_type bucket_count) : mem(init, bucket_count)
 	{
-		if constexpr (ElementCount > 0)
-		{
-			set.reserve(ElementCount);
-		}
+	}
+
+	hybrid_unordered_set(std::initializer_list<value_type> init,
+		size_type bucket_count, const H& hash) : mem(init, bucket_count, hash)
+	{
 	}
 
 	~hybrid_unordered_set() {}
@@ -284,25 +220,25 @@ public:
 public:
 	hybrid_unordered_set& operator=(const hybrid_unordered_set& other)
 	{
-		set.operator=(other.set);
+		mem.con.operator=(other.mem.con);
 		return *this;
 	}
 
 	hybrid_unordered_set& operator=(const container_type& other)
 	{
-		set.operator=(other);
+		mem.con.operator=(other);
 		return *this;
 	}
 
 	hybrid_unordered_set& operator=(hybrid_unordered_set&& other) noexcept
 	{
-		set.operator=(std::move(other.set));
+		mem.con.operator=(std::move(other.mem.con));
 		return *this;
 	}
 
 	hybrid_unordered_set& operator=(container_type&& other)
 	{
-		set.operator=(std::move(other));
+		mem.con.operator=(std::move(other));
 		return *this;
 	}
 
@@ -310,74 +246,77 @@ public:
 
 	allocator_type get_allocator() const noexcept
 	{
-		return set.get_allocator();
+		return mem.con.get_allocator();
 	}
 
-	iterator begin() noexcept { return set.begin(); }
+	iterator begin() noexcept { return mem.con.begin(); }
 
-	const_iterator begin() const noexcept { return set.begin(); }
+	const_iterator begin() const noexcept { return mem.con.begin(); }
 
-	const_iterator cbegin() const noexcept { return set.cbegin(); }
+	const_iterator cbegin() const noexcept { return mem.con.cbegin(); }
 
-	iterator end() noexcept { return set.end(); }
+	iterator end() noexcept { return mem.con.end(); }
 
-	const_iterator end() const noexcept { return set.end(); }
+	const_iterator end() const noexcept { return mem.con.end(); }
 
-	const_iterator cend() const noexcept { return set.cend(); }
+	const_iterator cend() const noexcept { return mem.con.cend(); }
 
-	bool empty() const noexcept { return set.empty(); }
+	bool empty() const noexcept { return mem.con.empty(); }
 
-	size_type size() const noexcept { return set.size(); }
+	size_type size() const noexcept { return mem.con.size(); }
 
-	size_type max_size() const noexcept { return set.max_size(); }
+	size_type max_size() const noexcept { return mem.con.max_size(); }
 
-	void clear() noexcept { return set.clear(); }
+	void clear() noexcept { return mem.con.clear(); }
 
 	std::pair<iterator, bool> insert(const value_type& value)
 	{
-		return set.insert(value);
+		return mem.con.insert(value);
 	}
 
 	std::pair<iterator, bool> insert(value_type&& value)
 	{
-		return set.insert(std::move(value));
+		return mem.con.insert(std::move(value));
 	}
 
 	iterator insert(const_iterator hint, const value_type& value)
 	{
-		return set.insert(hint, value);
+		return mem.con.insert(hint, value);
 	}
 
 	iterator insert(const_iterator hint, value_type&& value)
 	{
-		return set.insert(hint, std::move(value));
+		return mem.con.insert(hint, std::move(value));
 	}
 
 	template <class InputIt>
 	void insert(InputIt first, InputIt last)
 	{
-		set.insert<InputIt>(first, last);
+		mem.con.insert<InputIt>(first, last);
 	}
 
-	void insert(std::initializer_list<value_type> ilist) { set.insert(ilist); }
+	void insert(std::initializer_list<value_type> ilist)
+	{
+		mem.con.insert(ilist);
+	}
 
-	insert_return_type insert(node_type&& nh) { return set.insert(nh); }
+	insert_return_type insert(node_type&& nh) { return mem.con.insert(nh); }
 
 	iterator insert(const_iterator hint, node_type&& nh)
 	{
-		return set.insert(hint, nh);
+		return mem.con.insert(hint, nh);
 	}
 
 	template <class... Args>
 	std::pair<iterator, bool> emplace(Args&&... args)
 	{
-		return set.emplace(std::forward<Args>(args)...);
+		return mem.con.emplace(std::forward<Args>(args)...);
 	}
 
 	template <class... Args>
 	iterator emplace_hint(const_iterator hint, Args&&... args)
 	{
-		return set.emplace_hint(hint, std::forward<Args>(args)...);
+		return mem.con.emplace_hint(hint, std::forward<Args>(args)...);
 	}
 
 	/*
@@ -387,109 +326,112 @@ public:
 	}
 	*/
 
-	iterator erase(const_iterator pos) { return set.erase(pos); }
+	iterator erase(const_iterator pos) { return mem.con.erase(pos); }
 
 	iterator erase(const_iterator first, const_iterator last)
 	{
-		return set.erase(first, last);
+		return mem.con.erase(first, last);
 	}
 
-	size_type erase(const Type& key) { return set.erase(key); }
+	size_type erase(const Type& key) { return mem.con.erase(key); }
 
-	void swap(hybrid_unordered_set& other) noexcept { set.swap(other.set); }
+	void swap(hybrid_unordered_set& other) noexcept
+	{
+		mem.con.swap(other.mem.con);
+	}
 
-	void swap(container_type& other) noexcept { set.swap(other); }
+	void swap(container_type& other) noexcept { mem.con.swap(other); }
 
-	node_type extract(const_iterator pos) { return set.extract(pos); }
+	node_type extract(const_iterator pos) { return mem.con.extract(pos); }
 
-	node_type extract(const Type& k) { return set.extract(k); }
+	node_type extract(const Type& k) { return mem.con.extract(k); }
 
 	template <class H2, class P2>
 	void merge(
 		hybrid_unordered_set<Type, H2, P2, ElementCount, Realloc>& source)
 	{
-		set.merge(source.set);
+		mem.con.merge(source.mem.con);
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_set<Type, H2, P2>& source)
 	{
-		set.merge(source);
+		mem.con.merge(source);
 	}
 
 	template <class H2, class P2>
 	void merge(
 		hybrid_unordered_set<Type, H2, P2, ElementCount, Realloc>&& source)
 	{
-		set.merge(std::move(source.set));
+		mem.con.merge(std::move(source.mem.con));
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_set<Type, H2, P2>&& source)
 	{
-		set.merge(std::move(source));
+		mem.con.merge(std::move(source));
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_multiset<Type, H2, P2>& source)
 	{
-		set.merge(source);
+		mem.con.merge(source);
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_multiset<Type, H2, P2>&& source)
 	{
-		set.merge(std::move(source));
+		mem.con.merge(std::move(source));
 	}
 
-	size_type count(const Type& key) const { return set.count(key); }
+	size_type count(const Type& key) const { return mem.con.count(key); }
 
-	iterator find(const Type& key) { return set.find(key); }
+	iterator find(const Type& key) { return mem.con.find(key); }
 
-	const_iterator find(const Type& key) const { return set.find(key); }
+	const_iterator find(const Type& key) const { return mem.con.find(key); }
 
 	std::pair<iterator, iterator> equal_range(const Type& key)
 	{
-		return set.equal_range(key);
+		return mem.con.equal_range(key);
 	}
 
 	std::pair<const_iterator, const_iterator> equal_range(const Type& key) const
 	{
-		return set.equal_range(key);
+		return mem.con.equal_range(key);
 	}
 
-	local_iterator begin(size_type n) { return set.begin(n); }
+	local_iterator begin(size_type n) { return mem.con.begin(n); }
 
-	const_local_iterator begin(size_type n) const { return set.begin(n); }
+	const_local_iterator begin(size_type n) const { return mem.con.begin(n); }
 
-	const_local_iterator cbegin(size_type n) const { return set.cbegin(n); }
+	const_local_iterator cbegin(size_type n) const { return mem.con.cbegin(n); }
 
-	local_iterator end(size_type n) { return set.end(n); }
+	local_iterator end(size_type n) { return mem.con.end(n); }
 
-	const_local_iterator end(size_type n) const { return set.end(n); }
-	const_local_iterator cend(size_type n) const { return set.cend(n); }
+	const_local_iterator end(size_type n) const { return mem.con.end(n); }
+	const_local_iterator cend(size_type n) const { return mem.con.cend(n); }
 
-	size_type bucket_count() const { return set.bucket_count(); }
+	size_type bucket_count() const { return mem.con.bucket_count(); }
 
-	size_type max_bucket_count() const { return set.max_bucket_count(); }
+	size_type max_bucket_count() const { return mem.con.max_bucket_count(); }
 
-	size_type bucket_size(size_type n) const { return set.bucket_size(n); }
+	size_type bucket_size(size_type n) const { return mem.con.bucket_size(n); }
 
-	size_type bucket(const Type& key) const { return set.bucket(key); }
+	size_type bucket(const Type& key) const { return mem.con.bucket(key); }
 
-	float load_factor() const { return set.load_factor(); }
+	float load_factor() const { return mem.con.load_factor(); }
 
-	float max_load_factor() const { return set.max_load_factor(); }
+	float max_load_factor() const { return mem.con.max_load_factor(); }
 
-	void max_load_factor(float ml) { return set.max_load_factor(ml); }
+	void max_load_factor(float ml) { return mem.con.max_load_factor(ml); }
 
-	void rehash(size_type count) { return set.rehash(count); }
+	void rehash(size_type count) { return mem.con.rehash(count); }
 
-	void reserve(size_type count) { return set.reserve(count); }
+	void reserve(size_type count) { return mem.con.reserve(count); }
 
-	hasher hash_function() const { return set.hash_function(); }
+	hasher hash_function() const { return mem.con.hash_function(); }
 
-	key_equal key_eq() const { return set.key_eq(); }
+	key_equal key_eq() const { return mem.con.key_eq(); }
 
 public:
 	constexpr std::size_t preallocated_memory_size() const noexcept
@@ -505,9 +447,13 @@ public:
 		return Realloc;
 	}
 
-	const container_type& container() const noexcept { return set; }
-	container_type& container() noexcept { return set; }
-	container_type&& container_move_out() noexcept { return std::move(str); }
+	const container_type& container() const noexcept { return mem.con; }
+	container_type& container() noexcept { return mem.con; }
+	container_type container_move_out() noexcept
+	{
+		container_type temp = std::move(mem.con);
+		return std::move(temp);
+	}
 
 private:
 	struct layout_prealloc_t
@@ -595,18 +541,213 @@ private:
 			}
 		}
 
+		template <typename Type2, typename H2, typename P2,
+			std::size_t ElementCount2, bool Realloc2,
+			typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
+											Realloc == true) &&
+				std::is_same_v<Type, Type2>>>
+
+		layout_prealloc_t(
+			const hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&
+				other) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : __hus_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{other.container(), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(const hybrid_unordered_set& other) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : __hus_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{other.mem.con, &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(hybrid_unordered_set&& other) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : __hus_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{std::move(other.con), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		template <typename Type2, typename H2, typename P2,
+			std::size_t ElementCount2, bool Realloc2,
+			typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
+											Realloc == true) &&
+				std::is_same_v<Type, Type2>>>
+		layout_prealloc_t(
+			hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&&
+				other) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : __hus_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{std::move(other.container_move_out()), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(std::initializer_list<value_type> init,
+			size_type bucket_count, const H& hash = H(),
+			const key_equal& equal = key_equal()) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : __hus_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{init, bucket_count, hash, equal, &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(
+			std::initializer_list<value_type> init, size_type bucket_count) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : __hus_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con(init, bucket_count, H(), key_equal(), &pool)
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(std::initializer_list<value_type> init,
+			size_type bucket_count, const H& hash) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : __hus_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con(init, bucket_count, hash, key_equal(), &pool)
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
 		unsigned char buf[__hus_Size];
-		__hv_container_namespace_pmr::monotonic_buffer_resource pool;
+		__hus_container_namespace_pmr::monotonic_buffer_resource pool;
 		container_type con;
 	};
 
 	struct layout_no_prealloc_t
 	{
+		layout_no_prealloc_t() : con{} {}
+
+		layout_no_prealloc_t(size_type bucket_count) :
+			con(bucket_count, H(), P())
+		{
+		}
+
+		layout_no_prealloc_t(size_type bucket_count, const H& hash) :
+			con(bucket_count, hash, P())
+		{
+		}
+
+		template <class InputIt>
+		layout_no_prealloc_t(InputIt first, InputIt last,
+			size_type bucket_count, const H& hash = H(),
+			const key_equal& equal = key_equal()) :
+			con(first, last, bucket_count, hash, equal)
+		{
+		}
+
+		template <class InputIt>
+		layout_no_prealloc_t(
+			InputIt first, InputIt last, size_type bucket_count) :
+			con(first, last, bucket_count, H(), key_equal())
+		{
+		}
+
+		template <class InputIt>
+		layout_no_prealloc_t(InputIt first, InputIt last,
+			size_type bucket_count, const H& hash) :
+			con(first, last, bucket_count, hash, key_equal())
+		{
+		}
+
+		template <typename Type2, typename H2, typename P2,
+			std::size_t ElementCount2, bool Realloc2,
+			typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
+											Realloc == true) &&
+				std::is_same_v<Type, Type2>>>
+
+		layout_no_prealloc_t(
+			const hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&
+				other) : con{other.container()}
+		{
+		}
+
+		layout_no_prealloc_t(const hybrid_unordered_set& other) :
+			con{other.mem.con}
+		{
+		}
+
+		layout_no_prealloc_t(hybrid_unordered_set&& other) :
+			con{std::move(other.con)}
+		{
+		}
+
+		template <typename Type2, typename H2, typename P2,
+			std::size_t ElementCount2, bool Realloc2,
+			typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
+											Realloc == true) &&
+				std::is_same_v<Type, Type2>>>
+		layout_no_prealloc_t(
+			hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&&
+				other) : con{std::move(other.container_move_out())}
+		{
+		}
+
+		layout_no_prealloc_t(std::initializer_list<value_type> init,
+			size_type bucket_count, const H& hash = H(),
+			const key_equal& equal = key_equal()) :
+			con{init, bucket_count, hash, equal}
+		{
+		}
+
+		layout_no_prealloc_t(std::initializer_list<value_type> init,
+			size_type bucket_count) : con(init, bucket_count, H(), key_equal())
+		{
+		}
+
+		layout_no_prealloc_t(std::initializer_list<value_type> init,
+			size_type bucket_count, const H& hash) :
+			con(init, bucket_count, hash, key_equal())
+		{
+		}
+
 		container_type con;
 	};
 
 	using layout_t =
-		__hv_container_namespace_conditional::conditional_t<ElementCount == 0,
+		__hus_container_namespace_conditional::conditional_t<ElementCount == 0,
 			layout_no_prealloc_t, layout_prealloc_t>;
 
 	layout_t mem;
