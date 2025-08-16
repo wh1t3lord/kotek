@@ -18,7 +18,7 @@ KOTEK_BEGIN_NAMESPACE_KTK
 
 namespace __hv_container_namespace = ::boost;
 
-namespace __hv_container_namespace_pmr = ::boost::container::pmr;
+namespace __hv_container_namespace_pmr = ::std::pmr;
 
 namespace __hv_container_namespace_swap = ::std;
 
