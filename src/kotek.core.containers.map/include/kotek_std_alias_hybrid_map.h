@@ -27,8 +27,7 @@ template <class Type>
 using _kotek_hm_il_t = ::std::initializer_list<Type>;
 
 template <typename Key, typename Value>
-using hybrid_map_container =
-	_kotek_hm_container_namespace_pmr::map<Key, Value>;
+using hybrid_map_container = _kotek_hm_container_namespace_pmr::map<Key, Value>;
 
 #elif defined(KOTEK_USE_STD_LIBRARY)
 
@@ -41,8 +40,7 @@ template <class Type>
 using _kotek_hm_il_t = ::std::initializer_list<Type>;
 
 template <typename Key, typename Value>
-using hybrid_map_container =
-	_kotek_hm_container_namespace_pmr::map<Key, Value>;
+using hybrid_map_container = _kotek_hm_container_namespace_pmr::map<Key, Value>;
 
 #else
 #endif
@@ -138,25 +136,10 @@ struct is_fixed_size_container<std::array<T, N>> : std::true_type
 {
 };
 
-#ifdef _MSVC_LANG
-
-	#if _MSVC_LANG >= 202002L
 template <typename T>
 struct is_fixed_size_container<std::span<T>> : std::true_type
 {
 };
-	#endif
-
-#elif defined(__cplusplus)
-
-	#if __cplusplus >= 202002L
-template <typename T>
-struct is_fixed_size_container<std::span<T>> : std::true_type
-{
-};
-	#endif
-
-#endif
 
 template <typename T>
 struct is_safe_for_buffer
@@ -169,8 +152,7 @@ struct is_safe_for_buffer
 template <typename T>
 inline constexpr bool is_safe_for_buffer_v = is_safe_for_buffer<T>::value;
 
-template <typename Key, typename Value, std::size_t ElementCount,
-	bool Realloc,
+template <typename Key, typename Value, std::size_t ElementCount, bool Realloc,
 	std::size_t _kotek_hm_Size =
 		_kotek_pmr_hybrid_map_map_buffer_size(ElementCount)>
 class hybrid_map
@@ -577,7 +559,7 @@ private:
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hm_Size,
 				Realloc ? std::pmr::get_default_resource()
-						  : std::pmr::null_memory_resource()},
+						: std::pmr::null_memory_resource()},
 			con{&pool}
 		{
 		}
@@ -586,7 +568,7 @@ private:
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hm_Size,
 				Realloc ? std::pmr::get_default_resource()
-						  : std::pmr::null_memory_resource()},
+						: std::pmr::null_memory_resource()},
 			con{comp, &pool}
 		{
 		}
@@ -597,7 +579,7 @@ private:
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hm_Size,
 				Realloc ? std::pmr::get_default_resource()
-						  : std::pmr::null_memory_resource()},
+						: std::pmr::null_memory_resource()},
 			con{first, last, comp, &pool}
 		{
 		}
@@ -607,7 +589,7 @@ private:
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hm_Size,
 				Realloc ? std::pmr::get_default_resource()
-						  : std::pmr::null_memory_resource()},
+						: std::pmr::null_memory_resource()},
 			con(first, last, key_compare(), &pool)
 		{
 		}
@@ -616,7 +598,7 @@ private:
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hm_Size,
 				Realloc ? std::pmr::get_default_resource()
-						  : std::pmr::null_memory_resource()},
+						: std::pmr::null_memory_resource()},
 			con{other.container(), &pool}
 		{
 		}
@@ -625,7 +607,7 @@ private:
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hm_Size,
 				Realloc ? std::pmr::get_default_resource()
-						  : std::pmr::null_memory_resource()},
+						: std::pmr::null_memory_resource()},
 			con{std::move(other.container_move_out()), &pool}
 		{
 		}
@@ -635,7 +617,7 @@ private:
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hm_Size,
 				Realloc ? std::pmr::get_default_resource()
-						  : std::pmr::null_memory_resource()},
+						: std::pmr::null_memory_resource()},
 			con{init, comp, &pool}
 		{
 		}
@@ -644,7 +626,7 @@ private:
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hm_Size,
 				Realloc ? std::pmr::get_default_resource()
-						  : std::pmr::null_memory_resource()},
+						: std::pmr::null_memory_resource()},
 			con(init, key_compare(), &pool)
 		{
 		}
