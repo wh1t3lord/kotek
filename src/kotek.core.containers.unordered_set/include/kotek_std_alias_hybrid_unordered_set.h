@@ -17,29 +17,29 @@ KOTEK_BEGIN_NAMESPACE_KTK
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 
-namespace __hus_container_namespace = ::boost;
-namespace __hus_container_namespace_pmr = ::std::pmr;
-namespace __hus_container_namespace_swap = ::std;
-namespace __hus_container_namespace_conditional = ::std;
+namespace _kotek_hus_container_namespace = ::boost;
+namespace _kotek_hus_container_namespace_pmr = ::std::pmr;
+namespace _kotek_hus_container_namespace_swap = ::std;
+namespace _kotek_hus_container_namespace_conditional = ::std;
 
 template <class Type>
-using __hv_il_t = ::std::initializer_list<Type>;
+using _kotek_hv_il_t = ::std::initializer_list<Type>;
 
 template <typename Type>
 using hybrid_unordered_set_container =
-	__hus_container_namespace::unordered::unordered_set<Type,
-		__hus_container_namespace::hash<Type>, std::equal_to<Type>,
-		__hus_container_namespace_pmr::polymorphic_allocator<Type>>;
+	_kotek_hus_container_namespace::unordered::unordered_set<Type,
+		_kotek_hus_container_namespace::hash<Type>, std::equal_to<Type>,
+		_kotek_hus_container_namespace_pmr::polymorphic_allocator<Type>>;
 
 #elif defined(KOTEK_USE_STD_LIBRARY)
 
-namespace __hus_container_namespace = ::std;
-namespace __hus_container_namespace_pmr = ::std::pmr;
-namespace __hus_container_namespace_swap = ::std;
-namespace __hus_container_namespace_conditional = ::std;
+namespace _kotek_hus_container_namespace = ::std;
+namespace _kotek_hus_container_namespace_pmr = ::std::pmr;
+namespace _kotek_hus_container_namespace_swap = ::std;
+namespace _kotek_hus_container_namespace_conditional = ::std;
 
 template <class Type>
-using __hv_il_t = ::std::initializer_list<Type>;
+using _kotek_hv_il_t = ::std::initializer_list<Type>;
 
 template <typename Type>
 using hybrid_unordered_set_container = std::pmr::unordered_set<Type>;
@@ -99,7 +99,7 @@ inline constexpr size_t __calculate_unordered_set_size(
 
 template <typename Type, typename H, typename P, std::size_t ElementCount,
 	bool Realloc,
-	std::size_t __hus_Size = __calculate_unordered_set_size(ElementCount)>
+	std::size_t _kotek_hus_Size = __calculate_unordered_set_size(ElementCount)>
 class hybrid_unordered_set
 {
 	static_assert(ElementCount == 0 ? Realloc : true,
@@ -436,7 +436,7 @@ public:
 public:
 	constexpr std::size_t preallocated_memory_size() const noexcept
 	{
-		return __hus_Size;
+		return _kotek_hus_Size;
 	}
 	constexpr std::size_t preallocated_size() const noexcept
 	{
@@ -460,7 +460,7 @@ private:
 	{
 		layout_prealloc_t() :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con{&pool}
@@ -473,7 +473,7 @@ private:
 
 		layout_prealloc_t(size_type bucket_count) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con(bucket_count, H(), P(), &pool)
@@ -486,7 +486,7 @@ private:
 
 		layout_prealloc_t(size_type bucket_count, const H& hash) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con(bucket_count, hash, P(), &pool)
@@ -501,7 +501,7 @@ private:
 		layout_prealloc_t(InputIt first, InputIt last, size_type bucket_count,
 			const H& hash = H(), const key_equal& equal = key_equal()) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con(first, last, bucket_count, hash, equal, &pool)
@@ -515,7 +515,7 @@ private:
 		template <class InputIt>
 		layout_prealloc_t(InputIt first, InputIt last, size_type bucket_count) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con(first, last, bucket_count, H(), key_equal(), &pool)
@@ -530,7 +530,7 @@ private:
 		layout_prealloc_t(InputIt first, InputIt last, size_type bucket_count,
 			const H& hash) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con(first, last, bucket_count, hash, key_equal(), &pool)
@@ -551,7 +551,7 @@ private:
 			const hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&
 				other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con{other.container(), &pool}
@@ -564,7 +564,7 @@ private:
 
 		layout_prealloc_t(const hybrid_unordered_set& other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con{other.mem.con, &pool}
@@ -577,7 +577,7 @@ private:
 
 		layout_prealloc_t(hybrid_unordered_set&& other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con{std::move(other.con), &pool}
@@ -597,7 +597,7 @@ private:
 			hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&&
 				other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con{std::move(other.container_move_out()), &pool}
@@ -612,7 +612,7 @@ private:
 			size_type bucket_count, const H& hash = H(),
 			const key_equal& equal = key_equal()) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con{init, bucket_count, hash, equal, &pool}
@@ -626,7 +626,7 @@ private:
 		layout_prealloc_t(
 			std::initializer_list<value_type> init, size_type bucket_count) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con(init, bucket_count, H(), key_equal(), &pool)
@@ -640,7 +640,7 @@ private:
 		layout_prealloc_t(std::initializer_list<value_type> init,
 			size_type bucket_count, const H& hash) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hus_Size,
+				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con(init, bucket_count, hash, key_equal(), &pool)
@@ -651,8 +651,8 @@ private:
 			}
 		}
 
-		unsigned char buf[__hus_Size];
-		__hus_container_namespace_pmr::monotonic_buffer_resource pool;
+		unsigned char buf[_kotek_hus_Size];
+		_kotek_hus_container_namespace_pmr::monotonic_buffer_resource pool;
 		container_type con;
 	};
 
@@ -747,7 +747,7 @@ private:
 	};
 
 	using layout_t =
-		__hus_container_namespace_conditional::conditional_t<ElementCount == 0,
+		_kotek_hus_container_namespace_conditional::conditional_t<ElementCount == 0,
 			layout_no_prealloc_t, layout_prealloc_t>;
 
 	layout_t mem;

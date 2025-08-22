@@ -17,49 +17,49 @@ KOTEK_BEGIN_NAMESPACE_KTK
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 
-namespace __hv_container_namespace = ::boost;
+namespace _kotek_hv_container_namespace = ::boost;
 
-namespace __hv_container_namespace_pmr = ::std::pmr;
+namespace _kotek_hv_container_namespace_pmr = ::std::pmr;
 
-namespace __hv_container_namespace_swap = ::std;
+namespace _kotek_hv_container_namespace_swap = ::std;
 
-namespace __hv_container_namespace_conditional = ::std;
+namespace _kotek_hv_container_namespace_conditional = ::std;
 
 /// @brief \~english notice that some libraries are not supposed to have some
 /// implementations and for that you can use from standard as boost library did
 /// or provide own implementation but you have to specify the aliases all
 /// @tparam Type
 template <class Type>
-using __hv_il_t = ::std::initializer_list<Type>;
+using _kotek_hv_il_t = ::std::initializer_list<Type>;
 
 template <typename Type>
-using hybrid_vector_container = __hv_container_namespace_pmr::vector<Type>;
+using hybrid_vector_container = _kotek_hv_container_namespace_pmr::vector<Type>;
 
 #elif defined(KOTEK_USE_STD_LIBRARY)
 
-namespace __hv_container_namespace = ::std;
+namespace _kotek_hv_container_namespace = ::std;
 
-namespace __hv_container_namespace_pmr = ::std::pmr;
+namespace _kotek_hv_container_namespace_pmr = ::std::pmr;
 
-namespace __hv_container_namespace_swap = ::std;
+namespace _kotek_hv_container_namespace_swap = ::std;
 
-namespace __hv_container_namespace_conditional = ::std;
+namespace _kotek_hv_container_namespace_conditional = ::std;
 
 /// @brief \~english notice that some libraries are not supposed to have some
 /// implementations and for that you can use from standard as boost library did
 /// or provide own implementation but you have to specify the aliases all
 /// @tparam Type
 template <class Type>
-using __hv_il_t = ::std::initializer_list<Type>;
+using _kotek_hv_il_t = ::std::initializer_list<Type>;
 
 template <typename Type>
-using hybrid_vector_container = __hv_container_namespace_pmr::vector<Type>;
+using hybrid_vector_container = _kotek_hv_container_namespace_pmr::vector<Type>;
 
 #else
 #endif
 
 template <typename Type, kun_ktk size_t ElementCount, bool Realloc,
-	kun_ktk size_t __hv_Size
+	kun_ktk size_t _kotek_hv_Size
 #ifdef KOTEK_DEBUG
 	= sizeof(Type) * ElementCount * 2
 #else
@@ -103,9 +103,9 @@ public:
 	}
 
 	template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-		typename = __hv_container_namespace::enable_if_t<
+		typename = _kotek_hv_container_namespace::enable_if_t<
 			(ElementCount >= ElementCount2 || Realloc == true) &&
-			__hv_container_namespace::is_same_v<Type, Type2>>>
+			_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
 	hybrid_vector_impl(
 		const hybrid_vector_impl<Type2, ElementCount2, Realloc2>& other) :
 		mem(other)
@@ -115,9 +115,9 @@ public:
 	hybrid_vector_impl(const hybrid_vector_impl& other) : mem(other) {}
 
 	template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-		typename = __hv_container_namespace::enable_if_t<
+		typename = _kotek_hv_container_namespace::enable_if_t<
 			(ElementCount >= ElementCount2 || Realloc == true) &&
-			__hv_container_namespace::is_same_v<Type, Type2>>>
+			_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
 	hybrid_vector_impl(
 		hybrid_vector_impl<Type2, ElementCount2, Realloc2>&& other) : mem(other)
 	{
@@ -125,7 +125,7 @@ public:
 
 	hybrid_vector_impl(hybrid_vector_impl&& other) noexcept : mem(other) {}
 
-	hybrid_vector_impl(__hv_il_t<Type> init) : mem(init) {}
+	hybrid_vector_impl(_kotek_hv_il_t<Type> init) : mem(init) {}
 
 	~hybrid_vector_impl() {}
 
@@ -173,14 +173,14 @@ public:
 	reference emplace_back(Args&&... args)
 	{
 		return mem.con.emplace_back(
-			__hv_container_namespace::forward<Args>(args)...);
+			_kotek_hv_container_namespace::forward<Args>(args)...);
 	}
 
 	template <class... Args>
 	iterator emplace(const_iterator pos, Args&&... args)
 	{
 		return mem.con.emplace(
-			__hv_container_namespace::forward<Args>(args)...);
+			_kotek_hv_container_namespace::forward<Args>(args)...);
 	}
 
 	iterator insert(const_iterator pos, const Type& value)
@@ -189,7 +189,7 @@ public:
 	}
 	iterator insert(const_iterator pos, Type&& value)
 	{
-		return mem.con.insert(pos, __hv_container_namespace::move(value));
+		return mem.con.insert(pos, _kotek_hv_container_namespace::move(value));
 	}
 	iterator insert(const_iterator pos, size_type count, const Type& value)
 	{
@@ -202,7 +202,7 @@ public:
 		return mem.con.insert<InputIt>(pos, first, last);
 	}
 
-	iterator insert(const_iterator pos, __hv_il_t<Type> ilist)
+	iterator insert(const_iterator pos, _kotek_hv_il_t<Type> ilist)
 	{
 		return mem.con.insert(pos, ilist);
 	}
@@ -210,7 +210,7 @@ public:
 	void push_back(const Type& value) { mem.con.push_back(value); }
 	void push_back(Type&& value)
 	{
-		mem.con.push_back(__hv_container_namespace::move(value));
+		mem.con.push_back(_kotek_hv_container_namespace::move(value));
 	}
 	void pop_back() { mem.con.pop_back(); }
 
@@ -222,7 +222,7 @@ public:
 
 	void swap(hybrid_vector_impl& other) noexcept
 	{
-		__hv_container_namespace_swap::swap(mem.con, other.mem.con);
+		_kotek_hv_container_namespace_swap::swap(mem.con, other.mem.con);
 	}
 
 	iterator erase(iterator pos) { return mem.con.erase(pos); }
@@ -247,7 +247,7 @@ public:
 		return mem.con.assign<InputIt>(first, last);
 	}
 
-	void assign(__hv_il_t<Type> ilist) { return mem.con.assign(ilist); }
+	void assign(_kotek_hv_il_t<Type> ilist) { return mem.con.assign(ilist); }
 
 	allocator_type get_allocator() const { return mem.con.get_allocator(); }
 
@@ -264,17 +264,17 @@ public:
 
 	hybrid_vector_impl& operator=(hybrid_vector_impl&& other)
 	{
-		mem.con.operator=(__hv_container_namespace::move(other.con));
+		mem.con.operator=(_kotek_hv_container_namespace::move(other.con));
 		return *this;
 	}
 
 	hybrid_vector_impl& operator=(container_type&& other)
 	{
-		mem.con.operator=(__hv_container_namespace::move(other));
+		mem.con.operator=(_kotek_hv_container_namespace::move(other));
 		return *this;
 	}
 
-	hybrid_vector_impl& operator=(__hv_il_t<value_type> ilist)
+	hybrid_vector_impl& operator=(_kotek_hv_il_t<value_type> ilist)
 	{
 		mem.con.operator=(ilist);
 		return *this;
@@ -285,7 +285,7 @@ public:
 	container_type& container(void) noexcept { return mem.con; }
 	container_type&& container_move(void) noexcept
 	{
-		return __hv_container_namespace::move(mem.con);
+		return _kotek_hv_container_namespace::move(mem.con);
 	}
 
 	constexpr kun_ktk size_t size_preallocated(void) const noexcept
@@ -296,7 +296,7 @@ public:
 	constexpr kun_ktk size_t size_preallocated_memory(
 		void) const KOTEK_CPP_KEYWORD_NOEXCEPT
 	{
-		return __hv_Size;
+		return _kotek_hv_Size;
 	}
 
 	constexpr bool is_static(void) const noexcept { return Realloc; }
@@ -306,9 +306,9 @@ private:
 	{
 		layout_prealloc_t() :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hv_Size,
-				Realloc ? __hv_container_namespace_pmr::get_default_resource()
-						: __hv_container_namespace_pmr::null_memory_resource()},
+				(ElementCount == 0) ? 0 : _kotek_hv_Size,
+				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
+						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
 			con{&pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -319,9 +319,9 @@ private:
 
 		explicit layout_prealloc_t(size_type count) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hv_Size,
-				Realloc ? __hv_container_namespace_pmr::get_default_resource()
-						: __hv_container_namespace_pmr::null_memory_resource()},
+				(ElementCount == 0) ? 0 : _kotek_hv_Size,
+				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
+						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
 			con{count, &pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -332,9 +332,9 @@ private:
 
 		layout_prealloc_t(size_type count, const Type& value) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hv_Size,
-				Realloc ? __hv_container_namespace_pmr::get_default_resource()
-						: __hv_container_namespace_pmr::null_memory_resource()},
+				(ElementCount == 0) ? 0 : _kotek_hv_Size,
+				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
+						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
 			con{count, value, &pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -346,9 +346,9 @@ private:
 		template <class InputIt>
 		layout_prealloc_t(InputIt first, InputIt last) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hv_Size,
-				Realloc ? __hv_container_namespace_pmr::get_default_resource()
-						: __hv_container_namespace_pmr::null_memory_resource()},
+				(ElementCount == 0) ? 0 : _kotek_hv_Size,
+				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
+						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
 			con{first, last, &pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -358,15 +358,15 @@ private:
 		}
 
 		template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-			typename = __hv_container_namespace::enable_if_t<
+			typename = _kotek_hv_container_namespace::enable_if_t<
 				(ElementCount >= ElementCount2 || Realloc == true) &&
-				__hv_container_namespace::is_same_v<Type, Type2>>>
+				_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
 		layout_prealloc_t(
 			const hybrid_vector_impl<Type2, ElementCount2, Realloc2>& other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hv_Size,
-				Realloc ? __hv_container_namespace_pmr::get_default_resource()
-						: __hv_container_namespace_pmr::null_memory_resource()},
+				(ElementCount == 0) ? 0 : _kotek_hv_Size,
+				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
+						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
 			con{other.container(), &pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -376,12 +376,12 @@ private:
 		}
 
 		layout_prealloc_t(
-			const hybrid_vector_impl<Type, ElementCount, Realloc, __hv_Size>&
+			const hybrid_vector_impl<Type, ElementCount, Realloc, _kotek_hv_Size>&
 				other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hv_Size,
-				Realloc ? __hv_container_namespace_pmr::get_default_resource()
-						: __hv_container_namespace_pmr::null_memory_resource()},
+				(ElementCount == 0) ? 0 : _kotek_hv_Size,
+				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
+						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
 			con{other.container(), &pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -391,41 +391,41 @@ private:
 		}
 
 		template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-			typename = __hv_container_namespace::enable_if_t<
+			typename = _kotek_hv_container_namespace::enable_if_t<
 				(ElementCount >= ElementCount2 || Realloc == true) &&
-				__hv_container_namespace::is_same_v<Type, Type2>>>
+				_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
 		layout_prealloc_t(
 			hybrid_vector_impl<Type2, ElementCount2, Realloc2>&& other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hv_Size,
-				Realloc ? __hv_container_namespace_pmr::get_default_resource()
-						: __hv_container_namespace_pmr::null_memory_resource()},
-			con{__hv_container_namespace::move(other.container_move()), &pool}
+				(ElementCount == 0) ? 0 : _kotek_hv_Size,
+				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
+						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
+			con{_kotek_hv_container_namespace::move(other.container_move()), &pool}
 		{
 		}
 
 		layout_prealloc_t(
-			hybrid_vector_impl<Type, ElementCount, Realloc, __hv_Size>&&
+			hybrid_vector_impl<Type, ElementCount, Realloc, _kotek_hv_Size>&&
 				other) noexcept :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hv_Size,
-				Realloc ? __hv_container_namespace_pmr::get_default_resource()
-						: __hv_container_namespace_pmr::null_memory_resource()},
-			con{__hv_container_namespace::move(other.container_move()), &pool}
+				(ElementCount == 0) ? 0 : _kotek_hv_Size,
+				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
+						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
+			con{_kotek_hv_container_namespace::move(other.container_move()), &pool}
 		{
 		}
 
-		layout_prealloc_t(__hv_il_t<Type> init) :
+		layout_prealloc_t(_kotek_hv_il_t<Type> init) :
 			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : __hv_Size,
-				Realloc ? __hv_container_namespace_pmr::get_default_resource()
-						: __hv_container_namespace_pmr::null_memory_resource()},
+				(ElementCount == 0) ? 0 : _kotek_hv_Size,
+				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
+						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
 			con{init, &pool}
 		{
 		}
 
-		unsigned char buf[__hv_Size == 0 ? 1 : __hv_Size];
-		__hv_container_namespace_pmr::monotonic_buffer_resource pool;
+		unsigned char buf[_kotek_hv_Size == 0 ? 1 : _kotek_hv_Size];
+		_kotek_hv_container_namespace_pmr::monotonic_buffer_resource pool;
 		container_type con;
 	};
 
@@ -446,9 +446,9 @@ private:
 		}
 
 		template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-			typename = __hv_container_namespace::enable_if_t<
+			typename = _kotek_hv_container_namespace::enable_if_t<
 				(ElementCount >= ElementCount2 || Realloc == true) &&
-				__hv_container_namespace::is_same_v<Type, Type2>>>
+				_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
 		layout_no_prealloc_t(
 			const hybrid_vector_impl<Type2, ElementCount2, Realloc2>& other) :
 			con{other.container()}
@@ -456,35 +456,35 @@ private:
 		}
 
 		layout_no_prealloc_t(
-			const hybrid_vector_impl<Type, ElementCount, Realloc, __hv_Size>&
+			const hybrid_vector_impl<Type, ElementCount, Realloc, _kotek_hv_Size>&
 				other) : con{other.container()}
 		{
 		}
 
 		template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-			typename = __hv_container_namespace::enable_if_t<
+			typename = _kotek_hv_container_namespace::enable_if_t<
 				(ElementCount >= ElementCount2 || Realloc == true) &&
-				__hv_container_namespace::is_same_v<Type, Type2>>>
+				_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
 		layout_no_prealloc_t(
 			hybrid_vector_impl<Type2, ElementCount2, Realloc2>&& other) :
-			con{__hv_container_namespace::move(other.container_move())}
+			con{_kotek_hv_container_namespace::move(other.container_move())}
 		{
 		}
 
 		layout_no_prealloc_t(
-			hybrid_vector_impl<Type, ElementCount, Realloc, __hv_Size>&&
+			hybrid_vector_impl<Type, ElementCount, Realloc, _kotek_hv_Size>&&
 				other) noexcept :
-			con{__hv_container_namespace::move(other.container_move())}
+			con{_kotek_hv_container_namespace::move(other.container_move())}
 		{
 		}
 
-		layout_no_prealloc_t(__hv_il_t<Type> init) : con{init} {}
+		layout_no_prealloc_t(_kotek_hv_il_t<Type> init) : con{init} {}
 
 		container_type con;
 	};
 
 	using layout_t =
-		__hv_container_namespace_conditional::conditional_t<ElementCount == 0,
+		_kotek_hv_container_namespace_conditional::conditional_t<ElementCount == 0,
 			layout_no_prealloc_t, layout_prealloc_t>;
 
 	layout_t mem;
