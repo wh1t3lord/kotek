@@ -27,12 +27,30 @@ template <class Type>
 using _kotek_hum_il_t = ::std::initializer_list<Type>;
 
 template <typename Key, typename Value>
+using _kotek_hum_value_type =
+	_kotek_hum_container_namespace::unordered::unordered_map<Key,
+		Value>::value_type;
+
+template <typename Key, typename Value>
+using _kotek_hum_polymorphic_allocator =
+	_kotek_hum_container_namespace_pmr::polymorphic_allocator<
+		_kotek_hum_value_type<Key, Value>>;
+
+template <typename Key, typename Value>
+using _kotek_humm_value_type =
+	_kotek_hum_container_namespace::unordered::unordered_multimap<Key,
+		Value>::value_type;
+
+template <typename Key, typename Value>
+using _kotek_humm_polymorphic_allocator =
+	_kotek_hum_container_namespace_pmr::polymorphic_allocator<
+		_kotek_humm_value_type<Key, Value>>;
+
+template <typename Key, typename Value>
 using hybrid_unordered_map_container =
 	_kotek_hum_container_namespace::unordered::unordered_map<Key, Value,
 		_kotek_hum_container_namespace::hash<Key>, std::equal_to<Key>,
-		_kotek_hum_container_namespace_pmr::polymorphic_allocator<
-			_kotek_hum_container_namespace::unordered::unordered_map<Key,
-				Value>::value_type>>;
+		_kotek_hum_polymorphic_allocator<Key, Value>>;
 
 #elif defined(KOTEK_USE_STD_LIBRARY)
 
@@ -43,6 +61,25 @@ namespace _kotek_hum_container_namespace_conditional = ::std;
 
 template <class Type>
 using _kotek_hum_il_t = ::std::initializer_list<Type>;
+
+template <typename Key, typename Value>
+using _kotek_hum_value_type =
+	_kotek_hum_container_namespace::pmr::unordered_map<Key, Value>::value_type;
+
+template <typename Key, typename Value>
+using _kotek_hum_polymorphic_allocator =
+	_kotek_hum_container_namespace_pmr::polymorphic_allocator<
+		_kotek_hum_value_type<Key, Value>>;
+
+template <typename Key, typename Value>
+using _kotek_humm_value_type =
+	_kotek_hum_container_namespace::pmr::unordered_multimap<Key,
+		Value>::value_type;
+
+template <typename Key, typename Value>
+using _kotek_humm_polymorphic_allocator =
+	_kotek_hum_container_namespace_pmr::polymorphic_allocator<
+		_kotek_humm_value_type<Key, Value>>;
 
 template <typename Key, typename Value>
 using hybrid_unordered_map_container =
@@ -145,12 +182,15 @@ class hybrid_unordered_map
 		"memory at all and it means that container is forced to support "
 		"reallocation!");
 
-	template <typename _K, typename _T, typename _C>
-	using base_type = _kotek_hum_container_namespace_pmr::map<_K, _T, _C>;
+	template <typename _K, typename _T, typename H2, typename KQ2>
+	using base_type =
+		_kotek_hum_container_namespace::unordered::unordered_map<_K, _T, H2,
+			KQ2, _kotek_hum_polymorphic_allocator<_K, _T>>;
 
-	template <typename _K, typename _T, typename _C>
+	template <typename _K, typename _T, typename H2, typename KQ2>
 	using base_multimap_type =
-		_kotek_hum_container_namespace_pmr::multimap<_K, _T, _C>;
+		_kotek_hum_container_namespace::unordered::unordered_multimap<_K, _T,
+			H2, KQ2, _kotek_humm_polymorphic_allocator<_K, _T>>;
 
 	using container_type = hybrid_unordered_map_container<Key, Value>;
 
@@ -214,9 +254,42 @@ public:
 	{
 	}
 
+	template <typename Key2, typename Value2, std::size_t ElementCount2,
+		bool Realloc2,
+		typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
+										Realloc == true) &&
+			std::is_same_v<Key, Key2> && std::is_same_v<Value, Value2>>>
+	hybrid_unordered_map(
+		const hybrid_unordered_map<Key2, Value2, ElementCount2, Realloc2>&
+			other) : mem(other)
+	{
+	}
+
 	hybrid_unordered_map(const hybrid_unordered_map& other) : mem(other) {}
 
+	template <typename Key2, typename Value2, std::size_t ElementCount2,
+		bool Realloc2,
+		typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
+										Realloc == true) &&
+			std::is_same_v<Key, Key2> && std::is_same_v<Value, Value2>>>
+	hybrid_unordered_map(
+		hybrid_unordered_map<Key2, Value2, ElementCount2, Realloc2>&& other) :
+		mem(other)
+	{
+	}
+
 	hybrid_unordered_map(hybrid_unordered_map&& other) : mem(other) {}
+
+	hybrid_unordered_map(std::initializer_list<value_type> init,
+		size_type bucket_count) : mem(init, bucket_count)
+	{
+	}
+
+	hybrid_unordered_map(std::initializer_list<value_type> init,
+		size_type bucket_count, const hasher& hash) :
+		mem(init, bucket_count, hash)
+	{
+	}
 
 	~hybrid_unordered_map() {}
 
@@ -240,21 +313,6 @@ public:
 	const_iterator end() const { return mem.con.end(); }
 
 	const_iterator cend() const noexcept { return mem.con.cend(); }
-
-	reverse_iterator rbegin() { return mem.con.rbegin(); }
-
-	const_reverse_iterator rbegin() const { return mem.con.rbegin(); }
-
-	const_reverse_iterator crbegin() const noexcept
-	{
-		return mem.con.crbegin();
-	}
-
-	reverse_iterator rend() { return mem.con.rend(); }
-
-	const_reverse_iterator rend() const { return mem.con.rend(); }
-
-	const_reverse_iterator crend() const noexcept { return mem.con.crend(); }
 
 public:
 	bool empty() const { return mem.con.empty(); }
@@ -403,34 +461,34 @@ public:
 
 	size_type erase(const Key& key) { return mem.con.erase(key); }
 
-	void swap(hybrid_map& other) noexcept { mem.con.swap(other); }
+	void swap(hybrid_unordered_map& other) noexcept { mem.con.swap(other); }
 
 	node_type extract(const_iterator pos) { return mem.con.extract(pos); }
 
 	node_type extract(const Key& k) { return mem.con.extract(k); }
 
-	template <class C2>
-	void merge(base_type<Key, Value, C2>& source)
+	template <class Hasher2, class KeyEqual2>
+	void merge(base_type<Key, Value, Hasher2, KeyEqual2>& source)
 	{
-		mem.con.merge<C2>(source);
+		mem.con.merge<Hasher2, KeyEqual2>(source);
 	}
 
-	template <class C2>
-	void merge(base_type<Key, Value, C2>&& source)
+	template <class Hasher2, class KeyEqual2>
+	void merge(base_type<Key, Value, Hasher2, KeyEqual2>&& source)
 	{
-		mem.con.merge<C2>(std::move(source));
+		mem.con.merge<Hasher2, KeyEqual2>(std::move(source));
 	}
 
-	template <class C2>
-	void merge(base_multimap_type<Key, Value, C2>& source)
+	template <class Hasher2, class KeyEqual2>
+	void merge(base_multimap_type<Key, Value, Hasher2, KeyEqual2>& source)
 	{
-		mem.con.merge<C2>(source);
+		mem.con.merge<Hasher2, KeyEqual2>(source);
 	}
 
-	template <class C2>
-	void merge(base_multimap_type<Key, Value, C2>&& source)
+	template <class Hasher2, class KeyEqual2>
+	void merge(base_multimap_type<Key, Value, Hasher2, KeyEqual2>&& source)
 	{
-		mem.con.merge<C2>(std::move(source));
+		mem.con.merge<Hasher2, KeyEqual2>(std::move(source));
 	}
 
 public:
@@ -554,73 +612,175 @@ private:
 						: std::pmr::null_memory_resource()},
 			con{&pool}
 		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
 		}
 
-		explicit layout_prealloc_t(const key_compare& comp) :
+		explicit layout_prealloc_t(size_type bucket_count,
+			const hasher& hash = hasher(),
+			const key_equal& equal = key_equal()) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hum_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
-			con{comp, &pool}
+			con{bucket_count, hash, equal, &pool}
 		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(size_type bucket_count) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hum_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{bucket_count, hasher(), key_equal(), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(size_type bucket_count, const hasher& hash) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hum_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{bucket_count, hash, key_equal(), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
 		}
 
 		template <class InputIt>
-		layout_prealloc_t(InputIt first, InputIt last,
-			const key_compare& comp = key_compare()) :
+		layout_prealloc_t(InputIt first, InputIt last, size_type bucket_count,
+			const hasher& hash = hasher(),
+			const key_equal& equal = key_equal()) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hum_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
-			con{first, last, comp, &pool}
+			con{first, last, bucket_count, hash, equal, &pool}
 		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
 		}
 
 		template <typename InputIt>
-		layout_prealloc_t(InputIt first, InputIt last) :
+		layout_prealloc_t(InputIt first, InputIt last, size_type bucket_count) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hum_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
-			con(first, last, key_compare(), &pool)
+			con{first, last, bucket_count, hasher(), key_equal(), &pool}
 		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
 		}
 
-		layout_prealloc_t(const hybrid_map& other) :
+		template <typename Key2, typename Value2, std::size_t ElementCount2,
+			bool Realloc2,
+			typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
+											Realloc == true) &&
+				std::is_same_v<Key, Key2> && std::is_same_v<Value, Value2>>>
+		layout_prealloc_t(
+			const hybrid_unordered_map<Key2, Value2, ElementCount2, Realloc2>&
+				other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hum_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con{other.container(), &pool}
 		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
 		}
 
-		layout_prealloc_t(hybrid_map&& other) :
+		layout_prealloc_t(const hybrid_unordered_map& other) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hum_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{other.container(), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		template <typename Key2, typename Value2, std::size_t ElementCount2,
+			bool Realloc2,
+			typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
+											Realloc == true) &&
+				std::is_same_v<Key, Key2> && std::is_same_v<Value, Value2>>>
+		layout_prealloc_t(
+			hybrid_unordered_map<Key2, Value2, ElementCount2, Realloc2>&&
+				other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hum_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con{std::move(other.container_move_out()), &pool}
 		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(hybrid_unordered_map&& other) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hum_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{std::move(other.container_move_out()), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(
+			std::initializer_list<value_type> init, size_type bucket_count) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hum_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{init, bucket_count, hasher(), key_equal(), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
 		}
 
 		layout_prealloc_t(std::initializer_list<value_type> init,
-			const key_compare& comp = key_compare()) :
+			size_type bucket_count, const hasher& hash) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hum_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
-			con{init, comp, &pool}
+			con(init, bucket_count, hash, key_equal(), &pool)
 		{
-		}
-
-		layout_prealloc_t(std::initializer_list<value_type> init) :
-			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : _kotek_hum_Size,
-				Realloc ? std::pmr::get_default_resource()
-						: std::pmr::null_memory_resource()},
-			con(init, key_compare(), &pool)
-		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
 		}
 
 		unsigned char buf[_kotek_hum_Size];
@@ -632,36 +792,79 @@ private:
 	{
 		layout_no_prealloc_t() : con{} {}
 
-		explicit layout_no_prealloc_t(const key_compare& comp) : con{comp} {}
+		explicit layout_no_prealloc_t(size_type bucket_count,
+			const hasher& hash = hasher(),
+			const key_equal& equal = key_equal()) :
+			con{bucket_count, hash, equal}
+		{
+		}
+
+		layout_no_prealloc_t(size_type bucket_count) :
+			con{bucket_count, hasher(), key_equal()}
+		{
+		}
+
+		layout_no_prealloc_t(size_type bucket_count, const hasher& hash) :
+			con{bucket_count, hash, key_equal()}
+		{
+		}
 
 		template <class InputIt>
 		layout_no_prealloc_t(InputIt first, InputIt last,
-			const key_compare& comp = key_compare()) : con{first, last, comp}
+			size_type bucket_count, const hasher& hash = hasher(),
+			const key_equal& equal = key_equal()) :
+			con{first, last, bucket_count, hash, equal}
 		{
 		}
 
 		template <typename InputIt>
-		layout_no_prealloc_t(InputIt first, InputIt last) :
-			con(first, last, key_compare())
+		layout_no_prealloc_t(
+			InputIt first, InputIt last, size_type bucket_count) :
+			con{first, last, bucket_count, hasher(), key_equal()}
 		{
 		}
 
-		layout_no_prealloc_t(const hybrid_map& other) : con{other.container()}
+		template <typename Key2, typename Value2, std::size_t ElementCount2,
+			bool Realloc2,
+			typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
+											Realloc == true) &&
+				std::is_same_v<Key, Key2> && std::is_same_v<Value, Value2>>>
+		layout_no_prealloc_t(
+			const hybrid_unordered_map<Key2, Value2, ElementCount2, Realloc2>&
+				other) : con{other.container()}
 		{
 		}
 
-		layout_no_prealloc_t(hybrid_map&& other) :
+		layout_no_prealloc_t(const hybrid_unordered_map& other) :
+			con{other.container()}
+		{
+		}
+
+		template <typename Key2, typename Value2, std::size_t ElementCount2,
+			bool Realloc2,
+			typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
+											Realloc == true) &&
+				std::is_same_v<Key, Key2> && std::is_same_v<Value, Value2>>>
+		layout_no_prealloc_t(
+			hybrid_unordered_map<Key2, Value2, ElementCount2, Realloc2>&&
+				other) : con{std::move(other.container_move_out())}
+		{
+		}
+
+		layout_no_prealloc_t(hybrid_unordered_map&& other) :
 			con{std::move(other.container_move_out())}
 		{
 		}
 
-		layout_no_prealloc_t(std::initializer_list<value_type> init,
-			const key_compare& comp = key_compare()) : con{init, comp}
+		layout_no_prealloc_t(
+			std::initializer_list<value_type> init, size_type bucket_count) :
+			con{init, bucket_count, hasher(), key_equal()}
 		{
 		}
 
-		layout_no_prealloc_t(std::initializer_list<value_type> init) :
-			con(init, key_compare())
+		layout_no_prealloc_t(std::initializer_list<value_type> init,
+			size_type bucket_count, const hasher& hash) :
+			con(init, bucket_count, hash, key_equal())
 		{
 		}
 
