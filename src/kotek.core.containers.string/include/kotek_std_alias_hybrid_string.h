@@ -5,478 +5,877 @@
 #include <kotek.core.casting.lexical/include/kotek_core_casting_lexical.h>
 #include <kotek.core.defines.static.string/include/kotek_core_defines_static_string.h>
 
-#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	#include <etl/string.h>
-	#include <etl/wstring.h>
-	#include <etl/u8string.h>
-	#include <etl/u16string.h>
-	#include <etl/u32string.h>
+#ifdef KOTEK_USE_BOOST_LIBRARY
+	#include <string>
+	#include <memory_resource>
+#elif defined(KOTEK_USE_STD_LIBRARY)
+	#include <string>
+	#include <memory_resource>
 #endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
+
 KOTEK_BEGIN_NAMESPACE_KTK
 
-#ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
+#ifdef KOTEK_USE_BOOST_LIBRARY
+namespace _kotek_hstr_container_namespace = ::std;
+namespace _kotek_hstr_container_namespace_pmr = ::std::pmr;
+namespace _kotek_hstr_container_namespace_swap = ::std;
+namespace _kotek_hstr_container_namespace_conditional = ::std;
 
-std::size_t hash_value(const ktk::ustring& instance);
-void to_lower(cstring& str);
-cstring to_lower(const cstring& str);
-int sprintf(char* const p_string, const std::size_t buffer_count,
-	char const* const p_format, ...);
+template <class Type>
+using _kotek_hstr_il_t = ::std::initializer_list<Type>;
+
+template <typename CharType>
+using hybrid_string_container =
+	_kotek_hstr_container_namespace_pmr::basic_string<CharType>;
+
+#elif defined(KOTEK_USE_STD_LIBRARY)
+namespace _kotek_hstr_container_namespace = ::std;
+namespace _kotek_hstr_container_namespace_pmr = ::std::pmr;
+namespace _kotek_hstr_container_namespace_swap = ::std;
+namespace _kotek_hstr_container_namespace_conditional = ::std;
+
+template <class Type>
+using _kotek_hstr_il_t = ::std::initializer_list<Type>;
+
+template <typename CharType>
+using hybrid_string_container =
+	_kotek_hstr_container_namespace_pmr::basic_string<CharType>;
 #else
 #endif
 
-#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-// TODO: add static version of strings containers respect to char8_t model
-// architecture !
-// TODO: add predefined versions size of static strings like
-// 2,4,8,16,32,64,128,256,512,1024,2048,4096,8192,16384,32768,65536
+template <typename T, std::size_t E, bool R, std::size_t B>
+class hybrid_string;
 
-template <size_t Size>
-using static_u8string = etl::u8string<Size>;
-using static_u8string_view = etl::u8string_view;
+// Type trait to detect hybrid_string
+template <typename T>
+struct _kotek_hstr_is_hybrid_string : std::false_type
+{
+};
 
-template <size_t Size>
-using static_u16string = etl::u16string<Size>;
-using static_u16string_view = etl::u16string_view;
+template <typename Type, std::size_t EC, bool R, std::size_t BS>
+struct _kotek_hstr_is_hybrid_string<hybrid_string<Type, EC, R, BS>>
+	: std::true_type
+{
+};
 
-template <size_t Size>
-using static_u32string = etl::u32string<Size>;
-using static_u32string_view = etl::u32string_view;
+template <typename T>
+inline constexpr bool _kotek_hstr_is_hybrid_string_v =
+	_kotek_hstr_is_hybrid_string<T>::value;
 
-template <size_t Size>
-using static_wstring = etl::wstring<Size>;
-using static_wstring_view = etl::wstring_view;
-
-template <size_t Size>
-using static_cstring = etl::string<Size>;
-using static_cstring_view = etl::string_view;
-using static_cstring_ext = etl::string_ext;
-using static_cstring_base = etl::ibasic_string<char>;
-
-template <size_t Size>
-	#ifdef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
-using static_ustring = static_cstring<Size>;
-using static_ustring_view = static_cstring_view;
-	#else
-using ustring = static_string<Size>;
-using ustring_view = static_string_view;
-	#endif
-
+template <typename Type, std::size_t ElementCount, bool Realloc,
+	std::size_t _kotek_hstr_Size
+#ifdef _DEBUG
+	= sizeof(Type) * ElementCount * 2
+#else
+	= sizeof(Type) * ElementCount
 #endif
 
-/// @brief allocates memory because it is not embedded function on stack
-/// @param str takes char16_t type (don't mistake with wchar_t)
-/// @return char8_t based std::u8string container, then you can keep this type
-/// or convert to std::string (char based string)
-u8string convert_utf16_to_utf8(const u16string_view& str);
-/// @brief allocates memory because it is not embedded function on stack
-/// @param str takes char32_t string type
-/// @return char8_t based std::u8string container, then you can keep this type
-/// or convert to std::string (char based string)
-u8string convert_utf32_to_utf8(const u32string_view& str);
-
-// TODO: create default size of stack static string size
-template <size_t Size = 128>
-inline static_cstring<Size> convert_wchar_to_char(const wstring_view& str)
+	>
+class hybrid_string
 {
-	assert(str.size() <= Size && "can't convert try to change the size!");
+	using container_type = std::pmr::basic_string<Type>;
+	using container_view_type = std::basic_string_view<Type>;
 
-	ktk::size_t written;
-	static_cstring<Size> stack{};
+	static_assert(ElementCount == 0 ? Realloc : true,
+		"if you specified ElementCount as 0 it means that it doesn't use stack "
+		"memory at all and it means that container is forced to support "
+		"reallocation!");
 
+public:
+	using value_type = typename container_type::value_type;
+	using size_type = typename container_type::size_type;
+	using difference_type = typename container_type::difference_type;
+	using reference = typename container_type::reference;
+	using const_reference = typename container_type::const_reference;
+	using pointer = typename container_type::pointer;
+	using const_pointer = typename container_type::const_pointer;
+	using iterator = typename container_type::iterator;
+	using const_iterator = typename container_type::const_iterator;
+	using reverse_iterator = typename container_type::reverse_iterator;
+	using const_reverse_iterator =
+		typename container_type::const_reverse_iterator;
+	using allocator_type = typename container_type::allocator_type;
+
+	template <class InputIt>
+	hybrid_string(InputIt first, InputIt last) : mem{first, last}
 	{
-		char temp[Size];
-		wcstombs_s(&written, temp, Size, str.data(), str.size());
-		stack = temp;
 	}
 
-	return stack;
-}
+	hybrid_string(const Type* s, size_type count) : mem{s, count} {}
+
+	hybrid_string(const Type* s) : mem{s} {}
+
+	template <class StringViewLike,
+		typename = std::enable_if_t<
+			!_kotek_hstr_is_hybrid_string_v<std::decay_t<StringViewLike>> &&
+			std::is_convertible_v<const StringViewLike&, container_view_type>>>
+	hybrid_string(const StringViewLike& t) : mem{t}
+	{
+	}
+
+	template <class StringViewLike,
+		typename = std::enable_if_t<
+			!is_hybrid_string_v<std::decay_t<StringViewLike>> &&
+			std::is_convertible_v<const StringViewLike&, container_view_type>>>
+	hybrid_string(const StringViewLike& t, size_type pos, size_type count) :
+		mem{t, pos, count}
+	{
+	}
+
+	// hybrid_string(const hybrid_string& other);
+	// hybrid_string(hybrid_string&& other) noexcept;
+
+	template <typename TypeOther, std::size_t Size, bool Realloc,
+		typename = std::enable_if_t<(ElementCount >= Size || Realloc == true) &&
+			std::is_same_v<Type, TypeOther>>>
+	hybrid_string(hybrid_string<TypeOther, Size, Realloc>&& other) noexcept :
+		mem{other}
+	{
+	}
+
+	hybrid_string(hybrid_string&& other) noexcept : mem{other} {}
+
+	//	hybrid_string(const hybrid_string& other, const allocator_type& alloc);
+
+	// Deleted constructor for invalid sizes
+
+	template <typename TypeOther, std::size_t Size, bool Realloc,
+		typename = std::enable_if_t<(ElementCount >= Size || Realloc == true) &&
+			std::is_same_v<Type, TypeOther>>>
+	hybrid_string(const hybrid_string<TypeOther, Size, Realloc>& other) :
+		mem{other}
+	{
+	}
+
+	hybrid_string(const hybrid_string& other) : mem{other} {}
+
+	//	hybrid_string(hybrid_string&& other, const allocator_type& alloc);
+
+	//	hybrid_string(const hybrid_string& other, size_type pos,
+	//	const allocator_type& alloc = allocator_type());
+
+	//	hybrid_string(const hybrid_string& other,
+	//		size_type pos, size_type count,
+	//		const allocator_type& alloc = allocator_type());
+
+	hybrid_string(std::initializer_list<Type> ilist) : mem{ilist} {}
+
+	hybrid_string() : mem{} {}
+
+	~hybrid_string() {}
+
+	inline const_iterator begin() const { return mem.con.begin(); }
+	inline const_iterator end() const { return mem.con.end(); }
+
+	inline const_iterator cbegin() const { return mem.con.cbegin(); }
+	inline const_iterator cend() const { return mem.con.cend(); }
+
+	inline reverse_iterator rbegin() { return mem.con.rbegin(); }
+	inline reverse_iterator rend() { return mem.con.rend(); }
+
+	inline const_reverse_iterator rbegin() const { return mem.con.rbegin(); }
+	inline const_reverse_iterator rend() const { return mem.con.rend(); }
+
+	inline const_reverse_iterator crbegin() const { return mem.con.crbegin(); }
+	inline const_reverse_iterator crend() const { return mem.con.crend(); }
+
+	inline const value_type* c_str(void) const { return mem.con.c_str(); }
+	inline size_type max_size(void) const { return mem.con.max_size(); }
+	inline bool empty(void) const { return mem.con.empty(); }
+	inline reference at(size_type index) { return mem.con.at(index); }
+
+	inline const_reference at(const size_type index) const
+	{
+		return mem.con.at(index);
+	}
+
+	hybrid_string substr(
+		size_type pos = 0, size_type count = container_type::npos) const
+	{
+		return mem.con.substr(pos, count);
+	}
+
+	size_type copy(Type* dest, size_type count, size_type pos = 0) const
+	{
+		return mem.con.copy(dest, count, pos);
+	}
+
+	size_type find(const hybrid_string& istr, size_type pos = 0) const
+	{
+		return mem.con.find(istr.mem.con, pos);
+	}
+
+	size_type find(const container_type& istr, size_type pos = 0) const
+	{
+		return mem.con.find(istr, pos);
+	}
+
+	size_type find(const Type* s, size_type pos, size_type count) const
+	{
+		return mem.con.find(s, pos, count);
+	}
+
+	size_type find(const Type* s, size_type pos = 0) const
+	{
+		return mem.con.find(s, pos);
+	}
+
+	size_type find(Type ch, size_type pos = 0) const
+	{
+		return mem.con.find(ch, pos);
+	}
+
+	template <class StringViewLike>
+	size_type find(const StringViewLike& t, size_type pos = 0) const noexcept
+	{
+		return mem.con.find<StringViewLike>(t, pos);
+	}
+
+	size_type rfind(
+		const hybrid_string& istr, size_type pos = container_type::npos) const
+	{
+		return mem.con.rfind(istr.mem.con, pos);
+	}
+
+	size_type rfind(
+		const container_type& str, size_type pos = container_type::npos) const
+	{
+		return mem.con.rfind(str, pos);
+	}
+
+	size_type rfind(const Type* s, size_type pos, size_type count) const
+	{
+		return mem.con.rfind(s, pos, count);
+	}
+
+	size_type rfind(const Type* s, size_type pos = container_type::npos) const
+	{
+		return mem.con.rfind(s, pos);
+	}
+
+	size_type rfind(Type ch, size_type pos = container_type::npos) const
+	{
+		return mem.con.rfind(ch, pos);
+	}
+
+	template <class StringViewLike>
+	size_type rfind(const StringViewLike& t,
+		size_type pos = container_type::npos) const noexcept
+	{
+		return mem.con.rfind<StringViewLike>(t, pos);
+	}
+
+	size_type find_first_of(const hybrid_string& istr, size_type pos = 0) const
+	{
+		return mem.con.find_first_of(istr.mem.con, pos);
+	}
+
+	size_type find_first_of(const container_type& str, size_type pos = 0) const
+	{
+		return mem.con.find_first_of(str, pos);
+	}
+
+	size_type find_first_of(const Type* s, size_type pos, size_type count) const
+	{
+		return mem.con.find_first_of(s, pos, count);
+	}
+
+	size_type find_first_of(const Type* s, size_type pos = 0) const
+	{
+		return mem.con.find_first_of(s, pos);
+	}
+
+	size_type find_first_of(Type ch, size_type pos = 0) const
+	{
+		return mem.con.find_first_of(ch, pos);
+	}
+
+	template <class StringViewLike>
+	size_type find_first_of(
+		const StringViewLike& t, size_type pos = 0) const noexcept
+	{
+		return mem.con.find_first_of<StringViewLike>(t, pos);
+	}
+
+	size_type find_first_not_of(
+		const hybrid_string& istr, size_type pos = 0) const
+	{
+		return mem.con.find_first_not_of(istr.mem.con, pos);
+	}
+
+	size_type find_first_not_of(
+		const container_type& str, size_type pos = 0) const
+	{
+		return mem.con.find_first_not_of(str, pos);
+	}
+
+	size_type find_first_not_of(
+		const Type* s, size_type pos, size_type count) const
+	{
+		return mem.con.find_first_not_of(s, pos, count);
+	}
+
+	size_type find_first_not_of(const Type* s, size_type pos = 0) const
+	{
+		return mem.con.find_first_not_of(s, pos);
+	}
+
+	size_type find_first_not_of(Type ch, size_type pos = 0) const
+	{
+		return mem.con.find_first_not_of(ch, pos);
+	}
+
+	template <class StringViewLike>
+	size_type find_first_not_of(
+		const StringViewLike& t, size_type pos = 0) const noexcept
+	{
+		return mem.con.find_first_not_of<StringViewLike>(t, pos);
+	}
+
+	size_type find_last_of(
+		const hybrid_string& istr, size_type pos = container_type::npos) const
+	{
+		return mem.con.find_last_of(istr.mem.con, pos);
+	}
+
+	size_type find_last_of(
+		const container_type& str, size_type pos = container_type::npos) const
+	{
+		return mem.con.find_last_of(str, pos);
+	}
+
+	size_type find_last_of(const Type* s, size_type pos, size_type count) const
+	{
+		return mem.con.find_last_of(s, pos, count);
+	}
+
+	size_type find_last_of(
+		const Type* s, size_type pos = container_type::npos) const
+	{
+		return mem.con.find_last_of(s, pos);
+	}
+
+	size_type find_last_of(Type ch, size_type pos = container_type::npos) const
+	{
+		return mem.con.find_last_of(ch, pos);
+	}
+
+	template <class StringViewLike>
+	size_type find_last_of(const StringViewLike& t,
+		size_type pos = container_type::npos) const noexcept
+	{
+		return mem.con.find_last_of<StringViewLike>(t, pos);
+	}
+
+	size_type find_last_not_of(
+		const hybrid_string& istr, size_type pos = container_type::npos) const
+	{
+		return mem.con.find_last_not_of(istr.mem.con, pos);
+	}
+
+	size_type find_last_not_of(
+		const container_type& str, size_type pos = container_type::npos) const
+	{
+		return mem.con.find_last_not_of(str, pos);
+	}
+
+	size_type find_last_not_of(
+		const Type* s, size_type pos, size_type count) const
+	{
+		return mem.con.find_last_not_of(s, pos, count);
+	}
+
+	size_type find_last_not_of(
+		const Type* s, size_type pos = container_type::npos) const
+	{
+		return mem.con.find_last_not_of(s, pos);
+	}
+
+	size_type find_last_not_of(
+		Type ch, size_type pos = container_type::npos) const
+	{
+		return mem.con.find_last_not_of(ch, pos);
+	}
+
+	template <class StringViewLike>
+	size_type find_last_not_of(const StringViewLike& t,
+		size_type pos = container_type::npos) const noexcept
+	{
+		return mem.con.find_last_not_of<StringViewLike>(t, pos);
+	}
+
+	// non-const
+	inline iterator begin() { return mem.con.begin(); }
+	inline iterator end() { return mem.con.end(); }
+
+	inline void clear(void) { mem.con.clear(); }
+	inline pointer data(void) { return mem.con.data(); }
+	inline size_type size(void) const { return mem.con.size(); }
+
+	size_type length() const { return mem.con.length(); }
+
+	hybrid_string& append(size_type count, Type ch)
+	{
+		mem.con.append(count, ch);
+		return *this;
+	}
+
+	hybrid_string& append(const Type* s, size_type count)
+	{
+		mem.con.append(s, count);
+		return *this;
+	}
+
+	hybrid_string& append(const Type* s)
+	{
+		mem.con.append(s);
+		return *this;
+	}
+
+	template <class SV>
+	hybrid_string& append(const SV& t)
+	{
+		mem.con.append<SV>(t);
+		return *this;
+	}
+
+	template <class SV>
+	hybrid_string& append(
+		const SV& t, size_type pos, size_type count = container_type::npos)
+	{
+		mem.con.append<SV>(t, pos, count);
+		return *this;
+	}
+
+	hybrid_string& append(const hybrid_string& istr)
+	{
+		mem.con.append(istr.mem.con);
+		return *this;
+	}
+
+	hybrid_string& append(const container_type& istr)
+	{
+		mem.con.append(istr);
+		return *this;
+	}
+
+	hybrid_string& append(const hybrid_string& istr, size_type pos,
+		size_type count = container_type::npos)
+	{
+		mem.con.append(istr.mem.con, pos, count);
+		return *this;
+	}
+
+	hybrid_string& append(const container_type& istr, size_type pos,
+		size_type count = container_type::npos)
+	{
+		mem.con.append(istr, pos, count);
+		return *this;
+	}
+
+	template <class InputIt>
+	hybrid_string& append(InputIt first, InputIt last)
+	{
+		mem.con.append<InputIt>(first, last);
+		return *this;
+	}
+
+	hybrid_string& append(std::initializer_list<Type> ilist)
+	{
+		mem.con.append(ilist);
+		return *this;
+	}
+
+	inline void swap(const hybrid_string& istr)
+	{
+		return mem.con.swap(istr.mem.con);
+	}
+
+	inline void swap(const container_type& istr) { return mem.con.swap(istr); }
+
+	inline void push_back(Type c) { mem.con.push_back(c); }
+
+	inline void pop_back() { mem.con.pop_back(); }
+
+	hybrid_string& operator+=(const hybrid_string& istr)
+	{
+		mem.con.operator+=(istr.mem.con);
+		return *this;
+	}
+
+	hybrid_string& operator+=(const container_type& istr)
+	{
+		mem.con.operator+=(istr);
+		return *this;
+	}
+
+	hybrid_string& operator+=(Type ch)
+	{
+		mem.con.operator+=(ch);
+		return *this;
+	}
+
+	hybrid_string& operator+=(const Type* s)
+	{
+		mem.con.operator+=(s);
+		return *this;
+	}
+
+	hybrid_string& operator+=(std::initializer_list<Type> ilist)
+	{
+		mem.con.operator+=(ilist);
+		return *this;
+	}
+
+	template <class StringViewLike>
+	hybrid_string& operator+=(const StringViewLike& t)
+	{
+		mem.con.operator+=(t);
+		return *this;
+	}
+
+	hybrid_string& operator=(const hybrid_string& istr)
+	{
+		mem.con.operator=(istr.mem.con);
+		return *this;
+	}
+
+	hybrid_string& operator=(const container_type& istr)
+	{
+		mem.con.operator=(istr);
+		return *this;
+	}
+
+	hybrid_string& operator=(hybrid_string&& istr) noexcept
+	{
+		mem.con.operator=(std::move(istr.mem.con));
+		return *this;
+	}
+	hybrid_string& operator=(container_type&& istr) noexcept
+	{
+		mem.con.operator=(std::move(istr));
+		return *this;
+	}
+
+	template <size_type Size>
+	hybrid_string& operator=(const Type (&test)[Size])
+	{
+		this->operator=(static_cast<const Type*>(test));
+		return *this;
+	}
+
+	hybrid_string& operator=(const Type* s)
+	{
+		mem.con.operator=(s);
+		return *this;
+	}
+
+	hybrid_string& operator=(Type ch)
+	{
+		mem.con.operator=(ch);
+		return *this;
+	}
+
+	hybrid_string& operator=(std::initializer_list<Type> ilist)
+	{
+		mem.con.operator=(ilist);
+		return *this;
+	}
+
+	template <class StringViewLike>
+	hybrid_string& operator=(const StringViewLike& t)
+	{
+		mem.con.operator= <StringViewLike>(t);
+		return *this;
+	}
+
+	explicit operator container_view_type() const noexcept
+	{
+		return container_view_type(mem.con);
+	}
+
+	allocator_type get_allocator() const noexcept
+	{
+		return mem.con.get_allocator();
+	}
+
+	value_type& front() { return mem.con.front(); }
+	const value_type& front() const { return mem.con.front(); }
+
+	value_type& back() { return mem.con.back(); }
+	const value_type& back() const { return mem.con.back(); }
+
+	inline reference operator[](size_type pos) noexcept
+	{
+		return mem.con.operator[](pos);
+	}
+	inline const_reference operator[](size_type pos) const noexcept
+	{
+		return mem.con.operator[](pos);
+	}
+
+	container_type& container() noexcept { return mem.con; }
+	container_type&& container_move_out() noexcept { return std::move(mem.con); }
+	const container_type& container() const noexcept { return mem.con; }
+
+	constexpr std::size_t preallocated_memory_size() const noexcept
+	{
+		return _kotek_hstr_Size;
+	}
+	constexpr std::size_t preallocated_size() const noexcept
+	{
+		return ElementCount;
+	}
+	constexpr bool is_reallocation_supported() const noexcept
+	{
+		return Realloc;
+	}
+
+private:
+	struct layout_prealloc_t
+	{
+		template <class InputIt>
+		layout_prealloc_t(InputIt first, InputIt last) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{first, last, &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(const Type* s, size_type count) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{s, count, &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(const Type* s) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{s, &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		template <class StringViewLike,
+			typename = std::enable_if_t<
+				!_kotek_hstr_is_hybrid_string_v<std::decay_t<StringViewLike>> &&
+				std::is_convertible_v<const StringViewLike&,
+					container_view_type>>>
+		layout_prealloc_t(const StringViewLike& t) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{t, &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		template <class StringViewLike,
+			typename = std::enable_if_t<!+_kotek_hstr_is_hybrid_string_v<
+											std::decay_t<StringViewLike>> &&
+				std::is_convertible_v<const StringViewLike&,
+					container_view_type>>>
+		layout_prealloc_t(
+			const StringViewLike& t, size_type pos, size_type count) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{t, pos, count, &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		template <typename TypeOther, std::size_t Size, bool Realloc,
+			typename =
+				std::enable_if_t<(ElementCount >= Size || Realloc == true) &&
+					std::is_same_v<Type, TypeOther>>>
+		layout_prealloc_t(
+			hybrid_string<TypeOther, Size, Realloc>&& other) noexcept :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{std::move(other.container_move_out()), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(hybrid_string&& other) noexcept :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{std::move(other.str), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		template <typename TypeOther, std::size_t Size, bool Realloc,
+			typename =
+				std::enable_if_t<(ElementCount >= Size || Realloc == true) &&
+					std::is_same_v<Type, TypeOther>>>
+		layout_prealloc_t(
+			const hybrid_string<TypeOther, Size, Realloc>& other) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{other.container(), &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(const hybrid_string& other) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{other.str, &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t(std::initializer_list<Type> ilist) :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{ilist, &pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		layout_prealloc_t() :
+			pool{(ElementCount == 0) ? nullptr : buf,
+				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
+				Realloc ? std::pmr::get_default_resource()
+						: std::pmr::null_memory_resource()},
+			con{&pool}
+		{
+			if constexpr (ElementCount > 0)
+			{
+				con.reserve(ElementCount);
+			}
+		}
+
+		unsigned char buf[(ElementCount == 0) ? 1 : _kotek_hstr_Size];
+		std::pmr::monotonic_buffer_resource pool;
+		container_type con;
+	};
+
+	struct layout_no_prealloc_t
+	{
+		template <class InputIt>
+		layout_no_prealloc_t(InputIt first, InputIt last) : con{first, last}
+		{
+		}
+
+		layout_no_prealloc_t(const Type* s, size_type count) : con{s, count} {}
+
+		layout_no_prealloc_t(const Type* s) : con{s} {}
+
+		template <class StringViewLike,
+			typename = std::enable_if_t<
+				!_kotek_hstr_is_hybrid_string_v<std::decay_t<StringViewLike>> &&
+				std::is_convertible_v<const StringViewLike&,
+					container_view_type>>>
+		layout_no_prealloc_t(const StringViewLike& t) : con{t}
+		{
+		}
+
+		template <class StringViewLike,
+			typename = std::enable_if_t<!+_kotek_hstr_is_hybrid_string_v<
+											std::decay_t<StringViewLike>> &&
+				std::is_convertible_v<const StringViewLike&,
+					container_view_type>>>
+		layout_no_prealloc_t(const StringViewLike& t, size_type pos,
+			size_type count) : con{t, pos, count}
+		{
+		}
+
+		template <typename TypeOther, std::size_t Size, bool Realloc,
+			typename =
+				std::enable_if_t<(ElementCount >= Size || Realloc == true) &&
+					std::is_same_v<Type, TypeOther>>>
+		layout_no_prealloc_t(
+			hybrid_string<TypeOther, Size, Realloc>&& other) noexcept :
+			con{std::move(other.container_move_out())}
+		{
+		}
+
+		layout_no_prealloc_t(hybrid_string&& other) noexcept :
+			con{std::move(other.str)}
+		{
+		}
+
+		template <typename TypeOther, std::size_t Size, bool Realloc,
+			typename =
+				std::enable_if_t<(ElementCount >= Size || Realloc == true) &&
+					std::is_same_v<Type, TypeOther>>>
+		layout_no_prealloc_t(
+			const hybrid_string<TypeOther, Size, Realloc>& other) :
+			con{other.container()}
+		{
+		}
+
+		layout_no_prealloc_t(const hybrid_string& other) : con{other.str} {}
+
+		layout_no_prealloc_t(std::initializer_list<Type> ilist) : con{ilist} {}
+
+		layout_no_prealloc_t() : con{} {}
+
+		container_type con;
+	};
+
+	using layout_t = _kotek_hstr_container_namespace_conditional::conditional_t<
+		ElementCount == 0, layout_no_prealloc_t, layout_prealloc_t>;
+
+	layout_t mem;
+};
 
 KOTEK_END_NAMESPACE_KTK
 
-using cstring_t = KUN_KOTEK KUN_KTK cstring;
-using cstring_view_t = KUN_KOTEK KUN_KTK cstring_view;
-
-#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-
-template <KUN_KOTEK KUN_KTK size_t Size>
-using static_u8string_t = KUN_KOTEK KUN_KTK static_u8string<Size>;
-
-template <KUN_KOTEK KUN_KTK size_t Size>
-using static_u16string_t = KUN_KOTEK KUN_KTK static_u16string<Size>;
-
-template <KUN_KOTEK KUN_KTK size_t Size>
-using static_u32string_t = KUN_KOTEK KUN_KTK static_u32string<Size>;
-
-template <KUN_KOTEK KUN_KTK size_t Size>
-using static_wstring_t = KUN_KOTEK KUN_KTK static_wstring<Size>;
-
-template <KUN_KOTEK KUN_KTK size_t Size>
-using static_cstring_t = KUN_KOTEK KUN_KTK static_cstring<Size>;
-using static_cstring_base_t = KUN_KOTEK KUN_KTK static_cstring_base;
-
-template <KUN_KOTEK KUN_KTK size_t Size>
-using static_ustring_t = KUN_KOTEK KUN_KTK static_ustring<Size>;
-
-using static_u8string_view_t = KUN_KOTEK KUN_KTK static_u8string_view;
-using static_u16string_view_t = KUN_KOTEK KUN_KTK static_u16string_view;
-using static_u32string_view_t = KUN_KOTEK KUN_KTK static_u32string_view;
-using static_wstring_view_t = KUN_KOTEK KUN_KTK static_wstring_view;
-using static_cstring_view_t = KUN_KOTEK KUN_KTK static_cstring_view;
-using static_ustring_view_t = KUN_KOTEK KUN_KTK static_ustring_view;
-
-#endif
-
 KOTEK_END_NAMESPACE_KOTEK
-
-#if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \
-	defined(KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS)
-
-	#define ktk_cstring kun_kotek kun_ktk static_cstring
-	#define KTK_CSTRING kun_kotek kun_ktk static_cstring
-	#define ktkCString kun_kotek kun_ktk static_cstring
-
-	#define ktk_cstring_view kun_kotek kun_ktk static_cstring_view
-	#define KTK_CSTRING_VIEW kun_kotek kun_ktk static_cstring_view
-	#define ktkCStringView kun_kotek kun_ktk static_cstring_view
-
-	#define ktk_wstring kun_kotek kun_ktk static_wstring
-	#define KTK_WSTRING kun_kotek kun_ktk static_wstring
-	#define ktkWString kun_kotek kun_ktk static_wstring
-
-	#define ktk_wstring_view kun_kotek kun_ktk static_wstring_view
-	#define KTK_WSTRING_VIEW kun_kotek kun_ktk static_wstring_view
-	#define ktkWStringView kun_kotek kun_ktk static_wstring_view
-
-	#define ktk_u8string kun_kotek kun_ktk static_u8string
-	#define KTK_U8STRING kun_kotek kun_ktk static_u8string
-	#define ktkU8String kun_kotek kun_ktk static_u8string
-
-	#define ktk_u8string_view kun_kotek kun_ktk static_u8string_view
-	#define KTK_U8STRING_VIEW kun_kotek kun_ktk static_u8string_view
-	#define ktkU8StringView kun_kotek kun_ktk static_u8string_view
-
-	#define ktk_u16string kun_kotek kun_ktk static_u16string
-	#define KTK_U16STRING kun_kotek kun_ktk static_u16string
-	#define ktkU16String kun_kotek kun_ktk static_u16string
-
-	#define ktk_u16string_view kun_kotek kun_ktk static_u16string_view
-	#define KTK_U16STRING_VIEW kun_kotek kun_ktk static_u16string_view
-	#define ktkU16StringView kun_kotek kun_ktk static_u16string_view
-
-	#define ktk_u32string kun_kotek kun_ktk static_u32string
-	#define KTK_U32STRING kun_kotek kun_ktk static_u32string
-	#define ktkU32String kun_kotek kun_ktk static_u32string
-
-	#define ktk_u32string_view kun_kotek kun_ktk static_u32string_view
-	#define KTK_U32STRING_VIEW kun_kotek kun_ktk static_u32string_view
-	#define ktkU32StringView kun_kotek kun_ktk static_u32string_view
-
-	#define ktk_ustring kun_kotek kun_ktk static_ustring
-	#define KTK_USTRING kun_kotek kun_ktk static_ustring
-	#define ktkUString kun_kotek kun_ktk static_ustring
-
-	#define ktk_ustring_view kun_kotek kun_ktk static_ustring_view
-	#define KTK_USTRING_VIEW kun_kotek kun_ktk static_ustring_view
-	#define ktkUStringView kun_kotek kun_ktk static_ustring_view
-
-#else
-
-	#define ktk_string kun_kotek kun_ktk cstring
-	#define KTK_STRING kun_kotek kun_ktk cstring
-	#define ktkString kun_kotek kun_ktk cstring
-
-	#define ktk_string_view kun_kotek kun_ktk cstring_view
-	#define KTK_STRING_VIEW kun_kotek kun_ktk cstring_view
-	#define ktkStringView kun_kotek kun_ktk cstring_view
-
-	#define ktk_wstring kun_kotek kun_ktk wstring
-	#define KTK_WSTRING kun_kotek kun_ktk wstring
-	#define ktkWString kun_kotek kun_ktk wstring
-
-	#define ktk_wstring_view kun_kotek kun_ktk wstring_view
-	#define KTK_WSTRING_VIEW kun_kotek kun_ktk wstring_view
-	#define ktkWStringView kun_kotek kun_ktk wstring_view
-
-	#define ktk_u8string kun_kotek kun_ktk u8string
-	#define KTK_U8STRING kun_kotek kun_ktk u8string
-	#define ktkU8String kun_kotek kun_ktk u8string
-
-	#define ktk_u8string_view kun_kotek kun_ktk u8string_view
-	#define KTK_U8STRING_VIEW kun_kotek kun_ktk u8string_view
-	#define ktkU8StringView kun_kotek kun_ktk u8string_view
-
-	#define ktk_u16string kun_kotek kun_ktk u16string
-	#define KTK_U16STRING kun_kotek kun_ktk u16string
-	#define ktkU16String kun_kotek kun_ktk u16string
-
-	#define ktk_u16string_view kun_kotek kun_ktk u16string_view
-	#define KTK_U16STRING_VIEW kun_kotek kun_ktk u16string_view
-	#define ktkU16StringView kun_kotek kun_ktk u16string_view
-
-	#define ktk_u32string kun_kotek kun_ktk u32string
-	#define KTK_U32STRING kun_kotek kun_ktk u32string
-	#define ktkU32String kun_kotek kun_ktk u32string
-
-	#define ktk_u32string_view kun_kotek kun_ktk u32string_view
-	#define KTK_U32STRING_VIEW kun_kotek kun_ktk u32string_view
-	#define ktkU32String kun_kotek kun_ktk u32string_view
-
-	#define ktk_ustring kun_kotek kun_ktk ustring
-	#define KTK_USTRING kun_kotek kun_ktk ustring
-	#define ktkUString kun_kotek kun_ktk ustring
-
-	#define ktk_ustring_view kun_kotek kun_ktk ustring_view
-	#define KTK_USTRING_VIEW kun_kotek kun_ktk ustring_view
-	#define ktkUStringView kun_kotek kun_ktk ustring_view
-
-#endif
-
-#ifdef KOTEK_USE_LIBRARY_TYPE_EMB
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk static_cstring<1>, ktk_cstring<1>>,
-	"If library type was defined as EMB (aka static) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with static_ prefix it means that "
-	"this cstring "
-	"container is expected as static_cstring implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk static_u8string<1>, ktk_u8string<1>>,
-	"If library type was defined as EMB (aka static) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with static_ prefix it means that "
-	"this u8string "
-	"container is expected as static_u8string implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk static_u16string<1>, ktk_u16string<1>>,
-	"If library type was defined as EMB (aka static) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with static_ prefix it means that "
-	"this u16string "
-	"container is expected as static_u16string implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk static_u32string<1>, ktk_u32string<1>>,
-	"If library type was defined as EMB (aka static) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with static_ prefix it means that "
-	"this u32string "
-	"container is expected as static_u32string implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk static_wstring<1>, ktk_wstring<1>>,
-	"If library type was defined as EMB (aka static) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with static_ prefix it means that "
-	"this wstring "
-	"container is expected as static_wstring implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk static_cstring_view, ktk_cstring_view>,
-	"If library type was defined as EMB (aka static) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with static_ prefix it means that "
-	"this cstring_view "
-	"container is expected as static_cstring_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk static_u8string_view, ktk_u8string_view>,
-	"If library type was defined as EMB (aka static) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with static_ prefix it means that "
-	"this u8string_view "
-	"container is expected as static_u8string_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk static_u16string_view, ktk_u16string_view>,
-	"If library type was defined as EMB (aka static) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with static_ prefix it means that "
-	"this u16string_view "
-	"container is expected as static_u16string_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk static_u32string_view, ktk_u32string_view>,
-	"If library type was defined as EMB (aka static) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with static_ prefix it means that "
-	"this u32string_view "
-	"container is expected as static_u32string_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk static_wstring_view, ktk_wstring_view>,
-	"If library type was defined as EMB (aka static) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with static_ prefix it means that "
-	"this wstring_view "
-	"container is expected as static_wstring_view implementation");
-#elif defined(KOTEK_USE_LIBRARY_TYPE_DYN)
-static_assert(std::is_same_v<kun_kotek kun_ktk cstring<1>, ktk_cstring<1>>,
-	"If library type was defined as DYN (aka dynamic) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
-	"prefix it means that "
-	"this cstring "
-	"container is expected as cstring implementation");
-
-static_assert(std::is_same_v<kun_kotek kun_ktk u8string<1>, ktk_u8string<1>>,
-	"If library type was defined as DYN (aka dynamic) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
-	"prefix it means that "
-	"this u8string "
-	"container is expected as u8string implementation");
-
-static_assert(std::is_same_v<kun_kotek kun_ktk u16string<1>, ktk_u16string<1>>,
-	"If library type was defined as DYN (aka dynamic) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
-	"prefix it means that "
-	"this u16string "
-	"container is expected as u16string implementation");
-
-static_assert(std::is_same_v<kun_kotek kun_ktk u32string<1>, ktk_u32string<1>>,
-	"If library type was defined as DYN (aka dynamic) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
-	"prefix it means that "
-	"this u32string "
-	"container is expected as u32string implementation");
-
-static_assert(std::is_same_v<kun_kotek kun_ktk wstring<1>, ktk_wstring<1>>,
-	"If library type was defined as DYN (aka dynamic) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
-	"prefix it means that "
-	"this wstring "
-	"container is expected as wstring implementation");
-
-static_assert(std::is_same_v<kun_kotek kun_ktk cstring_view, ktk_cstring_view>,
-	"If library type was defined as DYN (aka dynamic) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
-    "prefix it means that "
-	"this cstring_view "
-	"container is expected as cstring_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk u8string_view, ktk_u8string_view>,
-	"If library type was defined as DYN (aka dynamic) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
-    "prefix it means that "
-	"this u8string_view "
-	"container is expected as u8string_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk u16string_view, ktk_u16string_view>,
-	"If library type was defined as DYN (aka dynamic) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
-    "prefix it means that "
-	"this u16string_view "
-	"container is expected as u16string_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk u32string_view, ktk_u32string_view>,
-	"If library type was defined as DYN (aka dynamic) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
-    "prefix it means that "
-	"this u32string_view "
-	"container is expected as u32string_view implementation");
-
-static_assert(std::is_same_v<kun_kotek kun_ktk wstring_view, ktk_wstring_view>,
-	"If library type was defined as DYN (aka dynamic) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE WITHOUT static_ prefix and hybrid_ "
-    "prefix it means that "
-	"this wstring_view "
-	"container is expected as wstring_view implementation");
-#elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk hybrid_cstring<1>, ktk_cstring<1>>,
-	"If library type was defined as HYB (aka hybrid) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with hybrid_ prefix it means that "
-	"this cstring "
-	"container is expected as hybrid_cstring implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk hybrid_u8string<1>, ktk_u8string<1>>,
-	"If library type was defined as HYB (aka hybrid) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with hybrid_ prefix it means that "
-	"this u8string "
-	"container is expected as hybrid_u8string implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk hybrid_u16string<1>, ktk_u16string<1>>,
-	"If library type was defined as HYB (aka hybrid) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with hybrid_ prefix it means that "
-	"this u16string "
-	"container is expected as hybrid_u16string implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk hybrid_u32string<1>, ktk_u32string<1>>,
-	"If library type was defined as HYB (aka hybrid) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with hybrid_ prefix it means that "
-	"this u32string "
-	"container is expected as hybrid_u32string implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk hybrid_wstring<1>, ktk_wstring<1>>,
-	"If library type was defined as HYB (aka hybrid) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with hybrid_ prefix it means that "
-	"this wstring "
-	"container is expected as hybrid_wstring implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk hybrid_cstring_view, ktk_cstring_view>,
-	"If library type was defined as HYB (aka hybrid) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with hybrid_ prefix it means that "
-	"this cstring_view "
-	"container is expected as hybrid_cstring_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk hybrid_u8string_view, ktk_u8string_view>,
-	"If library type was defined as HYB (aka hybrid) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with hybrid_ prefix it means that "
-	"this u8string_view "
-	"container is expected as hybrid_u8string_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk hybrid_u16string_view, ktk_u16string_view>,
-	"If library type was defined as HYB (aka hybrid) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with hybrid_ prefix it means that "
-	"this u16string_view "
-	"container is expected as hybrid_u16string_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk hybrid_u32string_view, ktk_u32string_view>,
-	"If library type was defined as HYB (aka hybrid) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with hybrid_ prefix it means that "
-	"this u32string_view "
-	"container is expected as hybrid_u32string_view implementation");
-
-static_assert(
-	std::is_same_v<kun_kotek kun_ktk hybrid_wstring_view, ktk_wstring_view>,
-	"If library type was defined as HYB (aka hybrid) it means that all "
-	"containers that "
-	"kotek framework provides to use ARE with hybrid_ prefix it means that "
-	"this wstring_view "
-	"container is expected as hybrid_wstring_view implementation");
-#else
-	#error unknown configuration, kotek supports three configurations: DYN (dynamic), EMB (static), HYB (hybrid)
-#endif
