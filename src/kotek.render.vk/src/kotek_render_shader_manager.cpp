@@ -270,8 +270,13 @@ namespace Kotek
 					shaderc_optimization_level_size);
 #endif
 
-				ktk::ustring temp =
-					this->m_p_filesystem->ReadFile(path_to_file);
+				ktk::ustring temp;
+
+				bool read_status =
+					this->m_p_filesystem->Read_File(path_to_file, temp);
+
+				KOTEK_ASSERT(
+					read_status, "failed to read file: {}", path_to_file);
 
 				if (temp.empty() == true)
 				{
@@ -1197,8 +1202,7 @@ namespace Kotek
 			} // namespace helper
 
 			kotek_render_shader_manager::shader_module_t::shader_module_t(
-				void) :
-				m_p_module(nullptr)
+				void) : m_p_module(nullptr)
 			{
 			}
 
@@ -1240,15 +1244,13 @@ namespace Kotek
 			shader_loading_data_t::shader_loading_data_t(
 				shader_loading_data_type_t type,
 				const ktk::ustring& path_to_file_or_source_code_string) :
-				m_type(type),
-				m_data(path_to_file_or_source_code_string)
+				m_type(type), m_data(path_to_file_or_source_code_string)
 			{
 			}
 
 			shader_loading_data_t::shader_loading_data_t(
 				shader_loading_data_type_t type, void* p_data) :
-				m_type(type),
-				m_data(p_data)
+				m_type(type), m_data(p_data)
 			{
 			}
 
@@ -1431,5 +1433,5 @@ namespace Kotek
 			}
 
 		} // namespace vk
-	}     // namespace Render
+	} // namespace Render
 } // namespace Kotek

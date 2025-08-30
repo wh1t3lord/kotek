@@ -14,12 +14,6 @@ void ktkResourceLoaderManager::Initialize(
 
 	this->Set_Loader(eResourceLoadingType::kText,
 		new ktkResourceLoaderFile_Text(p_main_manager));
-
-	for (unsigned char i = 0;
-		 i < KOTEK_DEF_RESOURCE_LOADER_MANAGER_SIZE_FILE_POOL; ++i)
-	{
-		this->m_readers[i].second = true;
-	}
 }
 
 void ktkResourceLoaderManager::Shutdown(void)
@@ -30,19 +24,6 @@ void ktkResourceLoaderManager::Shutdown(void)
 	}
 
 	this->m_loaders.clear();
-
-#ifdef KOTEK_DEBUG
-	for (auto& [id, pair] : this->m_readers)
-	{
-		auto is_free = pair.second.load();
-
-		KOTEK_ASSERT(is_free,
-			"file is not free, but we do shutdown that means that file is "
-			"opened and awaits for writing or currently writes something rn!");
-	}
-#endif
-
-	this->m_readers.clear();
 }
 
 void ktkResourceLoaderManager::Set_Loader(
