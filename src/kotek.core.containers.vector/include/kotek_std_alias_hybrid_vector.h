@@ -25,6 +25,12 @@ namespace _kotek_hv_container_namespace_swap = ::std;
 
 namespace _kotek_hv_container_namespace_conditional = ::std;
 
+namespace _kotek_hv_container_namespace_enable_if = ::std;
+
+namespace _kotek_hv_container_namespace_is_same_v = ::std;
+
+namespace _kotek_hv_container_namespace_forward = ::std;
+
 /// @brief \~english notice that some libraries are not supposed to have some
 /// implementations and for that you can use from standard as boost library did
 /// or provide own implementation but you have to specify the aliases all
@@ -103,9 +109,9 @@ public:
 	}
 
 	template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-		typename = _kotek_hv_container_namespace::enable_if_t<
+		typename = _kotek_hv_container_namespace_enable_if::enable_if_t<
 			(ElementCount >= ElementCount2 || Realloc == true) &&
-			_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
+			_kotek_hv_container_namespace_is_same_v::is_same_v<Type, Type2>>>
 	hybrid_vector_impl(
 		const hybrid_vector_impl<Type2, ElementCount2, Realloc2>& other) :
 		mem(other)
@@ -115,9 +121,9 @@ public:
 	hybrid_vector_impl(const hybrid_vector_impl& other) : mem(other) {}
 
 	template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-		typename = _kotek_hv_container_namespace::enable_if_t<
+		typename = _kotek_hv_container_namespace_enable_if::enable_if_t<
 			(ElementCount >= ElementCount2 || Realloc == true) &&
-			_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
+			_kotek_hv_container_namespace_is_same_v::is_same_v<Type, Type2>>>
 	hybrid_vector_impl(
 		hybrid_vector_impl<Type2, ElementCount2, Realloc2>&& other) : mem(other)
 	{
@@ -173,14 +179,14 @@ public:
 	reference emplace_back(Args&&... args)
 	{
 		return mem.con.emplace_back(
-			_kotek_hv_container_namespace::forward<Args>(args)...);
+			_kotek_hv_container_namespace_forward::forward<Args>(args)...);
 	}
 
 	template <class... Args>
 	iterator emplace(const_iterator pos, Args&&... args)
 	{
 		return mem.con.emplace(
-			_kotek_hv_container_namespace::forward<Args>(args)...);
+			pos, _kotek_hv_container_namespace_forward::forward<Args>(args)...);
 	}
 
 	iterator insert(const_iterator pos, const Type& value)
@@ -244,7 +250,7 @@ public:
 	template <class InputIt>
 	void assign(InputIt first, InputIt last)
 	{
-		return mem.con.assign<InputIt>(first, last);
+		return mem.con.assign(first, last);
 	}
 
 	void assign(_kotek_hv_il_t<Type> ilist) { return mem.con.assign(ilist); }
@@ -307,8 +313,10 @@ private:
 		layout_prealloc_t() :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hv_Size,
-				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
-						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
+				Realloc
+					? _kotek_hv_container_namespace_pmr::get_default_resource()
+					: _kotek_hv_container_namespace_pmr::
+						  null_memory_resource()},
 			con{&pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -320,8 +328,10 @@ private:
 		explicit layout_prealloc_t(size_type count) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hv_Size,
-				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
-						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
+				Realloc
+					? _kotek_hv_container_namespace_pmr::get_default_resource()
+					: _kotek_hv_container_namespace_pmr::
+						  null_memory_resource()},
 			con{count, &pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -333,8 +343,10 @@ private:
 		layout_prealloc_t(size_type count, const Type& value) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hv_Size,
-				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
-						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
+				Realloc
+					? _kotek_hv_container_namespace_pmr::get_default_resource()
+					: _kotek_hv_container_namespace_pmr::
+						  null_memory_resource()},
 			con{count, value, &pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -347,9 +359,11 @@ private:
 		layout_prealloc_t(InputIt first, InputIt last) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hv_Size,
-				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
-						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
-			con{first, last, &pool}
+				Realloc
+					? _kotek_hv_container_namespace_pmr::get_default_resource()
+					: _kotek_hv_container_namespace_pmr::
+						  null_memory_resource()},
+			con(first, last, &pool)
 		{
 			if constexpr (ElementCount > 0)
 			{
@@ -358,15 +372,18 @@ private:
 		}
 
 		template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-			typename = _kotek_hv_container_namespace::enable_if_t<
+			typename = _kotek_hv_container_namespace_enable_if::enable_if_t<
 				(ElementCount >= ElementCount2 || Realloc == true) &&
-				_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
+				_kotek_hv_container_namespace_is_same_v::is_same_v<Type,
+					Type2>>>
 		layout_prealloc_t(
 			const hybrid_vector_impl<Type2, ElementCount2, Realloc2>& other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hv_Size,
-				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
-						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
+				Realloc
+					? _kotek_hv_container_namespace_pmr::get_default_resource()
+					: _kotek_hv_container_namespace_pmr::
+						  null_memory_resource()},
 			con{other.container(), &pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -375,13 +392,14 @@ private:
 			}
 		}
 
-		layout_prealloc_t(
-			const hybrid_vector_impl<Type, ElementCount, Realloc, _kotek_hv_Size>&
-				other) :
+		layout_prealloc_t(const hybrid_vector_impl<Type, ElementCount, Realloc,
+			_kotek_hv_Size>& other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hv_Size,
-				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
-						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
+				Realloc
+					? _kotek_hv_container_namespace_pmr::get_default_resource()
+					: _kotek_hv_container_namespace_pmr::
+						  null_memory_resource()},
 			con{other.container(), &pool}
 		{
 			if constexpr (ElementCount > 0)
@@ -391,16 +409,20 @@ private:
 		}
 
 		template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-			typename = _kotek_hv_container_namespace::enable_if_t<
+			typename = _kotek_hv_container_namespace_enable_if::enable_if_t<
 				(ElementCount >= ElementCount2 || Realloc == true) &&
-				_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
+				_kotek_hv_container_namespace_is_same_v::is_same_v<Type,
+					Type2>>>
 		layout_prealloc_t(
 			hybrid_vector_impl<Type2, ElementCount2, Realloc2>&& other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hv_Size,
-				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
-						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
-			con{_kotek_hv_container_namespace::move(other.container_move()), &pool}
+				Realloc
+					? _kotek_hv_container_namespace_pmr::get_default_resource()
+					: _kotek_hv_container_namespace_pmr::
+						  null_memory_resource()},
+			con{_kotek_hv_container_namespace::move(other.container_move()),
+				&pool}
 		{
 		}
 
@@ -409,17 +431,22 @@ private:
 				other) noexcept :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hv_Size,
-				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
-						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
-			con{_kotek_hv_container_namespace::move(other.container_move()), &pool}
+				Realloc
+					? _kotek_hv_container_namespace_pmr::get_default_resource()
+					: _kotek_hv_container_namespace_pmr::
+						  null_memory_resource()},
+			con{_kotek_hv_container_namespace::move(other.container_move()),
+				&pool}
 		{
 		}
 
 		layout_prealloc_t(_kotek_hv_il_t<Type> init) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hv_Size,
-				Realloc ? _kotek_hv_container_namespace_pmr::get_default_resource()
-						: _kotek_hv_container_namespace_pmr::null_memory_resource()},
+				Realloc
+					? _kotek_hv_container_namespace_pmr::get_default_resource()
+					: _kotek_hv_container_namespace_pmr::
+						  null_memory_resource()},
 			con{init, &pool}
 		{
 		}
@@ -446,25 +473,26 @@ private:
 		}
 
 		template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-			typename = _kotek_hv_container_namespace::enable_if_t<
+			typename = _kotek_hv_container_namespace_enable_if::enable_if_t<
 				(ElementCount >= ElementCount2 || Realloc == true) &&
-				_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
+				_kotek_hv_container_namespace_is_same_v::is_same_v<Type,
+					Type2>>>
 		layout_no_prealloc_t(
 			const hybrid_vector_impl<Type2, ElementCount2, Realloc2>& other) :
 			con{other.container()}
 		{
 		}
 
-		layout_no_prealloc_t(
-			const hybrid_vector_impl<Type, ElementCount, Realloc, _kotek_hv_Size>&
-				other) : con{other.container()}
+		layout_no_prealloc_t(const hybrid_vector_impl<Type, ElementCount,
+			Realloc, _kotek_hv_Size>& other) : con{other.container()}
 		{
 		}
 
 		template <typename Type2, kun_ktk size_t ElementCount2, bool Realloc2,
-			typename = _kotek_hv_container_namespace::enable_if_t<
+			typename = _kotek_hv_container_namespace_enable_if::enable_if_t<
 				(ElementCount >= ElementCount2 || Realloc == true) &&
-				_kotek_hv_container_namespace::is_same_v<Type, Type2>>>
+				_kotek_hv_container_namespace_is_same_v::is_same_v<Type,
+					Type2>>>
 		layout_no_prealloc_t(
 			hybrid_vector_impl<Type2, ElementCount2, Realloc2>&& other) :
 			con{_kotek_hv_container_namespace::move(other.container_move())}
@@ -483,9 +511,8 @@ private:
 		container_type con;
 	};
 
-	using layout_t =
-		_kotek_hv_container_namespace_conditional::conditional_t<ElementCount == 0,
-			layout_no_prealloc_t, layout_prealloc_t>;
+	using layout_t = _kotek_hv_container_namespace_conditional::conditional_t<
+		ElementCount == 0, layout_no_prealloc_t, layout_prealloc_t>;
 
 	layout_t mem;
 };

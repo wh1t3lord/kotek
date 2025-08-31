@@ -215,6 +215,9 @@ public:
 			static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>&
 				path_to_file) noexcept = 0;
 
+	virtual bool Read_File(const ktk_filesystem_path& path_to_file,
+		char*& p_buffer, kun_ktk size_t& length_of_buffer) = 0;
+
 	virtual ktk_filesystem_path GetFolderByEnum(
 		eFolderIndex id) const noexcept = 0;
 };

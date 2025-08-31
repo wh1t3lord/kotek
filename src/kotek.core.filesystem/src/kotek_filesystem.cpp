@@ -10,7 +10,6 @@ ktkFileSystemFileHandleType ktkFileSystem::Begin_Stream(
 	const ktk_filesystem_path& path_to_file,
 	size_t stream_step /*= KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE*/)
 {
-
 	return ktkFileSystemFileHandleType();
 }
 
@@ -41,6 +40,80 @@ ktkFileSystemFileHandleType ktkFileSystem::Get_AvailableFile(void) const
 				result = reinterpret_cast<ktkFileSystemFileHandleType>(&file);
 			}
 		}
+	}
+
+	return result;
+}
+
+bool ktkFileSystem::Read_File(const ktk_filesystem_path& path_to_file,
+	char*& p_buffer, kun_ktk size_t& length_of_buffer)
+{
+	KOTEK_ASSERT(p_buffer, "must be valid!");
+	KOTEK_ASSERT(length_of_buffer > 0, "must be non zero!");
+	KOTEK_ASSERT(path_to_file.empty() == false, "must be a non empty string");
+
+	bool result{};
+
+	if (this->IsValidPath(path_to_file) == false)
+	{
+		KOTEK_MESSAGE_WARNING("can't load file by following path: [{}]",
+			reinterpret_cast<const char*>(path_to_file.u8string().c_str()));
+		return result;
+	}
+
+	kun_ktk ifstream file(path_to_file.c_str());
+
+	if (file.good())
+	{
+		//	return_static_string_buffer.assign(
+		//	kun_ktk istreambuf_iterator(file), kun_ktk istreambuf_iterator());
+
+		file.seekg(0, kun_ktk ios::end);
+		auto size_of_text = file.tellg();
+		file.seekg(0, kun_ktk ios::beg);
+
+		if (size_of_text <= length_of_buffer)
+		{
+			file.read(reinterpret_cast<char*>(p_buffer), size_of_text);
+			length_of_buffer = size_of_text;
+			if (file)
+			{
+				result = true;
+			}
+			else
+			{
+				KOTEK_MESSAGE_WARNING(
+					"failed to read content of file {}", path_to_file);
+				return result;
+			}
+		}
+		else
+		{
+			KOTEK_ASSERT(size_of_text <= this->m_reserved_buffer.max_size(),
+				"overflow the system can't handle a such huge file!");
+			this->m_reserved_buffer.clear();
+
+			this->m_reserved_buffer.resize(size_of_text);
+			file.read(this->m_reserved_buffer.begin(), size_of_text);
+			length_of_buffer = size_of_text;
+			p_buffer = this->m_reserved_buffer.begin();
+			if (file)
+			{
+				result = true;
+			}
+			else
+			{
+				KOTEK_MESSAGE_WARNING(
+					"failed to read content of file {}!", path_to_file);
+				return result;
+			}
+		}
+	}
+	else
+	{
+		KOTEK_MESSAGE("something is wrong while reading file: [{}]",
+			reinterpret_cast<const char*>(path_to_file.u8string().c_str()));
+		return result;
 	}
 
 	return result;
@@ -236,7 +309,8 @@ bool ktkFileSystem::Read_File(kun_ktk uint8_t*& p_buffer,
 			this->m_reserved_buffer.resize(size_of_text);
 			file.read(this->m_reserved_buffer.begin(), size_of_text);
 			length_of_buffer = size_of_text;
-			p_buffer = reinterpret_cast<kun_ktk uint8_t*>(this->m_reserved_buffer.begin());
+			p_buffer = reinterpret_cast<kun_ktk uint8_t*>(
+				this->m_reserved_buffer.begin());
 			if (file)
 			{
 				result = true;

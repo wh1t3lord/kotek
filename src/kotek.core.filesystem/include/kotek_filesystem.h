@@ -62,23 +62,28 @@ public:
 
 	template <kun_ktk size_t BytesCount>
 	bool Read_File(const ktk_filesystem_path& path_to_file,
-		ktk_vector<kun_ktk uint8_t, BytesCount>& output_result)
-		const noexcept;
+		ktk_vector<kun_ktk uint8_t, BytesCount>& output_result) const noexcept;
 
+	// todo: change order of arguments and make same as ustring version
 	bool Read_File(kun_ktk uint8_t*& p_buffer, size_t& length_of_buffer,
 		const kun_ktk kun_filesystem
 			static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>&
 				path_to_file) noexcept override;
 
-	ktkFileSystemFileHandleType Begin_Stream(const ktk_filesystem_path& path_to_file,
+
+	bool Read_File(const ktk_filesystem_path& path_to_file, char*& p_buffer,
+		kun_ktk size_t& length_of_buffer) override;
+
+	ktkFileSystemFileHandleType Begin_Stream(
+		const ktk_filesystem_path& path_to_file,
 		size_t stream_step = KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE);
 
 	template <kun_ktk size_t BytesCount = KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE>
 	void Stream(const ktkFileSystemFileHandleType file_handle,
 		ktk_vector<kun_ktk uint8_t, BytesCount>& vector);
 
-	void Stream(const ktkFileSystemFileHandleType file_handle, kun_ktk uint8_t*& p_buffer,
-		kun_ktk size_t buffer_size);
+	void Stream(const ktkFileSystemFileHandleType file_handle,
+		kun_ktk uint8_t*& p_buffer, kun_ktk size_t buffer_size);
 
 	void End_Stream(const ktkFileSystemFileHandleType file_handle);
 
@@ -122,8 +127,7 @@ void ktkFileSystem::Stream(const ktkFileSystemFileHandleType file_handle,
 }
 
 template <kun_ktk size_t BytesCount>
-bool ktkFileSystem::Read_File(
-	const ktk_filesystem_path& path_to_file,
+bool ktkFileSystem::Read_File(const ktk_filesystem_path& path_to_file,
 	ktk_vector<kun_ktk uint8_t, BytesCount>& output_result) const noexcept
 {
 	kun_ktk size_t size = BytesCount;

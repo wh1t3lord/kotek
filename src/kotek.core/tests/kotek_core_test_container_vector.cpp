@@ -263,3 +263,6 @@ TEST(Containers, test_container_vector_data)
 	
 	#endif
 #endif
+
+KOTEK_END_NAMESPACE_CORE
+KOTEK_END_NAMESPACE_KOTEK

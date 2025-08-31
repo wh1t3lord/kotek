@@ -8,8 +8,8 @@ KOTEK_BEGIN_NAMESPACE_RENDER_GL
 
 ktkRenderShaderManager::ktkRenderShaderManager(
 	Core::ktkMainManager* p_main_manager) :
-	m_is_reallocation_feature_supported{},
-	m_total_memory{}, m_current_memory{}, m_p_main_manager{p_main_manager}
+	m_is_reallocation_feature_supported{}, m_total_memory{}, m_current_memory{},
+	m_p_main_manager{p_main_manager}
 {
 	KOTEK_ASSERT(p_main_manager, "must be valid");
 
@@ -99,7 +99,7 @@ void ktkRenderShaderManager::Shutdown(void)
 
 	KOTEK_ASSERT(deleted_all_programs,
 		"you forget to issue Destroy_Program calling in your renderer "
-	    "implementation! Not all programs resources are destroyed!!!");
+		"implementation! Not all programs resources are destroyed!!!");
 #endif
 }
 
@@ -107,7 +107,11 @@ ktkShaderModule ktkRenderShaderManager::Create_Shader(
 	const ktk_filesystem_path& absolute_path,
 	gl::eShaderType type) KOTEK_CPP_KEYWORD_NOEXCEPT
 {
-	auto content = this->m_p_filesystem->ReadFile(absolute_path);
+	kun_ktk ustring content;
+
+	bool status = this->m_p_filesystem->Read_File(absolute_path, content);
+
+	KOTEK_ASSERT(status, "failed to read file!");
 
 	KOTEK_ASSERT(content.empty(),
 		"failed to read file: {} or file's content is empty!", absolute_path);
@@ -174,7 +178,7 @@ ktkShaderModule ktkRenderShaderManager::Create_Shader(
 	size_t size_of_buffer = static_string_view.max_size();
 	size_t prev_size = size_of_buffer;
 	auto status = this->m_p_filesystem->Read_File(
-		p_temporary_reference, size_of_buffer, absolute_path);
+		absolute_path, p_temporary_reference, size_of_buffer);
 
 #ifdef KOTEK_DEBUG
 	if (size_of_buffer > prev_size)
