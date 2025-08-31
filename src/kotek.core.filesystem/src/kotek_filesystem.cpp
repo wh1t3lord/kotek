@@ -10,6 +10,8 @@ ktkFileSystemFileHandleType ktkFileSystem::Begin_Stream(
 	const ktk_filesystem_path& path_to_file,
 	size_t stream_step /*= KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE*/)
 {
+
+	return ktkFileSystemFileHandleType();
 }
 
 void ktkFileSystem::Stream(const ktkFileSystemFileHandleType file_handle,
@@ -234,7 +236,7 @@ bool ktkFileSystem::Read_File(kun_ktk uint8_t*& p_buffer,
 			this->m_reserved_buffer.resize(size_of_text);
 			file.read(this->m_reserved_buffer.begin(), size_of_text);
 			length_of_buffer = size_of_text;
-			p_buffer = this->m_reserved_buffer.begin();
+			p_buffer = reinterpret_cast<kun_ktk uint8_t*>(this->m_reserved_buffer.begin());
 			if (file)
 			{
 				result = true;

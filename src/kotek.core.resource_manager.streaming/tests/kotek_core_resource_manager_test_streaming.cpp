@@ -1,5 +1,6 @@
 #include "../include/kotek_core_resource_manager_streaming.h"
 #include <kotek.core.defines.static.tests/include/kotek_core_defines_static_tests.h>
+#include <kotek.core.filesystem/include/kotek_core_filesystem.h>
 #include <gtest/gtest.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -10,17 +11,30 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 TEST(Core, resource_streaming_initialize)
 {
+	ktkFileSystem fs;
+
 	ktkResourceStreamingManager manager;
 
-	manager.Initialize();
+	fs.Initialize();
+
+	manager.Initialize(&fs);
 	manager.Shutdown();
+
+	fs.Shutdown();
 }
 
 TEST(Core, resource_streaming_loading) 
 {
+	ktkFileSystem fs;
+
 	ktkResourceStreamingManager manager;
-	manager.Initialize();
+	
+	fs.Initialize();
+
+	manager.Initialize(&fs);
 	manager.Shutdown();
+
+	fs.Shutdown();
 }
 
 	#endif
