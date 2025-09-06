@@ -4,6 +4,37 @@
 #include <kotek.core.memory.cpu/include/kotek_core_memory_cpu.h>
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
+namespace boost
+{
+	namespace unordered
+	{
+		namespace detail
+		{
+
+			// Provide a swap function for polymorphic_allocator that Boost can
+			// find via ADL
+			template <typename T>
+			void swap(std::pmr::polymorphic_allocator<T>& a,
+				std::pmr::polymorphic_allocator<T>& b) noexcept
+			{
+				// polymorphic_allocators are stateless, so swap is a no-op
+			}
+
+		} // namespace detail
+	} // namespace unordered
+} // namespace boost
+
+namespace std
+{
+	template <typename T>
+	void swap(std::pmr::polymorphic_allocator<T>& a,
+		std::pmr::polymorphic_allocator<T>& b) noexcept
+	{
+		// polymorphic_allocators are not swappable in the standard, but we need
+		// this for Boost Since they're stateless, we can just do nothing
+	}
+} // namespace std
+
 	#include <boost/unordered/unordered_set.hpp>
 	#include <unordered_set>
 	#include <memory_resource>
@@ -23,12 +54,12 @@ namespace _kotek_hus_container_namespace_swap = ::std;
 namespace _kotek_hus_container_namespace_conditional = ::std;
 
 template <class Type>
-using _kotek_hv_il_t = ::std::initializer_list<Type>;
+using _kotek_hus_il_t = ::std::initializer_list<Type>;
 
-template <typename Type>
+template <typename Type, typename Hasher, typename KeyEqual>
 using hybrid_unordered_set_container =
 	_kotek_hus_container_namespace::unordered::unordered_set<Type,
-		_kotek_hus_container_namespace::hash<Type>, std::equal_to<Type>,
+		Hasher, KeyEqual,
 		_kotek_hus_container_namespace_pmr::polymorphic_allocator<Type>>;
 
 #elif defined(KOTEK_USE_STD_LIBRARY)
@@ -39,13 +70,15 @@ namespace _kotek_hus_container_namespace_swap = ::std;
 namespace _kotek_hus_container_namespace_conditional = ::std;
 
 template <class Type>
-using _kotek_hv_il_t = ::std::initializer_list<Type>;
+using _kotek_hus_il_t = ::std::initializer_list<Type>;
 
-template <typename Type>
-using hybrid_unordered_set_container = std::pmr::unordered_set<Type>;
+template <typename Type, typename Hasher, typename KeyEqual>
+using hybrid_unordered_set_container = std::pmr::unordered_set<Type, Hasher, KeyEqual>;
 
 #else
 #endif
+
+constexpr size_t _kotek_hus_default_bucket_count = 0;
 
 inline constexpr size_t __next_power_of_two(size_t n) noexcept
 {
@@ -108,10 +141,11 @@ class hybrid_unordered_set
 		"reallocation!");
 
 public:
-	using container_type = hybrid_unordered_set_container<Type>;
+	using container_type = hybrid_unordered_set_container<Type, H, P>;
 	using key_type = typename container_type::key_type;
 	using hasher = typename container_type::hasher;
 	using key_equal = typename container_type::key_equal;
+	using allocator_type = typename container_type::allocator_type;
 
 	using local_iterator = typename container_type::local_iterator;
 	using const_local_iterator = typename container_type::const_local_iterator;
@@ -133,31 +167,18 @@ public:
 public:
 	hybrid_unordered_set() : mem() {}
 
-	hybrid_unordered_set(size_type bucket_count) : mem(bucket_count) {}
-
-	hybrid_unordered_set(size_type bucket_count, const H& hash) :
-		mem(bucket_count, hash)
+	explicit hybrid_unordered_set(size_type bucket_count,
+		const H& hash = H()) : mem(bucket_count, hash)
 	{
 	}
 
 	// explicit unordered_set(const allocator_type& alloc);
 
 	template <class InputIt>
-	hybrid_unordered_set(InputIt first, InputIt last, size_type bucket_count,
+	hybrid_unordered_set(InputIt first, InputIt last,
+		size_type bucket_count = _kotek_hus_default_bucket_count,
 		const H& hash = H(), const key_equal& equal = key_equal()) :
 		mem(first, last, bucket_count, hash, equal)
-	{
-	}
-
-	template <class InputIt>
-	hybrid_unordered_set(InputIt first, InputIt last, size_type bucket_count) :
-		mem(first, last, bucket_count)
-	{
-	}
-
-	template <class InputIt>
-	hybrid_unordered_set(InputIt first, InputIt last, size_type bucket_count,
-		const H& hash) : mem(first, last, bucket_count, hash)
 	{
 	}
 
@@ -198,20 +219,10 @@ public:
 	{
 	}
 
-	hybrid_unordered_set(std::initializer_list<value_type> init,
-		size_type bucket_count, const H& hash = H(),
-		const key_equal& equal = key_equal()) :
+	hybrid_unordered_set(_kotek_hus_il_t<value_type> init,
+		size_type bucket_count = _kotek_hus_default_bucket_count,
+		const H& hash = H(), const key_equal& equal = key_equal()) :
 		mem(init, bucket_count, hash, equal)
-	{
-	}
-
-	hybrid_unordered_set(std::initializer_list<value_type> init,
-		size_type bucket_count) : mem(init, bucket_count)
-	{
-	}
-
-	hybrid_unordered_set(std::initializer_list<value_type> init,
-		size_type bucket_count, const H& hash) : mem(init, bucket_count, hash)
 	{
 	}
 
@@ -242,7 +253,7 @@ public:
 		return *this;
 	}
 
-	hybrid_unordered_set& operator=(std::initializer_list<value_type> ilist);
+	hybrid_unordered_set& operator=(_kotek_hus_il_t<value_type> ilist);
 
 	allocator_type get_allocator() const noexcept
 	{
@@ -295,10 +306,7 @@ public:
 		mem.con.insert<InputIt>(first, last);
 	}
 
-	void insert(std::initializer_list<value_type> ilist)
-	{
-		mem.con.insert(ilist);
-	}
+	void insert(_kotek_hus_il_t<value_type> ilist) { mem.con.insert(ilist); }
 
 	insert_return_type insert(node_type&& nh) { return mem.con.insert(nh); }
 
@@ -340,7 +348,10 @@ public:
 		mem.con.swap(other.mem.con);
 	}
 
-	void swap(container_type& other) noexcept { mem.con.swap(other); }
+	void swap(container_type& other) noexcept
+	{
+		mem.con.swap(other);
+	}
 
 	node_type extract(const_iterator pos) { return mem.con.extract(pos); }
 
@@ -471,19 +482,6 @@ private:
 			}
 		}
 
-		layout_prealloc_t(size_type bucket_count) :
-			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : _kotek_hus_Size,
-				Realloc ? std::pmr::get_default_resource()
-						: std::pmr::null_memory_resource()},
-			con(bucket_count, H(), P(), &pool)
-		{
-			if constexpr (ElementCount > 0)
-			{
-				con.reserve(ElementCount);
-			}
-		}
-
 		layout_prealloc_t(size_type bucket_count, const H& hash) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hus_Size,
@@ -498,42 +496,14 @@ private:
 		}
 
 		template <class InputIt>
-		layout_prealloc_t(InputIt first, InputIt last, size_type bucket_count,
+		layout_prealloc_t(InputIt first, InputIt last,
+			size_type bucket_count = _kotek_hus_default_bucket_count,
 			const H& hash = H(), const key_equal& equal = key_equal()) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con(first, last, bucket_count, hash, equal, &pool)
-		{
-			if constexpr (ElementCount > 0)
-			{
-				con.reserve(ElementCount);
-			}
-		}
-
-		template <class InputIt>
-		layout_prealloc_t(InputIt first, InputIt last, size_type bucket_count) :
-			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : _kotek_hus_Size,
-				Realloc ? std::pmr::get_default_resource()
-						: std::pmr::null_memory_resource()},
-			con(first, last, bucket_count, H(), key_equal(), &pool)
-		{
-			if constexpr (ElementCount > 0)
-			{
-				con.reserve(ElementCount);
-			}
-		}
-
-		template <class InputIt>
-		layout_prealloc_t(InputIt first, InputIt last, size_type bucket_count,
-			const H& hash) :
-			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : _kotek_hus_Size,
-				Realloc ? std::pmr::get_default_resource()
-						: std::pmr::null_memory_resource()},
-			con(first, last, bucket_count, hash, key_equal(), &pool)
 		{
 			if constexpr (ElementCount > 0)
 			{
@@ -608,42 +578,14 @@ private:
 			}
 		}
 
-		layout_prealloc_t(std::initializer_list<value_type> init,
-			size_type bucket_count, const H& hash = H(),
-			const key_equal& equal = key_equal()) :
+		layout_prealloc_t(_kotek_hus_il_t<value_type> init,
+			size_type bucket_count = _kotek_hus_default_bucket_count,
+			const H& hash = H(), const key_equal& equal = key_equal()) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
 			con{init, bucket_count, hash, equal, &pool}
-		{
-			if constexpr (ElementCount > 0)
-			{
-				con.reserve(ElementCount);
-			}
-		}
-
-		layout_prealloc_t(
-			std::initializer_list<value_type> init, size_type bucket_count) :
-			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : _kotek_hus_Size,
-				Realloc ? std::pmr::get_default_resource()
-						: std::pmr::null_memory_resource()},
-			con(init, bucket_count, H(), key_equal(), &pool)
-		{
-			if constexpr (ElementCount > 0)
-			{
-				con.reserve(ElementCount);
-			}
-		}
-
-		layout_prealloc_t(std::initializer_list<value_type> init,
-			size_type bucket_count, const H& hash) :
-			pool{(ElementCount == 0) ? nullptr : buf,
-				(ElementCount == 0) ? 0 : _kotek_hus_Size,
-				Realloc ? std::pmr::get_default_resource()
-						: std::pmr::null_memory_resource()},
-			con(init, bucket_count, hash, key_equal(), &pool)
 		{
 			if constexpr (ElementCount > 0)
 			{
@@ -660,11 +602,6 @@ private:
 	{
 		layout_no_prealloc_t() : con{} {}
 
-		layout_no_prealloc_t(size_type bucket_count) :
-			con(bucket_count, H(), P())
-		{
-		}
-
 		layout_no_prealloc_t(size_type bucket_count, const H& hash) :
 			con(bucket_count, hash, P())
 		{
@@ -672,23 +609,9 @@ private:
 
 		template <class InputIt>
 		layout_no_prealloc_t(InputIt first, InputIt last,
-			size_type bucket_count, const H& hash = H(),
-			const key_equal& equal = key_equal()) :
+			size_type bucket_count = _kotek_hus_default_bucket_count,
+			const H& hash = H(), const key_equal& equal = key_equal()) :
 			con(first, last, bucket_count, hash, equal)
-		{
-		}
-
-		template <class InputIt>
-		layout_no_prealloc_t(
-			InputIt first, InputIt last, size_type bucket_count) :
-			con(first, last, bucket_count, H(), key_equal())
-		{
-		}
-
-		template <class InputIt>
-		layout_no_prealloc_t(InputIt first, InputIt last,
-			size_type bucket_count, const H& hash) :
-			con(first, last, bucket_count, hash, key_equal())
 		{
 		}
 
@@ -725,30 +648,18 @@ private:
 		{
 		}
 
-		layout_no_prealloc_t(std::initializer_list<value_type> init,
-			size_type bucket_count, const H& hash = H(),
-			const key_equal& equal = key_equal()) :
+		layout_no_prealloc_t(_kotek_hus_il_t<value_type> init,
+			size_type bucket_count = _kotek_hus_default_bucket_count,
+			const H& hash = H(), const key_equal& equal = key_equal()) :
 			con{init, bucket_count, hash, equal}
-		{
-		}
-
-		layout_no_prealloc_t(std::initializer_list<value_type> init,
-			size_type bucket_count) : con(init, bucket_count, H(), key_equal())
-		{
-		}
-
-		layout_no_prealloc_t(std::initializer_list<value_type> init,
-			size_type bucket_count, const H& hash) :
-			con(init, bucket_count, hash, key_equal())
 		{
 		}
 
 		container_type con;
 	};
 
-	using layout_t =
-		_kotek_hus_container_namespace_conditional::conditional_t<ElementCount == 0,
-			layout_no_prealloc_t, layout_prealloc_t>;
+	using layout_t = _kotek_hus_container_namespace_conditional::conditional_t<
+		ElementCount == 0, layout_no_prealloc_t, layout_prealloc_t>;
 
 	layout_t mem;
 };
