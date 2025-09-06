@@ -226,9 +226,10 @@ public:
 		mem.con.resize(count, value);
 	}
 
-	void swap(hybrid_vector_impl& other) noexcept
+	void swap(hybrid_vector_impl& other)
 	{
-		_kotek_hv_container_namespace_swap::swap(mem.con, other.mem.con);
+		throw "std doesn't support swapping polymorphic allocators (C++20)";
+		//	_kotek_hv_container_namespace_swap::swap(mem.con, other.mem.con);
 	}
 
 	iterator erase(iterator pos) { return mem.con.erase(pos); }

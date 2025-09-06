@@ -24,17 +24,6 @@ namespace boost
 	} // namespace unordered
 } // namespace boost
 
-namespace std
-{
-	template <typename T>
-	void swap(std::pmr::polymorphic_allocator<T>& a,
-		std::pmr::polymorphic_allocator<T>& b) noexcept
-	{
-		// polymorphic_allocators are not swappable in the standard, but we need
-		// this for Boost Since they're stateless, we can just do nothing
-	}
-} // namespace std
-
 	#include <boost/unordered/unordered_set.hpp>
 	#include <unordered_set>
 	#include <memory_resource>
@@ -58,8 +47,8 @@ using _kotek_hus_il_t = ::std::initializer_list<Type>;
 
 template <typename Type, typename Hasher, typename KeyEqual>
 using hybrid_unordered_set_container =
-	_kotek_hus_container_namespace::unordered::unordered_set<Type,
-		Hasher, KeyEqual,
+	_kotek_hus_container_namespace::unordered::unordered_set<Type, Hasher,
+		KeyEqual,
 		_kotek_hus_container_namespace_pmr::polymorphic_allocator<Type>>;
 
 #elif defined(KOTEK_USE_STD_LIBRARY)
@@ -73,7 +62,8 @@ template <class Type>
 using _kotek_hus_il_t = ::std::initializer_list<Type>;
 
 template <typename Type, typename Hasher, typename KeyEqual>
-using hybrid_unordered_set_container = std::pmr::unordered_set<Type, Hasher, KeyEqual>;
+using hybrid_unordered_set_container =
+	std::pmr::unordered_set<Type, Hasher, KeyEqual>;
 
 #else
 #endif
@@ -167,8 +157,8 @@ public:
 public:
 	hybrid_unordered_set() : mem() {}
 
-	explicit hybrid_unordered_set(size_type bucket_count,
-		const H& hash = H()) : mem(bucket_count, hash)
+	explicit hybrid_unordered_set(size_type bucket_count, const H& hash = H()) :
+		mem(bucket_count, hash)
 	{
 	}
 
@@ -206,7 +196,9 @@ public:
 
 	hybrid_unordered_set(const hybrid_unordered_set& other) : mem(other) {}
 
-	hybrid_unordered_set(hybrid_unordered_set&& other) : mem(other) {}
+	hybrid_unordered_set(hybrid_unordered_set&& other) : mem(std::move(other))
+	{
+	}
 
 	template <typename Type2, typename H2, typename P2,
 		std::size_t ElementCount2, bool Realloc2,
@@ -253,7 +245,11 @@ public:
 		return *this;
 	}
 
-	hybrid_unordered_set& operator=(_kotek_hus_il_t<value_type> ilist);
+	hybrid_unordered_set& operator=(_kotek_hus_il_t<value_type> ilist)
+	{
+		mem.con.operator=(ilist);
+		return *this;
+	}
 
 	allocator_type get_allocator() const noexcept
 	{
@@ -348,10 +344,7 @@ public:
 		mem.con.swap(other.mem.con);
 	}
 
-	void swap(container_type& other) noexcept
-	{
-		mem.con.swap(other);
-	}
+	void swap(container_type& other) noexcept { mem.con.swap(other); }
 
 	node_type extract(const_iterator pos) { return mem.con.extract(pos); }
 
@@ -550,12 +543,37 @@ private:
 				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
-			con{std::move(other.con), &pool}
+			con{std::move(other.mem.con), &pool}
 		{
 			if constexpr (ElementCount > 0)
 			{
 				con.reserve(ElementCount);
 			}
+
+#ifdef KOTEK_USE_BOOST_LIBRARY
+	#if BOOST_VERSION <= 108400
+			// in some cases when we do move they compare resources
+			// (std::pmr::memory_resource) that used by polymorphic_allocator so
+			// they compare them on equality and by that time we have different
+			// resources because of different resources, memory were allocated
+			// differently and on con that being constructed here will have
+			// different free amount of memory but that container what we move
+			// will have different free amount of memory too and that might
+			// cause their == expression as false and thus leads to not valid
+			// move operation as we expect, but since it is reallocated
+			// containers the clear is just for ensurance that behaviour would
+			// be expected
+			// so for example std::pmr::unordered_set with passed unsigned char
+			// buf still after moving will set to 0 its content (like it was
+			// really moved or just issued clear) but boost version doesn't do
+			// it!
+			other.mem.con.clear();
+	#else
+				// todo: test
+				// test_container_hybrid_unordered_set_move_constructor will it
+				// be same as std container behaviour?
+	#endif
+#endif
 		}
 
 		template <typename Type2, typename H2, typename P2,
@@ -633,7 +651,7 @@ private:
 		}
 
 		layout_no_prealloc_t(hybrid_unordered_set&& other) :
-			con{std::move(other.con)}
+			con{std::move(other.mem.con)}
 		{
 		}
 

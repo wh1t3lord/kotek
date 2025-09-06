@@ -60,6 +60,8 @@ void RegisterTests_Json_ForModule_Core(void);
 void RegisterTests_String_ForModule_Core(void);
 void RegisterTests_Input_ForModule_Core(void);
 void RegisterTests_Utility_ForModule_Core(void);
+void RegisterTests_Container_Vector_Core(void);
+void RegisterTests_Container_Unordered_Set_Core(void);
 void RegisterAllTests(void);
 
 KOTEK_END_NAMESPACE_CORE
