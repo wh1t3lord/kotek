@@ -4,6 +4,12 @@
 #include <kotek.core.memory.cpu/include/kotek_core_memory_cpu.h>
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
+
+/* even for current 1.84-1.89 there's no support for unordered_set
+* it means that unordered_set has undefined behaviour with polymorphic_allocator 
+* for a trivial test sample you can test on just initialization of unordered_set with {1,2,3} and do .find(2); .erase(it); and you will get next as == to .end but it is expected as != because iterators that were increments are invalid!!
+* So in such case we use std 
+* You can use only when unordered_set header will be shown in boost/container/pmr folder otherwise for now and further versions of boost are treated as not compatible with polymorphic_allocator usage
 namespace boost
 {
 	namespace unordered
@@ -27,6 +33,10 @@ namespace boost
 	#include <boost/unordered/unordered_set.hpp>
 	#include <unordered_set>
 	#include <memory_resource>
+*/
+
+	#include <unordered_set>
+	#include <memory_resource>
 #elif defined(KOTEK_USE_STD_LIBRARY)
 	#include <unordered_set>
 	#include <memory_resource>
@@ -37,6 +47,7 @@ KOTEK_BEGIN_NAMESPACE_KTK
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 
+/* rn boost doesn't provide implementation of pmr unordered_set
 namespace _kotek_hus_container_namespace = ::boost;
 namespace _kotek_hus_container_namespace_pmr = ::std::pmr;
 namespace _kotek_hus_container_namespace_swap = ::std;
@@ -50,6 +61,19 @@ using hybrid_unordered_set_container =
 	_kotek_hus_container_namespace::unordered::unordered_set<Type, Hasher,
 		KeyEqual,
 		_kotek_hus_container_namespace_pmr::polymorphic_allocator<Type>>;
+*/
+
+namespace _kotek_hus_container_namespace = ::std;
+namespace _kotek_hus_container_namespace_pmr = ::std::pmr;
+namespace _kotek_hus_container_namespace_swap = ::std;
+namespace _kotek_hus_container_namespace_conditional = ::std;
+
+template <class Type>
+using _kotek_hus_il_t = ::std::initializer_list<Type>;
+
+template <typename Type, typename Hasher, typename KeyEqual>
+using hybrid_unordered_set_container =
+	std::pmr::unordered_set<Type, Hasher, KeyEqual>;
 
 #elif defined(KOTEK_USE_STD_LIBRARY)
 
@@ -339,9 +363,9 @@ public:
 
 	size_type erase(const Type& key) { return mem.con.erase(key); }
 
-	void swap(hybrid_unordered_set& other) noexcept
+	void swap(hybrid_unordered_set& other) 
 	{
-		mem.con.swap(other.mem.con);
+		throw "stl doesn't support swap operation";
 	}
 
 	void swap(container_type& other) noexcept { mem.con.swap(other); }
@@ -354,38 +378,44 @@ public:
 	void merge(
 		hybrid_unordered_set<Type, H2, P2, ElementCount, Realloc>& source)
 	{
-		mem.con.merge(source.mem.con);
+		throw "stl polymorphic_allocator doesn't support merge";
+		//		mem.con.merge(source.mem.con);
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_set<Type, H2, P2>& source)
 	{
-		mem.con.merge(source);
+		throw "stl polymorphic_allocator doesn't support merge";
+	//	mem.con.merge(source);
 	}
 
 	template <class H2, class P2>
 	void merge(
 		hybrid_unordered_set<Type, H2, P2, ElementCount, Realloc>&& source)
 	{
-		mem.con.merge(std::move(source.mem.con));
+		throw "stl polymorphic_allocator doesn't support merge";
+	//	mem.con.merge(std::move(source.mem.con));
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_set<Type, H2, P2>&& source)
 	{
-		mem.con.merge(std::move(source));
+		throw "stl polymorphic_allocator doesn't support merge";
+	//	mem.con.merge(std::move(source));
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_multiset<Type, H2, P2>& source)
 	{
-		mem.con.merge(source);
+		throw "stl polymorphic_allocator doesn't support merge";
+	//	mem.con.merge(source);
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_multiset<Type, H2, P2>&& source)
 	{
-		mem.con.merge(std::move(source));
+		throw "stl polymorphic_allocator doesn't support merge";
+	//	mem.con.merge(std::move(source));
 	}
 
 	size_type count(const Type& key) const { return mem.con.count(key); }
