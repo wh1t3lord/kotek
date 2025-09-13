@@ -179,7 +179,8 @@ ktkRenderStats* ktkRenderResourceManager::Get_Statistic(
 	{
 		if (this->m_p_render_manager_geometry)
 		{
-			p_result = this->m_p_render_manager_geometry->Get_StatIndexBuffer();
+	//		p_result = this->m_p_render_manager_geometry->Get_StatIndexBuffer();
+			KOTEK_ASSERT(false, "todo: implement");
 		}
 
 		break;
@@ -188,8 +189,9 @@ ktkRenderStats* ktkRenderResourceManager::Get_Statistic(
 	{
 		if (this->m_p_render_manager_geometry)
 		{
-			p_result =
-				this->m_p_render_manager_geometry->Get_StatSSBOBufferMatrix();
+//			p_result =
+		//		this->m_p_render_manager_geometry->Get_StatSSBOBufferMatrix();
+			KOTEK_ASSERT(false, "todo: implement");
 		}
 
 		break;
@@ -198,8 +200,9 @@ ktkRenderStats* ktkRenderResourceManager::Get_Statistic(
 	{
 		if (this->m_p_render_manager_geometry)
 		{
-			p_result =
-				this->m_p_render_manager_geometry->Get_StatVertexBuffer();
+	//		p_result =
+	//			this->m_p_render_manager_geometry->Get_StatVertexBuffer();
+			KOTEK_ASSERT(false, "todo: implement");
 		}
 
 		break;

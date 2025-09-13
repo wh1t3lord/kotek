@@ -5,7 +5,7 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-bool InitializeModule_Core_Enum_Render_GL(ktkMainManager* p_manager)
+bool InitializeModule_Core_Enum_Render_BGFX(ktkMainManager* p_manager)
 {
 	if (p_manager->Get_Splash())
 	{
@@ -16,17 +16,17 @@ bool InitializeModule_Core_Enum_Render_GL(ktkMainManager* p_manager)
 	return true;
 }
 
-bool ShutdownModule_Core_Enum_Render_GL(ktkMainManager* p_manager)
+bool ShutdownModule_Core_Enum_Render_BGFX(ktkMainManager* p_manager)
 {
 	return true;
 }
 
-bool SerializeModule_Core_Enum_Render_GL(ktkMainManager* p_manager)
+bool SerializeModule_Core_Enum_Render_BGFX(ktkMainManager* p_manager)
 {
 	return true;
 }
 
-bool DeserializeModule_Core_Enum_Render_GL(ktkMainManager* p_manager)
+bool DeserializeModule_Core_Enum_Render_BGFX(ktkMainManager* p_manager)
 {
 	return true;
 }
