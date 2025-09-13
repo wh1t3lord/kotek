@@ -20,7 +20,7 @@ add_library(${PROJECT_NAME} ${KOTEK_DEVELOPMENT_TYPE}
 	"include/kotek_render_gl_glad.h"
 	"src/main_render_gl_glad_dll.cpp")
 
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/gl gles")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/gl&gles")
 if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "SHARED")
 	target_compile_definitions(${PROJECT_NAME} PRIVATE ${KOTEK_OUTPUT_PRIVATE_FLAGS})
 endif()

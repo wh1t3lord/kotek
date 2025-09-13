@@ -57,6 +57,14 @@
 	// kotek.render.glx.x version
 	#endif
 
+	// todo: replace to KOTEK_USE_BGFX
+	#ifdef KOTEK_USE_BGFX
+		#include <bx/bx.h>
+		#include <bx/thread.h>
+		#include <bgfx/bgfx.h>
+		#include <bgfx/platform.h>
+	#endif
+
 struct ktkWin32OSData
 {
 	HWND hWnd = NULL;

@@ -69,14 +69,84 @@ bool ktkFileSystem::Read_File(const ktk_filesystem_path& path_to_file,
 		//	kun_ktk istreambuf_iterator(file), kun_ktk istreambuf_iterator());
 
 		file.seekg(0, kun_ktk ios::end);
+
+#ifdef KOTEK_DEBUG
+		if (file.fail())
+		{
+			KOTEK_MESSAGE_WARNING("failed .seekg(0, kun_ktk ios::end); for "
+								  "path: [{}] = reason {}",
+				path_to_file, strerror(errno));
+		}
+		else if (file.bad())
+		{
+			KOTEK_MESSAGE_ERROR("fatal failed .seekg(0, kun_ktk ios::end); for "
+								"path: [{}] = reason {}",
+				path_to_file, strerror(errno));
+		}
+#endif
+
 		auto size_of_text = file.tellg();
+#ifdef KOTEK_DEBUG
+		if (file.fail())
+		{
+			KOTEK_MESSAGE_WARNING("failed .tellg for path: [{}] = reason {}",
+				path_to_file, strerror(errno));
+		}
+		else if (file.bad())
+		{
+			KOTEK_MESSAGE_ERROR(
+				"fatal failed .tellg for path: [{}] = reason {}", path_to_file,
+				strerror(errno));
+		}
+#endif
+
 		file.seekg(0, kun_ktk ios::beg);
+
+#ifdef KOTEK_DEBUG
+		if (file.fail())
+		{
+			KOTEK_MESSAGE_WARNING("failed .seekg(0, kun_ktk ios::beg); for "
+								  "path: [{}] = reason {}",
+				path_to_file, strerror(errno));
+		}
+		else if (file.bad())
+		{
+			KOTEK_MESSAGE_ERROR("fatal fail .seekg(0, kun_ktk ios::beg); for "
+								"path: [{}] = reason {}",
+				path_to_file, strerror(errno));
+		}
+#endif
 
 		if (size_of_text <= length_of_buffer)
 		{
 			file.read(reinterpret_cast<char*>(p_buffer), size_of_text);
+
+#ifdef KOTEK_DEBUG
+			if (file.fail())
+			{
+				KOTEK_MESSAGE_WARNING(
+					"failed .read(this->m_reserved_buffer.begin(), "
+					"size_of_text); for path: [{}] = reason {}",
+					path_to_file, strerror(errno));
+			}
+			else if (file.bad())
+			{
+				KOTEK_MESSAGE_ERROR(
+					"fatal fail .read(this->m_reserved_buffer.begin(), "
+					"size_of_text); path: [{}] = reason {}",
+					path_to_file, strerror(errno));
+			}
+#endif
+
+			if (!file.eof())
+			{
+				KOTEK_MESSAGE_ERROR("fatal fail because we read whole file but "
+									"state is not EOF! path: [{}]",
+					path_to_file);
+			}
+
 			length_of_buffer = size_of_text;
-			if (file)
+			if (file || file.eof())
 			{
 				result = true;
 			}
@@ -97,7 +167,32 @@ bool ktkFileSystem::Read_File(const ktk_filesystem_path& path_to_file,
 			file.read(this->m_reserved_buffer.begin(), size_of_text);
 			length_of_buffer = size_of_text;
 			p_buffer = this->m_reserved_buffer.begin();
-			if (file)
+
+#ifdef KOTEK_DEBUG
+			if (file.fail())
+			{
+				KOTEK_MESSAGE_WARNING(
+					"failed .read(this->m_reserved_buffer.begin(), "
+					"size_of_text); for path: [{}] = reason {}",
+					path_to_file, strerror(errno));
+			}
+			else if (file.bad())
+			{
+				KOTEK_MESSAGE_ERROR(
+					"fatal fail .read(this->m_reserved_buffer.begin(), "
+					"size_of_text); path: [{}] = reason {}",
+					path_to_file, strerror(errno));
+			}
+#endif
+
+			if (!file.eof())
+			{
+				KOTEK_MESSAGE_ERROR("fatal fail because we read whole file but "
+									"state is not EOF! path: [{}]",
+					path_to_file);
+			}
+
+			if (file || file.eof())
 			{
 				result = true;
 			}

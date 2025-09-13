@@ -12,6 +12,10 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 			find_package(glfw3 REQUIRED)
 			find_package(unofficial-angle CONFIG REQUIRED)
 
+			if ("${KOTEK_BGFX}" STREQUAL "ON")
+				find_package(bgfx REQUIRED)
+			endif()
+
 			if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC" OR UNIX)
 				find_package(zstd CONFIG REQUIRED)
 				find_package(Threads REQUIRED)
@@ -20,6 +24,10 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 			endif()
 		elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			find_package(unofficial-angle CONFIG REQUIRED)
+
+			if ("${KOTEK_BGFX}" STREQUAL "ON")
+				find_package(bgfx CONFIG REQUIRED)
+			endif()
 
 			file(GLOB nuget_glfw3_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Glfw3.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
 			if ("${nuget_glfw3_folder}" MATCHES "Kotek.Packages.Glfw3.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
@@ -95,6 +103,15 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		unofficial::angle::libANGLE
 		unofficial::angle::libGLESv2
 	)
+
+	if ("${KOTEK_BGFX}" STREQUAL "ON")
+		target_link_libraries(${PROJECT_NAME} PUBLIC 
+			bgfx::bx 
+			bgfx::bgfx 
+			bgfx::bimg 
+			bgfx::bimg_decode
+		)
+	endif()
 elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 	if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC" OR UNIX)
 		find_package(zstd CONFIG REQUIRED)
@@ -107,6 +124,15 @@ elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 		 unofficial::angle::libEGL
 		 unofficial::angle::libANGLE
 		 unofficial::angle::libGLESv2)
+
+	if ("${KOTEK_BGFX}" STREQUAL "ON")
+		target_link_libraries(${PROJECT_NAME} PUBLIC 
+			bgfx::bx 
+			bgfx::bgfx 
+			bgfx::bimg 
+			bgfx::bimg_decode
+		)
+	endif()
 else()
 	message(FATAL_ERROR "provide implementation for custom folder and compiled by user")
 endif()

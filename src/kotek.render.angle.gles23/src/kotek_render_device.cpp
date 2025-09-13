@@ -21,7 +21,7 @@ namespace gles
 		// preprocessor for passing this function to glad
 		int version = gladLoadGLES2Loader(
 			reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
-
+		
 		KOTEK_ASSERT(version, "failed to gladLoadGLLoader");
 
 		KOTEK_MESSAGE("Initialized GLAD for: {}",

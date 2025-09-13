@@ -24,6 +24,10 @@ bool InitializeModule_Core_Enum_Render(ktkMainManager* p_manager)
 	InitializeModule_Core_Enum_Render_VK(p_manager);
 #endif
 
+#ifdef KOTEK_USE_BGFX
+	InitializeModule_Core_Enum_Render_BGFX(p_manager);
+#endif
+
 	return true;
 }
 
@@ -40,6 +44,11 @@ bool ShutdownModule_Core_Enum_Render(ktkMainManager* p_manager)
 #ifdef KOTEK_USE_VULKAN
 	ShutdownModule_Core_Enum_Render_VK(p_manager);
 #endif
+
+#ifdef KOTEK_USE_BGFX
+	ShutdownModule_Core_Enum_Render_BGFX(p_manager);
+#endif
+
 	return true;
 }
 
@@ -57,6 +66,10 @@ bool SerializeModule_Core_Enum_Render(ktkMainManager* p_manager)
 	SerializeModule_Core_Enum_Render_VK(p_manager);
 #endif
 
+#ifdef KOTEK_USE_BGFX
+	SerializeModule_Core_Enum_Render_BGFX(p_manager);
+#endif
+
 	return true;
 }
 
@@ -72,6 +85,10 @@ bool DeserializeModule_Core_Enum_Render(ktkMainManager* p_manager)
 
 #ifdef KOTEK_USE_VULKAN
 	DeserializeModule_Core_Enum_Render_VK(p_manager);
+#endif
+
+#ifdef KOTEK_USE_BGFX
+	DeserializeModule_Core_Enum_Render_BGFX(p_manager);
 #endif
 
 	return true;

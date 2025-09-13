@@ -12,6 +12,10 @@
 	#include <kotek.render.shared.dx/include/kotek_render_shared_dx.h>
 #endif
 
+#ifdef KOTEK_USE_BGFX
+	#include <kotek.render.shared.bgfx/include/kotek_render_shared_bgfx.h>
+#endif
+
 #include "kotek_render_data_types.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK

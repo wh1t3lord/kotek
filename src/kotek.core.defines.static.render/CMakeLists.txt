@@ -13,3 +13,4 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/i
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.dx)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.vk)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.bgfx)

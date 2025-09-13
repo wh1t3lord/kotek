@@ -14,36 +14,84 @@ bool InitializeModule_Core_Defines_Static_Render(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
+#ifdef KOTEK_USE_DIRECTX
 	InitializeModule_Core_Defines_Static_Render_DirectX(p_manager);
+#endif
+
+#ifdef KOTEK_USE_OPENGL
 	InitializeModule_Core_Defines_Static_Render_OpenGL(p_manager);
+#endif
+
+#ifdef KOTEK_USE_VULKAN
 	InitializeModule_Core_Defines_Static_Render_Vulkan(p_manager);
+#endif
+
+#ifdef KOTEK_USE_BGFX
+	InitializeModule_Core_Defines_Static_Render_BGFX(p_manager);
+#endif
 
 	return true;
 }
 
 bool ShutdownModule_Core_Defines_Static_Render(ktkMainManager* p_manager)
 {
+#ifdef KOTEK_USE_DIRECTX
 	ShutdownModule_Core_Defines_Static_Render_DirectX(p_manager);
+#endif
+
+#ifdef KOTEK_USE_OPENGL
 	ShutdownModule_Core_Defines_Static_Render_OpenGL(p_manager);
+#endif
+
+#ifdef KOTEK_USE_VULKAN
 	ShutdownModule_Core_Defines_Static_Render_Vulkan(p_manager);
+#endif
+
+#ifdef KOTEK_USE_BGFX
+	ShutdownModule_Core_Defines_Static_Render_BGFX(p_manager);
+#endif
 
 	return true;
 }
 
 bool SerializeModule_Core_Defines_Static_Render(ktkMainManager* p_manager)
 {
+#ifdef KOTEK_USE_DIRECTX
 	SerializeModule_Core_Defines_Static_Render_DirectX(p_manager);
+#endif
+
+#ifdef KOTEK_USE_OPENGL
 	SerializeModule_Core_Defines_Static_Render_OpenGL(p_manager);
+#endif
+
+#ifdef KOTEK_USE_VULKAN
 	SerializeModule_Core_Defines_Static_Render_Vulkan(p_manager);
+#endif
+
+#ifdef KOTEK_USE_BGFX
+	SerializeModule_Core_Defines_Static_Render_BGFX(p_manager);
+#endif
 
 	return true;
 }
 
 bool DeserializeModule_Core_Defines_Static_Render(ktkMainManager* p_manager)
 {
+#ifdef KOTEK_USE_DIRECTX
 	DeserializeModule_Core_Defines_Static_Render_DirectX(p_manager);
+#endif
+
+#ifdef KOTEK_USE_OPENGL
 	DeserializeModule_Core_Defines_Static_Render_OpenGL(p_manager);
+#endif
+
+#ifdef KOTEK_USE_VULKAN
 	DeserializeModule_Core_Defines_Static_Render_Vulkan(p_manager);
+#endif
+
+#ifdef KOTEK_USE_BGFX
+	DeserializeModule_Core_Defines_Static_Render_BGFX(p_manager);
+#endif
 
 	return true;
 }

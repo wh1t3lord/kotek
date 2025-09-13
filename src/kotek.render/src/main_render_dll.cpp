@@ -15,6 +15,10 @@
 	#include <kotek.render.vk/include/kotek_render_vk.h>
 #endif
 
+#ifdef KOTEK_USE_RENDER_BGFX
+	#include <kotek.render.bgfx/include/kotek_render_bgfx.h>
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 

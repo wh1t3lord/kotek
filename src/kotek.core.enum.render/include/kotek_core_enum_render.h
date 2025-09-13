@@ -14,6 +14,10 @@
 	#include <kotek.core.enum.render.vk/include/kotek_core_enum_render_vk.h>
 #endif
 
+#ifdef KOTEK_USE_BGFX
+	#include <kotek.core.enum.render.bgfx/include/kotek_core_enum_render_bgfx.h>
+#endif
+
 #include "kotek_enum.h"
 #include "kotek_translation.h"
 

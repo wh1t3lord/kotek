@@ -14,7 +14,7 @@ add_library(${PROJECT_NAME} STATIC
 	"include/kotek_render_format.h"
 	"src/main_render_shared_vk_dll.cpp"
 )
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/vendor")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/shared")
 if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()

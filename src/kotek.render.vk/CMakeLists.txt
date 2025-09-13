@@ -99,7 +99,7 @@ add_library(${PROJECT_NAME} STATIC
     "include/vk_enum_string_helper.h"
     "src/main_render_vk_dll.cpp"
 )
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/vk")
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)

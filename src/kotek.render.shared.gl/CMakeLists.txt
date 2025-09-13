@@ -24,7 +24,7 @@ add_library(${PROJECT_NAME} STATIC
 	"src/kotek_render_data_types.cpp"
 	"src/main_render_shared_gl_dll.cpp"
 )
-set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/vendor")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/shared")
 
 if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
