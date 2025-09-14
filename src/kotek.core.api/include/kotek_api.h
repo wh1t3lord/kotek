@@ -842,7 +842,7 @@ public:
 	/// @return
 	virtual void* GetHandle(void) const noexcept = 0;
 	virtual void* Get_OSData(void) noexcept = 0;
-	virtual void Initialize(Core::eEngineSupportedRenderer version) = 0;
+	virtual void Initialize(kun_core eEngineSupportedRenderer version, kun_core eEngineFeatureRendererVendor vendor) = 0;
 	virtual void Shutdown(void) = 0;
 	virtual void PollEvents(void) = 0;
 	virtual bool Is_NeedToClose(void) = 0;

@@ -121,8 +121,28 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		}
 		else if (is_gles)
 		{
-			status = InitializeModule_Render_ANGLE_GLES23(
-				main_manager, p_engine_config->GetRendererVersionEnum());
+			bool isBGFX = p_engine_config->IsFeatureEnabled(
+				kun_core eEngineFeatureRendererVendor::kBGFX);
+
+			bool isANGLE = p_engine_config->IsFeatureEnabled(
+				kun_core eEngineFeatureRendererVendor::kANGLE);
+
+			if (isBGFX)
+			{
+				status = InitializeModule_Render_BGFX(
+					main_manager, p_engine_config->GetRendererVersionEnum());
+			}
+			else if (isANGLE)
+			{
+				// todo: when vcpkg will support angle[vulkan] package delete
+				// this message below
+				KOTEK_MESSAGE_WARNING(
+					"don't use ANGLE for Windows as DX11, "
+					"because it was written bad and is not "
+					"efficient as Vulkan implementation for ANGLE");
+				status = InitializeModule_Render_ANGLE_GLES23(
+					main_manager, p_engine_config->GetRendererVersionEnum());
+			}
 		}
 		else
 		{
@@ -146,7 +166,8 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 				KOTEK_ASSERT(false, "not implemented");
 				break;
 			}
-			case Core::eEngineFeatureRenderer::kEngine_Feature_Renderer_Software:
+			case Core::eEngineFeatureRenderer::
+				kEngine_Feature_Renderer_Software:
 			{
 				break;
 			}

@@ -83,7 +83,7 @@ int ktkWindow::GetHeight(void) const noexcept
 }
 
 void ktkWindow::RegisterUserMainManager(
-	Core::ktkMainManager* p_manager) noexcept
+	kun_core ktkMainManager* p_manager) noexcept
 {
 	KOTEK_ASSERT(p_manager, "you can't pass an invalid manager");
 	KOTEK_ASSERT(this->m_p_window, "you can't have an invalid window");
@@ -102,10 +102,10 @@ void* ktkWindow::Get_OSData(void) noexcept
 	return this->m_p_os_data;
 }
 
-void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
+void ktkWindow::Initialize(kun_core eEngineSupportedRenderer version, kun_core eEngineFeatureRendererVendor vendor)
 {
-	if (version >= Core::eEngineSupportedRenderer::kOpenGL_1_0 &&
-		version <= Core::eEngineSupportedRenderer::kOpenGL_Latest)
+	if (version >= kun_core eEngineSupportedRenderer::kOpenGL_1_0 &&
+		version <= kun_core eEngineSupportedRenderer::kOpenGL_Latest)
 	{
 		if (!glfwInit())
 		{
@@ -113,122 +113,122 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			return;
 		}
 
-		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
+		KOTEK_ASSERT(version != kun_core eEngineSupportedRenderer::kUnknown,
 			"you must pass a valid version of OpenGL what you want to "
 			"initialize "
 			"for");
 
 		switch (version)
 		{
-		case Core::eEngineSupportedRenderer::kOpenGL_1_0:
+		case kun_core eEngineSupportedRenderer::kOpenGL_1_0:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_1_1:
+		case kun_core eEngineSupportedRenderer::kOpenGL_1_1:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_1_2:
+		case kun_core eEngineSupportedRenderer::kOpenGL_1_2:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_1_3:
+		case kun_core eEngineSupportedRenderer::kOpenGL_1_3:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_1_4:
+		case kun_core eEngineSupportedRenderer::kOpenGL_1_4:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_1_5:
+		case kun_core eEngineSupportedRenderer::kOpenGL_1_5:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_2_0:
+		case kun_core eEngineSupportedRenderer::kOpenGL_2_0:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_2_1:
+		case kun_core eEngineSupportedRenderer::kOpenGL_2_1:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_3_0:
+		case kun_core eEngineSupportedRenderer::kOpenGL_3_0:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_3_1:
+		case kun_core eEngineSupportedRenderer::kOpenGL_3_1:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_3_2:
+		case kun_core eEngineSupportedRenderer::kOpenGL_3_2:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_3_3:
+		case kun_core eEngineSupportedRenderer::kOpenGL_3_3:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_4_0:
+		case kun_core eEngineSupportedRenderer::kOpenGL_4_0:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_4_1:
+		case kun_core eEngineSupportedRenderer::kOpenGL_4_1:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_4_2:
+		case kun_core eEngineSupportedRenderer::kOpenGL_4_2:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_4_3:
+		case kun_core eEngineSupportedRenderer::kOpenGL_4_3:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_4_4:
+		case kun_core eEngineSupportedRenderer::kOpenGL_4_4:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 4);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_4_5:
+		case kun_core eEngineSupportedRenderer::kOpenGL_4_5:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 5);
 			break;
 		}
-		case Core::eEngineSupportedRenderer::kOpenGL_4_6:
+		case kun_core eEngineSupportedRenderer::kOpenGL_4_6:
 		{
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -261,8 +261,8 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			return;
 		}
 	}
-	else if (version >= Core::eEngineSupportedRenderer::kOpenGLES_1 &&
-		version <= Core::eEngineSupportedRenderer::kOpenGLES_Latest)
+	else if (version >= kun_core eEngineSupportedRenderer::kOpenGLES_1 &&
+		version <= kun_core eEngineSupportedRenderer::kOpenGLES_Latest)
 	{
 		if (!glfwInit())
 		{
@@ -270,55 +270,69 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			return;
 		}
 
-		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
+		KOTEK_ASSERT(version != kun_core eEngineSupportedRenderer::kUnknown,
 			"you must pass a valid version of OpenGL what you want to "
 			"initialize "
 			"for");
 
-		switch (version)
+		bool isNOAPI =
+			((vendor & kun_core eEngineFeatureRendererVendor::kBGFX) ==
+				kun_core eEngineFeatureRendererVendor::kBGFX);
+
+		if (isNOAPI)
 		{
-		case Core::eEngineSupportedRenderer::kOpenGLES_1:
-		{
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-			break;
+			glfwWindowHint(GLFW_CLIENT_API, GLFW_NO_API);
 		}
-		case Core::eEngineSupportedRenderer::kOpenGLES_2:
+		else
 		{
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-			break;
-		}
-		case Core::eEngineSupportedRenderer::kOpenGLES_3_0:
-		{
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
-			break;
-		}
-		case Core::eEngineSupportedRenderer::kOpenGLES_3_1:
-		{
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-			break;
-		}
-		case Core::eEngineSupportedRenderer::kOpenGLES_3_2:
-		{
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-			break;
-		}
-		default:
-		{
-			// TODO: create preprocessor for defininng major and minor version
-			// through preprocessor and configurable from cmake for user
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-			glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-			break;
-		}
+			switch (version)
+			{
+			case kun_core eEngineSupportedRenderer::kOpenGLES_1:
+			{
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 1);
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+				break;
+			}
+			case kun_core eEngineSupportedRenderer::kOpenGLES_2:
+			{
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+				break;
+			}
+			case kun_core eEngineSupportedRenderer::kOpenGLES_3_0:
+			{
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+				break;
+			}
+			case kun_core eEngineSupportedRenderer::kOpenGLES_3_1:
+			{
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+				break;
+			}
+			case kun_core eEngineSupportedRenderer::kOpenGLES_3_2:
+			{
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+				break;
+			}
+			default:
+			{
+				// TODO: create preprocessor for defininng major and minor
+				// version through preprocessor and configurable from cmake for
+				// user
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+				glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
+				break;
+			}
+			}
+
+			glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+			glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
 		}
 
-		glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
-		glfwWindowHint(GLFW_CONTEXT_CREATION_API, GLFW_EGL_CONTEXT_API);
+
 
 		this->ObtainInformationAboutDisplay();
 
@@ -338,8 +352,8 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			return;
 		}
 	}
-	else if (version >= Core::eEngineSupportedRenderer::kDirectX_7 &&
-		version <= Core::eEngineSupportedRenderer::kDirectX_Latest)
+	else if (version >= kun_core eEngineSupportedRenderer::kDirectX_7 &&
+		version <= kun_core eEngineSupportedRenderer::kDirectX_Latest)
 	{
 		if (!glfwInit())
 		{
@@ -347,7 +361,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			return;
 		}
 
-		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
+		KOTEK_ASSERT(version != kun_core eEngineSupportedRenderer::kUnknown,
 			"you must pass a valid version of DirectX what you want to "
 			"initialize "
 			"for");
@@ -366,8 +380,8 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			return;
 		}
 	}
-	else if (version <= Core::eEngineSupportedRenderer::kVulkan_1_0 &&
-		version <= Core::eEngineSupportedRenderer::kVulkan_Latest)
+	else if (version <= kun_core eEngineSupportedRenderer::kVulkan_1_0 &&
+		version <= kun_core eEngineSupportedRenderer::kVulkan_Latest)
 	{
 		if (!glfwInit())
 		{
@@ -375,7 +389,7 @@ void ktkWindow::Initialize(Core::eEngineSupportedRenderer version)
 			return;
 		}
 
-		KOTEK_ASSERT(version != Core::eEngineSupportedRenderer::kUnknown,
+		KOTEK_ASSERT(version != kun_core eEngineSupportedRenderer::kUnknown,
 			"you must pass a valid version of DirectX what you want to "
 			"initialize "
 			"for");
@@ -497,11 +511,11 @@ ktk::cstring ktkWindow::GetTitle(void) const noexcept
 
 void ktkWindow::Set_InputType(ktk::enum_base_t type) noexcept
 {
-	Kotek::Core::eInputType input = static_cast<Kotek::Core::eInputType>(type);
+	Kotek::kun_core eInputType input = static_cast<Kotek::kun_core eInputType>(type);
 
 	switch (input)
 	{
-	case Core::eInputType::kInputType_Cursor:
+	case kun_core eInputType::kInputType_Cursor:
 	{
 		if (this->m_p_window)
 		{
@@ -510,7 +524,7 @@ void ktkWindow::Set_InputType(ktk::enum_base_t type) noexcept
 
 		break;
 	}
-	case Core::eInputType::kInputType_DisabledCursor:
+	case kun_core eInputType::kInputType_DisabledCursor:
 	{
 		if (this->m_p_window)
 		{
@@ -520,7 +534,7 @@ void ktkWindow::Set_InputType(ktk::enum_base_t type) noexcept
 
 		break;
 	}
-	case Core::eInputType::kInputType_HiddenCursor:
+	case kun_core eInputType::kInputType_HiddenCursor:
 	{
 		if (this->m_p_window)
 		{

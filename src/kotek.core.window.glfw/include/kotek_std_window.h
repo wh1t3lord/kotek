@@ -43,8 +43,9 @@ public:
 	int GetHeight(void) const noexcept override;
 	void* GetHandle(void) const noexcept override;
 	void* Get_OSData(void) noexcept override;
-	void Initialize(Core::eEngineSupportedRenderer version) override;
- 
+	void Initialize(kun_core eEngineSupportedRenderer version,
+		kun_core eEngineFeatureRendererVendor vendor) override;
+
 	void Shutdown(void) override;
 
 	void MakeContextCurrent(void) noexcept override;
@@ -54,7 +55,7 @@ public:
 	void SetStringToTitle(ktk::enum_base_t id,
 		const char* p_utf8_or_char_string) noexcept override;
 	void RemoveStringFromTitle(ktk::enum_base_t id) noexcept override;
-    ktk::cstring GetTitle(void) const noexcept override;
+	ktk::cstring GetTitle(void) const noexcept override;
 	void Set_InputType(ktk::enum_base_t type) noexcept override;
 
 private:
@@ -65,7 +66,7 @@ private:
 	int m_screen_size_height;
 	GLFWwindow* m_p_window;
 	void* m_p_os_data;
-    ktk::unordered_map<ktk::enum_base_t, ktk::cstring> m_titles;
+	ktk::unordered_map<ktk::enum_base_t, ktk::cstring> m_titles;
 };
 
 KOTEK_END_NAMESPACE_CORE
