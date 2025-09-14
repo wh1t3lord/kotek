@@ -73,8 +73,6 @@ bool InitializeModule_Render_ANGLE_GLES23(
 
 	p_main_manager->SetRenderResourceManager(p_render_resource_manager);
 
-	KOTEK_MESSAGE("render module is initialized");
-
 	return true;
 }
 

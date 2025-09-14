@@ -10,21 +10,47 @@ bool InitializeModule_Render_BGFX(kun_core ktkMainManager* p_main_manager,
 {
 	auto* p_engine_config = p_main_manager->Get_EngineConfig();
 
-	auto gl_version = version;
-	p_engine_config->SetFeatureStatus(gl_version, true);
+	p_engine_config->SetFeatureStatus(version, true);
 
 	bgfx::ktkRenderDevice* p_render_device = new bgfx::ktkRenderDevice();
-	bgfx::ktkRenderSwapchain* p_render_swapchain =
-		new bgfx::ktkRenderSwapchain();
 	bgfx::ktkRenderResourceManager* p_render_resource_manager =
 		new bgfx::ktkRenderResourceManager(p_render_device, p_main_manager);
+	bgfx::ktkRenderSwapchain* p_render_swapchain =
+		new bgfx::ktkRenderSwapchain();
 
 	p_main_manager->setRenderDevice(p_render_device);
 	p_main_manager->setRenderSwapchainManager(p_render_swapchain);
 	p_main_manager->SetRenderResourceManager(p_render_resource_manager);
 
+	if (p_main_manager->Get_Splash())
+	{
+		p_main_manager->Get_Splash()->Set_Text("loading complete!");
+		p_main_manager->Get_Splash()->Set_Progress(-1.0f);
+	}
+
+	// todo: wut, too expensive better to use task manager...
+	kun_kotek kun_ktk kun_mt thread close_splash(
+		[p_main_manager]()
+		{
+			kun_kotek kun_ktk kun_mt this_thread::sleep_for(
+				kun_kotek kun_ktk chrono::milliseconds(700));
+
+			if (p_main_manager)
+			{
+				kun_kotek kun_core ktkIWindowSplash* p_window =
+					p_main_manager->Get_Splash();
+
+				if (p_window)
+				{
+					p_window->Hide();
+				}
+			}
+		});
+
+	close_splash.detach();
+
 	p_main_manager->Get_WindowManager()->Get_ActiveWindow()->Initialize(
-		gl_version, p_engine_config->GetEngineFeatureRendererVendor());
+		version, p_engine_config->GetEngineFeatureRendererVendor());
 
 	// TODO: load from user settings
 	p_render_device->SetWidth(
@@ -35,10 +61,10 @@ bool InitializeModule_Render_BGFX(kun_core ktkMainManager* p_main_manager,
 	p_render_device->Initialize(p_main_manager);
 
 	p_render_swapchain->Initialize(p_render_device);
-	p_render_resource_manager->initialize(p_render_device, p_render_swapchain);
+	p_render_resource_manager->initialize(p_render_device, p_render_swapchain,
+		p_engine_config->Get_VideoMemoryForInitialize());
 
-	p_main_manager->GetResourceManager()->Set_RenderResourceManager(
-		p_render_resource_manager);
+	p_main_manager->SetRenderResourceManager(p_render_resource_manager);
 
 	KOTEK_MESSAGE("render module is initialized");
 
@@ -49,12 +75,7 @@ bool ShutdownModule_Render_BGFX(kun_core ktkMainManager* p_main_manager)
 {
 	p_main_manager->getRenderDevice()->GPUFlush();
 
-	p_main_manager->getRenderSwapchainManager()->Shutdown(
-		p_main_manager->getRenderDevice());
-	p_main_manager->GetRenderResourceManager()->shutdown(
-		p_main_manager->getRenderDevice());
-
-	kun_core ktkIGameManager* p_game_manager = p_main_manager->GetGameManager();
+	Core::ktkIGameManager* p_game_manager = p_main_manager->GetGameManager();
 	if (p_game_manager)
 	{
 		auto* p_renderer = p_game_manager->GetRenderer();
@@ -64,6 +85,12 @@ bool ShutdownModule_Render_BGFX(kun_core ktkMainManager* p_main_manager)
 			p_renderer->Shutdown();
 		}
 	}
+
+	p_main_manager->getRenderSwapchainManager()->Shutdown(
+		p_main_manager->getRenderDevice());
+
+	p_main_manager->GetRenderResourceManager()->shutdown(
+		p_main_manager->getRenderDevice());
 
 	p_main_manager->getRenderDevice()->Shutdown();
 
