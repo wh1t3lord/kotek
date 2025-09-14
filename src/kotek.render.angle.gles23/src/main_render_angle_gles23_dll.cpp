@@ -57,7 +57,7 @@ bool InitializeModule_Render_ANGLE_GLES23(
 	close_splash.detach();
 
 	p_main_manager->Get_WindowManager()->Get_ActiveWindow()->Initialize(
-		version);
+		version, p_engine_config->GetEngineFeatureRendererVendor());
 
 	p_render_device->Initialize(p_main_manager);
 

@@ -24,7 +24,7 @@ bool InitializeModule_Render_BGFX(kun_core ktkMainManager* p_main_manager,
 	p_main_manager->SetRenderResourceManager(p_render_resource_manager);
 
 	p_main_manager->Get_WindowManager()->Get_ActiveWindow()->Initialize(
-		gl_version);
+		gl_version, p_engine_config->GetEngineFeatureRendererVendor());
 
 	// TODO: load from user settings
 	p_render_device->SetWidth(

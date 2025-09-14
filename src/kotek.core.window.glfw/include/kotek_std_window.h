@@ -41,8 +41,14 @@ public:
 
 	int GetWidth(void) const noexcept override;
 	int GetHeight(void) const noexcept override;
+
+	/// @brief GLFWwindow* returns
+	/// @param
+	/// @return
 	void* GetHandle(void) const noexcept override;
+	
 	void* Get_OSData(void) noexcept override;
+	
 	void Initialize(kun_core eEngineSupportedRenderer version,
 		kun_core eEngineFeatureRendererVendor vendor) override;
 

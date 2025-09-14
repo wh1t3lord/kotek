@@ -727,5 +727,11 @@ void ktkEngineConfig::Parse_CommandLine(void) noexcept
 		this->m_argv, this->m_argv + this->m_argc);
 }
 
+eEngineFeatureRendererVendor
+ktkEngineConfig::GetEngineFeatureRendererVendor(void) const noexcept
+{
+	return this->m_engine_feature_renderer_vendor_flags;
+}
+
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

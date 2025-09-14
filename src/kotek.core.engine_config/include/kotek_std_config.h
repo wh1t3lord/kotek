@@ -78,6 +78,8 @@ public:
 	eEngineFeatureRender GetEngineFeatureRender(void) const noexcept override;
 	eEngineFeatureRenderer GetEngineFeatureRenderer(
 		void) const noexcept override;
+	eEngineFeatureRendererVendor GetEngineFeatureRendererVendor(
+		void) const noexcept override;
 	eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept override;
 	eEngineFeatureWindow GetEngineFeatureWindow(void) const noexcept override;
 	eEngineSupportedRenderer GetRendererVersionEnum(

@@ -38,9 +38,20 @@ void ktkRenderDevice::Initialize(kun_core ktkMainManager* p_main_manager)
 		KOTEK_MESSAGE_ERROR(
 			"unknown renderer or we just didn't implement support! Sorry");
 	}
-	
-	init.platformData.nwh =
-		p_main_manager->Get_WindowManager()->ActiveWindow_GetHandle();
+
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	ktkWin32OSData* p_platform_data = static_cast<ktkWin32OSData*>(
+		p_main_manager->Get_WindowManager()->Get_ActiveWindow()->Get_OSData());
+	KOTEK_ASSERT(p_platform_data,
+		"window must have valid platform data aka hwnd and etc");
+
+	KOTEK_ASSERT(p_platform_data->hWnd, "HWND is not valid!");
+
+	init.platformData.nwh = p_platform_data->hWnd;
+#elif defined(KOTEK_USE_PLATFORM_LINUX)
+#else
+	#error unknown platform
+#endif
 
 	init.resolution.width = this->m_width;
 	init.resolution.height = this->m_height;
@@ -55,7 +66,6 @@ void ktkRenderDevice::Initialize(kun_core ktkMainManager* p_main_manager)
 	{
 		KOTEK_MESSAGE("bgfx initialized: {}",
 			::bgfx::getRendererName(::bgfx::getRendererType()));
-
 #ifdef KOTEK_DEBUG
 		::bgfx::setDebug(BGFX_DEBUG_TEXT);
 #endif

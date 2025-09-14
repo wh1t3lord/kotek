@@ -750,6 +750,8 @@ public:
 		void) const noexcept = 0;
 	virtual eEngineFeatureRenderer GetEngineFeatureRenderer(
 		void) const noexcept = 0;
+	virtual eEngineFeatureRendererVendor GetEngineFeatureRendererVendor(
+		void) const noexcept = 0;
 	virtual eEngineFeatureSDK GetEngineFeatureSDK(void) const noexcept = 0;
 	virtual eEngineFeatureWindow GetEngineFeatureWindow(
 		void) const noexcept = 0;

@@ -9,7 +9,7 @@ namespace Kotek
 {
 	namespace Render
 	{
-		void registerCommands(Core::ktkMainManager* p_main_manager) {}
+		void registerCommands(kun_core ktkMainManager* p_main_manager) {}
 
 #ifdef KOTEK_DEBUG
 		// TODO: write separated test-applications for that kind of library
@@ -22,8 +22,8 @@ namespace Kotek
 		}
 #endif
 
-		bool InitializeModule_Render_VK(Core::ktkMainManager* p_main_manager,
-			Core::eEngineSupportedRenderer version)
+		bool InitializeModule_Render_VK(kun_core ktkMainManager* p_main_manager,
+			kun_core eEngineSupportedRenderer version)
 		{
 			KOTEK_CPU_PROFILE();
 
@@ -48,7 +48,7 @@ namespace Kotek
 				p_render_manager_render_resource);
 
 			p_main_manager->Get_WindowManager()->Get_ActiveWindow()->Initialize(
-				version);
+				version, p_engine_config->GetEngineFeatureRendererVendor());
 
 			p_render_manager_device->Initialize(p_main_manager);
 
@@ -73,7 +73,7 @@ namespace Kotek
 			return true;
 		}
 
-		bool ShutdownModule_Render_VK(Core::ktkMainManager* p_main_manager)
+		bool ShutdownModule_Render_VK(kun_core ktkMainManager* p_main_manager)
 		{
 			p_main_manager->getRenderDevice()->GPUFlush();
 
@@ -82,7 +82,7 @@ namespace Kotek
 			p_main_manager->GetRenderResourceManager()->shutdown(
 				p_main_manager->getRenderDevice());
 
-			Core::ktkIGameManager* p_game_manager =
+			kun_core ktkIGameManager* p_game_manager =
 				p_main_manager->GetGameManager();
 			if (p_game_manager)
 			{
@@ -107,14 +107,14 @@ namespace Kotek
 					p_main_manager->getRenderSwapchainManager());
 
 			KOTEK_ASSERT(p_render_device,
-				"you must get a valid point of gl::ktkRenderDevice (otherwise "
+				"you must get a valid point of vk::ktkRenderDevice (otherwise "
 				"it is impossible situation and something went really wrong)");
 			KOTEK_ASSERT(p_render_resource_manager,
-				"you must get a valid point of gl::ktkRenderResourceManager "
+				"you must get a valid point of vk::ktkRenderResourceManager "
 				"(otherwise it is impossible situation and something went "
 				"really wrong)");
 			KOTEK_ASSERT(p_render_swapchain,
-				"you must get a valid point of gl::ktkRenderSwapchain "
+				"you must get a valid point of vk::ktkRenderSwapchain "
 				"(otherwise it is impossible situation and something went "
 				"really wrong)");
 
