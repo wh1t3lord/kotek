@@ -222,6 +222,10 @@ if ("${KOTEK_STARTUP_RENDERER_VERSION}" STREQUAL "")
 	message(FATAL_ERROR "you must specify renderer version what you need to load. see documentation.")
 endif()
 
+if ("${KOTEK_STARTUP_RENDERER_VENDOR}" STREQUAL "")
+	message(FATAL_ERROR "you must specify renderer vendor what you need to load. see documentation.")
+endif()
+
 ### Namespaces
 # TODO: test override namespace instead of Kotek to some name that user wanted to write and use in their environment
 if ("${KOTEK_NAMESPACE_KOTEK}" STREQUAL "" OR "${KOTEK_NAMESPACE_KOTEK}" STREQUAL "ON")
@@ -1139,6 +1143,7 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
 	"
 		#define KOTEK_USE_STARTUP_RENDERER_VERSION k${KOTEK_STARTUP_RENDERER_VERSION}
+		#define KOTEK_USE_STARTUP_RENDERER_VENDOR k${KOTEK_STARTUP_RENDERER_VENDOR}
 	")
 
 	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}

@@ -15,6 +15,11 @@ bool InitializeModule_Render_Shared(Core::ktkMainManager* p_main_manager)
 #ifdef KOTEK_USE_VULKAN
 	InitializeModule_Render_Shared_VK(p_main_manager);
 #endif
+
+#ifdef KOTEK_USE_BGFX
+	InitializeModule_Render_Shared_BGFX(p_main_manager);
+#endif
+
 	return true;
 }
 
@@ -30,6 +35,10 @@ bool ShutdownModule_Render_Shared(Core::ktkMainManager* p_main_manager)
 
 #ifdef KOTEK_USE_VULKAN
 	ShutdownModule_Render_Shared_VK(p_main_manager);
+#endif
+
+#ifdef KOTEK_USE_BGFX
+	ShutdownModule_Render_Shared_BGFX(p_main_manager);
 #endif
 
 	return true;

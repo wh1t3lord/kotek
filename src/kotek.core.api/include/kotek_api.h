@@ -720,6 +720,8 @@ public:
 	virtual bool IsFeatureEnabled(eEngineFeatureRenderer id) const noexcept = 0;
 	virtual bool IsFeatureEnabled(eEngineFeatureSDK id) const noexcept = 0;
 	virtual bool IsFeatureEnabled(eEngineFeatureWindow id) const noexcept = 0;
+	virtual bool IsFeatureEnabled(
+		eEngineFeatureRendererVendor id) const noexcept = 0;
 
 	virtual void SetFeatureStatus(eEngineFeature id, bool status) noexcept = 0;
 	virtual void SetFeatureStatus(
@@ -733,6 +735,9 @@ public:
 
 	virtual void SetFeatureStatus(
 		eEngineSupportedRenderer version, bool status) noexcept = 0;
+
+	virtual void SetFeatureStatus(
+		eEngineFeatureRendererVendor vendor, bool status) noexcept = 0;
 
 	virtual void SetFeatureStatus(const ktk_vector<eEngineSupportedRenderer,
 		KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&

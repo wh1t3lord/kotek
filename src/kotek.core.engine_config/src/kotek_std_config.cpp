@@ -6,10 +6,14 @@ KOTEK_BEGIN_NAMESPACE_CORE
 ktkEngineConfig::ktkEngineConfig(void) :
 	m_argc{-1}, m_argv{}, m_is_running{true},
 	m_engine_feature_flags{eEngineFeature::kEngine_Feature_None},
-	m_engine_feature_render_flags{eEngineFeatureRender::kEngine_Feature_Render_None},
+	m_engine_feature_render_flags{
+		eEngineFeatureRender::kEngine_Feature_Render_None},
 	m_engine_feature_sdk_flags{eEngineFeatureSDK::kEngine_Feature_SDK_None},
-	m_engine_feature_renderer_flags{eEngineFeatureRenderer::kEngine_Feature_Renderer_None},
-	m_engine_feature_window_flags{eEngineFeatureWindow::kEngine_Feature_Window_None},
+	m_engine_feature_renderer_flags{
+		eEngineFeatureRenderer::kEngine_Feature_Renderer_None},
+	m_engine_feature_renderer_vendor_flags{eEngineFeatureRendererVendor::kNone},
+	m_engine_feature_window_flags{
+		eEngineFeatureWindow::kEngine_Feature_Window_None},
 	m_video_memory_for_initialize{}
 {
 }
@@ -43,6 +47,12 @@ bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureSDK id) const noexcept
 bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureWindow id) const noexcept
 {
 	return (this->m_engine_feature_window_flags & id) == id;
+}
+
+bool ktkEngineConfig::IsFeatureEnabled(
+	eEngineFeatureRendererVendor id) const noexcept
+{
+	return (this->m_engine_feature_renderer_vendor_flags & id) == id;
 }
 
 void ktkEngineConfig::SetFeatureStatus(eEngineFeature id, bool status) noexcept
@@ -102,7 +112,8 @@ void ktkEngineConfig::SetFeatureStatus(
 					eEngineSupportedRenderer::kDirectX_Latest, true);
 			}
 			else if (id ==
-				eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGLES_Latest)
+				eEngineFeatureRenderer::
+					kEngine_Feature_Renderer_OpenGLES_Latest)
 			{
 				this->SetFeatureStatus(
 					eEngineSupportedRenderer::kOpenGLES_Latest, true);
@@ -147,22 +158,35 @@ void ktkEngineConfig::SetFeatureStatus(
 	if (status)
 		this->m_version_renderer = static_cast<kun_ktk enum_base_t>(version);
 	else
-		this->m_version_renderer =
-			static_cast<kun_ktk enum_base_t>(eEngineSupportedRenderer::kUnknown);
+		this->m_version_renderer = static_cast<kun_ktk enum_base_t>(
+			eEngineSupportedRenderer::kUnknown);
 }
 
 void ktkEngineConfig::SetFeatureStatus(
-	const ktk_vector<eEngineSupportedRenderer, KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
+	const ktk_vector<eEngineSupportedRenderer,
+		KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
 		fallback_versions) noexcept
 {
 	this->m_fallback_renderers_versions = fallback_versions;
 }
 
-void ktkEngineConfig::SetFeatureStatus(
-	const ktk_vector<eEngineFeatureRenderer, KOTEK_DEF_FALLBACK_RENDERERS_COUNT>&
-		gapis) noexcept
+void ktkEngineConfig::SetFeatureStatus(const ktk_vector<eEngineFeatureRenderer,
+	KOTEK_DEF_FALLBACK_RENDERERS_COUNT>& gapis) noexcept
 {
 	this->m_fallback_renderers = gapis;
+}
+
+void ktkEngineConfig::SetFeatureStatus(
+	eEngineFeatureRendererVendor vendor, bool status) noexcept
+{
+	if (status)
+	{
+		this->m_engine_feature_renderer_vendor_flags |= vendor;
+	}
+	else
+	{
+		this->m_engine_feature_renderer_vendor_flags &= ~vendor;
+	}
 }
 
 eEngineFeature ktkEngineConfig::GetEngineFeature(void) const noexcept
@@ -204,14 +228,14 @@ kun_ktk enum_base_t ktkEngineConfig::GetRendererVersion(void) const noexcept
 	return this->m_version_renderer;
 }
 
-const ktk_vector<eEngineFeatureRenderer,
-	KOTEK_DEF_FALLBACK_RENDERERS_COUNT>&
+const ktk_vector<eEngineFeatureRenderer, KOTEK_DEF_FALLBACK_RENDERERS_COUNT>&
 ktkEngineConfig::GetFallbackRendereres(void) const noexcept
 {
 	return this->m_fallback_renderers;
 }
 
-const ktk_vector<eEngineSupportedRenderer, KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
+const ktk_vector<eEngineSupportedRenderer,
+	KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
 ktkEngineConfig::GetFallbackRendererVersions(void) const noexcept
 {
 	return this->m_fallback_renderers_versions;
@@ -323,7 +347,8 @@ bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 
 		status = true;
 	}
-	case eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGL_SpecifiedByUser:
+	case eEngineFeatureRenderer::
+		kEngine_Feature_Renderer_OpenGL_SpecifiedByUser:
 	{
 		if (this->GetRendererVersionEnum() ==
 			eEngineSupportedRenderer::kOpenGL_Latest)
@@ -354,7 +379,8 @@ bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 
 		status = true;
 	}
-	case eEngineFeatureRenderer::kEngine_Feature_Renderer_Vulkan_SpecifiedByUser:
+	case eEngineFeatureRenderer::
+		kEngine_Feature_Renderer_Vulkan_SpecifiedByUser:
 	{
 		if (this->GetRendererVersionEnum() ==
 			eEngineSupportedRenderer::kVulkan_Latest)
@@ -394,8 +420,8 @@ bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(
 	           this->m_parsed_command_line_arguments.end(),
 	           [your_argument](const kun_ktk cstring& argument) -> bool
 	           {
-	               kun_ktk cstring_view wrapped_argument = your_argument.c_str();
-	               return argument == wrapped_argument;
+	               kun_ktk cstring_view wrapped_argument =
+	your_argument.c_str(); return argument == wrapped_argument;
 	           }) != this->m_parsed_command_line_arguments.end();*/
 
 	return this->m_parsed_command_line_arguments.find(your_argument) !=
@@ -671,12 +697,14 @@ kun_ktk size_t ktkEngineConfig::Get_VideoMemoryTotal(void) const noexcept
 	return 0;
 }
 
-kun_ktk size_t ktkEngineConfig::Get_VideoMemoryForInitialize(void) const noexcept
+kun_ktk size_t ktkEngineConfig::Get_VideoMemoryForInitialize(
+	void) const noexcept
 {
 	return this->m_video_memory_for_initialize;
 }
 
-void ktkEngineConfig::Set_VideoMemoryForInitialize(kun_ktk size_t value) noexcept
+void ktkEngineConfig::Set_VideoMemoryForInitialize(
+	kun_ktk size_t value) noexcept
 {
 	this->m_video_memory_for_initialize = value;
 }
@@ -685,13 +713,17 @@ void ktkEngineConfig::Parse_CommandLine(void) noexcept
 {
 	KOTEK_ASSERT(this->m_argc != -1,
 		"you must set argc before calling set argv method!");
-	
-	#ifdef KOTEK_USE_LIBRARY_TYPE_EMB
-	KOTEK_ASSERT(
-		this->m_argc <= KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT, "overflow! reduce or set bigger size of this constant KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT in cmake (because it is dynamically generated constant and will be overwritten after any changes of cmake scripts)");
-	#endif
 
-	this->m_parsed_command_line_arguments = ktk_unordered_set<kun_ktk cstring, KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT>(
+#ifdef KOTEK_USE_LIBRARY_TYPE_EMB
+	KOTEK_ASSERT(this->m_argc <= KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT,
+		"overflow! reduce or set bigger size of this constant "
+	    "KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT in cmake (because it is "
+	    "dynamically generated constant and will be overwritten after any "
+	    "changes of cmake scripts)");
+#endif
+
+	this->m_parsed_command_line_arguments = ktk_unordered_set<kun_ktk cstring,
+		KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT>(
 		this->m_argv, this->m_argv + this->m_argc);
 }
 

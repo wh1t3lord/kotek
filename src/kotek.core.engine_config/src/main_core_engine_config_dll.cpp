@@ -18,6 +18,8 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 	p_instance->Initialize();
 
 	auto renderer_type = eEngineFeatureRenderer::KOTEK_USE_STARTUP_RENDERER;
+	auto renderer_vendor =
+		eEngineFeatureRendererVendor::KOTEK_USE_STARTUP_RENDERER_VENDOR;
 
 	p_instance->SetFeatureStatus(renderer_type, true);
 
@@ -65,6 +67,34 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 				renderer_version <= eEngineSupportedRenderer::kOpenGLES_Latest,
 			"you passed OpenGL ES renderer but version is not for OpenGL ES at "
 			"all!");
+
+		bool isBGFX = (renderer_vendor & eEngineFeatureRendererVendor::kBGFX) == eEngineFeatureRendererVendor::kBGFX;
+		bool isANGLE =
+			(renderer_vendor & eEngineFeatureRendererVendor::kANGLE) ==
+			eEngineFeatureRendererVendor::kANGLE;
+
+		// todo: when angle[vulkan] package will be added to vcpkg you should delete this assert and warning
+		if (isANGLE)
+		{
+			KOTEK_MESSAGE_WARNING(
+				"you shouldn't use ANGLE right now because it provides poor "
+			    "implementation on Windows due to DX11 backend, but vcpkg "
+			    "doesn't provide vulkan version of angle yet. So choose BGFX "
+			    "please!");
+
+			if (!isBGFX)
+			{
+				renderer_vendor |= eEngineFeatureRendererVendor::kBGFX;
+
+				KOTEK_MESSAGE_WARNING(
+					"you forgot to add BGFX to your flag, engine did for you");
+			}
+		}
+
+		// todo: when angle[vulkan] package will be added to vcpkg you should
+		// delete this assert and warning
+		KOTEK_ASSERT(isBGFX, "right now we prioritize BGFX over ANGLE");
+
 		break;
 	}
 	case eEngineFeatureRenderer::kEngine_Feature_Renderer_OpenGL_Latest:
@@ -116,6 +146,7 @@ bool InitializeModule_Core_Engine_Config(ktkMainManager* p_manager)
 
 	p_instance->Set_VideoMemoryForInitialize(1024 * 1024 * 32);
 	p_instance->SetFeatureStatus(renderer_version, true);
+	p_instance->SetFeatureStatus(renderer_vendor, true);
 	p_manager->Set_EngineConfig(p_instance);
 
 	return true;

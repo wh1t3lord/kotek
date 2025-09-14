@@ -49,6 +49,8 @@ public:
 	bool IsFeatureEnabled(eEngineFeatureRenderer id) const noexcept override;
 	bool IsFeatureEnabled(eEngineFeatureSDK id) const noexcept override;
 	bool IsFeatureEnabled(eEngineFeatureWindow id) const noexcept override;
+	bool IsFeatureEnabled(
+		eEngineFeatureRendererVendor id) const noexcept override;
 
 	void SetFeatureStatus(eEngineFeature id, bool status) noexcept override;
 	void SetFeatureStatus(
@@ -62,6 +64,8 @@ public:
 	// passing false set to kUnknown
 	void SetFeatureStatus(
 		eEngineSupportedRenderer version, bool status) noexcept override;
+	void SetFeatureStatus(
+		eEngineFeatureRendererVendor vendor, bool status) noexcept override;
 
 	void SetFeatureStatus(
 		const ktk_vector<eEngineSupportedRenderer, KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
@@ -232,6 +236,7 @@ private:
 	eEngineFeature m_engine_feature_flags;
 	eEngineFeatureRender m_engine_feature_render_flags;
 	eEngineFeatureRenderer m_engine_feature_renderer_flags;
+	eEngineFeatureRendererVendor m_engine_feature_renderer_vendor_flags;
 	eEngineFeatureSDK m_engine_feature_sdk_flags;
 	eEngineFeatureWindow m_engine_feature_window_flags;
 	kun_ktk enum_base_t m_version_renderer;

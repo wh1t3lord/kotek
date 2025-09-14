@@ -7,11 +7,13 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 // TODO: add helper namespace for translating this enum
 enum class eFolderIndex : kun_ktk enum_base_t{kFolderIndex_Root,
-	kFolderIndex_DataGame, kFolderIndex_DataGame_Configs, kFolderIndex_DataGame_Scripts,
-	kFolderIndex_DataGame_Textures, kFolderIndex_DataGame_Shaders, kFolderIndex_DataGame_Shaders_GLSL,
+	kFolderIndex_DataGame, kFolderIndex_DataGame_Configs,
+	kFolderIndex_DataGame_Scripts, kFolderIndex_DataGame_Textures,
+	kFolderIndex_DataGame_Shaders, kFolderIndex_DataGame_Shaders_GLSL,
 	kFolderIndex_DataGame_Shaders_HLSL, kFolderIndex_DataGame_Shaders_WEBGPU,
-	kFolderIndex_DataGame_Shaders_SPV, kFolderIndex_DataGame_Models, kFolderIndex_DataGame_Sounds,
-	kFolderIndex_DataGame_Levels, kFolderIndex_DataGame_AI, kFolderIndex_DataUser_Tests,
+	kFolderIndex_DataGame_Shaders_SPV, kFolderIndex_DataGame_Models,
+	kFolderIndex_DataGame_Sounds, kFolderIndex_DataGame_Levels,
+	kFolderIndex_DataGame_AI, kFolderIndex_DataUser_Tests,
 	kFolderIndex_DataUser_ShaderCache, kFolderIndex_DataUser_SDK,
 	kFolderIndex_DataUser_SDK_Settings, kFolderIndex_DataUser_SDK_Scenes,
 	kFolderIndex_DataUser, kEndOfEnum};
@@ -433,6 +435,17 @@ enum eEngineFeatureRenderer
 };
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRenderer);
+
+enum eEngineFeatureRendererVendor
+{
+	kANGLE = 1 << 1,
+	kBGFX = 1 << 2,
+	kNative = 1 << 3,
+	kNone = 0,
+	kEndOfEnumeEngineFeatureRendererVendor = 3
+};
+
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRendererVendor);
 
 /// @brief took information from https://github.com/google/angle
 enum eEngineFeatureRendererANGLE
