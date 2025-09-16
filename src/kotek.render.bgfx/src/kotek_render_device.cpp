@@ -77,9 +77,9 @@ void ktkRenderDevice::Shutdown(void)
 	::bgfx::shutdown();
 }
 
-void ktkRenderDevice::Resize(Core::ktkIRenderSwapchain* p_raw_swapchain,
-	Core::ktkIRenderer* p_raw_renderer,
-	Core::ktkIRenderResourceManager* p_raw_resource_manager, int width,
+void ktkRenderDevice::Resize(kun_core ktkIRenderSwapchain* p_raw_swapchain,
+	kun_core ktkIRenderer* p_raw_renderer,
+	kun_core ktkIRenderResourceManager* p_raw_resource_manager, int width,
 	int height)
 {
 	this->m_width = width;
