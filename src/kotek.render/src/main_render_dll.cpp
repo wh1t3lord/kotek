@@ -311,7 +311,20 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 		}
 		else if (is_gles)
 		{
-			status = ShutdownModule_Render_ANGLE_GLES23(main_manager);
+			bool isBGFX = p_engine_config->IsFeatureEnabled(
+				kun_core eEngineFeatureRendererVendor::kBGFX);
+
+			bool isANGLE = p_engine_config->IsFeatureEnabled(
+				kun_core eEngineFeatureRendererVendor::kANGLE);
+
+			if (isBGFX)
+			{
+				status = ShutdownModule_Render_BGFX(main_manager);
+			}
+			else if (isANGLE)
+			{
+				status = ShutdownModule_Render_ANGLE_GLES23(main_manager);
+			}
 		}
 		else
 		{
