@@ -9,8 +9,6 @@ namespace bgfx
 
 	void ktkRenderSwapchain::Initialize(Core::ktkIRenderDevice* p_render_device)
 	{
-		::bgfx::setViewClear(0, BGFX_CLEAR_COLOR);
-		::bgfx::setViewRect(0, 0, 0, ::bgfx::BackbufferRatio::Equal);
 	}
 
 	void ktkRenderSwapchain::Shutdown(Core::ktkIRenderDevice* p_render_device)
@@ -22,7 +20,6 @@ namespace bgfx
 	{
 		::bgfx::reset(static_cast<uint32_t>(width),
 			static_cast<uint32_t>(height), BGFX_RESET_VSYNC);
-		::bgfx::setViewRect(0, 0, 0, ::bgfx::BackbufferRatio::Equal);
 	}
 
 	void ktkRenderSwapchain::Present(Core::ktkMainManager* p_main_manager,
