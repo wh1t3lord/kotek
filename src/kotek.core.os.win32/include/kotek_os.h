@@ -61,8 +61,10 @@
 	#ifdef KOTEK_USE_BGFX
 		#include <bx/bx.h>
 		#include <bx/thread.h>
+		#include <bx/math.h>
 		#include <bgfx/bgfx.h>
 		#include <bgfx/platform.h>
+		#include <bgfx/embedded_shader.h>
 	#endif
 
 struct ktkWin32OSData
