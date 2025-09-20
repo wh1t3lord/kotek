@@ -4,17 +4,6 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 KOTEK_BEGIN_NAMESPACE_RENDER_GL
 
-ktkRenderGraphSimplifiedRenderPass::ktkRenderGraphSimplifiedRenderPass(
-	const kun_ktk u8string_view& name) :
-	m_p_manager_main{},
-	m_p_manager_resource{}
-#ifdef KOTEK_DEBUG
-	,
-	m_name{reinterpret_cast<const char*>(name.data())}
-#endif
-{
-}
-
 ktkRenderGraphSimplifiedRenderPass::ktkRenderGraphSimplifiedRenderPass(void) :
 	m_p_manager_main{}, m_p_manager_resource{}
 {

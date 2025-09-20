@@ -15,7 +15,6 @@ KOTEK_BEGIN_NAMESPACE_RENDER_GL
 class ktkRenderGraphSimplifiedRenderPass
 {
 public:
-	ktkRenderGraphSimplifiedRenderPass(const kun_ktk u8string_view& name);
 	ktkRenderGraphSimplifiedRenderPass(void);
 	virtual ~ktkRenderGraphSimplifiedRenderPass(void) = default;
 

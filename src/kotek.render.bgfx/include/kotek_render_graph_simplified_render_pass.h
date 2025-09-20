@@ -15,7 +15,6 @@ KOTEK_BEGIN_NAMESPACE_RENDER_BGFX
 class ktkRenderGraphSimplifiedRenderPass
 {
 public:
-	ktkRenderGraphSimplifiedRenderPass(const kun_ktk u8string_view& name);
 	ktkRenderGraphSimplifiedRenderPass(void);
 	virtual ~ktkRenderGraphSimplifiedRenderPass(void) = default;
 
@@ -26,10 +25,11 @@ public:
 		kun_core ktkIRenderResourceManager* p_manager_resource);
 	virtual void OnDestroyResources();
 	virtual void OnUpdate(
-		const ktkRenderGraphSimplifiedRenderPass* p_previous_pass);
+		const ktkRenderGraphSimplifiedRenderPass* p_previous_pass, kun_ktk uint32_t my_id_in_queue);
 	virtual void OnRender(
-		const ktkRenderGraphSimplifiedRenderPass* p_previous_pass);
+		const ktkRenderGraphSimplifiedRenderPass* p_previous_pass, kun_ktk uint32_t my_id_in_queue);
 
+	void Set_Name(static_cstring_t<32>& debug_name);
 	const char* Get_Name(void) const noexcept;
 
 protected:

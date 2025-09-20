@@ -157,29 +157,32 @@ void ktkRenderGraphSimplified::Shutdown(void)
 void ktkRenderGraphSimplified::Update_All(void)
 {
 	ktkRenderGraphSimplifiedRenderPass* p_previous_pass{};
+	kun_ktk uint32_t id{};
 	for (ktkRenderGraphSimplifiedRenderPass* p_pass : this->m_passes)
 	{
 		if (p_pass)
 		{
-			p_pass->OnUpdate(p_previous_pass);
+			p_pass->OnUpdate(p_previous_pass, id);
 		}
 
 		p_previous_pass = p_pass;
+		++id;
 	}
 }
 
 void ktkRenderGraphSimplified::Render_All(void)
 {
 	ktkRenderGraphSimplifiedRenderPass* p_previous_pass{};
-
+	kun_ktk uint32_t id{};
 	for (ktkRenderGraphSimplifiedRenderPass* p_pass : this->m_passes)
 	{
 		if (p_pass)
 		{
-			p_pass->OnRender(p_previous_pass);
+			p_pass->OnRender(p_previous_pass, id);
 		}
 
 		p_previous_pass = p_pass;
+		++id;
 	}
 }
 
