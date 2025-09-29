@@ -17,7 +17,7 @@ endif()
 #### OVERRIDING PROJECT NAMES ####
 
 if ("${KOTEK_PROJECT_NAME_OVERRIDE_KOTEK}" STREQUAL "")
-	set(KOTEK_PROJECT_NAME_OVERRIDE_KOTEK "kotek")
+	set(KOTEK_PROJECT_NAME_OVERRIDE_KOTEK "kotek" CACHE INTERNAL "")
 	message("[${PROJECT_NAME}]: Setting default name for kotek.exe folder: ${KOTEK_PROJECT_NAME_OVERRIDE_KOTEK}")
 else()
 	message("[${PROJECT_NAME}]: Your overriden kotek.exe [${KOTEK_PROJECT_NAME_OVERRIDE_KOTEK}]")
