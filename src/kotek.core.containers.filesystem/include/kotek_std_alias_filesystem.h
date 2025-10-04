@@ -2,11 +2,9 @@
 
 #include <kotek.core.containers.filesystem.path/include/kotek_core_containers_filesystem_path.h>
 
-KOTEK_BEGIN_NAMESPACE_KOTEK
+#include <kotek.core.enum.core/include/kotek_core_enum_core.h>
 
-KOTEK_BEGIN_NAMESPACE_CORE
-enum class eFolderIndex;
-KOTEK_END_NAMESPACE_CORE
+KOTEK_BEGIN_NAMESPACE_KOTEK
 
 KOTEK_BEGIN_NAMESPACE_KTK
 
@@ -21,11 +19,32 @@ KOTEK_BEGIN_NAMESPACE_FILESYSTEM
 	bool exists(const ktk_filesystem_path& path);
 	bool create_directory(const ktk_filesystem_path& path);
 	bool remove(const ktk_filesystem_path& path);
-	constexpr const char* get_frameworks_folder_name_by_enum(kun_core eFolderIndex id);
 KOTEK_END_NAMESPACE_FILESYSTEM
 	#else
 namespace filesystem = std::filesystem;
 	#endif
+
+KOTEK_BEGIN_NAMESPACE_FILESYSTEM
+constexpr const char* get_frameworks_folder_name_by_enum(
+	kun_core eFolderIndex id)
+{
+	constexpr const char* _kFrameworkFolderNames[] = {"", "data_game",
+		"configs", "scripts", "textures", "shaders", "glsl", "hlsl", "webgpu",
+		"spv", "models", "sounds", "levels", "ai", "tests", "shader_cache",
+		"sdk", "settings", "scenes", "data_user"};
+
+	constexpr int _kFrameworkFolderNamesSize =
+		sizeof(_kFrameworkFolderNames) / sizeof(_kFrameworkFolderNames[0]);
+
+	static_assert(
+		static_cast<int>(static_cast<int>(kun_core eFolderIndex::kEndOfEnum)) ==
+			(_kFrameworkFolderNamesSize),
+		"you forget to update array of names (_kFrameworkFolderNames) or "
+		"something else");
+
+	return _kFrameworkFolderNames[static_cast<int>(id)];
+}
+KOTEK_END_NAMESPACE_FILESYSTEM
 
 #else
 #endif

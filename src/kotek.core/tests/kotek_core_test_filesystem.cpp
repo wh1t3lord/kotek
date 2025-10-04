@@ -1448,11 +1448,11 @@ TEST(FileSystem, test_virtualfilemapper_manager_mapping)
 
 			ktkFileHandleType handle_id = 0;
 
-			vfm.MapFile(handle_id, file);
+			vfm.MapFile(handle_id, file, current_path.c_str());
 
 			file.close();
 
-			vfm.UnMapFile(handle_id, file);
+			vfm.UnMapFile(current_path.c_str());
 		}
 	}
 

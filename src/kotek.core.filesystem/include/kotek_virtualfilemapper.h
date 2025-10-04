@@ -14,14 +14,15 @@ class ktkFileSystem_VFM
 {
 	struct vfm_handle_t
 	{
-		unsigned char lookup_id = -1;
+		ktkFileHandleType file_id = kInvalidFileHandleType;
 
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
 		/// @brief file mapping handle obtained as result of CreateFileMapping
 		HANDLE p_fmh = HANDLE(0);
+		void* p_data = nullptr;
+#else
+	#error unknown platform
 #endif
-
-		ktkFileHandleType file_id = kInvalidFileHandleType;
 	};
 
 public:
@@ -31,12 +32,13 @@ public:
 	void Initialize();
 	void Shutdown();
 
-	void MapFile(ktkFileHandleType file_id, kun_ktk fstream& file);
+	bool MapFile(ktkFileHandleType file_id, kun_ktk fstream& file,
+		const ktk_cstring_view& path_to_file);
 
-	void UnMapFile(ktkFileHandleType file_id, kun_ktk fstream& file);
+	void UnMapFile(const ktk_cstring_view& path_to_file);
 
 private:
-	ktk_vector<vfm_handle_t, VFM_FILE_MAX_COUNT> m_mappings;
+	ktk_unordered_map<ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>, vfm_handle_t, 2048> m_mappings;
 };
 
 KOTEK_END_NAMESPACE_CORE

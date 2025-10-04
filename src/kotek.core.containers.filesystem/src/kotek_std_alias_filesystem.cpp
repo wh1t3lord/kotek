@@ -1,7 +1,6 @@
 #include "../include/kotek_std_alias_filesystem.h"
 
 #include <kotek.core.os/include/kotek_core_os.h>
-#include <kotek.core.enum.core/include/kotek_core_enum_core.h>
 
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
 	#pragma comment(lib, "shlwapi.lib")
@@ -134,27 +133,8 @@ bool remove(const ktk_filesystem_path& path)
 
 	return result;
 }
-
-constexpr const char* _kFrameworkFolderNames[] = {"", "data_game", "configs",
-	"scripts", "textures", "shaders", "glsl", "hlsl", "webgpu", "spv", "models",
-	"sounds", "levels", "ai", "tests", "shader_cache", "sdk", "settings",
-	"scenes", "data_user"};
-
-constexpr int _kFrameworkFolderNamesSize =
-	sizeof(_kFrameworkFolderNames) / sizeof(_kFrameworkFolderNames[0]);
-
-static_assert(
-	static_cast<int>(static_cast<int>(kun_core eFolderIndex::kEndOfEnum)) ==
-		(_kFrameworkFolderNamesSize),
-	"you forget to update array of names (_kFrameworkFolderNames) or something else");
-
-constexpr const char* get_frameworks_folder_name_by_enum(
-	kun_core eFolderIndex id)
-{
-	return _kFrameworkFolderNames[static_cast<int>(id)];
-}
-
 KOTEK_END_NAMESPACE_FILESYSTEM
 #endif
+
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
