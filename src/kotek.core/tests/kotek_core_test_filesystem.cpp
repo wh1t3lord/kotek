@@ -1397,10 +1397,73 @@ TEST(Filesystem, test_container_filesystem_static_path_iterator_for_loop)
 
 TEST(Filesystem, test_container_filesystem_static_path_iterator_constructor) {}
 
+TEST(FileSystem, test_virtualfilemapper_manager_init_and_shutdown)
+{
+	ktkFileSystem_VFM vfm;
+	vfm.Initialize();
+	vfm.Shutdown();
+}
+
+TEST(FileSystem, test_virtualfilemapper_manager_mapping)
+{
+	ktkFileSystem_VFM vfm;
+	vfm.Initialize();
+
+	// faking handles in order to simulate working without full instancing of
+	// filesystem
+
+	ktk_filesystem_path current_path = kun_ktk kun_filesystem current_path();
+
+	current_path /= kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
+		eFolderIndex::kFolderIndex_DataUser);
+
+	bool folder_exists = kun_ktk kun_filesystem exists(current_path);
+
+	KOTEK_ASSERT(folder_exists,
+		"folder {} must exist!",
+		kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
+			eFolderIndex::kFolderIndex_DataUser));
+
+	if (folder_exists)
+	{
+		current_path /=
+			kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser_Tests);
+
+		folder_exists = kun_ktk kun_filesystem exists(current_path);
+
+		KOTEK_ASSERT(folder_exists, "folder {} must exist!",
+			kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser_Tests));
+
+		if (folder_exists)
+		{
+			current_path /= "tvfmmm.dat";
+
+			kun_ktk fstream file(current_path.c_str());
+			KOTEK_ASSERT(
+				file.good(), "failed to create file by path: {}", current_path);
+
+			file << "test";
+
+			ktkFileHandleType handle_id = 0;
+
+			vfm.MapFile(handle_id, file);
+
+			file.close();
+
+			vfm.UnMapFile(handle_id, file);
+		}
+	}
+
+	vfm.Shutdown();
+}
+
 	#endif
 #endif
 
-void RegisterTests_Filesystem_ForModule_Core(){
+void RegisterTests_Filesystem_ForModule_Core()
+{
 #ifdef KOTEK_USE_TESTS
 #endif
 }

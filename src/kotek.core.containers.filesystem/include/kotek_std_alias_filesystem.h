@@ -3,6 +3,11 @@
 #include <kotek.core.containers.filesystem.path/include/kotek_core_containers_filesystem_path.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_CORE
+enum class eFolderIndex;
+KOTEK_END_NAMESPACE_CORE
+
 KOTEK_BEGIN_NAMESPACE_KTK
 
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
@@ -16,6 +21,7 @@ KOTEK_BEGIN_NAMESPACE_FILESYSTEM
 	bool exists(const ktk_filesystem_path& path);
 	bool create_directory(const ktk_filesystem_path& path);
 	bool remove(const ktk_filesystem_path& path);
+	constexpr const char* get_frameworks_folder_name_by_enum(kun_core eFolderIndex id);
 KOTEK_END_NAMESPACE_FILESYSTEM
 	#else
 namespace filesystem = std::filesystem;

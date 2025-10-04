@@ -6,6 +6,10 @@
 #include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 #include <kotek.core.containers.multithreading.atomic/include/kotek_core_containers_multithreading_atomic.h>
 
+#include "kotek_filesystem_native.h"
+#include "kotek_filesystem_zlib.h"
+#include "kotek_virtualfilemapper.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
@@ -74,18 +78,18 @@ public:
 	bool Read_File(const ktk_filesystem_path& path_to_file, char*& p_buffer,
 		kun_ktk size_t& length_of_buffer) override;
 
-	ktkFileSystemFileHandleType Begin_Stream(
+	ktkFileHandleType Begin_Stream(
 		const ktk_filesystem_path& path_to_file,
 		size_t stream_step = KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE);
 
 	template <kun_ktk size_t BytesCount = KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE>
-	void Stream(const ktkFileSystemFileHandleType file_handle,
+	void Stream(const ktkFileHandleType file_handle,
 		ktk_vector<kun_ktk uint8_t, BytesCount>& vector);
 
-	void Stream(const ktkFileSystemFileHandleType file_handle,
+	void Stream(const ktkFileHandleType file_handle,
 		kun_ktk uint8_t*& p_buffer, kun_ktk size_t buffer_size);
 
-	void End_Stream(const ktkFileSystemFileHandleType file_handle);
+	void End_Stream(const ktkFileHandleType file_handle);
 
 	void Create_Directory(
 		const ktk_filesystem_path& path, eFolderVisibilityType type) override;
@@ -102,7 +106,7 @@ private:
 
 	bool Is_AnyAvailableFiles(void) const noexcept;
 
-	ktkFileSystemFileHandleType Get_AvailableFile(void) const;
+	ktkFileHandleType Get_AvailableFile(void) const;
 
 private:
 	ktk_unordered_map<eFolderIndex,
@@ -112,6 +116,10 @@ private:
 		m_storage_paths;
 
 	kun_ktk kun_mt atomic<size_t> m_current_in_use_files;
+	ktkFileSystem_Native m_fs_native;
+	ktkFileSystem_Zlib m_fs_zlib;
+	ktkFileSystem_VFM m_fs_vfm;
+
 	ktk_vector<ktkFileHandleImpl, KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE>
 		m_files;
 
@@ -120,7 +128,7 @@ private:
 };
 
 template <kun_ktk size_t BytesCount /*= KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE*/>
-void ktkFileSystem::Stream(const ktkFileSystemFileHandleType file_handle,
+void ktkFileSystem::Stream(const ktkFileHandleType file_handle,
 	ktk_vector<kun_ktk uint8_t, BytesCount>& vector)
 {
 	this->Stream(file_handle, vector.data(), BytesCount);

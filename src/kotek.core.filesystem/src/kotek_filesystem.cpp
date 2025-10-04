@@ -6,28 +6,28 @@ ktkFileSystem::ktkFileSystem(void) {}
 
 ktkFileSystem::~ktkFileSystem(void) {}
 
-ktkFileSystemFileHandleType ktkFileSystem::Begin_Stream(
+ktkFileHandleType ktkFileSystem::Begin_Stream(
 	const ktk_filesystem_path& path_to_file,
 	size_t stream_step /*= KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE*/)
 {
-	return ktkFileSystemFileHandleType();
+	return ktkFileHandleType();
 }
 
-void ktkFileSystem::Stream(const ktkFileSystemFileHandleType file_handle,
+void ktkFileSystem::Stream(const ktkFileHandleType file_handle,
 	kun_ktk uint8_t*& p_buffer, kun_ktk size_t buffer_size)
 {
 }
 
-void ktkFileSystem::End_Stream(const ktkFileSystemFileHandleType file_handle) {}
+void ktkFileSystem::End_Stream(const ktkFileHandleType file_handle) {}
 
 bool ktkFileSystem::Is_AnyAvailableFiles(void) const noexcept
 {
 	return this->m_current_in_use_files.load() < this->m_files.size();
 }
 
-ktkFileSystemFileHandleType ktkFileSystem::Get_AvailableFile(void) const
+ktkFileHandleType ktkFileSystem::Get_AvailableFile(void) const
 {
-	ktkFileSystemFileHandleType result = kFileSystemInvalidFileHandleType;
+	ktkFileHandleType result = kFileSystemInvalidFileHandleType;
 
 	if (!this->Is_AnyAvailableFiles())
 	{
@@ -37,7 +37,7 @@ ktkFileSystemFileHandleType ktkFileSystem::Get_AvailableFile(void) const
 		{
 			if (!file.is_in_use.load())
 			{
-				result = reinterpret_cast<ktkFileSystemFileHandleType>(&file);
+				result = reinterpret_cast<ktkFileHandleType>(&file);
 			}
 		}
 	}

@@ -177,9 +177,12 @@ public:
 	virtual const char* Get_Name(void) const noexcept = 0;
 };
 
-using ktkFileSystemFileHandleType = kun_ktk uintptr_t;
-constexpr ktkFileSystemFileHandleType kFileSystemInvalidFileHandleType =
-	ktkFileSystemFileHandleType(0);
+// todo: rename it
+using ktkFileHandleType = kun_ktk uint32_t;
+constexpr ktkFileHandleType kInvalidFileHandleType = ktkFileHandleType(-1);
+// todo: probably should delete in order to avoid duplication
+constexpr ktkFileHandleType kFileSystemInvalidFileHandleType =
+	ktkFileHandleType(-1);
 
 class ktkIFileSystem
 {
@@ -221,6 +224,8 @@ public:
 	virtual ktk_filesystem_path GetFolderByEnum(
 		eFolderIndex id) const noexcept = 0;
 };
+
+
 
 enum eInputControllerType;
 enum eInputAllKeys;
