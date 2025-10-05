@@ -3,6 +3,7 @@
 #include <kotek.core.filesystem.file_text/include/kotek_core_filesystem_file_text.h>
 #include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 #include <kotek.core.containers.multithreading.atomic/include/kotek_core_containers_multithreading_atomic.h>
+#include <kotek.core.containers.queue/include/kotek_core_containers_queue.h>
 
 #define VFM_FILE_MAX_COUNT \
 	KOTEK_DEF_FILESYSTEM_NATIVE_MAX_FILES + KOTEK_DEF_FILESYSTEM_ZLIB_MAX_FILES
@@ -12,6 +13,8 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 class ktkFileSystem_VFM
 {
+	using id_type = kun_ktk uint32_t;
+
 	struct vfm_handle_t
 	{
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
@@ -31,14 +34,14 @@ public:
 	void Initialize();
 	void Shutdown();
 
-	kun_ktk uint32_t MapFile(
-		FILE* p_file
-	);
+	id_type MapFile(FILE* p_file);
 
-	void UnMapFile(kun_ktk uint32_t file_id);
+	void UnMapFile(id_type file_id);
 
 private:
-	ktk_vector<vfm_handle_t, 2048> m_mappings;
+	ktk_queue<id_type, KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT> m_free_ids;
+	ktk_vector<vfm_handle_t, KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT>
+		m_mappings;
 };
 
 KOTEK_END_NAMESPACE_CORE

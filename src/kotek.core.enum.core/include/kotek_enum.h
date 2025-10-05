@@ -18,6 +18,33 @@ enum class eFolderIndex : kun_ktk enum_base_t{kFolderIndex_Root,
 	kFolderIndex_DataUser_SDK_Settings, kFolderIndex_DataUser_SDK_Scenes,
 	kFolderIndex_DataUser, kEndOfEnum};
 
+enum class eFileSystemType : kun_ktk uint16_t
+{
+	kUnknown = 0,
+	kNative = 1 << 1,
+	kZlib = 1 << 2,
+	kEndOfEnum = kZlib
+};
+
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eFileSystemType, kun_ktk uint16_t);
+
+enum class eFileSystemPriorityType : kun_ktk uint16_t
+{
+	/// @brief will use what user passed to ktkFileSystem::Initialize
+	kAuto,
+	kNative,
+	kZlib
+};
+
+enum class eFileSystemFeatureType : kun_ktk uint16_t
+{
+	kNone = 0,
+	kVFM = 1 << 1
+};
+
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eFileSystemFeatureType, kun_ktk uint16_t);
+
 enum class eResourceRequestOperationType : kun_ktk enum_base_t{
 	kLoad, kSave, kEndOfEnum};
 
@@ -237,7 +264,7 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 ///
 ///
 /// \~french
-enum eEngineFeature
+enum class eEngineFeature : kun_ktk uint32_t
 {
 	/// \~english @brief This field is system and it means that if the
 	/// required feature is not implemenented or exist you need to use
@@ -262,9 +289,9 @@ enum eEngineFeature
 	kEngine_Feature_None = 0
 };
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeature);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeature, kun_ktk uint32_t);
 
-enum eEngineFeatureWindow
+enum class eEngineFeatureWindow : kun_ktk uint32_t
 {
 	/// \~english @brief This field specifies that (main) window is in
 	/// windowed mode. So if user checks if this feature is in true
@@ -312,9 +339,9 @@ enum eEngineFeatureWindow
 	kEngine_Feature_Window_None = 0
 };
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureWindow);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureWindow, kun_ktk uint32_t);
 
-enum eEngineFeatureSDK
+enum class eEngineFeatureSDK : kun_ktk uint32_t
 {
 	/// \~english @brief This field means that your engine is called SDK
 	/// initialization or it means that your SDK implementation is
@@ -356,7 +383,7 @@ enum eEngineFeatureSDK
 	kEngine_Feature_SDK_None = 0
 };
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureSDK);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureSDK, kun_ktk uint32_t);
 
 /// @brief
 enum class eEngineSupportedRenderer : kun_ktk enum_base_t{kDirectX_7,
@@ -375,7 +402,7 @@ enum class eEngineSupportedRenderer : kun_ktk enum_base_t{kDirectX_7,
 	kOpenGL_4_3, kOpenGL_4_4, kOpenGL_4_5, kOpenGL_4_6,
 	kOpenGL_Latest = kOpenGL_4_6, kEndOfEnum, kUnknown = -1};
 
-enum eEngineFeatureRenderer
+enum class eEngineFeatureRenderer : kun_ktk uint32_t
 {
 	/// \~english @brief This field means that engine uses OpenGL
 	/// version 4.6. If this field is true it means that engine uses
@@ -434,9 +461,9 @@ enum eEngineFeatureRenderer
 	kEndOfEnum = 9
 };
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRenderer);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRenderer, kun_ktk uint32_t);
 
-enum eEngineFeatureRendererVendor
+enum class eEngineFeatureRendererVendor : kun_ktk uint32_t
 {
 	kANGLE = 1 << 1,
 	kBGFX = 1 << 2,
@@ -445,10 +472,10 @@ enum eEngineFeatureRendererVendor
 	kEndOfEnumeEngineFeatureRendererVendor = 3
 };
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRendererVendor);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRendererVendor, kun_ktk uint32_t);
 
 /// @brief took information from https://github.com/google/angle
-enum eEngineFeatureRendererANGLE
+enum class eEngineFeatureRendererANGLE : kun_ktk uint32_t
 {
 	kEngine_Feature_Renderer_ANGLE_Feature_Vulkan = 1 << 0,
 	kEngine_Feature_Renderer_ANGLE_Feature_DirectX_9 = 1 << 1,
@@ -459,9 +486,9 @@ enum eEngineFeatureRendererANGLE
 	kEngine_Feature_Renderer_ANGLE_Feature_None = 0
 };
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRendererANGLE);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRendererANGLE, kun_ktk uint32_t);
 
-enum eEngineFeatureRender
+enum class eEngineFeatureRender : kun_ktk uint32_t
 {
 	/// \~english @brief This field means that renderer enabled MSAA
 	/// feature. If the field's state is true it means that renderer
@@ -491,7 +518,7 @@ enum eEngineFeatureRender
 	kEngine_Feature_Render_None = 0
 };
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRender);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRender, kun_ktk uint32_t);
 
 /**
  * \~english @brief This is used for console manager class ktkConsole. And it
@@ -704,13 +731,15 @@ enum eInputControllerMouseData
 	kControllerMouseDataTotalAmountOfEnum
 };
 
-enum eInputMouseKeys
+enum class eInputMouseKeys : kun_ktk uint16_t
 {
 	kKEY_LeftButton = 1 << 1,
 	kKEY_RightButton = 1 << 2,
 	kKEY_MiddleButton = 1 << 3, // wheel
 	kKEY_MouseUnknown = 0
 };
+
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eInputMouseKeys, kun_ktk uint16_t);
 
 /// @brief CK = ControllerKeyboard; CM = ControllerMouse; CG =
 /// ControllerGamepad; CJ = ControllerJoystick; CA = ControllerAny;
@@ -831,7 +860,7 @@ enum eInputAllKeys
 	kCA_KEY_UNKNOWN = -1 // kCA = kControllerAny
 };
 
-enum eInputKeyboardKeys
+enum class eInputKeyboardKeys : kun_ktk uint32_t
 {
 	kKEY_A = 1 << 1,
 	kKEY_B = 1 << 2,
@@ -864,7 +893,10 @@ enum eInputKeyboardKeys
 	kKEY_UNKNOWN = 0
 };
 
-enum eInputKeyboardKeysNumbers
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eInputKeyboardKeys, kun_ktk uint32_t);
+
+
+enum class eInputKeyboardKeysNumbers : kun_ktk uint32_t
 {
 	kKEY_1 = 1 << 1,
 	kKEY_2 = 1 << 2,
@@ -881,7 +913,10 @@ enum eInputKeyboardKeysNumbers
 	kKEY_NUMBER_UNKNOWN = 0
 };
 
-enum eInputKeyboardKeysFunctionKeys
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eInputKeyboardKeysNumbers, kun_ktk uint32_t);
+
+enum class eInputKeyboardKeysFunctionKeys : kun_ktk uint32_t
 {
 	kKEY_F1 = 1 << 1,
 	kKEY_F2 = 1 << 2,
@@ -898,7 +933,10 @@ enum eInputKeyboardKeysFunctionKeys
 	kKEY_FUNCTION_KEY_UNKNOWN = 0
 };
 
-enum eInputKeyboardKeysOther
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eInputKeyboardKeysFunctionKeys, kun_ktk uint32_t);
+
+enum class eInputKeyboardKeysOther : kun_ktk uint32_t
 {
 	kKEY_PRTSC = 1 << 1,
 	kKEY_PAUSE = 1 << 2,
@@ -931,14 +969,20 @@ enum eInputKeyboardKeysOther
 	kKEY_OTHER_KEY_UNKNOWN = 0
 };
 
-enum eInputKeyboardKeysEnter
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eInputKeyboardKeysOther, kun_ktk uint32_t);
+
+enum class eInputKeyboardKeysEnter : kun_ktk uint16_t
 {
 	kKEY_ENTER = 1 << 1,
 	kKEY_ENTER_NUMPAD = 1 << 2,
 	kKEY_ENTER_UNKNOWN = 0
 };
 
-enum eInputKeyboardKeysNumpad
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eInputKeyboardKeysEnter, kun_ktk uint16_t);
+
+enum class eInputKeyboardKeysNumpad : kun_ktk uint32_t
 {
 	kKEY_NUMPAD_NUMLOCK = 1 << 1,
 	kKEY_NUMPAD_ENTER = 1 << 2,
@@ -959,7 +1003,10 @@ enum eInputKeyboardKeysNumpad
 	kKEY_NUMPAD_UNKNOWN = 0
 };
 
-enum eInputKeyboardKeysApplication
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eInputKeyboardKeysNumpad, kun_ktk uint32_t);
+
+enum class eInputKeyboardKeysApplication : kun_ktk uint16_t
 {
 	kKEY_MENU = 1 << 1,
 	kKEY_LEFT_ALT = 1 << 2,
@@ -969,13 +1016,19 @@ enum eInputKeyboardKeysApplication
 	kKEY_APPLICATION_UNKNOWN = 0
 };
 
-enum eInputKeyboardKeysSystem
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eInputKeyboardKeysApplication, kun_ktk uint16_t);
+
+enum class eInputKeyboardKeysSystem : kun_ktk uint16_t
 {
 	kKEY_WINDOWS = 1 << 1,
 	kKEY_SYSTEM_UNKNOWN = 0
 };
 
-enum eInputKeyboardCursorControlKeys
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eInputKeyboardKeysSystem, kun_ktk uint16_t);
+
+enum class eInputKeyboardCursorControlKeys : kun_ktk uint16_t
 {
 	kKEY_ARROW_LEFT = 1 << 1,
 	kKEY_ARROW_UP = 1 << 2,
@@ -983,6 +1036,9 @@ enum eInputKeyboardCursorControlKeys
 	kKEY_ARROW_DOWN = 1 << 4,
 	kKEY_CURSOR_CONTROL_UNKNOWN = 0
 };
+
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eInputKeyboardCursorControlKeys, kun_ktk uint16_t);
 
 enum eInputPlatformBackend
 {
@@ -1007,8 +1063,8 @@ enum eInputPlatformBackend
 	kPlatformBackend_Unknown
 };
 
-static_assert(eInputKeyboardKeysEnter::kKEY_ENTER_NUMPAD ==
-		eInputKeyboardKeysNumpad::kKEY_NUMPAD_ENTER &&
+static_assert(static_cast<kun_ktk uint32_t>(eInputKeyboardKeysEnter::kKEY_ENTER_NUMPAD) ==
+		static_cast<kun_ktk uint32_t>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_ENTER) &&
 	"must be equal otherwise the conflict exists");
 
 KOTEK_END_NAMESPACE_CORE

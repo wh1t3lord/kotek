@@ -3,7 +3,15 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkFileSystem_VFM::ktkFileSystem_VFM(void) {}
+ktkFileSystem_VFM::ktkFileSystem_VFM(void)
+{
+	// todo: for dyn and hyb KOTEK_USE_LIBRARY_TYPE you need to call resize
+	// because we need to use lookup approach for accessing data from m_mappings
+
+#if defined(KOTEK_USE_LIBRARY_TYPE_DYN) || defined(KOTEK_USE_LIBRARY_TYPE_HYB)
+	#error provide implementation for dynamic and hybrid containers, see todo above
+#endif
+}
 
 ktkFileSystem_VFM::~ktkFileSystem_VFM(void) {}
 
@@ -49,10 +57,10 @@ void ktkFileSystem_VFM::Shutdown()
 #endif
 }
 
-kun_ktk uint32_t ktkFileSystem_VFM::MapFile(FILE* p_file)
+ktkFileSystem_VFM::id_type ktkFileSystem_VFM::MapFile(FILE* p_file)
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	kun_ktk uint32_t status = decltype(status)(-1);
+	id_type status = id_type(-1);
 
 	if (p_file == nullptr)
 		return status;
@@ -127,15 +135,35 @@ kun_ktk uint32_t ktkFileSystem_VFM::MapFile(FILE* p_file)
 		return status;
 	}
 
-	vfm_handle_t data;
+	// we try to use free ids and then if there's no any available we do insert
+	// to mappings for dynamic and hybrid (if hybrid supports reallocation) will
+	// create new memory, but if you don't want to it is preferably to use
+	// static or hybrid without reallocation due to fact of physical persistent
+	// preallocated memory and lookup accessing
+	if (this->m_free_ids.empty())
+	{
+		vfm_handle_t data;
 
-	data.p_data = pMapped;
-	data.p_fmh = hMap;
-	data.file_size = liFileSize.QuadPart;
+		data.p_data = pMapped;
+		data.p_fmh = hMap;
+		data.file_size = liFileSize.QuadPart;
 
-	this->m_mappings.emplace_back(std::move(data));
+		this->m_mappings.emplace_back(std::move(data));
+	}
+	else
+	{
+		id_type free_id = this->m_free_ids.back();
 
-	status = this->m_mappings.size() - 1;
+		vfm_handle_t& data = this->m_mappings[free_id];
+
+		data.p_data = pMapped;
+		data.p_fmh = hMap;
+		data.file_size = liFileSize.QuadPart;
+
+		this->m_free_ids.pop();
+	}
+
+	status = static_cast<id_type>(this->m_mappings.size() - 1);
 
 	return status;
 #else
@@ -143,7 +171,7 @@ kun_ktk uint32_t ktkFileSystem_VFM::MapFile(FILE* p_file)
 #endif
 }
 
-void ktkFileSystem_VFM::UnMapFile(kun_ktk uint32_t file_id)
+void ktkFileSystem_VFM::UnMapFile(id_type file_id)
 {
 	KOTEK_ASSERT(file_id < this->m_mappings.max_size(), "out of range!");
 
@@ -169,7 +197,22 @@ void ktkFileSystem_VFM::UnMapFile(kun_ktk uint32_t file_id)
 				"CloseHandle = last error: {}", GetLastError());
 		}
 
+	#if defined(KOTEK_USE_LIBRARY_TYPE_EMB)
 		this->m_mappings.erase(this->m_mappings.begin() + file_id);
+	#else
+			// todo: we don't need to call erase, but technically we can handle
+			// hybrid containers as emb but after exceeding preallocated size we
+			// need to manually 'invalidate' data without clearing memory
+
+			// why we don't need to erase? Because we want to keep memory low as
+			// possible but without loosing pure O(1) by speed accessing because
+			// unoredered_map is slow compared to lookup, it makes things easier
+			// but def not faster
+
+		#error provide implementation, see todo
+	#endif
+
+		this->m_free_ids.push(file_id);
 
 	#ifdef KOTEK_DEBUG
 		KOTEK_MESSAGE("unmapped file: {}", file_id);

@@ -46,11 +46,22 @@ private:
 		kun_ktk cfstream file;
 	};
 
+	struct file_id_t
+	{
+		kun_ktk uint32_t file_id[std::countr_zero(
+			static_cast<kun_ktk uint32_t>(eFileSystemType::kEndOfEnum))]{
+			kun_ktk uint32_t(-1), kun_ktk uint32_t(-1)};
+	};
+
 public:
 	ktkFileSystem(void);
 	~ktkFileSystem(void);
 
-	void Initialize(void) override;
+	void Initialize(
+		eFileSystemPriorityType priority_by_filesystem, 
+		eFileSystemFeatureType features
+	) override;
+
 	void Shutdown(void) override;
 
 	/*
@@ -74,20 +85,18 @@ public:
 			static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>&
 				path_to_file) noexcept override;
 
-
 	bool Read_File(const ktk_filesystem_path& path_to_file, char*& p_buffer,
 		kun_ktk size_t& length_of_buffer) override;
 
-	ktkFileHandleType Begin_Stream(
-		const ktk_filesystem_path& path_to_file,
+	ktkFileHandleType Begin_Stream(const ktk_filesystem_path& path_to_file,
 		size_t stream_step = KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE);
 
 	template <kun_ktk size_t BytesCount = KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE>
 	void Stream(const ktkFileHandleType file_handle,
 		ktk_vector<kun_ktk uint8_t, BytesCount>& vector);
 
-	void Stream(const ktkFileHandleType file_handle,
-		kun_ktk uint8_t*& p_buffer, kun_ktk size_t buffer_size);
+	void Stream(const ktkFileHandleType file_handle, kun_ktk uint8_t*& p_buffer,
+		kun_ktk size_t buffer_size);
 
 	void End_Stream(const ktkFileHandleType file_handle);
 
@@ -109,22 +118,24 @@ private:
 	ktkFileHandleType Get_AvailableFile(void) const;
 
 private:
-	ktk_unordered_map<eFolderIndex,
-		kun_ktk static_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>,
-		static_cast<size_t>(
-			static_cast<kun_ktk enum_base_t>(eFolderIndex::kEndOfEnum) - 1)>
-		m_storage_paths;
-
+	ktk_vector<int, KOTEK_DEF_FILESYSTEM_MAX_OPENED_FILES> m_file_tracker;
 	kun_ktk kun_mt atomic<size_t> m_current_in_use_files;
+
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
 	ktkFileSystem_Native m_fs_native;
+#endif
+
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
 	ktkFileSystem_Zlib m_fs_zlib;
+#endif
+
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
 	ktkFileSystem_VFM m_fs_vfm;
+#endif
 
-	ktk_vector<ktkFileHandleImpl, KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE>
-		m_files;
-
-	// for static string buffer implementation of Read_File
-	kun_ktk static_cstring<2048> m_reserved_buffer;
+	ktk_unordered_map<ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>, file_id_t,
+		KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT>
+		m_paths_storage;
 };
 
 template <kun_ktk size_t BytesCount /*= KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE*/>

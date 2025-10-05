@@ -4,7 +4,12 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkFileSystem_Zlib::ktkFileSystem_Zlib() : m_p_vfm{} {}
+ktkFileSystem_Zlib::ktkFileSystem_Zlib()
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+	: m_p_vfm{}
+#endif
+{
+}
 
 ktkFileSystem_Zlib::~ktkFileSystem_Zlib() {}
 

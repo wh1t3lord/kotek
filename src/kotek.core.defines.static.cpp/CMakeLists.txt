@@ -631,14 +631,8 @@ if ("${KOTEK_LIBRARY_TYPE}" STREQUAL "EMB")
 		set(KOTEK_RESOURCE_STREAMING_CHUNK_SIZE 4096)
 	endif()
 
-	# how much files can be processing in parallel 
-	if ("${KOTEK_DEF_FILESYSTEM_ZLIB_MAX_FILES}" STREQUAL "")
-		set(KOTEK_DEF_FILESYSTEM_ZLIB_MAX_FILES 4)
-	endif()
-
-	# how much files can be processing in parallel
-	if ("${KOTEK_DEF_FILESYSTEM_NATIVE_MAX_FILES}" STREQUAL "")
-		set(KOTEK_DEF_FILESYSTEM_NATIVE_MAX_FILES 4)
+	if ("${KOTEK_DEF_FILESYSTEM_MAX_OPENED_FILES}" STREQUAL "")
+		set(KOTEK_DEF_FILESYSTEM_MAX_OPENED_FILES 8)
 	endif()
 
 elseif("${KOTEK_LIBRARY_TYPE}" STREQUAL "DYN")
@@ -669,6 +663,24 @@ message("[${PROJECT_NAME}]: standard library is ${KOTEK_STD_LIBRARY_NAME}")
 message("[${PROJECT_NAME}]: string configuration is '${KOTEK_STRING_CONFIGURATION}'")
 message("[${PROJECT_NAME}]: development is for ${KOTEK_LIBRARY_TYPE} environment")
 message("[${PROJECT_NAME}]: log backend is ${KOTEK_LOG_LIBRARY}")
+
+if ("${KOTEK_FILESYSTEM_FEATURE_VFM}" STREQUAL "" OR "${KOTEK_FILESYSTEM_FEATURE_VFM}" STREQUAL "ON")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_FILESYSTEM_FEATURE_VFM)
+endif()
+
+message(STATUS "[${PROJECT_NAME}]: using filesystem feature: KOTEK_FILESYSTEM_FEATURE_VFM=${KOTEK_FILESYSTEM_FEATURE_VFM}")
+
+if ("${KOTEK_FILESYSTEM_TYPE_NATIVE}" STREQUAL "" OR "${KOTEK_FILESYSTEM_TYPE_NATIVE}" STREQUAL "ON")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_FILESYSTEM_TYPE_NATIVE)
+endif()
+
+message(STATUS "[${PROJECT_NAME}]: using filesystem type: KOTEK_FILESYSTEM_TYPE_NATIVE=${KOTEK_FILESYSTEM_TYPE_NATIVE}")
+
+if ("${KOTEK_FILESYSTEM_TYPE_ZLIB}" STREQUAL "" OR "${KOTEK_FILESYSTEM_TYPE_ZLIB}" STREQUAL "ON")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_FILESYSTEM_TYPE_ZLIB)
+endif()
+
+message(STATUS "[${PROJECT_NAME}]: using filesystem type: KOTEK_FILESYSTEM_TYPE_ZLIB=${KOTEK_FILESYSTEM_TYPE_ZLIB}")
 
 ### Generating code
 if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
@@ -1175,7 +1187,7 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 
 	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
 	"
-		#define KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(your_type) inline your_type& operator|=(your_type& left, your_type right) { return left = your_type(left|right);} inline your_type& operator&=(your_type& left, your_type right) { return left = your_type(left & right); } inline your_type& operator&=(your_type& left, int right) { return left = your_type(left & right); } inline your_type& operator&=(your_type& left, unsigned int right) { return left = your_type(left & right); }
+		#define KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(your_type, underlying_type) inline your_type operator|(your_type left, your_type right){ return static_cast<your_type>(static_cast<underlying_type>(left) | static_cast<underlying_type>(right)); } inline your_type operator&(your_type left, your_type right) { return static_cast<your_type>(static_cast<underlying_type>(left) & static_cast<underlying_type>(right)); } inline your_type operator~(your_type value){ return static_cast<your_type>(~static_cast<underlying_type>(value));} inline your_type& operator|=(your_type& left, your_type right) { return left = your_type(left|right);} inline your_type& operator&=(your_type& left, your_type right) { return left = your_type(left & right); }
 	")
 
 	if ("${KOTEK_STRING_CONFIGURATION_CHAR_TYPE}" STREQUAL "1")
@@ -1246,8 +1258,14 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 			#define KOTEK_DEF_RESOURCE_STREAMING_CHUNK_SIZE ${KOTEK_RESOURCE_STREAMING_CHUNK_SIZE}
 			#define KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE ${KOTEK_FILESYSTEM_FSTREAM_POOL_SIZE}
 			#define KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE ${KOTEK_FILESYSTEM_STREAM_STEP_SIZE}
-			#define KOTEK_DEF_FILESYSTEM_NATIVE_MAX_FILES ${KOTEK_DEF_FILESYSTEM_NATIVE_MAX_FILES}
-			#define KOTEK_DEF_FILESYSTEM_ZLIB_MAX_FILES ${KOTEK_DEF_FILESYSTEM_ZLIB_MAX_FILES}
+			#define KOTEK_DEF_FILESYSTEM_MAX_OPENED_FILES ${KOTEK_DEF_FILESYSTEM_MAX_OPENED_FILES}
+
+			#ifdef KOTEK_SDK_IMGUI
+				#define KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT 2048
+			#else
+				#define KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT 32
+			#endif
+
 		")
 	endif()
 	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
@@ -1285,6 +1303,22 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 		#else
 			#define KOTEK_USE_WINDOW_CONSOLE_STRING_VIEW_SIZE ${KOTEK_WINDOW_CONSOLE_STRING_VIEW_SIZE}
 		#endif
+	")
+
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+	"
+		#ifdef KOTEK_FILESYSTEM_FEATURE_VFM
+			#define KOTEK_USE_FILESYSTEM_FEATURE_VFM
+		#endif
+
+		#ifdef KOTEK_FILESYSTEM_TYPE_NATIVE
+			#define KOTEK_USE_FILESYSTEM_TYPE_NATIVE
+		#endif
+
+		#ifdef KOTEK_FILESYSTEM_TYPE_ZLIB
+			#define KOTEK_USE_FILESYSTEM_TYPE_ZLIB
+		#endif
+	
 	")
 
 else()

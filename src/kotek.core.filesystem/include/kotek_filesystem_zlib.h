@@ -9,21 +9,49 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
 class ktkFileSystem_VFM;
+#endif
 
 class ktkFileSystem_Zlib
 {
+	struct file_handle_no_vfm_t
+	{
+		FILE* p_file = nullptr;
+	};
+
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+	struct file_handle_vfm_t
+	{
+		kun_ktk uint32_t vfm_file_id = decltype(vfm_file_id)(-1);
+	};
+#endif
+
+	struct file_handle_t
+	{
+		std::variant<file_handle_no_vfm_t
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+			,
+			file_handle_vfm_t
+#endif
+			>
+			desc;
+	};
+
 public:
 	ktkFileSystem_Zlib();
 	~ktkFileSystem_Zlib();
-
 
 	void Initialize(ktkFileSystem_VFM* p_vfm);
 	void Shutdown(void);
 
 private:
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
 	ktkFileSystem_VFM* m_p_vfm;
-	ktk_vector<ktkFileHandleType, KOTEK_DEF_FILESYSTEM_ZLIB_MAX_FILES> m_files;
+#endif
+
+	ktk_vector<file_handle_t, KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT>
+		m_files;
 };
 
 KOTEK_END_NAMESPACE_CORE

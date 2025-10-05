@@ -4,9 +4,16 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkFileSystem_Native::ktkFileSystem_Native(void) : m_p_vfm{} {}
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
+ktkFileSystem_Native::ktkFileSystem_Native(void)
+	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+	: m_p_vfm{}
+	#endif
+{
+}
 
 ktkFileSystem_Native::~ktkFileSystem_Native(void) {}
+#endif
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

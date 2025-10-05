@@ -189,7 +189,11 @@ class ktkIFileSystem
 public:
 	virtual ~ktkIFileSystem(void) {}
 
-	virtual void Initialize(void) = 0;
+	virtual void Initialize(
+		eFileSystemPriorityType priority_by_filesystem, 
+		eFileSystemFeatureType features
+	) = 0;
+
 	virtual void Shutdown(void) = 0;
 	virtual bool IsValidPath(
 		const ktk_filesystem_path& path) const noexcept = 0;
@@ -200,7 +204,11 @@ public:
 	// TODO: check todo in implementation class ktkFileSystem and it is
 	// a temporary virtual function delete it
 	virtual bool Read_File(
-		const ktk_filesystem_path& path_to_file, kun_ktk ustring& output_result) const noexcept = 0;
+		const ktk_filesystem_path& path_to_file,
+		kun_ktk ustring& output_result,
+		eFileSystemPriorityType priority = eFileSystemPriorityType::kAuto,
+		eFileSystemFeatureType feature = eFileSystemFeatureType::kNone
+	) const noexcept = 0;
 
 	// be careful! this method's purpose is only on stack and for stack
 	// purposes! You should copy the content of p_buffer and (if updated)

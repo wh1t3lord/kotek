@@ -51,7 +51,7 @@ void ktkInput::Initialize(eInputPlatformBackend backend)
 		this->m_controller_key_ticks, 0, sizeof(this->m_controller_key_ticks));
 }
 
-void ktkInput::Shutdown(void) 
+void ktkInput::Shutdown(void)
 {
 	this->m_current_platform = eInputPlatformBackend::kPlatformBackend_Unknown;
 }
@@ -827,33 +827,54 @@ int p_glfw3_keyboard_keys_to_input[] = {-1, // 0
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	-1, // 31
-	eInputKeyboardKeysOther::kKEY_SPACE, -1, -1, -1, -1, -1, -1,
-	eInputKeyboardKeysOther::kKEY_APOSTROPHE, -1, -1, -1, -1,
-	eInputKeyboardKeysOther::kKEY_COMMA, eInputKeyboardKeysNumbers::kKEY_MINUS,
-	eInputKeyboardKeysOther::kKEY_PERIOD, eInputKeyboardKeysOther::kKEY_SLASH,
-	eInputKeyboardKeysNumbers::kKEY_0, eInputKeyboardKeysNumbers::kKEY_1,
-	eInputKeyboardKeysNumbers::kKEY_2, eInputKeyboardKeysNumbers::kKEY_3,
-	eInputKeyboardKeysNumbers::kKEY_4, eInputKeyboardKeysNumbers::kKEY_5,
-	eInputKeyboardKeysNumbers::kKEY_6, eInputKeyboardKeysNumbers::kKEY_7,
-	eInputKeyboardKeysNumbers::kKEY_8, eInputKeyboardKeysNumbers::kKEY_9, -1,
-	eInputKeyboardKeysOther::KKEY_SEMICOLON, -1,
-	eInputKeyboardKeysOther::kKEY_EQUAL, -1, -1, -1, eInputKeyboardKeys::kKEY_A,
-	eInputKeyboardKeys::kKEY_B, eInputKeyboardKeys::kKEY_C,
-	eInputKeyboardKeys::kKEY_D, eInputKeyboardKeys::kKEY_E,
-	eInputKeyboardKeys::kKEY_F, eInputKeyboardKeys::kKEY_G,
-	eInputKeyboardKeys::kKEY_H, eInputKeyboardKeys::kKEY_I,
-	eInputKeyboardKeys::kKEY_J, eInputKeyboardKeys::kKEY_K,
-	eInputKeyboardKeys::kKEY_L, eInputKeyboardKeys::kKEY_M,
-	eInputKeyboardKeys::kKEY_N, eInputKeyboardKeys::kKEY_O,
-	eInputKeyboardKeys::kKEY_P, eInputKeyboardKeys::kKEY_Q,
-	eInputKeyboardKeys::kKEY_R, eInputKeyboardKeys::kKEY_S,
-	eInputKeyboardKeys::kKEY_T, eInputKeyboardKeys::kKEY_U,
-	eInputKeyboardKeys::kKEY_V, eInputKeyboardKeys::kKEY_W,
-	eInputKeyboardKeys::kKEY_X, eInputKeyboardKeys::kKEY_Y,
-	eInputKeyboardKeys::kKEY_Z, eInputKeyboardKeysOther::kKEY_LEFT_BRACKET,
-	eInputKeyboardKeysOther::kKEY_BACKSLASH,
-	eInputKeyboardKeysOther::kKEY_RIGHT_BRACKET, -1, -1,
-	eInputKeyboardKeysOther::kKEY_GRAVE_ACCENT, // 96
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_SPACE), -1, -1, -1, -1, -1,
+	-1, static_cast<int>(eInputKeyboardKeysOther::kKEY_APOSTROPHE), -1, -1, -1,
+	-1, static_cast<int>(eInputKeyboardKeysOther::kKEY_COMMA),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_MINUS),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_PERIOD),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_SLASH),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_0),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_1),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_2),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_3),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_4),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_5),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_6),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_7),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_8),
+	static_cast<int>(eInputKeyboardKeysNumbers::kKEY_9), -1,
+	static_cast<int>(eInputKeyboardKeysOther::KKEY_SEMICOLON), -1,
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_EQUAL), -1, -1, -1,
+	static_cast<int>(eInputKeyboardKeys::kKEY_A),
+	static_cast<int>(eInputKeyboardKeys::kKEY_B),
+	static_cast<int>(eInputKeyboardKeys::kKEY_C),
+	static_cast<int>(eInputKeyboardKeys::kKEY_D),
+	static_cast<int>(eInputKeyboardKeys::kKEY_E),
+	static_cast<int>(eInputKeyboardKeys::kKEY_F),
+	static_cast<int>(eInputKeyboardKeys::kKEY_G),
+	static_cast<int>(eInputKeyboardKeys::kKEY_H),
+	static_cast<int>(eInputKeyboardKeys::kKEY_I),
+	static_cast<int>(eInputKeyboardKeys::kKEY_J),
+	static_cast<int>(eInputKeyboardKeys::kKEY_K),
+	static_cast<int>(eInputKeyboardKeys::kKEY_L),
+	static_cast<int>(eInputKeyboardKeys::kKEY_M),
+	static_cast<int>(eInputKeyboardKeys::kKEY_N),
+	static_cast<int>(eInputKeyboardKeys::kKEY_O),
+	static_cast<int>(eInputKeyboardKeys::kKEY_P),
+	static_cast<int>(eInputKeyboardKeys::kKEY_Q),
+	static_cast<int>(eInputKeyboardKeys::kKEY_R),
+	static_cast<int>(eInputKeyboardKeys::kKEY_S),
+	static_cast<int>(eInputKeyboardKeys::kKEY_T),
+	static_cast<int>(eInputKeyboardKeys::kKEY_U),
+	static_cast<int>(eInputKeyboardKeys::kKEY_V),
+	static_cast<int>(eInputKeyboardKeys::kKEY_W),
+	static_cast<int>(eInputKeyboardKeys::kKEY_X),
+	static_cast<int>(eInputKeyboardKeys::kKEY_Y),
+	static_cast<int>(eInputKeyboardKeys::kKEY_Z),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_LEFT_BRACKET),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_BACKSLASH),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_RIGHT_BRACKET), -1, -1,
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_GRAVE_ACCENT), // 96
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -862,47 +883,50 @@ int p_glfw3_keyboard_keys_to_input[] = {-1, // 0
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	-1, -1, -1, -1, -1, -1, -1, eInputKeyboardKeysOther::kKEY_ESCAPE,
-	eInputKeyboardKeysEnter::kKEY_ENTER, eInputKeyboardKeysOther::kKEY_TAB,
-	eInputKeyboardKeysOther::kKEY_BACKSPACE,
-	eInputKeyboardKeysOther::kKEY_INSERT, eInputKeyboardKeysOther::kKEY_DEL,
-	eInputKeyboardCursorControlKeys::kKEY_ARROW_RIGHT,
-	eInputKeyboardCursorControlKeys::kKEY_ARROW_LEFT,
-	eInputKeyboardCursorControlKeys::kKEY_ARROW_DOWN,
-	eInputKeyboardCursorControlKeys::kKEY_ARROW_UP,
-	eInputKeyboardKeysOther::kKEY_PAGEUP,
-	eInputKeyboardKeysOther::kKEY_PAGEDOWN, eInputKeyboardKeysOther::kKEY_HOME,
-	eInputKeyboardKeysOther::kKEY_END, // 269
-	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
-	eInputKeyboardKeys::kKEY_CAPS_LOCK, // 280
-	eInputKeyboardKeys::kKEY_SCROLL_LOCK,
-	eInputKeyboardKeysNumpad::kKEY_NUMPAD_NUMLOCK,
-	eInputKeyboardKeysOther::kKEY_PRTSC, eInputKeyboardKeysOther::kKEY_PAUSE,
-	-1, -1, -1, -1, -1, eInputKeyboardKeysFunctionKeys::kKEY_F1,
-	eInputKeyboardKeysFunctionKeys::kKEY_F2,
-	eInputKeyboardKeysFunctionKeys::kKEY_F3,
-	eInputKeyboardKeysFunctionKeys::kKEY_F4,
-	eInputKeyboardKeysFunctionKeys::kKEY_F5,
-	eInputKeyboardKeysFunctionKeys::kKEY_F6,
-	eInputKeyboardKeysFunctionKeys::kKEY_F7,
-	eInputKeyboardKeysFunctionKeys::kKEY_F8,
-	eInputKeyboardKeysFunctionKeys::kKEY_F9,
-	eInputKeyboardKeysFunctionKeys::kKEY_F10,
-	eInputKeyboardKeysFunctionKeys::kKEY_F11,
-	eInputKeyboardKeysFunctionKeys::kKEY_F12,
-	-1, // F13
-	-1, // F14
-	-1, // F15
-	-1, // F16
-	-1, // F17
-	-1, // F18
-	-1, // F19
-	-1, // F20
-	-1, // F21
-	-1, // F22
-	-1, // F23
-	-1, // F24
-	-1, // F25
+	-1, -1, -1, -1, -1, -1, -1,
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_ESCAPE),
+	static_cast<int>(eInputKeyboardKeysEnter::kKEY_ENTER),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_TAB),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_BACKSPACE),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_INSERT),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_DEL),
+	static_cast<int>(eInputKeyboardCursorControlKeys::kKEY_ARROW_RIGHT),
+	static_cast<int>(eInputKeyboardCursorControlKeys::kKEY_ARROW_LEFT),
+	static_cast<int>(eInputKeyboardCursorControlKeys::kKEY_ARROW_DOWN),
+	static_cast<int>(eInputKeyboardCursorControlKeys::kKEY_ARROW_UP),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_PAGEUP),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_PAGEDOWN),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_HOME),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_END), -1, -1, -1, -1, -1, -1,
+	-1, -1, -1, -1, static_cast<int>(eInputKeyboardKeys::kKEY_CAPS_LOCK),
+	static_cast<int>(eInputKeyboardKeys::kKEY_SCROLL_LOCK),
+	static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_NUMLOCK),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_PRTSC),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_PAUSE), -1, -1, -1, -1, -1,
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F1),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F2),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F3),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F4),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F5),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F6),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F7),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F8),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F9),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F10),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F11),
+	static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F12) - 1, // F13
+	-1,                                                             // F14
+	-1,                                                             // F15
+	-1,                                                             // F16
+	-1,                                                             // F17
+	-1,                                                             // F18
+	-1,                                                             // F19
+	-1,                                                             // F20
+	-1,                                                             // F21
+	-1,                                                             // F22
+	-1,                                                             // F23
+	-1,                                                             // F24
+	-1,                                                             // F25
 	-1, -1, -1, -1, -1,
 	-1, // KP_0
 	-1, // KP_1
@@ -921,13 +945,13 @@ int p_glfw3_keyboard_keys_to_input[] = {-1, // 0
 	-1, // KP_ADD
 	-1, // KP_ENTER
 	-1, // KP_EQUAL
-	-1, -1, -1, eInputKeyboardKeysOther::kKEY_LEFT_SHIFT,
-	eInputKeyboardKeysOther::kKEY_LEFT_CONTROL,
-	eInputKeyboardKeysApplication::kKEY_LEFT_ALT, -1,
-	eInputKeyboardKeysOther::kKEY_RIGHT_SHIFT,
-	eInputKeyboardKeysOther::kKEY_RIGHT_CONTROL,
-	eInputKeyboardKeysApplication::kKEY_RIGHT_ALT, -1,
-	eInputKeyboardKeysApplication::kKEY_MENU};
+	-1, -1, -1, static_cast<int>(eInputKeyboardKeysOther::kKEY_LEFT_SHIFT),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_LEFT_CONTROL),
+	static_cast<int>(eInputKeyboardKeysApplication::kKEY_LEFT_ALT), -1,
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_RIGHT_SHIFT),
+	static_cast<int>(eInputKeyboardKeysOther::kKEY_RIGHT_CONTROL),
+	static_cast<int>(eInputKeyboardKeysApplication::kKEY_RIGHT_ALT), -1,
+	static_cast<int>(eInputKeyboardKeysApplication::kKEY_MENU)};
 
 int p_glfw3_keyboard_keys_to_all_keys[] = {eInputAllKeys::kCA_KEY_UNKNOWN, // 0
 	eInputAllKeys::kCA_KEY_UNKNOWN, eInputAllKeys::kCA_KEY_UNKNOWN,
@@ -1123,9 +1147,10 @@ int p_glfw3_keyboard_keys_to_all_keys[] = {eInputAllKeys::kCA_KEY_UNKNOWN, // 0
 	eInputAllKeys::kCK_KEY_RIGHT_CONTROL, eInputAllKeys::kCK_KEY_RIGHT_ALT,
 	eInputAllKeys::kCA_KEY_UNKNOWN, eInputAllKeys::kCK_KEY_MENU};
 
-int p_glfw3_mouse_key_to_input[] = {eInputMouseKeys::kKEY_LeftButton,
-	eInputMouseKeys::kKEY_RightButton, eInputMouseKeys::kKEY_MiddleButton, -1,
-	-1, -1, -1, -1};
+int p_glfw3_mouse_key_to_input[] = {
+	static_cast<int>(eInputMouseKeys::kKEY_LeftButton),
+	static_cast<int>(eInputMouseKeys::kKEY_RightButton),
+	static_cast<int>(eInputMouseKeys::kKEY_MiddleButton), -1, -1, -1, -1, -1};
 
 int p_glfw3_mouse_key_to_all_keys[] = {eInputAllKeys::kCM_KEY_LEFT,
 	eInputAllKeys::kCM_KEY_RIGHT, eInputAllKeys::kCM_KEY_MIDDLE, -1, -1, -1, -1,
@@ -2864,227 +2889,231 @@ int ktkInput::Convert_AllKeysToFlags(eInputAllKeys field) const
 	switch (field)
 	{
 	case eInputAllKeys::kCK_KEY_A:
-		return eInputKeyboardKeys::kKEY_A;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_A);
 	case eInputAllKeys::kCK_KEY_B:
-		return eInputKeyboardKeys::kKEY_B;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_B);
 	case eInputAllKeys::kCK_KEY_C:
-		return eInputKeyboardKeys::kKEY_C;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_C);
 	case eInputAllKeys::kCK_KEY_D:
-		return eInputKeyboardKeys::kKEY_D;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_D);
 	case eInputAllKeys::kCK_KEY_E:
-		return eInputKeyboardKeys::kKEY_E;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_E);
 	case eInputAllKeys::kCK_KEY_F:
-		return eInputKeyboardKeys::kKEY_F;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_F);
 	case eInputAllKeys::kCK_KEY_G:
-		return eInputKeyboardKeys::kKEY_G;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_G);
 	case eInputAllKeys::kCK_KEY_H:
-		return eInputKeyboardKeys::kKEY_H;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_H);
 	case eInputAllKeys::kCK_KEY_I:
-		return eInputKeyboardKeys::kKEY_I;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_I);
 	case eInputAllKeys::kCK_KEY_J:
-		return eInputKeyboardKeys::kKEY_J;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_J);
 	case eInputAllKeys::kCK_KEY_K:
-		return eInputKeyboardKeys::kKEY_K;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_K);
 	case eInputAllKeys::kCK_KEY_L:
-		return eInputKeyboardKeys::kKEY_L;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_L);
 	case eInputAllKeys::kCK_KEY_M:
-		return eInputKeyboardKeys::kKEY_M;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_M);
 	case eInputAllKeys::kCK_KEY_N:
-		return eInputKeyboardKeys::kKEY_N;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_N);
 	case eInputAllKeys::kCK_KEY_O:
-		return eInputKeyboardKeys::kKEY_O;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_O);
 	case eInputAllKeys::kCK_KEY_P:
-		return eInputKeyboardKeys::kKEY_P;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_P);
 	case eInputAllKeys::kCK_KEY_Q:
-		return eInputKeyboardKeys::kKEY_Q;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_Q);
 	case eInputAllKeys::kCK_KEY_R:
-		return eInputKeyboardKeys::kKEY_R;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_R);
 	case eInputAllKeys::kCK_KEY_S:
-		return eInputKeyboardKeys::kKEY_S;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_S);
 	case eInputAllKeys::kCK_KEY_T:
-		return eInputKeyboardKeys::kKEY_T;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_T);
 	case eInputAllKeys::kCK_KEY_U:
-		return eInputKeyboardKeys::kKEY_U;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_U);
 	case eInputAllKeys::kCK_KEY_V:
-		return eInputKeyboardKeys::kKEY_V;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_V);
 	case eInputAllKeys::kCK_KEY_W:
-		return eInputKeyboardKeys::kKEY_W;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_W);
 	case eInputAllKeys::kCK_KEY_X:
-		return eInputKeyboardKeys::kKEY_X;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_X);
 	case eInputAllKeys::kCK_KEY_Y:
-		return eInputKeyboardKeys::kKEY_Y;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_Y);
 	case eInputAllKeys::kCK_KEY_Z:
-		return eInputKeyboardKeys::kKEY_Z;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_Z);
 	case eInputAllKeys::kCK_KEY_CAPS_LOCK:
-		return eInputKeyboardKeys::kKEY_CAPS_LOCK;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_CAPS_LOCK);
 	case eInputAllKeys::kCK_KEY_SCROLL_LOCK:
-		return eInputKeyboardKeys::kKEY_SCROLL_LOCK;
+		return static_cast<int>(eInputKeyboardKeys::kKEY_SCROLL_LOCK);
 	case eInputAllKeys::kCK_KEY_1:
-		return eInputKeyboardKeysNumbers::kKEY_1;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_1);
 	case eInputAllKeys::kCK_KEY_2:
-		return eInputKeyboardKeysNumbers::kKEY_2;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_2);
 	case eInputAllKeys::kCK_KEY_3:
-		return eInputKeyboardKeysNumbers::kKEY_3;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_3);
 	case eInputAllKeys::kCK_KEY_4:
-		return eInputKeyboardKeysNumbers::kKEY_4;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_4);
 	case eInputAllKeys::kCK_KEY_5:
-		return eInputKeyboardKeysNumbers::kKEY_5;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_5);
 	case eInputAllKeys::kCK_KEY_6:
-		return eInputKeyboardKeysNumbers::kKEY_6;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_6);
 	case eInputAllKeys::kCK_KEY_7:
-		return eInputKeyboardKeysNumbers::kKEY_7;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_7);
 	case eInputAllKeys::kCK_KEY_8:
-		return eInputKeyboardKeysNumbers::kKEY_8;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_8);
 	case eInputAllKeys::kCK_KEY_9:
-		return eInputKeyboardKeysNumbers::kKEY_9;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_9);
 	case eInputAllKeys::kCK_KEY_0:
-		return eInputKeyboardKeysNumbers::kKEY_0;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_0);
 	case eInputAllKeys::kCK_KEY_MINUS:
-		return eInputKeyboardKeysNumbers::kKEY_MINUS;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_MINUS);
 	case eInputAllKeys::kCK_KEY_PLUS:
-		return eInputKeyboardKeysNumbers::kKEY_PLUS;
+		return static_cast<int>(eInputKeyboardKeysNumbers::kKEY_PLUS);
 	case eInputAllKeys::kCK_KEY_F1:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F1;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F1);
 	case eInputAllKeys::kCK_KEY_F2:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F2;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F2);
 	case eInputAllKeys::kCK_KEY_F3:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F3;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F3);
 	case eInputAllKeys::kCK_KEY_F4:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F4;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F4);
 	case eInputAllKeys::kCK_KEY_F5:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F5;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F5);
 	case eInputAllKeys::kCK_KEY_F6:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F6;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F6);
 	case eInputAllKeys::kCK_KEY_F7:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F7;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F7);
 	case eInputAllKeys::kCK_KEY_F8:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F8;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F8);
 	case eInputAllKeys::kCK_KEY_F9:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F9;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F9);
 	case eInputAllKeys::kCK_KEY_F10:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F10;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F10);
 	case eInputAllKeys::kCK_KEY_F11:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F11;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F11);
 	case eInputAllKeys::kCK_KEY_F12:
-		return eInputKeyboardKeysFunctionKeys::kKEY_F12;
+		return static_cast<int>(eInputKeyboardKeysFunctionKeys::kKEY_F12);
 	case eInputAllKeys::kCK_KEY_PRTSC:
-		return eInputKeyboardKeysOther::kKEY_PRTSC;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_PRTSC);
 	case eInputAllKeys::kCK_KEY_PAUSE:
-		return eInputKeyboardKeysOther::kKEY_PAUSE;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_PAUSE);
 	case eInputAllKeys::kCK_KEY_DEL:
-		return eInputKeyboardKeysOther::kKEY_DEL;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_DEL);
 	case eInputAllKeys::kCK_KEY_END:
-		return eInputKeyboardKeysOther::kKEY_END;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_END);
 	case eInputAllKeys::kCK_KEY_INSERT:
-		return eInputKeyboardKeysOther::kKEY_INSERT;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_INSERT);
 	case eInputAllKeys::kCK_KEY_HOME:
-		return eInputKeyboardKeysOther::kKEY_HOME;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_HOME);
 	case eInputAllKeys::kCK_KEY_PAGEUP:
-		return eInputKeyboardKeysOther::kKEY_PAGEUP;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_PAGEUP);
 	case eInputAllKeys::kCK_KEY_PAGEDOWN:
-		return eInputKeyboardKeysOther::kKEY_PAGEDOWN;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_PAGEDOWN);
 	case eInputAllKeys::kCK_KEY_SCROLLLOCK:
-		return eInputKeyboardKeysOther::kKEY_SCROLLLOCK;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_SCROLLLOCK);
 	case eInputAllKeys::kCK_KEY_ESC:
-		return eInputKeyboardKeysOther::kKEY_ESC;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_ESC);
 	case eInputAllKeys::kCK_KEY_SPACE:
-		return eInputKeyboardKeysOther::kKEY_SPACE;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_SPACE);
 	case eInputAllKeys::kCK_KEY_LEFT_SHIFT:
-		return eInputKeyboardKeysOther::kKEY_LEFT_SHIFT;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_LEFT_SHIFT);
 	case eInputAllKeys::kCK_KEY_RIGHT_SHIFT:
-		return eInputKeyboardKeysOther::kKEY_RIGHT_SHIFT;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_RIGHT_SHIFT);
 	case eInputAllKeys::kCK_KEY_LEFT_CONTROL:
-		return eInputKeyboardKeysOther::kKEY_LEFT_CONTROL;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_LEFT_CONTROL);
 	case eInputAllKeys::kCK_KEY_RIGHT_CONTROL:
-		return eInputKeyboardKeysOther::kKEY_RIGHT_CONTROL;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_RIGHT_CONTROL);
 	case eInputAllKeys::kCK_KEY_APOSTROPHE:
-		return eInputKeyboardKeysOther::kKEY_APOSTROPHE;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_APOSTROPHE);
 	case eInputAllKeys::kCK_KEY_COMMA:
-		return eInputKeyboardKeysOther::kKEY_COMMA;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_COMMA);
 	case eInputAllKeys::kCK_KEY_PERIOD:
-		return eInputKeyboardKeysOther::kKEY_PERIOD;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_PERIOD);
 	case eInputAllKeys::kCK_KEY_SLASH:
-		return eInputKeyboardKeysOther::kKEY_SLASH;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_SLASH);
 	case eInputAllKeys::kCK_KEY_BACKSLASH:
-		return eInputKeyboardKeysOther::kKEY_BACKSLASH;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_BACKSLASH);
 	case eInputAllKeys::kCK_KEY_SEMICOLON:
-		return eInputKeyboardKeysOther::KKEY_SEMICOLON;
+		return static_cast<int>(eInputKeyboardKeysOther::KKEY_SEMICOLON);
 	case eInputAllKeys::kCK_KEY_EQUAL:
-		return eInputKeyboardKeysOther::kKEY_EQUAL;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_EQUAL);
 	case eInputAllKeys::kCK_KEY_LEFT_BRACKET:
-		return eInputKeyboardKeysOther::kKEY_LEFT_BRACKET;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_LEFT_BRACKET);
 	case eInputAllKeys::kCK_KEY_RIGHT_BRACKET:
-		return eInputKeyboardKeysOther::kKEY_RIGHT_BRACKET;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_RIGHT_BRACKET);
 	case eInputAllKeys::kCK_KEY_GRAVE_ACCENT:
-		return eInputKeyboardKeysOther::kKEY_GRAVE_ACCENT;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_GRAVE_ACCENT);
 	case eInputAllKeys::kCK_KEY_ESCAPE:
-		return eInputKeyboardKeysOther::kKEY_ESCAPE;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_ESCAPE);
 	case eInputAllKeys::kCK_KEY_TAB:
-		return eInputKeyboardKeysOther::kKEY_TAB;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_TAB);
 	case eInputAllKeys::kCK_KEY_BACKSPACE:
-		return eInputKeyboardKeysOther::kKEY_BACKSPACE;
+		return static_cast<int>(eInputKeyboardKeysOther::kKEY_BACKSPACE);
 	case eInputAllKeys::kCK_KEY_ENTER:
-		return eInputKeyboardKeysEnter::kKEY_ENTER;
+		return static_cast<int>(eInputKeyboardKeysEnter::kKEY_ENTER);
 	case eInputAllKeys::kCK_KEY_ENTER_NUMPAD:
-		return eInputKeyboardKeysEnter::kKEY_ENTER_NUMPAD;
+		return static_cast<int>(eInputKeyboardKeysEnter::kKEY_ENTER_NUMPAD);
 	case eInputAllKeys::kCK_KEY_NUMPAD_NUMLOCK:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_NUMLOCK;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_NUMLOCK);
 	case eInputAllKeys::kCK_KEY_NUMPAD_ENTER:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_ENTER;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_ENTER);
 	case eInputAllKeys::kCK_KEY_NUMPAD_SLASH:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_SLASH;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_SLASH);
 	case eInputAllKeys::kCK_KEY_NUMPAD_ASTERISK:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_ASTERISK;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_ASTERISK);
 	case eInputAllKeys::kCK_KEY_NUMPAD_1:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_1;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_1);
 	case eInputAllKeys::kCK_KEY_NUMPAD_2:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_2;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_2);
 	case eInputAllKeys::kCK_KEY_NUMPAD_3:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_3;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_3);
 	case eInputAllKeys::kCK_KEY_NUMPAD_4:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_4;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_4);
 	case eInputAllKeys::kCK_KEY_NUMPAD_5:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_5;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_5);
 	case eInputAllKeys::kCK_KEY_NUMPAD_6:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_6;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_6);
 	case eInputAllKeys::kCK_KEY_NUMPAD_7:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_7;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_7);
 	case eInputAllKeys::kCK_KEY_NUMPAD_8:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_8;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_8);
 	case eInputAllKeys::kCK_KEY_NUMPAD_9:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_9;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_9);
 	case eInputAllKeys::kCK_KEY_NUMPAD_0:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_0;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_0);
 	case eInputAllKeys::kCK_KEY_NUMPAD_MINUS:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_MINUS;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_MINUS);
 	case eInputAllKeys::kCK_KEY_NUMPAD_PLUS:
-		return eInputKeyboardKeysNumpad::kKEY_NUMPAD_PLUS;
+		return static_cast<int>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_PLUS);
 	case eInputAllKeys::kCK_KEY_MENU:
-		return eInputKeyboardKeysApplication::kKEY_MENU;
+		return static_cast<int>(eInputKeyboardKeysApplication::kKEY_MENU);
 	case eInputAllKeys::kCK_KEY_LEFT_ALT:
-		return eInputKeyboardKeysApplication::kKEY_LEFT_ALT;
+		return static_cast<int>(eInputKeyboardKeysApplication::kKEY_LEFT_ALT);
 	case eInputAllKeys::kCK_KEY_RIGHT_ALT:
-		return eInputKeyboardKeysApplication::kKEY_RIGHT_ALT;
+		return static_cast<int>(eInputKeyboardKeysApplication::kKEY_RIGHT_ALT);
 	case eInputAllKeys::kCK_KEY_LEFT_SUPER:
-		return eInputKeyboardKeysApplication::kKEY_LEFT_SUPER;
+		return static_cast<int>(eInputKeyboardKeysApplication::kKEY_LEFT_SUPER);
 	case eInputAllKeys::kCK_KEY_RIGHT_SUPER:
-		return eInputKeyboardKeysApplication::kKEY_RIGHT_SUPER;
+		return static_cast<int>(
+			eInputKeyboardKeysApplication::kKEY_RIGHT_SUPER);
 	case eInputAllKeys::kCK_KEY_WINDOWS:
-		return eInputKeyboardKeysSystem::kKEY_WINDOWS;
+		return static_cast<int>(eInputKeyboardKeysSystem::kKEY_WINDOWS);
 	case eInputAllKeys::kCK_KEY_ARROW_LEFT:
-		return eInputKeyboardCursorControlKeys::kKEY_ARROW_LEFT;
+		return static_cast<int>(
+			eInputKeyboardCursorControlKeys::kKEY_ARROW_LEFT);
 	case eInputAllKeys::kCK_KEY_ARROW_UP:
-		return eInputKeyboardCursorControlKeys::kKEY_ARROW_UP;
+		return static_cast<int>(eInputKeyboardCursorControlKeys::kKEY_ARROW_UP);
 	case eInputAllKeys::kCK_KEY_ARROW_RIGHT:
-		return eInputKeyboardCursorControlKeys::kKEY_ARROW_RIGHT;
+		return static_cast<int>(
+			eInputKeyboardCursorControlKeys::kKEY_ARROW_RIGHT);
 	case eInputAllKeys::kCK_KEY_ARROW_DOWN:
-		return eInputKeyboardCursorControlKeys::kKEY_ARROW_DOWN;
+		return static_cast<int>(
+			eInputKeyboardCursorControlKeys::kKEY_ARROW_DOWN);
 	case eInputAllKeys::kCM_KEY_LEFT:
-		return eInputMouseKeys::kKEY_LeftButton;
+		return static_cast<int>(eInputMouseKeys::kKEY_LeftButton);
 	case eInputAllKeys::kCM_KEY_RIGHT:
-		return eInputMouseKeys::kKEY_RightButton;
+		return static_cast<int>(eInputMouseKeys::kKEY_RightButton);
 	case eInputAllKeys::kCM_KEY_MIDDLE:
-		return eInputMouseKeys::kKEY_MiddleButton;
+		return static_cast<int>(eInputMouseKeys::kKEY_MiddleButton);
 	default:
 	{
 		KOTEK_ASSERT(
