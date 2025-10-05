@@ -15,21 +15,43 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 constexpr const char* kConfigFileNameSystemInfo =
 	"sys_info.json";
+
+/* todo: legacy delete
 constexpr const char* kSysInfoFieldName_InitializeCallback =
-	"UserCallbackForGameLibrary_Initialize";
+    "UserCallbackForGameLibrary_Initialize";
 constexpr const char* kSysInfoFieldName_ShutdownCallback =
-	"UserCallbackForGameLibrary_Shutdown";
+    "UserCallbackForGameLibrary_Shutdown";
 constexpr const char* kSysInfoFieldName_UpdateCallback =
-	"UserCallbackForGameLibrary_Update";
+    "UserCallbackForGameLibrary_Update";
 constexpr const char* kSysInfoFieldName_UserLibraryName =
-	"UserGameLibraryName";
+    "UserGameLibraryName";
 
 constexpr const char*
-	kSysInfoFieldName_UpdateCallbackContainsLoop =
-		"UserCallbackForGameLibrary_Update_Contains_Loop";
+    kSysInfoFieldName_UpdateCallbackContainsLoop =
+        "UserCallbackForGameLibrary_Update_Contains_Loop";
 constexpr const char*
-	kSysInfoFieldName_InitializeCallback_Render =
-		"UserCallbackForGameLibrary_Initialize_Render";
+    kSysInfoFieldName_InitializeCallback_Render =
+        "UserCallbackForGameLibrary_Initialize_Render";
+*/
+
+constexpr const char* kSysInfoFieldName_UserNamespace = "User";
+constexpr const char*
+	kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks =
+		"Callbacks";
+constexpr const char*
+	kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init =
+		"Init";
+constexpr const char*
+	kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Shutdown =
+		"Shutdown";
+constexpr const char*
+	kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Update =
+		"Update";
+constexpr const char*
+	kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init_Render =
+		"Init_Render";
+constexpr const char*
+	kSysInfoFieldName_UserNamespace_EngineNamespace = "Engine";
 
 constexpr const char* kUserCallbackName_Initialize =
 	"InitializeModule_Game";
@@ -40,39 +62,78 @@ constexpr const char* kUserCallbackName_Update =
 constexpr const char* kUserCallbackName_Initialize_Render =
 	"InitializeModule_Render";
 
+/* CORE */
+constexpr const char* kSysInfoFieldName_CoreNamespace = "Core";
+
+/// @brief this defines registered file systems and their
+/// priority in one field!!! this field must be defined and
+/// specified in kConfigFileNameSystemInfo
+constexpr const char*
+	kSysInfoFieldName_CoreNamespace_FileSystemPriorityList =
+		"FS_PriorityList";
+constexpr const char*
+	kSysInfoFieldName_CoreNamespace_FileSystemFeatures =
+		"FS_Features";
+constexpr const char*
+	kSysInfoFieldName_CoreNamespace_FileSystemFeatures_VFMRead =
+		"VFM_READ";
+/// @brief if this is not specifie in
+/// kSysInfoFieldName_CoreNamespace_FileSystemPriorityList then
+/// the first entry that was specified in
+/// kSysInfoFieldName_CoreNamespace_FileSystemPriorityList will
+/// be used as main and single FS
+constexpr const char*
+	kSysInfoFieldName_CoreNamespace_FileSystemFeatures_PriorityList =
+		"PRIORITY_LIST";
+constexpr const char*
+	kSysInfoFieldName_CoreNamespace_FileSystemFeatures_VFMCache =
+		"VFM_CACHE";
+/* CORE */
+
 class ktkFileSystem : public ktkIFileSystem
 {
 private:
-	struct file_id_t
+	struct file_desc_t
 	{
+		/// @brief must be defined as NOT AUTO it means that
+		/// this field shows to us in which FS we truly
+		/// determine our file based on current priority like if
+		/// it was native then we search native if native failed
+		/// (but feature about
+		/// kEnablePriorityWhenFailedToOpenFile was
+		/// specified)then we try to use any other fs based on
+		/// priority order that was defined in
+		/// kConfigFileNameSystemInfo
+		eFileSystemPriorityType fs_type =
+			eFileSystemPriorityType::kAuto;
 		kun_ktk uint32_t thread_id = decltype(thread_id)(-1);
-		kun_ktk uint32_t file_id[std::countr_zero(
-			static_cast<kun_ktk uint32_t>(
-				eFileSystemType::kEndOfEnum
-			)
-		)]{kun_ktk uint32_t(-1), kun_ktk uint32_t(-1)};
+
+		kun_ktk uint32_t file_id = decltype(file_id)(-1);
 	};
+
+	static_assert(
+		sizeof(file_desc_t::thread_id) ==
+			sizeof(std::thread::id),
+		"must be same size otherwise you need to update "
+		"this field for your std::thread::id "
+		"implementation, but basically it is uint32_t"
+	);
 
 public:
 	ktkFileSystem(void);
 	~ktkFileSystem(void);
 
-	void Initialize(
-		eFileSystemPriorityType priority_by_filesystem,
-		eFileSystemFeatureType features,
-		kun_ktk uint32_t stream_buffer_length,
-		kun_ktk uint16_t simultaneously_opened_files_count
-	) override;
+	void Initialize() override;
 
 	void Shutdown(void) override;
 
 	/*
 	 * For Win32 returns without slash
 	 */
-	ktk_filesystem_path GetFolderByEnum(eFolderIndex id
+	ktk_filesystem_path Get_FolderByEnum(eFolderIndex id
 	) const noexcept override;
 
-	bool IsValidPath(const ktk_filesystem_path& path
+	bool Is_ValidPath(const ktk_filesystem_path& path
 	) const noexcept override;
 
 	void Create_Directory(
@@ -175,7 +236,7 @@ public:
 		ktkFileHandleType file_handle
 	) const noexcept override;
 
-	kun_ktk size_t Get_RemaningStreamsCount(
+	kun_ktk size_t Get_RemainingStreamsCount(
 		ktkFileHandleType file_handle
 	) const noexcept override;
 
@@ -189,17 +250,17 @@ public:
 	/* STREAMING */
 
 private:
-	bool AddGamedataFolderToStorage(
+	bool Add_GamedataFolderToStorage(
 		const ktk_filesystem_path& path,
 		eFolderIndex id,
-		const kun_ktk cstring& folder_name
+		const ktk_cstring_view& folder_name
 	) noexcept;
 
-	void ValidateFolders(void) noexcept;
+	void Validate_Folders(void) noexcept;
 
-	void CreateConfigFiles(void) noexcept;
+	void Create_ConfigFiles(void) noexcept;
 
-	bool CreateDirectoryImpl(const ktk_filesystem_path& path
+	bool Create_DirectoryImpl(const ktk_filesystem_path& path
 	) const noexcept;
 
 	bool Is_AnyAvailableFiles(void) const noexcept;
@@ -207,9 +268,8 @@ private:
 	ktkFileHandleType Get_AvailableFile(void) const;
 
 private:
-	//	ktk_vector<int, KOTEK_DEF_FILESYSTEM_MAX_OPENED_FILES>
-	// m_file_tracker; 	kun_ktk kun_mt atomic<size_t>
-	// m_current_in_use_files;
+	kun_ktk uint8_t m_registered_filesystems[static_cast<
+		kun_ktk size_t>(eFileSystemPriorityType::kEndOfEnum)];
 
 	kun_ktk kun_mt atomic<kun_ktk uint16_t>
 		m_current_opened_files;
@@ -223,12 +283,12 @@ private:
 #endif
 
 #ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
-	ktkFileSystem_VFM m_fs_vfm;
+	ktkFileSystem_VFM m_vfm;
 #endif
 
 	ktk_unordered_map<
 		ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>,
-		file_id_t,
+		file_desc_t,
 		KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT>
 		m_paths_storage;
 };

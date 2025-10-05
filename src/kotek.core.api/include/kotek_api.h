@@ -222,15 +222,17 @@ class ktkIFileSystem
 public:
 	virtual ~ktkIFileSystem(void) {}
 
-	virtual void Initialize(
-		eFileSystemPriorityType priority_by_filesystem,
-		eFileSystemFeatureType features,
-		kun_ktk uint32_t stream_buffer_length,
-		kun_ktk uint16_t simultaneously_opened_files_count
-	) = 0;
+	/*
+kun_ktk uint8_t* p_priority_list,
+kun_ktk uint8_t priority_list_size,
+eFileSystemFeatureType features,
+kun_ktk uint32_t stream_buffer_length,
+kun_ktk uint16_t simultaneously_opened_files_count
+*/
+	virtual void Initialize() = 0;
 
 	virtual void Shutdown(void) = 0;
-	virtual bool IsValidPath(const ktk_filesystem_path& path
+	virtual bool Is_ValidPath(const ktk_filesystem_path& path
 	) const noexcept = 0;
 
 	/*  */
@@ -239,7 +241,7 @@ public:
 		eFolderVisibilityType type
 	) = 0;
 
-	virtual ktk_filesystem_path GetFolderByEnum(eFolderIndex id
+	virtual ktk_filesystem_path Get_FolderByEnum(eFolderIndex id
 	) const noexcept = 0;
 
 	/* SINGLE SHOT READ&WRITE */
@@ -375,7 +377,7 @@ public:
 	/// streaming
 	/// @param file_handle
 	/// @return
-	virtual kun_ktk size_t Get_RemaningStreamsCount(
+	virtual kun_ktk size_t Get_RemainingStreamsCount(
 		ktkFileHandleType file_handle
 	) const noexcept = 0;
 

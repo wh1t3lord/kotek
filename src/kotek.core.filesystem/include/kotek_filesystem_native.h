@@ -32,6 +32,9 @@ class ktkFileSystem_Native
 
 	struct file_handle_t
 	{
+		kun_ktk uint32_t stream_remaining_count = 0;
+		kun_ktk uint32_t stream_total_count = 0;
+
 		std::variant<
 			file_handle_no_vfm_t
 	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
@@ -39,7 +42,7 @@ class ktkFileSystem_Native
 			file_handle_vfm_t
 	#endif
 			>
-			desc;
+			desc_id;
 	};
 
 public:
