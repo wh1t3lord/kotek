@@ -18,28 +18,26 @@ enum class eFolderIndex : kun_ktk enum_base_t{kFolderIndex_Root,
 	kFolderIndex_DataUser_SDK_Settings, kFolderIndex_DataUser_SDK_Scenes,
 	kFolderIndex_DataUser, kEndOfEnum};
 
-enum class eFileSystemType : kun_ktk uint16_t
-{
-	kUnknown = 0,
-	kNative = 1 << 1,
-	kZlib = 1 << 2,
-	kEndOfEnum = kZlib
-};
+enum class eFileSystemType : kun_ktk uint16_t{
+	kUnknown = 0, kNative = 1 << 1, kZlib = 1 << 2, kEndOfEnum = kZlib};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eFileSystemType, kun_ktk uint16_t);
 
-enum class eFileSystemPriorityType : kun_ktk uint16_t
-{
+enum class eFileSystemPriorityType : kun_ktk uint16_t{
 	/// @brief will use what user passed to ktkFileSystem::Initialize
-	kAuto,
-	kNative,
-	kZlib
-};
+	kAuto, kNative, kZlib};
 
-enum class eFileSystemFeatureType : kun_ktk uint16_t
-{
+enum class eFileSystemFeatureType : kun_ktk uint16_t{
 	kNone = 0,
-	kVFM = 1 << 1
+	kVFM = 1 << 1,
+	/// @brief \~english if this flag was specified as features then priority
+    /// (eFileSystemPriorityType) will take action and be used by system
+    /// otherwise it will use only from specified filesystem (or filesystem that
+    /// supported like native or zlib) and if a requested file wasn't found it
+    /// will raise error & assert
+	kFSPriority = 1 << 2,
+	/// @brief \~english this won't work if kVFM wasn't passed (keep this in mind)
+	kCacheVFM = 1 << 3
 };
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
@@ -264,124 +262,119 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 ///
 ///
 /// \~french
-enum class eEngineFeature : kun_ktk uint32_t
-{
+enum class eEngineFeature : kun_ktk uint32_t{
 	/// \~english @brief This field is system and it means that if the
-	/// required feature is not implemenented or exist you need to use
-	/// this field. For example, the user asks for determining if
-	/// kEngine_Feature_SomethingThatDoesntExistInEnum exists in engine.
-	/// But we can't return anything else as false state, and for
-	/// obtaining the field if the user asks for the field we will
-	/// return kEngine_Feature_Unknown.
-	///
-	/// For understanding check Kotek::Core::ktkEngineConfig's method
-	/// GetRenderFeature.
-	/// \~russian @brief Данное поле системное и используется для того,
-	/// чтобы сказать что запрашиваемое поле не существует вообще, то
-	/// есть в самом перечислении. В таком случае разработчик должен
-	/// воспользоваться данным полем, чтобы сказать пользователю что его
-	/// запрашиваемое поле не существует и неизвестно для системы.
-	///
-	/// Конкретный пример использования определен в методе
-	/// GetRenderFeature в Kotek::Core::ktkEngineConfig.
-	/// \~german @brief
-	/// \~french @brief
-	kEngine_Feature_None = 0
-};
+    /// required feature is not implemenented or exist you need to use
+    /// this field. For example, the user asks for determining if
+    /// kEngine_Feature_SomethingThatDoesntExistInEnum exists in engine.
+    /// But we can't return anything else as false state, and for
+    /// obtaining the field if the user asks for the field we will
+    /// return kEngine_Feature_Unknown.
+    ///
+    /// For understanding check Kotek::Core::ktkEngineConfig's method
+    /// GetRenderFeature.
+    /// \~russian @brief Данное поле системное и используется для того,
+    /// чтобы сказать что запрашиваемое поле не существует вообще, то
+    /// есть в самом перечислении. В таком случае разработчик должен
+    /// воспользоваться данным полем, чтобы сказать пользователю что его
+    /// запрашиваемое поле не существует и неизвестно для системы.
+    ///
+    /// Конкретный пример использования определен в методе
+    /// GetRenderFeature в Kotek::Core::ktkEngineConfig.
+    /// \~german @brief
+    /// \~french @brief
+	kEngine_Feature_None = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeature, kun_ktk uint32_t);
 
-enum class eEngineFeatureWindow : kun_ktk uint32_t
-{
+enum class eEngineFeatureWindow : kun_ktk uint32_t{
 	/// \~english @brief This field specifies that (main) window is in
-	/// windowed mode. So if user checks if this feature is in true
-	/// state, so it means the window is in windowed mode. The developer
-	/// must check that the field sets to true only if the window is in
-	/// real windowed mode.
-	/// \~russian @brief Данное поле означает, что (главное) окно
-	/// приложения находится в оконном режиме. Для конечного
-	/// пользователя это означает, что если он хочет проверить данное
-	/// поле, то если оно включено, значит окно реально находится в
-	/// оконном режиме, разработчик должен убедиться и гарантировать,
-	/// что если поле включено, то это соответствует действительности.
-	/// \~german @brief
-	/// \~french @brief
+    /// windowed mode. So if user checks if this feature is in true
+    /// state, so it means the window is in windowed mode. The developer
+    /// must check that the field sets to true only if the window is in
+    /// real windowed mode.
+    /// \~russian @brief Данное поле означает, что (главное) окно
+    /// приложения находится в оконном режиме. Для конечного
+    /// пользователя это означает, что если он хочет проверить данное
+    /// поле, то если оно включено, значит окно реально находится в
+    /// оконном режиме, разработчик должен убедиться и гарантировать,
+    /// что если поле включено, то это соответствует действительности.
+    /// \~german @brief
+    /// \~french @brief
 	kEngine_Feature_Window_Windowed = 1 << 2,
 
 	/// \~english @brief This field specifies that window is in
-	/// borderless mode. So if the user checks if this field is set to
-	/// true state, it means that window is in borderless mode. The
-	/// developer must check that window is indeed in borderless mode
-	/// and set this field in true state for notifying user.
-	/// \~russian @brief Данное поле означает, что окно находится в
-	/// оконном режиме, но без оконных рамок. Конечный пользователь при
-	/// проверке должен получать состояние, что окно реально находится в
-	/// соответствующем режиме. За этим должен следить разработчик и
-	/// гарантировать это состояние.
-	/// \~german @brief
-	/// \~french @brief
+    /// borderless mode. So if the user checks if this field is set to
+    /// true state, it means that window is in borderless mode. The
+    /// developer must check that window is indeed in borderless mode
+    /// and set this field in true state for notifying user.
+    /// \~russian @brief Данное поле означает, что окно находится в
+    /// оконном режиме, но без оконных рамок. Конечный пользователь при
+    /// проверке должен получать состояние, что окно реально находится в
+    /// соответствующем режиме. За этим должен следить разработчик и
+    /// гарантировать это состояние.
+    /// \~german @brief
+    /// \~french @brief
 	kEngine_Feature_Window_Borderless = 1 << 3,
 
 	/// \~english @brief This field specifies that window is in
-	/// fullscreen mode. If user checks that field is in true state it
-	/// means that window is in real fullscreen mode. The developer must
-	/// provide to user that window is in fullscreen and the appropriate
-	/// is in true state.
-	/// \~russian @brief Данное поле показывает что окно находится в
-	/// полноэкранном режиме. Это означает, что если пользователь
-	/// проверяет данное поле что оно включено, то это значит что окно
-	/// реально находится в таком режиме. Разработчик должен
-	/// гарантировать такое состояние.
-	/// \~german @brief
-	/// \~french @brief
+    /// fullscreen mode. If user checks that field is in true state it
+    /// means that window is in real fullscreen mode. The developer must
+    /// provide to user that window is in fullscreen and the appropriate
+    /// is in true state.
+    /// \~russian @brief Данное поле показывает что окно находится в
+    /// полноэкранном режиме. Это означает, что если пользователь
+    /// проверяет данное поле что оно включено, то это значит что окно
+    /// реально находится в таком режиме. Разработчик должен
+    /// гарантировать такое состояние.
+    /// \~german @brief
+    /// \~french @brief
 	kEngine_Feature_Window_FullScreen = 1 << 4,
 
-	kEngine_Feature_Window_None = 0
-};
+	kEngine_Feature_Window_None = 0};
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureWindow, kun_ktk uint32_t);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eEngineFeatureWindow, kun_ktk uint32_t);
 
-enum class eEngineFeatureSDK : kun_ktk uint32_t
-{
+enum class eEngineFeatureSDK : kun_ktk uint32_t{
 	/// \~english @brief This field means that your engine is called SDK
-	/// initialization or it means that your SDK implementation is
-	/// working in Engine. So for user it means that if your status of
-	/// this field equals true that means that your SDK is enabled and
-	/// working in Engine.
-	///
-	/// \~russian @brief Данное поле обозначает что ваш СДК работает и
-	/// все необходимые процедуры для создания были вызваны в движке.
-	/// Для конечного пользователя будет означать следующее, что если
-	/// это поле равно true, то пользователь может обрабатывать ситуации
-	/// когда СДК реально работает в движке. Иначе СДК не был
-	/// реализован, либо он просто не работает сейчас.
-	///
-	///
-	/// \~german @brief
-	/// \~french @brief
+    /// initialization or it means that your SDK implementation is
+    /// working in Engine. So for user it means that if your status of
+    /// this field equals true that means that your SDK is enabled and
+    /// working in Engine.
+    ///
+    /// \~russian @brief Данное поле обозначает что ваш СДК работает и
+    /// все необходимые процедуры для создания были вызваны в движке.
+    /// Для конечного пользователя будет означать следующее, что если
+    /// это поле равно true, то пользователь может обрабатывать ситуации
+    /// когда СДК реально работает в движке. Иначе СДК не был
+    /// реализован, либо он просто не работает сейчас.
+    ///
+    ///
+    /// \~german @brief
+    /// \~french @brief
 	kEngine_Feature_SDK = 1 << 0,
 
 	/// \~english @brief This field means that your engine implemented
-	/// SDK based on ImGui. So for end user the checking status of this
-	/// feature will be meant that you implemented and called all things
-	/// that related for Initialization/Creation SDK which is based on
-	/// ImGui and it means that it works in Engine right now.
-	/// \~russian @brief Данное поле означает, что вы имеете реализацию
-	/// SDK основанного на парадигме ImGui. Для конечного пользователя
-	/// это также означает, что если он хочет проверить включена ли
-	/// такая возможность (поле в Kotek::Core::ktkEngineConfig), то все
-	/// соответствующие процеду были выполнены для того, чтобы
-	/// инициализировать/создать SDK основанного на ImGui.
-	/// \~german @brief
-	/// \~french @brief
-	///
-	///
+    /// SDK based on ImGui. So for end user the checking status of this
+    /// feature will be meant that you implemented and called all things
+    /// that related for Initialization/Creation SDK which is based on
+    /// ImGui and it means that it works in Engine right now.
+    /// \~russian @brief Данное поле означает, что вы имеете реализацию
+    /// SDK основанного на парадигме ImGui. Для конечного пользователя
+    /// это также означает, что если он хочет проверить включена ли
+    /// такая возможность (поле в Kotek::Core::ktkEngineConfig), то все
+    /// соответствующие процеду были выполнены для того, чтобы
+    /// инициализировать/создать SDK основанного на ImGui.
+    /// \~german @brief
+    /// \~french @brief
+    ///
+    ///
 	kEngine_Feature_SDK_ImGui = 1 << 1,
 
 	kEngine_Feature_SDK_ImGui_Initialized = 1 << 2,
 
-	kEngine_Feature_SDK_None = 0
-};
+	kEngine_Feature_SDK_None = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureSDK, kun_ktk uint32_t);
 
@@ -402,19 +395,18 @@ enum class eEngineSupportedRenderer : kun_ktk enum_base_t{kDirectX_7,
 	kOpenGL_4_3, kOpenGL_4_4, kOpenGL_4_5, kOpenGL_4_6,
 	kOpenGL_Latest = kOpenGL_4_6, kEndOfEnum, kUnknown = -1};
 
-enum class eEngineFeatureRenderer : kun_ktk uint32_t
-{
+enum class eEngineFeatureRenderer : kun_ktk uint32_t{
 	/// \~english @brief This field means that engine uses OpenGL
-	/// version 4.6. If this field is true it means that engine uses
-	/// OpenGL 4.6 currently. The developer must check the valid state
-	/// of this field in order to provide it to end user.
-	/// \~russian @brief Данное поле обозначает, что движок использует
-	/// рендерер OpenGL версии 4.6 (то есть текущую самую последнюю). Если поле
-	/// имеет true состояние, то это значит что движок использует данный
-	/// рендерер OpenGL 4.6. Разработчик должен гарантировать что состояние поля
-	/// соответствует работе движка.
-	/// \~german @brief
-	/// \~french @brief
+    /// version 4.6. If this field is true it means that engine uses
+    /// OpenGL 4.6 currently. The developer must check the valid state
+    /// of this field in order to provide it to end user.
+    /// \~russian @brief Данное поле обозначает, что движок использует
+    /// рендерер OpenGL версии 4.6 (то есть текущую самую последнюю). Если поле
+    /// имеет true состояние, то это значит что движок использует данный
+    /// рендерер OpenGL 4.6. Разработчик должен гарантировать что состояние поля
+    /// соответствует работе движка.
+    /// \~german @brief
+    /// \~french @brief
 	kEngine_Feature_Renderer_OpenGL_Latest = 1 << 1,
 	kEngine_Feature_Renderer_OpenGL_SpecifiedByUser = 1 << 2,
 
@@ -422,34 +414,34 @@ enum class eEngineFeatureRenderer : kun_ktk uint32_t
 	kEngine_Feature_Renderer_DirectX_SpecifiedByUser = 1 << 4,
 
 	/// \~english @brief This field means that renderer is Vulkan. In
-	/// Engine it supposed that only one renderer can exist, thus if
-	/// have a true state for this field it means that engine currently
-	/// uses Vulkan renderer. The developer must provide a valid state
-	/// when the Vulkan renderer is initialized and set state for this
-	/// field as true.
-	/// \~russian @brief Данное поле обозначает, что движок работает с
-	/// рендерером Vulkan, при условии что само значение поле true.
-	/// Разработчик должен следить за тем, что состояние этого поля
-	/// соотносится с работой рендерера Vulkan.
-	/// \~german @brief
-	/// \~french @brief
+    /// Engine it supposed that only one renderer can exist, thus if
+    /// have a true state for this field it means that engine currently
+    /// uses Vulkan renderer. The developer must provide a valid state
+    /// when the Vulkan renderer is initialized and set state for this
+    /// field as true.
+    /// \~russian @brief Данное поле обозначает, что движок работает с
+    /// рендерером Vulkan, при условии что само значение поле true.
+    /// Разработчик должен следить за тем, что состояние этого поля
+    /// соотносится с работой рендерера Vulkan.
+    /// \~german @brief
+    /// \~french @brief
 	kEngine_Feature_Renderer_Vulkan_Latest = 1 << 5,
 	kEngine_Feature_Renderer_Vulkan_SpecifiedByUser = 1 << 6,
 
 	/// \~english @brief This field means that renderer is software. In
-	/// Engine it supposed that only one renderer can exist, so if you
-	/// have this field as state true that means that engine is
-	/// currently working with Software Renderer. The developer must
-	/// provide a valid state when this field is true.
-	/// \~russian @brief Данное поле означает, что текущий рендерер
-	/// работает только на ЦПУ без поддержки ГПУ. Предполагается, что
-	/// движок может работать только с одним рендерером, а это значит,
-	/// что если данное поле включено, то это значит движок работает с
-	/// ЦПУ рендерером. Разработчик должен гарантировать, что если
-	/// пользователь получил состаяние true, то и движок работает с
-	/// данным рендерером.
-	/// \~german @brief
-	/// \~french @brief
+    /// Engine it supposed that only one renderer can exist, so if you
+    /// have this field as state true that means that engine is
+    /// currently working with Software Renderer. The developer must
+    /// provide a valid state when this field is true.
+    /// \~russian @brief Данное поле означает, что текущий рендерер
+    /// работает только на ЦПУ без поддержки ГПУ. Предполагается, что
+    /// движок может работать только с одним рендерером, а это значит,
+    /// что если данное поле включено, то это значит движок работает с
+    /// ЦПУ рендерером. Разработчик должен гарантировать, что если
+    /// пользователь получил состаяние true, то и движок работает с
+    /// данным рендерером.
+    /// \~german @brief
+    /// \~french @brief
 	kEngine_Feature_Renderer_Software = 1 << 7,
 
 	kEngine_Feature_Renderer_OpenGLES_Latest = 1 << 8,
@@ -457,68 +449,62 @@ enum class eEngineFeatureRenderer : kun_ktk uint32_t
 
 	kEngine_Feature_Renderer_None = 0,
 	// defines amount of real fields before kNone
-	// needed to be updated regularly
-	kEndOfEnum = 9
-};
+    // needed to be updated regularly
+	kEndOfEnum = 9};
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRenderer, kun_ktk uint32_t);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eEngineFeatureRenderer, kun_ktk uint32_t);
 
-enum class eEngineFeatureRendererVendor : kun_ktk uint32_t
-{
-	kANGLE = 1 << 1,
-	kBGFX = 1 << 2,
-	kNative = 1 << 3,
-	kNone = 0,
-	kEndOfEnumeEngineFeatureRendererVendor = 3
-};
+enum class eEngineFeatureRendererVendor : kun_ktk uint32_t{kANGLE = 1 << 1,
+	kBGFX = 1 << 2, kNative = 1 << 3, kNone = 0,
+	kEndOfEnumeEngineFeatureRendererVendor = 3};
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRendererVendor, kun_ktk uint32_t);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eEngineFeatureRendererVendor, kun_ktk uint32_t);
 
 /// @brief took information from https://github.com/google/angle
-enum class eEngineFeatureRendererANGLE : kun_ktk uint32_t
-{
+enum class eEngineFeatureRendererANGLE : kun_ktk uint32_t{
 	kEngine_Feature_Renderer_ANGLE_Feature_Vulkan = 1 << 0,
 	kEngine_Feature_Renderer_ANGLE_Feature_DirectX_9 = 1 << 1,
 	kEngine_Feature_Renderer_ANGLE_Feature_DirectX_11 = 1 << 2,
 	kEngine_Feature_Renderer_ANGLE_Feature_Desktop_GL = 1 << 3,
 	kEngine_Feature_Renderer_ANGLE_Feature_GL_ES = 1 << 4,
 	kEngine_Feature_Renderer_ANGLE_Feature_Metal = 1 << 5,
-	kEngine_Feature_Renderer_ANGLE_Feature_None = 0
-};
+	kEngine_Feature_Renderer_ANGLE_Feature_None = 0};
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRendererANGLE, kun_ktk uint32_t);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eEngineFeatureRendererANGLE, kun_ktk uint32_t);
 
-enum class eEngineFeatureRender : kun_ktk uint32_t
-{
+enum class eEngineFeatureRender : kun_ktk uint32_t{
 	/// \~english @brief This field means that renderer enabled MSAA
-	/// feature. If the field's state is true it means that renderer
-	/// implemented and enabled MSAA feature. The developer must set the
-	/// valid state of field.
-	/// \~russian @brief Данное поле означает что рендерер включил
-	/// возможность MSAA. Если состояние поля true означает что
-	/// разработчик реализовал и включил MSAA. Разработчик должен
-	/// гарантировать что состояние поля соответствует работе рендерера.
-	/// \~german @brief
-	/// \~french @brief
+    /// feature. If the field's state is true it means that renderer
+    /// implemented and enabled MSAA feature. The developer must set the
+    /// valid state of field.
+    /// \~russian @brief Данное поле означает что рендерер включил
+    /// возможность MSAA. Если состояние поля true означает что
+    /// разработчик реализовал и включил MSAA. Разработчик должен
+    /// гарантировать что состояние поля соответствует работе рендерера.
+    /// \~german @brief
+    /// \~french @brief
 	kEngine_Feature_Render_MSAA = 1 << 0,
 
 	/// \~english @brief This field means that renderer enabled VSYNC
-	/// feature. If the field's state is true it means that renderer
-	/// implemented and enabled VSYNC feature. The developer must set
-	/// the valid state of field.
-	/// \~russian @brief Данное поле означает что рендерер имеет VSYNC
-	/// функцию. Если поле имеет состояние true это означает, что
-	/// реднерер реализовал и включил VSYNC функцию. Разработчик должен
-	/// гарантировать что состояние поля соответствует работе рендерера.
-	/// \~german @brief
-	/// \~french @brief
-	///
+    /// feature. If the field's state is true it means that renderer
+    /// implemented and enabled VSYNC feature. The developer must set
+    /// the valid state of field.
+    /// \~russian @brief Данное поле означает что рендерер имеет VSYNC
+    /// функцию. Если поле имеет состояние true это означает, что
+    /// реднерер реализовал и включил VSYNC функцию. Разработчик должен
+    /// гарантировать что состояние поля соответствует работе рендерера.
+    /// \~german @brief
+    /// \~french @brief
+    ///
 	kEngine_Feature_Render_VSYNC = 1 << 1,
 
-	kEngine_Feature_Render_None = 0
-};
+	kEngine_Feature_Render_None = 0};
 
-KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eEngineFeatureRender, kun_ktk uint32_t);
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
+	eEngineFeatureRender, kun_ktk uint32_t);
 
 /**
  * \~english @brief This is used for console manager class ktkConsole. And it
@@ -731,13 +717,10 @@ enum eInputControllerMouseData
 	kControllerMouseDataTotalAmountOfEnum
 };
 
-enum class eInputMouseKeys : kun_ktk uint16_t
-{
-	kKEY_LeftButton = 1 << 1,
+enum class eInputMouseKeys : kun_ktk uint16_t{kKEY_LeftButton = 1 << 1,
 	kKEY_RightButton = 1 << 2,
 	kKEY_MiddleButton = 1 << 3, // wheel
-	kKEY_MouseUnknown = 0
-};
+	kKEY_MouseUnknown = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eInputMouseKeys, kun_ktk uint16_t);
 
@@ -860,182 +843,89 @@ enum eInputAllKeys
 	kCA_KEY_UNKNOWN = -1 // kCA = kControllerAny
 };
 
-enum class eInputKeyboardKeys : kun_ktk uint32_t
-{
-	kKEY_A = 1 << 1,
-	kKEY_B = 1 << 2,
-	kKEY_C = 1 << 3,
-	kKEY_D = 1 << 4,
-	kKEY_E = 1 << 5,
-	kKEY_F = 1 << 6,
-	kKEY_G = 1 << 7,
-	kKEY_H = 1 << 8,
-	kKEY_I = 1 << 9,
-	kKEY_J = 1 << 10,
-	kKEY_K = 1 << 11,
-	kKEY_L = 1 << 12,
-	kKEY_M = 1 << 13,
-	kKEY_N = 1 << 14,
-	kKEY_O = 1 << 15,
-	kKEY_P = 1 << 16,
-	kKEY_Q = 1 << 17,
-	kKEY_R = 1 << 18,
-	kKEY_S = 1 << 19,
-	kKEY_T = 1 << 20,
-	kKEY_U = 1 << 21,
-	kKEY_V = 1 << 22,
-	kKEY_W = 1 << 23,
-	kKEY_X = 1 << 24,
-	kKEY_Y = 1 << 25,
-	kKEY_Z = 1 << 26,
-	kKEY_CAPS_LOCK = 1 << 27,
-	kKEY_SCROLL_LOCK = 1 << 28,
-	kKEY_UNKNOWN = 0
-};
+enum class eInputKeyboardKeys : kun_ktk uint32_t{kKEY_A = 1 << 1,
+	kKEY_B = 1 << 2, kKEY_C = 1 << 3, kKEY_D = 1 << 4, kKEY_E = 1 << 5,
+	kKEY_F = 1 << 6, kKEY_G = 1 << 7, kKEY_H = 1 << 8, kKEY_I = 1 << 9,
+	kKEY_J = 1 << 10, kKEY_K = 1 << 11, kKEY_L = 1 << 12, kKEY_M = 1 << 13,
+	kKEY_N = 1 << 14, kKEY_O = 1 << 15, kKEY_P = 1 << 16, kKEY_Q = 1 << 17,
+	kKEY_R = 1 << 18, kKEY_S = 1 << 19, kKEY_T = 1 << 20, kKEY_U = 1 << 21,
+	kKEY_V = 1 << 22, kKEY_W = 1 << 23, kKEY_X = 1 << 24, kKEY_Y = 1 << 25,
+	kKEY_Z = 1 << 26, kKEY_CAPS_LOCK = 1 << 27, kKEY_SCROLL_LOCK = 1 << 28,
+	kKEY_UNKNOWN = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eInputKeyboardKeys, kun_ktk uint32_t);
 
-
-enum class eInputKeyboardKeysNumbers : kun_ktk uint32_t
-{
-	kKEY_1 = 1 << 1,
-	kKEY_2 = 1 << 2,
-	kKEY_3 = 1 << 3,
-	kKEY_4 = 1 << 4,
-	kKEY_5 = 1 << 5,
-	kKEY_6 = 1 << 6,
-	kKEY_7 = 1 << 7,
-	kKEY_8 = 1 << 8,
-	kKEY_9 = 1 << 9,
-	kKEY_0 = 1 << 10,
-	kKEY_MINUS = 1 << 11,
-	kKEY_PLUS = 1 << 12,
-	kKEY_NUMBER_UNKNOWN = 0
-};
+enum class eInputKeyboardKeysNumbers : kun_ktk uint32_t{kKEY_1 = 1 << 1,
+	kKEY_2 = 1 << 2, kKEY_3 = 1 << 3, kKEY_4 = 1 << 4, kKEY_5 = 1 << 5,
+	kKEY_6 = 1 << 6, kKEY_7 = 1 << 7, kKEY_8 = 1 << 8, kKEY_9 = 1 << 9,
+	kKEY_0 = 1 << 10, kKEY_MINUS = 1 << 11, kKEY_PLUS = 1 << 12,
+	kKEY_NUMBER_UNKNOWN = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
 	eInputKeyboardKeysNumbers, kun_ktk uint32_t);
 
-enum class eInputKeyboardKeysFunctionKeys : kun_ktk uint32_t
-{
-	kKEY_F1 = 1 << 1,
-	kKEY_F2 = 1 << 2,
-	kKEY_F3 = 1 << 3,
-	kKEY_F4 = 1 << 4,
-	kKEY_F5 = 1 << 5,
-	kKEY_F6 = 1 << 6,
-	kKEY_F7 = 1 << 7,
-	kKEY_F8 = 1 << 8,
-	kKEY_F9 = 1 << 9,
-	kKEY_F10 = 1 << 10,
-	kKEY_F11 = 1 << 11,
-	kKEY_F12 = 1 << 12,
-	kKEY_FUNCTION_KEY_UNKNOWN = 0
-};
+enum class eInputKeyboardKeysFunctionKeys : kun_ktk uint32_t{kKEY_F1 = 1 << 1,
+	kKEY_F2 = 1 << 2, kKEY_F3 = 1 << 3, kKEY_F4 = 1 << 4, kKEY_F5 = 1 << 5,
+	kKEY_F6 = 1 << 6, kKEY_F7 = 1 << 7, kKEY_F8 = 1 << 8, kKEY_F9 = 1 << 9,
+	kKEY_F10 = 1 << 10, kKEY_F11 = 1 << 11, kKEY_F12 = 1 << 12,
+	kKEY_FUNCTION_KEY_UNKNOWN = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
 	eInputKeyboardKeysFunctionKeys, kun_ktk uint32_t);
 
-enum class eInputKeyboardKeysOther : kun_ktk uint32_t
-{
-	kKEY_PRTSC = 1 << 1,
-	kKEY_PAUSE = 1 << 2,
-	kKEY_DEL = 1 << 3,
-	kKEY_END = 1 << 4,
-	kKEY_INSERT = 1 << 5,
-	kKEY_HOME = 1 << 6,
-	kKEY_PAGEUP = 1 << 7,
-	kKEY_PAGEDOWN = 1 << 8,
-	kKEY_SCROLLLOCK = 1 << 9,
-	kKEY_ESC = 1 << 10,
-	kKEY_SPACE = 1 << 11,
-	kKEY_LEFT_SHIFT = 1 << 12,
-	kKEY_RIGHT_SHIFT = 1 << 13,
-	kKEY_LEFT_CONTROL = 1 << 14,
-	kKEY_RIGHT_CONTROL = 1 << 15,
+enum class eInputKeyboardKeysOther : kun_ktk uint32_t{kKEY_PRTSC = 1 << 1,
+	kKEY_PAUSE = 1 << 2, kKEY_DEL = 1 << 3, kKEY_END = 1 << 4,
+	kKEY_INSERT = 1 << 5, kKEY_HOME = 1 << 6, kKEY_PAGEUP = 1 << 7,
+	kKEY_PAGEDOWN = 1 << 8, kKEY_SCROLLLOCK = 1 << 9, kKEY_ESC = 1 << 10,
+	kKEY_SPACE = 1 << 11, kKEY_LEFT_SHIFT = 1 << 12, kKEY_RIGHT_SHIFT = 1 << 13,
+	kKEY_LEFT_CONTROL = 1 << 14, kKEY_RIGHT_CONTROL = 1 << 15,
 	kKEY_APOSTROPHE = 1 << 16, // '
 	kKEY_COMMA = 1 << 17,      // ,
 	kKEY_PERIOD = 1 << 18,     // .
 	kKEY_SLASH = 1 << 19,      // /
-	kKEY_BACKSLASH = 1 << 20,
-	KKEY_SEMICOLON = 1 << 21,
-	kKEY_EQUAL = 1 << 22,
-	kKEY_LEFT_BRACKET = 1 << 23,
-	kKEY_RIGHT_BRACKET = 1 << 24,
-	kKEY_GRAVE_ACCENT = 1 << 25,
-	kKEY_ESCAPE = 1 << 26,
-	kKEY_TAB = 1 << 27,
-	kKEY_BACKSPACE = 1 << 28,
-	kKEY_OTHER_KEY_UNKNOWN = 0
-};
+	kKEY_BACKSLASH = 1 << 20, KKEY_SEMICOLON = 1 << 21, kKEY_EQUAL = 1 << 22,
+	kKEY_LEFT_BRACKET = 1 << 23, kKEY_RIGHT_BRACKET = 1 << 24,
+	kKEY_GRAVE_ACCENT = 1 << 25, kKEY_ESCAPE = 1 << 26, kKEY_TAB = 1 << 27,
+	kKEY_BACKSPACE = 1 << 28, kKEY_OTHER_KEY_UNKNOWN = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
 	eInputKeyboardKeysOther, kun_ktk uint32_t);
 
-enum class eInputKeyboardKeysEnter : kun_ktk uint16_t
-{
-	kKEY_ENTER = 1 << 1,
-	kKEY_ENTER_NUMPAD = 1 << 2,
-	kKEY_ENTER_UNKNOWN = 0
-};
+enum class eInputKeyboardKeysEnter : kun_ktk uint16_t{
+	kKEY_ENTER = 1 << 1, kKEY_ENTER_NUMPAD = 1 << 2, kKEY_ENTER_UNKNOWN = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
 	eInputKeyboardKeysEnter, kun_ktk uint16_t);
 
-enum class eInputKeyboardKeysNumpad : kun_ktk uint32_t
-{
-	kKEY_NUMPAD_NUMLOCK = 1 << 1,
-	kKEY_NUMPAD_ENTER = 1 << 2,
+enum class eInputKeyboardKeysNumpad : kun_ktk uint32_t{
+	kKEY_NUMPAD_NUMLOCK = 1 << 1, kKEY_NUMPAD_ENTER = 1 << 2,
 	kKEY_NUMPAD_SLASH = 1 << 3,    // "/"
 	kKEY_NUMPAD_ASTERISK = 1 << 4, // "*"
-	kKEY_NUMPAD_1 = 1 << 5,
-	kKEY_NUMPAD_2 = 1 << 6,
-	kKEY_NUMPAD_3 = 1 << 7,
-	kKEY_NUMPAD_4 = 1 << 8,
-	kKEY_NUMPAD_5 = 1 << 9,
-	kKEY_NUMPAD_6 = 1 << 10,
-	kKEY_NUMPAD_7 = 1 << 11,
-	kKEY_NUMPAD_8 = 1 << 12,
-	kKEY_NUMPAD_9 = 1 << 13,
-	kKEY_NUMPAD_0 = 1 << 14,
-	kKEY_NUMPAD_MINUS = 1 << 15,
-	kKEY_NUMPAD_PLUS = 1 << 16,
-	kKEY_NUMPAD_UNKNOWN = 0
-};
+	kKEY_NUMPAD_1 = 1 << 5, kKEY_NUMPAD_2 = 1 << 6, kKEY_NUMPAD_3 = 1 << 7,
+	kKEY_NUMPAD_4 = 1 << 8, kKEY_NUMPAD_5 = 1 << 9, kKEY_NUMPAD_6 = 1 << 10,
+	kKEY_NUMPAD_7 = 1 << 11, kKEY_NUMPAD_8 = 1 << 12, kKEY_NUMPAD_9 = 1 << 13,
+	kKEY_NUMPAD_0 = 1 << 14, kKEY_NUMPAD_MINUS = 1 << 15,
+	kKEY_NUMPAD_PLUS = 1 << 16, kKEY_NUMPAD_UNKNOWN = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
 	eInputKeyboardKeysNumpad, kun_ktk uint32_t);
 
-enum class eInputKeyboardKeysApplication : kun_ktk uint16_t
-{
-	kKEY_MENU = 1 << 1,
-	kKEY_LEFT_ALT = 1 << 2,
-	kKEY_RIGHT_ALT = 1 << 3,
-	kKEY_LEFT_SUPER = 1 << 4,
-	kKEY_RIGHT_SUPER = 1 << 5,
-	kKEY_APPLICATION_UNKNOWN = 0
-};
+enum class eInputKeyboardKeysApplication : kun_ktk uint16_t{kKEY_MENU = 1 << 1,
+	kKEY_LEFT_ALT = 1 << 2, kKEY_RIGHT_ALT = 1 << 3, kKEY_LEFT_SUPER = 1 << 4,
+	kKEY_RIGHT_SUPER = 1 << 5, kKEY_APPLICATION_UNKNOWN = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
 	eInputKeyboardKeysApplication, kun_ktk uint16_t);
 
-enum class eInputKeyboardKeysSystem : kun_ktk uint16_t
-{
-	kKEY_WINDOWS = 1 << 1,
-	kKEY_SYSTEM_UNKNOWN = 0
-};
+enum class eInputKeyboardKeysSystem : kun_ktk uint16_t{
+	kKEY_WINDOWS = 1 << 1, kKEY_SYSTEM_UNKNOWN = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
 	eInputKeyboardKeysSystem, kun_ktk uint16_t);
 
-enum class eInputKeyboardCursorControlKeys : kun_ktk uint16_t
-{
-	kKEY_ARROW_LEFT = 1 << 1,
-	kKEY_ARROW_UP = 1 << 2,
-	kKEY_ARROW_RIGHT = 1 << 3,
-	kKEY_ARROW_DOWN = 1 << 4,
-	kKEY_CURSOR_CONTROL_UNKNOWN = 0
-};
+enum class eInputKeyboardCursorControlKeys : kun_ktk uint16_t{
+	kKEY_ARROW_LEFT = 1 << 1, kKEY_ARROW_UP = 1 << 2, kKEY_ARROW_RIGHT = 1 << 3,
+	kKEY_ARROW_DOWN = 1 << 4, kKEY_CURSOR_CONTROL_UNKNOWN = 0};
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
 	eInputKeyboardCursorControlKeys, kun_ktk uint16_t);
@@ -1063,8 +953,10 @@ enum eInputPlatformBackend
 	kPlatformBackend_Unknown
 };
 
-static_assert(static_cast<kun_ktk uint32_t>(eInputKeyboardKeysEnter::kKEY_ENTER_NUMPAD) ==
-		static_cast<kun_ktk uint32_t>(eInputKeyboardKeysNumpad::kKEY_NUMPAD_ENTER) &&
+static_assert(
+	static_cast<kun_ktk uint32_t>(eInputKeyboardKeysEnter::kKEY_ENTER_NUMPAD) ==
+		static_cast<kun_ktk uint32_t>(
+			eInputKeyboardKeysNumpad::kKEY_NUMPAD_ENTER) &&
 	"must be equal otherwise the conflict exists");
 
 KOTEK_END_NAMESPACE_CORE

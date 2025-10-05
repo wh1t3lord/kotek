@@ -13,44 +13,44 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-constexpr const char* kConfigFileNameSystemInfo = "sys_info.json";
+constexpr const char* kConfigFileNameSystemInfo =
+	"sys_info.json";
 constexpr const char* kSysInfoFieldName_InitializeCallback =
 	"UserCallbackForGameLibrary_Initialize";
 constexpr const char* kSysInfoFieldName_ShutdownCallback =
 	"UserCallbackForGameLibrary_Shutdown";
 constexpr const char* kSysInfoFieldName_UpdateCallback =
 	"UserCallbackForGameLibrary_Update";
-constexpr const char* kSysInfoFieldName_UserLibraryName = "UserGameLibraryName";
+constexpr const char* kSysInfoFieldName_UserLibraryName =
+	"UserGameLibraryName";
 
-constexpr const char* kSysInfoFieldName_UpdateCallbackContainsLoop =
-	"UserCallbackForGameLibrary_Update_Contains_Loop";
-constexpr const char* kSysInfoFieldName_InitializeCallback_Render =
-	"UserCallbackForGameLibrary_Initialize_Render";
+constexpr const char*
+	kSysInfoFieldName_UpdateCallbackContainsLoop =
+		"UserCallbackForGameLibrary_Update_Contains_Loop";
+constexpr const char*
+	kSysInfoFieldName_InitializeCallback_Render =
+		"UserCallbackForGameLibrary_Initialize_Render";
 
-constexpr const char* kUserCallbackName_Initialize = "InitializeModule_Game";
-constexpr const char* kUserCallbackName_Shutdown = "ShutdownModule_Game";
-constexpr const char* kUserCallbackName_Update = "UpdateModule_Game";
+constexpr const char* kUserCallbackName_Initialize =
+	"InitializeModule_Game";
+constexpr const char* kUserCallbackName_Shutdown =
+	"ShutdownModule_Game";
+constexpr const char* kUserCallbackName_Update =
+	"UpdateModule_Game";
 constexpr const char* kUserCallbackName_Initialize_Render =
 	"InitializeModule_Render";
 
 class ktkFileSystem : public ktkIFileSystem
 {
 private:
-	struct ktkFileHandleImpl
-	{
-		kun_ktk size_t lookup_id;
-		kun_ktk size_t stream_total_steps;
-		kun_ktk size_t stream_current_step;
-		kun_ktk size_t stream_step_size;
-		kun_ktk kun_mt atomic<bool> is_in_use;
-		kun_ktk cfstream file;
-	};
-
 	struct file_id_t
 	{
+		kun_ktk uint32_t thread_id = decltype(thread_id)(-1);
 		kun_ktk uint32_t file_id[std::countr_zero(
-			static_cast<kun_ktk uint32_t>(eFileSystemType::kEndOfEnum))]{
-			kun_ktk uint32_t(-1), kun_ktk uint32_t(-1)};
+			static_cast<kun_ktk uint32_t>(
+				eFileSystemType::kEndOfEnum
+			)
+		)]{kun_ktk uint32_t(-1), kun_ktk uint32_t(-1)};
 	};
 
 public:
@@ -58,8 +58,10 @@ public:
 	~ktkFileSystem(void);
 
 	void Initialize(
-		eFileSystemPriorityType priority_by_filesystem, 
-		eFileSystemFeatureType features
+		eFileSystemPriorityType priority_by_filesystem,
+		eFileSystemFeatureType features,
+		kun_ktk uint32_t stream_buffer_length,
+		kun_ktk uint16_t simultaneously_opened_files_count
 	) override;
 
 	void Shutdown(void) override;
@@ -67,59 +69,150 @@ public:
 	/*
 	 * For Win32 returns without slash
 	 */
-	ktk_filesystem_path GetFolderByEnum(
-		eFolderIndex id) const noexcept override;
+	ktk_filesystem_path GetFolderByEnum(eFolderIndex id
+	) const noexcept override;
 
-	bool IsValidPath(const ktk_filesystem_path& path) const noexcept override;
-
-	bool Read_File(const ktk_filesystem_path& path_to_file,
-		kun_ktk ustring& output_result) const noexcept override;
-
-	template <kun_ktk size_t BytesCount>
-	bool Read_File(const ktk_filesystem_path& path_to_file,
-		ktk_vector<kun_ktk uint8_t, BytesCount>& output_result) const noexcept;
-
-	// todo: change order of arguments and make same as ustring version
-	bool Read_File(kun_ktk uint8_t*& p_buffer, size_t& length_of_buffer,
-		const kun_ktk kun_filesystem
-			static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>&
-				path_to_file) noexcept override;
-
-	bool Read_File(const ktk_filesystem_path& path_to_file, char*& p_buffer,
-		kun_ktk size_t& length_of_buffer) override;
-
-	ktkFileHandleType Begin_Stream(const ktk_filesystem_path& path_to_file,
-		size_t stream_step = KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE);
-
-	template <kun_ktk size_t BytesCount = KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE>
-	void Stream(const ktkFileHandleType file_handle,
-		ktk_vector<kun_ktk uint8_t, BytesCount>& vector);
-
-	void Stream(const ktkFileHandleType file_handle, kun_ktk uint8_t*& p_buffer,
-		kun_ktk size_t buffer_size);
-
-	void End_Stream(const ktkFileHandleType file_handle);
+	bool IsValidPath(const ktk_filesystem_path& path
+	) const noexcept override;
 
 	void Create_Directory(
-		const ktk_filesystem_path& path, eFolderVisibilityType type) override;
+		const ktk_filesystem_path& path,
+		eFolderVisibilityType type
+	) override;
+
+	bool Read_File(
+		const ktk_filesystem_path& path_to_file,
+		kun_ktk ustring& output_result,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto,
+		eFileSystemFeatureType feature =
+			eFileSystemFeatureType::kNone
+	) const noexcept override;
+
+	bool Read_File(
+		const ktk_filesystem_path& path_to_file,
+		kun_ktk uint8_t*& p_buffer,
+		kun_ktk size_t& length_of_buffer,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto,
+		eFileSystemFeatureType features =
+			eFileSystemFeatureType::kNone
+	) noexcept override;
+
+	bool Read_File(
+		const ktk_filesystem_path& path_to_file,
+		char*& p_buffer,
+		kun_ktk size_t& length_of_buffer,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto,
+		eFileSystemFeatureType features =
+			eFileSystemFeatureType::kNone
+	) override;
+
+	bool Write_File(
+		const ktk_filesystem_path& path_to_file,
+		kun_ktk ustring& input,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto,
+		eFileSystemFeatureType feature =
+			eFileSystemFeatureType::kNone
+	) noexcept override;
+
+	bool Write_File(
+		const ktk_filesystem_path& path_to_file,
+		const kun_ktk uint8_t* p_buffer,
+		kun_ktk size_t length_of_buffer,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto,
+		eFileSystemFeatureType featurs =
+			eFileSystemFeatureType::kNone
+	) noexcept override;
+
+	bool Write_File(
+		const ktk_filesystem_path& path_to_file,
+		const char* p_buffer,
+		kun_ktk size_t length_of_buffer,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto,
+		eFileSystemFeatureType features =
+			eFileSystemFeatureType::kNone
+	) noexcept override;
+
+	/* SINGLE SHOT READ&WRITE */
+
+	/* STREAMING */
+
+	ktkFileHandleType Begin_Stream(
+		const ktk_filesystem_path& path_to_file,
+		kun_ktk uint32_t override_stream_reading_length = 0,
+		bool force_be_called_from_one_thread_only = false,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto,
+		eFileSystemFeatureType features =
+			eFileSystemFeatureType::kNone,
+	) noexcept override;
+
+	bool Write_Stream(
+		ktkFileHandleType file_handle, kun_ktk ustring& input
+	) noexcept override;
+
+	bool Write_Stream(
+		ktkFileHandleType file_handle,
+		const unsigned char* p_buffer,
+		kun_ktk size_t override_write_streaming_length = 0
+	) noexcept override;
+
+	bool Read_Stream(
+		ktkFileHandleType file_handle,
+		unsigned char* p_buffer,
+		kun_ktk size_t& length_of_streaming_buffer
+	) noexcept override;
+
+	kun_ktk uint32_t Get_DefaultStreamingBufferLength(void
+	) const noexcept override;
+
+	kun_ktk uint32_t Get_StreamingBufferLength(
+		ktkFileHandleType file_handle
+	) const noexcept override;
+
+	kun_ktk size_t Get_RemaningStreamsCount(
+		ktkFileHandleType file_handle
+	) const noexcept override;
+
+	kun_ktk size_t Get_TotalStreamsCount(
+		ktkFileHandleType file_handle
+	) const noexcept override;
+
+	bool End_Stream(ktkFileHandleType file_handle
+	) noexcept override;
+
+	/* STREAMING */
 
 private:
-	bool AddGamedataFolderToStorage(const ktk_filesystem_path& path,
-		eFolderIndex id, const kun_ktk cstring& folder_name) noexcept;
+	bool AddGamedataFolderToStorage(
+		const ktk_filesystem_path& path,
+		eFolderIndex id,
+		const kun_ktk cstring& folder_name
+	) noexcept;
 
 	void ValidateFolders(void) noexcept;
 
 	void CreateConfigFiles(void) noexcept;
 
-	bool CreateDirectoryImpl(const ktk_filesystem_path& path) const noexcept;
+	bool CreateDirectoryImpl(const ktk_filesystem_path& path
+	) const noexcept;
 
 	bool Is_AnyAvailableFiles(void) const noexcept;
 
 	ktkFileHandleType Get_AvailableFile(void) const;
 
 private:
-	ktk_vector<int, KOTEK_DEF_FILESYSTEM_MAX_OPENED_FILES> m_file_tracker;
-	kun_ktk kun_mt atomic<size_t> m_current_in_use_files;
+	//	ktk_vector<int, KOTEK_DEF_FILESYSTEM_MAX_OPENED_FILES>
+	// m_file_tracker; 	kun_ktk kun_mt atomic<size_t>
+	// m_current_in_use_files;
+
+	kun_ktk kun_mt atomic<kun_ktk uint16_t>
+		m_current_opened_files;
 
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
 	ktkFileSystem_Native m_fs_native;
@@ -133,25 +226,12 @@ private:
 	ktkFileSystem_VFM m_fs_vfm;
 #endif
 
-	ktk_unordered_map<ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>, file_id_t,
+	ktk_unordered_map<
+		ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>,
+		file_id_t,
 		KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT>
 		m_paths_storage;
 };
-
-template <kun_ktk size_t BytesCount /*= KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE*/>
-void ktkFileSystem::Stream(const ktkFileHandleType file_handle,
-	ktk_vector<kun_ktk uint8_t, BytesCount>& vector)
-{
-	this->Stream(file_handle, vector.data(), BytesCount);
-}
-
-template <kun_ktk size_t BytesCount>
-bool ktkFileSystem::Read_File(const ktk_filesystem_path& path_to_file,
-	ktk_vector<kun_ktk uint8_t, BytesCount>& output_result) const noexcept
-{
-	kun_ktk size_t size = BytesCount;
-	return this->Read_File(output_result.data(), size, path_to_file);
-}
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK
