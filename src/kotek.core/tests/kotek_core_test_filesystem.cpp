@@ -1397,6 +1397,11 @@ TEST(Filesystem, test_container_filesystem_static_path_iterator_for_loop)
 
 TEST(Filesystem, test_container_filesystem_static_path_iterator_constructor) {}
 
+TEST(FileSystem, test_virtualfilemapper_manager_default_constructor) 
+{
+	ktkFileSystem_VFM vfm;
+}
+
 TEST(FileSystem, test_virtualfilemapper_manager_init_and_shutdown)
 {
 	ktkFileSystem_VFM vfm;
@@ -1440,19 +1445,81 @@ TEST(FileSystem, test_virtualfilemapper_manager_mapping)
 		{
 			current_path /= "tvfmmm.dat";
 
-			kun_ktk fstream file(current_path.c_str());
+			FILE* p_file = fopen(current_path.c_str(), "w+");
 			KOTEK_ASSERT(
-				file.good(), "failed to create file by path: {}", current_path);
+				p_file, "failed to create file by path: {}", current_path);
 
-			file << "test";
+			fwrite("test", sizeof("test"), 1, p_file);
+			fflush(p_file);
 
 			ktkFileHandleType handle_id = 0;
 
-			vfm.MapFile(handle_id, file, current_path.c_str());
+			kun_ktk uint32_t file_id = vfm.MapFile(p_file);
 
-			file.close();
+			KOTEK_ASSERT(file_id != decltype(file_id)(-1), "failed to MapFile");
 
-			vfm.UnMapFile(current_path.c_str());
+			if (p_file)
+				fclose(p_file);
+
+			vfm.UnMapFile(file_id);
+		}
+	}
+
+	vfm.Shutdown();
+}
+
+TEST(FileSystem, test_virtualfilemapper_manager_shutdown) 
+{
+	ktkFileSystem_VFM vfm;
+	vfm.Initialize();
+
+	// faking handles in order to simulate working without full instancing of
+	// filesystem
+
+	ktk_filesystem_path current_path = kun_ktk kun_filesystem current_path();
+
+	current_path /= kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
+		eFolderIndex::kFolderIndex_DataUser);
+
+	bool folder_exists = kun_ktk kun_filesystem exists(current_path);
+
+	KOTEK_ASSERT(folder_exists, "folder {} must exist!",
+		kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
+			eFolderIndex::kFolderIndex_DataUser));
+
+	if (folder_exists)
+	{
+		current_path /=
+			kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser_Tests);
+
+		folder_exists = kun_ktk kun_filesystem exists(current_path);
+
+		KOTEK_ASSERT(folder_exists, "folder {} must exist!",
+			kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser_Tests));
+
+		if (folder_exists)
+		{
+			current_path /= "tvfmms.dat";
+
+			FILE* p_file = fopen(current_path.c_str(), "w+");
+			KOTEK_ASSERT(
+				p_file, "failed to create file by path: {}", current_path);
+
+			fwrite("test", sizeof("test"), 1, p_file);
+			fflush(p_file);
+
+			ktkFileHandleType handle_id = 0;
+
+			kun_ktk uint32_t file_id = vfm.MapFile(p_file);
+
+			KOTEK_ASSERT(file_id != decltype(file_id)(-1), "failed to MapFile");
+
+			if (p_file)
+				fclose(p_file);
+
+		//	vfm.UnMapFile(file_id);
 		}
 	}
 

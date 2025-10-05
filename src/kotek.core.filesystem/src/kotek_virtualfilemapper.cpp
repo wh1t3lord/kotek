@@ -12,10 +12,9 @@ void ktkFileSystem_VFM::Initialize() {}
 void ktkFileSystem_VFM::Shutdown()
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	for (auto& pair : this->m_mappings)
-	{
-		auto& handle = pair.second;
 
+	for (auto& handle : this->m_mappings)
+	{
 		KOTEK_ASSERT(handle.p_fmh,
 			"must be valid otherwise it means that you didn't update data "
 			"properly from this cache (m_mappings)");
@@ -26,6 +25,15 @@ void ktkFileSystem_VFM::Shutdown()
 
 		if (handle.p_data)
 		{
+	#ifdef KOTEK_DEBUG
+			char buf[32];
+			constexpr unsigned char _kBufSize = sizeof(buf) / sizeof(buf[0]);
+			std::memcpy(buf, handle.p_data,
+				std::min(handle.file_size,
+					static_cast<decltype(handle.file_size)>(_kBufSize)));
+
+			KOTEK_MESSAGE("unmapped file: {} ...", buf);
+	#endif
 			UnmapViewOfFile(handle.p_data);
 		}
 
@@ -33,10 +41,6 @@ void ktkFileSystem_VFM::Shutdown()
 		{
 			CloseHandle(handle.p_fmh);
 		}
-
-	#ifdef KOTEK_DEBUG
-		KOTEK_MESSAGE("unmapped file: {}", pair.first);
-	#endif
 	}
 
 	this->m_mappings.clear();
@@ -45,19 +49,17 @@ void ktkFileSystem_VFM::Shutdown()
 #endif
 }
 
-bool ktkFileSystem_VFM::MapFile(ktkFileHandleType file_id,
-	kun_ktk fstream& file, const ktk_cstring_view& path_to_file)
+kun_ktk uint32_t ktkFileSystem_VFM::MapFile(FILE* p_file)
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	bool status = false;
+	kun_ktk uint32_t status = decltype(status)(-1);
 
-	if (this->m_mappings.find(path_to_file.data()) != this->m_mappings.end())
+	if (p_file == nullptr)
 		return status;
 
-	KOTEK_ASSERT(
-		path_to_file.empty() == false, "don't pass empty pathes, can't be!");
+	KOTEK_ASSERT(p_file, "must be valid");
 
-	int fd = _fileno(reinterpret_cast<FILE*>(file.rdbuf()));
+	int fd = _fileno(p_file);
 	KOTEK_ASSERT(fd != -1, "failed to get file descriptor!");
 
 	if (fd == -1)
@@ -92,8 +94,21 @@ bool ktkFileSystem_VFM::MapFile(ktkFileHandleType file_id,
 	HANDLE hMap = CreateFileMapping(hFile, NULL, PAGE_READONLY,
 		liFileSize.HighPart, liFileSize.LowPart, NULL);
 
+	#ifdef KOTEK_DEBUG
+	ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH> szPathToFile;
+
+	DWORD dwRet = GetFinalPathNameByHandleA(hFile, szPathToFile.begin(),
+		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH, FILE_NAME_NORMALIZED);
+
+	KOTEK_ASSERT(dwRet > 0 && dwRet < KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH,
+		"failed to obtain file path from file handle!");
+
 	KOTEK_ASSERT(hMap != INVALID_HANDLE_VALUE && hMap != nullptr,
-		"failed to CreateFileMapping for {}", path_to_file);
+		"failed to CreateFileMapping for {}", szPathToFile);
+	#else
+	KOTEK_ASSERT(hMap != INVALID_HANDLE_VALUE && hMap != nullptr,
+		"failed to CreateFileMapping!");
+	#endif
 
 	if (hMap == INVALID_HANDLE_VALUE || !hMap)
 	{
@@ -104,7 +119,7 @@ bool ktkFileSystem_VFM::MapFile(ktkFileHandleType file_id,
 
 	void* pMapped = MapViewOfFile(hMap, FILE_MAP_READ, 0, 0, 0);
 
-	KOTEK_ASSERT(pMapped, "failed to map the file {}!", path_to_file);
+	KOTEK_ASSERT(pMapped, "failed to map the file!");
 
 	if (!pMapped)
 	{
@@ -112,12 +127,15 @@ bool ktkFileSystem_VFM::MapFile(ktkFileHandleType file_id,
 		return status;
 	}
 
-	vfm_handle_t& data = this->m_mappings[path_to_file.data()];
+	vfm_handle_t data;
 
-	data.file_id = file_id;
 	data.p_data = pMapped;
 	data.p_fmh = hMap;
-	status = true;
+	data.file_size = liFileSize.QuadPart;
+
+	this->m_mappings.emplace_back(std::move(data));
+
+	status = this->m_mappings.size() - 1;
 
 	return status;
 #else
@@ -125,30 +143,36 @@ bool ktkFileSystem_VFM::MapFile(ktkFileHandleType file_id,
 #endif
 }
 
-void ktkFileSystem_VFM::UnMapFile(const ktk_cstring_view& path_to_file)
+void ktkFileSystem_VFM::UnMapFile(kun_ktk uint32_t file_id)
 {
-	if (this->m_mappings.find(path_to_file.data()) != this->m_mappings.end())
+	KOTEK_ASSERT(file_id < this->m_mappings.max_size(), "out of range!");
+
+	if (file_id < this->m_mappings.max_size())
 	{
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-		vfm_handle_t& data = this->m_mappings[path_to_file.data()];
+		vfm_handle_t& data = this->m_mappings[file_id];
 
 		KOTEK_ASSERT(data.p_data, "must be valid!");
 		KOTEK_ASSERT(data.p_fmh, "must be valid!");
 
 		if (data.p_data)
 		{
-			UnmapViewOfFile(data.p_data);
+			BOOL nStatusUnmapViewOfFile = UnmapViewOfFile(data.p_data);
+			KOTEK_ASSERT(nStatusUnmapViewOfFile != 0,
+				"UnmapViewOfFile = last error: {}", GetLastError());
 		}
 
 		if (data.p_fmh)
 		{
-			CloseHandle(data.p_fmh);
+			BOOL nStatusCloseHandle = CloseHandle(data.p_fmh);
+			KOTEK_ASSERT(nStatusCloseHandle != 0,
+				"CloseHandle = last error: {}", GetLastError());
 		}
 
-		this->m_mappings.erase(path_to_file.data());
+		this->m_mappings.erase(this->m_mappings.begin() + file_id);
 
 	#ifdef KOTEK_DEBUG
-		KOTEK_MESSAGE("unmapped file: {}", path_to_file);
+		KOTEK_MESSAGE("unmapped file: {}", file_id);
 	#endif
 
 #else
