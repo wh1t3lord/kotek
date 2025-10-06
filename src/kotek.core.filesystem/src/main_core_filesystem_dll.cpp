@@ -17,7 +17,7 @@ bool InitializeModule_Core_FileSystem(ktkMainManager* p_manager)
 	InitializeModule_Core_FileSystem_File_Text(p_manager);
 
 	ktkFileSystem* p_instance = new ktkFileSystem();
-	p_instance->Initialize();
+	p_instance->Initialize(p_manager->Get_EngineConfig());
 
 	p_manager->Set_FileSystem(p_instance);
 

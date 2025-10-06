@@ -129,12 +129,6 @@ public:
 
 	void Shutdown(void) override;
 
-	/*
-	 * For Win32 returns without slash
-	 */
-	ktk_filesystem_path Get_FolderByEnum(eFolderIndex id
-	) const noexcept override;
-
 	bool Is_ValidPath(const ktk_filesystem_path& path
 	) const noexcept override;
 
@@ -254,26 +248,23 @@ public:
 	/* STREAMING */
 
 private:
-	bool Add_GamedataFolderToStorage(
-		const ktk_filesystem_path& path,
-		eFolderIndex id,
-		const ktk_cstring_view& folder_name
-	) noexcept;
-
 	void Validate_Folders(void) noexcept;
+
+	void Validate_Folder(const ktk_filesystem_path& path);
 
 	void Create_ConfigFiles(void) noexcept;
 
-	bool Create_DirectoryImpl(const ktk_filesystem_path& path
+	bool Create_Directory(const ktk_filesystem_path& path
 	) const noexcept;
 
-	bool Is_AnyAvailableFiles(void) const noexcept;
-
-	ktkFileHandleType Get_AvailableFile(void) const;
+	void
+	Initialize_FrameworkConfig(ktkIFrameworkConfig* p_config);
 
 private:
 	kun_ktk kun_mt atomic<kun_ktk uint16_t>
 		m_current_opened_files;
+
+	ktk_filesystem_path m_root_path;
 
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
 	ktkFileSystem_Native m_fs_native;

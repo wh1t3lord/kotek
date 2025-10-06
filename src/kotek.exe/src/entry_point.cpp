@@ -22,10 +22,10 @@
  */
 int main(int argc, char** argv)
 {
-	Kotek::Core::ktkMainManager main_manager(argc, argv);
-	Kotek::Engine::InitializeEngine(&main_manager);
-	Kotek::Engine::ExecuteEngine(&main_manager);
-	Kotek::Engine::ShutdownEngine(&main_manager);
+	kun_kotek kun_core ktkMainManager main_manager(argc, argv);
+	kun_kotek Engine::InitializeEngine(&main_manager);
+	kun_kotek Engine::ExecuteEngine(&main_manager);
+	kun_kotek Engine::ShutdownEngine(&main_manager);
 
 	return 0;
 }

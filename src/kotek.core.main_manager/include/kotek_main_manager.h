@@ -47,9 +47,6 @@ public:
 	ktkIGameManager* GetGameManager(void) const noexcept;
 	void SetGameManager(ktkIGameManager* p_game_manager) noexcept;
 
-	ktkIResourceManager* GetResourceManager(void) const noexcept;
-	void SetResourceManager(ktkIResourceManager* p_manager) noexcept;
-
 	ktkIRenderDevice* getRenderDevice(void) const noexcept;
 
 	void setRenderDevice(ktkIRenderDevice* pointer) noexcept;
@@ -97,7 +94,6 @@ private:
 	ktkIFrameworkConfig* m_p_manager_config;
 	ktkIRenderer* m_p_manager_renderer;
 	ktkIGameManager* m_p_game_manager;
-	ktkIResourceManager* m_p_resource_manager;
 	ktkIFileSystem* m_p_manager_filesystem;
 	ktkIInput* m_p_manager_input;
 	ktkIRenderDevice* m_p_manager_render_device;

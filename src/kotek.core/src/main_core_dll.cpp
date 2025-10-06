@@ -34,8 +34,8 @@ void RegisterAllTests(void)
 
 bool InitializeModule_Core(ktkMainManager* p_manager)
 {
+	InitializeModule_Core_Engine_Config(p_manager);
 	InitializeModule_Core_Memory(p_manager);
-	InitializeModule_Core_Resource_Manager(p_manager);
 	InitializeModule_Core_Enum(p_manager);
 	InitializeModule_Core_API(p_manager);
 	InitializeModule_Core_Math(p_manager);
@@ -44,7 +44,6 @@ bool InitializeModule_Core(ktkMainManager* p_manager)
 	InitializeModule_Core_Defines(p_manager);
 	InitializeModule_Core_Console(p_manager);
 	InitializeModule_Core_Containers(p_manager);
-	InitializeModule_Core_Engine_Config(p_manager);
 	InitializeModule_Core_FileSystem(p_manager);
 	InitializeModule_Core_Log(p_manager);
 	InitializeModule_Core_Format(p_manager);
@@ -100,7 +99,6 @@ bool ShutdownModule_Core(ktkMainManager* p_manager)
 	ShutdownModule_Core_ECS(p_manager);
 	ShutdownModule_Core_Input(p_manager);
 	ShutdownModule_Core_Utility(p_manager);
-	ShutdownModule_Core_Resource_Manager(p_manager);
 	ShutdownModule_Core_Engine_Config(p_manager);
 
 	ShutdownModule_Core_Main_Manager(p_manager);

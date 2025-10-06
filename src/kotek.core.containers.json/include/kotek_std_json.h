@@ -10,17 +10,47 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+template <kun_ktk size_t _MemorySize, bool _Realloc>
 class ktkJson
 {
 public:
-	ktkJson(void);
-	ktkJson(const ktk::json::object& text);
-	ktkJson(const ktkJson& instance);
+	ktkJson(void) : m_data{} {}
+	ktkJson(const ktk::json::object& text) : m_data{text} {}
+	ktkJson(const ktkJson& instance) : m_data{instance} {}
 
-	ktkJson& operator=(const ktkJson& instance);
-	ktkJson& operator=(const ktk::json::object& instance);
+	template <
+		kun_ktk size_t _MemorySize2,
+		bool _Realloc2,
+		typename = std::enable_if_t<
+			(_MemorySize >= _MemorySize2 || _Realloc == true)>>
+	ktkJson(const ktkJson<_MemorySize2, _Realloc2>& instance) :
+		m_data{instance}
+	{
+	}
 
-	~ktkJson(void);
+	ktkJson& operator=(const ktkJson& instance)
+	{
+		this->m_data.json = instance.m_data.json;
+		return *this;
+	}
+
+	template <
+		kun_ktk size_t _MS2,
+		bool _Realloc2,
+		typename = std::enable_if_t<(_MemorySize >= _MS2 || _Realloc == true)>>
+	ktkJson& operator=(const ktkJson<_MS2, _Realloc2>& instance)
+	{
+		this->m_data.json = instance.Get_Object();
+		return *this;
+	}
+
+	ktkJson& operator=(const ktk::json::object& instance)
+	{
+		this->m_data.json = instance;
+		return *this;
+	}
+
+	~ktkJson(void) {}
 
 	/// <summary>
 	/// If you want to obtain string you must use GetString
@@ -44,7 +74,7 @@ public:
 			return result;
 		}
 
-		if (this->m_json.empty())
+		if (this->m_data.json.empty())
 		{
 			KOTEK_MESSAGE_WARNING(
 				"you didn't load file or your file is empty"
@@ -52,8 +82,8 @@ public:
 			return result;
 		}
 
-		if (this->m_json.find(key_name.c_str()) ==
-		    this->m_json.end())
+		if (this->m_data.json.find(key_name.c_str()) ==
+		    this->m_data.json.end())
 		{
 			KOTEK_MESSAGE_WARNING(
 				"your file doesn't contain key: {}", key_name
@@ -62,7 +92,7 @@ public:
 			return result;
 		}
 
-		const auto& json_value = this->m_json.at(key_name);
+		const auto& json_value = this->m_data.json.at(key_name);
 
 		result = ktk::json::value_to<ReturnType>(json_value);
 #endif
@@ -70,7 +100,10 @@ public:
 		return result;
 	}
 
-	const ktk::json::object& Get_Object(void) const noexcept;
+	const ktk::json::object& Get_Object(void) const noexcept
+	{
+		return m_data.json;
+	}
 
 	// TODO: standartize this thing for any type what the kotek
 	// has, containers, math structures, graphs and etc
@@ -83,14 +116,14 @@ public:
 		DataType data
 	) noexcept
 	{
-		this->m_json[field_name.c_str()] =
+		this->m_data.json[field_name.c_str()] =
 			ktk::json::value_from(data);
 	}
 
 	ktk::json::value& operator[](ktk::json::string_view key
 	) noexcept
 	{
-		return this->m_json[key];
+		return this->m_data.json[key];
 	}
 
 	bool Serialize(kun_ktk cstring& result) const noexcept
@@ -98,23 +131,108 @@ public:
 #ifdef KOTEK_USE_BOOST_LIBRARY
 		bool status = false;
 
-		if (this->m_json.empty())
+		if (this->m_data.json.empty())
 			return status;
 
-		result = ktk::json::serialize(this->m_json);
+		result = ktk::json::serialize(this->m_data.json);
 
 		status = true;
-	
+
 		return status;
 #else
 		bool status = false;
-		#error implement this!
+	#error implement this!
 		return status;
 #endif
 	}
 
+	constexpr kun_ktk size_t Get_PreallocateMemorySize(void
+	) const noexcept
+	{
+		return _MemorySize;
+	}
+
+	constexpr bool Is_ReallocationSupported(void) const noexcept
+	{
+		return _Realloc;
+	}
+
 private:
-	ktk::json::object m_json;
+	struct mem_layout_no_embedded_t
+	{
+		mem_layout_no_embedded_t() {}
+
+		mem_layout_no_embedded_t(const ktk::json::object& obj) :
+			json{obj}
+		{
+		}
+
+		mem_layout_no_embedded_t(const ktkJson& instance) :
+			json{instance.m_data.json}
+		{
+		}
+
+		ktk::json::object json;
+	};
+
+	struct mem_layout_embedded_t
+	{
+		mem_layout_embedded_t() :
+			mem{}, resource{mem},
+			json(ktk::json::storage_ptr(&resource))
+		{
+		}
+
+		mem_layout_embedded_t(const ktk::json::object& obj) :
+			mem{}, resource{mem},
+			json(obj, ktk::json::storage_ptr(&resource))
+		{
+		}
+
+		mem_layout_embedded_t(const ktkJson& instance) :
+			mem{}, resource{mem},
+			json(
+				instance.m_data.json,
+				ktk::json::storage_ptr(&resource)
+			)
+		{
+		}
+
+		template <
+			kun_ktk size_t _MemorySize2,
+			bool _Realloc2,
+			typename = std::enable_if_t<
+				(_MemorySize >= _MemorySize2 || _Realloc == true
+		        )>>
+		mem_layout_embedded_t(
+			const ktkJson<_MemorySize2, _Realloc2>& instance
+		) :
+			mem{}, resource{mem},
+			json{
+				instance.Get_Object(),
+				ktk::json::storage_ptr(&resource)
+			}
+		{
+		}
+
+		unsigned char mem[_MemorySize];
+
+		using resource_t = std::conditional_t<
+			_Realloc == true,
+			ktk::json::monotonic_resource,
+			ktk::json::static_resource>;
+
+		resource_t resource;
+
+		ktk::json::object json;
+	};
+
+	using mem_layout_t = std::conditional_t<
+		_MemorySize == 0,
+		mem_layout_no_embedded_t,
+		mem_layout_embedded_t>;
+
+	mem_layout_t m_data;
 };
 
 KOTEK_END_NAMESPACE_CORE

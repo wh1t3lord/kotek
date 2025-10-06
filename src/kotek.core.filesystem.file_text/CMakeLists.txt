@@ -6,14 +6,6 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_library(${PROJECT_NAME} STATIC
-	"include/kotek_loader_file_text_json.h"
-	"src/kotek_loader_file_text_json.cpp"
-	"include/kotek_loader_file_text.h"
-	"src/kotek_loader_file_text.cpp"
-	"include/kotek_saver_file_text.h"
-	"src/kotek_saver_file_text.cpp"
-	"include/kotek_saver_file_text_json.h"
-	"src/kotek_saver_file_text_json.cpp"
 	"include/kotek_file_text.h"
 	"src/kotek_file_text.cpp"
 	"include/kotek_core_filesystem_file_text.h"

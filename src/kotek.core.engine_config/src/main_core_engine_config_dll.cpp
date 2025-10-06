@@ -21,6 +21,9 @@ bool InitializeModule_Core_Engine_Config(
 	ktkEngineConfig* p_instance = new ktkEngineConfig();
 	p_instance->Initialize();
 
+	p_instance->SetARGC(p_manager->Get_ARGC());
+	p_instance->SetARGV(p_manager->Get_ARGV());
+
 	auto renderer_type =
 		eEngineFeatureRenderer::KOTEK_USE_STARTUP_RENDERER;
 	auto renderer_vendor = eEngineFeatureRendererVendor::
