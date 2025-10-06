@@ -214,7 +214,7 @@ bool ktkFileSystem::Read_File(const ktk_filesystem_path& path_to_file,
 	return result;
 }
 
-void ktkFileSystem::Initialize(void)
+void ktkFileSystem::Initialize(ktkIFrameworkConfig* p_config)
 {
 #ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
 	KOTEK_ASSERT(kun_ktk filesystem::current_path().u8string().size() <=

@@ -44,6 +44,7 @@ bool InitializeModule_Core(ktkMainManager* p_manager)
 	InitializeModule_Core_Defines(p_manager);
 	InitializeModule_Core_Console(p_manager);
 	InitializeModule_Core_Containers(p_manager);
+	InitializeModule_Core_Engine_Config(p_manager);
 	InitializeModule_Core_FileSystem(p_manager);
 	InitializeModule_Core_Log(p_manager);
 	InitializeModule_Core_Format(p_manager);
@@ -53,7 +54,6 @@ bool InitializeModule_Core(ktkMainManager* p_manager)
 	InitializeModule_Core_Utility(p_manager);
 	InitializeModule_Core_ECS(p_manager);
 	InitializeModule_Core_Input(p_manager);
-	InitializeModule_Core_Engine_Config(p_manager);
 	InitializeModule_Core_Main_Manager(p_manager);
 
 	RegisterCommands(p_manager);
@@ -76,7 +76,7 @@ bool DeserializeModule_Core(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	DeserializeModule_Core_Engine_Config(p_manager);
+	//DeserializeModule_Core_Engine_Config(p_manager);
 
 	return true;
 }

@@ -38,6 +38,7 @@ class ktkIRenderResourceManager;
 class ktkIRenderer;
 class ktkProfiler;
 class ktkConsole;
+class ktkIFrameworkConfig;
 KOTEK_END_NAMESPACE_CORE
 
 // TODO: replace namespace to
@@ -229,7 +230,7 @@ eFileSystemFeatureType features,
 kun_ktk uint32_t stream_buffer_length,
 kun_ktk uint16_t simultaneously_opened_files_count
 */
-	virtual void Initialize() = 0;
+	virtual void Initialize(ktkIFrameworkConfig* p_config) = 0;
 
 	virtual void Shutdown(void) = 0;
 	virtual bool Is_ValidPath(const ktk_filesystem_path& path
@@ -338,10 +339,12 @@ kun_ktk uint16_t simultaneously_opened_files_count
 		const ktk_filesystem_path& path_to_file,
 		kun_ktk uint32_t override_stream_reading_length = 0,
 		bool force_be_called_from_one_thread_only = false,
+		eFileSystemStreamingType streaming_type =
+			eFileSystemStreamingType::kAuto,
 		eFileSystemPriorityType priority =
 			eFileSystemPriorityType::kAuto,
 		eFileSystemFeatureType features =
-			eFileSystemFeatureType::kNone,
+			eFileSystemFeatureType::kNone
 	) noexcept = 0;
 
 	virtual bool Write_Stream(
@@ -1157,7 +1160,7 @@ class ktkIFrameworkConfig
 public:
 	virtual ~ktkIFrameworkConfig(void) {}
 
-	virtual void Initialize(void) = 0;
+	virtual void Initialize() = 0;
 	virtual void Shutdown(void) = 0;
 
 	virtual bool IsFeatureEnabled(eEngineFeature id
@@ -1306,6 +1309,39 @@ public:
 	Set_UserLibrary(const ktk_filesystem_path& path_to_library
 	) noexcept = 0;
 	virtual void* Get_UserLibrary(void) noexcept = 0;
+	
+	virtual void Set_UserLibrary_Name(
+		const ktk_cstring<
+			KOTEK_DEF_USER_ENGINE_LIBRARY_NAME_LENGTH>& name
+	) = 0;
+
+	virtual const char* Get_UserLibrary_Name(void
+	) const noexcept = 0;
+
+	virtual void Set_FS_PriorityList(const kun_ktk uint8_t (&arr
+	)[static_cast<kun_ktk uint8_t>(
+		eFileSystemPriorityType::kEndOfEnum
+	)]) = 0;
+
+	virtual const kun_ktk uint8_t* Get_FS_PriorityList(void
+	) const noexcept = 0;
+	virtual kun_ktk uint8_t Get_FS_PriorityListSize(void
+	) const noexcept = 0;
+	virtual eFileSystemPriorityType Get_FS_MainPriority(void
+	) const noexcept;
+	virtual void Set_FS_FeaturesFlag(kun_ktk uint16_t features
+	) = 0;
+	virtual kun_ktk uint16_t Get_FS_FeaturesFlag(void
+	) const noexcept = 0;
+	virtual void Set_UserLibrary_CallbackName(
+		eUserEngineLibraryCallbacks callback_id,
+		const ktk_cstring<
+			KOTEK_DEF_USER_ENGINE_LIBRARY_CALLBACK_NAME_LENGTH>&
+			name
+	) = 0;
+	virtual const char* Get_UserLibrary_CallbackName(
+		eUserEngineLibraryCallbacks callback_id
+	) const noexcept = 0;
 };
 
 class ktkIComponentAllocator

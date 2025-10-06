@@ -3,28 +3,10 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkFileText::ktkFileText(void) {}
-
-ktkFileText::ktkFileText(const ktkFileText& instance) : m_json(instance.m_json)
-{
-}
-
-ktkFileText::ktkFileText(const ktk::cstring& file_name) : m_file_name(file_name)
-{
-	this->m_file_name += kFormatFile_Text;
-}
-
-ktkFileText& ktkFileText::operator=(const ktkFileText& instance)
-{
-	this->m_json = instance.m_json;
-	return *this;
-}
-
-ktkFileText::~ktkFileText(void) {}
-
 /* TODO: implement separated loader and saver classes
-bool ktkFileText::Load(
-    Core::ktkMainManager& main_manager, const ktk::ustring& path)
+bool ktkResourceText::Load(
+    Core::ktkMainManager& main_manager, const ktk::ustring&
+path)
 {
     if (path.empty())
     {
@@ -32,7 +14,8 @@ bool ktkFileText::Load(
         return false;
     }
 
-    if (main_manager.GetFileSystem()->IsValidPath(path) == false)
+    if (main_manager.GetFileSystem()->IsValidPath(path) ==
+false)
     {
         KOTEK_MESSAGE("you path is invalid and doesn't exist");
         return false;
@@ -58,7 +41,8 @@ bool ktkFileText::Load(
         options.allow_invalid_utf8 = true;
         options.allow_trailing_commas = false;
 
-        ktk::json::parser parser(ktk::json::storage_ptr(), options);
+        ktk::json::parser parser(ktk::json::storage_ptr(),
+options);
 
         ktk::json::error_code code;
 
@@ -77,7 +61,8 @@ bool ktkFileText::Load(
             ktk::json::value data = parser.release();
 
             KOTEK_ASSERT(data.is_object(),
-                "your file must be object not a some code of json");
+                "your file must be object not a some code of
+json");
 
             this->m_json = data.as_object();
 
@@ -98,44 +83,47 @@ bool ktkFileText::Load(
     return true;
 }
 
-bool ktkFileText::Save(Core::ktkMainManager& main_manager,
+bool ktkResourceText::Save(Core::ktkMainManager& main_manager,
     const ktk::ustring& full_path_to_folder,
     const ktk::ustring& full_path_to_file, bool is_format)
 {
-    return this->Save(main_manager.GetFileSystem(), full_path_to_folder,
-        full_path_to_file, is_format);
+    return this->Save(main_manager.GetFileSystem(),
+full_path_to_folder, full_path_to_file, is_format);
 }
 
-bool ktkFileText::Save(
-    Core::ktkMainManager& main_manager, const ktk::ustring& path)
+bool ktkResourceText::Save(
+    Core::ktkMainManager& main_manager, const ktk::ustring&
+path)
 {
     return this->Save(main_manager.GetFileSystem(), path);
 }
 
-bool ktkFileText::Save(Core::ktkFileTextSystem* p_file_system,
-    const ktk::ustring& full_path_to_folder,
-    const ktk::ustring& full_path_to_file, bool is_format)
+bool ktkResourceText::Save(Core::ktkResourceTextSystem*
+p_file_system, const ktk::ustring& full_path_to_folder, const
+ktk::ustring& full_path_to_file, bool is_format)
 {
     KOTEK_ASSERT(
-        p_file_system, "you passed an invalid file system manager");
+        p_file_system, "you passed an invalid file system
+manager");
 
     if (full_path_to_file.empty())
     {
-        KOTEK_ASSERT(false, "invalid path can't write any data");
-        return false;
+        KOTEK_ASSERT(false, "invalid path can't write any
+data"); return false;
     }
 
-    if (p_file_system->IsValidPath(full_path_to_folder) == false)
+    if (p_file_system->IsValidPath(full_path_to_folder) ==
+false)
     {
-        KOTEK_ASSERT(false, "invalid path can't create output file");
-        return false;
+        KOTEK_ASSERT(false, "invalid path can't create output
+file"); return false;
     }
 
 #ifdef KOTEK_PLATFORM_WINDOWS
-    ktk::ofstream output_file(full_path_to_file.get_as_legacy().c_str());
-#elif defined(KOTEK_PLATFORM_LINUX)
-    KOTEK_ASSERT(false, "not implemented");
-    ktk::string_legacy temp_path_output =
+    ktk::ofstream
+output_file(full_path_to_file.get_as_legacy().c_str()); #elif
+defined(KOTEK_PLATFORM_LINUX) KOTEK_ASSERT(false, "not
+implemented"); ktk::string_legacy temp_path_output =
         ktk::cast::to_legacy_string(path);
     ktk::ofstream output_file(temp_path_output.c_str());
 #endif
@@ -146,7 +134,8 @@ bool ktkFileText::Save(Core::ktkFileTextSystem* p_file_system,
     }
     else
     {
-        this->PrettyWrite(output_file, this->m_json.GetObject());
+        this->PrettyWrite(output_file,
+this->m_json.GetObject());
     }
 
     output_file.close();
@@ -159,8 +148,9 @@ bool ktkFileText::Save(Core::ktkFileTextSystem* p_file_system,
     return true;
 }
 
-bool ktkFileText::Save(
-    Core::ktkFileSystem* p_file_system, const ktk::ustring& path)
+bool ktkResourceText::Save(
+    Core::ktkFileSystem* p_file_system, const ktk::ustring&
+path)
 {
     ktk::ustring full_path_with_file_and_its_format = path;
 
@@ -173,48 +163,6 @@ bool ktkFileText::Save(
         full_path_with_file_and_its_format, true);
 }
 */
-
-const ktk::json::object& ktkFileText::Get_Json(void) const noexcept
-{
-	return this->m_json.GetObject();
-}
-
-bool ktkFileText::IsKeyExist(const ktk::cstring& field_name) const noexcept
-{
-	if (field_name.empty())
-	{
-		KOTEK_MESSAGE("field is empty");
-		return false;
-	}
-
-	const ktk::json::object& json = this->m_json.GetObject();
-
-    return json.find(field_name.c_str()) != json.end();
-}
-
-const ktk::cstring& ktkFileText::Get_FileName(void) const noexcept
-{
-	return this->m_file_name;
-}
-
-void ktkFileText::Set_FileName(
-    const ktk::ustring& file_name, bool is_apply_format) noexcept
-{
-    this->m_file_name = reinterpret_cast<const char*>(file_name.c_str());
-
-    if (is_apply_format)
-        this->m_file_name += kFormatFile_Text;
-}
-
-void ktkFileText::Set_Json(const ktkJson& data) noexcept
-{
-	this->m_json = data;
-}
-
-ktk::ustring ktkFileText::Get_FileAsSerializedString(void) const noexcept
-{
-	return this->m_json.Serialize();
-}
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

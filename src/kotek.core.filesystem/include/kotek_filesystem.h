@@ -106,6 +106,8 @@ private:
 		/// kConfigFileNameSystemInfo
 		eFileSystemPriorityType fs_type =
 			eFileSystemPriorityType::kAuto;
+		eFileSystemStreamingType fs_streaming =
+			eFileSystemStreamingType::kAuto;
 		kun_ktk uint32_t thread_id = decltype(thread_id)(-1);
 
 		kun_ktk uint32_t file_id = decltype(file_id)(-1);
@@ -123,7 +125,7 @@ public:
 	ktkFileSystem(void);
 	~ktkFileSystem(void);
 
-	void Initialize() override;
+	void Initialize(ktkIFrameworkConfig* p_config) override;
 
 	void Shutdown(void) override;
 
@@ -207,10 +209,12 @@ public:
 		const ktk_filesystem_path& path_to_file,
 		kun_ktk uint32_t override_stream_reading_length = 0,
 		bool force_be_called_from_one_thread_only = false,
+		eFileSystemStreamingType streaming_type =
+			eFileSystemStreamingType::kAuto,
 		eFileSystemPriorityType priority =
 			eFileSystemPriorityType::kAuto,
 		eFileSystemFeatureType features =
-			eFileSystemFeatureType::kNone,
+			eFileSystemFeatureType::kNone
 	) noexcept override;
 
 	bool Write_Stream(
@@ -268,9 +272,6 @@ private:
 	ktkFileHandleType Get_AvailableFile(void) const;
 
 private:
-	kun_ktk uint8_t m_registered_filesystems[static_cast<
-		kun_ktk size_t>(eFileSystemPriorityType::kEndOfEnum)];
-
 	kun_ktk kun_mt atomic<kun_ktk uint16_t>
 		m_current_opened_files;
 

@@ -68,9 +68,29 @@ enum class eFileSystemFeatureType : kun_ktk uint16_t{
 	kCacheVFM = 1 << 4
 };
 
+enum class eFileSystemStreamingType : kun_ktk uint8_t
+{
+	kAuto,
+	kReadOnly,
+	/// @brief todo: implement
+	kWriteOnly,
+	/// @brief todo: implement
+	kReadAndWrite,
+	kEndOfEnum
+};
+
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
 	eFileSystemFeatureType, kun_ktk uint16_t
 );
+
+enum class eUserEngineLibraryCallbacks : kun_ktk uint8_t
+{
+	kGame_Init,
+	kGame_Shutdown,
+	kGame_Update,
+	kRender_Init,
+	kEndOfEnum
+};
 
 enum class eResourceRequestOperationType : kun_ktk enum_base_t{
 	kLoad, kSave, kEndOfEnum

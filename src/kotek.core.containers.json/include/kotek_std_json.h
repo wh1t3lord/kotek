@@ -23,77 +23,93 @@ public:
 	~ktkJson(void);
 
 	/// <summary>
-	/// If you want to obtain string you must use GetString method
-	/// instead
+	/// If you want to obtain string you must use GetString
+	/// method instead
 	/// </summary>
-	/// <typeparam name="ReturnType">templated parameter</typeparam>
-	/// <param name="key_name">json key</param>
-	/// <returns>Your specified ReturnType</returns>
+	/// <typeparam name="ReturnType">templated
+	/// parameter</typeparam> <param name="key_name">json
+	/// key</param> <returns>Your specified ReturnType</returns>
 	template <typename ReturnType>
-    ReturnType Get(const ktk::cstring& key_name) const noexcept
+	ReturnType
+	Get(const ktk_cstring<
+		KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>& key_name
+	) const noexcept
 	{
-		ktk::any result = ReturnType{};
+		ReturnType result{};
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
 		if (key_name.empty())
 		{
 			KOTEK_MESSAGE_WARNING("passed an empty key");
-			return std::any_cast<ReturnType>(result);
+			return result;
 		}
 
 		if (this->m_json.empty())
 		{
-			KOTEK_MESSAGE_WARNING("you didn't load file or your file is empty");
-			return std::any_cast<ReturnType>(result);
+			KOTEK_MESSAGE_WARNING(
+				"you didn't load file or your file is empty"
+			);
+			return result;
 		}
 
-        if (this->m_json.find(key_name.c_str()) == this->m_json.end())
+		if (this->m_json.find(key_name.c_str()) ==
+		    this->m_json.end())
 		{
 			KOTEK_MESSAGE_WARNING(
-				"your file doesn't contain key: {}", key_name);
+				"your file doesn't contain key: {}", key_name
+			);
 
-			return std::any_cast<ReturnType>(result);
+			return result;
 		}
 
-        const auto& json_value = this->m_json.at(key_name);
+		const auto& json_value = this->m_json.at(key_name);
 
 		result = ktk::json::value_to<ReturnType>(json_value);
 #endif
 
-		return std::any_cast<ReturnType>(result);
+		return result;
 	}
 
-	const ktk::json::object& GetObject(void) const noexcept;
+	const ktk::json::object& Get_Object(void) const noexcept;
 
-	// TODO: standartize this thing for any type what the kotek has, containers,
-	// math structures, graphs and etc
+	// TODO: standartize this thing for any type what the kotek
+	// has, containers, math structures, graphs and etc
 
 	template <typename DataType>
-    void Write(const ktk::cstring& field_name, DataType data) noexcept
+	void Write(
+		const ktk_cstring<
+			KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>&
+			field_name,
+		DataType data
+	) noexcept
 	{
-        this->m_json[field_name.c_str()] = ktk::json::value_from(data);
+		this->m_json[field_name.c_str()] =
+			ktk::json::value_from(data);
 	}
 
-    ktk::json::value& operator[](ktk::json::string_view key) noexcept
+	ktk::json::value& operator[](ktk::json::string_view key
+	) noexcept
 	{
 		return this->m_json[key];
 	}
 
-	ktk::ustring Serialize(void) const noexcept
+	bool Serialize(kun_ktk cstring& result) const noexcept
 	{
 #ifdef KOTEK_USE_BOOST_LIBRARY
-        ktk::ustring result;
+		bool status = false;
 
 		if (this->m_json.empty())
-            return result;
+			return status;
 
-        const auto& string = ktk::json::serialize(this->m_json);
+		result = ktk::json::serialize(this->m_json);
 
-        result = ktk::ustring(string.begin(), string.end());
-
-        return result;
+		status = true;
+	
+		return status;
 #else
-		return "";
+		bool status = false;
+		#error implement this!
+		return status;
 #endif
 	}
 

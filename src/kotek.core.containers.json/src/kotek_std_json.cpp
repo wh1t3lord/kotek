@@ -18,7 +18,7 @@ ktkJson& ktkJson::operator=(const ktkJson& instance)
 
 ktkJson::~ktkJson(void) {}
 
-const ktk::json::object& ktkJson::GetObject(void) const noexcept
+const ktk::json::object& ktkJson::Get_Object(void) const noexcept
 {
 	return this->m_json;
 }
