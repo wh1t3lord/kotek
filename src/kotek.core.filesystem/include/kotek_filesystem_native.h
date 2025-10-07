@@ -19,7 +19,6 @@ class ktkFileSystem_Native
 {
 	struct file_handle_no_vfm_t
 	{
-		FILE* p_file = nullptr;
 	};
 
 	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
@@ -57,7 +56,12 @@ public:
 	void Shutdown();
 
 
-
+	bool Read_File(
+		const ktk_filesystem_path& path,
+		kun_ktk uint8_t*& p_buffer,
+		kun_ktk size_t& length_of_buffer,
+		eFileSystemFeatureType features
+	);
 
 
 private:
@@ -70,6 +74,9 @@ private:
 	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
 	ktkFileSystem_VFM* m_p_vfm;
 	#endif
+
+	// trivial cache for stack based reading, but generally saying it is better to provide virtual mapping cache
+	unsigned char m_reserved_cache[2048];
 
 	ktk_vector<
 		file_handle_t,

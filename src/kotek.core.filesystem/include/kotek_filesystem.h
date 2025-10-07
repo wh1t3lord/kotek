@@ -90,6 +90,10 @@ constexpr const char*
 		"VFM_CACHE";
 /* CORE */
 
+#ifndef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
+	#error you can't initialize framework because kConfigFileNameSystemInfo is stored on physical disk as standard design of framework 
+#endif
+
 class ktkFileSystem : public ktkIFileSystem
 {
 private:
@@ -257,10 +261,11 @@ private:
 	bool Create_Directory(const ktk_filesystem_path& path
 	) const noexcept;
 
-	void
-	Initialize_FrameworkConfig(ktkIFrameworkConfig* p_config);
+	void Initialize_FrameworkConfig();
 
 private:
+	ktkIFrameworkConfig* m_p_config;
+
 	kun_ktk kun_mt atomic<kun_ktk uint16_t>
 		m_current_opened_files;
 
