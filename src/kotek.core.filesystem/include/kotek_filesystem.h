@@ -51,6 +51,9 @@ constexpr const char*
 	kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init_Render =
 		"Init_Render";
 constexpr const char*
+	kSysInfoFieldName_UserNamespace_EngineNamespace_Name =
+		"Name";
+constexpr const char*
 	kSysInfoFieldName_UserNamespace_EngineNamespace = "Engine";
 
 constexpr const char* kUserCallbackName_Initialize =
@@ -71,6 +74,12 @@ constexpr const char* kSysInfoFieldName_CoreNamespace = "Core";
 constexpr const char*
 	kSysInfoFieldName_CoreNamespace_FileSystemPriorityList =
 		"FS_PriorityList";
+constexpr const char*
+	kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_Native =
+		"Native";
+constexpr const char*
+	kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_ZLIB =
+		"ZLIB";
 constexpr const char*
 	kSysInfoFieldName_CoreNamespace_FileSystemFeatures =
 		"FS_Features";
@@ -133,7 +142,9 @@ public:
 
 	void Shutdown(void) override;
 
-	bool Is_ValidPath(const ktk_filesystem_path& path
+	bool Is_ValidPath(
+		const ktk_filesystem_path& path,
+		bool is_relative_path = false
 	) const noexcept override;
 
 	void Create_Directory(
@@ -250,6 +261,15 @@ public:
 	) noexcept override;
 
 	/* STREAMING */
+
+
+	void Make_Path(
+		ktk_filesystem_path& path, eFolderIndex index
+	) const noexcept override;
+	void Make_Path(
+		ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& path,
+		eFolderIndex index
+	) const noexcept override;
 
 private:
 	void Validate_Folders(void) noexcept;

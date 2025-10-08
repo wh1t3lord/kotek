@@ -119,47 +119,6 @@ public:
 	) = 0;
 };
 
-class ktkIRenderResourceManager
-{
-public:
-	virtual ~ktkIRenderResourceManager(void) {}
-
-	// TODO: change signature on
-	// void
-	// TODO: think about dynamic
-	// memory if we are exceeded
-	// we can use more memory
-	// and etc
-	virtual void initialize(
-		ktkIRenderDevice* p_raw_device,
-		ktkIRenderSwapchain* p_raw_swapchain,
-		ktk::size_t memory_size = 1024 * 1024 * 32
-	) = 0;
-
-	// TODO: change signature on
-	// void
-	virtual void shutdown(ktkIRenderDevice* p_raw_device) = 0;
-
-	virtual ktk::shared_ptr<kun_core ktkResourceHandle>
-	LoadGeometry(
-		ktk::enum_base_t resource_loading_type, ktk::uint32_t id
-	) = 0;
-	virtual ktk::shared_ptr<kun_core ktkResourceHandle>
-	LoadGeometry(
-		ktk::enum_base_t resource_loading_type,
-		const ktk_filesystem_path& path_to_file,
-		ktk::uint32_t id
-	) = 0;
-
-	virtual void Resize(
-		ktkIRenderDevice* p_raw_device,
-		ktkIRenderSwapchain* p_raw_swapchain
-	) = 0;
-
-	virtual Render::ktkRenderStats*
-	Get_Statistic(Core::eRenderStatistics type) noexcept = 0;
-};
-
 class ktkIRenderGraphResourceManager
 {
 public:
@@ -231,7 +190,9 @@ kun_ktk uint16_t simultaneously_opened_files_count
 	virtual void Initialize(ktkIFrameworkConfig* p_config) = 0;
 
 	virtual void Shutdown(void) = 0;
-	virtual bool Is_ValidPath(const ktk_filesystem_path& path
+	virtual bool Is_ValidPath(
+		const ktk_filesystem_path& path,
+		bool is_relative_path = false
 	) const noexcept = 0;
 
 	/*  */
@@ -387,6 +348,14 @@ kun_ktk uint16_t simultaneously_opened_files_count
 	) noexcept = 0;
 
 	/* STREAMING */
+
+	virtual void Make_Path(
+		ktk_filesystem_path& path, eFolderIndex index
+	) const noexcept = 0;
+	virtual void Make_Path(
+		ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& path,
+		eFolderIndex index
+	) const noexcept = 0;
 };
 
 enum eInputControllerType;
@@ -753,7 +722,7 @@ public:
 	Set_UserLibrary(const ktk_filesystem_path& path_to_library
 	) noexcept = 0;
 	virtual void* Get_UserLibrary(void) noexcept = 0;
-	
+
 	virtual void Set_UserLibrary_Name(
 		const ktk_cstring<
 			KOTEK_DEF_USER_ENGINE_LIBRARY_NAME_LENGTH>& name

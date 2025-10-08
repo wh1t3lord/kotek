@@ -231,7 +231,7 @@ bool DeserializeModule_Core_Engine_Config(
 		"you must initialize filesystem instance before "
 	    "calling this function"
 	);
-
+	/*
 	auto path_to_sys_info_json = p_filesystem->GetFolderByEnum(
 		eFolderIndex::kFolderIndex_Root
 	);
@@ -308,6 +308,7 @@ bool DeserializeModule_Core_Engine_Config(
 	else
 	{
 	}
+	*/
 
 	return true;
 }

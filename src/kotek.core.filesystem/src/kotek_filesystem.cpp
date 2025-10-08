@@ -1,4 +1,5 @@
 #include "../include/kotek_filesystem.h"
+#include <kotek.core.constants/include/kotek_core_constants.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -98,11 +99,148 @@ void ktkFileSystem::Initialize_FrameworkConfig()
 
 		KOTEK_ASSERT(status, "failed to read file!");
 
+		using sys_info_t = ktkResourceText<1024, 4096, false>;
+
 		if (status)
 		{
-			ktkResourceText<1024, 1024, false> cfg;
-
+			sys_info_t cfg;
 			cfg.Create_FromMemory(p_temp, buffer_size);
+
+			cfg.Get(kSysInfoFieldName_UserNamespace);
+		}
+		else
+		{
+			sys_info_t cfg;
+
+			{
+				// User
+				{
+					sys_info_t user_content;
+					{
+						sys_info_t engine_content;
+						{
+							engine_content.Write(
+								kSysInfoFieldName_UserNamespace_EngineNamespace_Name,
+								KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME
+							);
+							{
+								sys_info_t callbacks_content;
+								{
+									callbacks_content.Write(
+										kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init,
+										kUserCallbackName_Initialize
+									);
+									callbacks_content.Write(
+										kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Shutdown,
+										kUserCallbackName_Shutdown
+									);
+									callbacks_content.Write(
+										kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Update,
+										kUserCallbackName_Update
+									);
+									callbacks_content.Write(
+										kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init_Render,
+										kUserCallbackName_Initialize_Render
+									);
+								}
+
+								engine_content.Write(
+									kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks,
+									callbacks_content.Get_JSON()
+								);
+							}
+						}
+
+						user_content.Write(
+							kSysInfoFieldName_UserNamespace_EngineNamespace,
+							engine_content.Get_JSON()
+						);
+					}
+
+					cfg.Write(
+						kSysInfoFieldName_UserNamespace,
+						user_content.Get_JSON()
+					);
+				}
+
+				// core
+				{
+					sys_info_t core_content;
+					{
+						unsigned char pl_mem[256];
+						ktk::json::static_resource pl{pl_mem};
+
+						ktk::json::array fs_priority_list(&pl);
+
+						fs_priority_list.emplace_back(
+							kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_Native
+						);
+
+						fs_priority_list.emplace_back(
+							kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_ZLIB
+						);
+
+						core_content.Write(
+							kSysInfoFieldName_CoreNamespace_FileSystemPriorityList,
+							fs_priority_list
+						);
+					}
+
+					{
+						// todo: provide own wrapper with
+						// template argument that will define
+						// dynamic or static initialization of
+						// json related fundamental types
+						unsigned char f_mem[256];
+						ktk::json::static_resource feat{f_mem};
+
+						ktk::json::array fs_features(&feat);
+
+						fs_features.emplace_back(
+							kSysInfoFieldName_CoreNamespace_FileSystemFeatures_VFMRead
+						);
+						fs_features.emplace_back(
+							kSysInfoFieldName_CoreNamespace_FileSystemFeatures_PriorityList
+						);
+						fs_features.emplace_back(
+							kSysInfoFieldName_CoreNamespace_FileSystemFeatures_VFMCache
+						);
+
+						core_content.Write(
+							kSysInfoFieldName_CoreNamespace_FileSystemFeatures,
+							fs_features
+						);
+					}
+
+					cfg.Write(
+						kSysInfoFieldName_CoreNamespace,
+						core_content.Get_JSON()
+					);
+				}
+			}
+
+			char cfg_as_string[1024];
+			bool status =
+				cfg.Get_AsSerializedString(cfg_as_string);
+
+			KOTEK_ASSERT(
+				status, "failed to make json as string"
+			);
+
+			if (status)
+			{
+				status = this->Write_File(
+					kConfigFileNameSystemInfo,
+					cfg_as_string,
+					sizeof(cfg_as_string) /
+						sizeof(cfg_as_string[0]),
+					eFileSystemPriorityType::kNative
+				);
+
+				KOTEK_ASSERT(
+					status, "failed to write json on disk!"
+				);
+			}
 		}
 	}
 }
@@ -419,6 +557,606 @@ bool ktkFileSystem::Read_File(
 	return false;
 }
 
+bool ktkFileSystem::Write_File(
+	const ktk_filesystem_path& path_to_file,
+	kun_ktk ustring& input,
+	eFileSystemPriorityType
+		priority /*= eFileSystemPriorityType::kAuto*/,
+	eFileSystemFeatureType
+		feature /*= eFileSystemFeatureType::kNone */
+) noexcept
+{
+	KOTEK_ASSERT(false, "implement");
+
+	return false;
+}
+
+bool ktkFileSystem::Write_File(
+	const ktk_filesystem_path& path_to_file,
+	const kun_ktk uint8_t* p_buffer,
+	kun_ktk size_t length_of_buffer,
+	eFileSystemPriorityType
+		priority /*= eFileSystemPriorityType::kAuto*/,
+	eFileSystemFeatureType
+		featurs /*= eFileSystemFeatureType::kNone */
+) noexcept
+{
+	return false;
+}
+
+bool ktkFileSystem::Write_File(
+	const ktk_filesystem_path& path_to_file,
+	const char* p_buffer,
+	kun_ktk size_t length_of_buffer,
+	eFileSystemPriorityType
+		priority /*= eFileSystemPriorityType::kAuto*/,
+	eFileSystemFeatureType
+		features /*= eFileSystemFeatureType::kNone */
+) noexcept
+{
+	return false;
+}
+
+ktkFileHandleType ktkFileSystem::Begin_Stream(
+	const ktk_filesystem_path& path_to_file,
+	kun_ktk uint32_t override_stream_reading_length /*= 0*/,
+	bool force_be_called_from_one_thread_only /*= false*/,
+	eFileSystemStreamingType
+		streaming_type /*= eFileSystemStreamingType::kAuto*/,
+	eFileSystemPriorityType
+		priority /*= eFileSystemPriorityType::kAuto*/,
+	eFileSystemFeatureType
+		features /*= eFileSystemFeatureType::kNone */
+) noexcept
+{
+	KOTEK_ASSERT(false, "implement");
+	return kInvalidFileHandleType;
+}
+
+bool ktkFileSystem::Write_Stream(
+	ktkFileHandleType file_handle, kun_ktk ustring& input
+) noexcept
+{
+	KOTEK_ASSERT(false, "implement");
+	return false;
+}
+
+bool ktkFileSystem::Write_Stream(
+	ktkFileHandleType file_handle,
+	const unsigned char* p_buffer,
+	kun_ktk size_t override_write_streaming_length /*= 0 */
+) noexcept
+{
+	KOTEK_ASSERT(false, "implement");
+	return false;
+}
+
+bool ktkFileSystem::Read_Stream(
+	ktkFileHandleType file_handle,
+	unsigned char* p_buffer,
+	kun_ktk size_t& length_of_streaming_buffer
+) noexcept
+{
+	KOTEK_ASSERT(false, "implement");
+	return false;
+}
+
+kun_ktk uint32_t
+ktkFileSystem::Get_DefaultStreamingBufferLength(void
+) const noexcept
+{
+	KOTEK_ASSERT(false, "implement");
+	return 0;
+}
+
+kun_ktk uint32_t ktkFileSystem::Get_StreamingBufferLength(
+	ktkFileHandleType file_handle
+) const noexcept
+{
+	KOTEK_ASSERT(false, "implement");
+	return 0;
+}
+
+kun_ktk size_t ktkFileSystem::Get_RemainingStreamsCount(
+	ktkFileHandleType file_handle
+) const noexcept
+{
+	KOTEK_ASSERT(false, "implement");
+	return 0;
+}
+
+kun_ktk size_t ktkFileSystem::Get_TotalStreamsCount(
+	ktkFileHandleType file_handle
+) const noexcept
+{
+	KOTEK_ASSERT(false, "implement");
+	return 0;
+}
+
+bool ktkFileSystem::End_Stream(ktkFileHandleType file_handle
+) noexcept
+{
+	KOTEK_ASSERT(false, "implement");
+	return 0;
+}
+
+void ktkFileSystem::Make_Path(
+	ktk_filesystem_path& path, eFolderIndex index
+) const noexcept
+{
+	path = this->m_root_path;
+
+	switch (index)
+	{
+	case eFolderIndex::kFolderIndex_Root:
+	{
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Configs:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Scripts:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Textures:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Shaders:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Shaders_GLSL:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame_Shaders
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Shaders_HLSL:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame_Shaders
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Shaders_WEBGPU:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame_Shaders
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Shaders_SPV:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame_Shaders
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Models:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Sounds:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Levels:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_AI:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser_Tests:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser_ShaderCache:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser_SDK:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser_SDK_Settings:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser_SDK
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser_SDK_Scenes:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser_SDK
+			);
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser:
+	{
+		path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "unsupported folder index");
+		break;
+	}
+	}
+}
+
+void ktkFileSystem::Make_Path(
+	ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& path,
+	eFolderIndex index
+) const noexcept
+{
+	path = this->m_root_path;
+	path += "/";
+
+	switch (index)
+	{
+	case eFolderIndex::kFolderIndex_Root:
+	{
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Configs:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Scripts:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Textures:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Shaders:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Shaders_GLSL:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame_Shaders
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Shaders_HLSL:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame_Shaders
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Shaders_WEBGPU:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame_Shaders
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Shaders_SPV:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame_Shaders
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Models:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Sounds:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_Levels:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataGame_AI:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataGame
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser_Tests:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser_ShaderCache:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser_SDK:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser_SDK_Settings:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser_SDK
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser_SDK_Scenes:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser_SDK
+			);
+		path += kPathSeparator;
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	case eFolderIndex::kFolderIndex_DataUser:
+	{
+		path += kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(index);
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "unsupported folder index");
+		break;
+	}
+	}
+}
+
 /*
 bool ktkFileSystem::Read_File(
     const ktk_filesystem_path& path_to_file,
@@ -729,16 +1467,30 @@ ktkFileSystem::GetFolderByEnum(eFolderIndex id) const noexcept
         ;
 }*/
 
-bool ktkFileSystem::Is_ValidPath(const ktk_filesystem_path& path
+bool ktkFileSystem::Is_ValidPath(
+	const ktk_filesystem_path& path, bool is_relative_path
 ) const noexcept
 {
-	if (path.empty())
+	KOTEK_ASSERT(
+		this->m_root_path.empty() == false,
+		"must be initialized, otherwise early calling"
+	);
+
+	ktk_filesystem_path temp = path;
+
+	if (is_relative_path)
+	{
+		temp = this->m_root_path;
+		temp /= path;
+	}
+
+	if (temp.empty())
 	{
 		KOTEK_MESSAGE_WARNING("you have passed an empty path");
 		return false;
 	}
 
-	return kun_ktk filesystem::exists(path);
+	return kun_ktk kun_filesystem exists(temp);
 }
 
 bool ktkFileSystem::Create_Directory(

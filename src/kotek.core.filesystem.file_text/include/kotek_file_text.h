@@ -20,7 +20,7 @@ constexpr const char* kFormatResource_Text = ".json";
 // manages resource manager and its loader and saver managers
 
 template <
-	kun_ktk uint32_t _SerializeTextBufferSize,
+	kun_ktk uint32_t _ParserBufferSize,
 	kun_ktk uint32_t _JsonMemorySize,
 	bool _Realloc>
 class ktkResourceText
@@ -34,15 +34,15 @@ public:
 	}
 
 	template <
-		kun_ktk size_t _STBS2,
+		kun_ktk size_t _PBS2,
 		kun_ktk size_t _JMS2,
 		bool _Realloc2,
 		typename = std::enable_if_t<
-			((_SerializeTextBufferSize >= _STBS2 &&
+			((_ParserBufferSize >= _PBS2 &&
 	          _JsonMemorySize >= _JMS2) ||
 	         _Realloc == true)>>
 	ktkResourceText(
-		const ktkResourceText<_STBS2, _JMS2, _Realloc2>&
+		const ktkResourceText<_PBS2, _JMS2, _Realloc2>&
 			instance
 	) : m_data{instance}, m_file_name{instance.Get_FileName()}
 	{
@@ -90,7 +90,9 @@ public:
 	path);
 	*/
 
-	template <typename ReturnType = ktkJson>
+	template <
+		typename ReturnType =
+			ktkJson<_JsonMemorySize, _Realloc>>
 	ReturnType
 	Get(const ktk_cstring<
 		KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>& key_name
@@ -168,17 +170,34 @@ public:
 		this->m_data.json = data;
 	}
 
-	kun_ktk cstring Get_FileAsSerializedString(void
+	bool Get_AsSerializedString(kun_ktk cstring& result
 	) const noexcept
 	{
-		ktk::cstring result;
 		bool status = this->m_data.json.Serialize(result);
 
 		KOTEK_ASSERT(
 			status, "failed to serialize json as string!"
 		);
 
-		return std::move(result);
+		return status;
+	}
+
+	template<kun_ktk size_t _StringLength>
+	bool Get_AsSerializedString(char (&buffer_out)[_StringLength])
+		const noexcept
+	{
+		const auto& obj = this->m_data.json.Get_Object();
+
+		kun_ktk json::serializer sr;
+		sr.reset(&obj);
+		sr.read(buffer_out);
+
+		bool status = sr.done();
+
+		KOTEK_ASSERT(
+			status, "failed to serialize json as string!"
+		);
+		return status;
 	}
 
 	constexpr kun_ktk uint8_t Get_MaxFileNameLength(void
@@ -199,7 +218,7 @@ public:
 		if constexpr (!_Realloc)
 		{
 			KOTEK_ASSERT(
-				size <= _SerializeTextBufferSize,
+				size <= _ParserBufferSize,
 				"can't construct json because out of memory!"
 			);
 		}
@@ -221,7 +240,7 @@ public:
 
 		if constexpr (_Realloc)
 		{
-			if constexpr (_SerializeTextBufferSize > 0)
+			if constexpr (_ParserBufferSize > 0)
 			{
 				p_storage = new (sp_mem
 				) ktk::json::storage_ptr(&this->m_data.resource
@@ -237,12 +256,12 @@ public:
 		else
 		{
 			static_assert(
-				_SerializeTextBufferSize > 0,
+				_ParserBufferSize > 0,
 				"it doesn't make any sense! can't be and fix "
 				"your template arguments"
 			);
 
-			if constexpr (_SerializeTextBufferSize)
+			if constexpr (_ParserBufferSize)
 			{
 				p_storage = new (sp_mem
 				) ktk::json::storage_ptr(&this->m_data.resource
@@ -280,6 +299,8 @@ public:
 			status = true;
 		}
 
+		p_storage->~storage_ptr();
+
 		return status;
 	}
 
@@ -291,7 +312,7 @@ public:
 	constexpr kun_ktk uint32_t
 	Get_MaxSerializeTextBufferSize(void) const noexcept
 	{
-		return _SerializeTextBufferSize;
+		return _ParserBufferSize;
 	}
 
 private:
@@ -304,15 +325,15 @@ private:
 		}
 
 		template <
-			kun_ktk size_t _STBS2,
+			kun_ktk size_t _PBS2,
 			kun_ktk size_t _JMS2,
 			bool _Realloc2,
 			typename = std::enable_if_t<
-				((_SerializeTextBufferSize >= _STBS2 &&
+				((_ParserBufferSize >= _PBS2 &&
 		          _JsonMemorySize >= _JMS2) ||
 		         _Realloc == true)>>
 		mem_layout_no_embedded_t(
-			const ktkResourceText<_STBS2, _JMS2, _Realloc2>&
+			const ktkResourceText<_PBS2, _JMS2, _Realloc2>&
 				instance
 		) : json{instance.Get_JSON()}
 		{
@@ -332,21 +353,21 @@ private:
 		}
 
 		template <
-			kun_ktk size_t _STBS2,
+			kun_ktk size_t _PBS2,
 			kun_ktk size_t _JMS2,
 			bool _Realloc2,
 			typename = std::enable_if_t<
-				((_SerializeTextBufferSize >= _STBS2 &&
+				((_ParserBufferSize >= _PBS2 &&
 		          _JsonMemorySize >= _JMS2) ||
 		         _Realloc == true)>>
 		mem_layout_embedded_t(
-			const ktkResourceText<_STBS2, _JMS2, _Realloc2>&
+			const ktkResourceText<_PBS2, _JMS2, _Realloc2>&
 				instance
 		) : mem(), resource{mem}, json{instance.Get_JSON()}
 		{
 		}
 
-		unsigned char mem[_SerializeTextBufferSize];
+		unsigned char mem[_ParserBufferSize];
 		using resource_t = std::conditional_t<
 			_Realloc == true,
 			ktk::json::monotonic_resource,
@@ -357,7 +378,7 @@ private:
 	};
 
 	using mem_layout_t = std::conditional_t<
-		_SerializeTextBufferSize == 0,
+		_ParserBufferSize == 0,
 		mem_layout_no_embedded_t,
 		mem_layout_embedded_t>;
 

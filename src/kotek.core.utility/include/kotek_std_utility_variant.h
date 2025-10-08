@@ -3,7 +3,6 @@
 #include <kotek.core.containers.variant\include\kotek_core_containers_variant.h>
 #include <kotek.core.defines_dependent.assert\include\kotek_core_defines_dependent_assert.h>
 #include <kotek.core.containers.filesystem.path\include\kotek_core_containers_filesystem_path.h>
-#include <kotek.core.api\include\kotek_api_resource_manager.h>
 #include <kotek.core.containers.shared_ptr\include\kotek_core_containers_shared_ptr.h>
 
 // #include
@@ -500,40 +499,6 @@ T convert_impl(std::string_view, bool& status, custom_tag)
 	static_assert(dependent_false<T>::value,
 		"No conversion provided for custom type T. Please specialize "
 		"convert_impl for your type.");
-}
-
-template <>
-inline kun_kotek kun_core ktkLoadingRequest
-convert_impl<kun_kotek kun_core ktkLoadingRequest>(
-	std::string_view str, bool& status, custom_tag)
-{
-	kun_kotek kun_core ktkLoadingRequest result;
-
-	KOTEK_ASSERT(false, "not implemented!");
-
-	return result;
-}
-
-template <>
-inline kun_kotek kun_ktk shared_ptr<kun_kotek kun_core ktkResourceHandle>
-convert_impl<
-	kun_kotek kun_ktk shared_ptr<kun_kotek kun_core ktkResourceHandle>>(
-	std::string_view str, bool& status, custom_tag)
-{
-	int simple_resource;
-	const char* _kTypeName = typeid(simple_resource).name();
-	const char* _kFunctionName = __FUNCTION__;
-	const char* _kFileName = __FILE__;
-
-	KOTEK_ASSERT(false, "not implemented!");
-
-	return std::make_shared<kun_kotek kun_core ktkResourceHandle>(
-		&simple_resource, false
-#ifdef KOTEK_DEBUG
-		,
-		_kTypeName, _kFunctionName, _kFileName
-#endif
-	);
 }
 
 // The generic conversion function that dispatches based on T.

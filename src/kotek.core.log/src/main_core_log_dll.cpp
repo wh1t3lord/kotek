@@ -129,9 +129,11 @@ bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 	KOTEK_ASSERT(p_manager->GetFileSystem(),
 		"you must initialize filesystem before initializing this module!");
 
-	auto path_to_folder = p_manager->GetFileSystem()->GetFolderByEnum(
-		Kotek::Core::eFolderIndex::kFolderIndex_DataUser);
-
+	ktk_filesystem_path path_to_folder;
+	p_manager->GetFileSystem()->Make_Path(
+		path_to_folder,
+		kun_core eFolderIndex::kFolderIndex_DataUser);
+	
 	path_to_folder /= KOTEK_USE_LOG_OUTPUT_FILE_NAME;
 
 	auto logger_main = spdlog::basic_logger_mt(kLoggerMainName,
