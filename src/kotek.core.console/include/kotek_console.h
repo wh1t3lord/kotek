@@ -21,8 +21,7 @@ using console_command_variant_t = std::variant<kun_ktk int64_t, kun_ktk int32_t,
 	ktk_cstring<256>, ktk_cstring<128>, ktk_cstring<64>, ktk_cstring<32>,
 	ktk_cstring<16>, ktk_cstring<8>, ktk_cstring<4>, ktk_cstring<2>,
 	ktk_cstring<1>, ktk_cstring<2048>, kun_kotek static_path_t, const char*,
-	ktk_cstring_view, kun_core ktkLoadingRequest,
-	kun_ktk shared_ptr<kun_core ktkResourceHandle>, std::monostate>;
+	ktk_cstring_view, std::monostate>;
 
 static_assert(is_in_variant_v<kun_ktk enum_base_t, console_command_variant_t>,
 	"you didn't register this type in variant");

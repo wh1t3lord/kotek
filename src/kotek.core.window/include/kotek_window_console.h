@@ -25,9 +25,7 @@ public:
 
 	/// @brief window in order to obtain parent's window handle, resource
 	/// manager for creating file for reading (log file)
-	/// @param p_window
-	/// @param p_manager
-	void Initialize(ktkIWindow* p_window, ktkIResourceManager* p_manager,
+	void Initialize(ktkIWindow* p_window, ktkIFileSystem* p_manager,
 		ktkIInput* p_input, ktkILogger* p_logger, ktkIConsole* p_console,
 		int imgui_mainmenubar_height,
 		const ktk_filesystem_path& full_path_to_log_file);
@@ -45,7 +43,7 @@ private:
 	bool m_is_issued_hide;
 	bool m_is_issued_show;
 	kun_ktk cfstream* m_p_log_reader;
-	ktkIResourceManager* m_p_manager_resource;
+	ktkIFileSystem* m_p_fs;
 	ktkIInput* m_p_input;
 	ktkILogger* m_p_logger;
 	ktkIConsole* m_p_console;

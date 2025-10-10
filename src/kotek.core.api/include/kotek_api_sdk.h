@@ -16,8 +16,6 @@ KOTEK_END_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-class ktkIResourceManager;
-
 class ktkISDKRedoUndo
 {
 public:
@@ -26,12 +24,12 @@ public:
 	virtual void Execute() = 0;
 	virtual void Undo() = 0;
 	virtual const char* GetName() = 0;
-	virtual ktk::uint32_t GetEntityID(void) const noexcept { return -1; }
-	virtual void SetEntityID(ktk::uint32_t id) noexcept {}
-	virtual ktk::enum_base_t GetCommandType() noexcept = 0;
+	virtual kun_ktk uint32_t GetEntityID(void) const noexcept { return -1; }
+	virtual void SetEntityID(kun_ktk uint32_t id) noexcept {}
+	virtual kun_ktk enum_base_t GetCommandType() noexcept = 0;
 
-	virtual ktk::size_t Serialize(kun_ktk cfstream* p_file,
-		Kotek::Core::ktkIResourceManager* p_resource_manager) noexcept = 0;
+	virtual kun_ktk size_t Serialize(kun_ktk cfstream* p_file,
+		void* p_resource_manager) noexcept = 0;
 };
 
 /// @brief manager stores registered command that will be accessed through

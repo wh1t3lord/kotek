@@ -9,7 +9,6 @@ class ktkIProfiler;
 class ktkIFileSystem;
 class ktkIInput;
 class ktkIGameManager;
-class ktkIResourceManager;
 class ktkIRenderDevice;
 class ktkIRenderResourceManager;
 class ktkIRenderSwapchain;
