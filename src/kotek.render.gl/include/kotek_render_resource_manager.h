@@ -31,23 +31,33 @@ public:
 	ktkRenderResourceManager(ktkRenderResourceManager&&) = delete;
 	ktkRenderResourceManager& operator=(ktkRenderResourceManager&&) = delete;
 
-	void initialize(Core::ktkIRenderDevice* p_raw_device,
+	void Initialize(Core::ktkIRenderDevice* p_raw_device,
 		Core::ktkIRenderSwapchain* p_raw_swapchain,
 		ktk::size_t memory_size =
 			ktk::kMemoryConvertValueDenominator_Megabytes * 32) override;
 
-	void shutdown(Core::ktkIRenderDevice* p_raw_device) override;
+	void Shutdown(Core::ktkIRenderDevice* p_raw_device) override;
 
 	void Resize(Core::ktkIRenderDevice* p_raw_device,
 		Core::ktkIRenderSwapchain* p_raw_swapchain) override;
 
 	// called from a thread! Not render thread!!!!
 	// not cached , without cache
-	ktk::shared_ptr<kun_core ktkResourceHandle> LoadGeometry(
-		ktk::enum_base_t resource_loading_type, ktk::uint32_t id) override;
-	ktk::shared_ptr<kun_core ktkResourceHandle> LoadGeometry(
-		ktk::enum_base_t resource_loading_type,
-		const ktk_filesystem_path& path_to_file, ktk::uint32_t id) override;
+	bool Load_Geometry(
+		const ktk_filesystem_path& path_to_file,
+		float* p_vertecies,
+		kun_ktk size_t vertecies_count,
+		float* p_uv,
+		kun_ktk size_t uv_count
+	) override;
+
+	bool Load_Geometry(
+		const ktk_filesystem_path& path_to_file,
+		unsigned char* p_vertecies,
+		kun_ktk size_t vertecies_raw_size,
+		unsigned char* p_uv,
+		kun_ktk size_t uv_raw_size
+	) override;
 
 	// call only in render thread
 	void Update(void) noexcept;

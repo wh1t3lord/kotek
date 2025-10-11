@@ -15,7 +15,7 @@ class ktkJson
 {
 public:
 	ktkJson(void) : m_data{} {}
-	ktkJson(const ktk::json::object& text) : m_data{text} {}
+	ktkJson(const kun_ktk json::object& text) : m_data{text} {}
 	ktkJson(const ktkJson& instance) : m_data{instance} {}
 
 	template <
@@ -44,7 +44,7 @@ public:
 		return *this;
 	}
 
-	ktkJson& operator=(const ktk::json::object& instance)
+	ktkJson& operator=(const kun_ktk json::object& instance)
 	{
 		this->m_data.json = instance;
 		return *this;
@@ -92,15 +92,15 @@ public:
 			return result;
 		}
 
-		const auto& json_value = this->m_data.json.at(key_name);
+		const auto& json_value = this->m_data.json.at(key_name.c_str());
 
-		result = ktk::json::value_to<ReturnType>(json_value);
+		result = kun_ktk json::value_to<ReturnType>(json_value);
 #endif
 
 		return result;
 	}
 
-	const ktk::json::object& Get_Object(void) const noexcept
+	const kun_ktk json::object& Get_Object(void) const noexcept
 	{
 		return m_data.json;
 	}
@@ -117,10 +117,10 @@ public:
 	) noexcept
 	{
 		this->m_data.json[field_name.c_str()] =
-			ktk::json::value_from(data);
+			kun_ktk json::value_from(data);
 	}
 
-	ktk::json::value& operator[](ktk::json::string_view key
+	kun_ktk json::value& operator[](kun_ktk json::string_view key
 	) noexcept
 	{
 		return this->m_data.json[key];
@@ -134,7 +134,7 @@ public:
 		if (this->m_data.json.empty())
 			return status;
 
-		result = ktk::json::serialize(this->m_data.json);
+		result = kun_ktk json::serialize(this->m_data.json);
 
 		status = true;
 
@@ -162,7 +162,7 @@ private:
 	{
 		mem_layout_no_embedded_t() {}
 
-		mem_layout_no_embedded_t(const ktk::json::object& obj) :
+		mem_layout_no_embedded_t(const kun_ktk json::object& obj) :
 			json{obj}
 		{
 		}
@@ -172,20 +172,20 @@ private:
 		{
 		}
 
-		ktk::json::object json;
+		kun_ktk json::object json;
 	};
 
 	struct mem_layout_embedded_t
 	{
 		mem_layout_embedded_t() :
 			mem{}, resource{mem},
-			json(ktk::json::storage_ptr(&resource))
+			json(kun_ktk json::storage_ptr(&resource))
 		{
 		}
 
-		mem_layout_embedded_t(const ktk::json::object& obj) :
+		mem_layout_embedded_t(const kun_ktk json::object& obj) :
 			mem{}, resource{mem},
-			json(obj, ktk::json::storage_ptr(&resource))
+			json(obj, kun_ktk json::storage_ptr(&resource))
 		{
 		}
 
@@ -193,7 +193,7 @@ private:
 			mem{}, resource{mem},
 			json(
 				instance.m_data.json,
-				ktk::json::storage_ptr(&resource)
+				kun_ktk json::storage_ptr(&resource)
 			)
 		{
 		}
@@ -210,7 +210,7 @@ private:
 			mem{}, resource{mem},
 			json{
 				instance.Get_Object(),
-				ktk::json::storage_ptr(&resource)
+				kun_ktk json::storage_ptr(&resource)
 			}
 		{
 		}
@@ -219,12 +219,12 @@ private:
 
 		using resource_t = std::conditional_t<
 			_Realloc == true,
-			ktk::json::monotonic_resource,
-			ktk::json::static_resource>;
+			kun_ktk json::monotonic_resource,
+			kun_ktk json::static_resource>;
 
 		resource_t resource;
 
-		ktk::json::object json;
+		kun_ktk json::object json;
 	};
 
 	using mem_layout_t = std::conditional_t<
@@ -234,6 +234,28 @@ private:
 
 	mem_layout_t m_data;
 };
+
+template <kun_ktk size_t _BufferSize, bool _Realloc>
+inline void tag_invoke(
+	const kun_ktk json::value_from_tag&,
+	kun_ktk json::value& write_to,
+	const ktkJson<_BufferSize, _Realloc>& data
+)
+{
+	write_to = data.GetObject();
+}
+
+template <kun_ktk size_t _BufferSize, bool _Realloc>
+inline ktkJson<_BufferSize, _Realloc> tag_invoke(
+	const kun_ktk
+		json::value_to_tag<ktkJson<_BufferSize, _Realloc>>&,
+	const kun_ktk json::value& read_from
+)
+{
+	const kun_ktk json::object& object = read_from.as_object();
+
+	return ktkJson<_BufferSize, _Realloc>(object);
+}
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

@@ -15,14 +15,23 @@ KOTEK_BEGIN_NAMESPACE_CORE
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
 
-TEST(Filesystem, test_filesystem_check_folder_tests_for_existance)
+TEST(
+	Filesystem, test_filesystem_check_folder_tests_for_existance
+)
 {
+	ktkEngineConfig cfg;
+
 	ktkFileSystem instance;
 
-	instance.Initialize();
+	instance.Initialize(&cfg);
 
-	bool status = instance.IsValidPath(
-		instance.GetFolderByEnum(eFolderIndex::kFolderIndex_DataUser_Tests));
+	ktk_filesystem_path test_path;
+
+	instance.Make_Path(
+		test_path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	bool status = instance.Is_ValidPath(test_path);
 
 	EXPECT_TRUE(status);
 
@@ -34,16 +43,24 @@ TEST(Filesystem, test_file_create_pretty_output)
 	ktkMainManager main_manager;
 	ktkFileSystem filesystem;
 
-	filesystem.Initialize();
+	ktkEngineConfig _engine_cfg;
+
+	filesystem.Initialize(&_engine_cfg);
 
 	main_manager.Set_FileSystem(&filesystem);
 
-	ktkFileText instance("pretty");
+	ktkResourceText<1024, 1024, false> instance("pretty");
 
-	auto path =
-		filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_DataUser_Tests);
+	//	auto path =
+	//		filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_DataUser_Tests);
 
-	path /= instance.Get_FileName().c_str();
+	ktk_filesystem_path path;
+	filesystem.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	path /= instance.Get_FileName();
+	path /= instance.Get_FileExtensionName();
 
 		#ifdef KOTEK_USE_UNICODE
 	ktk::ustring test(KOTEK_TEXTU("いくつか"));
@@ -56,31 +73,46 @@ TEST(Filesystem, test_file_create_pretty_output)
 	instance.Write<ktk::ustring>("ktk::ustring", test);
 
 		#ifdef KOTEK_USE_UNICODE
-	instance.Write<ktk::ustring>("KOTEK_TEXT", KOTEK_TEXTU("いくつか"));
+	instance.Write<ktk::ustring>(
+		"KOTEK_TEXT", KOTEK_TEXTU("いくつか")
+	);
 	instance.Write<ktk::wstring>("wchar_t", L"いくつか");
 	instance.Write<ktk::u8string>("char8_t", u8"いくつか");
 	instance.Write<ktk::u16string>("char16_t", u"いくつか");
 	instance.Write<ktk::u32string>("char32_t", U"いくつか");
 		#endif
 
-	ktkResourceSaverManager saver_instance;
-	saver_instance.Initialize(&filesystem, &main_manager);
+	//	ktkResourceSaverManager saver_instance;
+	//	saver_instance.Initialize(&filesystem, &main_manager);
 
-	bool status = saver_instance.Save(path, ktkResourceHandle(&instance, true));
+	//	bool status = saver_instance.Save(
+	//		path, ktkResourceHandle(&instance, true)
+	//	);
 
-	EXPECT_TRUE(status);
+	//	EXPECT_TRUE(status);
+
+	char out[1024];
+
+	instance.Serialize_ToString(out);
+	KOTEK_ASSERT(false, "see todo:");
+	// todo: provide write operation filesystem saving
 
 	filesystem.Shutdown();
-	saver_instance.Shutdown();
 	main_manager.Shutdown();
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_constructor)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_constructor
+)
 {
 	ktk_filesystem_path test1;
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_make_preferred)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_make_preferred
+)
 {
 	ktk_filesystem_path test1("a/b/c");
 		#ifdef KOTEK_USE_PLATFORM_WINDOWS
@@ -92,7 +124,10 @@ TEST(Filesystem, test_container_filesystem_static_path_make_preferred)
 		#endif
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_remove_filename)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_remove_filename
+)
 {
 	ktk_filesystem_path test("/");
 	ktk_filesystem_path test1("\\");
@@ -111,7 +146,10 @@ TEST(Filesystem, test_container_filesystem_static_path_remove_filename)
 	EXPECT_TRUE(test6.remove_filename().native() == "/");
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_remove_filename2)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_remove_filename2
+)
 {
 	ktk_filesystem_path test("/");
 	ktk_filesystem_path test1("\\");
@@ -124,7 +162,10 @@ TEST(Filesystem, test_container_filesystem_static_path_remove_filename2)
 	EXPECT_TRUE(test3.remove_filename().native() == "");
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_has_extension)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_has_extension
+)
 {
 	ktk_filesystem_path test("/");
 	ktk_filesystem_path test2("\\");
@@ -150,20 +191,45 @@ TEST(Filesystem, test_container_filesystem_static_path_has_extension)
 	std::filesystem::path std_test10("/ab/...");
 	std::filesystem::path std_test11("/ab/.1.");
 
-	EXPECT_TRUE(test.has_extension() == std_test.has_extension());
-	EXPECT_TRUE(test2.has_extension() == std_test2.has_extension());
-	EXPECT_TRUE(test3.has_extension() == std_test3.has_extension());
-	EXPECT_TRUE(test4.has_extension() == std_test4.has_extension());
-	EXPECT_TRUE(test5.has_extension() == std_test5.has_extension());
-	EXPECT_TRUE(test6.has_extension() == std_test6.has_extension());
-	EXPECT_TRUE(test7.has_extension() == std_test7.has_extension());
-	EXPECT_TRUE(test8.has_extension() == std_test8.has_extension());
-	EXPECT_TRUE(test9.has_extension() == std_test9.has_extension());
-	EXPECT_TRUE(test10.has_extension() == std_test10.has_extension());
-	EXPECT_TRUE(test11.has_extension() == std_test11.has_extension());
+	EXPECT_TRUE(
+		test.has_extension() == std_test.has_extension()
+	);
+	EXPECT_TRUE(
+		test2.has_extension() == std_test2.has_extension()
+	);
+	EXPECT_TRUE(
+		test3.has_extension() == std_test3.has_extension()
+	);
+	EXPECT_TRUE(
+		test4.has_extension() == std_test4.has_extension()
+	);
+	EXPECT_TRUE(
+		test5.has_extension() == std_test5.has_extension()
+	);
+	EXPECT_TRUE(
+		test6.has_extension() == std_test6.has_extension()
+	);
+	EXPECT_TRUE(
+		test7.has_extension() == std_test7.has_extension()
+	);
+	EXPECT_TRUE(
+		test8.has_extension() == std_test8.has_extension()
+	);
+	EXPECT_TRUE(
+		test9.has_extension() == std_test9.has_extension()
+	);
+	EXPECT_TRUE(
+		test10.has_extension() == std_test10.has_extension()
+	);
+	EXPECT_TRUE(
+		test11.has_extension() == std_test11.has_extension()
+	);
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_has_filename)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_has_filename
+)
 {
 	ktk_filesystem_path test("/");
 	ktk_filesystem_path test2("\\");
@@ -200,24 +266,57 @@ TEST(Filesystem, test_container_filesystem_static_path_has_filename)
 	std::filesystem::path std_test16("/ab\\.1.");
 
 	EXPECT_TRUE(test.has_filename() == std_test.has_filename());
-	EXPECT_TRUE(test2.has_filename() == std_test2.has_filename());
-	EXPECT_TRUE(test3.has_filename() == std_test3.has_filename());
-	EXPECT_TRUE(test4.has_filename() == std_test4.has_filename());
-	EXPECT_TRUE(test5.has_filename() == std_test5.has_filename());
-	EXPECT_TRUE(test6.has_filename() == std_test6.has_filename());
-	EXPECT_TRUE(test7.has_filename() == std_test7.has_filename());
-	EXPECT_TRUE(test8.has_filename() == std_test8.has_filename());
-	EXPECT_TRUE(test9.has_filename() == std_test9.has_filename());
-	EXPECT_TRUE(test10.has_filename() == std_test10.has_filename());
-	EXPECT_TRUE(test11.has_filename() == std_test11.has_filename());
-	EXPECT_TRUE(test12.has_filename() == std_test12.has_filename());
-	EXPECT_TRUE(test13.has_filename() == std_test13.has_filename());
-	EXPECT_TRUE(test14.has_filename() == std_test14.has_filename());
-	EXPECT_TRUE(test15.has_filename() == std_test15.has_filename());
-	EXPECT_TRUE(test16.has_filename() == std_test16.has_filename());
+	EXPECT_TRUE(
+		test2.has_filename() == std_test2.has_filename()
+	);
+	EXPECT_TRUE(
+		test3.has_filename() == std_test3.has_filename()
+	);
+	EXPECT_TRUE(
+		test4.has_filename() == std_test4.has_filename()
+	);
+	EXPECT_TRUE(
+		test5.has_filename() == std_test5.has_filename()
+	);
+	EXPECT_TRUE(
+		test6.has_filename() == std_test6.has_filename()
+	);
+	EXPECT_TRUE(
+		test7.has_filename() == std_test7.has_filename()
+	);
+	EXPECT_TRUE(
+		test8.has_filename() == std_test8.has_filename()
+	);
+	EXPECT_TRUE(
+		test9.has_filename() == std_test9.has_filename()
+	);
+	EXPECT_TRUE(
+		test10.has_filename() == std_test10.has_filename()
+	);
+	EXPECT_TRUE(
+		test11.has_filename() == std_test11.has_filename()
+	);
+	EXPECT_TRUE(
+		test12.has_filename() == std_test12.has_filename()
+	);
+	EXPECT_TRUE(
+		test13.has_filename() == std_test13.has_filename()
+	);
+	EXPECT_TRUE(
+		test14.has_filename() == std_test14.has_filename()
+	);
+	EXPECT_TRUE(
+		test15.has_filename() == std_test15.has_filename()
+	);
+	EXPECT_TRUE(
+		test16.has_filename() == std_test16.has_filename()
+	);
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_replace_extension)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_replace_extension
+)
 {
 	ktk_filesystem_path test("/foo/bar.jpg");
 	test.replace_extension(".png");
@@ -295,23 +394,37 @@ TEST(Filesystem, test_container_filesystem_static_path_swap)
 	EXPECT_TRUE(test.native() == "D:/kek");
 	EXPECT_TRUE(b.native() == "C:/test");
 
-	ktk_filesystem_path test2("D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
-	ktk_filesystem_path b2("C:\\Program Files (x86)\\Microsoft SQL "
-						   "Server\\150\\LocalDB\\Binn\\Resources\\es-ES");
+	ktk_filesystem_path test2(
+		"D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs"
+	);
+	ktk_filesystem_path b2(
+		"C:\\Program Files (x86)\\Microsoft SQL "
+		"Server\\150\\LocalDB\\Binn\\Resources\\es-ES"
+	);
 
 	test2.swap(b2);
 
-	EXPECT_TRUE(test2.native() ==
+	EXPECT_TRUE(
+		test2.native() ==
 		"C:\\Program Files (x86)\\Microsoft SQL "
-		"Server\\150\\LocalDB\\Binn\\Resources\\es-ES");
-	EXPECT_TRUE(b2.native() == "D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
+		"Server\\150\\LocalDB\\Binn\\Resources\\es-ES"
+	);
+	EXPECT_TRUE(
+		b2.native() ==
+		"D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs"
+	);
 
-	ktk_filesystem_path test3("D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
+	ktk_filesystem_path test3(
+		"D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs"
+	);
 	ktk_filesystem_path b3("");
 
 	test3.swap(b3);
 	EXPECT_TRUE(test3.native() == "");
-	EXPECT_TRUE(b3.native() == "D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs");
+	EXPECT_TRUE(
+		b3.native() ==
+		"D:\\Godot\\4.2.1\\GodotSharp\\Tools\\nupkgs"
+	);
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_compare)
@@ -340,7 +453,10 @@ TEST(Filesystem, test_container_filesystem_static_path_compare)
 	a.compare("");
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_has_root_directory)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_has_root_directory
+)
 {
 	std::filesystem::path t("a/b");
 	std::filesystem::path t1("C:/a/b");
@@ -366,20 +482,45 @@ TEST(Filesystem, test_container_filesystem_static_path_has_root_directory)
 	ktk_filesystem_path _t9("c\\d\\");
 	ktk_filesystem_path _t10(":/c\\d");
 
-	EXPECT_TRUE(t.has_root_directory() == _t.has_root_directory());
-	EXPECT_TRUE(t1.has_root_directory() == _t1.has_root_directory());
-	EXPECT_TRUE(t2.has_root_directory() == _t2.has_root_directory());
-	EXPECT_TRUE(t3.has_root_directory() == _t3.has_root_directory());
-	EXPECT_TRUE(t4.has_root_directory() == _t4.has_root_directory());
-	EXPECT_TRUE(t5.has_root_directory() == _t5.has_root_directory());
-	EXPECT_TRUE(t6.has_root_directory() == _t6.has_root_directory());
-	EXPECT_TRUE(t7.has_root_directory() == _t7.has_root_directory());
-	EXPECT_TRUE(t8.has_root_directory() == _t8.has_root_directory());
-	EXPECT_TRUE(t9.has_root_directory() == _t9.has_root_directory());
-	EXPECT_TRUE(t10.has_root_directory() == _t10.has_root_directory());
+	EXPECT_TRUE(
+		t.has_root_directory() == _t.has_root_directory()
+	);
+	EXPECT_TRUE(
+		t1.has_root_directory() == _t1.has_root_directory()
+	);
+	EXPECT_TRUE(
+		t2.has_root_directory() == _t2.has_root_directory()
+	);
+	EXPECT_TRUE(
+		t3.has_root_directory() == _t3.has_root_directory()
+	);
+	EXPECT_TRUE(
+		t4.has_root_directory() == _t4.has_root_directory()
+	);
+	EXPECT_TRUE(
+		t5.has_root_directory() == _t5.has_root_directory()
+	);
+	EXPECT_TRUE(
+		t6.has_root_directory() == _t6.has_root_directory()
+	);
+	EXPECT_TRUE(
+		t7.has_root_directory() == _t7.has_root_directory()
+	);
+	EXPECT_TRUE(
+		t8.has_root_directory() == _t8.has_root_directory()
+	);
+	EXPECT_TRUE(
+		t9.has_root_directory() == _t9.has_root_directory()
+	);
+	EXPECT_TRUE(
+		t10.has_root_directory() == _t10.has_root_directory()
+	);
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_is_absolute)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_is_absolute
+)
 {
 	std::filesystem::path t("a/b");
 	std::filesystem::path t1("C:/a/b");
@@ -422,7 +563,10 @@ TEST(Filesystem, test_container_filesystem_static_path_is_absolute)
 	EXPECT_TRUE(t10.is_absolute() == _t10.is_absolute());
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_is_relative)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_is_relative
+)
 {
 	std::filesystem::path t("a/b");
 	std::filesystem::path t1("C:/a/b");
@@ -465,7 +609,10 @@ TEST(Filesystem, test_container_filesystem_static_path_is_relative)
 	EXPECT_TRUE(t10.is_relative() == _t10.is_relative());
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_relative_path)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_relative_path
+)
 {
 	std::filesystem::path t("a/b");
 	std::filesystem::path t1("C:/a/b");
@@ -506,44 +653,83 @@ TEST(Filesystem, test_container_filesystem_static_path_relative_path)
 	ktk_filesystem_path _t17(":c/a");
 
 	EXPECT_TRUE(
-		t.relative_path().string().c_str() == _t.relative_path().native());
+		t.relative_path().string().c_str() ==
+		_t.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t1.relative_path().string().c_str() == _t1.relative_path().native());
+		t1.relative_path().string().c_str() ==
+		_t1.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t2.relative_path().string().c_str() == _t2.relative_path().native());
+		t2.relative_path().string().c_str() ==
+		_t2.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t3.relative_path().string().c_str() == _t3.relative_path().native());
+		t3.relative_path().string().c_str() ==
+		_t3.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t4.relative_path().string().c_str() == _t4.relative_path().native());
+		t4.relative_path().string().c_str() ==
+		_t4.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t5.relative_path().string().c_str() == _t5.relative_path().native());
+		t5.relative_path().string().c_str() ==
+		_t5.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t6.relative_path().string().c_str() == _t6.relative_path().native());
+		t6.relative_path().string().c_str() ==
+		_t6.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t7.relative_path().string().c_str() == _t7.relative_path().native());
+		t7.relative_path().string().c_str() ==
+		_t7.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t8.relative_path().string().c_str() == _t8.relative_path().native());
+		t8.relative_path().string().c_str() ==
+		_t8.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t9.relative_path().string().c_str() == _t9.relative_path().native());
+		t9.relative_path().string().c_str() ==
+		_t9.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t10.relative_path().string().c_str() == _t10.relative_path().native());
+		t10.relative_path().string().c_str() ==
+		_t10.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t11.relative_path().string().c_str() == _t11.relative_path().native());
+		t11.relative_path().string().c_str() ==
+		_t11.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t12.relative_path().string().c_str() == _t12.relative_path().native());
+		t12.relative_path().string().c_str() ==
+		_t12.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t13.relative_path().string().c_str() == _t13.relative_path().native());
+		t13.relative_path().string().c_str() ==
+		_t13.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t14.relative_path().string().c_str() == _t14.relative_path().native());
+		t14.relative_path().string().c_str() ==
+		_t14.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t15.relative_path().string().c_str() == _t15.relative_path().native());
+		t15.relative_path().string().c_str() ==
+		_t15.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t16.relative_path().string().c_str() == _t16.relative_path().native());
+		t16.relative_path().string().c_str() ==
+		_t16.relative_path().native()
+	);
 	EXPECT_TRUE(
-		t17.relative_path().string().c_str() == _t17.relative_path().native());
+		t17.relative_path().string().c_str() ==
+		_t17.relative_path().native()
+	);
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_parent_path)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_parent_path
+)
 {
 	std::filesystem::path t("a/b");
 	std::filesystem::path t1("C:/a/b");
@@ -583,44 +769,84 @@ TEST(Filesystem, test_container_filesystem_static_path_parent_path)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	EXPECT_TRUE(t.parent_path().string().c_str() == _t.parent_path().native());
 	EXPECT_TRUE(
-		t1.parent_path().string().c_str() == _t1.parent_path().native());
+		t.parent_path().string().c_str() ==
+		_t.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t2.parent_path().string().c_str() == _t2.parent_path().native());
+		t1.parent_path().string().c_str() ==
+		_t1.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t3.parent_path().string().c_str() == _t3.parent_path().native());
+		t2.parent_path().string().c_str() ==
+		_t2.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t4.parent_path().string().c_str() == _t4.parent_path().native());
+		t3.parent_path().string().c_str() ==
+		_t3.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t5.parent_path().string().c_str() == _t5.parent_path().native());
+		t4.parent_path().string().c_str() ==
+		_t4.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t6.parent_path().string().c_str() == _t6.parent_path().native());
+		t5.parent_path().string().c_str() ==
+		_t5.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t7.parent_path().string().c_str() == _t7.parent_path().native());
+		t6.parent_path().string().c_str() ==
+		_t6.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t8.parent_path().string().c_str() == _t8.parent_path().native());
+		t7.parent_path().string().c_str() ==
+		_t7.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t9.parent_path().string().c_str() == _t9.parent_path().native());
+		t8.parent_path().string().c_str() ==
+		_t8.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t10.parent_path().string().c_str() == _t10.parent_path().native());
+		t9.parent_path().string().c_str() ==
+		_t9.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t11.parent_path().string().c_str() == _t11.parent_path().native());
+		t10.parent_path().string().c_str() ==
+		_t10.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t12.parent_path().string().c_str() == _t12.parent_path().native());
+		t11.parent_path().string().c_str() ==
+		_t11.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t13.parent_path().string().c_str() == _t13.parent_path().native());
+		t12.parent_path().string().c_str() ==
+		_t12.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t14.parent_path().string().c_str() == _t14.parent_path().native());
+		t13.parent_path().string().c_str() ==
+		_t13.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t15.parent_path().string().c_str() == _t15.parent_path().native());
+		t14.parent_path().string().c_str() ==
+		_t14.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t16.parent_path().string().c_str() == _t16.parent_path().native());
+		t15.parent_path().string().c_str() ==
+		_t15.parent_path().native()
+	);
 	EXPECT_TRUE(
-		t17.parent_path().string().c_str() == _t17.parent_path().native());
+		t16.parent_path().string().c_str() ==
+		_t16.parent_path().native()
+	);
+	EXPECT_TRUE(
+		t17.parent_path().string().c_str() ==
+		_t17.parent_path().native()
+	);
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_has_parent_path)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_has_parent_path
+)
 {
 	std::filesystem::path t("a/b");
 	std::filesystem::path t1("C:/a/b");
@@ -670,14 +896,30 @@ TEST(Filesystem, test_container_filesystem_static_path_has_parent_path)
 	EXPECT_TRUE(t7.has_parent_path() == _t7.has_parent_path());
 	EXPECT_TRUE(t8.has_parent_path() == _t8.has_parent_path());
 	EXPECT_TRUE(t9.has_parent_path() == _t9.has_parent_path());
-	EXPECT_TRUE(t10.has_parent_path() == _t10.has_parent_path());
-	EXPECT_TRUE(t11.has_parent_path() == _t11.has_parent_path());
-	EXPECT_TRUE(t12.has_parent_path() == _t12.has_parent_path());
-	EXPECT_TRUE(t13.has_parent_path() == _t13.has_parent_path());
-	EXPECT_TRUE(t14.has_parent_path() == _t14.has_parent_path());
-	EXPECT_TRUE(t15.has_parent_path() == _t15.has_parent_path());
-	EXPECT_TRUE(t16.has_parent_path() == _t16.has_parent_path());
-	EXPECT_TRUE(t17.has_parent_path() == _t17.has_parent_path());
+	EXPECT_TRUE(
+		t10.has_parent_path() == _t10.has_parent_path()
+	);
+	EXPECT_TRUE(
+		t11.has_parent_path() == _t11.has_parent_path()
+	);
+	EXPECT_TRUE(
+		t12.has_parent_path() == _t12.has_parent_path()
+	);
+	EXPECT_TRUE(
+		t13.has_parent_path() == _t13.has_parent_path()
+	);
+	EXPECT_TRUE(
+		t14.has_parent_path() == _t14.has_parent_path()
+	);
+	EXPECT_TRUE(
+		t15.has_parent_path() == _t15.has_parent_path()
+	);
+	EXPECT_TRUE(
+		t16.has_parent_path() == _t16.has_parent_path()
+	);
+	EXPECT_TRUE(
+		t17.has_parent_path() == _t17.has_parent_path()
+	);
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_has_stem)
@@ -740,7 +982,10 @@ TEST(Filesystem, test_container_filesystem_static_path_has_stem)
 	EXPECT_TRUE(t17.has_stem() == _t17.has_stem());
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_has_root_path)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_has_root_path
+)
 {
 	std::filesystem::path t("a/b");
 	std::filesystem::path t1("C:/a/b");
@@ -800,7 +1045,10 @@ TEST(Filesystem, test_container_filesystem_static_path_has_root_path)
 	EXPECT_TRUE(t17.has_root_path() == _t17.has_root_path());
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_has_root_name)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_has_root_name
+)
 {
 	std::filesystem::path t("a/b");
 	std::filesystem::path t1("C:/a/b");
@@ -860,7 +1108,9 @@ TEST(Filesystem, test_container_filesystem_static_path_has_root_name)
 	EXPECT_TRUE(t17.has_root_name() == _t17.has_root_name());
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_root_name)
+TEST(
+	Filesystem, test_container_filesystem_static_path_root_name
+)
 {
 	std::filesystem::path t("a/b");
 	std::filesystem::path t1("C:/a/b");
@@ -900,27 +1150,83 @@ TEST(Filesystem, test_container_filesystem_static_path_root_name)
 	ktk_filesystem_path _t16(":/a");
 	ktk_filesystem_path _t17(":c/a");
 
-	EXPECT_TRUE(t.root_name().string().c_str() == _t.root_name().native());
-	EXPECT_TRUE(t1.root_name().string().c_str() == _t1.root_name().native());
-	EXPECT_TRUE(t2.root_name().string().c_str() == _t2.root_name().native());
-	EXPECT_TRUE(t3.root_name().string().c_str() == _t3.root_name().native());
-	EXPECT_TRUE(t4.root_name().string().c_str() == _t4.root_name().native());
-	EXPECT_TRUE(t5.root_name().string().c_str() == _t5.root_name().native());
-	EXPECT_TRUE(t6.root_name().string().c_str() == _t6.root_name().native());
-	EXPECT_TRUE(t7.root_name().string().c_str() == _t7.root_name().native());
-	EXPECT_TRUE(t8.root_name().string().c_str() == _t8.root_name().native());
-	EXPECT_TRUE(t9.root_name().string().c_str() == _t9.root_name().native());
-	EXPECT_TRUE(t10.root_name().string().c_str() == _t10.root_name().native());
-	EXPECT_TRUE(t11.root_name().string().c_str() == _t11.root_name().native());
-	EXPECT_TRUE(t12.root_name().string().c_str() == _t12.root_name().native());
-	EXPECT_TRUE(t13.root_name().string().c_str() == _t13.root_name().native());
-	EXPECT_TRUE(t14.root_name().string().c_str() == _t14.root_name().native());
-	EXPECT_TRUE(t15.root_name().string().c_str() == _t15.root_name().native());
-	EXPECT_TRUE(t16.root_name().string().c_str() == _t16.root_name().native());
-	EXPECT_TRUE(t17.root_name().string().c_str() == _t17.root_name().native());
+	EXPECT_TRUE(
+		t.root_name().string().c_str() ==
+		_t.root_name().native()
+	);
+	EXPECT_TRUE(
+		t1.root_name().string().c_str() ==
+		_t1.root_name().native()
+	);
+	EXPECT_TRUE(
+		t2.root_name().string().c_str() ==
+		_t2.root_name().native()
+	);
+	EXPECT_TRUE(
+		t3.root_name().string().c_str() ==
+		_t3.root_name().native()
+	);
+	EXPECT_TRUE(
+		t4.root_name().string().c_str() ==
+		_t4.root_name().native()
+	);
+	EXPECT_TRUE(
+		t5.root_name().string().c_str() ==
+		_t5.root_name().native()
+	);
+	EXPECT_TRUE(
+		t6.root_name().string().c_str() ==
+		_t6.root_name().native()
+	);
+	EXPECT_TRUE(
+		t7.root_name().string().c_str() ==
+		_t7.root_name().native()
+	);
+	EXPECT_TRUE(
+		t8.root_name().string().c_str() ==
+		_t8.root_name().native()
+	);
+	EXPECT_TRUE(
+		t9.root_name().string().c_str() ==
+		_t9.root_name().native()
+	);
+	EXPECT_TRUE(
+		t10.root_name().string().c_str() ==
+		_t10.root_name().native()
+	);
+	EXPECT_TRUE(
+		t11.root_name().string().c_str() ==
+		_t11.root_name().native()
+	);
+	EXPECT_TRUE(
+		t12.root_name().string().c_str() ==
+		_t12.root_name().native()
+	);
+	EXPECT_TRUE(
+		t13.root_name().string().c_str() ==
+		_t13.root_name().native()
+	);
+	EXPECT_TRUE(
+		t14.root_name().string().c_str() ==
+		_t14.root_name().native()
+	);
+	EXPECT_TRUE(
+		t15.root_name().string().c_str() ==
+		_t15.root_name().native()
+	);
+	EXPECT_TRUE(
+		t16.root_name().string().c_str() ==
+		_t16.root_name().native()
+	);
+	EXPECT_TRUE(
+		t17.root_name().string().c_str() ==
+		_t17.root_name().native()
+	);
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_extension)
+TEST(
+	Filesystem, test_container_filesystem_static_path_extension
+)
 {
 	ktk_filesystem_path test("/");
 	ktk_filesystem_path test2("\\");
@@ -957,27 +1263,49 @@ TEST(Filesystem, test_container_filesystem_static_path_extension)
 	std::filesystem::path std_test16("/ab\\.1.");
 
 	EXPECT_TRUE(
-		test.extension().native().c_str() == std_test.extension().string());
+		test.extension().native().c_str() ==
+		std_test.extension().string()
+	);
 	EXPECT_TRUE(
-		test2.extension().native().c_str() == std_test2.extension().string());
+		test2.extension().native().c_str() ==
+		std_test2.extension().string()
+	);
 	EXPECT_TRUE(
-		test3.extension().native().c_str() == std_test3.extension().string());
+		test3.extension().native().c_str() ==
+		std_test3.extension().string()
+	);
 	EXPECT_TRUE(
-		test4.extension().native().c_str() == std_test4.extension().string());
+		test4.extension().native().c_str() ==
+		std_test4.extension().string()
+	);
 	EXPECT_TRUE(
-		test5.extension().native().c_str() == std_test5.extension().string());
+		test5.extension().native().c_str() ==
+		std_test5.extension().string()
+	);
 	EXPECT_TRUE(
-		test6.extension().native().c_str() == std_test6.extension().string());
+		test6.extension().native().c_str() ==
+		std_test6.extension().string()
+	);
 	EXPECT_TRUE(
-		test7.extension().native().c_str() == std_test7.extension().string());
+		test7.extension().native().c_str() ==
+		std_test7.extension().string()
+	);
 	EXPECT_TRUE(
-		test8.extension().native().c_str() == std_test8.extension().string());
+		test8.extension().native().c_str() ==
+		std_test8.extension().string()
+	);
 	EXPECT_TRUE(
-		test9.extension().native().c_str() == std_test9.extension().string());
+		test9.extension().native().c_str() ==
+		std_test9.extension().string()
+	);
 	EXPECT_TRUE(
-		test10.extension().native().c_str() == std_test10.extension().string());
+		test10.extension().native().c_str() ==
+		std_test10.extension().string()
+	);
 	EXPECT_TRUE(
-		test11.extension().native().c_str() == std_test11.extension().string());
+		test11.extension().native().c_str() ==
+		std_test11.extension().string()
+	);
 }
 
 TEST(Filesystem, test_container_filesystem_static_path_filename)
@@ -1030,32 +1358,103 @@ TEST(Filesystem, test_container_filesystem_static_path_filename)
 	std::filesystem::path t22(".");
 	std::filesystem::path t23("...");
 
-	EXPECT_TRUE(_t.filename().native().c_str() == t.filename().string());
-	EXPECT_TRUE(_t2.filename().native().c_str() == t2.filename().string());
-	EXPECT_TRUE(_t3.filename().native().c_str() == t3.filename().string());
-	EXPECT_TRUE(_t4.filename().native().c_str() == t4.filename().string());
-	EXPECT_TRUE(_t5.filename().native().c_str() == t5.filename().string());
-	EXPECT_TRUE(_t6.filename().native().c_str() == t6.filename().string());
-	EXPECT_TRUE(_t7.filename().native().c_str() == t7.filename().string());
-	EXPECT_TRUE(_t8.filename().native().c_str() == t8.filename().string());
-	EXPECT_TRUE(_t9.filename().native().c_str() == t9.filename().string());
-	EXPECT_TRUE(_t10.filename().native().c_str() == t10.filename().string());
-	EXPECT_TRUE(_t11.filename().native().c_str() == t11.filename().string());
-	EXPECT_TRUE(_t12.filename().native().c_str() == t12.filename().string());
-	EXPECT_TRUE(_t13.filename().native().c_str() == t13.filename().string());
-	EXPECT_TRUE(_t14.filename().native().c_str() == t14.filename().string());
-	EXPECT_TRUE(_t15.filename().native().c_str() == t15.filename().string());
-	EXPECT_TRUE(_t16.filename().native().c_str() == t16.filename().string());
-	EXPECT_TRUE(_t17.filename().native().c_str() == t17.filename().string());
-	EXPECT_TRUE(_t18.filename().native().c_str() == t18.filename().string());
-	EXPECT_TRUE(_t19.filename().native().c_str() == t19.filename().string());
-	EXPECT_TRUE(_t20.filename().native().c_str() == t20.filename().string());
-	EXPECT_TRUE(_t21.filename().native().c_str() == t21.filename().string());
-	EXPECT_TRUE(_t22.filename().native().c_str() == t22.filename().string());
-	EXPECT_TRUE(_t23.filename().native().c_str() == t23.filename().string());
+	EXPECT_TRUE(
+		_t.filename().native().c_str() == t.filename().string()
+	);
+	EXPECT_TRUE(
+		_t2.filename().native().c_str() ==
+		t2.filename().string()
+	);
+	EXPECT_TRUE(
+		_t3.filename().native().c_str() ==
+		t3.filename().string()
+	);
+	EXPECT_TRUE(
+		_t4.filename().native().c_str() ==
+		t4.filename().string()
+	);
+	EXPECT_TRUE(
+		_t5.filename().native().c_str() ==
+		t5.filename().string()
+	);
+	EXPECT_TRUE(
+		_t6.filename().native().c_str() ==
+		t6.filename().string()
+	);
+	EXPECT_TRUE(
+		_t7.filename().native().c_str() ==
+		t7.filename().string()
+	);
+	EXPECT_TRUE(
+		_t8.filename().native().c_str() ==
+		t8.filename().string()
+	);
+	EXPECT_TRUE(
+		_t9.filename().native().c_str() ==
+		t9.filename().string()
+	);
+	EXPECT_TRUE(
+		_t10.filename().native().c_str() ==
+		t10.filename().string()
+	);
+	EXPECT_TRUE(
+		_t11.filename().native().c_str() ==
+		t11.filename().string()
+	);
+	EXPECT_TRUE(
+		_t12.filename().native().c_str() ==
+		t12.filename().string()
+	);
+	EXPECT_TRUE(
+		_t13.filename().native().c_str() ==
+		t13.filename().string()
+	);
+	EXPECT_TRUE(
+		_t14.filename().native().c_str() ==
+		t14.filename().string()
+	);
+	EXPECT_TRUE(
+		_t15.filename().native().c_str() ==
+		t15.filename().string()
+	);
+	EXPECT_TRUE(
+		_t16.filename().native().c_str() ==
+		t16.filename().string()
+	);
+	EXPECT_TRUE(
+		_t17.filename().native().c_str() ==
+		t17.filename().string()
+	);
+	EXPECT_TRUE(
+		_t18.filename().native().c_str() ==
+		t18.filename().string()
+	);
+	EXPECT_TRUE(
+		_t19.filename().native().c_str() ==
+		t19.filename().string()
+	);
+	EXPECT_TRUE(
+		_t20.filename().native().c_str() ==
+		t20.filename().string()
+	);
+	EXPECT_TRUE(
+		_t21.filename().native().c_str() ==
+		t21.filename().string()
+	);
+	EXPECT_TRUE(
+		_t22.filename().native().c_str() ==
+		t22.filename().string()
+	);
+	EXPECT_TRUE(
+		_t23.filename().native().c_str() ==
+		t23.filename().string()
+	);
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_root_directory)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_root_directory
+)
 {
 	std::filesystem::path t("a/b");
 	std::filesystem::path t1("C:/a/b");
@@ -1096,44 +1495,83 @@ TEST(Filesystem, test_container_filesystem_static_path_root_directory)
 	ktk_filesystem_path _t17(":c/a");
 
 	EXPECT_TRUE(
-		t.root_directory().string().c_str() == _t.root_directory().native());
+		t.root_directory().string().c_str() ==
+		_t.root_directory().native()
+	);
 	EXPECT_TRUE(
-		t1.root_directory().string().c_str() == _t1.root_directory().native());
+		t1.root_directory().string().c_str() ==
+		_t1.root_directory().native()
+	);
 	EXPECT_TRUE(
-		t2.root_directory().string().c_str() == _t2.root_directory().native());
+		t2.root_directory().string().c_str() ==
+		_t2.root_directory().native()
+	);
 	EXPECT_TRUE(
-		t3.root_directory().string().c_str() == _t3.root_directory().native());
+		t3.root_directory().string().c_str() ==
+		_t3.root_directory().native()
+	);
 	EXPECT_TRUE(
-		t4.root_directory().string().c_str() == _t4.root_directory().native());
+		t4.root_directory().string().c_str() ==
+		_t4.root_directory().native()
+	);
 	EXPECT_TRUE(
-		t5.root_directory().string().c_str() == _t5.root_directory().native());
+		t5.root_directory().string().c_str() ==
+		_t5.root_directory().native()
+	);
 	EXPECT_TRUE(
-		t6.root_directory().string().c_str() == _t6.root_directory().native());
+		t6.root_directory().string().c_str() ==
+		_t6.root_directory().native()
+	);
 	EXPECT_TRUE(
-		t7.root_directory().string().c_str() == _t7.root_directory().native());
+		t7.root_directory().string().c_str() ==
+		_t7.root_directory().native()
+	);
 	EXPECT_TRUE(
-		t8.root_directory().string().c_str() == _t8.root_directory().native());
+		t8.root_directory().string().c_str() ==
+		_t8.root_directory().native()
+	);
 	EXPECT_TRUE(
-		t9.root_directory().string().c_str() == _t9.root_directory().native());
-	EXPECT_TRUE(t10.root_directory().string().c_str() ==
-		_t10.root_directory().native());
-	EXPECT_TRUE(t11.root_directory().string().c_str() ==
-		_t11.root_directory().native());
-	EXPECT_TRUE(t12.root_directory().string().c_str() ==
-		_t12.root_directory().native());
-	EXPECT_TRUE(t13.root_directory().string().c_str() ==
-		_t13.root_directory().native());
-	EXPECT_TRUE(t14.root_directory().string().c_str() ==
-		_t14.root_directory().native());
-	EXPECT_TRUE(t15.root_directory().string().c_str() ==
-		_t15.root_directory().native());
-	EXPECT_TRUE(t16.root_directory().string().c_str() ==
-		_t16.root_directory().native());
-	EXPECT_TRUE(t17.root_directory().string().c_str() ==
-		_t17.root_directory().native());
+		t9.root_directory().string().c_str() ==
+		_t9.root_directory().native()
+	);
+	EXPECT_TRUE(
+		t10.root_directory().string().c_str() ==
+		_t10.root_directory().native()
+	);
+	EXPECT_TRUE(
+		t11.root_directory().string().c_str() ==
+		_t11.root_directory().native()
+	);
+	EXPECT_TRUE(
+		t12.root_directory().string().c_str() ==
+		_t12.root_directory().native()
+	);
+	EXPECT_TRUE(
+		t13.root_directory().string().c_str() ==
+		_t13.root_directory().native()
+	);
+	EXPECT_TRUE(
+		t14.root_directory().string().c_str() ==
+		_t14.root_directory().native()
+	);
+	EXPECT_TRUE(
+		t15.root_directory().string().c_str() ==
+		_t15.root_directory().native()
+	);
+	EXPECT_TRUE(
+		t16.root_directory().string().c_str() ==
+		_t16.root_directory().native()
+	);
+	EXPECT_TRUE(
+		t17.root_directory().string().c_str() ==
+		_t17.root_directory().native()
+	);
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_operator_slash)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_operator_slash
+)
 {
 	ktk_filesystem_path t;
 	ktk_filesystem_path t2("/");
@@ -1159,7 +1597,10 @@ TEST(Filesystem, test_container_filesystem_static_path_operator_slash)
 	EXPECT_TRUE(new_t3.native() == new__t3.string().c_str());
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_operator_slash_equal)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_operator_slash_equal
+)
 {
 	ktk_filesystem_path t;
 	ktk_filesystem_path t2("/");
@@ -1211,7 +1652,10 @@ TEST(Filesystem, test_container_filesystem_static_path_append)
 	EXPECT_TRUE(new_t3.native() == new__t3.string().c_str());
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_operator_plus_slash)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_operator_plus_slash
+)
 {
 	ktk_filesystem_path t("C:");
 	ktk_filesystem_path t1("C:/");
@@ -1337,14 +1781,20 @@ TEST(Filesystem, test_container_filesystem_static_path_concat)
 	EXPECT_TRUE(t10.native() == _t10.string().c_str());
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_operator_ostream)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_operator_ostream
+)
 {
 	ktk_filesystem_path t("C:\\test\\ostream\\operator");
 
 	std::cout << t << std::endl;
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_iterator_for_loop)
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_iterator_for_loop
+)
 {
 	std::vector<std::string> kotek;
 	std::vector<std::string> stl;
@@ -1395,14 +1845,24 @@ TEST(Filesystem, test_container_filesystem_static_path_iterator_for_loop)
 	}
 }
 
-TEST(Filesystem, test_container_filesystem_static_path_iterator_constructor) {}
+TEST(
+	Filesystem,
+	test_container_filesystem_static_path_iterator_constructor
+)
+{
+}
 
-TEST(FileSystem, test_virtualfilemapper_manager_default_constructor) 
+TEST(
+	FileSystem,
+	test_virtualfilemapper_manager_default_constructor
+)
 {
 	ktkFileSystem_VFM vfm;
 }
 
-TEST(FileSystem, test_virtualfilemapper_manager_init_and_shutdown)
+TEST(
+	FileSystem, test_virtualfilemapper_manager_init_and_shutdown
+)
 {
 	ktkFileSystem_VFM vfm;
 	vfm.Initialize();
@@ -1414,32 +1874,47 @@ TEST(FileSystem, test_virtualfilemapper_manager_mapping)
 	ktkFileSystem_VFM vfm;
 	vfm.Initialize();
 
-	// faking handles in order to simulate working without full instancing of
-	// filesystem
+	// faking handles in order to simulate working without full
+	// instancing of filesystem
 
-	ktk_filesystem_path current_path = kun_ktk kun_filesystem current_path();
+	ktk_filesystem_path current_path =
+		kun_ktk kun_filesystem current_path();
 
-	current_path /= kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
-		eFolderIndex::kFolderIndex_DataUser);
+	current_path /= kun_ktk kun_filesystem
+		get_frameworks_folder_name_by_enum(
+			eFolderIndex::kFolderIndex_DataUser
+		);
 
-	bool folder_exists = kun_ktk kun_filesystem exists(current_path);
+	bool folder_exists =
+		kun_ktk kun_filesystem exists(current_path);
 
-	KOTEK_ASSERT(folder_exists,
+	KOTEK_ASSERT(
+		folder_exists,
 		"folder {} must exist!",
-		kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
-			eFolderIndex::kFolderIndex_DataUser));
+		kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			)
+	);
 
 	if (folder_exists)
 	{
-		current_path /=
-			kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
-				eFolderIndex::kFolderIndex_DataUser_Tests);
+		current_path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser_Tests
+			);
 
-		folder_exists = kun_ktk kun_filesystem exists(current_path);
+		folder_exists =
+			kun_ktk kun_filesystem exists(current_path);
 
-		KOTEK_ASSERT(folder_exists, "folder {} must exist!",
-			kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
-				eFolderIndex::kFolderIndex_DataUser_Tests));
+		KOTEK_ASSERT(
+			folder_exists,
+			"folder {} must exist!",
+			kun_ktk kun_filesystem
+				get_frameworks_folder_name_by_enum(
+					eFolderIndex::kFolderIndex_DataUser_Tests
+				)
+		);
 
 		if (folder_exists)
 		{
@@ -1447,7 +1922,10 @@ TEST(FileSystem, test_virtualfilemapper_manager_mapping)
 
 			FILE* p_file = fopen(current_path.c_str(), "w+");
 			KOTEK_ASSERT(
-				p_file, "failed to create file by path: {}", current_path);
+				p_file,
+				"failed to create file by path: {}",
+				current_path
+			);
 
 			fwrite("test", sizeof("test"), 1, p_file);
 			fflush(p_file);
@@ -1456,7 +1934,10 @@ TEST(FileSystem, test_virtualfilemapper_manager_mapping)
 
 			kun_ktk uint32_t file_id = vfm.MapFile(p_file);
 
-			KOTEK_ASSERT(file_id != decltype(file_id)(-1), "failed to MapFile");
+			KOTEK_ASSERT(
+				file_id != decltype(file_id)(-1),
+				"failed to MapFile"
+			);
 
 			if (p_file)
 				fclose(p_file);
@@ -1468,36 +1949,52 @@ TEST(FileSystem, test_virtualfilemapper_manager_mapping)
 	vfm.Shutdown();
 }
 
-TEST(FileSystem, test_virtualfilemapper_manager_shutdown) 
+TEST(FileSystem, test_virtualfilemapper_manager_shutdown)
 {
 	ktkFileSystem_VFM vfm;
 	vfm.Initialize();
 
-	// faking handles in order to simulate working without full instancing of
-	// filesystem
+	// faking handles in order to simulate working without full
+	// instancing of filesystem
 
-	ktk_filesystem_path current_path = kun_ktk kun_filesystem current_path();
+	ktk_filesystem_path current_path =
+		kun_ktk kun_filesystem current_path();
 
-	current_path /= kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
-		eFolderIndex::kFolderIndex_DataUser);
+	current_path /= kun_ktk kun_filesystem
+		get_frameworks_folder_name_by_enum(
+			eFolderIndex::kFolderIndex_DataUser
+		);
 
-	bool folder_exists = kun_ktk kun_filesystem exists(current_path);
+	bool folder_exists =
+		kun_ktk kun_filesystem exists(current_path);
 
-	KOTEK_ASSERT(folder_exists, "folder {} must exist!",
-		kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
-			eFolderIndex::kFolderIndex_DataUser));
+	KOTEK_ASSERT(
+		folder_exists,
+		"folder {} must exist!",
+		kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser
+			)
+	);
 
 	if (folder_exists)
 	{
-		current_path /=
-			kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
-				eFolderIndex::kFolderIndex_DataUser_Tests);
+		current_path /= kun_ktk kun_filesystem
+			get_frameworks_folder_name_by_enum(
+				eFolderIndex::kFolderIndex_DataUser_Tests
+			);
 
-		folder_exists = kun_ktk kun_filesystem exists(current_path);
+		folder_exists =
+			kun_ktk kun_filesystem exists(current_path);
 
-		KOTEK_ASSERT(folder_exists, "folder {} must exist!",
-			kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
-				eFolderIndex::kFolderIndex_DataUser_Tests));
+		KOTEK_ASSERT(
+			folder_exists,
+			"folder {} must exist!",
+			kun_ktk kun_filesystem
+				get_frameworks_folder_name_by_enum(
+					eFolderIndex::kFolderIndex_DataUser_Tests
+				)
+		);
 
 		if (folder_exists)
 		{
@@ -1505,7 +2002,10 @@ TEST(FileSystem, test_virtualfilemapper_manager_shutdown)
 
 			FILE* p_file = fopen(current_path.c_str(), "w+");
 			KOTEK_ASSERT(
-				p_file, "failed to create file by path: {}", current_path);
+				p_file,
+				"failed to create file by path: {}",
+				current_path
+			);
 
 			fwrite("test", sizeof("test"), 1, p_file);
 			fflush(p_file);
@@ -1514,12 +2014,15 @@ TEST(FileSystem, test_virtualfilemapper_manager_shutdown)
 
 			kun_ktk uint32_t file_id = vfm.MapFile(p_file);
 
-			KOTEK_ASSERT(file_id != decltype(file_id)(-1), "failed to MapFile");
+			KOTEK_ASSERT(
+				file_id != decltype(file_id)(-1),
+				"failed to MapFile"
+			);
 
 			if (p_file)
 				fclose(p_file);
 
-		//	vfm.UnMapFile(file_id);
+			//	vfm.UnMapFile(file_id);
 		}
 	}
 

@@ -10,9 +10,10 @@ ktkFileSystem_Native::ktkFileSystem_Native() :
 	m_shutdown_was_called{},
 	#endif
 
-	m_default_stream_buffer_size{},
+	m_default_stream_buffer_size{}
 	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
-	, m_p_vfm{}
+	,
+	m_p_vfm{}
 	#endif
 {
 }
@@ -102,7 +103,7 @@ bool ktkFileSystem_Native::Read_File(
 			if (file_size <= length_of_buffer)
 			{
 				fread(p_buffer, file_size, 1, p_file);
-				
+
 				KOTEK_ASSERT(
 					ferror(p_file) == 0, "fread failed!"
 				);
@@ -116,8 +117,8 @@ bool ktkFileSystem_Native::Read_File(
 						sizeof(this->m_reserved_cache) /
 							sizeof(this->m_reserved_cache[0]),
 					"overflow, resize your cache or use "
-				    "another dynamic/streaming methods for "
-				    "loading this data"
+					"another dynamic/streaming methods for "
+					"loading this data"
 				);
 
 				fread(

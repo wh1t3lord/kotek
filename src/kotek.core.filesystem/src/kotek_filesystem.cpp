@@ -1,6 +1,7 @@
 #include "../include/kotek_filesystem.h"
 #include <kotek.core.constants/include/kotek_core_constants.h>
 
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 ktkFileSystem::ktkFileSystem(void) : m_p_config{} {}
@@ -221,7 +222,7 @@ void ktkFileSystem::Initialize_FrameworkConfig()
 
 			char cfg_as_string[1024];
 			bool status =
-				cfg.Get_AsSerializedString(cfg_as_string);
+				cfg.Serialize_ToString(cfg_as_string);
 
 			KOTEK_ASSERT(
 				status, "failed to make json as string"

@@ -19,7 +19,6 @@ endif()
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.shared)
 
 if (WIN32)

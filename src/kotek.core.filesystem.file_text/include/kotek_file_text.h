@@ -26,6 +26,13 @@ template <
 class ktkResourceText
 {
 public:
+	ktkResourceText(
+		const ktk_cstring<
+			KOTEK_DEF_RESOURCE_TEXT_FILENAME_LENGTH>& filename
+	) : m_data{}, m_file_name{filename}
+	{
+	}
+
 	ktkResourceText(void) : m_data{} {}
 
 	ktkResourceText(const ktkResourceText& instance) :
@@ -42,8 +49,7 @@ public:
 	          _JsonMemorySize >= _JMS2) ||
 	         _Realloc == true)>>
 	ktkResourceText(
-		const ktkResourceText<_PBS2, _JMS2, _Realloc2>&
-			instance
+		const ktkResourceText<_PBS2, _JMS2, _Realloc2>& instance
 	) : m_data{instance}, m_file_name{instance.Get_FileName()}
 	{
 	}
@@ -170,7 +176,7 @@ public:
 		this->m_data.json = data;
 	}
 
-	bool Get_AsSerializedString(kun_ktk cstring& result
+	bool Serialize_ToString(kun_ktk cstring& result
 	) const noexcept
 	{
 		bool status = this->m_data.json.Serialize(result);
@@ -182,9 +188,9 @@ public:
 		return status;
 	}
 
-	template<kun_ktk size_t _StringLength>
-	bool Get_AsSerializedString(char (&buffer_out)[_StringLength])
-		const noexcept
+	template <kun_ktk size_t _StringLength>
+	bool Serialize_ToString(char (&buffer_out)[_StringLength]
+	) const noexcept
 	{
 		const auto& obj = this->m_data.json.Get_Object();
 

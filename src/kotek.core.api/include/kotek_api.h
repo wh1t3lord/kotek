@@ -119,6 +119,54 @@ public:
 	) = 0;
 };
 
+class ktkIRenderResourceManager
+{
+public:
+	virtual ~ktkIRenderResourceManager(void) {}
+
+	// TODO: change signature on
+	// void
+	// TODO: think about dynamic
+	// memory if we are exceeded
+	// we can use more memory
+	// and etc
+	virtual void Initialize(
+		ktkIRenderDevice* p_raw_device,
+		ktkIRenderSwapchain* p_raw_swapchain,
+		kun_ktk size_t memory_size = 1024 * 1024 * 32
+	) = 0;
+
+	// TODO: change signature on
+	// void
+	virtual void Shutdown(ktkIRenderDevice* p_raw_device) = 0;
+
+	// doesn't create 'any' resource it just fills data
+
+	virtual bool Load_Geometry(
+		const ktk_filesystem_path& path_to_file,
+		float* p_vertecies,
+		kun_ktk size_t vertecies_count,
+		float* p_uv,
+		kun_ktk size_t uv_count
+	) = 0;
+
+	virtual bool Load_Geometry(
+		const ktk_filesystem_path& path_to_file,
+		unsigned char* p_vertecies,
+		kun_ktk size_t vertecies_raw_size,
+		unsigned char* p_uv,
+		kun_ktk size_t uv_raw_size
+	) = 0;
+
+	virtual void Resize(
+		ktkIRenderDevice* p_raw_device,
+		ktkIRenderSwapchain* p_raw_swapchain
+	) = 0;
+
+	virtual kun_render ktkRenderStats*
+	Get_Statistic(kun_core eRenderStatistics type) noexcept = 0;
+};
+
 class ktkIRenderGraphResourceManager
 {
 public:
