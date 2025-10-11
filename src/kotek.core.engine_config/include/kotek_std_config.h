@@ -174,9 +174,6 @@ public:
 	kun_ktk uint8_t Get_FS_PriorityListSize(void
 	) const noexcept override;
 
-	eFileSystemPriorityType Get_FS_MainPriority(void
-	) const noexcept;
-
 	void Set_FS_FeaturesFlag(kun_ktk uint16_t features
 	) override;
 

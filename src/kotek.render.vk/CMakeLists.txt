@@ -105,7 +105,6 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<ko
 target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.imgui)
 
 

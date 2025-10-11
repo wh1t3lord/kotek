@@ -68,7 +68,7 @@ bool InitializeModule_Render_ANGLE_GLES23(
 		p_main_manager->Get_WindowManager()->ActiveWindow_GetHeight());
 
 	p_render_swapchain->Initialize(p_render_device);
-	p_render_resource_manager->initialize(p_render_device, p_render_swapchain,
+	p_render_resource_manager->Initialize(p_render_device, p_render_swapchain,
 		p_engine_config->Get_VideoMemoryForInitialize());
 
 	p_main_manager->SetRenderResourceManager(p_render_resource_manager);
@@ -94,7 +94,7 @@ bool ShutdownModule_Render_ANGLE_GLES23(Core::ktkMainManager* p_main_manager)
 	p_main_manager->getRenderSwapchainManager()->Shutdown(
 		p_main_manager->getRenderDevice());
 
-	p_main_manager->GetRenderResourceManager()->shutdown(
+	p_main_manager->GetRenderResourceManager()->Shutdown(
 		p_main_manager->getRenderDevice());
 
 	p_main_manager->getRenderDevice()->Shutdown();

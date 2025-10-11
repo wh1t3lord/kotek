@@ -215,9 +215,7 @@ public:
 };
 
 // todo: rename it
-using ktkFileHandleType = kun_ktk uintptr_t;
-constexpr ktkFileHandleType kInvalidFileHandleType =
-	ktkFileHandleType(-1);
+
 // todo: probably should delete
 // in order to avoid duplication
 constexpr ktkFileHandleType kFileSystemInvalidFileHandleType =
@@ -788,8 +786,6 @@ public:
 	) const noexcept = 0;
 	virtual kun_ktk uint8_t Get_FS_PriorityListSize(void
 	) const noexcept = 0;
-	virtual eFileSystemPriorityType Get_FS_MainPriority(void
-	) const noexcept;
 	virtual void Set_FS_FeaturesFlag(kun_ktk uint16_t features
 	) = 0;
 	virtual kun_ktk uint16_t Get_FS_FeaturesFlag(void

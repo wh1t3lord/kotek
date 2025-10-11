@@ -7,7 +7,9 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 KOTEK_BEGIN_NAMESPACE_RENDER_BGFX
 ktkRenderResourceManager::ktkRenderResourceManager(
-	kun_core ktkIRenderDevice* p_device, kun_core ktkMainManager* p_manager) :
+	kun_core ktkIRenderDevice* p_device,
+	kun_core ktkMainManager* p_manager
+) :
 	m_p_render_device{p_device}, m_p_render_manager_texture{},
 	m_p_render_manager_shader{}, m_p_main_manager{p_manager}
 {
@@ -34,39 +36,55 @@ ktkRenderResourceManager::~ktkRenderResourceManager(void)
 	}
 }
 
-void ktkRenderResourceManager::initialize(
+void ktkRenderResourceManager::Initialize(
 	kun_core ktkIRenderDevice* p_raw_device,
-	kun_core ktkIRenderSwapchain* p_raw_swapchain, kun_ktk size_t memory_size)
+	kun_core ktkIRenderSwapchain* p_raw_swapchain,
+	kun_ktk size_t memory_size
+)
 {
-	KOTEK_ASSERT(p_raw_device, "you can't pass an invalid interface");
-	KOTEK_ASSERT(p_raw_swapchain, "you can't pass an invalid interface");
+	KOTEK_ASSERT(
+		p_raw_device, "you can't pass an invalid interface"
+	);
+	KOTEK_ASSERT(
+		p_raw_swapchain, "you can't pass an invalid interface"
+	);
 
 	this->m_p_render_manager_texture =
 		new ktkRenderTextureManager(this->m_p_main_manager);
 	this->m_p_render_manager_shader =
 		new ktkRenderShaderManager(this->m_p_main_manager);
-	this->m_p_render_manager_geometry = new ktkRenderGeometryManager();
+	this->m_p_render_manager_geometry =
+		new ktkRenderGeometryManager();
 
 	kun_ktk size_t total_memory = memory_size;
 
-	auto tex_mem =
-		kun_ktk align_down<kun_ktk size_t>((((memory_size / 100) * 70)), 2);
+	auto tex_mem = kun_ktk align_down<kun_ktk size_t>(
+		(((memory_size / 100) * 70)), 2
+	);
 	this->m_p_render_manager_texture->Initialize(tex_mem);
 
 	total_memory -= tex_mem;
 
 	auto shader_manager_memory =
-		kun_ktk align_down<kun_ktk size_t>((((memory_size / 100) * 10)), 2);
-	this->m_p_render_manager_shader->Initialize(shader_manager_memory);
+		kun_ktk align_down<kun_ktk size_t>(
+			(((memory_size / 100) * 10)), 2
+		);
+	this->m_p_render_manager_shader->Initialize(
+		shader_manager_memory
+	);
 
 	total_memory -= shader_manager_memory;
 
 	this->m_p_render_manager_geometry->Initialize(total_memory);
 }
 
-void ktkRenderResourceManager::shutdown(kun_core ktkIRenderDevice* p_raw_device)
+void ktkRenderResourceManager::Shutdown(
+	kun_core ktkIRenderDevice* p_raw_device
+)
 {
-	KOTEK_ASSERT(p_raw_device, "you can't pass an invalid interface");
+	KOTEK_ASSERT(
+		p_raw_device, "you can't pass an invalid interface"
+	);
 
 	if (this->m_p_render_manager_texture)
 		this->m_p_render_manager_texture->Shutdown();
@@ -78,69 +96,101 @@ void ktkRenderResourceManager::shutdown(kun_core ktkIRenderDevice* p_raw_device)
 		this->m_p_render_manager_geometry->Shutdown();
 }
 
-void ktkRenderResourceManager::Resize(kun_core ktkIRenderDevice* p_raw_device,
-	kun_core ktkIRenderSwapchain* p_raw_swapchain)
+void ktkRenderResourceManager::Resize(
+	kun_core ktkIRenderDevice* p_raw_device,
+	kun_core ktkIRenderSwapchain* p_raw_swapchain
+)
 {
-	KOTEK_ASSERT(p_raw_device, "you can't pass an invalid interface");
-	KOTEK_ASSERT(p_raw_swapchain, "you can't pass an invalid interface");
+	KOTEK_ASSERT(
+		p_raw_device, "you can't pass an invalid interface"
+	);
+	KOTEK_ASSERT(
+		p_raw_swapchain, "you can't pass an invalid interface"
+	);
 }
 
-kun_ktk shared_ptr<kun_core ktkResourceHandle>
-ktkRenderResourceManager::LoadGeometry(
-	kun_ktk enum_base_t resource_loading_type, kun_ktk uint32_t id)
+bool ktkRenderResourceManager::Load_Geometry(
+	const ktk_filesystem_path& path_to_file,
+	float* p_vertecies,
+	kun_ktk size_t vertecies_count,
+	float* p_uv,
+	kun_ktk size_t uv_count
+)
 {
-	kun_ktk shared_ptr<kun_core ktkResourceHandle> p_result;
+	KOTEK_ASSERT(false, "todo: re-write");
 
-	kun_core eResourceLoadingType type =
-		static_cast<kun_core eResourceLoadingType>(
-			resource_loading_type);
+	bool result = true;
 
-	switch (type)
-	{
-	case kun_core eResourceLoadingType::kModelStatic_Triangle:
-	{
-		if (this->m_p_render_manager_geometry)
-		{
-			ktkGeometry* p_geometry = new ktkGeometry(id,
-				{{0.5f, 0.5f, 0.0f}, {0.5f, -0.5f, 0.0f}, {-0.5f, -0.5f, 0.0f},
-					{-0.5f, 0.5f, 0.0f}},
-				{0, 1, 3, 1, 2, 3});
+	/* todo: re-write
+	    kun_core eResourceLoadingType type =
+	        static_cast<kun_core eResourceLoadingType>(
+	            resource_loading_type
+	        );
 
-			this->m_p_render_manager_geometry->AddForUpload(
-				p_geometry->Get_VertexData(), p_geometry->Get_IndexData(), id);
+	    switch (type)
+	    {
+	    case kun_core
+	eResourceLoadingType::kModelStatic_Triangle:
+	    {
+	        if (this->m_p_render_manager_geometry)
+	        {
+	            ktkGeometry* p_geometry = new ktkGeometry(
+	                id,
+	                {{0.5f, 0.5f, 0.0f},
+	                 {0.5f, -0.5f, 0.0f},
+	                 {-0.5f, -0.5f, 0.0f},
+	                 {-0.5f, 0.5f, 0.0f}},
+	                {0, 1, 3, 1, 2, 3}
+	            );
 
-			p_result = std::make_shared<kun_core ktkResourceHandle>(p_geometry
-#ifdef KOTEK_DEBUG
-				,
-				false, typeid(p_geometry).name(), __FILE__, __FUNCTION__
-#endif
-			);
-		}
+	            this->m_p_render_manager_geometry->AddForUpload(
+	                p_geometry->Get_VertexData(),
+	                p_geometry->Get_IndexData(),
+	                id
+	            );
 
-		break;
-	}
-	case Kotek::kun_core eResourceLoadingType::kModelStatic_Box:
-	{
-		if (this->m_p_render_manager_geometry)
-		{
-		}
+	            p_result =
+	                std::make_shared<kun_core
+	ktkResourceHandle>( p_geometry #ifdef KOTEK_DEBUG
+	                    ,
+	                    false,
+	                    typeid(p_geometry).name(),
+	                    __FILE__,
+	                    __FUNCTION__
+	#endif
+	                );
+	        }
 
-		break;
-	}
-	default:
-	{
-		KOTEK_ASSERT(false, "not implemented");
-	}
-	}
+	        break;
+	    }
+	    case Kotek::kun_core
+	eResourceLoadingType::kModelStatic_Box:
+	    {
+	        if (this->m_p_render_manager_geometry)
+	        {
+	        }
 
-	return p_result;
+	        break;
+	    }
+	    default:
+	    {
+	        KOTEK_ASSERT(false, "not implemented");
+	    }
+	    }*/
+
+	return result;
 }
 
-kun_ktk shared_ptr<kun_core ktkResourceHandle>
-ktkRenderResourceManager::LoadGeometry(kun_ktk enum_base_t resource_loading_type,
-	const ktk_filesystem_path& path_to_file, kun_ktk uint32_t id)
+bool ktkRenderResourceManager::Load_Geometry(
+	const ktk_filesystem_path& path_to_file,
+	unsigned char* p_vertecies,
+	kun_ktk size_t vertecies_raw_size,
+	unsigned char* p_uv,
+	kun_ktk size_t uv_raw_size
+)
 {
-	return nullptr;
+	KOTEK_ASSERT(false, "todo: implement please");
+	return false;
 }
 
 void ktkRenderResourceManager::Update(void) noexcept
@@ -151,25 +201,28 @@ void ktkRenderResourceManager::Update(void) noexcept
 	}
 }
 
-ktkRenderTextureManager* ktkRenderResourceManager::Get_ManagerTexture(
-	void) const noexcept
+ktkRenderTextureManager*
+ktkRenderResourceManager::Get_ManagerTexture(void
+) const noexcept
 {
 	return this->m_p_render_manager_texture;
 }
 
-ktkRenderShaderManager* ktkRenderResourceManager::Get_ManagerShader(
-	void) const noexcept
+ktkRenderShaderManager*
+ktkRenderResourceManager::Get_ManagerShader(void) const noexcept
 {
 	return this->m_p_render_manager_shader;
 }
-ktkRenderGeometryManager* ktkRenderResourceManager::Get_ManagerGeometry(
-	void) const noexcept
+ktkRenderGeometryManager*
+ktkRenderResourceManager::Get_ManagerGeometry(void
+) const noexcept
 {
 	return this->m_p_render_manager_geometry;
 }
 
 ktkRenderStats* ktkRenderResourceManager::Get_Statistic(
-	kun_core eRenderStatistics type) noexcept
+	kun_core eRenderStatistics type
+) noexcept
 {
 	ktkRenderStats* p_result{};
 
@@ -179,7 +232,8 @@ ktkRenderStats* ktkRenderResourceManager::Get_Statistic(
 	{
 		if (this->m_p_render_manager_geometry)
 		{
-	//		p_result = this->m_p_render_manager_geometry->Get_StatIndexBuffer();
+			//		p_result =
+			// this->m_p_render_manager_geometry->Get_StatIndexBuffer();
 			KOTEK_ASSERT(false, "todo: implement");
 		}
 
@@ -189,8 +243,8 @@ ktkRenderStats* ktkRenderResourceManager::Get_Statistic(
 	{
 		if (this->m_p_render_manager_geometry)
 		{
-//			p_result =
-		//		this->m_p_render_manager_geometry->Get_StatSSBOBufferMatrix();
+			//			p_result =
+			//		this->m_p_render_manager_geometry->Get_StatSSBOBufferMatrix();
 			KOTEK_ASSERT(false, "todo: implement");
 		}
 
@@ -200,8 +254,8 @@ ktkRenderStats* ktkRenderResourceManager::Get_Statistic(
 	{
 		if (this->m_p_render_manager_geometry)
 		{
-	//		p_result =
-	//			this->m_p_render_manager_geometry->Get_StatVertexBuffer();
+			//		p_result =
+			//			this->m_p_render_manager_geometry->Get_StatVertexBuffer();
 			KOTEK_ASSERT(false, "todo: implement");
 		}
 

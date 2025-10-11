@@ -16,6 +16,10 @@ KOTEK_END_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+using ktkFileHandleType = kun_ktk uintptr_t;
+constexpr ktkFileHandleType kInvalidFileHandleType =
+	ktkFileHandleType(-1);
+
 class ktkISDKRedoUndo
 {
 public:
@@ -28,8 +32,7 @@ public:
 	virtual void SetEntityID(kun_ktk uint32_t id) noexcept {}
 	virtual kun_ktk enum_base_t GetCommandType() noexcept = 0;
 
-	virtual kun_ktk size_t Serialize(kun_ktk cfstream* p_file,
-		void* p_resource_manager) noexcept = 0;
+	virtual kun_ktk size_t Serialize(ktkFileHandleType file) noexcept = 0;
 };
 
 /// @brief manager stores registered command that will be accessed through

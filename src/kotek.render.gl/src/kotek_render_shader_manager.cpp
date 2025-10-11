@@ -131,19 +131,26 @@ ktkShaderModule ktkRenderShaderManager::Create_Shader(
 	ktkShaderModule result;
 
 	auto real_path = relative_to_glsl_folder_or_absolute_path;
-	if (!this->m_p_filesystem->IsValidPath(
+	if (!this->m_p_filesystem->Is_ValidPath(
 			relative_to_glsl_folder_or_absolute_path))
 	{
 		// so you passed a name with extension
 
 		// TODO: implement changing subfolder to any other custom, but does it
 		// make any sense?
-		auto path_to_folder = this->m_p_filesystem->GetFolderByEnum(
-			Core::eFolderIndex::kFolderIndex_DataGame_Shaders_GLSL);
+		ktk_filesystem_path path_to_folder;
+		this->m_p_filesystem->Make_Path(
+			path_to_folder,
+			kun_core
+				eFolderIndex::kFolderIndex_DataGame_Shaders_GLSL
+		);
+		//	auto path_to_folder =
+		   //this->m_p_filesystem->GetFolderByEnum(
+	//		Core::eFolderIndex::kFolderIndex_DataGame_Shaders_GLSL);
 
 		path_to_folder /= real_path;
 
-		if (!this->m_p_filesystem->IsValidPath(path_to_folder))
+		if (!this->m_p_filesystem->Is_ValidPath(path_to_folder))
 		{
 			KOTEK_ASSERT(false, "path is not valid at all!");
 			KOTEK_MESSAGE_ERROR("failed to load file by path: {} the file "
@@ -209,15 +216,22 @@ ktkShaderModule ktkRenderShaderManager::Create_Shader(
 	ktkShaderModule result;
 
 	auto real_path = relative_to_glsl_folder_or_absolute_path;
-	if (!this->m_p_filesystem->IsValidPath(
+	if (!this->m_p_filesystem->Is_ValidPath(
 			relative_to_glsl_folder_or_absolute_path))
 	{
-		auto path_to_folder = this->m_p_filesystem->GetFolderByEnum(
-			kun_core eFolderIndex::kFolderIndex_DataGame_Shaders_GLSL);
+		ktk_filesystem_path path_to_folder;
+		this->m_p_filesystem->Make_Path(
+			path_to_folder,
+			kun_core
+				eFolderIndex::kFolderIndex_DataGame_Shaders_GLSL
+		);
+
+	//	auto path_to_folder = this->m_p_filesystem->GetFolderByEnum(
+	//		kun_core eFolderIndex::kFolderIndex_DataGame_Shaders_GLSL);
 
 		path_to_folder /= real_path;
 
-		if (!this->m_p_filesystem->IsValidPath(path_to_folder))
+		if (!this->m_p_filesystem->Is_ValidPath(path_to_folder))
 		{
 			KOTEK_ASSERT(false,
 				"path is not valid at all! tried to construct as relative to "
@@ -397,7 +411,7 @@ gl::eShaderType ktkRenderShaderManager::DetectType(
 		return eShaderType::kShaderType_Unknown;
 	}
 
-	if (this->m_p_filesystem->IsValidPath(path_to_file) == false)
+	if (this->m_p_filesystem->Is_ValidPath(path_to_file) == false)
 	{
 		KOTEK_MESSAGE_WARNING(
 			"invalid path to file, can't analyze this path: [{}]",

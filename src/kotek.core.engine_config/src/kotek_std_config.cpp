@@ -893,14 +893,6 @@ kun_ktk uint8_t ktkEngineConfig::Get_FS_PriorityListSize(void
 	return result;
 }
 
-eFileSystemPriorityType
-ktkEngineConfig::Get_FS_MainPriority(void) const noexcept
-{
-	return static_cast<eFileSystemPriorityType>(
-		this->m_fs_priority_list[0]
-	);
-}
-
 kun_ktk uint16_t ktkEngineConfig::Get_FS_FeaturesFlag(void
 ) const noexcept
 {

@@ -35,10 +35,7 @@ bool InitializeModule_Render_GL(Core::ktkMainManager* p_main_manager,
 		p_main_manager->Get_WindowManager()->ActiveWindow_GetHeight());
 
 	p_render_swapchain->Initialize(p_render_device);
-	p_render_resource_manager->initialize(p_render_device, p_render_swapchain);
-
-	p_main_manager->GetResourceManager()->Set_RenderResourceManager(
-		p_render_resource_manager);
+	p_render_resource_manager->Initialize(p_render_device, p_render_swapchain);
 
 	KOTEK_MESSAGE("render module is initialized");
 
@@ -51,7 +48,7 @@ bool ShutdownModule_Render_GL(Core::ktkMainManager* p_main_manager)
 
 	p_main_manager->getRenderSwapchainManager()->Shutdown(
 		p_main_manager->getRenderDevice());
-	p_main_manager->GetRenderResourceManager()->shutdown(
+	p_main_manager->GetRenderResourceManager()->Shutdown(
 		p_main_manager->getRenderDevice());
 
 	Core::ktkIGameManager* p_game_manager = p_main_manager->GetGameManager();

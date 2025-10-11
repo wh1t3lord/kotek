@@ -60,11 +60,8 @@ namespace Kotek
 
 			p_render_manager_swapchain->Initialize(p_render_manager_device);
 
-			p_render_manager_render_resource->initialize(
+			p_render_manager_render_resource->Initialize(
 				p_render_manager_device, p_render_manager_swapchain);
-
-			p_main_manager->GetResourceManager()->Set_RenderResourceManager(
-				p_render_manager_render_resource);
 
 			KOTEK_MESSAGE("render module is initialized");
 
@@ -79,7 +76,7 @@ namespace Kotek
 
 			p_main_manager->getRenderSwapchainManager()->Shutdown(
 				p_main_manager->getRenderDevice());
-			p_main_manager->GetRenderResourceManager()->shutdown(
+			p_main_manager->GetRenderResourceManager()->Shutdown(
 				p_main_manager->getRenderDevice());
 
 			kun_core ktkIGameManager* p_game_manager =

@@ -99,7 +99,6 @@ target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 #target_link_directories(${PROJECT_NAME} PUBLIC "../../${KOTEK_DEPS_FOLDER}/shaderc/${CMAKE_BUILD_TYPE}/lib/")
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.model)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
 
 
