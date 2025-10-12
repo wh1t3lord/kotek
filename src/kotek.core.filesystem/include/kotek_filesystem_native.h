@@ -55,7 +55,6 @@ public:
 	);
 	void Shutdown();
 
-
 	bool Read_File(
 		const ktk_filesystem_path& path,
 		kun_ktk uint8_t*& p_buffer,
@@ -63,6 +62,12 @@ public:
 		eFileSystemFeatureType features
 	);
 
+	bool Write_File(
+		const ktk_filesystem_path& path_to_file,
+		const char* p_buffer,
+		kun_ktk size_t length_of_buffer,
+		eFileSystemFeatureType features
+	);
 
 private:
 	#ifdef KOTEK_DEBUG
@@ -75,7 +80,8 @@ private:
 	ktkFileSystem_VFM* m_p_vfm;
 	#endif
 
-	// trivial cache for stack based reading, but generally saying it is better to provide virtual mapping cache
+	// trivial cache for stack based reading, but generally
+	// saying it is better to provide virtual mapping cache
 	unsigned char m_reserved_cache[2048];
 
 	ktk_vector<

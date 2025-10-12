@@ -134,7 +134,7 @@ public:
 		const ktk_cstring<
 			KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>&
 			field_name,
-		DataType data
+		const DataType& data
 	) noexcept
 	{
 		this->m_data.json.Write<DataType>(field_name, data);
@@ -188,15 +188,27 @@ public:
 		return status;
 	}
 
-	template <kun_ktk size_t _StringLength>
-	bool Serialize_ToString(char (&buffer_out)[_StringLength]
+	template <kun_ktk size_t _StringLength, typename _SizeType>
+	bool Serialize_ToString(
+		char (&buffer_out)[_StringLength], _SizeType& real_size
 	) const noexcept
 	{
 		const auto& obj = this->m_data.json.Get_Object();
 
 		kun_ktk json::serializer sr;
 		sr.reset(&obj);
-		sr.read(buffer_out);
+		const auto& str_view = sr.read(buffer_out);
+
+		KOTEK_ASSERT(
+			str_view.size() <= _StringLength,
+			"something is wrong, did it just json bug and not "
+			"on our side? Otherwise it means that real size is "
+			"bigger than what you've read, if asset below is "
+			"valid then you can ignore this assert"
+		);
+
+		real_size = static_cast<_SizeType>(str_view.size());
+		buffer_out[str_view.size()] = '\0';
 
 		bool status = sr.done();
 

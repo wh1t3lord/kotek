@@ -236,7 +236,7 @@ kun_ktk uint16_t simultaneously_opened_files_count
 	virtual void Initialize(ktkIFrameworkConfig* p_config) = 0;
 
 	virtual void Shutdown(void) = 0;
-	virtual bool Is_ValidPath(
+	virtual bool Is_Exists(
 		const ktk_filesystem_path& path,
 		bool is_relative_path = false
 	) const noexcept = 0;

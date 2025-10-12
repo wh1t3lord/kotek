@@ -31,7 +31,7 @@ TEST(
 		test_path, eFolderIndex::kFolderIndex_DataUser_Tests
 	);
 
-	bool status = instance.Is_ValidPath(test_path);
+	bool status = instance.Is_Exists(test_path);
 
 	EXPECT_TRUE(status);
 
@@ -92,8 +92,9 @@ TEST(Filesystem, test_file_create_pretty_output)
 	//	EXPECT_TRUE(status);
 
 	char out[1024];
+	kun_ktk uint16_t out_real_length = 0;
+	instance.Serialize_ToString(out, out_real_length);
 
-	instance.Serialize_ToString(out);
 	KOTEK_ASSERT(false, "see todo:");
 	// todo: provide write operation filesystem saving
 

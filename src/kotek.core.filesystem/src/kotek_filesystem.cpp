@@ -1,7 +1,6 @@
 #include "../include/kotek_filesystem.h"
 #include <kotek.core.constants/include/kotek_core_constants.h>
 
-
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 ktkFileSystem::ktkFileSystem(void) : m_p_config{} {}
@@ -68,7 +67,7 @@ void ktkFileSystem::Validate_Folder(
 	const ktk_filesystem_path& path
 )
 {
-	bool status = this->Is_ValidPath(path);
+	bool status = this->Is_Exists(path);
 
 	if (status == false)
 	{
@@ -78,6 +77,8 @@ void ktkFileSystem::Validate_Folder(
 		);
 	}
 }
+using sys_info_t = ktkResourceText<1024, 4096, false>;
+using sys_info_small_t = ktkResourceText<1024, 2048, false>;
 
 void ktkFileSystem::Initialize_FrameworkConfig()
 {
@@ -91,157 +92,390 @@ void ktkFileSystem::Initialize_FrameworkConfig()
 
 		kun_ktk uint8_t* p_temp = buffer;
 
-		bool status = this->Read_File(
-			kConfigFileNameSystemInfo,
-			p_temp,
-			buffer_size,
-			eFileSystemPriorityType::kNative
+		bool status = this->Is_Exists(
+			this->m_root_path / kConfigFileNameSystemInfo
 		);
-
-		KOTEK_ASSERT(status, "failed to read file!");
-
-		using sys_info_t = ktkResourceText<1024, 4096, false>;
 
 		if (status)
 		{
-			sys_info_t cfg;
-			cfg.Create_FromMemory(p_temp, buffer_size);
+			status = this->Read_File(
+				kConfigFileNameSystemInfo,
+				p_temp,
+				buffer_size,
+				eFileSystemPriorityType::kNative
+			);
 
-			cfg.Get(kSysInfoFieldName_UserNamespace);
+			KOTEK_ASSERT(status, "failed to read file!");
+
+			sys_info_t cfg;
+			status = cfg.Create_FromMemory(p_temp, buffer_size);
+
+			KOTEK_ASSERT(
+				status, "failed to make json from string"
+			);
+
+			KOTEK_ASSERT(
+				cfg.Is_KeyExist(kSysInfoFieldName_UserNamespace
+			    ),
+				"there's no field as: {}",
+				kSysInfoFieldName_UserNamespace
+			);
+
+			if (cfg.Is_KeyExist(kSysInfoFieldName_UserNamespace
+			    ))
+			{
+				const auto& user =
+					cfg.Get(kSysInfoFieldName_UserNamespace);
+
+				KOTEK_ASSERT(
+					user.Is_KeyExist(
+						kSysInfoFieldName_UserNamespace_EngineNamespace
+					),
+					"there's no field as: {}",
+					kSysInfoFieldName_UserNamespace_EngineNamespace
+				);
+
+				if (user.Is_KeyExist(
+						kSysInfoFieldName_UserNamespace_EngineNamespace
+					))
+				{
+					const auto& engine = user.Get(
+						kSysInfoFieldName_UserNamespace_EngineNamespace
+					);
+
+					if (engine.Is_KeyExist(
+							kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks
+						))
+					{
+						if (engine.Is_KeyExist(
+								kSysInfoFieldName_UserNamespace_EngineNamespace_Name
+							))
+						{
+							this->m_p_config->Set_UserLibrary_Name(
+								engine.Get<ktk_cstring<
+									KOTEK_DEF_USER_ENGINE_LIBRARY_NAME_LENGTH>>(
+									kSysInfoFieldName_UserNamespace_EngineNamespace_Name
+								)
+							);
+						}
+						else
+						{
+							KOTEK_MESSAGE_WARNING(
+								"can't obtain field: {}",
+								kSysInfoFieldName_UserNamespace_EngineNamespace_Name
+							);
+						}
+
+						const auto& callbacks = engine.Get(
+							kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks
+						);
+
+						auto p_read_and_set_callback =
+							[this](
+								const decltype(callbacks
+						        )& section,
+								const char* p_field_name,
+								eUserEngineLibraryCallbacks
+									callback_id
+							) -> void
+						{
+							if (section.Is_KeyExist(p_field_name
+							    ))
+							{
+								const ktk_cstring<
+									KOTEK_DEF_USER_ENGINE_LIBRARY_CALLBACK_NAME_LENGTH>&
+									callback_name =
+										section.Get<ktk_cstring<
+											KOTEK_DEF_USER_ENGINE_LIBRARY_CALLBACK_NAME_LENGTH>>(
+											p_field_name
+										);
+
+								this->m_p_config
+									->Set_UserLibrary_CallbackName(
+										callback_id,
+										callback_name
+									);
+							}
+							else
+							{
+								KOTEK_MESSAGE_WARNING(
+									"can't obtain field: {}",
+									p_field_name
+								);
+							}
+						};
+
+						p_read_and_set_callback(
+							callbacks,
+							kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init,
+							eUserEngineLibraryCallbacks::
+								kGame_Init
+						);
+
+						p_read_and_set_callback(
+							callbacks,
+							kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Shutdown,
+							eUserEngineLibraryCallbacks::
+								kGame_Shutdown
+						);
+
+						p_read_and_set_callback(
+							callbacks,
+							kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Update,
+							eUserEngineLibraryCallbacks::
+								kGame_Update
+						);
+
+						p_read_and_set_callback(
+							callbacks,
+							kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init_Render,
+							eUserEngineLibraryCallbacks::
+								kRender_Init
+						);
+					}
+					else
+					{
+						KOTEK_MESSAGE_WARNING(
+							"can't obtain field: {}",
+							kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks
+						);
+					}
+				}
+			}
+			else
+			{
+				KOTEK_MESSAGE_ERROR(
+					"can't obtain field: {}",
+					kSysInfoFieldName_UserNamespace
+				);
+			}
+
+			if (cfg.Is_KeyExist(kSysInfoFieldName_CoreNamespace
+			    ))
+			{
+				const auto& core =
+					cfg.Get(kSysInfoFieldName_CoreNamespace);
+
+				if (core.Is_KeyExist(
+						kSysInfoFieldName_CoreNamespace_FileSystemPriorityList
+					))
+				{
+					const kun_ktk json::array& arr = core.Get<
+						kun_ktk json::array>(
+						kSysInfoFieldName_CoreNamespace_FileSystemPriorityList
+					);
+
+					if (arr.empty())
+					{
+						KOTEK_MESSAGE_WARNING(
+							"priority list is empty!"
+						);
+					}
+					else
+					{
+						auto p_get_priority_type =
+							[](const kun_ktk json::string& name
+						    ) -> eFileSystemPriorityType
+						{
+							if (name.empty())
+								return eFileSystemPriorityType::
+									kAuto;
+
+							if (name.size() >= 1 &&
+							    tolower(name[0]) == 'n')
+							{
+								return eFileSystemPriorityType::
+									kNative;
+							}
+							else if (name.size() >= 1 &&
+							         tolower(name[0]) == 'z')
+							{
+								return eFileSystemPriorityType::
+									kZlib;
+							}
+
+							return eFileSystemPriorityType::
+								kAuto;
+						};
+
+						kun_ktk uint8_t priority_list
+							[static_cast<kun_ktk uint8_t>(
+								eFileSystemPriorityType::
+									kEndOfEnum
+							)];
+
+						for (int i = 0; i < arr.size(); ++i)
+						{
+							if (i >=
+							    static_cast<kun_ktk uint8_t>(
+									eFileSystemPriorityType::
+										kEndOfEnum
+								))
+							{
+								KOTEK_MESSAGE_WARNING(
+									"your field=[{}] has too "
+									"many "
+									"fields that system won't "
+									"handle!",
+									kSysInfoFieldName_CoreNamespace_FileSystemPriorityList
+								);
+
+								break;
+							}
+
+							const auto& value =
+								arr[i].as_string();
+
+							eFileSystemPriorityType casted =
+								p_get_priority_type(value);
+
+							KOTEK_ASSERT(
+								casted !=
+									eFileSystemPriorityType::
+										kAuto,
+								"failed to cast to "
+								"eFileSystemPriorityType={}",
+								value.c_str()
+							);
+
+							priority_list[i] =
+								static_cast<kun_ktk uint8_t>(
+									casted
+								);
+						}
+
+						this->m_p_config->Set_FS_PriorityList(
+							priority_list
+						);
+					}
+				}
+				else
+				{
+					KOTEK_MESSAGE_WARNING(
+						"can't obtain field: {}",
+						kSysInfoFieldName_CoreNamespace_FileSystemPriorityList
+					);
+				}
+
+				if (core.Is_KeyExist(
+						kSysInfoFieldName_CoreNamespace_FileSystemFeatures
+					))
+				{
+					const kun_ktk json::array& features =
+						core.Get<kun_ktk json::array>(
+							kSysInfoFieldName_CoreNamespace_FileSystemFeatures
+						);
+
+					if (features.empty() == false)
+					{
+						kun_ktk uint16_t features_result = 0;
+
+						auto p_cast_feature =
+							[](const kun_ktk json::string& name
+						    ) -> kun_ktk uint16_t
+						{
+							if (name.empty())
+								return 0;
+
+							if (name.size() >= 5 &&
+							    tolower(name[0]) == 'v' &&
+							    tolower(name[1]) == 'f' &&
+							    tolower(name[2]) == 'm' &&
+							    tolower(name[3]) == '_')
+							{
+								if (tolower(name[4]) == 'r')
+								{
+									return static_cast<
+										kun_ktk uint16_t>(
+										eFileSystemFeatureType::
+											kVFMRead
+									);
+								}
+								else if (tolower(name[4]) ==
+								         'w')
+								{
+									return static_cast<
+										kun_ktk uint16_t>(
+										eFileSystemFeatureType::
+											kVFMWrite
+									);
+								}
+								else if (tolower(name[4]) ==
+								         'c')
+								{
+									return static_cast<
+										kun_ktk uint16_t>(
+										eFileSystemFeatureType::
+											kVFMCacheEnabled
+									);
+								}
+							}
+							else if (name.size() >= 5 &&
+							         tolower(name[0]) == 'p' &&
+							         tolower(name[1]) == 'r' &&
+							         tolower(name[2]) == 'i' &&
+							         tolower(name[3]) == 'o' &&
+							         tolower(name[4]) == 'r')
+							{
+								return static_cast<
+									kun_ktk uint16_t>(
+									eFileSystemFeatureType::
+										kEnablePriorityWhenFailedToOpenFile
+								);
+							}
+
+							return 0;
+						};
+
+						for (int i = 0; i < features.size();
+						     ++i)
+						{
+							if (i >=
+							    _kEndOfEnum_eFileSystemFeatureType)
+							{
+								KOTEK_MESSAGE_WARNING(
+									"your field={} has too "
+									"many fields that system "
+									"won't handle",
+									kSysInfoFieldName_CoreNamespace_FileSystemFeatures
+								);
+								break;
+							}
+
+							const auto& value =
+								features[i].as_string();
+
+							kun_ktk uint16_t casted =
+								p_cast_feature(value);
+
+							features_result |= casted;
+						}
+
+						this->m_p_config->Set_FS_FeaturesFlag(
+							features_result
+						);
+					}
+				}
+				else
+				{
+					KOTEK_MESSAGE_WARNING(
+						"can't obtain field: {}",
+						kSysInfoFieldName_CoreNamespace_FileSystemFeatures
+					);
+				}
+			}
+			else
+			{
+				KOTEK_MESSAGE_ERROR(
+					"can't obtain field: {}",
+					kSysInfoFieldName_CoreNamespace
+				);
+			}
 		}
 		else
 		{
-			sys_info_t cfg;
-
-			{
-				// User
-				{
-					sys_info_t user_content;
-					{
-						sys_info_t engine_content;
-						{
-							engine_content.Write(
-								kSysInfoFieldName_UserNamespace_EngineNamespace_Name,
-								KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME
-							);
-							{
-								sys_info_t callbacks_content;
-								{
-									callbacks_content.Write(
-										kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init,
-										kUserCallbackName_Initialize
-									);
-									callbacks_content.Write(
-										kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Shutdown,
-										kUserCallbackName_Shutdown
-									);
-									callbacks_content.Write(
-										kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Update,
-										kUserCallbackName_Update
-									);
-									callbacks_content.Write(
-										kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init_Render,
-										kUserCallbackName_Initialize_Render
-									);
-								}
-
-								engine_content.Write(
-									kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks,
-									callbacks_content.Get_JSON()
-								);
-							}
-						}
-
-						user_content.Write(
-							kSysInfoFieldName_UserNamespace_EngineNamespace,
-							engine_content.Get_JSON()
-						);
-					}
-
-					cfg.Write(
-						kSysInfoFieldName_UserNamespace,
-						user_content.Get_JSON()
-					);
-				}
-
-				// core
-				{
-					sys_info_t core_content;
-					{
-						unsigned char pl_mem[256];
-						ktk::json::static_resource pl{pl_mem};
-
-						ktk::json::array fs_priority_list(&pl);
-
-						fs_priority_list.emplace_back(
-							kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_Native
-						);
-
-						fs_priority_list.emplace_back(
-							kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_ZLIB
-						);
-
-						core_content.Write(
-							kSysInfoFieldName_CoreNamespace_FileSystemPriorityList,
-							fs_priority_list
-						);
-					}
-
-					{
-						// todo: provide own wrapper with
-						// template argument that will define
-						// dynamic or static initialization of
-						// json related fundamental types
-						unsigned char f_mem[256];
-						ktk::json::static_resource feat{f_mem};
-
-						ktk::json::array fs_features(&feat);
-
-						fs_features.emplace_back(
-							kSysInfoFieldName_CoreNamespace_FileSystemFeatures_VFMRead
-						);
-						fs_features.emplace_back(
-							kSysInfoFieldName_CoreNamespace_FileSystemFeatures_PriorityList
-						);
-						fs_features.emplace_back(
-							kSysInfoFieldName_CoreNamespace_FileSystemFeatures_VFMCache
-						);
-
-						core_content.Write(
-							kSysInfoFieldName_CoreNamespace_FileSystemFeatures,
-							fs_features
-						);
-					}
-
-					cfg.Write(
-						kSysInfoFieldName_CoreNamespace,
-						core_content.Get_JSON()
-					);
-				}
-			}
-
-			char cfg_as_string[1024];
-			bool status =
-				cfg.Serialize_ToString(cfg_as_string);
-
-			KOTEK_ASSERT(
-				status, "failed to make json as string"
-			);
-
-			if (status)
-			{
-				status = this->Write_File(
-					kConfigFileNameSystemInfo,
-					cfg_as_string,
-					sizeof(cfg_as_string) /
-						sizeof(cfg_as_string[0]),
-					eFileSystemPriorityType::kNative
-				);
-
-				KOTEK_ASSERT(
-					status, "failed to write json on disk!"
-				);
-			}
+			this->Create_DefaultFrameworkConfig();
+			this->Fill_FrameworkConfigDefaults();
 		}
 	}
 }
@@ -282,6 +516,17 @@ bool ktkFileSystem::Read_File(
 
 	bool status = false;
 
+	if (length_of_buffer == 0)
+	{
+		KOTEK_MESSAGE_WARNING(
+			"you try to write no information to file: {} "
+			"(buffer_size==0)",
+			path_to_file
+		);
+		status = true;
+		return status;
+	}
+
 	if (path_to_file.empty())
 	{
 		KOTEK_MESSAGE_WARNING(
@@ -292,17 +537,6 @@ bool ktkFileSystem::Read_File(
 
 	const kun_ktk uint8_t* p_fs_list =
 		this->m_p_config->Get_FS_PriorityList();
-
-	KOTEK_ASSERT(p_fs_list, "must be initialized");
-	KOTEK_ASSERT(
-		p_fs_list[0] !=
-			static_cast<kun_ktk uint8_t>(
-				eFileSystemPriorityType::kAuto
-			),
-		"can't be, it means that your config is not "
-		"initialized or data was corrupted because of let's "
-		"say memory leaks or something"
-	);
 
 	if (features == eFileSystemFeatureType::kNone)
 	{
@@ -327,6 +561,20 @@ bool ktkFileSystem::Read_File(
 		{
 			p_fs_list = &specified_fs;
 			was_overloaded_fs_order = true;
+		}
+		else
+		{
+			KOTEK_ASSERT(p_fs_list, "must be initialized");
+			KOTEK_ASSERT(
+				p_fs_list[0] !=
+					static_cast<kun_ktk uint8_t>(
+						eFileSystemPriorityType::kAuto
+					),
+				"can't be, it means that your config is not "
+				"initialized or data was corrupted because of "
+				"let's "
+				"say memory leaks or something"
+			);
 		}
 	}
 
@@ -392,7 +640,13 @@ bool ktkFileSystem::Read_File(
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
 				if (priority == fs_type)
 				{
-					// todo: implement please
+					status = this->m_fs_native.Read_File(
+						this->m_root_path / path_to_file,
+						p_buffer,
+						length_of_buffer,
+						features
+					);
+
 					was_used_specified_fs = true;
 				}
 				else
@@ -443,7 +697,7 @@ bool ktkFileSystem::Read_File(
 					else
 					{
 						// todo: implement please
-						KOTEK_ASSERT(false, "implement this");
+						KOTEK_ASSERT(false, "todo: implement");
 					}
 				}
 #endif
@@ -595,7 +849,292 @@ bool ktkFileSystem::Write_File(
 		features /*= eFileSystemFeatureType::kNone */
 ) noexcept
 {
-	return false;
+	KOTEK_ASSERT(
+		path_to_file.empty() == false,
+		"you can't pass an empty path"
+	);
+
+	KOTEK_ASSERT(
+		this->m_p_config,
+		"you must initialize config before using filesystem!"
+	);
+
+	bool status = false;
+
+	if (path_to_file.empty())
+	{
+		KOTEK_MESSAGE_WARNING(
+			"you passed empty path to file can't processed"
+		);
+		return status;
+	}
+
+	const kun_ktk uint8_t* p_fs_list =
+		this->m_p_config->Get_FS_PriorityList();
+
+	if (features == eFileSystemFeatureType::kNone)
+	{
+		features = static_cast<eFileSystemFeatureType>(
+			this->m_p_config->Get_FS_FeaturesFlag()
+		);
+	}
+
+	bool is_priority_list_enabled =
+		(features &
+	     eFileSystemFeatureType::
+	         kEnablePriorityWhenFailedToOpenFile) ==
+		eFileSystemFeatureType::
+			kEnablePriorityWhenFailedToOpenFile;
+
+	kun_ktk uint8_t specified_fs =
+		static_cast<kun_ktk uint8_t>(priority);
+
+	bool was_overloaded_fs_order = false;
+
+	if (is_priority_list_enabled == false)
+	{
+		if (priority != eFileSystemPriorityType::kAuto)
+		{
+			p_fs_list = &specified_fs;
+			was_overloaded_fs_order = true;
+		}
+		else
+		{
+			KOTEK_ASSERT(p_fs_list, "must be initialized");
+			KOTEK_ASSERT(
+				p_fs_list[0] !=
+					static_cast<kun_ktk uint8_t>(
+						eFileSystemPriorityType::kAuto
+					),
+				"can't be, it means that your config is not "
+				"initialized or data was corrupted because of "
+				"let's "
+				"say memory leaks or something"
+			);
+		}
+	}
+
+	if (p_fs_list)
+	{
+		kun_ktk uint8_t list_size = is_priority_list_enabled
+			? this->m_p_config->Get_FS_PriorityListSize()
+			: 1;
+		KOTEK_ASSERT(
+			list_size > 0,
+			"you must specify at least 1 file system"
+		);
+
+		bool was_used_specified_fs = false;
+
+		eFileSystemPriorityType
+			repeat_fs[static_cast<kun_ktk uint8_t>(
+				eFileSystemPriorityType::kEndOfEnum
+			)];
+
+		if (is_priority_list_enabled &&
+		    priority != eFileSystemPriorityType::kAuto)
+		{
+			KOTEK_ASSERT(
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0])) <=
+					list_size,
+				"something is wrong your list is much bigger "
+				"than system can handle, see "
+				"eFileSystemPriorityType::kEndOfEnum={}",
+				static_cast<kun_ktk uint8_t>(
+					eFileSystemPriorityType::kEndOfEnum
+				)
+			);
+			std::exit(-1);
+		}
+
+		kun_ktk uint8_t repeat_fs_iter = 0;
+
+		for (kun_ktk uint8_t i = 0; i < list_size; ++i)
+		{
+			if (status)
+				break;
+
+			eFileSystemPriorityType fs_type =
+				static_cast<eFileSystemPriorityType>(
+					p_fs_list[i]
+				);
+
+			switch (fs_type)
+			{
+			case eFileSystemPriorityType::kAuto:
+			{
+				KOTEK_ASSERT(false, "can't be!");
+
+				// todo: make own exit function for break the
+				// application
+				std::exit(-1);
+
+				break;
+			}
+			case eFileSystemPriorityType::kNative:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
+				if (priority == fs_type)
+				{
+					status = this->m_fs_native.Write_File(
+						this->m_root_path / path_to_file,
+						p_buffer,
+						length_of_buffer,
+						features
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					else
+					{
+						status = this->m_fs_native.Write_File(
+							this->m_root_path / path_to_file,
+							p_buffer,
+							length_of_buffer,
+							features
+						);
+					}
+				}
+#endif
+
+				break;
+			}
+			case eFileSystemPriorityType::kZlib:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
+				if (priority == fs_type)
+				{
+					// todo: implement please
+					KOTEK_ASSERT(false, "todo: implement");
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					else
+					{
+						// todo: implement please
+						KOTEK_ASSERT(false, "todo: implement");
+					}
+				}
+#endif
+
+				break;
+			}
+			default:
+			{
+				KOTEK_ASSERT(
+					false, "something is broken, can't be!"
+				);
+				std::exit(-1);
+				break;
+			}
+			}
+		}
+
+		if (!status && is_priority_list_enabled)
+		{
+			if (priority != eFileSystemPriorityType::kAuto)
+			{
+				for (kun_ktk uint8_t i = 0; i < repeat_fs_iter;
+				     ++i)
+				{
+					if (status)
+					{
+						break;
+					}
+
+					eFileSystemPriorityType fs_type =
+						repeat_fs[i];
+
+					switch (fs_type)
+					{
+					case eFileSystemPriorityType::kAuto:
+					{
+						KOTEK_ASSERT(false, "can't be!");
+						std::exit(-1);
+						break;
+					}
+					case eFileSystemPriorityType::kNative:
+					{
+						KOTEK_ASSERT(false, "todo: implement");
+						/*status = this->m_fs_native.Read_File(
+						    this->m_root_path / path_to_file,
+						    p_buffer,
+						    length_of_buffer,
+						    features
+						);*/
+
+						break;
+					}
+					case eFileSystemPriorityType::kZlib:
+					{
+						KOTEK_ASSERT(false, "not implemented");
+						// todo: implement this please
+						break;
+					}
+					default:
+					{
+						KOTEK_ASSERT(
+							false,
+							"something is broken can't be!"
+						);
+						std::exit(-1);
+
+						break;
+					}
+					}
+				}
+
+				KOTEK_ASSERT(
+					status,
+					"failed to obtain file {} using all file "
+					"systems!",
+					path_to_file
+				);
+
+				if (!status)
+				{
+					KOTEK_MESSAGE_WARNING(
+						"can't read file: {} because all file "
+						"systems couldn't obtain it",
+						path_to_file
+					);
+				}
+			}
+			else
+			{
+				KOTEK_ASSERT(false, "failed to obtain file!");
+				KOTEK_MESSAGE_WARNING(
+					"can't read file: {} because all file "
+					"systems couldn't obtain it",
+					path_to_file
+				);
+			}
+		}
+	}
+
+	return status;
 }
 
 ktkFileHandleType ktkFileSystem::Begin_Stream(
@@ -1158,6 +1697,197 @@ void ktkFileSystem::Make_Path(
 	}
 }
 
+void ktkFileSystem::Create_DefaultFrameworkConfig()
+{
+	sys_info_t cfg;
+
+	{
+		// User
+		{
+			sys_info_small_t user_content;
+			{
+				sys_info_small_t engine_content;
+				{
+					engine_content.Write(
+						kSysInfoFieldName_UserNamespace_EngineNamespace_Name,
+						KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME
+					);
+					{
+						sys_info_small_t callbacks_content;
+						{
+							callbacks_content.Write(
+								kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init,
+								kUserCallbackName_Initialize
+							);
+							callbacks_content.Write(
+								kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Shutdown,
+								kUserCallbackName_Shutdown
+							);
+							callbacks_content.Write(
+								kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Update,
+								kUserCallbackName_Update
+							);
+							callbacks_content.Write(
+								kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init_Render,
+								kUserCallbackName_Initialize_Render
+							);
+						}
+
+						engine_content.Write(
+							kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks,
+							callbacks_content.Get_JSON()
+						);
+					}
+				}
+
+				user_content.Write(
+					kSysInfoFieldName_UserNamespace_EngineNamespace,
+					engine_content.Get_JSON()
+				);
+			}
+
+			cfg.Write(
+				kSysInfoFieldName_UserNamespace,
+				user_content.Get_JSON()
+			);
+		}
+
+		// core
+		{
+			sys_info_t core_content;
+			{
+				unsigned char pl_mem[256];
+				ktk::json::static_resource pl{pl_mem};
+
+				ktk::json::array fs_priority_list(&pl);
+
+				fs_priority_list.emplace_back(
+					kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_Native
+				);
+
+				fs_priority_list.emplace_back(
+					kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_ZLIB
+				);
+
+				core_content.Write(
+					kSysInfoFieldName_CoreNamespace_FileSystemPriorityList,
+					fs_priority_list
+				);
+			}
+
+			{
+				// todo: provide own wrapper with
+				// template argument that will define
+				// dynamic or static initialization of
+				// json related fundamental types
+				unsigned char f_mem[256];
+				ktk::json::static_resource feat{f_mem};
+
+				ktk::json::array fs_features(&feat);
+
+				fs_features.emplace_back(
+					kSysInfoFieldName_CoreNamespace_FileSystemFeatures_VFMRead
+				);
+				fs_features.emplace_back(
+					kSysInfoFieldName_CoreNamespace_FileSystemFeatures_PriorityList
+				);
+				fs_features.emplace_back(
+					kSysInfoFieldName_CoreNamespace_FileSystemFeatures_VFMCache
+				);
+
+				core_content.Write(
+					kSysInfoFieldName_CoreNamespace_FileSystemFeatures,
+					fs_features
+				);
+			}
+
+			cfg.Write(
+				kSysInfoFieldName_CoreNamespace,
+				core_content.Get_JSON()
+			);
+		}
+	}
+
+	char cfg_as_string[1024];
+	kun_ktk uint16_t cfg_as_string_real_length = 0;
+	bool status = cfg.Serialize_ToString(
+		cfg_as_string, cfg_as_string_real_length
+	);
+
+	KOTEK_ASSERT(status, "failed to make json as string");
+
+	if (status)
+	{
+		status = this->Write_File(
+			kConfigFileNameSystemInfo,
+			cfg_as_string,
+			static_cast<kun_ktk size_t>(
+				cfg_as_string_real_length
+			),
+			eFileSystemPriorityType::kNative
+		);
+
+		KOTEK_ASSERT(status, "failed to write json on disk!");
+	}
+}
+
+void ktkFileSystem::Fill_FrameworkConfigDefaults()
+{
+	KOTEK_ASSERT(this->m_p_config, "must be initialized");
+
+	if (this->m_p_config)
+	{
+		//	this->m_p_config->Set_FS_FeaturesFlag()
+
+		kun_ktk uint16_t fs_features =
+			static_cast<kun_ktk uint16_t>(
+				eFileSystemFeatureType::kVFMRead
+			);
+		fs_features |= static_cast<kun_ktk uint16_t>(
+			eFileSystemFeatureType::kVFMCacheEnabled
+		);
+		fs_features |= static_cast<kun_ktk uint16_t>(
+			eFileSystemFeatureType::
+				kEnablePriorityWhenFailedToOpenFile
+		);
+
+		this->m_p_config->Set_FS_FeaturesFlag(fs_features);
+
+		kun_ktk uint8_t
+			fs_priority_list[static_cast<kun_ktk uint8_t>(
+				eFileSystemPriorityType::kEndOfEnum
+			)];
+		fs_priority_list[0] = static_cast<kun_ktk uint8_t>(
+			eFileSystemPriorityType::kZlib
+		);
+		fs_priority_list[1] = static_cast<kun_ktk uint8_t>(
+			eFileSystemPriorityType::kNative
+		);
+		this->m_p_config->Set_FS_PriorityList(fs_priority_list);
+
+		this->m_p_config->Set_UserLibrary_Name(
+			KOTEK_USE_GAME_OUTPUT_LIBRARY_NAME
+		);
+
+		this->m_p_config->Set_UserLibrary_CallbackName(
+			eUserEngineLibraryCallbacks::kGame_Init,
+			kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init
+		);
+		this->m_p_config->Set_UserLibrary_CallbackName(
+			eUserEngineLibraryCallbacks::kGame_Shutdown,
+			kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Shutdown
+		);
+		this->m_p_config->Set_UserLibrary_CallbackName(
+			eUserEngineLibraryCallbacks::kGame_Update,
+			kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Update
+		);
+		this->m_p_config->Set_UserLibrary_CallbackName(
+			eUserEngineLibraryCallbacks::kRender_Init,
+			kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks_Init_Render
+		);
+	}
+}
+
 /*
 bool ktkFileSystem::Read_File(
     const ktk_filesystem_path& path_to_file,
@@ -1468,7 +2198,7 @@ ktkFileSystem::GetFolderByEnum(eFolderIndex id) const noexcept
         ;
 }*/
 
-bool ktkFileSystem::Is_ValidPath(
+bool ktkFileSystem::Is_Exists(
 	const ktk_filesystem_path& path, bool is_relative_path
 ) const noexcept
 {
@@ -1504,7 +2234,7 @@ bool ktkFileSystem::Create_Directory(
 		return false;
 	}
 
-	if (this->Is_ValidPath(path) == true)
+	if (this->Is_Exists(path) == true)
 	{
 		KOTEK_MESSAGE("path is existed can't create folder");
 		return false;

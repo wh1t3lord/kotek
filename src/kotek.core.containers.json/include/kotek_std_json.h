@@ -37,7 +37,8 @@ public:
 	template <
 		kun_ktk size_t _MS2,
 		bool _Realloc2,
-		typename = std::enable_if_t<(_MemorySize >= _MS2 || _Realloc == true)>>
+		typename = std::enable_if_t<
+			(_MemorySize >= _MS2 || _Realloc == true)>>
 	ktkJson& operator=(const ktkJson<_MS2, _Realloc2>& instance)
 	{
 		this->m_data.json = instance.Get_Object();
@@ -59,7 +60,8 @@ public:
 	/// <typeparam name="ReturnType">templated
 	/// parameter</typeparam> <param name="key_name">json
 	/// key</param> <returns>Your specified ReturnType</returns>
-	template <typename ReturnType>
+	template <
+		typename ReturnType = ktkJson<_MemorySize, _Realloc>>
 	ReturnType
 	Get(const ktk_cstring<
 		KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>& key_name
@@ -92,12 +94,22 @@ public:
 			return result;
 		}
 
-		const auto& json_value = this->m_data.json.at(key_name.c_str());
+		const auto& json_value =
+			this->m_data.json.at(key_name.c_str());
 
 		result = kun_ktk json::value_to<ReturnType>(json_value);
 #endif
 
 		return result;
+	}
+
+	bool
+	Is_KeyExist(const ktk_cstring<
+				KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>&
+	                field_name) const noexcept
+	{
+		return this->m_data.json.find(field_name.c_str()) !=
+			this->m_data.json.end();
 	}
 
 	const kun_ktk json::object& Get_Object(void) const noexcept
@@ -113,15 +125,15 @@ public:
 		const ktk_cstring<
 			KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>&
 			field_name,
-		DataType data
+		const DataType& data
 	) noexcept
 	{
 		this->m_data.json[field_name.c_str()] =
 			kun_ktk json::value_from(data);
 	}
 
-	kun_ktk json::value& operator[](kun_ktk json::string_view key
-	) noexcept
+	kun_ktk json::value&
+	operator[](kun_ktk json::string_view key) noexcept
 	{
 		return this->m_data.json[key];
 	}
@@ -162,8 +174,8 @@ private:
 	{
 		mem_layout_no_embedded_t() {}
 
-		mem_layout_no_embedded_t(const kun_ktk json::object& obj) :
-			json{obj}
+		mem_layout_no_embedded_t(const kun_ktk json::object& obj
+		) : json{obj}
 		{
 		}
 
@@ -259,3 +271,40 @@ inline ktkJson<_BufferSize, _Realloc> tag_invoke(
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK
+
+#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+// casting operation for kun_kotek kun_ktk static_cstring
+namespace etl
+{
+	template <kun_kotek kun_ktk size_t _StringLength>
+	inline void tag_invoke(
+		const kun_kotek kun_ktk json::value_from_tag&,
+		kun_kotek kun_ktk json::value& write_to,
+		const ktk_cstring<_StringLength>& data
+	)
+	{
+		write_to =
+			kun_kotek kun_ktk json::string_view(data.c_str());
+	}
+
+	template <kun_kotek kun_ktk size_t _StringLength>
+	inline ktk_cstring<_StringLength> tag_invoke(
+		const kun_kotek kun_ktk
+			json::value_to_tag<ktk_cstring<_StringLength>>&,
+		const kun_kotek kun_ktk json::value& read_from
+	)
+	{
+		const kun_kotek kun_ktk json::string& str =
+			read_from.as_string();
+
+		KOTEK_ASSERT(
+			str.size() <= _StringLength,
+			"overflow, are you that tag_invoke for writting "
+			"insert "
+			"same length? Can't be!!!!"
+		);
+
+		return ktk_cstring<_StringLength>(str.c_str());
+	}
+} // namespace etl
+#endif

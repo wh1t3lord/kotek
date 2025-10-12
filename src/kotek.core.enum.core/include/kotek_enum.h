@@ -65,8 +65,15 @@ enum class eFileSystemFeatureType : kun_ktk uint16_t{
 	kEnablePriorityWhenFailedToOpenFile = 1 << 3,
 	/// @brief \~english this won't work if kVFM wasn't passed
     /// (keep this in mind)
-	kCacheVFM = 1 << 4
+	kVFMCacheEnabled = 1 << 4,
+	// todo: implement
+	kJSONPrettyFormatting = 1 << 5
 };
+
+constexpr int _kEndOfEnum_eFileSystemFeatureType =
+	std::countr_zero(
+		static_cast<std::underlying_type_t<eFileSystemFeatureType>>(eFileSystemFeatureType::kJSONPrettyFormatting)
+	);
 
 enum class eFileSystemStreamingType : kun_ktk uint8_t
 {

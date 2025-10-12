@@ -25,6 +25,8 @@ ktkEngineConfig::ktkEngineConfig(void) :
 	},
 	m_video_memory_for_initialize{}
 {
+	this->m_user_engine_library_callbacks.resize(
+		static_cast<kun_ktk uint8_t>(eUserEngineLibraryCallbacks::kEndOfEnum));
 }
 
 ktkEngineConfig::~ktkEngineConfig(void) {}
@@ -920,10 +922,25 @@ void ktkEngineConfig::Set_FS_PriorityList(
 		kun_ktk uint8_t>(eFileSystemPriorityType::kEndOfEnum)]
 )
 {
+	kun_ktk uint8_t real_size = 0;
+
+	for (int i = 0; i <
+	     static_cast<int>(eFileSystemPriorityType::kEndOfEnum);
+	     ++i)
+	{
+		if (static_cast<eFileSystemPriorityType>(arr[i]) !=
+		        eFileSystemPriorityType::kAuto &&
+		    static_cast<eFileSystemPriorityType>(arr[i]) !=
+		        eFileSystemPriorityType::kEndOfEnum)
+		{
+			++real_size;
+		}
+	}
+
 	std::memcpy(
 		this->m_fs_priority_list,
 		arr,
-		sizeof(arr) / sizeof(arr[0])
+		static_cast<kun_ktk size_t>(real_size) * sizeof(arr[0])
 	);
 }
 

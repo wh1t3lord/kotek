@@ -142,7 +142,7 @@ public:
 
 	void Shutdown(void) override;
 
-	bool Is_ValidPath(
+	bool Is_Exists(
 		const ktk_filesystem_path& path,
 		bool is_relative_path = false
 	) const noexcept override;
@@ -282,6 +282,9 @@ private:
 	) const noexcept;
 
 	void Initialize_FrameworkConfig();
+
+	void Create_DefaultFrameworkConfig();
+	void Fill_FrameworkConfigDefaults();
 
 private:
 	ktkIFrameworkConfig* m_p_config;

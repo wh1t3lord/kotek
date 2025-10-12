@@ -40,7 +40,7 @@ namespace Kotek
 					return result;
 				}
 
-				if (this->m_p_filesystem->Is_ValidPath(path.c_str()) == false)
+				if (this->m_p_filesystem->Is_Exists(path.c_str()) == false)
 				{
 					KOTEK_ASSERT(false, "you passed an invalid path: [{}]",
 						reinterpret_cast<const char*>(path.c_str()));
@@ -131,7 +131,7 @@ namespace Kotek
 					return result;
 				}
 
-				if (this->m_p_filesystem->Is_ValidPath(path) == false)
+				if (this->m_p_filesystem->Is_Exists(path) == false)
 				{
 					KOTEK_MESSAGE_WARNING("you passed an invalid path: [{}]",
 						reinterpret_cast<const char*>(path.c_str()));
@@ -245,7 +245,7 @@ namespace Kotek
 
 				ktk::vector<ktk::uint32_t> result;
 
-				if (this->m_p_filesystem->Is_ValidPath(path_to_file) == false)
+				if (this->m_p_filesystem->Is_Exists(path_to_file) == false)
 				{
 					KOTEK_MESSAGE_WARNING(
 						"invalid path for compiling shader to SPIRV: [{}]",
@@ -376,7 +376,7 @@ namespace Kotek
 					return shader_type_t::kShaderType_Unknown;
 				}
 
-				if (this->m_p_filesystem->Is_ValidPath(path_to_file) == false)
+				if (this->m_p_filesystem->Is_Exists(path_to_file) == false)
 				{
 					KOTEK_MESSAGE_WARNING(
 						"invalid path to file, can't analyze this path: [{}]",
