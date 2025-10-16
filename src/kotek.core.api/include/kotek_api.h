@@ -402,6 +402,20 @@ kun_ktk uint16_t simultaneously_opened_files_count
 		ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& path,
 		eFolderIndex index
 	) const noexcept = 0;
+
+	virtual ktkFileHandleType Open_File(
+		const ktk_filesystem_path& path,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto,
+		eFileSystemStreamingType type =
+			eFileSystemStreamingType::kReadOnly
+	) = 0;
+
+	virtual bool Close_File(
+		ktkFileHandleType handle,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	) = 0;
 };
 
 enum eInputControllerType;

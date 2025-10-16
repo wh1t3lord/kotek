@@ -42,7 +42,7 @@ private:
 	bool m_show;
 	bool m_is_issued_hide;
 	bool m_is_issued_show;
-	kun_ktk cfstream* m_p_log_reader;
+	FILE* m_p_log_file;
 	ktkIFileSystem* m_p_fs;
 	ktkIInput* m_p_input;
 	ktkILogger* m_p_logger;

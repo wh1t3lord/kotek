@@ -19,6 +19,13 @@ class ktkFileSystem_Native
 {
 	struct file_handle_no_vfm_t
 	{
+		FILE* p_file = nullptr;
+	};
+
+	struct file_handle_streaming_t
+	{
+		kun_ktk uint32_t stream_remaining_count = 0;
+		kun_ktk uint32_t stream_total_count = 0;
 	};
 
 	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
@@ -31,17 +38,19 @@ class ktkFileSystem_Native
 
 	struct file_handle_t
 	{
-		kun_ktk uint32_t stream_remaining_count = 0;
-		kun_ktk uint32_t stream_total_count = 0;
+		bool is_free = true;
+		eFileSystemStreamingType stream_type =
+			eFileSystemStreamingType::kAuto;
 
 		std::variant<
-			file_handle_no_vfm_t
+			file_handle_no_vfm_t,
+			file_handle_streaming_t
 	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
 			,
 			file_handle_vfm_t
 	#endif
 			>
-			desc_id;
+			desc;
 	};
 
 public:
@@ -67,6 +76,33 @@ public:
 		const char* p_buffer,
 		kun_ktk size_t length_of_buffer,
 		eFileSystemFeatureType features
+	);
+
+	bool Write_File(
+		ktkFileHandleType handle,
+		const kun_ktk uint8_t* p_buffer,
+		kun_ktk size_t length_of_buffer
+	);
+
+	bool Read_File(
+		ktkFileHandleType handle,
+		kun_ktk uint8_t* p_buffer,
+		kun_ktk size_t length_of_buffer
+	);
+
+	ktkFileHandleType Open_File(
+		const ktk_filesystem_path& path_to_file,
+		eFileSystemStreamingType stream_type,
+		eFileSystemFeatureType features
+	);
+
+	bool Close_File(ktkFileHandleType handle);
+
+private:
+	void Get_FreeHandle(ktkFileHandleType& result);
+
+	const char* Get_FOpenTypeByStreamingType(
+		eFileSystemStreamingType stream_type
 	);
 
 private:

@@ -1888,6 +1888,312 @@ void ktkFileSystem::Fill_FrameworkConfigDefaults()
 	}
 }
 
+ktkFileHandleType ktkFileSystem::Open_File(
+	const ktk_filesystem_path& path_to_file,
+	eFileSystemPriorityType priority,
+	eFileSystemStreamingType
+		type /*= eFileSystemStreamingType::kReadOnly */
+)
+{
+	ktkFileHandleType result;
+
+	KOTEK_ASSERT(
+		path_to_file.empty() == false,
+		"you can't pass an empty path"
+	);
+
+	KOTEK_ASSERT(
+		this->m_p_config,
+		"you must initialize config before using filesystem!"
+	);
+
+	bool status = false;
+
+	if (path_to_file.empty())
+	{
+		KOTEK_MESSAGE_WARNING(
+			"you passed empty path to file can't processed"
+		);
+		return status;
+	}
+
+	const kun_ktk uint8_t* p_fs_list =
+		this->m_p_config->Get_FS_PriorityList();
+
+	eFileSystemFeatureType features =
+		static_cast<eFileSystemFeatureType>(
+			this->m_p_config->Get_FS_FeaturesFlag()
+		);
+
+	bool is_priority_list_enabled =
+		(features &
+	     eFileSystemFeatureType::
+	         kEnablePriorityWhenFailedToOpenFile) ==
+		eFileSystemFeatureType::
+			kEnablePriorityWhenFailedToOpenFile;
+
+	kun_ktk uint8_t specified_fs =
+		static_cast<kun_ktk uint8_t>(priority);
+
+	bool was_overloaded_fs_order = false;
+
+	if (is_priority_list_enabled == false)
+	{
+		if (priority != eFileSystemPriorityType::kAuto)
+		{
+			p_fs_list = &specified_fs;
+			was_overloaded_fs_order = true;
+		}
+		else
+		{
+			KOTEK_ASSERT(p_fs_list, "must be initialized");
+			KOTEK_ASSERT(
+				p_fs_list[0] !=
+					static_cast<kun_ktk uint8_t>(
+						eFileSystemPriorityType::kAuto
+					),
+				"can't be, it means that your config is not "
+				"initialized or data was corrupted because of "
+				"let's "
+				"say memory leaks or something"
+			);
+		}
+	}
+
+	if (p_fs_list)
+	{
+		kun_ktk uint8_t list_size = is_priority_list_enabled
+			? this->m_p_config->Get_FS_PriorityListSize()
+			: 1;
+		KOTEK_ASSERT(
+			list_size > 0,
+			"you must specify at least 1 file system"
+		);
+
+		bool was_used_specified_fs = false;
+
+		eFileSystemPriorityType
+			repeat_fs[static_cast<kun_ktk uint8_t>(
+				eFileSystemPriorityType::kEndOfEnum
+			)];
+
+		if (is_priority_list_enabled &&
+		    priority != eFileSystemPriorityType::kAuto)
+		{
+			KOTEK_ASSERT(
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0])) <=
+					list_size,
+				"something is wrong your list is much bigger "
+				"than system can handle, see "
+				"eFileSystemPriorityType::kEndOfEnum={}",
+				static_cast<kun_ktk uint8_t>(
+					eFileSystemPriorityType::kEndOfEnum
+				)
+			);
+			std::exit(-1);
+		}
+
+		kun_ktk uint8_t repeat_fs_iter = 0;
+
+		for (kun_ktk uint8_t i = 0; i < list_size; ++i)
+		{
+			if (status)
+				break;
+
+			eFileSystemPriorityType fs_type =
+				static_cast<eFileSystemPriorityType>(
+					p_fs_list[i]
+				);
+
+			switch (fs_type)
+			{
+			case eFileSystemPriorityType::kAuto:
+			{
+				KOTEK_ASSERT(false, "can't be!");
+
+				// todo: make own exit function for break the
+				// application
+				std::exit(-1);
+
+				break;
+			}
+			case eFileSystemPriorityType::kNative:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
+				if (priority == fs_type)
+				{
+					status = this->m_fs_native.Write_File(
+						this->m_root_path / path_to_file,
+						p_buffer,
+						length_of_buffer,
+						features
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					else
+					{
+						status = this->m_fs_native.Write_File(
+							this->m_root_path / path_to_file,
+							p_buffer,
+							length_of_buffer,
+							features
+						);
+					}
+				}
+#endif
+
+				break;
+			}
+			case eFileSystemPriorityType::kZlib:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
+				if (priority == fs_type)
+				{
+					// todo: implement please
+					KOTEK_ASSERT(false, "todo: implement");
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					else
+					{
+						// todo: implement please
+						KOTEK_ASSERT(false, "todo: implement");
+					}
+				}
+#endif
+
+				break;
+			}
+			default:
+			{
+				KOTEK_ASSERT(
+					false, "something is broken, can't be!"
+				);
+				std::exit(-1);
+				break;
+			}
+			}
+		}
+
+		if (!status && is_priority_list_enabled)
+		{
+			if (priority != eFileSystemPriorityType::kAuto)
+			{
+				for (kun_ktk uint8_t i = 0; i < repeat_fs_iter;
+				     ++i)
+				{
+					if (status)
+					{
+						break;
+					}
+
+					eFileSystemPriorityType fs_type =
+						repeat_fs[i];
+
+					switch (fs_type)
+					{
+					case eFileSystemPriorityType::kAuto:
+					{
+						KOTEK_ASSERT(false, "can't be!");
+						std::exit(-1);
+						break;
+					}
+					case eFileSystemPriorityType::kNative:
+					{
+						KOTEK_ASSERT(false, "todo: implement");
+						/*status = this->m_fs_native.Read_File(
+						    this->m_root_path / path_to_file,
+						    p_buffer,
+						    length_of_buffer,
+						    features
+						);*/
+
+						break;
+					}
+					case eFileSystemPriorityType::kZlib:
+					{
+						KOTEK_ASSERT(false, "not implemented");
+						// todo: implement this please
+						break;
+					}
+					default:
+					{
+						KOTEK_ASSERT(
+							false,
+							"something is broken can't be!"
+						);
+						std::exit(-1);
+
+						break;
+					}
+					}
+				}
+
+				KOTEK_ASSERT(
+					status,
+					"failed to obtain file {} using all file "
+					"systems!",
+					path_to_file
+				);
+
+				if (!status)
+				{
+					KOTEK_MESSAGE_WARNING(
+						"can't read file: {} because all file "
+						"systems couldn't obtain it",
+						path_to_file
+					);
+				}
+			}
+			else
+			{
+				KOTEK_ASSERT(false, "failed to obtain file!");
+				KOTEK_MESSAGE_WARNING(
+					"can't read file: {} because all file "
+					"systems couldn't obtain it",
+					path_to_file
+				);
+			}
+		}
+	}
+
+	return result;
+}
+
+bool ktkFileSystem::Close_File(
+	ktkFileHandleType handle,
+	eFileSystemPriorityType
+		priority 
+)
+{
+
+
+	return false;
+}
+
 /*
 bool ktkFileSystem::Read_File(
     const ktk_filesystem_path& path_to_file,

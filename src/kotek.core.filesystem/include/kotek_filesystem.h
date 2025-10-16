@@ -262,7 +262,6 @@ public:
 
 	/* STREAMING */
 
-
 	void Make_Path(
 		ktk_filesystem_path& path, eFolderIndex index
 	) const noexcept override;
@@ -270,6 +269,20 @@ public:
 		ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& path,
 		eFolderIndex index
 	) const noexcept override;
+
+	ktkFileHandleType Open_File(
+		const ktk_filesystem_path& path,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto,
+		eFileSystemStreamingType type =
+			eFileSystemStreamingType::kReadOnly
+	) override;
+
+	bool Close_File(
+		ktkFileHandleType handle,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	) override;
 
 private:
 	void Validate_Folders(void) noexcept;
