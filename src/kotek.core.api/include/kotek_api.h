@@ -416,6 +416,43 @@ kun_ktk uint16_t simultaneously_opened_files_count
 		eFileSystemPriorityType priority =
 			eFileSystemPriorityType::kAuto
 	) = 0;
+
+	virtual bool Write_File(
+		ktkFileHandleType handle,
+		const kun_ktk uint8_t* p_buffer,
+		kun_ktk size_t length_of_buffer,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	) = 0;
+
+	virtual bool Write_File(
+		ktkFileHandleType handle,
+		const char* p_buffer,
+		kun_ktk size_t length_of_buffer,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	) = 0;
+
+	virtual bool Get_FileSize(
+		ktkFileHandleType handle,
+		kun_ktk size_t& result,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	) = 0;
+
+	virtual bool Seek(
+		ktkFileHandleType handle,
+		kun_ktk size_t offset,
+		eFileSystemSeekType seek_type,
+		eFileSystemPriorityType = eFileSystemPriorityType::kAuto
+	) = 0;
+
+	virtual bool Tell(
+		ktkFileHandleType handle,
+		kun_ktk size_t& result,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	) = 0;
 };
 
 enum eInputControllerType;

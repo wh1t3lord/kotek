@@ -278,6 +278,43 @@ public:
 			eFileSystemStreamingType::kReadOnly
 	) override;
 
+	 bool Write_File(
+		ktkFileHandleType handle,
+		const kun_ktk uint8_t* p_buffer,
+		kun_ktk size_t length_of_buffer,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	) override;
+
+	 bool Write_File(
+		ktkFileHandleType handle,
+		const char* p_buffer,
+		kun_ktk size_t length_of_buffer,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	) override;
+
+	bool Get_FileSize(
+		 ktkFileHandleType handle,
+		 kun_ktk size_t& result,
+		 eFileSystemPriorityType priority =
+			 eFileSystemPriorityType::kAuto
+	 ) override;
+	
+	bool Seek(
+		ktkFileHandleType handle,
+		kun_ktk size_t offset,
+		eFileSystemSeekType seek_type,
+		eFileSystemPriorityType priority = eFileSystemPriorityType::kAuto
+	) override;
+
+	bool Tell(
+		ktkFileHandleType handle,
+		kun_ktk size_t& result,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	) override;
+
 	bool Close_File(
 		ktkFileHandleType handle,
 		eFileSystemPriorityType priority =

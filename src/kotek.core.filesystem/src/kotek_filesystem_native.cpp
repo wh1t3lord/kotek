@@ -281,13 +281,19 @@ bool ktkFileSystem_Native::Write_File(
 			eFileSystemStreamingType::kAuto,
 		"invalid data"
 	);
-	
+	KOTEK_ASSERT(
+		p_handle->priority == eFileSystemPriorityType::kNative,
+		"wrong data! you passed different handle to wrong "
+		"filesystem"
+	);
+
 	KOTEK_ASSERT(
 		p_handle->stream_type ==
 				eFileSystemStreamingType::kWriteOnly ||
 			p_handle->stream_type ==
 				eFileSystemStreamingType::kReadAndWrite,
-		"invalid streaming type, it is only support reading operation so you can't use write!"
+		"invalid streaming type, it is only support reading "
+		"operation so you can't use write!"
 	);
 
 	if (!(p_handle->stream_type ==
@@ -305,7 +311,8 @@ bool ktkFileSystem_Native::Write_File(
 		const file_handle_no_vfm_t& data =
 			std::get<file_handle_no_vfm_t>(p_handle->desc);
 
-		auto _status_fwrite = fwrite(p_buffer, length_of_buffer, 1, data.p_file);
+		auto _status_fwrite =
+			fwrite(p_buffer, length_of_buffer, 1, data.p_file);
 
 		KOTEK_ASSERT(
 			_status_fwrite == 1,
@@ -320,8 +327,20 @@ bool ktkFileSystem_Native::Write_File(
 		KOTEK_ASSERT(false, "not suppose to be implemented!");
 	}
 
-
 	return result;
+}
+
+bool ktkFileSystem_Native::Write_File(
+	ktkFileHandleType handle,
+	const char* p_buffer,
+	kun_ktk size_t length_of_buffer
+)
+{
+	return this->Write_File(
+		handle,
+		reinterpret_cast<const kun_ktk uint8_t*>(p_buffer),
+		length_of_buffer
+	);
 }
 
 ktkFileHandleType ktkFileSystem_Native::Open_File(
@@ -466,6 +485,7 @@ const char* ktkFileSystem_Native::Get_FOpenTypeByStreamingType(
 
 bool ktkFileSystem_Native::Close_File(ktkFileHandleType handle)
 {
+	bool result =false;
 	KOTEK_ASSERT(
 		handle != kInvalidFileHandleType,
 		"you passed invalid file handle"
@@ -489,11 +509,198 @@ bool ktkFileSystem_Native::Close_File(ktkFileHandleType handle)
 			std::get<file_handle_no_vfm_t>(p_handle->desc);
 
 		fclose(data.p_file);
+		result = true;
 	}
 	else
 	{
 		KOTEK_ASSERT(false, "not supposed to be implemented");
 	}
+
+	return result;
+}
+
+bool ktkFileSystem_Native::Get_FileSize(
+	ktkFileHandleType handle, kun_ktk size_t& result
+)
+{
+	bool status = true;
+
+	KOTEK_ASSERT(
+		handle != kInvalidFileHandleType,
+		"you passed invalid file handle"
+	);
+
+	file_handle_t* p_handle =
+		reinterpret_cast<file_handle_t*>(handle);
+
+	KOTEK_ASSERT(p_handle->is_free == false, "invalid data");
+	KOTEK_ASSERT(
+		p_handle->stream_type !=
+			eFileSystemStreamingType::kAuto,
+		"invalid data"
+	);
+
+	if (std::holds_alternative<file_handle_no_vfm_t>(
+			p_handle->desc
+		))
+	{
+		file_handle_no_vfm_t& data =
+			std::get<file_handle_no_vfm_t>(p_handle->desc);
+
+		auto cur = ftell(data.p_file);
+		KOTEK_ASSERT(
+			cur != -1L, "failed ftell={}", GetLastError()
+		);
+		status = cur != -1L;
+
+		if (!status)
+			return status;
+
+		auto status_fseek = fseek(data.p_file, 0, SEEK_END);
+		KOTEK_ASSERT(
+			status_fseek == 0, "fseek failed={}", GetLastError()
+		);
+		status = status_fseek == 0;
+
+		if (!status)
+			return status;
+
+		result = ftell(data.p_file);
+		KOTEK_ASSERT(
+			result != -1L, "failed ftell={}", GetLastError()
+		);
+		status = result != -1L;
+		if (!status)
+			return status;
+
+		status_fseek = fseek(data.p_file, cur, SEEK_SET);
+		KOTEK_ASSERT(
+			status_fseek == 0, "fseek failed={}", GetLastError()
+		);
+
+		status = status_fseek == 0;
+		if (!status)
+			return status;
+	}
+	else
+	{
+		KOTEK_ASSERT(false, "not supposed to be implemented");
+	}
+
+	return status;
+}
+
+bool ktkFileSystem_Native::Seek(
+	ktkFileHandleType handle,
+	kun_ktk size_t offset,
+	eFileSystemSeekType seek_type
+)
+{
+	bool status = true;
+
+	KOTEK_ASSERT(
+		handle != kInvalidFileHandleType,
+		"you passed invalid file handle"
+	);
+
+	file_handle_t* p_handle =
+		reinterpret_cast<file_handle_t*>(handle);
+
+	KOTEK_ASSERT(p_handle->is_free == false, "invalid data");
+	KOTEK_ASSERT(
+		p_handle->stream_type !=
+			eFileSystemStreamingType::kAuto,
+		"invalid data"
+	);
+
+	if (std::holds_alternative<file_handle_no_vfm_t>(
+			p_handle->desc
+		))
+	{
+		file_handle_no_vfm_t& data =
+			std::get<file_handle_no_vfm_t>(p_handle->desc);
+
+		int _seek_type = SEEK_SET;
+
+		switch (seek_type)
+		{
+		case eFileSystemSeekType::kBegin:
+		{
+			break;
+		}
+		case eFileSystemSeekType::kCurrent:
+		{
+			_seek_type = SEEK_CUR;
+			break;
+		}
+		case eFileSystemSeekType::kEnd:
+		{
+			_seek_type = SEEK_END;
+			break;
+		}
+		default:
+		{
+			KOTEK_ASSERT(false, "undefined");
+			break;
+		}
+		}
+
+		auto status_fseek =
+			fseek(data.p_file, offset, _seek_type);
+		status = status_fseek == 0;
+		KOTEK_ASSERT(status, "failed fseek={}", GetLastError());
+	}
+	else
+	{
+		KOTEK_ASSERT(false, "not supposed to be implemented");
+	}
+
+	return status;
+}
+
+bool ktkFileSystem_Native::Tell(ktkFileHandleType handle, kun_ktk size_t& result) 
+{
+	bool status = true;
+
+	KOTEK_ASSERT(
+		handle != kInvalidFileHandleType,
+		"you passed invalid file handle"
+	);
+
+	file_handle_t* p_handle =
+		reinterpret_cast<file_handle_t*>(handle);
+
+	KOTEK_ASSERT(p_handle->is_free == false, "invalid data");
+	KOTEK_ASSERT(
+		p_handle->stream_type !=
+			eFileSystemStreamingType::kAuto,
+		"invalid data"
+	);
+
+	if (std::holds_alternative<file_handle_no_vfm_t>(
+			p_handle->desc
+		))
+	{
+		file_handle_no_vfm_t& data =
+			std::get<file_handle_no_vfm_t>(p_handle->desc);
+
+		result = ftell(data.p_file);
+		status = result != -1L;
+		KOTEK_ASSERT(status, "failed ftell={}", GetLastError());
+	}
+	else
+	{
+		KOTEK_ASSERT(false, "not supposed to be implemented");
+	}
+
+	return status;
+}
+
+void ktkFileSystem_Native::Shutdown() 
+{
+	#ifdef KOTEK_DEBUG
+	this->m_shutdown_was_called = true;
+	#endif
 }
 
 #endif

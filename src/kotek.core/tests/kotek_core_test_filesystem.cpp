@@ -49,7 +49,7 @@ TEST(Filesystem, test_file_create_pretty_output)
 
 	main_manager.Set_FileSystem(&filesystem);
 
-	ktkResourceText<1024, 1024, false> instance("pretty");
+	ktkResourceText<1024, 1024, false> instance;
 
 	//	auto path =
 	//		filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_DataUser_Tests);
@@ -59,7 +59,7 @@ TEST(Filesystem, test_file_create_pretty_output)
 		path, eFolderIndex::kFolderIndex_DataUser_Tests
 	);
 
-	path /= instance.Get_FileName();
+	path /= "pretty";
 	path /= instance.Get_FileExtensionName();
 
 		#ifdef KOTEK_USE_UNICODE

@@ -2,6 +2,7 @@
 
 #include <kotek.core.containers.json/include/kotek_core_containers_json.h>
 #include <kotek.core.containers.io/include/kotek_core_containers_io.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -23,20 +24,20 @@ template <
 	kun_ktk uint32_t _ParserBufferSize,
 	kun_ktk uint32_t _JsonMemorySize,
 	bool _Realloc>
-class ktkResourceText
+class ktkResourceText : public ktkIResource
 {
 public:
 	ktkResourceText(
 		const ktk_cstring<
 			KOTEK_DEF_RESOURCE_TEXT_FILENAME_LENGTH>& filename
-	) : m_data{}, m_file_name{filename}
+	) : m_data{}
 	{
 	}
 
 	ktkResourceText(void) : m_data{} {}
 
 	ktkResourceText(const ktkResourceText& instance) :
-		m_data{instance}, m_file_name{instance.m_file_name}
+		m_data{instance}
 	{
 	}
 
@@ -50,7 +51,7 @@ public:
 	         _Realloc == true)>>
 	ktkResourceText(
 		const ktkResourceText<_PBS2, _JMS2, _Realloc2>& instance
-	) : m_data{instance}, m_file_name{instance.Get_FileName()}
+	) : m_data{instance}
 	{
 	}
 
@@ -140,23 +141,10 @@ public:
 		this->m_data.json.Write<DataType>(field_name, data);
 	}
 
-	const char* Get_FileName(void) const noexcept
-	{
-		return this->m_file_name.c_str();
-	}
-
 	constexpr const char* Get_FileExtensionName(void
 	) const noexcept
 	{
 		return kFormatResource_Text;
-	}
-
-	void Set_FileName(
-		const ktk_cstring<
-			KOTEK_DEF_RESOURCE_TEXT_FILENAME_LENGTH>& file_name
-	) noexcept
-	{
-		this->m_file_name = file_name;
 	}
 
 	void Set_JSON(const ktkJson<_JsonMemorySize, _Realloc>& data
@@ -401,10 +389,6 @@ private:
 		mem_layout_embedded_t>;
 
 	mem_layout_t m_data;
-
-	/// @brief without extension!!
-	ktk_cstring<KOTEK_DEF_RESOURCE_TEXT_FILENAME_LENGTH>
-		m_file_name;
 };
 
 KOTEK_END_NAMESPACE_CORE

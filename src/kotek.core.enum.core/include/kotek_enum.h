@@ -50,6 +50,14 @@ enum class eFileSystemPriorityType : kun_ktk uint8_t{
 	kEndOfEnum = kZlib
 };
 
+enum class eFileSystemSeekType : kun_ktk uint8_t
+{
+	kBegin,
+	kCurrent,
+	kEnd,
+	kEndOfEnum
+};
+
 enum class eFileSystemFeatureType : kun_ktk uint16_t{
 	kNone = 0,
 	kVFMRead = 1 << 1,

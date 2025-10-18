@@ -344,7 +344,7 @@ EditWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
 ktkWindowConsole::ktkWindowConsole() :
 	m_show{}, m_is_issued_hide{}, m_is_issued_show{},
-	m_p_log_file{}, m_p_fs{}, m_p_input{}, m_p_logger{},
+	m_log_file{}, m_p_fs{}, m_p_input{}, m_p_logger{},
 	m_p_console{}, m_p_private_impl{}
 {
 }
@@ -713,7 +713,7 @@ void ktkWindowConsole::Shutdown()
 		// this->m_p_manager_resource->Close_Loader(this->m_file_reader_id);
 /* todo: re-write using actual filesystem
 		this->m_p_fs->Close_FileStream(
-			this->m_p_log_file
+			this->m_log_file
 		);*/
 	}
 }

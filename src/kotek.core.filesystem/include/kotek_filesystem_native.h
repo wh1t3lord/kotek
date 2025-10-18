@@ -41,7 +41,8 @@ class ktkFileSystem_Native
 		bool is_free = true;
 		eFileSystemStreamingType stream_type =
 			eFileSystemStreamingType::kAuto;
-
+		const eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kNative;
 		std::variant<
 			file_handle_no_vfm_t,
 			file_handle_streaming_t
@@ -84,6 +85,12 @@ public:
 		kun_ktk size_t length_of_buffer
 	);
 
+	bool Write_File(
+		ktkFileHandleType handle,
+		const char* p_buffer,
+		kun_ktk size_t length_of_buffer
+	);
+
 	bool Read_File(
 		ktkFileHandleType handle,
 		kun_ktk uint8_t* p_buffer,
@@ -95,6 +102,18 @@ public:
 		eFileSystemStreamingType stream_type,
 		eFileSystemFeatureType features
 	);
+
+	bool Get_FileSize(
+		ktkFileHandleType handle, kun_ktk size_t& result
+	);
+
+	bool Seek(
+		ktkFileHandleType handle,
+		kun_ktk size_t offset,
+		eFileSystemSeekType seek_type
+	);
+
+	bool Tell(ktkFileHandleType handle, kun_ktk size_t& result);
 
 	bool Close_File(ktkFileHandleType handle);
 

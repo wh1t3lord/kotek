@@ -13,5 +13,7 @@ ktkFileSystem_Zlib::ktkFileSystem_Zlib()
 
 ktkFileSystem_Zlib::~ktkFileSystem_Zlib() {}
 
+void ktkFileSystem_Zlib::Shutdown(void) {}
+
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK
