@@ -15,6 +15,363 @@ KOTEK_BEGIN_NAMESPACE_CORE
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
 
+class PathOperatorDivEqualTest : public ::testing::Test
+{
+protected:
+	void ComparePathOperations(
+		const std::string& initial, const std::string& append
+	)
+	{
+		ktk_filesystem_path custom_p(initial);
+		std::filesystem::path std_p(initial);
+
+		custom_p /= append;
+		std_p /= append;
+
+		EXPECT_TRUE(custom_p.native() == std_p.string().c_str())
+			<< "Initial: '" << initial << "', Append: '"
+			<< append << "'\nCustom result: '"
+			<< custom_p.native().c_str() << "'\nStd result: '"
+			<< std_p.c_str() << "'";
+	}
+
+	void CompareMultipleAppends(
+		const std::vector<std::string>& appends
+	)
+	{
+		ktk_filesystem_path custom_p;
+		std::filesystem::path std_p;
+
+		for (const auto& append : appends)
+		{
+			custom_p /= append;
+			std_p /= append;
+		}
+
+		EXPECT_TRUE(custom_p.native() == std_p.string().c_str())
+			<< "After " << appends.size()
+			<< " appends\nCustom result: '"
+			<< custom_p.native().c_str()
+			<< "'\nStd result: '" << std_p.c_str() << "'";
+	}
+};
+
+TEST_F(
+	PathOperatorDivEqualTest, StandardRootDirectoryReplacement
+)
+{
+	// When p.has_root_directory(), current relative path should
+	// be removed
+	ComparePathOperations(
+		"C:/Users/John", "/Windows"
+	); // Should become "C:/Windows"
+	ComparePathOperations(
+		"/home/user", "/etc"
+	); // Should become "/etc"
+	ComparePathOperations(
+		"relative/path", "/absolute"
+	); // Should become "/absolute"
+}
+
+TEST_F(
+	PathOperatorDivEqualTest,
+	RootNameWithRootDirectoryTransition
+)
+{
+	ComparePathOperations(
+		"C:Users", "/Windows"
+	); // Should become "C:/Windows"
+	ComparePathOperations(
+		"C:", "/Windows"
+	); // Should become "C:/Windows"
+	ComparePathOperations(
+		"//server", "/share"
+	); // Network path behavior
+}
+
+TEST_F(PathOperatorDivEqualTest, EmptyPathSpecialBehavior)
+{
+	ComparePathOperations("", "file"); // Should be "file"
+	ComparePathOperations(
+		"", "/absolute"
+	); // Should be "/absolute"
+	ComparePathOperations(
+		"", "C:Windows"
+	); // Should be "C:Windows"
+}
+
+TEST_F(PathOperatorDivEqualTest, ConsecutiveRootDirectories)
+{
+	ComparePathOperations(
+		"C:/", "/Windows"
+	); // Should become "C://Windows"?
+	ComparePathOperations(
+		"/", "/usr"
+	); // Should become "//usr"?
+}
+
+TEST_F(PathOperatorDivEqualTest, EmptyPathAppendRelative)
+{
+	ComparePathOperations("", "dir");
+	ComparePathOperations("", "dir/file.txt");
+	ComparePathOperations("", "a/b/c/d");
+}
+
+TEST_F(PathOperatorDivEqualTest, EmptyPathAppendAbsolute)
+{
+	ComparePathOperations("", "/absolute");
+	ComparePathOperations("", "C:Windows");
+	ComparePathOperations("", "//server/share");
+}
+
+TEST_F(PathOperatorDivEqualTest, RelativePathAppendRelative)
+{
+	ComparePathOperations("base", "dir");
+	ComparePathOperations("base/", "dir");
+	ComparePathOperations("base", "/dir");
+	ComparePathOperations("base/dir", "subdir/file");
+}
+
+TEST_F(
+	PathOperatorDivEqualTest, RelativePathWithTrailingSeparator
+)
+{
+	ComparePathOperations("base/", "dir/");
+	ComparePathOperations("base//", "dir");
+	ComparePathOperations("base/", "/dir");
+}
+
+TEST_F(PathOperatorDivEqualTest, AbsolutePathReplacement)
+{
+	ComparePathOperations("relative/path", "/absolute/path");
+	ComparePathOperations("a/b/c", "/x/y/z");
+	ComparePathOperations("dir", "C:Windows");
+}
+
+TEST_F(PathOperatorDivEqualTest, RootNameMismatchReplacement)
+{
+	ComparePathOperations("C:Users", "D:Data");
+	ComparePathOperations(
+		"//server1/share", "//server2/volume"
+	);
+	ComparePathOperations("C:local", "D:/absolute");
+}
+
+TEST_F(PathOperatorDivEqualTest, DriveRootOperations)
+{
+	ComparePathOperations("C:", "Windows");
+	ComparePathOperations("C:", "/Windows");
+	ComparePathOperations("C:Users", "Documents");
+	ComparePathOperations("C:Users/", "Documents");
+}
+
+TEST_F(PathOperatorDivEqualTest, UnixRootOperations)
+{
+	ComparePathOperations("/", "usr");
+	ComparePathOperations("/", "local/bin");
+	ComparePathOperations("/home", "user");
+	ComparePathOperations("/home/", "user/documents");
+}
+
+TEST_F(PathOperatorDivEqualTest, TrailingSeparatorHandling)
+{
+	ComparePathOperations("dir/", "file");
+	ComparePathOperations("no_trailing", "file");
+	ComparePathOperations("dir//", "file");
+	ComparePathOperations("a/b/c/", "d/e/f");
+}
+
+TEST_F(PathOperatorDivEqualTest, LeadingSeparatorInAppend)
+{
+	ComparePathOperations("base", "/dir");
+	ComparePathOperations("base/", "/dir");
+	ComparePathOperations("C:Users", "/Documents");
+}
+
+TEST_F(PathOperatorDivEqualTest, MultipleRelativeAppends)
+{
+	CompareMultipleAppends({"var", "log", "app", "debug.log"});
+	CompareMultipleAppends({"a", "b", "c", "d", "e", "f"});
+}
+
+TEST_F(PathOperatorDivEqualTest, MultipleMixedAppends)
+{
+	CompareMultipleAppends(
+		{"C:", "Program Files", "App", "config.ini"}
+	);
+	CompareMultipleAppends(
+		{"/", "home", "user", "docs", "file.txt"}
+	);
+}
+
+TEST_F(PathOperatorDivEqualTest, MultipleWithAbsoluteReset)
+{
+	ktk_filesystem_path custom_p;
+	std::filesystem::path std_p;
+
+	custom_p /= "relative";
+	std_p /= "relative";
+	EXPECT_TRUE(custom_p.native() == std_p.string().c_str());
+
+	custom_p /= "/absolute";
+	std_p /= "/absolute"; // Should reset
+	EXPECT_TRUE(custom_p.native() == std_p.string().c_str());
+
+	custom_p /= "more";
+	std_p /= "more";
+	EXPECT_TRUE(custom_p.native() == std_p.string().c_str());
+}
+
+TEST_F(PathOperatorDivEqualTest, EmptyAndDotPaths)
+{
+	ComparePathOperations("base", "");
+	ComparePathOperations("base", ".");
+	ComparePathOperations("base", "..");
+	ComparePathOperations("", ".");
+	ComparePathOperations("", "..");
+	ComparePathOperations("/", ".");
+	ComparePathOperations("C:", "..");
+}
+
+TEST_F(PathOperatorDivEqualTest, MixedAbsoluteRelativeSequence)
+{
+	ktk_filesystem_path custom_p = "/home";
+	std::filesystem::path std_p = "/home";
+
+	custom_p /= "user";
+	std_p /= "user";
+	EXPECT_TRUE(custom_p.native() == std_p.string().c_str());
+
+	custom_p /= "/tmp";
+	std_p /= "/tmp"; // Absolute replacement
+	EXPECT_TRUE(custom_p.native() == std_p.string().c_str());
+
+	custom_p /= "file";
+	std_p /= "file";
+	EXPECT_TRUE(custom_p.native() == std_p.string().c_str());
+}
+
+TEST_F(PathOperatorDivEqualTest, ComplexMixedSequence)
+{
+	CompareMultipleAppends(
+		{"relative",
+	     "/absolute",
+	     "relative_again",
+	     "/reset",
+	     "final"}
+	);
+}
+
+TEST_F(PathOperatorDivEqualTest, WindowsDrivePaths)
+{
+	ComparePathOperations("C:", "Users");
+	ComparePathOperations("C:Users", "Documents");
+	ComparePathOperations("C:/", "Windows");
+	ComparePathOperations("C:/Windows", "System32");
+	ComparePathOperations("C:/Windows/", "System32");
+}
+
+TEST_F(PathOperatorDivEqualTest, WindowsMixedSeparators)
+{
+	ComparePathOperations(
+		"C:Users", "/Documents"
+	); // Mixed root directory
+	ComparePathOperations(
+		"C:/Users", "Documents"
+	); // Normal append
+}
+
+TEST_F(PathOperatorDivEqualTest, NetworkPaths)
+{
+	ComparePathOperations("//server", "share");
+	ComparePathOperations("//server/share", "folder");
+	ComparePathOperations("//server/share/", "subfolder");
+	ComparePathOperations(
+		"//server", "//other"
+	); // Root name mismatch
+}
+
+TEST_F(PathOperatorDivEqualTest, ComplexMultiComponent)
+{
+	CompareMultipleAppends({"a", "b/c", "d/e/", "f"});
+	CompareMultipleAppends({"root/", "sub1/sub2/", "file.ext"});
+	CompareMultipleAppends({"", "a", "b/c/d", "e/f/g/", "file"}
+	);
+}
+
+TEST_F(PathOperatorDivEqualTest, DeeplyNestedPaths)
+{
+	CompareMultipleAppends(
+		{"level1",
+	     "level2",
+	     "level3",
+	     "level4",
+	     "level5",
+	     "file"}
+	);
+}
+
+TEST_F(PathOperatorDivEqualTest, SpecialCharacters)
+{
+	ComparePathOperations("path with spaces", "more spaces");
+	ComparePathOperations(
+		"normal", "path/with/multiple/components"
+	);
+	ComparePathOperations(
+		"weird//paths", "even//weirder//appends"
+	);
+}
+
+TEST_F(PathOperatorDivEqualTest, OriginalTestCase)
+{
+	ktk_filesystem_path custom_p;
+	std::filesystem::path std_p;
+
+	custom_p /= "test";
+	std_p /= "test";
+	EXPECT_TRUE(custom_p.native() == std_p.string().c_str());
+
+	custom_p /= "docs";
+	std_p /= "docs";
+	EXPECT_TRUE(custom_p.native() == std_p.string().c_str());
+
+	custom_p /= "pretty";
+	std_p /= "pretty";
+	EXPECT_TRUE(custom_p.native() == std_p.string().c_str());
+
+	// Note: += is string concatenation, not path append
+	custom_p += ".json";
+	std_p += ".json";
+	EXPECT_TRUE(custom_p.native() == std_p.string().c_str());
+}
+
+TEST_F(PathOperatorDivEqualTest, BoundaryConditions)
+{
+	ComparePathOperations("", "");   // Both empty
+	ComparePathOperations("/", "");  // Root with empty
+	ComparePathOperations("", "/");  // Empty with root
+	ComparePathOperations("a", "/"); // Relative with root
+	ComparePathOperations("/", "/"); // Root with root
+}
+
+TEST_F(PathOperatorDivEqualTest, SingleCharacterPaths)
+{
+	ComparePathOperations("a", "b");
+	ComparePathOperations("a", "b/c");
+	ComparePathOperations("a/", "b");
+	ComparePathOperations("a", "/b");
+}
+
+TEST_F(PathOperatorDivEqualTest, PathsWithDots)
+{
+	ComparePathOperations("dir", ".");
+	ComparePathOperations("dir", "..");
+	ComparePathOperations("dir", "../parent");
+	ComparePathOperations("dir", "./current");
+	ComparePathOperations(".", "file");
+	ComparePathOperations("..", "file");
+}
+
 TEST(
 	Filesystem, test_filesystem_check_folder_tests_for_existance
 )
@@ -49,37 +406,37 @@ TEST(Filesystem, test_file_create_pretty_output)
 
 	main_manager.Set_FileSystem(&filesystem);
 
-	ktkResourceText<1024, 1024, false> instance;
+	ktkResourceText<1024, 4096, false> instance;
 
 	//	auto path =
 	//		filesystem.GetFolderByEnum(eFolderIndex::kFolderIndex_DataUser_Tests);
 
 	ktk_filesystem_path path;
 	filesystem.Make_Path(
-		path, eFolderIndex::kFolderIndex_DataUser_Tests
+		path, eFolderIndex::kFolderIndex_DataUser_Tests, true
 	);
 
 	path /= "pretty";
-	path /= instance.Get_FileExtensionName();
+	path += instance.Get_FileExtensionName();
 
 		#ifdef KOTEK_USE_UNICODE
-	ktk::ustring test(KOTEK_TEXTU("いくつか"));
+	kun_ktk ustring test(KOTEK_TEXTU("いくつか"));
 		#else
 	ktk::ustring test("いくつか");
 		#endif
 
 	instance.Write("test_field1", "data");
 	instance.Write("test_field2", "data2");
-	instance.Write<ktk::ustring>("ktk::ustring", test);
+	instance.Write<kun_ktk ustring>("kun_ktk ustring", test);
 
 		#ifdef KOTEK_USE_UNICODE
-	instance.Write<ktk::ustring>(
+	instance.Write<kun_ktk ustring>(
 		"KOTEK_TEXT", KOTEK_TEXTU("いくつか")
 	);
-	instance.Write<ktk::wstring>("wchar_t", L"いくつか");
-	instance.Write<ktk::u8string>("char8_t", u8"いくつか");
-	instance.Write<ktk::u16string>("char16_t", u"いくつか");
-	instance.Write<ktk::u32string>("char32_t", U"いくつか");
+	instance.Write<kun_ktk wstring>("wchar_t", L"いくつか");
+	instance.Write<kun_ktk u8string>("char8_t", u8"いくつか");
+	instance.Write<kun_ktk u16string>("char16_t", u"いくつか");
+	instance.Write<kun_ktk u32string>("char32_t", U"いくつか");
 		#endif
 
 	//	ktkResourceSaverManager saver_instance;
@@ -95,8 +452,14 @@ TEST(Filesystem, test_file_create_pretty_output)
 	kun_ktk uint16_t out_real_length = 0;
 	instance.Serialize_ToString(out, out_real_length);
 
-	KOTEK_ASSERT(false, "see todo:");
 	// todo: provide write operation filesystem saving
+
+	bool status_write =
+		filesystem.Write_File(path, out, out_real_length);
+
+	KOTEK_ASSERT(
+		status_write, "failed to write file: {}", path
+	);
 
 	filesystem.Shutdown();
 	main_manager.Shutdown();

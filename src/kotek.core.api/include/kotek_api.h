@@ -396,11 +396,14 @@ kun_ktk uint16_t simultaneously_opened_files_count
 	/* STREAMING */
 
 	virtual void Make_Path(
-		ktk_filesystem_path& path, eFolderIndex index
+		ktk_filesystem_path& path,
+		eFolderIndex index,
+		bool is_relative = false
 	) const noexcept = 0;
 	virtual void Make_Path(
 		ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& path,
-		eFolderIndex index
+		eFolderIndex index,
+		bool is_relative = false
 	) const noexcept = 0;
 
 	virtual ktkFileHandleType Open_File(

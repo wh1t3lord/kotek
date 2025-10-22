@@ -263,11 +263,12 @@ public:
 	/* STREAMING */
 
 	void Make_Path(
-		ktk_filesystem_path& path, eFolderIndex index
+		ktk_filesystem_path& path, eFolderIndex index, bool is_relative=false
 	) const noexcept override;
 	void Make_Path(
 		ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>& path,
-		eFolderIndex index
+		eFolderIndex index,
+		bool is_relative=false
 	) const noexcept override;
 
 	ktkFileHandleType Open_File(
