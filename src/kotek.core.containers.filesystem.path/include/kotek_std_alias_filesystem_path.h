@@ -2796,7 +2796,7 @@ static_path<Size>::append(const static_path<Size>& p)
 	this->m_buffer.append(path.m_buffer);
 	*/
 
-	 // Case 1: p is absolute OR has different root name
+// Case 1: p is absolute OR has different root name
 	if (p.is_absolute() ||
 	    (p.has_root_name() && p.root_name() != root_name()))
 	{
@@ -2804,81 +2804,92 @@ static_path<Size>::append(const static_path<Size>& p)
 		return *this;
 	}
 
-	// Store current state before modifications
+	// Store state before modifications
 	bool current_has_root_name = has_root_name();
 	bool current_has_root_dir = has_root_directory();
-	auto current_root = root_name();
+	const auto& current_root = root_name();
+	const auto& current_root_str = current_root.native();
 
 	// Case 2: p has root directory
 	if (p.has_root_directory())
 	{
 		if (current_has_root_name)
 		{
-			if (current_has_root_dir)
+			// Keep root name
+			m_buffer = current_root_str;
+
+			// Add root directory separator
+			if (!p.m_buffer.empty() &&
+			    (p.m_buffer[0] == '/' || p.m_buffer[0] == '\\'))
 			{
-				// Remove everything after root directory
-				// Find the end of root directory
-				size_t root_dir_end =
-					m_buffer.find_last_of(preferred_separator);
-				if (root_dir_end != decltype(m_buffer)::npos)
-				{
-					m_buffer.resize(root_dir_end + 1);
-				}
-				else
-				{
-					// Should not happen if has_root_directory()
-					// is true
-					m_buffer = current_root.native();
-					m_buffer += preferred_separator;
-				}
+				m_buffer +=
+					p.m_buffer[0]; // Use p's separator style
 			}
 			else
 			{
-				// Current has root name but no root directory:
-				// "C:" -> "C:/"
-				m_buffer =
-					current_root.native();
 				m_buffer += preferred_separator;
 			}
 		}
 		else
 		{
-			// No root name - clear everything
-			m_buffer.clear();
+			// No root name - just use p as is
+			m_buffer = p.m_buffer;
+			return *this;
 		}
-		m_buffer.append(p.m_buffer);
+
+		// Append p, skipping its leading root directory
+		const auto& p_str = p.m_buffer;
+		if (!p_str.empty() &&
+		    (p_str[0] == '/' || p_str[0] == '\\'))
+		{
+			m_buffer.append(p_str.substr(1));
+		}
+		else
+		{
+			m_buffer.append(p_str);
+		}
 		return *this;
 	}
 
 	// Case 3 & 4: Normal append
 	if (m_buffer.empty())
 	{
-		// Empty current path - just assign
 		m_buffer = p.m_buffer;
-	}
-	else if (has_filename() ||
-	         (!has_root_directory() && is_absolute()))
-	{
-		// Need separator
-		if ((m_buffer.back() != '/' && m_buffer.back() != '\\') &&
-		    !p.m_buffer.empty() && p.m_buffer.front() != '/' &&
-		    p.m_buffer.front() != '\\')
-		{
-			// Special case: drive-relative paths ("C:" +
-			// "Windows")
-			if (!(current_has_root_name &&
-			      !current_has_root_dir &&
-			      m_buffer.size() ==
-			          current_root.native().size()))
-			{
-				m_buffer += preferred_separator;
-			}
-		}
-		m_buffer.append(p.m_buffer);
 	}
 	else
 	{
-		// No separator needed
+		bool needs_separator = true;
+
+		if (!m_buffer.empty() && !p.m_buffer.empty())
+		{
+			bool current_ends_with_sep =
+				(m_buffer.back() == '/' ||
+			     m_buffer.back() == '\\');
+			bool p_starts_with_sep =
+				(p.m_buffer.front() == '/' ||
+			     p.m_buffer.front() == '\\');
+
+			if (current_ends_with_sep || p_starts_with_sep)
+			{
+				needs_separator = false;
+			}
+
+			// Special case: drive-relative paths
+			if (current_has_root_name &&
+			    !current_has_root_dir &&
+			    m_buffer.size() == current_root_str.size())
+			{
+				needs_separator = false;
+			}
+		}
+
+		if (needs_separator)
+		{
+		//	if (!p.m_buffer.empty())
+			if ((p.m_buffer.empty() && m_buffer.size() == 1 &&
+			     current_has_root_dir) == false)
+				m_buffer += preferred_separator;
+		}
 		m_buffer.append(p.m_buffer);
 	}
 
@@ -3507,20 +3518,39 @@ template <size_t Size>
 inline static_path<Size> static_path<Size>::root_name() const
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	if (this->m_buffer.empty() == false)
+	if (this->m_buffer.empty())
+		return static_path<Size>();
+
+	// Handle network paths: "//server" or "\\server"
+	if (this->m_buffer.size() >= 2 &&
+	    ((this->m_buffer[0] == '/' && this->m_buffer[1] == '/'
+	     ) ||
+	     (this->m_buffer[0] == '\\' && this->m_buffer[1] == '\\'
+	     )))
 	{
-		if (this->m_buffer.size() >= 2)
+		// Find the end of the server name (up to next separator
+		// or end)
+		size_t pos = 2;
+		while (pos < this->m_buffer.size() &&
+		       this->m_buffer[pos] != '/' &&
+		       this->m_buffer[pos] != '\\')
 		{
-			if ((this->m_buffer[0] >= 65 &&
-			     this->m_buffer[0] <= 90) ||
-			    (this->m_buffer[0] >= 97 &&
-			     this->m_buffer[0] <= 122))
-			{
-				if (this->m_buffer[1] == ':')
-				{
-					return this->m_buffer.substr(0, 2).c_str();
-				}
-			}
+			pos++;
+		}
+		return static_path<Size>(this->m_buffer.substr(0, pos));
+	}
+
+	// Handle drive letters: "C:"
+	if (this->m_buffer.size() >= 2)
+	{
+		if (((this->m_buffer[0] >= 'A' &&
+		      this->m_buffer[0] <= 'Z') ||
+		     (this->m_buffer[0] >= 'a' &&
+		      this->m_buffer[0] <= 'z')) &&
+		    this->m_buffer[1] == ':')
+		{
+			return static_path<Size>(this->m_buffer.substr(0, 2)
+			);
 		}
 	}
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
@@ -3956,10 +3986,28 @@ inline bool static_path<Size>::has_root_name() const
 	{
 		if (this->m_buffer.size() >= 1)
 		{
-			if ((this->m_buffer[0] >= 65 &&
-			     this->m_buffer[0] <= 90) ||
-			    (this->m_buffer[0] >= 97 &&
-			     this->m_buffer[0] <= 122))
+			
+			// servers or something related to //
+			if (this->m_buffer.size()>=2)
+			{
+				if ((this->m_buffer[0] == '\\' &&
+				     this->m_buffer[1] == '\\') ||
+				    (this->m_buffer[0] == '/' &&
+				     this->m_buffer[1] == '/') ||
+				    (this->m_buffer[0] == '/' &&
+				     this->m_buffer[1] == '\\') ||
+				    (this->m_buffer[0] == '\\' &&
+				     this->m_buffer[1] == '/'))
+				{
+					return true;
+				}
+			}
+
+
+			if ((this->m_buffer[0] >= 'A' &&
+			     this->m_buffer[0] <= 'Z') ||
+			    (this->m_buffer[0] >= 'a' &&
+			     this->m_buffer[0] <= 'z'))
 			{
 				if (this->m_buffer.size() >= 2)
 				{
@@ -3985,50 +4033,40 @@ inline bool static_path<Size>::has_root_directory() const
 	bool result{};
 
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	if (this->m_buffer.empty() == false)
+	// Check for network path root directory: "//server/share"
+	// -> has root directory
+	if (this->m_buffer.size() >= 2 &&
+	    this->m_buffer[0] == '\\' && this->m_buffer[1] == '\\')
 	{
-		if (this->m_buffer.size() >= 3)
+		// Network path - root directory is the first two
+		// backslashes
+		result = true;
+		return result;
+	}
+
+	// Check for drive letter with root directory: "C:/" or
+	// "C:\"
+	if (this->m_buffer.size() >= 3)
+	{
+		if (((this->m_buffer[0] >= 'A' &&
+		      this->m_buffer[0] <= 'Z') ||
+		     (this->m_buffer[0] >= 'a' &&
+		      this->m_buffer[0] <= 'z')) &&
+		    this->m_buffer[1] == ':')
 		{
-			if (this->m_buffer[0] == ':')
-			{
-				// invalid disk and path so we think it is not
-				// root directory because of invalid path
-				// nothing applies to result variable
-			}
-			else
-			{
-				if (this->m_buffer[0] == '/' ||
-				    this->m_buffer[0] == '\\')
-				{
-					result = true;
-				}
-				else
-				{
-					if ((this->m_buffer[0] >= 65 &&
-					     this->m_buffer[0] <= 90) ||
-					    (this->m_buffer[0] >= 97 &&
-					     this->m_buffer[0] <= 122))
-					{
-						if (this->m_buffer[1] == ':')
-						{
-							if (this->m_buffer[2] == '/' ||
-							    this->m_buffer[2] == '\\')
-							{
-								result = true;
-							}
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			if (this->m_buffer[0] == '/' ||
-			    this->m_buffer[0] == '\\')
+			if (this->m_buffer[2] == '/' ||
+			    this->m_buffer[2] == '\\')
 			{
 				result = true;
+				return result;
 			}
 		}
+	}
+
+	// Check for root directory only: "/" or "\"
+	if (this->m_buffer[0] == '/' || this->m_buffer[0] == '\\')
+	{
+		result = true;
 	}
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 	#error not implemented
@@ -4293,23 +4331,33 @@ inline bool static_path<Size>::is_absolute() const
 	bool result{};
 
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	if (this->m_buffer.empty() == false)
+	if (this->m_buffer.empty())
+		return result;
+
+	// Network paths are absolute: "//server/share"
+	if (this->m_buffer.size() >= 2 &&
+	    ((this->m_buffer[0] == '/' && this->m_buffer[1] == '/'
+	     ) ||
+	     (this->m_buffer[0] == '\\' && this->m_buffer[1] == '\\'
+	     )))
 	{
-		if (this->m_buffer.size() >= 3)
+		result = true;
+		return result;
+	}
+
+	// Drive letter with root directory: "C:/" or "C:\"
+	if (this->m_buffer.size() >= 3)
+	{
+		if (((this->m_buffer[0] >= 'A' &&
+		      this->m_buffer[0] <= 'Z') ||
+		     (this->m_buffer[0] >= 'a' &&
+		      this->m_buffer[0] <= 'z')) &&
+		    this->m_buffer[1] == ':')
 		{
-			if ((this->m_buffer[0] >= 65 &&
-			     this->m_buffer[0] <= 90) ||
-			    (this->m_buffer[0] >= 97 &&
-			     this->m_buffer[0] <= 122))
+			if (this->m_buffer[2] == '/' ||
+			    this->m_buffer[2] == '\\')
 			{
-				if (this->m_buffer[1] == ':')
-				{
-					if (this->m_buffer[2] == '/' ||
-					    this->m_buffer[2] == '\\')
-					{
-						result = true;
-					}
-				}
+				result = true;
 			}
 		}
 	}

@@ -2454,13 +2454,13 @@ ktkFileHandleType ktkFileSystem::Open_File(
 				}
 
 				KOTEK_ASSERT(
-					status != kInvalidFileHandleType,
+					result != kInvalidFileHandleType,
 					"failed to obtain file {} using all file "
 					"systems!",
 					path_to_file
 				);
 
-				if (status == kInvalidFileHandleType)
+				if (result == kInvalidFileHandleType)
 				{
 					KOTEK_MESSAGE_WARNING(
 						"can't read file: {} because all file "
