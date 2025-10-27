@@ -10,9 +10,13 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+class ktkJsonView;
+
 template <kun_ktk size_t _MemorySize, bool _Realloc>
 class ktkJson
 {
+	friend class ktkJsonView;
+
 public:
 	ktkJson(void) : m_data{} {}
 	ktkJson(const kun_ktk json::object& text) : m_data{text} {}
@@ -170,6 +174,12 @@ public:
 	}
 
 private:
+	kun_ktk json::object& Get_Object(void) noexcept
+	{
+		return m_data.json;
+	}
+
+private:
 	struct mem_layout_no_embedded_t
 	{
 		mem_layout_no_embedded_t() {}
@@ -245,6 +255,161 @@ private:
 		mem_layout_embedded_t>;
 
 	mem_layout_t m_data;
+};
+
+class ktkJsonView
+{
+public:
+	template <kun_ktk size_t _MemorySize, bool _Realloc>
+	ktkJsonView(ktkJson<_MemorySize, _Realloc>& json) :
+		m_p_json{&json.Get_Object()}
+	{
+	}
+
+	~ktkJsonView() {}
+
+	template <typename ReturnType>
+	ReturnType
+	Get(const ktk_cstring<
+		KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>& key_name
+	) const noexcept
+	{
+		ReturnType result{};
+
+#ifdef KOTEK_USE_BOOST_LIBRARY
+		if (key_name.empty())
+		{
+			KOTEK_MESSAGE_WARNING("passed an empty key");
+			return result;
+		}
+
+		KOTEK_ASSERT(
+			this->m_p_json,
+			"view is not initialized successfully but supposed "
+			"to be valid!"
+		);
+
+		if (this->m_p_json == nullptr)
+			return result;
+
+		if (this->m_p_json->empty())
+		{
+			KOTEK_MESSAGE_WARNING(
+				"you didn't load file or your file is empty"
+			);
+			return result;
+		}
+
+		if (this->m_p_json->find(key_name.c_str()) ==
+		    this->m_p_json->end())
+		{
+			KOTEK_MESSAGE_WARNING(
+				"your file doesn't contain key: {}", key_name
+			);
+
+			return result;
+		}
+
+		const auto& json_value =
+			this->m_p_json->at(key_name.c_str());
+
+		result = kun_ktk json::value_to<ReturnType>(json_value);
+#endif
+
+		return result;
+	}
+
+	bool
+	Is_KeyExist(const ktk_cstring<
+				KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>&
+	                field_name) const noexcept
+	{
+		KOTEK_ASSERT(
+			this->m_p_json,
+			"view is not initialized successfully but supposed "
+			"to be valid!"
+		);
+
+		bool status = false;
+		if (this->m_p_json == nullptr)
+			return status;
+
+		status = this->m_p_json->find(field_name.c_str()) !=
+			this->m_p_json->end();
+
+		return status;
+	}
+
+	const kun_ktk json::object& Get_Object(void) const noexcept
+	{
+		KOTEK_ASSERT(
+			this->m_p_json,
+			"view is not initialized successfully but supposed "
+			"to be valid!"
+		);
+		return *this->m_p_json;
+	}
+
+	template <typename DataType>
+	void Write(
+		const ktk_cstring<
+			KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>&
+			field_name,
+		const DataType& data
+	) noexcept
+	{
+		KOTEK_ASSERT(
+			this->m_p_json,
+			"view is not initialized successfully but supposed "
+			"to be valid!"
+		);
+		this->m_p_json->operator[](field_name.c_str()) =
+			kun_ktk json::value_from(data);
+	}
+
+	kun_ktk json::value&
+	operator[](kun_ktk json::string_view key) noexcept
+	{
+		KOTEK_ASSERT(
+			this->m_p_json,
+			"view is not initialized successfully but supposed "
+			"to be valid!"
+		);
+
+		return this->m_p_json->operator[](key);
+	}
+
+	bool Serialize(kun_ktk cstring& result) const noexcept
+	{
+#ifdef KOTEK_USE_BOOST_LIBRARY
+		bool status = false;
+
+		KOTEK_ASSERT(
+			this->m_p_json,
+			"view is not initialized successfully but supposed "
+			"to be valid!"
+		);
+
+		if (this->m_p_json == nullptr)
+			return status;
+
+		if (this->m_p_json->empty())
+			return status;
+
+		result = kun_ktk json::serialize(*this->m_p_json);
+
+		status = true;
+
+		return status;
+#else
+		bool status = false;
+	#error implement this!
+		return status;
+#endif
+	}
+
+private:
+	kun_ktk json::object* m_p_json;
 };
 
 template <kun_ktk size_t _BufferSize, bool _Realloc>

@@ -17,6 +17,8 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 constexpr const char* kFormatResource_Text = ".json";
 
+class ktkResourceViewText;
+
 // TODO: think about save and load operations, because it
 // manages resource manager and its loader and saver managers
 
@@ -24,8 +26,11 @@ template <
 	kun_ktk uint32_t _ParserBufferSize,
 	kun_ktk uint32_t _JsonMemorySize,
 	bool _Realloc>
-class ktkResourceText : public ktkIResource
+class ktkResourceText
 {
+private:
+	friend class ktkResourceViewText;
+
 public:
 	ktkResourceText(
 		const ktk_cstring<
@@ -108,9 +113,14 @@ public:
 		return this->m_data.json.Get<ReturnType>(key_name);
 	}
 
-	const ktk::json::object& Get_JSON(void) const noexcept
+	const ktk::json::object& Get_Object(void) const noexcept
 	{
 		return this->m_data.json.Get_Object();
+	}
+
+	const ktkJson<_JsonMemorySize, _Realloc>& Get_JSON(void) const noexcept
+	{
+		return this->m_data.json;
 	}
 
 	bool
@@ -320,6 +330,12 @@ public:
 	{
 		return _ParserBufferSize;
 	}
+	
+private:
+	ktkJson<_JsonMemorySize, _Realloc>& Get_JSON() noexcept
+	{
+		return this->m_data.json;
+	}
 
 private:
 	struct mem_layout_no_embedded_t
@@ -389,6 +405,86 @@ private:
 		mem_layout_embedded_t>;
 
 	mem_layout_t m_data;
+};
+
+class ktkResourceViewText
+{
+public:
+	template <
+		kun_ktk uint32_t _ParserBufferSize,
+		kun_ktk uint32_t _JsonMemorySize,
+		bool _Realloc>
+	ktkResourceViewText(ktkResourceText<
+						_ParserBufferSize,
+						_JsonMemorySize,
+						_Realloc>& inst) :
+		m_view{inst.Get_JSON()}
+	{
+	}
+
+	~ktkResourceViewText() {}
+
+	template<typename ReturnType>
+	ReturnType
+	Get(const ktk_cstring<
+		KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>& key_name
+	) const noexcept
+	{
+		return m_view.Get<ReturnType>(key_name);
+	}
+
+	const ktk::json::object& Get_JSON(void) const noexcept
+	{
+		return m_view.Get_Object();
+	}
+
+	bool
+	Is_KeyExist(const ktk_cstring<
+				KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>&
+	                field_name) const noexcept
+	{
+		if (field_name.empty())
+		{
+			KOTEK_MESSAGE_WARNING("field is empty");
+			return false;
+		}
+
+		const ktk::json::object& json = m_view.Get_Object();
+
+		return json.find(field_name.c_str()) != json.end();
+	}
+
+	template <typename DataType>
+	void Write(
+		const ktk_cstring<
+			KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>&
+			field_name,
+		const DataType& data
+	) noexcept
+	{
+		m_view.Write<DataType>(field_name, data);
+	}
+
+	constexpr const char* Get_FileExtensionName(void
+	) const noexcept
+	{
+		return kFormatResource_Text;
+	}
+
+	bool Serialize_ToString(kun_ktk cstring& result
+	) const noexcept
+	{
+		bool status = m_view.Serialize(result);
+
+		KOTEK_ASSERT(
+			status, "failed to serialize json as string!"
+		);
+
+		return status;
+	}
+
+private:
+	ktkJsonView m_view;
 };
 
 KOTEK_END_NAMESPACE_CORE

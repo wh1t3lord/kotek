@@ -105,19 +105,5 @@ struct ktkResourceBinaryFileHeader
 	char string_field_big[32];
 };
 
-/// @brief \~english uses everywhere across framework + engine,
-/// we keep as the lightweight representation of class that will
-/// be used in inheritence but without it like in Zircon engine
-/// implementation hard to define destroying resources that
-/// would be allocated by allocator instead of predefined
-/// (preallocated) data that uses as cache by engine, if cpp can
-/// provide a such functionality then it is better to not use
-/// virtual tables since it grows memory size of class instances
-class ktkIResource
-{
-public:
-	virtual ~ktkIResource() {}
-};
-
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

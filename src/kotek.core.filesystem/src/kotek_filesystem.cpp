@@ -2042,20 +2042,20 @@ void ktkFileSystem::Create_DefaultFrameworkConfig()
 
 						engine_content.Write(
 							kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks,
-							callbacks_content.Get_JSON()
+							callbacks_content.Get_Object()
 						);
 					}
 				}
 
 				user_content.Write(
 					kSysInfoFieldName_UserNamespace_EngineNamespace,
-					engine_content.Get_JSON()
+					engine_content.Get_Object()
 				);
 			}
 
 			cfg.Write(
 				kSysInfoFieldName_UserNamespace,
-				user_content.Get_JSON()
+				user_content.Get_Object()
 			);
 		}
 
@@ -2110,7 +2110,7 @@ void ktkFileSystem::Create_DefaultFrameworkConfig()
 
 			cfg.Write(
 				kSysInfoFieldName_CoreNamespace,
-				core_content.Get_JSON()
+				core_content.Get_Object()
 			);
 		}
 	}

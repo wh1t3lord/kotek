@@ -106,6 +106,32 @@ TEST(Json,test_json_matrix4x4f)
 		"can't be deserializer or serialize doesn't work well");
 }
 
+TEST(JsonView, test_json_view) 
+{
+	ktkJson<1024, false> json;
+
+	json.Write("test", 1);
+
+	kun_ktk cstring str;
+	ktkJsonView view(json);
+
+	view.Serialize(str);
+
+	EXPECT_TRUE(str == "{\"test\":1}");
+}
+
+TEST(ResourceViewText, test_resource_view_text) 
+{
+	ktkResourceText<1024, 1024, false> resource;
+	resource.Write("test", 123);
+
+	kun_ktk cstring str;
+	ktkResourceViewText view(resource);
+	view.Serialize_ToString(str);
+
+	EXPECT_TRUE(str == "{\"test\":123}");
+}
+
 	#endif
 #endif
 
