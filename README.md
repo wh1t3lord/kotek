@@ -100,5 +100,5 @@ I choose Apache 2.0 license to provide people the full freedom as much as possib
 
 ## 🗣 Contact
 
-- **Discord:** https://discord.gg/h89dyGQFnN
+- **Discord:** [@wh1t3lord](https://discord.gg/h89dyGQFnN)
 - **Twitter:** [@wh1t3lord](https://twitter.com/wh1t3lord)
