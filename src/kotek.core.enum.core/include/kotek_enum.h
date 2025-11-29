@@ -225,7 +225,7 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 /// что возможность kEngine_Feature_SDK включена, когда на деле
 /// ни одной функции по инициализации СДК вызвано не было. Это
 /// можно вводить в заблуждение. Поэтому, если указано в
-/// Kotek::Core::ktkEngineConfig, что поле "включено", то есть
+/// Kotek::Core::ktkFrameworkConfig, что поле "включено", то есть
 /// значит что:
 /// - Пользователь реализовал реальные функции которые
 /// отображают данную возможность;
@@ -245,7 +245,7 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 ///		// самый конец метода или функции
 ///		// однако мы где-то определили
 /// Kotek::Core::ktkMainManager* (p_main_manager)
-/// Kotek::Core::ktkEngineConfig* p_config =
+/// Kotek::Core::ktkFrameworkConfig* p_config =
 /// p_main_manager->Get_EngineConfig();
 ///
 ///		// Реально мы ее отмечаем только, однако уже конечному
@@ -288,14 +288,14 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 /// @endcode
 ///
 /// @attention Если вы хотите увидеть реальное применение
-/// перечисления для Kotek::Core::ktkEngineConfig необходимо
+/// перечисления для Kotek::Core::ktkFrameworkConfig необходимо
 /// посмотреть на реализации следующих мест
 /// Kotek::Core::ktkWindow::Initialize,
-/// Kotek::Core::ktkEngineConfig::GetRenderFeature.
+/// Kotek::Core::ktkFrameworkConfig::GetRenderFeature.
 ///
 ///
 /// @see Kotek::Core::ktkWindow
-/// @see Kotek::Core::ktkEngineConfig
+/// @see Kotek::Core::ktkFrameworkConfig
 /// @see Kotek::Core::ktkMainManager
 ///
 /// \~english @brief This enumeration is for specifying what
@@ -305,14 +305,14 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 /// enumeration. When you want to tell a user that some feature
 /// is supported by Engine in code (at runtime), you need to
 /// call IsFeatureEnabled method from
-/// Kotek::Core::ktkEngineConfig instance in order to get status
+/// Kotek::Core::ktkFrameworkConfig instance in order to get status
 /// of the appropriate feature. Like if you implement your SDK
 /// you put the calling of setting feature with true status that
 /// means this feature is working in Engine right now. Otherwise
 /// the feature can't exist or it is not working like status is
 /// false. So you need to treat it like a flag when something
 /// was initialized in Engine and at runtime you want to check
-/// it through one place like Kotek::Core::ktkEngineConfig, but
+/// it through one place like Kotek::Core::ktkFrameworkConfig, but
 /// it is not a flag to tell Engine that Engine must enable
 /// (call it) because you passed the flag, no! So it is just
 /// writing current features that called somewhere and they
@@ -338,7 +338,7 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 ///
 ///		// probably interface is often used, but we make it more
 /// obvious
-/// with ktkEngineConfig instance
+/// with ktkFrameworkConfig instance
 ///		// and you obtained Kotek::Core::ktkMainManager*
 ///(p_main_manager) somewhere too!
 /// Kotek::Core::ktkIFrameworkConfig*
@@ -370,12 +370,12 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 /// @endcode
 ///
 /// @attention For observing real examples of usage
-/// Kotek::Core::ktkEngineConfig you have to check
+/// Kotek::Core::ktkFrameworkConfig you have to check
 /// Kotek::Core::ktkWindow::Initialize method and
-/// Kotek::Core::ktkEngineConfig::GetRenderFeature method
+/// Kotek::Core::ktkFrameworkConfig::GetRenderFeature method
 /// respectively.
 ///
-/// @see Kotek::Core::ktkEngineConfig
+/// @see Kotek::Core::ktkFrameworkConfig
 /// @see Kotek::Core::ktkMainManager
 /// @see Kotek::Core::ktkWindow
 ///
@@ -398,7 +398,7 @@ enum class eEngineFeature : kun_ktk uint32_t{
 	/// will
 	/// return kEngine_Feature_Unknown.
 	///
-	/// For understanding check Kotek::Core::ktkEngineConfig's
+	/// For understanding check Kotek::Core::ktkFrameworkConfig's
 	/// method
 	/// GetRenderFeature.
 	/// \~russian @brief Данное поле системное и используется
@@ -413,7 +413,7 @@ enum class eEngineFeature : kun_ktk uint32_t{
 	/// системы.
 	///
 	/// Конкретный пример использования определен в методе
-	/// GetRenderFeature в Kotek::Core::ktkEngineConfig.
+	/// GetRenderFeature в Kotek::Core::ktkFrameworkConfig.
 	/// \~german @brief
 	/// \~french @brief
 	kEngine_Feature_None = 0
@@ -538,7 +538,7 @@ enum class eEngineFeatureSDK : kun_ktk uint32_t{
 	/// пользователя
 	/// это также означает, что если он хочет проверить включена
 	/// ли
-	/// такая возможность (поле в Kotek::Core::ktkEngineConfig),
+	/// такая возможность (поле в Kotek::Core::ktkFrameworkConfig),
 	/// то все
 	/// соответствующие процеду были выполнены для того, чтобы
 	/// инициализировать/создать SDK основанного на ImGui.

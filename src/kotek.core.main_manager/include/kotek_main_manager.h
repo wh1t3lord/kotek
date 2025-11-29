@@ -63,7 +63,7 @@ public:
 
 	void setRenderSwapchainManager(ktkIRenderSwapchain* pointer) noexcept;
 
-	void Set_EngineConfig(ktkIFrameworkConfig* pointer) noexcept;
+	void Set_FrameworkConfig(ktkIFrameworkConfig* pointer) noexcept;
 	ktkIFrameworkConfig* Get_EngineConfig(void) const noexcept;
 
 	ktkIWindowManager* Get_WindowManager(void) const noexcept;

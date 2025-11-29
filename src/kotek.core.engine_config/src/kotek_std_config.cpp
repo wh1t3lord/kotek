@@ -3,7 +3,7 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkEngineConfig::ktkEngineConfig(void) :
+ktkFrameworkConfig::ktkFrameworkConfig(void) :
 	m_fs_priority_list{}, m_fs_features_flag{}, m_argc{-1},
 	m_argv{}, m_is_running{true},
 	m_engine_feature_flags{eEngineFeature::kEngine_Feature_None
@@ -29,43 +29,43 @@ ktkEngineConfig::ktkEngineConfig(void) :
 		static_cast<kun_ktk uint8_t>(eUserEngineLibraryCallbacks::kEndOfEnum));
 }
 
-ktkEngineConfig::~ktkEngineConfig(void) {}
+ktkFrameworkConfig::~ktkFrameworkConfig(void) {}
 
-void ktkEngineConfig::Initialize() {}
+void ktkFrameworkConfig::Initialize() {}
 
-void ktkEngineConfig::Shutdown(void) {}
+void ktkFrameworkConfig::Shutdown(void) {}
 
-bool ktkEngineConfig::IsFeatureEnabled(eEngineFeature id
+bool ktkFrameworkConfig::IsFeatureEnabled(eEngineFeature id
 ) const noexcept
 {
 	return (this->m_engine_feature_flags & id) == id;
 }
 
-bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureRender id
+bool ktkFrameworkConfig::IsFeatureEnabled(eEngineFeatureRender id
 ) const noexcept
 {
 	return (this->m_engine_feature_render_flags & id) == id;
 }
 
-bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureRenderer id
+bool ktkFrameworkConfig::IsFeatureEnabled(eEngineFeatureRenderer id
 ) const noexcept
 {
 	return (this->m_engine_feature_renderer_flags & id) == id;
 }
 
-bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureSDK id
+bool ktkFrameworkConfig::IsFeatureEnabled(eEngineFeatureSDK id
 ) const noexcept
 {
 	return (this->m_engine_feature_sdk_flags & id) == id;
 }
 
-bool ktkEngineConfig::IsFeatureEnabled(eEngineFeatureWindow id
+bool ktkFrameworkConfig::IsFeatureEnabled(eEngineFeatureWindow id
 ) const noexcept
 {
 	return (this->m_engine_feature_window_flags & id) == id;
 }
 
-bool ktkEngineConfig::IsFeatureEnabled(
+bool ktkFrameworkConfig::IsFeatureEnabled(
 	eEngineFeatureRendererVendor id
 ) const noexcept
 {
@@ -73,7 +73,7 @@ bool ktkEngineConfig::IsFeatureEnabled(
 	       ) == id;
 }
 
-void ktkEngineConfig::SetFeatureStatus(
+void ktkFrameworkConfig::SetFeatureStatus(
 	eEngineFeature id, bool status
 ) noexcept
 {
@@ -87,7 +87,7 @@ void ktkEngineConfig::SetFeatureStatus(
 	}
 }
 
-void ktkEngineConfig::SetFeatureStatus(
+void ktkFrameworkConfig::SetFeatureStatus(
 	eEngineFeatureRender id, bool status
 ) noexcept
 {
@@ -101,7 +101,7 @@ void ktkEngineConfig::SetFeatureStatus(
 	}
 }
 
-void ktkEngineConfig::SetFeatureStatus(
+void ktkFrameworkConfig::SetFeatureStatus(
 	eEngineFeatureRenderer id, bool status
 ) noexcept
 {
@@ -160,7 +160,7 @@ void ktkEngineConfig::SetFeatureStatus(
 	}
 }
 
-void ktkEngineConfig::SetFeatureStatus(
+void ktkFrameworkConfig::SetFeatureStatus(
 	eEngineFeatureSDK id, bool status
 ) noexcept
 {
@@ -174,7 +174,7 @@ void ktkEngineConfig::SetFeatureStatus(
 	}
 }
 
-void ktkEngineConfig::SetFeatureStatus(
+void ktkFrameworkConfig::SetFeatureStatus(
 	eEngineFeatureWindow id, bool status
 ) noexcept
 {
@@ -188,7 +188,7 @@ void ktkEngineConfig::SetFeatureStatus(
 	}
 }
 
-void ktkEngineConfig::SetFeatureStatus(
+void ktkFrameworkConfig::SetFeatureStatus(
 	eEngineSupportedRenderer version, bool status
 ) noexcept
 {
@@ -202,7 +202,7 @@ void ktkEngineConfig::SetFeatureStatus(
 			);
 }
 
-void ktkEngineConfig::SetFeatureStatus(
+void ktkFrameworkConfig::SetFeatureStatus(
 	const ktk_vector<
 		eEngineSupportedRenderer,
 		KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
@@ -212,7 +212,7 @@ void ktkEngineConfig::SetFeatureStatus(
 	this->m_fallback_renderers_versions = fallback_versions;
 }
 
-void ktkEngineConfig::SetFeatureStatus(
+void ktkFrameworkConfig::SetFeatureStatus(
 	const ktk_vector<
 		eEngineFeatureRenderer,
 		KOTEK_DEF_FALLBACK_RENDERERS_COUNT>& gapis
@@ -221,7 +221,7 @@ void ktkEngineConfig::SetFeatureStatus(
 	this->m_fallback_renderers = gapis;
 }
 
-void ktkEngineConfig::SetFeatureStatus(
+void ktkFrameworkConfig::SetFeatureStatus(
 	eEngineFeatureRendererVendor vendor, bool status
 ) noexcept
 {
@@ -235,45 +235,45 @@ void ktkEngineConfig::SetFeatureStatus(
 	}
 }
 
-eEngineFeature ktkEngineConfig::GetEngineFeature(void
+eEngineFeature ktkFrameworkConfig::GetEngineFeature(void
 ) const noexcept
 {
 	return this->m_engine_feature_flags;
 }
 
 eEngineFeatureRender
-ktkEngineConfig::GetEngineFeatureRender(void) const noexcept
+ktkFrameworkConfig::GetEngineFeatureRender(void) const noexcept
 {
 	return this->m_engine_feature_render_flags;
 }
 
 eEngineFeatureRenderer
-ktkEngineConfig::GetEngineFeatureRenderer(void) const noexcept
+ktkFrameworkConfig::GetEngineFeatureRenderer(void) const noexcept
 {
 	return this->m_engine_feature_renderer_flags;
 }
 
-eEngineFeatureSDK ktkEngineConfig::GetEngineFeatureSDK(void
+eEngineFeatureSDK ktkFrameworkConfig::GetEngineFeatureSDK(void
 ) const noexcept
 {
 	return this->m_engine_feature_sdk_flags;
 }
 
 eEngineFeatureWindow
-ktkEngineConfig::GetEngineFeatureWindow(void) const noexcept
+ktkFrameworkConfig::GetEngineFeatureWindow(void) const noexcept
 {
 	return this->m_engine_feature_window_flags;
 }
 
 eEngineSupportedRenderer
-ktkEngineConfig::GetRendererVersionEnum(void) const noexcept
+ktkFrameworkConfig::GetRendererVersionEnum(void) const noexcept
 {
 	return static_cast<eEngineSupportedRenderer>(
 		this->m_version_renderer
 	);
 }
 
-kun_ktk enum_base_t ktkEngineConfig::GetRendererVersion(void
+kun_ktk enum_base_t ktkFrameworkConfig::GetRendererVersion(void
 ) const noexcept
 {
 	return this->m_version_renderer;
@@ -282,7 +282,7 @@ kun_ktk enum_base_t ktkEngineConfig::GetRendererVersion(void
 const ktk_vector<
 	eEngineFeatureRenderer,
 	KOTEK_DEF_FALLBACK_RENDERERS_COUNT>&
-ktkEngineConfig::GetFallbackRendereres(void) const noexcept
+ktkFrameworkConfig::GetFallbackRendereres(void) const noexcept
 {
 	return this->m_fallback_renderers;
 }
@@ -290,13 +290,13 @@ ktkEngineConfig::GetFallbackRendereres(void) const noexcept
 const ktk_vector<
 	eEngineSupportedRenderer,
 	KOTEK_DEF_FALLBACK_RENDERERS_VERSIONS_COUNT>&
-ktkEngineConfig::GetFallbackRendererVersions(void
+ktkFrameworkConfig::GetFallbackRendererVersions(void
 ) const noexcept
 {
 	return this->m_fallback_renderers_versions;
 }
 
-kun_ktk cstring ktkEngineConfig::GetRenderName(void
+kun_ktk cstring ktkFrameworkConfig::GetRenderName(void
 ) const noexcept
 {
 	return helper::Translate_EngineSupportedRenderer(
@@ -305,7 +305,7 @@ kun_ktk cstring ktkEngineConfig::GetRenderName(void
 }
 
 /*
-eEngineFeature ktkEngineConfig::GetRenderFeature(void) const
+eEngineFeature ktkFrameworkConfig::GetRenderFeature(void) const
 noexcept
 {
     eEngineFeature result =
@@ -395,12 +395,12 @@ renderer!");
 }
 */
 
-bool ktkEngineConfig::IsCurrentRenderLegacy(void) const noexcept
+bool ktkFrameworkConfig::IsCurrentRenderLegacy(void) const noexcept
 {
 	return !this->IsCurrentRenderModern();
 }
 
-bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
+bool ktkFrameworkConfig::IsCurrentRenderModern(void) const noexcept
 {
 	auto render_type = this->GetEngineFeatureRenderer();
 
@@ -476,28 +476,28 @@ bool ktkEngineConfig::IsCurrentRenderModern(void) const noexcept
 	return status;
 }
 
-int ktkEngineConfig::GetARGC(void) const noexcept
+int ktkFrameworkConfig::GetARGC(void) const noexcept
 {
 	return this->m_argc;
 }
 
-void ktkEngineConfig::SetARGC(int count_of_arguments) noexcept
+void ktkFrameworkConfig::SetARGC(int count_of_arguments) noexcept
 {
 	this->m_argc = count_of_arguments;
 }
 
-char** ktkEngineConfig::GetARGV(void) const noexcept
+char** ktkFrameworkConfig::GetARGV(void) const noexcept
 {
 	return this->m_argv;
 }
 
-void ktkEngineConfig::SetARGV(char** p_char) noexcept
+void ktkFrameworkConfig::SetARGV(char** p_char) noexcept
 {
 	this->m_argv = p_char;
 	this->Parse_CommandLine();
 }
 
-bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(
+bool ktkFrameworkConfig::IsContainsConsoleCommandLineArgument(
 	const kun_ktk cstring& your_argument
 ) const noexcept
 {
@@ -518,7 +518,7 @@ bool ktkEngineConfig::IsContainsConsoleCommandLineArgument(
 		   ) != this->m_parsed_command_line_arguments.end();
 }
 
-bool ktkEngineConfig::IsUserSpecifiedValidRenderer(void
+bool ktkFrameworkConfig::IsUserSpecifiedValidRenderer(void
 ) const noexcept
 {
 	kun_ktk size_t validation{0};
@@ -542,7 +542,7 @@ bool ktkEngineConfig::IsUserSpecifiedValidRenderer(void
 	return validation <= 1;
 }
 
-bool ktkEngineConfig::
+bool ktkFrameworkConfig::
 	IsUserSpecifiedRendererOpenGLInCommandLine(void
     ) const noexcept
 {
@@ -565,7 +565,7 @@ bool ktkEngineConfig::
 	return result;
 }
 
-bool ktkEngineConfig::
+bool ktkFrameworkConfig::
 	IsUserSpecifiedRendererDirectXInCommandLine(void
     ) const noexcept
 {
@@ -588,7 +588,7 @@ bool ktkEngineConfig::
 	return result;
 }
 
-bool ktkEngineConfig::
+bool ktkFrameworkConfig::
 	IsUserSpecifiedRendererVulkanInCommandLine(void
     ) const noexcept
 {
@@ -612,7 +612,7 @@ bool ktkEngineConfig::
 }
 
 eEngineSupportedRenderer
-ktkEngineConfig::GetRendererVersionFromCommandLine(void
+ktkFrameworkConfig::GetRendererVersionFromCommandLine(void
 ) const noexcept
 {
 	KOTEK_ASSERT(
@@ -786,18 +786,18 @@ ktkEngineConfig::GetRendererVersionFromCommandLine(void
 	return result;
 }
 
-bool ktkEngineConfig::IsApplicationWorking(void) const noexcept
+bool ktkFrameworkConfig::IsApplicationWorking(void) const noexcept
 {
 	return this->m_is_running;
 }
 
-void ktkEngineConfig::SetApplicationWorking(bool status
+void ktkFrameworkConfig::SetApplicationWorking(bool status
 ) noexcept
 {
 	this->m_is_running = status;
 }
 
-void ktkEngineConfig::Set_UserLibrary(
+void ktkFrameworkConfig::Set_UserLibrary(
 	const ktk_filesystem_path& path_to_library
 ) noexcept
 {
@@ -805,33 +805,33 @@ void ktkEngineConfig::Set_UserLibrary(
 		kun_ktk dll::shared_library(path_to_library.c_str());
 }
 
-void* ktkEngineConfig::Get_UserLibrary(void) noexcept
+void* ktkFrameworkConfig::Get_UserLibrary(void) noexcept
 {
 	return &this->m_user_dll;
 }
 
 // TODO: finish this
-kun_ktk size_t ktkEngineConfig::Get_VideoMemoryTotal(void
+kun_ktk size_t ktkFrameworkConfig::Get_VideoMemoryTotal(void
 ) const noexcept
 {
 	return 0;
 }
 
-kun_ktk size_t ktkEngineConfig::Get_VideoMemoryForInitialize(
+kun_ktk size_t ktkFrameworkConfig::Get_VideoMemoryForInitialize(
 	void
 ) const noexcept
 {
 	return this->m_video_memory_for_initialize;
 }
 
-void ktkEngineConfig::Set_VideoMemoryForInitialize(
+void ktkFrameworkConfig::Set_VideoMemoryForInitialize(
 	kun_ktk size_t value
 ) noexcept
 {
 	this->m_video_memory_for_initialize = value;
 }
 
-void ktkEngineConfig::Parse_CommandLine(void) noexcept
+void ktkFrameworkConfig::Parse_CommandLine(void) noexcept
 {
 	KOTEK_ASSERT(
 		this->m_argc != -1,
@@ -858,19 +858,19 @@ void ktkEngineConfig::Parse_CommandLine(void) noexcept
 }
 
 eEngineFeatureRendererVendor
-ktkEngineConfig::GetEngineFeatureRendererVendor(void
+ktkFrameworkConfig::GetEngineFeatureRendererVendor(void
 ) const noexcept
 {
 	return this->m_engine_feature_renderer_vendor_flags;
 }
 
-const kun_ktk uint8_t* ktkEngineConfig::Get_FS_PriorityList(void
+const kun_ktk uint8_t* ktkFrameworkConfig::Get_FS_PriorityList(void
 ) const noexcept
 {
 	return m_fs_priority_list;
 }
 
-kun_ktk uint8_t ktkEngineConfig::Get_FS_PriorityListSize(void
+kun_ktk uint8_t ktkFrameworkConfig::Get_FS_PriorityListSize(void
 ) const noexcept
 {
 	kun_ktk uint8_t result = 0;
@@ -895,13 +895,13 @@ kun_ktk uint8_t ktkEngineConfig::Get_FS_PriorityListSize(void
 	return result;
 }
 
-kun_ktk uint16_t ktkEngineConfig::Get_FS_FeaturesFlag(void
+kun_ktk uint16_t ktkFrameworkConfig::Get_FS_FeaturesFlag(void
 ) const noexcept
 {
 	return this->m_fs_features_flag;
 }
 
-const char* ktkEngineConfig::Get_UserLibrary_CallbackName(
+const char* ktkFrameworkConfig::Get_UserLibrary_CallbackName(
 	eUserEngineLibraryCallbacks callback_id
 ) const noexcept
 {
@@ -911,13 +911,13 @@ const char* ktkEngineConfig::Get_UserLibrary_CallbackName(
 		.c_str();
 }
 
-const char* ktkEngineConfig::Get_UserLibrary_Name(void
+const char* ktkFrameworkConfig::Get_UserLibrary_Name(void
 ) const noexcept
 {
 	return this->m_user_dll_name.c_str();
 }
 
-void ktkEngineConfig::Set_FS_PriorityList(
+void ktkFrameworkConfig::Set_FS_PriorityList(
 	const kun_ktk uint8_t (&arr)[static_cast<
 		kun_ktk uint8_t>(eFileSystemPriorityType::kEndOfEnum)]
 )
@@ -944,13 +944,13 @@ void ktkEngineConfig::Set_FS_PriorityList(
 	);
 }
 
-void ktkEngineConfig::Set_FS_FeaturesFlag(kun_ktk uint16_t
+void ktkFrameworkConfig::Set_FS_FeaturesFlag(kun_ktk uint16_t
                                               features)
 {
 	this->m_fs_features_flag = features;
 }
 
-void ktkEngineConfig::Set_UserLibrary_CallbackName(
+void ktkFrameworkConfig::Set_UserLibrary_CallbackName(
 	eUserEngineLibraryCallbacks callback_id,
 	const ktk_cstring<
 		KOTEK_DEF_USER_ENGINE_LIBRARY_CALLBACK_NAME_LENGTH>&
@@ -961,7 +961,7 @@ void ktkEngineConfig::Set_UserLibrary_CallbackName(
 		[static_cast<kun_ktk uint8_t>(callback_id)] = name;
 }
 
-void ktkEngineConfig::Set_UserLibrary_Name(
+void ktkFrameworkConfig::Set_UserLibrary_Name(
 	const ktk_cstring<
 		KOTEK_DEF_USER_ENGINE_LIBRARY_NAME_LENGTH>& name
 )

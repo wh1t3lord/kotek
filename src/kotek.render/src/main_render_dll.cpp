@@ -30,7 +30,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 
 	// TODO: provide an overriding for every instance what implemented here
 	KOTEK_ASSERT(p_engine_config,
-		"you must initialize ktkEngineConfig instance or override it by your "
+		"you must initialize ktkFrameworkConfig instance or override it by your "
 		"own implementation");
 
 	KOTEK_ASSERT(p_engine_config->IsUserSpecifiedValidRenderer(),
@@ -244,7 +244,7 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 
 	// TODO: provide an overriding for every instance what implemented here
 	KOTEK_ASSERT(p_engine_config,
-		"you must initialize ktkEngineConfig instance or override it by your "
+		"you must initialize ktkFrameworkConfig instance or override it by your "
 		"own implementation");
 
 	KOTEK_ASSERT(p_engine_config->IsUserSpecifiedValidRenderer(),

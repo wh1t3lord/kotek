@@ -14,12 +14,12 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 // TODO: implement unit test for testing all methods about flags
 // and class in general!
-class ktkEngineConfig : public ktkIFrameworkConfig
+class ktkFrameworkConfig : public ktkIFrameworkConfig
 {
 public:
-	ktkEngineConfig(void);
+	ktkFrameworkConfig(void);
 
-	~ktkEngineConfig(void);
+	~ktkFrameworkConfig(void);
 
 	void Initialize() override;
 

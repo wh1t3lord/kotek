@@ -18,7 +18,7 @@ bool InitializeModule_Core_Engine_Config(
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	ktkEngineConfig* p_instance = new ktkEngineConfig();
+	ktkFrameworkConfig* p_instance = new ktkFrameworkConfig();
 	p_instance->Initialize();
 
 	p_instance->SetARGC(p_manager->Get_ARGC());
@@ -200,7 +200,7 @@ bool InitializeModule_Core_Engine_Config(
 	p_instance->Set_VideoMemoryForInitialize(1024 * 1024 * 32);
 	p_instance->SetFeatureStatus(renderer_version, true);
 	p_instance->SetFeatureStatus(renderer_vendor, true);
-	p_manager->Set_EngineConfig(p_instance);
+	p_manager->Set_FrameworkConfig(p_instance);
 
 	return true;
 }
@@ -316,14 +316,14 @@ bool DeserializeModule_Core_Engine_Config(
 bool ShutdownModule_Core_Engine_Config(ktkMainManager* p_manager
 )
 {
-	ktkEngineConfig* p_instance =
-		dynamic_cast<ktkEngineConfig*>(
+	ktkFrameworkConfig* p_instance =
+		dynamic_cast<ktkFrameworkConfig*>(
 			p_manager->Get_EngineConfig()
 		);
 
 	KOTEK_ASSERT(
 		p_instance,
-		"failed to cast to ktkEngineConfig. You must have a "
+		"failed to cast to ktkFrameworkConfig. You must have a "
 	    "valid "
 		"instance of it, otherwise something is wrong"
 	);

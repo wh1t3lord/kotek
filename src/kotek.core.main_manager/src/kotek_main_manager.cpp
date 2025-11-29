@@ -100,7 +100,7 @@ void ktkMainManager::setRenderSwapchainManager(
 	this->m_p_manager_swapchain = pointer;
 }
 
-void ktkMainManager::Set_EngineConfig(ktkIFrameworkConfig* pointer) noexcept
+void ktkMainManager::Set_FrameworkConfig(ktkIFrameworkConfig* pointer) noexcept
 {
 	this->m_p_manager_config = pointer;
 }

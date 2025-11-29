@@ -376,7 +376,7 @@ TEST(
 	Filesystem, test_filesystem_check_folder_tests_for_existance
 )
 {
-	ktkEngineConfig cfg;
+	ktkFrameworkConfig cfg;
 
 	ktkFileSystem instance;
 
@@ -400,7 +400,7 @@ TEST(Filesystem, test_file_create_pretty_output)
 	ktkMainManager main_manager;
 	ktkFileSystem filesystem;
 
-	ktkEngineConfig _engine_cfg;
+	ktkFrameworkConfig _engine_cfg;
 
 	filesystem.Initialize(&_engine_cfg);
 
