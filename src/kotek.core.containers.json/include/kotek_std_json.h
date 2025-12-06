@@ -266,7 +266,16 @@ public:
 	{
 	}
 
+	ktkJsonView() : m_p_json{} {}
+
 	~ktkJsonView() {}
+
+	template <kun_ktk size_t _MemorySize, bool _Realloc>
+	ktkJsonView& operator=(ktkJson<_MemorySize, _Realloc>& json)
+	{
+		this->m_p_json = json.Get_Object();
+		return *this;
+	}
 
 	template <typename ReturnType>
 	ReturnType

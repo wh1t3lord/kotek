@@ -590,6 +590,28 @@ bool ktkFileSystem_Native::Get_FileSize(
 	return status;
 }
 
+bool ktkFileSystem_Native::Get_FileSize(
+	const ktk_filesystem_path& path,
+	kun_ktk size_t& result
+) noexcept
+{
+	bool status = false;
+
+	KOTEK_ASSERT(
+		path.empty() == false, "you can't pass empty path!"
+	);
+
+	if (path.empty())
+	{
+		KOTEK_MESSAGE_WARNING("you pass empty path!");
+		return status;
+	}
+
+
+
+	return status;
+}
+
 bool ktkFileSystem_Native::Seek(
 	ktkFileHandleType handle,
 	kun_ktk size_t offset,

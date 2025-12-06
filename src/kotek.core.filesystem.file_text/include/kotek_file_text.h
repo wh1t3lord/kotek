@@ -118,7 +118,8 @@ public:
 		return this->m_data.json.Get_Object();
 	}
 
-	const ktkJson<_JsonMemorySize, _Realloc>& Get_JSON(void) const noexcept
+	const ktkJson<_JsonMemorySize, _Realloc>& Get_JSON(void
+	) const noexcept
 	{
 		return this->m_data.json;
 	}
@@ -330,7 +331,7 @@ public:
 	{
 		return _ParserBufferSize;
 	}
-	
+
 private:
 	ktkJson<_JsonMemorySize, _Realloc>& Get_JSON() noexcept
 	{
@@ -422,9 +423,25 @@ public:
 	{
 	}
 
+	ktkResourceViewText() : m_view{} {}
+
 	~ktkResourceViewText() {}
 
-	template<typename ReturnType>
+		template <
+		kun_ktk uint32_t _ParserBufferSize,
+		kun_ktk uint32_t _JsonMemorySize,
+		bool _Realloc>
+	ktkResourceViewText& operator=(ktkResourceText<
+								   _ParserBufferSize,
+								   _JsonMemorySize,
+								   _Realloc>& inst)
+	{
+			m_view = inst.Get_JSON();
+			return *this;
+	}
+
+
+	template <typename ReturnType>
 	ReturnType
 	Get(const ktk_cstring<
 		KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>& key_name

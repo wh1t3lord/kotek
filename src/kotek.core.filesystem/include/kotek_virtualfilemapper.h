@@ -42,6 +42,7 @@ private:
 	ktk_queue<id_type, KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT> m_free_ids;
 	ktk_vector<vfm_handle_t, KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT>
 		m_mappings;
+	// todo: add unordered_map for searching files that cache by name
 };
 
 KOTEK_END_NAMESPACE_CORE

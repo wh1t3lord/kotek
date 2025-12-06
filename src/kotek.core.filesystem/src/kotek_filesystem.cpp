@@ -3042,6 +3042,15 @@ bool ktkFileSystem::Get_FileSize(
 	return status;
 }
 
+bool ktkFileSystem::Get_FileSize(
+	const ktk_filesystem_path& path_to_file,
+	kun_ktk size_t& result,
+	eFileSystemPriorityType
+		priority /*= eFileSystemPriorityType::kAuto */
+) noexcept
+{
+}
+
 bool ktkFileSystem::Seek(
 	ktkFileHandleType handle,
 	kun_ktk size_t offset,

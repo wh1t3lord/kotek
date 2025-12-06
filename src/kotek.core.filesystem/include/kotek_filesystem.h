@@ -210,6 +210,12 @@ public:
 			eFileSystemFeatureType::kNone
 	) noexcept override;
 
+	bool Get_FileSize(
+		const ktk_filesystem_path& path_to_file,
+		kun_ktk size_t& result,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	) noexcept override;
 	/* SINGLE SHOT READ&WRITE */
 
 	/* STREAMING */

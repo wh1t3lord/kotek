@@ -107,6 +107,11 @@ public:
 		ktkFileHandleType handle, kun_ktk size_t& result
 	);
 
+	bool Get_FileSize(
+		const ktk_filesystem_path& path_to_file,
+		kun_ktk size_t& result
+	) noexcept; 
+
 	bool Seek(
 		ktkFileHandleType handle,
 		kun_ktk size_t offset,
