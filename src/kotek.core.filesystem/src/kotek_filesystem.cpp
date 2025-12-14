@@ -3049,6 +3049,9 @@ bool ktkFileSystem::Get_FileSize(
 		priority /*= eFileSystemPriorityType::kAuto */
 ) noexcept
 {
+	bool status = false;
+
+	return status;
 }
 
 bool ktkFileSystem::Seek(
