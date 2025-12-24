@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19.3)
+cmake_minimum_required(VERSION 3.21)
 
 project(kotek.core.os.win32 VERSION 1 LANGUAGES CXX)
 
@@ -10,7 +10,10 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "GLFW")
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 			find_package(glfw3 REQUIRED)
-			find_package(unofficial-angle CONFIG REQUIRED)
+
+			if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
+				find_package(unofficial-angle CONFIG REQUIRED)
+			endif()
 
 			if ("${KOTEK_BGFX}" STREQUAL "ON")
 				find_package(bgfx REQUIRED)
@@ -23,7 +26,10 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 				find_package(ZLIB REQUIRED)
 			endif()
 		elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
-			find_package(unofficial-angle CONFIG REQUIRED)
+
+			if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
+				find_package(unofficial-angle CONFIG REQUIRED)
+			endif()
 
 			if ("${KOTEK_BGFX}" STREQUAL "ON")
 				find_package(bgfx CONFIG REQUIRED)
@@ -98,11 +104,13 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	   )
 	endif()
 
-	target_link_libraries(${PROJECT_NAME} PUBLIC 
-		unofficial::angle::libEGL
-		unofficial::angle::libANGLE
-		unofficial::angle::libGLESv2
-	)
+	if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
+		target_link_libraries(${PROJECT_NAME} PUBLIC 
+			unofficial::angle::libEGL
+			unofficial::angle::libANGLE
+			unofficial::angle::libGLESv2
+		)
+	endif()
 
 	if ("${KOTEK_BGFX}" STREQUAL "ON")
 		target_link_libraries(${PROJECT_NAME} PUBLIC 
@@ -120,10 +128,13 @@ elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 		find_package(ZLIB REQUIRED)
 	endif()
 
-	target_link_libraries(${PROJECT_NAME} PUBLIC 
-		 unofficial::angle::libEGL
-		 unofficial::angle::libANGLE
-		 unofficial::angle::libGLESv2)
+	if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
+		target_link_libraries(${PROJECT_NAME} PUBLIC 
+			unofficial::angle::libEGL
+			unofficial::angle::libANGLE
+			unofficial::angle::libGLESv2
+		)
+	endif()
 
 	if ("${KOTEK_BGFX}" STREQUAL "ON")
 		target_link_libraries(${PROJECT_NAME} PUBLIC 

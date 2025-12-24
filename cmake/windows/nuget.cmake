@@ -149,8 +149,14 @@ if (WIN32)
         message("Generated package config name: [${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages]")
         message("Searching for file...")
 
-        if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages.config")
-            message("Using packages config file [${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages.config]")
+        if ("${KOTEK_CONFIGURATION_TYPE}" STREQUAL "")
+            message(FATAL_ERROR "you have to specify KOTEK_CONFIGURATION_TYPE because we unable to determine .config file for nuget in order to download packages")    
+        else()
+            set(KOTEK_NUGET_FILENAME "${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages-${KOTEK_CONFIGURATION_TYPE}.config")
+        endif()
+
+        if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/${KOTEK_NUGET_FILENAME}")
+            message("Using packages config file [${KOTEK_NUGET_FILENAME}]")
             message("Making config usable for nuget")
             
             if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/packages.config")
@@ -168,13 +174,13 @@ if (WIN32)
             endif()
             
             
-            file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages.config DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename)
-            if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename/${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages.config")
+            file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/${KOTEK_NUGET_FILENAME} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename)
+            if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename/${KOTEK_NUGET_FILENAME}")
                 message(FATAL_ERROR "failed to copy file, request more rights for CMake, aborting...")
             endif()
            # message("copy was successful!")
 
-            file(RENAME ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename/${KOTEK_NUGET_PLATFORM_NAME}-${KOTEK_NUGET_COMPILER_NAME}-Packages.config ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename/packages.config)
+            file(RENAME ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename/${KOTEK_NUGET_FILENAME} ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename/packages.config)
 
             if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename/packages.config")
                 message(FATAL_ERROR "failed to rename file, request more rights for CMake, aborting...")

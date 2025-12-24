@@ -1,4 +1,11 @@
-cmake_minimum_required(VERSION 3.19.3)
+cmake_minimum_required(VERSION 3.21)
+
+if (WIN32)
+	include("cmake/windows/compiler_globals.cmake")
+else()
+	message(FATAL_ERROR "todo: impl")
+endif()
+
 project(kotek.engine)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -46,8 +53,19 @@ message("[${PROJECT_NAME}]: filename for generating preprocessors: '${KOTEK_FILE
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
 	message("[${PROJECT_NAME}]: using nuget packages")
 
+	if ("${KOTEK_CONFIGURATION_TYPE}" STREQUAL "")
+		set(KOTEK_CONFIGURATION_TYPE "minimal" CACHE INTERNAL "")
+	endif()
+
+	message("KOTEK_CONFIGURATION_TYPE=${KOTEK_CONFIGURATION_TYPE}")
+
+	if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "")
+		set(KOTEK_VCPKG_FILENAME "vcpkg_nuget_${KOTEK_CONFIGURATION_TYPE}.cmake")
+		message("KOTEK_VCPKG_FILENAME=${KOTEK_VCPKG_FILENAME} using this for installing packages from vcpkg")
+	endif()
+
 	if (WIN32)
-		include("cmake/windows/vcpkg_nuget.cmake")
+		include("cmake/windows/${KOTEK_VCPKG_FILENAME}")
 		include("cmake/windows/nuget.cmake")
 	endif()
 
@@ -64,7 +82,12 @@ endif()
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
 		message("Using nuget packages because you didn't provide a folder that has a package manager\n So we don't need to build solution and using precompiled packages")	
-		set(KOTEK_DEPS_FOLDER "nuget" CACHE INTERNAL "")	
+		
+		if ("${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
+			set(KOTEK_DEPS_FOLDER "vcpkg" CACHE INTERNAL "")
+		else()
+			set(KOTEK_DEPS_FOLDER "nuget" CACHE INTERNAL "")
+		endif()	
 	else()
 		if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${KOTEK_DEPS_FOLDER}" AND NOT "${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			message("[${PROJECT_NAME}]: your dependency folder is '${KOTEK_DEPS_FOLDER}'")
@@ -237,8 +260,12 @@ add_subdirectory("src/kotek.render.vk")
 add_subdirectory("src/kotek.render.gl")
 add_subdirectory("src/kotek.render.gl.glad")
 add_subdirectory("src/kotek.render.software")
-add_subdirectory("src/kotek.render.angle.gles")
-add_subdirectory("src/kotek.render.angle.gles23")
+
+if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
+	add_subdirectory("src/kotek.render.angle.gles")
+	add_subdirectory("src/kotek.render.angle.gles23")
+endif()
+
 add_subdirectory("src/kotek.render.bgfx")
 
 add_subdirectory("src/kotek.exe")

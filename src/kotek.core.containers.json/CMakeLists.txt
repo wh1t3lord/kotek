@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19.3)
+cmake_minimum_required(VERSION 3.21)
 
 project(kotek.core.containers.json VERSION 1 LANGUAGES CXX)
 
@@ -6,19 +6,17 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
-	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
-		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-			find_package(Boost COMPONENTS json REQUIRED)
-		elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
-			file(GLOB nuget_boost_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
-			if ("${nuget_boost_folder}" MATCHES "Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
-				message("[${PROJECT_NAME}][nuget]: package boost exists!")
-			else()
-				message(FATAL_ERROR "failed to find boost package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
-			endif()
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+		find_package(Boost COMPONENTS json REQUIRED)
+	elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+		file(GLOB nuget_boost_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
+		if ("${nuget_boost_folder}" MATCHES "Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+			message("[${PROJECT_NAME}][nuget]: package boost exists!")
 		else()
-			find_package(Boost COMPONENTS json REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+			message(FATAL_ERROR "failed to find boost package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
 		endif()
+	else()
+		find_package(Boost COMPONENTS json REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 	endif()
 endif()
 
@@ -51,8 +49,7 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 			target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_json-vc140-mt.lib)
 		endif()
 	else()
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
-			Boost::boost 
+		target_link_libraries(${PROJECT_NAME} PUBLIC  
 			Boost::json
 		)
 	endif()

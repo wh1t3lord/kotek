@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19.3)
+cmake_minimum_required(VERSION 3.21)
 
 project(kotek.core.defines.static.cpp VERSION 1 LANGUAGES CXX)
 
@@ -6,7 +6,11 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "")
-	set(KOTEK_STD_LIBRARY "BOOST" CACHE INTERNAL "")
+	if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
+		set(KOTEK_STD_LIBRARY "BOOST" CACHE INTERNAL "")
+	else()
+		set(KOTEK_STD_LIBRARY "STD" CACHE INTERNAL "")
+	endif()
 endif()
 
 if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "")

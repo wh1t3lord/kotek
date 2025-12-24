@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19.3)
+cmake_minimum_required(VERSION 3.21)
 
 project(kotek.core.defines.static.math VERSION 1 LANGUAGES CXX)
 
@@ -7,7 +7,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 if ("${KOTEK_MATH_LIBRARY}" STREQUAL "")
 	if (WIN32)
-		set(KOTEK_MATH_LIBRARY "DXM" CACHE INTERNAL "")
+		if ("${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
+			set(KOTEK_MATH_LIBRARY "GLM" CACHE INTERNAL "")
+		else()
+			set(KOTEK_MATH_LIBRARY "DXM" CACHE INTERNAL "")
+		endif()
 	else()
 		set(KOTEK_MATH_LIBRARY "GLM" CACHE INTERNAL "")
 	endif()

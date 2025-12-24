@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.19.3)
+cmake_minimum_required(VERSION 3.21)
 
 project(kotek.core VERSION 1 LANGUAGES CXX)
 
@@ -8,9 +8,19 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
-	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-			find_package(Boost COMPONENTS json filesystem REQUIRED)
+
+			if ("${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
+				find_package(Boost COMPONENTS json REQUIRED)
+			else()
+
+				find_package(Boost COMPONENTS json REQUIRED)
+				
+				if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+					find_package(Boost COMPONENTS filesystem REQUIRED)
+				endif()
+				
+			endif()
 
 			if ("${KOTEK_TESTS}" STREQUAL "ON")
 				find_package(GTest CONFIG REQUIRED)
@@ -31,9 +41,16 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 				find_package(GTest REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 			endif()
 
-			find_package(Boost COMPONENTS json filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+			if ("${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
+				find_package(Boost COMPONENTS json REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+			else()
+				find_package(Boost COMPONENTS json REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+
+				if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+					find_package(Boost COMPONENTS filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+				endif()
+			endif()
 		endif()
-	endif()
 endif()
 
 if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON")
@@ -129,11 +146,17 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 			)
 		endif()
 	else()
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
-			Boost::headers 
-			Boost::json 
-			Boost::filesystem
+
+		target_link_libraries(${PROJECT_NAME} PUBLIC
+			Boost::json
 		)
+
+		if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+			target_link_libraries(${PROJECT_NAME} PUBLIC 
+				Boost::headers 
+				Boost::filesystem
+			)
+		endif()
 
 		if ("${KOTEK_TESTS}" STREQUAL "ON")
 			target_link_libraries(${PROJECT_NAME} PUBLIC 
