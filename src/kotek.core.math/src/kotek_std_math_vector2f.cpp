@@ -20,13 +20,19 @@ KOTEK_BEGIN_NAMESPACE_MATH
 vector2f::vector2f(float x) : m_base(x, 0.0f) {}
 vector2f::vector2f(float x, float y) : m_base(x, y) {}
 vector2f::vector2f(float x, float y, float z) : m_base(x, y) {}
-vector2f::vector2f(float x, float y, float z, float w) : m_base(x, y) {}
+vector2f::vector2f(float x, float y, float z, float w) :
+	m_base(x, y)
+{
+}
 
 vector2f::vector2f(float* p_arr2, unsigned char size) :
 	m_base(p_arr2[0], p_arr2[1])
 {
-	KOTEK_ASSERT(size > 0 && size <= 2,
-		"something is wrong, size must be positive and less or equal to 2");
+	KOTEK_ASSERT(
+		size > 0 && size <= 2,
+		"something is wrong, size must be positive and less or "
+		"equal to 2"
+	);
 
 	if (size == 1)
 	{
@@ -37,8 +43,11 @@ vector2f::vector2f(float* p_arr2, unsigned char size) :
 vector2f::vector2f(const float* p_arr2, unsigned char size) :
 	m_base(p_arr2[0], p_arr2[1])
 {
-	KOTEK_ASSERT(size > 0 && size <= 2,
-		"something is wrong, size must be positive and less or equal to 2");
+	KOTEK_ASSERT(
+		size > 0 && size <= 2,
+		"something is wrong, size must be positive and less or "
+		"equal to 2"
+	);
 
 	if (size == 1)
 	{
@@ -46,12 +55,25 @@ vector2f::vector2f(const float* p_arr2, unsigned char size) :
 	}
 }
 
-vector2f::vector2f(const matrix4f_view_t& view) : m_base(view.x(), view.y()) {}
-vector2f::vector2f(const matrix3f_view_t& view) : m_base(view.x(), view.y()) {}
-vector2f::vector2f(const matrix2f_view_t& view) : m_base(view.x(), view.y()) {}
-vector2f::vector2f(const matrix1f_view_t& view) : m_base(view.x(), 0.0f) {}
+vector2f::vector2f(const matrix4f_view_t& view) :
+	m_base(view.x(), view.y())
+{
+}
+vector2f::vector2f(const matrix3f_view_t& view) :
+	m_base(view.x(), view.y())
+{
+}
+vector2f::vector2f(const matrix2f_view_t& view) :
+	m_base(view.x(), view.y())
+{
+}
+vector2f::vector2f(const matrix1f_view_t& view) :
+	m_base(view.x(), 0.0f)
+{
+}
 
-vector2f::vector2f(const matrix1f_view_t& view, float y) : m_base(view.x(), y)
+vector2f::vector2f(const matrix1f_view_t& view, float y) :
+	m_base(view.x(), y)
 {
 }
 
@@ -67,7 +89,8 @@ vector2f::vector2f(const matrix2f_const_view_t& view) :
 	m_base(view.x(), view.y())
 {
 }
-vector2f::vector2f(const matrix1f_const_view_t& view) : m_base(view.x(), 0.0f)
+vector2f::vector2f(const matrix1f_const_view_t& view) :
+	m_base(view.x(), 0.0f)
 {
 }
 
@@ -76,19 +99,33 @@ vector2f::vector2f(const matrix1f_const_view_t& view, float y) :
 {
 }
 
-vector2f::vector2f(const vector1f& data) : m_base(data.x(), 0.0f) {}
+vector2f::vector2f(const vector1f& data) :
+	m_base(data.x(), 0.0f)
+{
+}
 
-vector2f::vector2f(const vector1f& data, float y) : m_base(data.x(), y) {}
+vector2f::vector2f(const vector1f& data, float y) :
+	m_base(data.x(), y)
+{
+}
 
-vector2f::vector2f(const vector3f& data) : m_base(data.x(), data.y()) {}
+vector2f::vector2f(const vector3f& data) :
+	m_base(data.x(), data.y())
+{
+}
 
-vector2f::vector2f(const vector4f& data) : m_base(data.x(), data.y()) {}
+vector2f::vector2f(const vector4f& data) :
+	m_base(data.x(), data.y())
+{
+}
 
 vector2f::vector2f(const base_vec2_t& data) : m_base(data) {}
-vector2f::vector2f(const vector2f& data) : m_base(data.m_base) {}
+vector2f::vector2f(const vector2f& data) : m_base(data.m_base)
+{
+}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-vector2f::vector2f(const DirectX::XMVECTOR& vec) 
+vector2f::vector2f(const DirectX::XMVECTOR& vec)
 {
 	DirectX::XMStoreFloat2(&this->m_base, vec);
 }
@@ -117,42 +154,50 @@ vector2f& vector2f::operator+=(const vector2f& data) noexcept
 	return *this;
 }
 
-vector2f& vector2f::operator+=(const matrix4f_view_t& data) noexcept
+vector2f& vector2f::operator+=(const matrix4f_view_t& data
+) noexcept
 {
 	return this->operator+=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator+=(const matrix3f_view_t& data) noexcept
+vector2f& vector2f::operator+=(const matrix3f_view_t& data
+) noexcept
 {
 	return this->operator+=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator+=(const matrix2f_view_t& data) noexcept
+vector2f& vector2f::operator+=(const matrix2f_view_t& data
+) noexcept
 {
 	return this->operator+=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator+=(const matrix1f_view_t& data) noexcept
+vector2f& vector2f::operator+=(const matrix1f_view_t& data
+) noexcept
 {
 	return this->operator+=(base_vec2_t(data.x(), 0.0f));
 }
 
-vector2f& vector2f::operator+=(const matrix4f_const_view_t& data) noexcept
+vector2f& vector2f::operator+=(const matrix4f_const_view_t& data
+) noexcept
 {
 	return this->operator+=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator+=(const matrix3f_const_view_t& data) noexcept
+vector2f& vector2f::operator+=(const matrix3f_const_view_t& data
+) noexcept
 {
 	return this->operator+=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator+=(const matrix2f_const_view_t& data) noexcept
+vector2f& vector2f::operator+=(const matrix2f_const_view_t& data
+) noexcept
 {
 	return this->operator+=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator+=(const matrix1f_const_view_t& data) noexcept
+vector2f& vector2f::operator+=(const matrix1f_const_view_t& data
+) noexcept
 {
 	return this->operator+=(base_vec2_t(data.x(), 0.0f));
 }
@@ -176,7 +221,9 @@ vector2f& vector2f::operator-=(const vector2f& data) noexcept
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR casted_original = *this;
 	DirectX::XMVECTOR casted_argument = data;
-	auto result = DirectX::XMVectorSubtract(casted_original, casted_argument);
+	auto result = DirectX::XMVectorSubtract(
+		casted_original, casted_argument
+	);
 
 	DirectX::XMStoreFloat2(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -185,42 +232,50 @@ vector2f& vector2f::operator-=(const vector2f& data) noexcept
 	return *this;
 }
 
-vector2f& vector2f::operator-=(const matrix4f_view_t& data) noexcept
+vector2f& vector2f::operator-=(const matrix4f_view_t& data
+) noexcept
 {
 	return this->operator-=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator-=(const matrix3f_view_t& data) noexcept
+vector2f& vector2f::operator-=(const matrix3f_view_t& data
+) noexcept
 {
 	return this->operator-=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator-=(const matrix2f_view_t& data) noexcept
+vector2f& vector2f::operator-=(const matrix2f_view_t& data
+) noexcept
 {
 	return this->operator-=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator-=(const matrix1f_view_t& data) noexcept
+vector2f& vector2f::operator-=(const matrix1f_view_t& data
+) noexcept
 {
 	return this->operator-=(base_vec2_t(data.x(), 0.0f));
 }
 
-vector2f& vector2f::operator-=(const matrix4f_const_view_t& data) noexcept
+vector2f& vector2f::operator-=(const matrix4f_const_view_t& data
+) noexcept
 {
 	return this->operator-=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator-=(const matrix3f_const_view_t& data) noexcept
+vector2f& vector2f::operator-=(const matrix3f_const_view_t& data
+) noexcept
 {
 	return this->operator-=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator-=(const matrix2f_const_view_t& data) noexcept
+vector2f& vector2f::operator-=(const matrix2f_const_view_t& data
+) noexcept
 {
 	return this->operator-=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator-=(const matrix1f_const_view_t& data) noexcept
+vector2f& vector2f::operator-=(const matrix1f_const_view_t& data
+) noexcept
 {
 	return this->operator-=(base_vec2_t(data.x(), 0.0f));
 }
@@ -229,8 +284,11 @@ vector2f& vector2f::operator-=(const base_vec2_t& data) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR casted_original = *this;
-	DirectX::XMVECTOR casted_argument = DirectX::XMLoadFloat2(&data);
-	auto result = DirectX::XMVectorSubtract(casted_original, casted_argument);
+	DirectX::XMVECTOR casted_argument =
+		DirectX::XMLoadFloat2(&data);
+	auto result = DirectX::XMVectorSubtract(
+		casted_original, casted_argument
+	);
 
 	DirectX::XMStoreFloat2(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -244,7 +302,9 @@ vector2f& vector2f::operator*=(const vector2f& data) noexcept
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR casted_original = *this;
 	DirectX::XMVECTOR casted_argument = data;
-	auto result = DirectX::XMVectorMultiply(casted_original, casted_argument);
+	auto result = DirectX::XMVectorMultiply(
+		casted_original, casted_argument
+	);
 
 	DirectX::XMStoreFloat2(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -253,42 +313,50 @@ vector2f& vector2f::operator*=(const vector2f& data) noexcept
 	return *this;
 }
 
-vector2f& vector2f::operator*=(const matrix4f_view_t& data) noexcept
+vector2f& vector2f::operator*=(const matrix4f_view_t& data
+) noexcept
 {
 	return this->operator*=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator*=(const matrix3f_view_t& data) noexcept
+vector2f& vector2f::operator*=(const matrix3f_view_t& data
+) noexcept
 {
 	return this->operator*=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator*=(const matrix2f_view_t& data) noexcept
+vector2f& vector2f::operator*=(const matrix2f_view_t& data
+) noexcept
 {
 	return this->operator*=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator*=(const matrix1f_view_t& data) noexcept
+vector2f& vector2f::operator*=(const matrix1f_view_t& data
+) noexcept
 {
 	return this->operator*=(base_vec2_t(data.x(), 1.0f));
 }
 
-vector2f& vector2f::operator*=(const matrix4f_const_view_t& data) noexcept
+vector2f& vector2f::operator*=(const matrix4f_const_view_t& data
+) noexcept
 {
 	return this->operator*=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator*=(const matrix3f_const_view_t& data) noexcept
+vector2f& vector2f::operator*=(const matrix3f_const_view_t& data
+) noexcept
 {
 	return this->operator*=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator*=(const matrix2f_const_view_t& data) noexcept
+vector2f& vector2f::operator*=(const matrix2f_const_view_t& data
+) noexcept
 {
 	return this->operator*=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator*=(const matrix1f_const_view_t& data) noexcept
+vector2f& vector2f::operator*=(const matrix1f_const_view_t& data
+) noexcept
 {
 	return this->operator*=(base_vec2_t(data.x(), 1.0f));
 }
@@ -316,7 +384,9 @@ vector2f& vector2f::operator/=(const vector2f& data) noexcept
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR casted_original = *this;
 	DirectX::XMVECTOR casted_argument = data;
-	auto result = DirectX::XMVectorDivide(casted_original, casted_argument);
+	auto result = DirectX::XMVectorDivide(
+		casted_original, casted_argument
+	);
 
 	DirectX::XMStoreFloat2(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -325,42 +395,50 @@ vector2f& vector2f::operator/=(const vector2f& data) noexcept
 	return *this;
 }
 
-vector2f& vector2f::operator/=(const matrix4f_view_t& data) noexcept
+vector2f& vector2f::operator/=(const matrix4f_view_t& data
+) noexcept
 {
 	return this->operator/=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator/=(const matrix3f_view_t& data) noexcept
+vector2f& vector2f::operator/=(const matrix3f_view_t& data
+) noexcept
 {
 	return this->operator/=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator/=(const matrix2f_view_t& data) noexcept
+vector2f& vector2f::operator/=(const matrix2f_view_t& data
+) noexcept
 {
 	return this->operator/=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator/=(const matrix1f_view_t& data) noexcept
+vector2f& vector2f::operator/=(const matrix1f_view_t& data
+) noexcept
 {
 	return this->operator/=(base_vec2_t(data.x(), 1.0f));
 }
 
-vector2f& vector2f::operator/=(const matrix4f_const_view_t& data) noexcept
+vector2f& vector2f::operator/=(const matrix4f_const_view_t& data
+) noexcept
 {
 	return this->operator/=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator/=(const matrix3f_const_view_t& data) noexcept
+vector2f& vector2f::operator/=(const matrix3f_const_view_t& data
+) noexcept
 {
 	return this->operator/=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator/=(const matrix2f_const_view_t& data) noexcept
+vector2f& vector2f::operator/=(const matrix2f_const_view_t& data
+) noexcept
 {
 	return this->operator/=(base_vec2_t(data.x(), data.y()));
 }
 
-vector2f& vector2f::operator/=(const matrix1f_const_view_t& data) noexcept
+vector2f& vector2f::operator/=(const matrix1f_const_view_t& data
+) noexcept
 {
 	return this->operator/=(base_vec2_t(data.x(), 1.0f));
 }
@@ -369,8 +447,11 @@ vector2f& vector2f::operator/=(const base_vec2_t& data) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR casted_original = *this;
-	DirectX::XMVECTOR casted_argument = DirectX::XMLoadFloat2(&data);
-	auto result = DirectX::XMVectorDivide(casted_original, casted_argument);
+	DirectX::XMVECTOR casted_argument =
+		DirectX::XMLoadFloat2(&data);
+	auto result = DirectX::XMVectorDivide(
+		casted_original, casted_argument
+	);
 
 	DirectX::XMStoreFloat2(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -413,7 +494,9 @@ bool vector2f::operator==(const vector2f& data) const noexcept
 	DirectX::XMVECTOR casted_original = *this;
 	DirectX::XMVECTOR casted_argument = data;
 
-	return DirectX::XMVector2Equal(casted_original, casted_argument);
+	return DirectX::XMVector2Equal(
+		casted_original, casted_argument
+	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base == data.m_base;
 #endif
@@ -425,7 +508,9 @@ bool vector2f::operator!=(const vector2f& data) const noexcept
 	DirectX::XMVECTOR casted_original = *this;
 	DirectX::XMVECTOR casted_argument = data;
 
-	return DirectX::XMVector2NotEqual(casted_original, casted_argument);
+	return DirectX::XMVector2NotEqual(
+		casted_original, casted_argument
+	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base != data.m_base;
 #endif
@@ -433,30 +518,39 @@ bool vector2f::operator!=(const vector2f& data) const noexcept
 
 float vector2f::operator[](unsigned char index) const
 {
-	KOTEK_ASSERT(index != unsigned char(-1),
-		"out of range (probably you passed a negative number)");
+	KOTEK_ASSERT(
+		index != unsigned char(-1),
+		"out of range (probably you passed a negative number)"
+	);
 	KOTEK_ASSERT(index <= 1, "out of range");
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	float const* p_array = reinterpret_cast<float const*>(&this->m_base);
+	float const* p_array =
+		reinterpret_cast<float const*>(&this->m_base);
 
 	return p_array[index];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-	#error provide implementation
+	return this->m_base[index];
+#else
+	#error todo: provide implementation
 #endif
 }
 
 float& vector2f::operator[](unsigned char index)
 {
-	KOTEK_ASSERT(index != unsigned char(-1),
-		"out of range (probably you passed a negative number)");
+	KOTEK_ASSERT(
+		index != unsigned char(-1),
+		"out of range (probably you passed a negative number)"
+	);
 	KOTEK_ASSERT(index <= 1, "out of range");
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	float* p_array = reinterpret_cast<float*>(&this->m_base);
 	return p_array[index];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-	#error provide implementation
+	return this->m_base[index];
+#else
+	#error todo: provide implementation
 #endif
 }
 

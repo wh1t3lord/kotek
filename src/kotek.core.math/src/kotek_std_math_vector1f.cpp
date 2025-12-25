@@ -22,23 +22,53 @@ vector1f::vector1f(float x) : m_base(x) {}
 
 vector1f::vector1f(float x, float y) : m_base(x) {}
 vector1f::vector1f(float x, float y, float z) : m_base(x) {}
-vector1f::vector1f(float x, float y, float z, float w) : m_base(x) {}
+vector1f::vector1f(float x, float y, float z, float w) :
+	m_base(x)
+{
+}
 
-vector1f::vector1f(float* p_arr1, unsigned char size) : m_base(p_arr1[0]) {}
+vector1f::vector1f(float* p_arr1, unsigned char size) :
+	m_base(p_arr1[0])
+{
+}
 vector1f::vector1f(const float* p_arr1, unsigned char size) :
 	m_base(p_arr1[0])
 {
 }
 
-vector1f::vector1f(const matrix4f_view_t& view) : m_base(view.x()) {}
-vector1f::vector1f(const matrix3f_view_t& view) : m_base(view.x()) {}
-vector1f::vector1f(const matrix2f_view_t& view) : m_base(view.x()) {}
-vector1f::vector1f(const matrix1f_view_t& view) : m_base(view.x()) {}
+vector1f::vector1f(const matrix4f_view_t& view) :
+	m_base(view.x())
+{
+}
+vector1f::vector1f(const matrix3f_view_t& view) :
+	m_base(view.x())
+{
+}
+vector1f::vector1f(const matrix2f_view_t& view) :
+	m_base(view.x())
+{
+}
+vector1f::vector1f(const matrix1f_view_t& view) :
+	m_base(view.x())
+{
+}
 
-vector1f::vector1f(const matrix4f_const_view_t& view) : m_base(view.x()) {}
-vector1f::vector1f(const matrix3f_const_view_t& view) : m_base(view.x()) {}
-vector1f::vector1f(const matrix2f_const_view_t& view) : m_base(view.x()) {}
-vector1f::vector1f(const matrix1f_const_view_t& view) : m_base(view.x()) {}
+vector1f::vector1f(const matrix4f_const_view_t& view) :
+	m_base(view.x())
+{
+}
+vector1f::vector1f(const matrix3f_const_view_t& view) :
+	m_base(view.x())
+{
+}
+vector1f::vector1f(const matrix2f_const_view_t& view) :
+	m_base(view.x())
+{
+}
+vector1f::vector1f(const matrix1f_const_view_t& view) :
+	m_base(view.x())
+{
+}
 
 vector1f::vector1f(const vector2f& data) : m_base(data.x()) {}
 
@@ -51,7 +81,9 @@ vector1f::vector1f(const vector4f& data) : m_base(data.x()) {}
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 vector1f::vector1f(const base_vec1_t& data) : m_base(data) {}
 #endif
-vector1f::vector1f(const vector1f& data) : m_base(data.m_base) {}
+vector1f::vector1f(const vector1f& data) : m_base(data.m_base)
+{
+}
 
 vector1f& vector1f::operator=(const vector1f& data)
 {
@@ -103,22 +135,26 @@ vector1f& vector1f::operator+=(const matrix1f_view_t& view)
 	return this->operator+=(view.x());
 }
 
-vector1f& vector1f::operator+=(const matrix4f_const_view_t& view)
+vector1f& vector1f::operator+=(const matrix4f_const_view_t& view
+)
 {
 	return this->operator+=(view.x());
 }
 
-vector1f& vector1f::operator+=(const matrix3f_const_view_t& view)
+vector1f& vector1f::operator+=(const matrix3f_const_view_t& view
+)
 {
 	return this->operator+=(view.x());
 }
 
-vector1f& vector1f::operator+=(const matrix2f_const_view_t& view)
+vector1f& vector1f::operator+=(const matrix2f_const_view_t& view
+)
 {
 	return this->operator+=(view.x());
 }
 
-vector1f& vector1f::operator+=(const matrix1f_const_view_t& view)
+vector1f& vector1f::operator+=(const matrix1f_const_view_t& view
+)
 {
 	return this->operator+=(view.x());
 }
@@ -126,7 +162,7 @@ vector1f& vector1f::operator+=(const matrix1f_const_view_t& view)
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-vector1f& operator+=(const base_vec1_t& data)
+vector1f& vector1f::operator+=(const base_vec1_t& data)
 {
 	this->m_base += data;
 	return *this;
@@ -138,7 +174,9 @@ vector1f& vector1f::operator-=(float value)
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	auto casted_original = DirectX::XMLoadFloat(&this->m_base);
 	auto casted_argument = DirectX::XMLoadFloat(&value);
-	auto result = DirectX::XMVectorSubtract(casted_original, casted_argument);
+	auto result = DirectX::XMVectorSubtract(
+		casted_original, casted_argument
+	);
 
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -177,22 +215,26 @@ vector1f& vector1f::operator-=(const matrix1f_view_t& view)
 	return this->operator-=(view.x());
 }
 
-vector1f& vector1f::operator-=(const matrix4f_const_view_t& view)
+vector1f& vector1f::operator-=(const matrix4f_const_view_t& view
+)
 {
 	return this->operator-=(view.x());
 }
 
-vector1f& vector1f::operator-=(const matrix3f_const_view_t& view)
+vector1f& vector1f::operator-=(const matrix3f_const_view_t& view
+)
 {
 	return this->operator-=(view.x());
 }
 
-vector1f& vector1f::operator-=(const matrix2f_const_view_t& view)
+vector1f& vector1f::operator-=(const matrix2f_const_view_t& view
+)
 {
 	return this->operator-=(view.x());
 }
 
-vector1f& vector1f::operator-=(const matrix1f_const_view_t& view)
+vector1f& vector1f::operator-=(const matrix1f_const_view_t& view
+)
 {
 	return this->operator-=(view.x());
 }
@@ -200,7 +242,7 @@ vector1f& vector1f::operator-=(const matrix1f_const_view_t& view)
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-vector1f& operator-=(const base_vec1_t& data)
+vector1f& vector1f::operator-=(const base_vec1_t& data)
 {
 	this->m_base -= data;
 	return *this;
@@ -211,7 +253,8 @@ vector1f& vector1f::operator*=(float value)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	auto casted_original = DirectX::XMLoadFloat(&this->m_base);
-	auto result = DirectX::XMVectorScale(casted_original, value);
+	auto result =
+		DirectX::XMVectorScale(casted_original, value);
 
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -240,22 +283,26 @@ vector1f& vector1f::operator*=(const matrix1f_view_t& view)
 	return this->operator*=(view.x());
 }
 
-vector1f& vector1f::operator*=(const matrix4f_const_view_t& view)
+vector1f& vector1f::operator*=(const matrix4f_const_view_t& view
+)
 {
 	return this->operator*=(view.x());
 }
 
-vector1f& vector1f::operator*=(const matrix3f_const_view_t& view)
+vector1f& vector1f::operator*=(const matrix3f_const_view_t& view
+)
 {
 	return this->operator*=(view.x());
 }
 
-vector1f& vector1f::operator*=(const matrix2f_const_view_t& view)
+vector1f& vector1f::operator*=(const matrix2f_const_view_t& view
+)
 {
 	return this->operator*=(view.x());
 }
 
-vector1f& vector1f::operator*=(const matrix1f_const_view_t& view)
+vector1f& vector1f::operator*=(const matrix1f_const_view_t& view
+)
 {
 	return this->operator*=(view.x());
 }
@@ -265,7 +312,9 @@ vector1f& vector1f::operator*=(const vector1f& data)
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	auto casted_original = DirectX::XMLoadFloat(&this->m_base);
 	auto casted_argument = DirectX::XMLoadFloat(&data.m_base);
-	auto result = DirectX::XMVectorMultiply(casted_original, casted_argument);
+	auto result = DirectX::XMVectorMultiply(
+		casted_original, casted_argument
+	);
 
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -277,7 +326,7 @@ vector1f& vector1f::operator*=(const vector1f& data)
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-vector1f& operator*=(const base_vec1_t& data)
+vector1f& vector1f::operator*=(const base_vec1_t& data)
 {
 	this->m_base *= data;
 	return *this;
@@ -287,10 +336,13 @@ vector1f& operator*=(const base_vec1_t& data)
 vector1f& vector1f::operator/=(float value)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	KOTEK_ASSERT(value != 0.0f, "you can't divide if you have zero!!!");
+	KOTEK_ASSERT(
+		value != 0.0f, "you can't divide if you have zero!!!"
+	);
 
 	auto casted_original = DirectX::XMLoadFloat(&this->m_base);
-	auto result = DirectX::XMVectorScale(casted_original, 1.f / value);
+	auto result =
+		DirectX::XMVectorScale(casted_original, 1.f / value);
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base /= value;
@@ -318,22 +370,26 @@ vector1f& vector1f::operator/=(const matrix1f_view_t& view)
 	return this->operator/=(view.x());
 }
 
-vector1f& vector1f::operator/=(const matrix4f_const_view_t& view)
+vector1f& vector1f::operator/=(const matrix4f_const_view_t& view
+)
 {
 	return this->operator/=(view.x());
 }
 
-vector1f& vector1f::operator/=(const matrix3f_const_view_t& view)
+vector1f& vector1f::operator/=(const matrix3f_const_view_t& view
+)
 {
 	return this->operator/=(view.x());
 }
 
-vector1f& vector1f::operator/=(const matrix2f_const_view_t& view)
+vector1f& vector1f::operator/=(const matrix2f_const_view_t& view
+)
 {
 	return this->operator/=(view.x());
 }
 
-vector1f& vector1f::operator/=(const matrix1f_const_view_t& view)
+vector1f& vector1f::operator/=(const matrix1f_const_view_t& view
+)
 {
 	return this->operator/=(view.x());
 }
@@ -343,7 +399,9 @@ vector1f& vector1f::operator/=(const vector1f& data)
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	auto casted_original = DirectX::XMLoadFloat(&this->m_base);
 	auto casted_argument = DirectX::XMLoadFloat(&data.m_base);
-	auto result = DirectX::XMVectorDivide(casted_original, casted_argument);
+	auto result = DirectX::XMVectorDivide(
+		casted_original, casted_argument
+	);
 
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -408,7 +466,9 @@ bool vector1f::operator==(const vector1f& data) const noexcept
 	auto casted_original = DirectX::XMLoadFloat(&this->m_base);
 	auto casted_argument = DirectX::XMLoadFloat(&data.m_base);
 
-	return DirectX::XMVector2Equal(casted_original, casted_argument);
+	return DirectX::XMVector2Equal(
+		casted_original, casted_argument
+	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base == data.m_base;
 #endif
@@ -420,7 +480,9 @@ bool vector1f::operator!=(const vector1f& data) const noexcept
 	auto casted_original = DirectX::XMLoadFloat(&this->m_base);
 	auto casted_argument = DirectX::XMLoadFloat(&data.m_base);
 
-	return DirectX::XMVector2NotEqual(casted_original, casted_argument);
+	return DirectX::XMVector2NotEqual(
+		casted_original, casted_argument
+	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base != data.m_base;
 #endif
@@ -431,11 +493,12 @@ float vector1f::operator[](unsigned int index) const
 	KOTEK_ASSERT(index == 0, "out of range");
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	float const* p_array = reinterpret_cast<float const*>(&this->m_base);
+	float const* p_array =
+		reinterpret_cast<float const*>(&this->m_base);
 
 	return p_array[index];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-	#error provide implementation
+	return this->m_base[index];
 #endif
 }
 
@@ -447,7 +510,7 @@ float& vector1f::operator[](unsigned int index)
 	float* p_array = reinterpret_cast<float*>(&this->m_base);
 	return p_array[index];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-	#error provide implementation
+	return this->m_base[index];
 #endif
 }
 
@@ -497,7 +560,13 @@ float* vector1f::data(void) noexcept
 
 void vector1f::set(float x) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	this->m_base = x;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	this->m_base.x = x;
+#else
+	#error todo: provide implementation
+#endif
 }
 
 vector1f& vector1f::Set_Base(const base_vec1_t& data) noexcept

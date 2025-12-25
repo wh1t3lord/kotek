@@ -23,7 +23,7 @@ template <typename Type, size_t NotInUseArgument = 0>
 using list =
 	boost::container::list<Type, KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
-template <typename Type>
+template <typename Type, size_t NotInUseArgument = 0>
 using list = std::list<Type, KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>;
 #else
 #endif

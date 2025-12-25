@@ -22,7 +22,11 @@ template <class Key, class Type, size_t NotInUseArgument = 0,
 using unordered_map =
 	boost::unordered::unordered_map<Key, Type, Hash, Predicate, Allocator>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
-template <class Key, class Type, class Hash = std::hash<Key>,
+template <
+	class Key,
+	class Type,
+	size_t NotInUseArgument = 0,
+	class Hash = std::hash<Key>,
 	class Predicate = std::equal_to<Key>,
 	class Allocator =
 		KOTEK_USE_MEMORY_ALLOCATOR_CLASS<std::pair<const Key, Type>>>

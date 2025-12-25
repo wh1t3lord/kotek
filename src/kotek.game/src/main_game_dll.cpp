@@ -128,9 +128,19 @@ namespace Game
 
 		kun_kotek static_path_t path_to_user_dll;
 		{
+	#ifdef KOTEK_USE_BOOST_LIBRARY
 			const auto& root_path =
 				ktk::dll::program_location().parent_path();
 			path_to_user_dll = root_path.c_str();
+	#elif defined(KOTEK_USE_STD_LIBRARY
+			KUN_KOTEK static_path_t root_path;
+			p_main_manager->GetFileSystem()->Make_Path(
+				root_path,
+				KUN_KOTEK KUN_CORE
+					eFolderIndex::kFolderIndex_Root
+			);
+			path_to_user_dll = root_path.c_str();
+	#endif
 			path_to_user_dll /=
 				p_config->Get_UserLibrary_Name();
 		}
@@ -144,6 +154,7 @@ namespace Game
 					->Get_UserLibrary()
 			);
 
+	#ifdef KOTEK_USE_BOOST_LIBRARY
 		p_user_callback_initialize_game_library =
 			p_user_dll->get<ktkUserCallbackInitialize>(
 				(p_config->Get_UserLibrary_CallbackName(
@@ -151,7 +162,19 @@ namespace Game
 						eUserEngineLibraryCallbacks::kGame_Init
 				))
 			);
+	#elif defined(KOTEK_USE_STD_LIBRARY)
+		p_user_callback_initialize_game_library =
+			reinterpret_cast<
+				ktkUserCallbackInitialize*>(p_user_dll->get(
+				(p_config->Get_UserLibrary_CallbackName(
+					kun_core
+						eUserEngineLibraryCallbacks::kGame_Init
+				))
+			));
+	#else
+	#endif
 
+	#ifdef KOTEK_USE_BOOST_LIBRARY
 		p_user_callback_shutdown_game_library =
 			p_user_dll->get<ktkUserCallbackShutdown>(
 				(p_config->Get_UserLibrary_CallbackName(
@@ -159,7 +182,21 @@ namespace Game
 						kGame_Shutdown
 				))
 			);
+	#elif defined(KOTEK_USE_STD_LIBRARY)
+		p_user_callback_shutdown_game_library =
+			reinterpret_cast<ktkUserCallbackShutdown*>(
 
+				p_user_dll->get(
+					(p_config->Get_UserLibrary_CallbackName(
+						kun_core eUserEngineLibraryCallbacks::
+							kGame_Shutdown
+					))
+				)
+			);
+	#else
+	#endif
+
+	#ifdef KOTEK_USE_BOOST_LIBRARY
 		p_user_callback_update_game_library =
 			p_user_dll->get<ktkUserCallbackUpdate>(
 				(p_config->Get_UserLibrary_CallbackName(
@@ -167,7 +204,21 @@ namespace Game
 						kGame_Update
 				))
 			);
+	#elif defined(KOTEK_USE_STD_LIBRARY)
+		p_user_callback_update_game_library =
+			reinterpret_cast<ktkUserCallbackUpdate*>(
 
+				p_user_dll->get(
+					(p_config->Get_UserLibrary_CallbackName(
+						kun_core eUserEngineLibraryCallbacks::
+							kGame_Update
+					))
+				)
+			);
+	#else
+	#endif
+
+	#ifdef KOTEK_USE_BOOST_LIBRARY
 		p_user_callback_initialize_render_from_game_library =
 			p_user_dll->get<ktkUserCallbackInitializeRender>(
 				(p_config->Get_UserLibrary_CallbackName(
@@ -175,6 +226,18 @@ namespace Game
 						kRender_Init
 				))
 			);
+	#elif defined(KOTEK_USE_STD_LIBRARY)
+		p_user_callback_initialize_render_from_game_library =
+			reinterpret_cast<ktkUserCallbackInitializeRender*>(
+				p_user_dll->get(
+					(p_config->Get_UserLibrary_CallbackName(
+						kun_core eUserEngineLibraryCallbacks::
+							kRender_Init
+					))
+				)
+			);
+	#else
+	#endif
 
 		KOTEK_ASSERT(
 			p_user_callback_initialize_game_library != nullptr,

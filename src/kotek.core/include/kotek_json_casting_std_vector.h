@@ -4,16 +4,16 @@
 #include <kotek.core.containers.json/include/kotek_core_containers_json.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 
-#ifdef KOTEK_USE_BOOST_LIBRARY
+#ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 template <typename Type>
-void tag_invoke(const ktk::json::value_from_tag&, ktk::json::value& write_to,
-	const ktk::vector<Type>& data)
+void tag_invoke(const KUN_KTK json::value_from_tag&, KUN_KTK json::value& write_to,
+	const KUN_KTK vector<Type>& data)
 {
-	ktk::json::array temp;
+	KUN_KTK json::array temp;
 
 	for (const auto& element : data)
 	{

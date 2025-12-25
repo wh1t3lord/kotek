@@ -321,7 +321,7 @@ struct char_string_pointer_tag
 };
 struct custom_tag
 {
-}; // For user–defined types
+}; // For userï¿½defined types
 
 // A helper to always yield false dependent on T.
 template <typename T>
@@ -329,7 +329,7 @@ struct dependent_false : std::false_type
 {
 };
 
-// Helper: select_tag – choose which conversion category applies to T.
+// Helper: select_tag ï¿½ choose which conversion category applies to T.
 template <typename T>
 constexpr auto select_tag()
 {
@@ -351,9 +351,9 @@ constexpr auto select_tag()
 
 //---------------------------------------------------------------------------
 // Conversion implementations via tag dispatching.
-// For built–in types we supply definitions.
+// For builtï¿½in types we supply definitions.
 // For custom types (tag custom_tag) the default implementation triggers a
-// compile–time error.
+// compileï¿½time error.
 
 // -- bool conversion:
 template <typename T>
@@ -411,7 +411,7 @@ T convert_impl(std::string_view str, bool& status, integral_tag)
 	return std::numeric_limits<short>::min();
 }
 
-// -- Floating–point conversion:
+// -- Floatingï¿½point conversion:
 template <typename T>
 T convert_impl(std::string_view str, bool& status, floating_tag)
 {
@@ -443,7 +443,7 @@ T convert_impl(std::string_view str, bool& status, floating_tag)
 	return std::numeric_limits<float>::min();
 }
 
-// -- Fixed–size char array conversion:
+// -- Fixedï¿½size char array conversion:
 template <typename T>
 T convert_impl(std::string_view str, bool& status, char_array_tag)
 {

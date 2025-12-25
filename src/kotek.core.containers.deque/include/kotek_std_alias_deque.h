@@ -23,7 +23,9 @@ template <typename Type, size_t NotInUseArgument = 0,
 	typename Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>
 using deque = boost::container::deque<Type, Allocator>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
-template <typename Type,
+template <
+	typename Type,
+	size_t NotInUseArgument = 0,
 	typename Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Type>>
 using deque = std::deque<Type, Allocator>;
 #else

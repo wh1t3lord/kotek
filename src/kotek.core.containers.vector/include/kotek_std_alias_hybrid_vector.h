@@ -51,6 +51,12 @@ namespace _kotek_hv_container_namespace_swap = ::std;
 
 namespace _kotek_hv_container_namespace_conditional = ::std;
 
+namespace _kotek_hv_container_namespace_enable_if = ::std;
+
+namespace _kotek_hv_container_namespace_is_same_v = ::std;
+
+namespace _kotek_hv_container_namespace_forward = ::std;
+
 /// @brief \~english notice that some libraries are not supposed to have some
 /// implementations and for that you can use from standard as boost library did
 /// or provide own implementation but you have to specify the aliases all

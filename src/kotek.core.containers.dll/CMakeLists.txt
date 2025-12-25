@@ -39,3 +39,9 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 endif()
 
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+
+if ("${KOTEK_STD_LIBRARY}" STREQUAL "STD")
+	target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
+	target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
+	target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+endif()

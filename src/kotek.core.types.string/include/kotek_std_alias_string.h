@@ -5,7 +5,12 @@
 #include <kotek.core.memory.cpu/include/kotek_core_memory_cpu.h>
 #include <string>
 #include <typeinfo>
-#include <etl/hash.h>
+
+#ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
+	#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
+		#include <etl/hash.h>
+	#endif
+#endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
@@ -39,27 +44,39 @@ using ustring_view = string_view;
 
 #else
 // TODO: sync with default allocator definitions
-using string = std::basic_string<tchar, std::char_traits<tchar>,
+using string = std::basic_string<
+	tchar,
+	std::char_traits<tchar>,
 	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<tchar>>;
 using string_view = std::basic_string_view<tchar>;
 
-using u8string = std::basic_string<char8_t, std::char_traits<char8_t>,
+using u8string = std::basic_string<
+	char8_t,
+	std::char_traits<char8_t>,
 	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char8_t>>;
 using u8string_view = std::u8string_view;
 
-using u16string = std::basic_string<char16_t, std::char_traits<char16_t>,
+using u16string = std::basic_string<
+	char16_t,
+	std::char_traits<char16_t>,
 	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char16_t>>;
 using u16string_view = std::u16string_view;
 
-using u32string = std::basic_string<char32_t, std::char_traits<char32_t>,
+using u32string = std::basic_string<
+	char32_t,
+	std::char_traits<char32_t>,
 	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char32_t>>;
 using u32string_view = std::u32string_view;
 
-using wstring = std::basic_string<wchar_t, std::char_traits<wchar_t>,
+using wstring = std::basic_string<
+	wchar_t,
+	std::char_traits<wchar_t>,
 	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<wchar_t>>;
 using wstring_view = std::wstring_view;
 
-using cstring = std::basic_string<char, std::char_traits<char>,
+using cstring = std::basic_string<
+	char,
+	std::char_traits<char>,
 	KOTEK_USE_MEMORY_ALLOCATOR_CLASS<char>>;
 using cstring_view = std::string_view;
 #endif
@@ -74,14 +91,16 @@ using ustring_view = string_view;
 
 namespace helper
 {
-	inline const char* ObtainCharTypeName_FromString(void) noexcept
+	inline const char* ObtainCharTypeName_FromString(void
+	) noexcept
 	{
 		auto id_char8_t = typeid(char8_t).hash_code();
 		auto id_char16_t = typeid(char16_t).hash_code();
 		auto id_char32_t = typeid(char32_t).hash_code();
 		auto id_wchar_t = typeid(wchar_t).hash_code();
 
-		auto id_current_type = typeid(ustring::value_type).hash_code();
+		auto id_current_type =
+			typeid(ustring::value_type).hash_code();
 
 		if (id_current_type == id_char8_t)
 		{
@@ -114,15 +133,20 @@ KOTEK_END_NAMESPACE_KOTEK
 namespace etl
 {
 	template <>
-	struct hash<KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK cstring>
+	struct hash<KOTEK_USE_NAMESPACE_KOTEK
+	                KOTEK_USE_NAMESPACE_KTK cstring>
 	{
-		size_t operator()(
-			const KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK
-				cstring& str) const
+		size_t
+		operator()(const KOTEK_USE_NAMESPACE_KOTEK
+		               KOTEK_USE_NAMESPACE_KTK cstring& str
+		) const
 		{
 			return etl::private_hash::generic_hash<size_t>(
 				reinterpret_cast<const uint8_t*>(str.data()),
-				reinterpret_cast<const uint8_t*>(str.data() + str.size()));
+				reinterpret_cast<const uint8_t*>(
+					str.data() + str.size()
+				)
+			);
 		}
 	};
 } // namespace etl

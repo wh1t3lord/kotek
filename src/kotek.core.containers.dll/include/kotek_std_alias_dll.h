@@ -5,7 +5,22 @@
 #ifdef KOTEK_USE_BOOST_LIBRARY
 	#include <boost/dll.hpp>
 #elif defined(KOTEK_USE_STD_LIBRARY)
-	#error add replacement for boost::dll
+namespace dll
+{
+	struct shared_library
+	{
+		shared_library();
+		shared_library(const char* p_path);
+		~shared_library();
+
+		bool load(const char* p_path);
+		bool unload();
+
+		void* get(const char* p_func_name);
+
+		void* p_lib;
+	};
+}
 #else
 #endif
 
@@ -15,7 +30,7 @@ KOTEK_BEGIN_NAMESPACE_KTK
 #ifdef KOTEK_USE_BOOST_LIBRARY
 namespace dll = boost::dll;
 #elif defined(KOTEK_USE_STD_LIBRARY)
-	#error add replacement for boost::dll
+namespace dll = ::dll;
 #else
 #endif
 

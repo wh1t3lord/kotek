@@ -144,7 +144,8 @@ public:
 
 	bool Serialize(kun_ktk cstring& result) const noexcept
 	{
-#ifdef KOTEK_USE_BOOST_LIBRARY
+#if defined(KOTEK_USE_BOOST_LIBRARY) || \
+	defined(KOTEK_USE_STD_LIBRARY)
 		bool status = false;
 
 		if (this->m_data.json.empty())
@@ -390,7 +391,8 @@ public:
 
 	bool Serialize(kun_ktk cstring& result) const noexcept
 	{
-#ifdef KOTEK_USE_BOOST_LIBRARY
+#if defined(KOTEK_USE_BOOST_LIBRARY) || \
+	defined(KOTEK_USE_STD_LIBRARY)
 		bool status = false;
 
 		KOTEK_ASSERT(

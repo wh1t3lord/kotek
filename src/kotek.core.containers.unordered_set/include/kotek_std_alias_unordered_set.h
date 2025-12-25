@@ -20,7 +20,7 @@ template <class Key, size_t NotInUseArgument = 0, class Hash = hash<Key>,
 	class Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Key>>
 using unordered_set = boost::unordered_set<Key, Hash, Predicate, Allocator>;
 #elif defined(KOTEK_USE_STD_LIBRARY)
-template <class Key, class Hash = hash<Key>,
+template <class Key, size_t NotInUseArgument = 0, class Hash = hash<Key>,
 	class Predicate = std::equal_to<Key>,
 	class Allocator = KOTEK_USE_MEMORY_ALLOCATOR_CLASS<Key>>
 using unordered_set = std::unordered_set<Key, Hash, Predicate, Allocator>;

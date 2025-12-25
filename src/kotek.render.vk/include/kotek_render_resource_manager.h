@@ -35,9 +35,9 @@ namespace Kotek
 			// TODO: delete functions about creation resources
 			// for swapchain, because render graph resource
 			// manager have already implemented it
-			// TODO: пересмотреть дизайн и перенести в юзер
-			// реализацию, нет стандарта для ресурс манагера в
-			// рендере
+			// TODO: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅ
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ
+			// пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 			class ktkRenderResourceManager
 				: public kun_core ktkIRenderResourceManager
 			{

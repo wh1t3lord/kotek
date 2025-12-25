@@ -7,8 +7,10 @@
 #include <cmath>
 
 #ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	#define GLM_ENABLE_EXPERIMENTAL
 	#include <glm/glm.hpp>
 	#include <glm/gtx/quaternion.hpp>
+	#include <glm/gtc/type_ptr.hpp>
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
 	#include <DirectXMath.h>
 #endif

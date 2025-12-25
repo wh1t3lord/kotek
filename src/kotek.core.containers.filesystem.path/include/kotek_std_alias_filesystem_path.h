@@ -64,7 +64,7 @@ public:
 	/// implementation, maikyie (Microsoft) uses
 	/// input_iterator... so let it be bidirectional
 	/// https://github.com/gulrak/filesystem/blob/master/include/ghc/filesystem.hpp
-	/// Author: Copyright (c) 2018, Steffen Schümann
+	/// Author: Copyright (c) 2018, Steffen Schï¿½mann
 	/// <s.schuemann@pobox.com> (MIT license)
 	class path_iterator
 	{
@@ -2796,7 +2796,7 @@ static_path<Size>::append(const static_path<Size>& p)
 	this->m_buffer.append(path.m_buffer);
 	*/
 
-// Case 1: p is absolute OR has different root name
+	// Case 1: p is absolute OR has different root name
 	if (p.is_absolute() ||
 	    (p.has_root_name() && p.root_name() != root_name()))
 	{
@@ -2885,7 +2885,7 @@ static_path<Size>::append(const static_path<Size>& p)
 
 		if (needs_separator)
 		{
-		//	if (!p.m_buffer.empty())
+			//	if (!p.m_buffer.empty())
 			if ((p.m_buffer.empty() && m_buffer.size() == 1 &&
 			     current_has_root_dir) == false)
 				m_buffer += preferred_separator;
@@ -3322,7 +3322,9 @@ template <size_t Size>
 inline static_u8string<Size> static_path<Size>::u8string() const
 {
 	return static_u8string<Size>(
-		this->m_buffer.begin(), this->m_buffer.end()
+		reinterpret_cast<const char8_t*>(this->m_buffer.begin()
+	    ),
+		reinterpret_cast<const char8_t*>(this->m_buffer.end())
 	);
 }
 
@@ -3986,9 +3988,8 @@ inline bool static_path<Size>::has_root_name() const
 	{
 		if (this->m_buffer.size() >= 1)
 		{
-			
 			// servers or something related to //
-			if (this->m_buffer.size()>=2)
+			if (this->m_buffer.size() >= 2)
 			{
 				if ((this->m_buffer[0] == '\\' &&
 				     this->m_buffer[1] == '\\') ||
@@ -4002,7 +4003,6 @@ inline bool static_path<Size>::has_root_name() const
 					return true;
 				}
 			}
-
 
 			if ((this->m_buffer[0] >= 'A' &&
 			     this->m_buffer[0] <= 'Z') ||
