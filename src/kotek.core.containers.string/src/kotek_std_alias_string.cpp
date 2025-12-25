@@ -88,6 +88,34 @@ u8string convert_utf32_to_utf8(const u32string_view& str)
 	return u8string(temp.begin(), temp.end());
 }
 
+u8string convert_wchar_to_utf8(const wstring_view& str)
+{
+	if constexpr (sizeof(wchar_t) == 2)
+	{
+		return convert_utf16_to_utf8(
+			reinterpret_cast<const char16_t*>(str.data())
+		);
+	}
+	else
+	{
+		if constexpr (sizeof(wchar_t) == 4)
+		{
+			return convert_utf32_to_utf8(
+				reinterpret_cast<const char32_t*>(str.data())
+			);
+		}
+		else
+		{
+			static_assert(
+				sizeof(wchar_t) == 2 || sizeof(wchar_t) == 4,
+				"handle this for your platform!"
+			);
+
+			return u8string();
+		}
+	}
+}
+
 #endif
 
 KOTEK_END_NAMESPACE_KTK

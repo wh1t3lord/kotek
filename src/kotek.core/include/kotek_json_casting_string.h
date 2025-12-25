@@ -5,6 +5,7 @@
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 
+
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -76,8 +77,8 @@ inline ustring tag_invoke(
 			{
 				buffer += number.as_int64();
 			}
-
-			result = ustring(buffer.begin(), buffer.end());
+			
+			result = reinterpret_cast<const char*>(convert_utf16_to_utf8(buffer).c_str());
 		}
 		else if (char_name == "char32_t")
 		{
@@ -91,7 +92,7 @@ inline ustring tag_invoke(
 				buffer += number.as_int64();
 			}
 
-			result = ustring(buffer.begin(), buffer.end());
+			result = reinterpret_cast<const char*>(convert_utf32_to_utf8(buffer).c_str());
 		}
 		else if (char_name == "wchar_t")
 		{
@@ -105,7 +106,7 @@ inline ustring tag_invoke(
 				buffer += number.as_int64();
 			}
 
-			result = ustring(buffer.begin(), buffer.end());
+			result = reinterpret_cast<const char*>(convert_wchar_to_utf8(buffer).c_str());
 		}
 		else
 		{

@@ -29,6 +29,11 @@ u8string convert_utf16_to_utf8(const u16string_view& str);
 /// or convert to std::string (char based string)
 u8string convert_utf32_to_utf8(const u32string_view& str);
 
+/// @brief allocates memory because it is not std::pmr::xstring type so keep this in mind
+/// @param str 
+/// @return KUN_KOTEK KUN_KTK u8string
+u8string convert_wchar_to_utf8(const wstring_view& str);
+
 KOTEK_END_NAMESPACE_KTK
 
 using cstring_t = KUN_KOTEK KUN_KTK cstring;
