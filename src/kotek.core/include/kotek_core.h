@@ -26,6 +26,8 @@
 #include "kotek_json_casting_string.h"
 #include "kotek_json_casting_other.h"
 
+#include "kotek_hash_aliases.h"
+
 #ifdef KOTEK_NAMESPACE_KOTEK
 namespace KOTEK_NAMESPACE_NAME_LOWERED = KN_KOTEK;
 #endif
