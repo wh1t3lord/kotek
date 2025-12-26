@@ -19,15 +19,8 @@ public:
 	vector1f(float* p_arr1, unsigned char size = 1);
 	vector1f(const float* p_arr1, unsigned char size = 1);
 
-	vector1f(const matrix4f_view_t& view);
-	vector1f(const matrix3f_view_t& view);
-	vector1f(const matrix2f_view_t& view);
-	vector1f(const matrix1f_view_t& view);
-
-	vector1f(const matrix4f_const_view_t& view);
-	vector1f(const matrix3f_const_view_t& view);
-	vector1f(const matrix2f_const_view_t& view);
-	vector1f(const matrix1f_const_view_t& view);
+	vector1f(const matrixnf_view_t& view);
+	vector1f(const matrixnf_const_view_t& view);
 
 	vector1f(const vector2f& data);
 	vector1f(const vector3f& data);
@@ -45,14 +38,8 @@ public:
 	vector1f& operator=(const vector1f& data);
 	vector1f& operator+=(float value);
 	vector1f& operator+=(const vector1f& data);
-	vector1f& operator+=(const matrix4f_view_t& view);
-	vector1f& operator+=(const matrix3f_view_t& view);
-	vector1f& operator+=(const matrix2f_view_t& view);
-	vector1f& operator+=(const matrix1f_view_t& view);
-	vector1f& operator+=(const matrix4f_const_view_t& view);
-	vector1f& operator+=(const matrix3f_const_view_t& view);
-	vector1f& operator+=(const matrix2f_const_view_t& view);
-	vector1f& operator+=(const matrix1f_const_view_t& view);
+	vector1f& operator+=(const matrixnf_view_t& view);
+	vector1f& operator+=(const matrixnf_const_view_t& view);
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -63,14 +50,8 @@ public:
 	vector1f& operator-=(float value);
 
 	vector1f& operator-=(const vector1f& data);
-	vector1f& operator-=(const matrix4f_view_t& view);
-	vector1f& operator-=(const matrix3f_view_t& view);
-	vector1f& operator-=(const matrix2f_view_t& view);
-	vector1f& operator-=(const matrix1f_view_t& view);
-	vector1f& operator-=(const matrix4f_const_view_t& view);
-	vector1f& operator-=(const matrix3f_const_view_t& view);
-	vector1f& operator-=(const matrix2f_const_view_t& view);
-	vector1f& operator-=(const matrix1f_const_view_t& view);
+	vector1f& operator-=(const matrixnf_view_t& view);
+	vector1f& operator-=(const matrixnf_const_view_t& view);
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -79,14 +60,8 @@ public:
 #endif
 
 	vector1f& operator*=(float value);
-	vector1f& operator*=(const matrix4f_view_t& view);
-	vector1f& operator*=(const matrix3f_view_t& view);
-	vector1f& operator*=(const matrix2f_view_t& view);
-	vector1f& operator*=(const matrix1f_view_t& view);
-	vector1f& operator*=(const matrix4f_const_view_t& view);
-	vector1f& operator*=(const matrix3f_const_view_t& view);
-	vector1f& operator*=(const matrix2f_const_view_t& view);
-	vector1f& operator*=(const matrix1f_const_view_t& view);
+	vector1f& operator*=(const matrixnf_view_t& view);
+	vector1f& operator*=(const matrixnf_const_view_t& view);
 	vector1f& operator*=(const vector1f& data);
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -96,14 +71,8 @@ public:
 #endif
 
 	vector1f& operator/=(float value);
-	vector1f& operator/=(const matrix4f_view_t& view);
-	vector1f& operator/=(const matrix3f_view_t& view);
-	vector1f& operator/=(const matrix2f_view_t& view);
-	vector1f& operator/=(const matrix1f_view_t& view);
-	vector1f& operator/=(const matrix4f_const_view_t& view);
-	vector1f& operator/=(const matrix3f_const_view_t& view);
-	vector1f& operator/=(const matrix2f_const_view_t& view);
-	vector1f& operator/=(const matrix1f_const_view_t& view);
+	vector1f& operator/=(const matrixnf_view_t& view);
+	vector1f& operator/=(const matrixnf_const_view_t& view);
 	vector1f& operator/=(const vector1f& data);
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -138,9 +107,9 @@ public:
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 #endif
 
-	float x(void) const noexcept;
-
-	float& x(void) noexcept;
+	float
+	e(math_id_t column_id, math_id_t row_id) const noexcept;
+	float& e(math_id_t column_id, math_id_t row_id) noexcept;
 
 	const float* data(void) const noexcept;
 

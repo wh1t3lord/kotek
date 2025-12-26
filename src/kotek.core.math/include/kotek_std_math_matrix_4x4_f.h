@@ -756,7 +756,7 @@ public:
 #endif
 	}
 
-	inline static constexpr unsigned char size_of(void) noexcept
+	inline constexpr unsigned char size_of(void) const noexcept
 	{
 		static_assert(
 			sizeof(float[4][4]) == sizeof(m_base) &&
@@ -764,6 +764,18 @@ public:
 			"float[4][4] by size"
 		);
 		return static_cast<unsigned char>(sizeof(float[4][4]));
+	}
+
+	inline constexpr unsigned char get_column_count(void
+	) const noexcept
+	{
+		return static_cast<unsigned char>(4);
+	}
+
+	inline constexpr unsigned char get_row_count(void
+	) const noexcept
+	{
+		return static_cast<unsigned char>(4);
 	}
 
 	matrix4x4f& Set_Base(const base_mat4x4_t& data) noexcept

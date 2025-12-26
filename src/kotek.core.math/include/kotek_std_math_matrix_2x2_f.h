@@ -53,25 +53,51 @@ public:
 	matrix2x2f& operator+=(const matrix2x2f& data) noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._11));
-		DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._21));
+		DirectX::XMVECTOR row_original_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_original_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._21
+				)
+			);
 
-		DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._11));
-		DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._21));
+		DirectX::XMVECTOR row_argument_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&data.m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_argument_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&data.m_base._21
+				)
+			);
 
-		row_original_0 = DirectX::XMVectorAdd(row_original_0, row_argument_0);
-		row_original_1 = DirectX::XMVectorAdd(row_original_1, row_argument_1);
+		row_original_0 = DirectX::XMVectorAdd(
+			row_original_0, row_argument_0
+		);
+		row_original_1 = DirectX::XMVectorAdd(
+			row_original_1, row_argument_1
+		);
 
 		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&this->m_base._11),
-			row_original_0);
+			reinterpret_cast<DirectX::XMFLOAT2*>(
+				&this->m_base._11
+			),
+			row_original_0
+		);
 		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&this->m_base._21),
-			row_original_1);
+			reinterpret_cast<DirectX::XMFLOAT2*>(
+				&this->m_base._21
+			),
+			row_original_1
+		);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base += data.m_base;
 #endif
@@ -86,27 +112,51 @@ public:
 	matrix2x2f& operator-=(const matrix2x2f& data) noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._11));
-		DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._21));
+		DirectX::XMVECTOR row_original_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_original_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._21
+				)
+			);
 
-		DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._11));
-		DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._21));
+		DirectX::XMVECTOR row_argument_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&data.m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_argument_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&data.m_base._21
+				)
+			);
 
-		row_original_0 =
-			DirectX::XMVectorSubtract(row_original_0, row_argument_0);
-		row_original_1 =
-			DirectX::XMVectorSubtract(row_original_1, row_argument_1);
+		row_original_0 = DirectX::XMVectorSubtract(
+			row_original_0, row_argument_0
+		);
+		row_original_1 = DirectX::XMVectorSubtract(
+			row_original_1, row_argument_1
+		);
 
 		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&this->m_base._11),
-			row_original_0);
+			reinterpret_cast<DirectX::XMFLOAT2*>(
+				&this->m_base._11
+			),
+			row_original_0
+		);
 		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&this->m_base._21),
-			row_original_1);
+			reinterpret_cast<DirectX::XMFLOAT2*>(
+				&this->m_base._21
+			),
+			row_original_1
+		);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base -= data.m_base;
 #endif
@@ -142,20 +192,36 @@ public:
 	matrix2x2f& operator*=(float value) noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._11));
-		DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._21));
+		DirectX::XMVECTOR row_original_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_original_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._21
+				)
+			);
 
-		row_original_0 = DirectX::XMVectorScale(row_original_0, value);
-		row_original_1 = DirectX::XMVectorScale(row_original_1, value);
+		row_original_0 =
+			DirectX::XMVectorScale(row_original_0, value);
+		row_original_1 =
+			DirectX::XMVectorScale(row_original_1, value);
 
 		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&this->m_base._11),
-			row_original_0);
+			reinterpret_cast<DirectX::XMFLOAT2*>(
+				&this->m_base._11
+			),
+			row_original_0
+		);
 		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&this->m_base._21),
-			row_original_1);
+			reinterpret_cast<DirectX::XMFLOAT2*>(
+				&this->m_base._21
+			),
+			row_original_1
+		);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base *= value;
 #endif
@@ -163,35 +229,55 @@ public:
 		return *this;
 	}
 
-	// TODO: provide preprocessor for user implementation here like
+	// TODO: provide preprocessor for user implementation here
+	// like
 	// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 	matrix2x2f& operator/=(const matrix2x2f& data) noexcept
 	{
-		KOTEK_ASSERT(false,
-			"formally it is undefined function in mathematics, if it is needed "
-			"provide own version of a such operation");
+		KOTEK_ASSERT(
+			false,
+			"formally it is undefined function in mathematics, "
+		    "if it is needed "
+			"provide own version of a such operation"
+		);
 		return *this;
 	}
 
 	matrix2x2f& operator/=(float value) noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._11));
-		DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._21));
+		DirectX::XMVECTOR row_original_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_original_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._21
+				)
+			);
 
 		float factor = 1.f / value;
 
-		row_original_0 = DirectX::XMVectorScale(row_original_0, factor);
-		row_original_1 = DirectX::XMVectorScale(row_original_1, factor);
+		row_original_0 =
+			DirectX::XMVectorScale(row_original_0, factor);
+		row_original_1 =
+			DirectX::XMVectorScale(row_original_1, factor);
 
 		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&this->m_base._11),
-			row_original_0);
+			reinterpret_cast<DirectX::XMFLOAT2*>(
+				&this->m_base._11
+			),
+			row_original_0
+		);
 		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&this->m_base._21),
-			row_original_1);
+			reinterpret_cast<DirectX::XMFLOAT2*>(
+				&this->m_base._21
+			),
+			row_original_1
+		);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base /= value;
 #endif
@@ -205,21 +291,37 @@ public:
 	{
 		matrix2x2f result;
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._11));
-		DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._21));
+		DirectX::XMVECTOR row_original_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_original_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._21
+				)
+			);
 
-		row_original_0 = DirectX::XMVectorNegate(row_original_0);
-		row_original_1 = DirectX::XMVectorNegate(row_original_1);
+		row_original_0 =
+			DirectX::XMVectorNegate(row_original_0);
+		row_original_1 =
+			DirectX::XMVectorNegate(row_original_1);
 
 		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&result.m_base._11),
-			row_original_0);
+			reinterpret_cast<DirectX::XMFLOAT2*>(
+				&result.m_base._11
+			),
+			row_original_0
+		);
 
 		DirectX::XMStoreFloat2(
-			reinterpret_cast<DirectX::XMFLOAT2*>(&result.m_base._21),
-			row_original_1);
+			reinterpret_cast<DirectX::XMFLOAT2*>(
+				&result.m_base._21
+			),
+			row_original_1
+		);
 
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		result = -this->m_base;
@@ -230,26 +332,53 @@ public:
 	bool operator==(const matrix2x2f& data) const noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._11));
-		DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._21));
-		DirectX::XMVECTOR row_original_2 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._31));
+		DirectX::XMVECTOR row_original_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_original_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._21
+				)
+			);
+		DirectX::XMVECTOR row_original_2 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._31
+				)
+			);
 
-		DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._11));
-		DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._21));
-		DirectX::XMVECTOR row_argument_2 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._31));
+		DirectX::XMVECTOR row_argument_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&data.m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_argument_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&data.m_base._21
+				)
+			);
+		DirectX::XMVECTOR row_argument_2 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&data.m_base._31
+				)
+			);
 
-		bool is_equal_0 =
-			DirectX::XMVector3Equal(row_original_0, row_argument_0);
-		bool is_equal_1 =
-			DirectX::XMVector3Equal(row_original_1, row_argument_1);
-		bool is_equal_2 =
-			DirectX::XMVector3Equal(row_original_2, row_argument_2);
+		bool is_equal_0 = DirectX::XMVector3Equal(
+			row_original_0, row_argument_0
+		);
+		bool is_equal_1 = DirectX::XMVector3Equal(
+			row_original_1, row_argument_1
+		);
+		bool is_equal_2 = DirectX::XMVector3Equal(
+			row_original_2, row_argument_2
+		);
 
 		return (is_equal_0 && is_equal_1 && is_equal_2);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -262,26 +391,53 @@ public:
 	bool operator!=(const matrix2x2f& data) noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._11));
-		DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._21));
-		DirectX::XMVECTOR row_original_2 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&this->m_base._31));
+		DirectX::XMVECTOR row_original_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_original_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._21
+				)
+			);
+		DirectX::XMVECTOR row_original_2 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&this->m_base._31
+				)
+			);
 
-		DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._11));
-		DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._21));
-		DirectX::XMVECTOR row_argument_2 = DirectX::XMLoadFloat2(
-			reinterpret_cast<const DirectX::XMFLOAT2*>(&data.m_base._31));
+		DirectX::XMVECTOR row_argument_0 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&data.m_base._11
+				)
+			);
+		DirectX::XMVECTOR row_argument_1 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&data.m_base._21
+				)
+			);
+		DirectX::XMVECTOR row_argument_2 =
+			DirectX::XMLoadFloat2(
+				reinterpret_cast<const DirectX::XMFLOAT2*>(
+					&data.m_base._31
+				)
+			);
 
-		bool is_equal_0 =
-			DirectX::XMVector3NotEqual(row_original_0, row_argument_0);
-		bool is_equal_1 =
-			DirectX::XMVector3NotEqual(row_original_1, row_argument_1);
-		bool is_equal_2 =
-			DirectX::XMVector3NotEqual(row_original_2, row_argument_2);
+		bool is_equal_0 = DirectX::XMVector3NotEqual(
+			row_original_0, row_argument_0
+		);
+		bool is_equal_1 = DirectX::XMVector3NotEqual(
+			row_original_1, row_argument_1
+		);
+		bool is_equal_2 = DirectX::XMVector3NotEqual(
+			row_original_2, row_argument_2
+		);
 
 		return (is_equal_0 || is_equal_1 || is_equal_2);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -323,7 +479,8 @@ public:
 
 	/// \~english @brief First row, second column
 	/// @param nothing as input for passing
-	/// @return element that stays at first row and second column
+	/// @return element that stays at first row and second
+	/// column
 	float Get_01(void) const noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -335,7 +492,8 @@ public:
 
 	/// \~english @brief Second row, first column
 	/// @param  nothing as input for passing
-	/// @return element that stays at second row and first column
+	/// @return element that stays at second row and first
+	/// column
 	float Get_10(void) const noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -347,7 +505,8 @@ public:
 
 	/// \~english @brief Second row, second column
 	/// @param nothing as input for passing
-	/// @return element that stays at second row and second column
+	/// @return element that stays at second row and second
+	/// column
 	float Get_11(void) const noexcept
 	{
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -409,46 +568,95 @@ public:
 		return *this;
 	}
 
+	inline constexpr unsigned char size_of(void) const noexcept
+	{
+		static_assert(
+			sizeof(float[2][2]) == sizeof(m_base) &&
+			"we gurantee that base type is equal to "
+			"float[2][2] by size"
+		);
+		return static_cast<unsigned char>(sizeof(float[2][2]));
+	}
+
+	inline constexpr unsigned char get_column_count(void
+	) const noexcept
+	{
+		return static_cast<unsigned char>(2);
+	}
+
+	inline constexpr unsigned char get_row_count(void
+	) const noexcept
+	{
+		return static_cast<unsigned char>(2);
+	}
+
 	matrix2x2f& Set_Base(const base_mat2x2_t& data) noexcept
 	{
 		this->m_base = data;
 		return *this;
 	}
 
-	base_mat2x2_t& Get_Base(void) noexcept { return this->m_base; }
-	const base_mat2x2_t& Get_Base(void) const noexcept { return this->m_base; }
+	base_mat2x2_t& Get_Base(void) noexcept
+	{
+		return this->m_base;
+	}
+	const base_mat2x2_t& Get_Base(void) const noexcept
+	{
+		return this->m_base;
+	}
 
 private:
 	base_mat2x2_t m_base;
 };
 
 inline matrix2x2f operator+(
-	const matrix2x2f& left, const matrix2x2f& right) noexcept
+	const matrix2x2f& left, const matrix2x2f& right
+) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT2 left_row_0 = {left.Get_00(), left.Get_01()};
-	DirectX::XMFLOAT2 left_row_1 = {left.Get_10(), left.Get_11()};
+	DirectX::XMFLOAT2 left_row_0 = {
+		left.Get_00(), left.Get_01()
+	};
+	DirectX::XMFLOAT2 left_row_1 = {
+		left.Get_10(), left.Get_11()
+	};
 
-	DirectX::XMFLOAT2 right_row_0 = {right.Get_00(), right.Get_01()};
-	DirectX::XMFLOAT2 right_row_1 = {right.Get_10(), right.Get_11()};
+	DirectX::XMFLOAT2 right_row_0 = {
+		right.Get_00(), right.Get_01()
+	};
+	DirectX::XMFLOAT2 right_row_1 = {
+		right.Get_10(), right.Get_11()
+	};
 
-	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(&left_row_0);
-	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(&left_row_1);
+	DirectX::XMVECTOR row_original_0 =
+		DirectX::XMLoadFloat2(&left_row_0);
+	DirectX::XMVECTOR row_original_1 =
+		DirectX::XMLoadFloat2(&left_row_1);
 
-	DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat2(&right_row_0);
-	DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat2(&right_row_1);
+	DirectX::XMVECTOR row_argument_0 =
+		DirectX::XMLoadFloat2(&right_row_0);
+	DirectX::XMVECTOR row_argument_1 =
+		DirectX::XMLoadFloat2(&right_row_1);
 
-	row_original_0 = DirectX::XMVectorAdd(row_original_0, row_argument_0);
-	row_original_1 = DirectX::XMVectorAdd(row_original_1, row_argument_1);
+	row_original_0 =
+		DirectX::XMVectorAdd(row_original_0, row_argument_0);
+	row_original_1 =
+		DirectX::XMVectorAdd(row_original_1, row_argument_1);
 
 	matrix2x2f result;
 
 	DirectX::XMStoreFloat2(
-		reinterpret_cast<DirectX::XMFLOAT2*>(&result.Get_Base()._11),
-		row_original_0);
+		reinterpret_cast<DirectX::XMFLOAT2*>(
+			&result.Get_Base()._11
+		),
+		row_original_0
+	);
 	DirectX::XMStoreFloat2(
-		reinterpret_cast<DirectX::XMFLOAT2*>(&result.Get_Base()._21),
-		row_original_1);
+		reinterpret_cast<DirectX::XMFLOAT2*>(
+			&result.Get_Base()._21
+		),
+		row_original_1
+	);
 
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -457,32 +665,55 @@ inline matrix2x2f operator+(
 }
 
 inline matrix2x2f operator-(
-	const matrix2x2f& left, const matrix2x2f& right) noexcept
+	const matrix2x2f& left, const matrix2x2f& right
+) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT2 left_row_0 = {left.Get_00(), left.Get_01()};
-	DirectX::XMFLOAT2 left_row_1 = {left.Get_10(), left.Get_11()};
+	DirectX::XMFLOAT2 left_row_0 = {
+		left.Get_00(), left.Get_01()
+	};
+	DirectX::XMFLOAT2 left_row_1 = {
+		left.Get_10(), left.Get_11()
+	};
 
-	DirectX::XMFLOAT2 right_row_0 = {right.Get_00(), right.Get_01()};
-	DirectX::XMFLOAT2 right_row_1 = {right.Get_10(), right.Get_11()};
+	DirectX::XMFLOAT2 right_row_0 = {
+		right.Get_00(), right.Get_01()
+	};
+	DirectX::XMFLOAT2 right_row_1 = {
+		right.Get_10(), right.Get_11()
+	};
 
-	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(&left_row_0);
-	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(&left_row_1);
+	DirectX::XMVECTOR row_original_0 =
+		DirectX::XMLoadFloat2(&left_row_0);
+	DirectX::XMVECTOR row_original_1 =
+		DirectX::XMLoadFloat2(&left_row_1);
 
-	DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat2(&right_row_0);
-	DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat2(&right_row_1);
+	DirectX::XMVECTOR row_argument_0 =
+		DirectX::XMLoadFloat2(&right_row_0);
+	DirectX::XMVECTOR row_argument_1 =
+		DirectX::XMLoadFloat2(&right_row_1);
 
-	row_original_0 = DirectX::XMVectorSubtract(row_original_0, row_argument_0);
-	row_original_1 = DirectX::XMVectorSubtract(row_original_1, row_argument_1);
+	row_original_0 = DirectX::XMVectorSubtract(
+		row_original_0, row_argument_0
+	);
+	row_original_1 = DirectX::XMVectorSubtract(
+		row_original_1, row_argument_1
+	);
 
 	matrix2x2f result;
 
 	DirectX::XMStoreFloat2(
-		reinterpret_cast<DirectX::XMFLOAT2*>(&result.Get_Base()._11),
-		row_original_0);
+		reinterpret_cast<DirectX::XMFLOAT2*>(
+			&result.Get_Base()._11
+		),
+		row_original_0
+	);
 	DirectX::XMStoreFloat2(
-		reinterpret_cast<DirectX::XMFLOAT2*>(&result.Get_Base()._21),
-		row_original_1);
+		reinterpret_cast<DirectX::XMFLOAT2*>(
+			&result.Get_Base()._21
+		),
+		row_original_1
+	);
 
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -491,7 +722,8 @@ inline matrix2x2f operator-(
 }
 
 inline matrix2x2f operator*(
-	const matrix2x2f& left, const matrix2x2f& right) noexcept
+	const matrix2x2f& left, const matrix2x2f& right
+) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMMATRIX m1 = left;
@@ -510,26 +742,41 @@ inline matrix2x2f operator*(
 #endif
 }
 
-inline matrix2x2f operator*(const matrix2x2f& left, float value) noexcept
+inline matrix2x2f
+operator*(const matrix2x2f& left, float value) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT2 left_row_0 = {left.Get_00(), left.Get_01()};
-	DirectX::XMFLOAT2 left_row_1 = {left.Get_10(), left.Get_11()};
+	DirectX::XMFLOAT2 left_row_0 = {
+		left.Get_00(), left.Get_01()
+	};
+	DirectX::XMFLOAT2 left_row_1 = {
+		left.Get_10(), left.Get_11()
+	};
 
-	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(&left_row_0);
-	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(&left_row_1);
+	DirectX::XMVECTOR row_original_0 =
+		DirectX::XMLoadFloat2(&left_row_0);
+	DirectX::XMVECTOR row_original_1 =
+		DirectX::XMLoadFloat2(&left_row_1);
 
-	row_original_0 = DirectX::XMVectorScale(row_original_0, value);
-	row_original_1 = DirectX::XMVectorScale(row_original_1, value);
+	row_original_0 =
+		DirectX::XMVectorScale(row_original_0, value);
+	row_original_1 =
+		DirectX::XMVectorScale(row_original_1, value);
 
 	matrix2x2f result;
 
 	DirectX::XMStoreFloat2(
-		reinterpret_cast<DirectX::XMFLOAT2*>(&result.Get_Base()._11),
-		row_original_0);
+		reinterpret_cast<DirectX::XMFLOAT2*>(
+			&result.Get_Base()._11
+		),
+		row_original_0
+	);
 	DirectX::XMStoreFloat2(
-		reinterpret_cast<DirectX::XMFLOAT2*>(&result.Get_Base()._21),
-		row_original_1);
+		reinterpret_cast<DirectX::XMFLOAT2*>(
+			&result.Get_Base()._21
+		),
+		row_original_1
+	);
 
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -537,33 +784,49 @@ inline matrix2x2f operator*(const matrix2x2f& left, float value) noexcept
 #endif
 }
 
-inline matrix2x2f operator*(float value, const matrix2x2f& right) noexcept
+inline matrix2x2f
+operator*(float value, const matrix2x2f& right) noexcept
 {
 	return operator*(right, value);
 }
 
-inline matrix2x2f operator/(const matrix2x2f& left, float value) noexcept
+inline matrix2x2f
+operator/(const matrix2x2f& left, float value) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT2 left_row_0 = {left.Get_00(), left.Get_01()};
-	DirectX::XMFLOAT2 left_row_1 = {left.Get_10(), left.Get_11()};
+	DirectX::XMFLOAT2 left_row_0 = {
+		left.Get_00(), left.Get_01()
+	};
+	DirectX::XMFLOAT2 left_row_1 = {
+		left.Get_10(), left.Get_11()
+	};
 
-	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(&left_row_0);
-	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(&left_row_1);
+	DirectX::XMVECTOR row_original_0 =
+		DirectX::XMLoadFloat2(&left_row_0);
+	DirectX::XMVECTOR row_original_1 =
+		DirectX::XMLoadFloat2(&left_row_1);
 
 	float factor = 1.f / value;
 
-	row_original_0 = DirectX::XMVectorScale(row_original_0, factor);
-	row_original_1 = DirectX::XMVectorScale(row_original_1, factor);
+	row_original_0 =
+		DirectX::XMVectorScale(row_original_0, factor);
+	row_original_1 =
+		DirectX::XMVectorScale(row_original_1, factor);
 
 	matrix2x2f result;
 
 	DirectX::XMStoreFloat2(
-		reinterpret_cast<DirectX::XMFLOAT2*>(&result.Get_Base()._11),
-		row_original_0);
+		reinterpret_cast<DirectX::XMFLOAT2*>(
+			&result.Get_Base()._11
+		),
+		row_original_0
+	);
 	DirectX::XMStoreFloat2(
-		reinterpret_cast<DirectX::XMFLOAT2*>(&result.Get_Base()._21),
-		row_original_1);
+		reinterpret_cast<DirectX::XMFLOAT2*>(
+			&result.Get_Base()._21
+		),
+		row_original_1
+	);
 
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -574,11 +837,15 @@ inline matrix2x2f operator/(const matrix2x2f& left, float value) noexcept
 // TODO: provide preprocessor for user implementation here like
 // KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 inline matrix2x2f operator/(
-	const matrix2x2f& left, const matrix2x2f& right) noexcept
+	const matrix2x2f& left, const matrix2x2f& right
+) noexcept
 {
-	KOTEK_ASSERT(false,
-		"formally it is undefined function in mathematics, if it is needed "
-		"provide own version of a such operation");
+	KOTEK_ASSERT(
+		false,
+		"formally it is undefined function in mathematics, if "
+	    "it is needed "
+		"provide own version of a such operation"
+	);
 	return matrix2x2f();
 }
 

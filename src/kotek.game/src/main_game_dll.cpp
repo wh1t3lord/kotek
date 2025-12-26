@@ -132,7 +132,7 @@ namespace Game
 			const auto& root_path =
 				ktk::dll::program_location().parent_path();
 			path_to_user_dll = root_path.c_str();
-	#elif defined(KOTEK_USE_STD_LIBRARY
+	#elif defined(KOTEK_USE_STD_LIBRARY)
 			KUN_KOTEK static_path_t root_path;
 			p_main_manager->GetFileSystem()->Make_Path(
 				root_path,
