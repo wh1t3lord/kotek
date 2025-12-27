@@ -14,92 +14,465 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
 
-vector1f_view_t::vector1f_view_t(float* p_values) :
-	_m_default(0.0f), m_p_values(p_values)
+vectornf_view_t::vectornf_view_t(
+	float* p_values, math_id_t row_count
+) :
+	_m_default(0.0f), m_row_count(row_count),
+	m_p_values(p_values)
+{
+	KOTEK_ASSERT(m_row_count > 0, "pass valid data");
+	KOTEK_ASSERT(p_values, "data must be valid!");
+}
+
+vectornf_view_t::vectornf_view_t() :
+	_m_default(0.0f), m_row_count(0), m_p_values(nullptr)
 {
 }
 
-float vector1f_view_t::x(void) const noexcept
+float vectornf_view_t::e(math_id_t column_id, math_id_t row_id)
+	const noexcept
 {
-	if (this->m_p_values == nullptr)
-		return 0.0f;
-
-	return this->m_p_values[0];
+	return this->operator[](row_id);
 }
 
-float& vector1f_view_t::x(void) noexcept
+float& vectornf_view_t::e(
+	math_id_t column_id, math_id_t row_id
+) noexcept
 {
-	if (this->m_p_values == nullptr)
-		return _m_default;
-
-	return this->m_p_values[0];
+	return this->operator[](row_id);
 }
 
-float vector1f_view_t::operator[](size_t row_id) const noexcept
+vectornf_view_t vectornf_view_t::c(math_id_t column_id
+) const noexcept
 {
-	KOTEK_ASSERT(row_id == 0, "send reasonable data");
+	return *this;
+}
 
+void vectornf_view_t::set(
+	float* p_data, math_id_t element_count
+) noexcept
+{
+	KOTEK_ASSERT(p_data, "data must be valid");
+	KOTEK_ASSERT(element_count > 0, "can't be null");
 	KOTEK_ASSERT(
-		this->m_p_values,
-		"must be initialized, data corruptiion?"
+		this->m_row_count <= element_count, "overwrite memory!"
 	);
 
+	if (p_data && this->m_row_count <= element_count)
+	{
+		std::memcpy(
+			this->m_p_values,
+			p_data,
+			sizeof(float) * element_count
+		);
+	}
+}
+
+void vectornf_view_t::set(const vectornf_view_t& view) noexcept
+{
+	KOTEK_ASSERT(view.data(), "data must be valid");
+	KOTEK_ASSERT(view.get_row_count() > 0, "can't be null");
+	KOTEK_ASSERT(
+		this->m_row_count <= view.get_row_count(),
+		"overwrite memory!"
+	);
+
+	if (view.data() &&
+	    this->m_row_count <= view.get_row_count())
+	{
+		std::memcpy(
+			this->m_p_values,
+			view.data(),
+			sizeof(float) * view.get_row_count()
+		);
+	}
+}
+
+void vectornf_view_t::set(const matrixnf_view_t& view) noexcept
+{
+}
+
+void vectornf_view_t::set(const vector1f& vec) noexcept
+{
+	KOTEK_ASSERT(this->m_p_values, "data must be valid");
+	KOTEK_ASSERT(this->m_row_count > 0, "data must be valid");
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count > 0)
+		{
+			this->m_p_values[0] = vec.e(0, 0);
+		}
+	}
+}
+
+void vectornf_view_t::set(const vector2f& vec) noexcept
+{
+	KOTEK_ASSERT(this->m_p_values, "data must be valid");
+	KOTEK_ASSERT(this->m_row_count > 0, "data must be valid");
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count > 0)
+		{
+		}
+	}
+}
+
+void vectornf_view_t::set(const vector3f& vec) noexcept {}
+
+void vectornf_view_t::set(const vector4f& vec) noexcept {}
+
+void vectornf_view_t::set(const matrix2x2f& mat) noexcept {}
+
+void vectornf_view_t::set(const matrix3x3f& mat) noexcept {}
+
+void vectornf_view_t::set(const matrix4x4f& mat) noexcept {}
+
+float* vectornf_view_t::data(void) noexcept
+{
+	return this->m_p_values;
+}
+
+const float* vectornf_view_t::data(void) const noexcept
+{
+	return this->m_p_values;
+}
+
+float vectornf_view_t::operator[](math_id_t row_id
+) const noexcept
+{
+	KOTEK_ASSERT(this->m_p_values, "data must be valid");
+
 	if (this->m_p_values == nullptr)
 		return 0.0f;
 
-	if (row_id > 0)
+	KOTEK_ASSERT(row_id < this->m_row_count, "invalid row");
+
+	if (row_id > this->m_row_count)
 		row_id = 0;
 
 	return this->m_p_values[row_id];
 }
 
-float& vector1f_view_t::operator[](size_t row_id) noexcept
+float& vectornf_view_t::operator[](math_id_t row_id) noexcept
 {
-	KOTEK_ASSERT(row_id == 0, "send reasonable data");
-
-	KOTEK_ASSERT(
-		this->m_p_values,
-		"must be initialized, data corruptiion?"
-	);
+	KOTEK_ASSERT(this->m_p_values, "data must be valid");
 
 	if (this->m_p_values == nullptr)
 		return _m_default;
 
-	if (row_id > 0)
+	KOTEK_ASSERT(row_id < this->m_row_count, "invalid row");
+
+	if (row_id > this->m_row_count)
 		row_id = 0;
 
 	return this->m_p_values[row_id];
 }
 
-size_t vector1f_view_t::size_of(void) const noexcept
+vectornf_view_t&
+vectornf_view_t::operator+=(const vectornf_view_t& view
+) noexcept
 {
-	return get_column_count() * sizeof(float) * get_row_count();
+	return *this;
 }
 
-size_t vector1f_view_t::get_column_count(void) const noexcept
+vectornf_view_t&
+vectornf_view_t::operator+=(const matrixnf_view_t& view
+) noexcept
 {
-	return 1;
+	return *this;
 }
 
-size_t vector1f_view_t::get_row_count(void) const noexcept
+vectornf_view_t& vectornf_view_t::operator+=(const vector1f& vec
+) noexcept
 {
-	return 1;
+	return *this;
 }
 
-float vector1f_view_t::c0(size_t row_id) const noexcept
+vectornf_view_t& vectornf_view_t::operator+=(const vector2f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator+=(const vector3f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator+=(const vector4f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator+=(const matrix2x2f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator+=(const matrix3x3f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator+=(const matrix4x4f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator-=(const vectornf_view_t& view
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator-=(const matrixnf_view_t& view
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator-=(const vector1f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator-=(const vector2f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator-=(const vector3f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator-=(const vector4f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator-=(const matrix2x2f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator-=(const matrix3x3f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator-=(const matrix4x4f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator*=(const vectornf_view_t& view
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator*=(const matrixnf_view_t& view
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator*=(const vector1f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator*=(const vector2f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator*=(const vector3f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator*=(const vector4f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator*=(const matrix2x2f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator*=(const matrix3x3f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator*=(const matrix4x4f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator/=(const vectornf_view_t& view
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator/=(const matrixnf_view_t& view
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator/=(const vector1f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator/=(const vector2f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator/=(const vector3f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t& vectornf_view_t::operator/=(const vector4f& vec
+) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator/=(const matrix2x2f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator/=(const matrix3x3f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_view_t&
+vectornf_view_t::operator/=(const matrix4x4f& mat) noexcept
+{
+	return *this;
+}
+
+vectornf_const_view_t::vectornf_const_view_t(
+	const float* p_values, math_id_t row_count
+) :
+	_m_default(0.0f), m_row_count(row_count),
+	m_p_values(p_values)
+{
+	KOTEK_ASSERT(m_row_count > 0, "pass valid data");
+	KOTEK_ASSERT(p_values, "data must be valid!");
+}
+
+const float vectornf_const_view_t::e(
+	math_id_t column_id, math_id_t row_id
+) const noexcept
 {
 	return this->operator[](row_id);
 }
 
-float& vector1f_view_t::c0(size_t row_id) noexcept
+const float& vectornf_const_view_t::e(
+	math_id_t column_id, math_id_t row_id
+) noexcept
 {
 	return this->operator[](row_id);
 }
 
-vector1f_view_t
-vector1f_view_t::c0(void) const noexcept
+vectornf_const_view_t
+vectornf_const_view_t::c(math_id_t column_id) const noexcept
 {
-	return vector1f_view_t(this->m_p_values);
+	return *this;
+}
+
+const float vectornf_const_view_t::operator[](math_id_t row_id
+) const noexcept
+{
+	KOTEK_ASSERT(this->m_p_values, "data must be valid");
+
+	if (this->m_p_values == nullptr)
+		return 0.0f;
+
+	KOTEK_ASSERT(row_id < this->m_row_count, "invalid row");
+
+	if (row_id > this->m_row_count)
+		row_id = 0;
+
+	return this->m_p_values[row_id];
+}
+
+const float& vectornf_const_view_t::operator[](math_id_t row_id
+) noexcept
+{
+	KOTEK_ASSERT(this->m_p_values, "data must be valid");
+
+	if (this->m_p_values == nullptr)
+		return 0.0f;
+
+	KOTEK_ASSERT(row_id < this->m_row_count, "invalid row");
+
+	if (row_id > this->m_row_count)
+		row_id = 0;
+
+	return this->m_p_values[row_id];
+}
+
+math_id_t vectornf_const_view_t::size_of(void) const noexcept {}
+
+math_id_t vectornf_const_view_t::get_column_count(void
+) const noexcept
+{
+	return 1;
+}
+
+math_id_t vectornf_const_view_t::get_row_count(void
+) const noexcept
+{
+	return this->m_row_count;
+}
+
+const float* vectornf_const_view_t::data(void) const noexcept
+{
+	return this->m_p_values;
 }
 
 KOTEK_END_NAMESPACE_MATH

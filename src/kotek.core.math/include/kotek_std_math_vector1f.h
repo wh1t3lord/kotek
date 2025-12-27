@@ -16,11 +16,13 @@ public:
 	vector1f(float x, float y, float z);
 	vector1f(float x, float y, float z, float w);
 
-	vector1f(float* p_arr1, unsigned char size = 1);
-	vector1f(const float* p_arr1, unsigned char size = 1);
+	vector1f(float* p_arr1, math_id_t size = 1);
+	vector1f(const float* p_arr1, math_id_t size = 1);
 
 	vector1f(const matrixnf_view_t& view);
 	vector1f(const matrixnf_const_view_t& view);
+	vector1f(const vectornf_view_t& view);
+	vector1f(const vectornf_const_view_t& view);
 
 	vector1f(const vector2f& data);
 	vector1f(const vector3f& data);
@@ -40,6 +42,8 @@ public:
 	vector1f& operator+=(const vector1f& data);
 	vector1f& operator+=(const matrixnf_view_t& view);
 	vector1f& operator+=(const matrixnf_const_view_t& view);
+	vector1f& operator+=(const vectornf_view_t& view);
+	vector1f& operator+=(const vectornf_const_view_t& view);
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -98,9 +102,9 @@ public:
 
 	bool operator!=(const vector1f& data) const noexcept;
 
-	float operator[](unsigned int index) const;
+	float operator[](math_id_t index) const;
 
-	float& operator[](unsigned int index);
+	float& operator[](math_id_t index);
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	operator DirectX::XMVECTOR() const noexcept;
@@ -117,11 +121,23 @@ public:
 
 	void set(float x) noexcept;
 
-	inline static constexpr unsigned char size_of(void) noexcept
+	inline constexpr math_id_t size_of(void) noexcept
 	{
-		static_assert(sizeof(float[1]) == sizeof(m_base) &&
-			"we gurantee that base type is float[1] by size");
-		return static_cast<unsigned char>(sizeof(float[1]));
+		static_assert(
+			sizeof(float[1]) == sizeof(m_base) &&
+			"we gurantee that base type is float[1] by size"
+		);
+		return sizeof(float[1]);
+	}
+
+	inline math_id_t get_column_count(void) const noexcept
+	{
+		return 1;
+	}
+
+	inline math_id_t get_row_count(void) const noexcept
+	{
+		return 1;
 	}
 
 	vector1f& Set_Base(const base_vec1_t& data) noexcept;
@@ -133,7 +149,8 @@ private:
 	base_vec1_t m_base;
 };
 
-inline vector1f operator+(const vector1f& a, const vector1f& b) noexcept
+inline vector1f
+operator+(const vector1f& a, const vector1f& b) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = a;
@@ -152,103 +169,8 @@ inline vector1f operator+(const vector1f& a, const vector1f& b) noexcept
 #endif
 }
 
-inline vector1f operator+(
-	const vector1f& left, const matrix4f_view_t& view) noexcept
-{
-	return operator+(left, vector1f(view));
-}
-
-inline vector1f operator+(
-	const vector1f& left, const matrix3f_view_t& view) noexcept
-{
-	return operator+(left, vector1f(view));
-}
-
-inline vector1f operator+(
-	const vector1f& left, const matrix2f_view_t& view) noexcept
-{
-	return operator+(left, vector1f(view));
-}
-
-inline vector1f operator+(
-	const vector1f& left, const matrix1f_view_t& view) noexcept
-{
-	return operator+(left, vector1f(view));
-}
-
-inline vector1f operator+(
-	const matrix4f_view_t& view, const vector1f& right) noexcept
-{
-	return operator+(vector1f(view), right);
-}
-
-inline vector1f operator+(
-	const matrix3f_view_t& view, const vector1f& right) noexcept
-{
-	return operator+(vector1f(view), right);
-}
-
-inline vector1f operator+(
-	const matrix2f_view_t& view, const vector1f& right) noexcept
-{
-	return operator+(vector1f(view), right);
-}
-
-inline vector1f operator+(
-	const matrix1f_view_t& view, const vector1f& right) noexcept
-{
-	return operator+(vector1f(view), right);
-}
-
-inline vector1f operator+(
-	const vector1f& left, const matrix4f_const_view_t& view) noexcept
-{
-	return operator+(left, vector1f(view));
-}
-
-inline vector1f operator+(
-	const vector1f& left, const matrix3f_const_view_t& view) noexcept
-{
-	return operator+(left, vector1f(view));
-}
-
-inline vector1f operator+(
-	const vector1f& left, const matrix2f_const_view_t& view) noexcept
-{
-	return operator+(left, vector1f(view));
-}
-
-inline vector1f operator+(
-	const vector1f& left, const matrix1f_const_view_t& view) noexcept
-{
-	return operator+(left, vector1f(view));
-}
-
-inline vector1f operator+(
-	const matrix4f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator+(vector1f(view), right);
-}
-
-inline vector1f operator+(
-	const matrix3f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator+(vector1f(view), right);
-}
-
-inline vector1f operator+(
-	const matrix2f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator+(vector1f(view), right);
-}
-
-inline vector1f operator+(
-	const matrix1f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator+(vector1f(view), right);
-}
-
-inline vector1f operator-(const vector1f& a, const vector1f& b) noexcept
+inline vector1f
+operator-(const vector1f& a, const vector1f& b) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = a;
@@ -267,103 +189,8 @@ inline vector1f operator-(const vector1f& a, const vector1f& b) noexcept
 #endif
 }
 
-inline vector1f operator-(
-	const vector1f& left, const matrix4f_view_t& view) noexcept
-{
-	return operator-(left, vector1f(view));
-}
-
-inline vector1f operator-(
-	const vector1f& left, const matrix3f_view_t& view) noexcept
-{
-	return operator-(left, vector1f(view));
-}
-
-inline vector1f operator-(
-	const vector1f& left, const matrix2f_view_t& view) noexcept
-{
-	return operator-(left, vector1f(view));
-}
-
-inline vector1f operator-(
-	const vector1f& left, const matrix1f_view_t& view) noexcept
-{
-	return operator-(left, vector1f(view));
-}
-
-inline vector1f operator-(
-	const matrix4f_view_t& view, const vector1f& right) noexcept
-{
-	return operator-(vector1f(view), right);
-}
-
-inline vector1f operator-(
-	const matrix3f_view_t& view, const vector1f& right) noexcept
-{
-	return operator-(vector1f(view), right);
-}
-
-inline vector1f operator-(
-	const matrix2f_view_t& view, const vector1f& right) noexcept
-{
-	return operator-(vector1f(view), right);
-}
-
-inline vector1f operator-(
-	const matrix1f_view_t& view, const vector1f& right) noexcept
-{
-	return operator-(vector1f(view), right);
-}
-
-inline vector1f operator-(
-	const vector1f& left, const matrix4f_const_view_t& view) noexcept
-{
-	return operator-(left, vector1f(view));
-}
-
-inline vector1f operator-(
-	const vector1f& left, const matrix3f_const_view_t& view) noexcept
-{
-	return operator-(left, vector1f(view));
-}
-
-inline vector1f operator-(
-	const vector1f& left, const matrix2f_const_view_t& view) noexcept
-{
-	return operator-(left, vector1f(view));
-}
-
-inline vector1f operator-(
-	const vector1f& left, const matrix1f_const_view_t& view) noexcept
-{
-	return operator-(left, vector1f(view));
-}
-
-inline vector1f operator-(
-	const matrix4f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator-(vector1f(view), right);
-}
-
-inline vector1f operator-(
-	const matrix3f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator-(vector1f(view), right);
-}
-
-inline vector1f operator-(
-	const matrix2f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator-(vector1f(view), right);
-}
-
-inline vector1f operator-(
-	const matrix1f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator-(vector1f(view), right);
-}
-
-inline vector1f operator*(const vector1f& a, const vector1f& b) noexcept
+inline vector1f
+operator*(const vector1f& a, const vector1f& b) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = a;
@@ -381,102 +208,6 @@ inline vector1f operator*(const vector1f& a, const vector1f& b) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (a.Get_Base() * b.Get_Base());
 #endif
-}
-
-inline vector1f operator*(
-	const vector1f& left, const matrix4f_view_t& view) noexcept
-{
-	return operator*(left, vector1f(view));
-}
-
-inline vector1f operator*(
-	const vector1f& left, const matrix3f_view_t& view) noexcept
-{
-	return operator*(left, vector1f(view));
-}
-
-inline vector1f operator*(
-	const vector1f& left, const matrix2f_view_t& view) noexcept
-{
-	return operator*(left, vector1f(view));
-}
-
-inline vector1f operator*(
-	const vector1f& left, const matrix1f_view_t& view) noexcept
-{
-	return operator*(left, vector1f(view));
-}
-
-inline vector1f operator*(
-	const matrix4f_view_t& view, const vector1f& right) noexcept
-{
-	return operator*(vector1f(view), right);
-}
-
-inline vector1f operator*(
-	const matrix3f_view_t& view, const vector1f& right) noexcept
-{
-	return operator*(vector1f(view), right);
-}
-
-inline vector1f operator*(
-	const matrix2f_view_t& view, const vector1f& right) noexcept
-{
-	return operator*(vector1f(view), right);
-}
-
-inline vector1f operator*(
-	const matrix1f_view_t& view, const vector1f& right) noexcept
-{
-	return operator*(vector1f(view), right);
-}
-
-inline vector1f operator*(
-	const vector1f& left, const matrix4f_const_view_t& view) noexcept
-{
-	return operator*(left, vector1f(view));
-}
-
-inline vector1f operator*(
-	const vector1f& left, const matrix3f_const_view_t& view) noexcept
-{
-	return operator*(left, vector1f(view));
-}
-
-inline vector1f operator*(
-	const vector1f& left, const matrix2f_const_view_t& view) noexcept
-{
-	return operator*(left, vector1f(view));
-}
-
-inline vector1f operator*(
-	const vector1f& left, const matrix1f_const_view_t& view) noexcept
-{
-	return operator*(left, vector1f(view));
-}
-
-inline vector1f operator*(
-	const matrix4f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator*(vector1f(view), right);
-}
-
-inline vector1f operator*(
-	const matrix3f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator*(vector1f(view), right);
-}
-
-inline vector1f operator*(
-	const matrix2f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator*(vector1f(view), right);
-}
-
-inline vector1f operator*(
-	const matrix1f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator*(vector1f(view), right);
 }
 
 inline vector1f operator*(const vector1f& a, float b) noexcept
@@ -503,7 +234,8 @@ inline vector1f operator*(float a, const vector1f& b) noexcept
 	return operator*(b, a);
 }
 
-inline vector1f operator/(const vector1f& a, const vector1f& b) noexcept
+inline vector1f
+operator/(const vector1f& a, const vector1f& b) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = a;
@@ -521,102 +253,6 @@ inline vector1f operator/(const vector1f& a, const vector1f& b) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (a.Get_Base() / b.Get_Base());
 #endif
-}
-
-inline vector1f operator/(
-	const vector1f& left, const matrix4f_view_t& view) noexcept
-{
-	return operator/(left, vector1f(view));
-}
-
-inline vector1f operator/(
-	const vector1f& left, const matrix3f_view_t& view) noexcept
-{
-	return operator/(left, vector1f(view));
-}
-
-inline vector1f operator/(
-	const vector1f& left, const matrix2f_view_t& view) noexcept
-{
-	return operator/(left, vector1f(view));
-}
-
-inline vector1f operator/(
-	const vector1f& left, const matrix1f_view_t& view) noexcept
-{
-	return operator/(left, vector1f(view));
-}
-
-inline vector1f operator/(
-	const matrix4f_view_t& view, const vector1f& right) noexcept
-{
-	return operator/(vector1f(view), right);
-}
-
-inline vector1f operator/(
-	const matrix3f_view_t& view, const vector1f& right) noexcept
-{
-	return operator/(vector1f(view), right);
-}
-
-inline vector1f operator/(
-	const matrix2f_view_t& view, const vector1f& right) noexcept
-{
-	return operator/(vector1f(view), right);
-}
-
-inline vector1f operator/(
-	const matrix1f_view_t& view, const vector1f& right) noexcept
-{
-	return operator/(vector1f(view), right);
-}
-
-inline vector1f operator/(
-	const vector1f& left, const matrix4f_const_view_t& view) noexcept
-{
-	return operator/(left, vector1f(view));
-}
-
-inline vector1f operator/(
-	const vector1f& left, const matrix3f_const_view_t& view) noexcept
-{
-	return operator/(left, vector1f(view));
-}
-
-inline vector1f operator/(
-	const vector1f& left, const matrix2f_const_view_t& view) noexcept
-{
-	return operator/(left, vector1f(view));
-}
-
-inline vector1f operator/(
-	const vector1f& left, const matrix1f_const_view_t& view) noexcept
-{
-	return operator/(left, vector1f(view));
-}
-
-inline vector1f operator/(
-	const matrix4f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator/(vector1f(view), right);
-}
-
-inline vector1f operator/(
-	const matrix3f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator/(vector1f(view), right);
-}
-
-inline vector1f operator/(
-	const matrix2f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator/(vector1f(view), right);
-}
-
-inline vector1f operator/(
-	const matrix1f_const_view_t& view, const vector1f& right) noexcept
-{
-	return operator/(vector1f(view), right);
 }
 
 inline vector1f operator/(const vector1f& a, float b) noexcept

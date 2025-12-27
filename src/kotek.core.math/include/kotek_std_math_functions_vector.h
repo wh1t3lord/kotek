@@ -5,9 +5,33 @@
 #include "kotek_std_math_vector3f.h"
 #include "kotek_std_math_vector4f.h"
 
+#include "kotek_std_math_vectornf_view.h"
+#include "kotek_std_math_vectornf_const_view.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
+
+inline float x(const vector1f& vec) 
+{
+	return vec.e(0, 0);
+}
+
+inline float& x(vector1f& vec) 
+{
+	return vec.e(0, 0);
+}
+
+inline float x(const vectornf_view_t& view) 
+{
+	return view.e(0, 0);
+}
+
+inline float& x(vectornf_view_t& view) 
+{
+	return view.e(0, 0);
+}
+
 
 inline float const* value_ptr(const vector1f& data)
 {

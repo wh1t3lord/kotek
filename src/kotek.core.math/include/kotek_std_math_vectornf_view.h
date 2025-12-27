@@ -8,6 +8,7 @@ KOTEK_BEGIN_NAMESPACE_MATH
 
 struct vectornf_view_t
 {
+	vectornf_view_t();
 	vectornf_view_t(float* p_values, math_id_t row_count);
 
 	/// @brief e means element you access element by column and
@@ -38,7 +39,7 @@ struct vectornf_view_t
 	/// @brief 
 	/// @param c 
 	/// @param element_count 
-	void set(float* c, math_id_t element_count) noexcept;
+	void set(float* p_data, math_id_t element_count) noexcept;
 
 	void set(const vectornf_view_t& view) noexcept;
 
@@ -115,6 +116,9 @@ struct vectornf_view_t
 	math_id_t size_of(void) const noexcept;
 	math_id_t get_column_count(void) const noexcept;
 	math_id_t get_row_count(void) const noexcept;
+
+	float* data(void) noexcept;
+	const float* data(void) const noexcept;
 
 private:
 	float _m_default;

@@ -2628,6 +2628,22 @@ TEST(Math, matrix4f_view_t_minus_operators)
 	EXPECT_TRUE(kn_kotek::kn_ktk::is_equal(res1.x(), 0.0f));
 }
 
+TEST(math, vec1f_sizes)
+{
+	KUN_KOTEK KUN_KTK KUN_MATH vector1f vec;
+
+	EXPECT_TRUE(vec.size_of() == sizeof(float));
+	EXPECT_TRUE(vec.get_column_count() == 1);
+	EXPECT_TRUE(vec.get_row_count() == 1);
+}
+
+TEST(math, vec2f_sizes) 
+{
+	KUN_KOTEK KUN_KTK KUN_MATH vector2f vec;
+
+	EXPECT_TRUE(vec.size_of() == sizeof(float[2]));
+}
+
 	#endif
 #endif
 

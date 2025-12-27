@@ -8,26 +8,110 @@ KOTEK_BEGIN_NAMESPACE_MATH
 
 struct matrixnf_view_t
 {
-	matrixnf_view_t(float* p_values, size_t column_count, size_t row_count);
+	matrixnf_view_t(
+		float* p_values,
+		math_id_t column_count,
+		math_id_t row_count
+	);
+
+	float
+	e(math_id_t column_id, math_id_t row_id) const noexcept;
+	float& e(math_id_t column_id, math_id_t row_id) noexcept;
+
+	vectornf_view_t c(math_id_t column_id) const noexcept;
+
+	void set(float* p_data, math_id_t element_count) noexcept;
+	void
+	set(float* p_data, math_id_t column_id, math_id_t row_id
+	) noexcept;
+	void
+	set(math_id_t column_id,
+	    float* p_data,
+	    math_id_t element_count) noexcept;
+	void set(const vectornf_view_t& view) noexcept;
+
+	void set(const matrixnf_view_t& view) noexcept;
+
+	void set(const vector1f& vec) noexcept;
+	void set(const vector2f& vec) noexcept;
+	void set(const vector3f& vec) noexcept;
+	void set(const vector4f& vec) noexcept;
+
+	void set(const matrix2x2f& mat) noexcept;
+	void set(const matrix3x3f& mat) noexcept;
+	void set(const matrix4x4f& mat) noexcept;
 
 	// PLUS
 
+	matrixnf_view_t& operator+=(const vectornf_view_t& view
+	) noexcept;
+	matrixnf_view_t& operator+=(const matrixnf_view_t& view
+	) noexcept;
+	matrixnf_view_t& operator+=(const vector1f& vec) noexcept;
+	matrixnf_view_t& operator+=(const vector2f& vec) noexcept;
+	matrixnf_view_t& operator+=(const vector3f& vec) noexcept;
+	matrixnf_view_t& operator+=(const vector4f& vec) noexcept;
+	matrixnf_view_t& operator+=(const matrix2x2f& mat) noexcept;
+	matrixnf_view_t& operator+=(const matrix3x3f& mat) noexcept;
+	matrixnf_view_t& operator+=(const matrix4x4f& mat) noexcept;
+
 	// MINUS
+
+	matrixnf_view_t& operator-=(const vectornf_view_t& view
+	) noexcept;
+	matrixnf_view_t& operator-=(const matrixnf_view_t& view
+	) noexcept;
+	matrixnf_view_t& operator-=(const vector1f& vec) noexcept;
+	matrixnf_view_t& operator-=(const vector2f& vec) noexcept;
+	matrixnf_view_t& operator-=(const vector3f& vec) noexcept;
+	matrixnf_view_t& operator-=(const vector4f& vec) noexcept;
+	matrixnf_view_t& operator-=(const matrix2x2f& mat) noexcept;
+	matrixnf_view_t& operator-=(const matrix3x3f& mat) noexcept;
+	matrixnf_view_t& operator-=(const matrix4x4f& mat) noexcept;
+
 
 	// MULTIPLY
 
+	matrixnf_view_t& operator*=(const vectornf_view_t& view
+	) noexcept;
+	matrixnf_view_t& operator*=(const matrixnf_view_t& view
+	) noexcept;
+	matrixnf_view_t& operator*=(const vector1f& vec) noexcept;
+	matrixnf_view_t& operator*=(const vector2f& vec) noexcept;
+	matrixnf_view_t& operator*=(const vector3f& vec) noexcept;
+	matrixnf_view_t& operator*=(const vector4f& vec) noexcept;
+	matrixnf_view_t& operator*=(const matrix2x2f& mat) noexcept;
+	matrixnf_view_t& operator*=(const matrix3x3f& mat) noexcept;
+	matrixnf_view_t& operator*=(const matrix4x4f& mat) noexcept;
+
+
+
 	// DIVISION
 
-	float* data(void) const noexcept;
+	matrixnf_view_t& operator/=(const vectornf_view_t& view
+	) noexcept;
+	matrixnf_view_t& operator/=(const matrixnf_view_t& view
+	) noexcept;
+	matrixnf_view_t& operator/=(const vector1f& vec) noexcept;
+	matrixnf_view_t& operator/=(const vector2f& vec) noexcept;
+	matrixnf_view_t& operator/=(const vector3f& vec) noexcept;
+	matrixnf_view_t& operator/=(const vector4f& vec) noexcept;
+	matrixnf_view_t& operator/=(const matrix2x2f& mat) noexcept;
+	matrixnf_view_t& operator/=(const matrix3x3f& mat) noexcept;
+	matrixnf_view_t& operator/=(const matrix4x4f& mat) noexcept;
 
-	size_t size_of(void) const noexcept;
-	size_t get_column_count(void) const noexcept;
-	size_t get_row_count(void) const noexcept;
+
+	float* data(void) noexcept;
+	const float* data(void) const noexcept;
+
+	math_id_t size_of(void) const noexcept;
+	math_id_t get_column_count(void) const noexcept;
+	math_id_t get_row_count(void) const noexcept;
 
 private:
 	float _m_default;
-	size_t m_column_count;
-	size_t m_row_count;
+	math_id_t m_column_count;
+	math_id_t m_row_count;
 	float* m_p_values;
 };
 

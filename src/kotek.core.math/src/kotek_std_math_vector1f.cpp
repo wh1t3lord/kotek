@@ -1,13 +1,9 @@
 #include "../include/kotek_std_math_vector1f.h"
 
-#include "../include/kotek_std_math_matrix1f_view.h"
-#include "../include/kotek_std_math_matrix2f_view.h"
-#include "../include/kotek_std_math_matrix3f_view.h"
-#include "../include/kotek_std_math_matrix4f_view.h"
-#include "../include/kotek_std_math_matrix1f_const_view.h"
-#include "../include/kotek_std_math_matrix2f_const_view.h"
-#include "../include/kotek_std_math_matrix3f_const_view.h"
-#include "../include/kotek_std_math_matrix4f_const_view.h"
+#include "../include/kotek_std_math_vectornf_view.h"
+#include "../include/kotek_std_math_vectornf_const_view.h"
+#include "../include/kotek_std_math_matrixnf_view.h"
+#include "../include/kotek_std_math_matrixnf_const_view.h"
 
 #include "../include/kotek_std_math_vector2f.h"
 #include "../include/kotek_std_math_vector3f.h"
@@ -27,46 +23,12 @@ vector1f::vector1f(float x, float y, float z, float w) :
 {
 }
 
-vector1f::vector1f(float* p_arr1, unsigned char size) :
+vector1f::vector1f(float* p_arr1, math_id_t size) :
 	m_base(p_arr1[0])
 {
 }
-vector1f::vector1f(const float* p_arr1, unsigned char size) :
+vector1f::vector1f(const float* p_arr1, math_id_t size) :
 	m_base(p_arr1[0])
-{
-}
-
-vector1f::vector1f(const matrix4f_view_t& view) :
-	m_base(view.x())
-{
-}
-vector1f::vector1f(const matrix3f_view_t& view) :
-	m_base(view.x())
-{
-}
-vector1f::vector1f(const matrix2f_view_t& view) :
-	m_base(view.x())
-{
-}
-vector1f::vector1f(const matrix1f_view_t& view) :
-	m_base(view.x())
-{
-}
-
-vector1f::vector1f(const matrix4f_const_view_t& view) :
-	m_base(view.x())
-{
-}
-vector1f::vector1f(const matrix3f_const_view_t& view) :
-	m_base(view.x())
-{
-}
-vector1f::vector1f(const matrix2f_const_view_t& view) :
-	m_base(view.x())
-{
-}
-vector1f::vector1f(const matrix1f_const_view_t& view) :
-	m_base(view.x())
 {
 }
 
@@ -84,6 +46,14 @@ vector1f::vector1f(const base_vec1_t& data) : m_base(data) {}
 vector1f::vector1f(const vector1f& data) : m_base(data.m_base)
 {
 }
+
+vector1f::vector1f(const matrixnf_view_t& view) {}
+
+vector1f::vector1f(const matrixnf_const_view_t& view) {}
+
+vector1f::vector1f(const vectornf_view_t& view) {}
+
+vector1f::vector1f(const vectornf_const_view_t& view) {}
 
 vector1f& vector1f::operator=(const vector1f& data)
 {
@@ -167,7 +137,31 @@ vector1f& vector1f::operator+=(const base_vec1_t& data)
 	this->m_base += data;
 	return *this;
 }
+
 #endif
+
+vector1f& vector1f::operator+=(const matrixnf_view_t& view)
+{
+	return *this;
+}
+
+vector1f& vector1f::operator+=(const matrixnf_const_view_t& view
+)
+{
+	return *this;
+}
+
+vector1f&
+vector1f::operator+=(const vectornf_view_t& view)
+{
+	return *this;
+}
+
+vector1f&
+vector1f::operator+=(const vectornf_const_view_t& view)
+{
+	return *this;
+}
 
 vector1f& vector1f::operator-=(float value)
 {
@@ -488,9 +482,12 @@ bool vector1f::operator!=(const vector1f& data) const noexcept
 #endif
 }
 
-float vector1f::operator[](unsigned int index) const
+float vector1f::operator[](math_id_t index) const
 {
 	KOTEK_ASSERT(index == 0, "out of range");
+
+	if (index > 0)
+		index = 0;
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	float const* p_array =
@@ -502,9 +499,12 @@ float vector1f::operator[](unsigned int index) const
 #endif
 }
 
-float& vector1f::operator[](unsigned int index)
+float& vector1f::operator[](math_id_t index)
 {
 	KOTEK_ASSERT(index == 0, "out of range");
+
+	if (index > 0)
+		index = 0;
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	float* p_array = reinterpret_cast<float*>(&this->m_base);
@@ -582,6 +582,30 @@ base_vec1_t& vector1f::Get_Base(void) noexcept
 const base_vec1_t& vector1f::Get_Base(void) const noexcept
 {
 	return this->m_base;
+}
+
+float vector1f::e(math_id_t column_id, math_id_t row_id)
+	const noexcept
+{
+	return this->operator[](row_id);
+}
+
+float&
+vector1f::e(math_id_t column_id, math_id_t row_id) noexcept
+{
+	return this->operator[](row_id);
+}
+
+vector1f&
+vector1f::operator-=(const matrixnf_const_view_t& view)
+{
+	return *this;
+}
+
+vector1f&
+vector1f::operator-=(const matrixnf_view_t& view)
+{
+	return *this;
 }
 
 KOTEK_END_NAMESPACE_MATH
