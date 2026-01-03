@@ -18,7 +18,9 @@ struct matrixnf_view_t
 	e(math_id_t column_id, math_id_t row_id) const noexcept;
 	float& e(math_id_t column_id, math_id_t row_id) noexcept;
 
-	vectornf_view_t c(math_id_t column_id) const noexcept;
+	vectornf_view_t c(math_id_t column_id) noexcept;
+	vectornf_const_view_t c(math_id_t column_id) const noexcept;
+
 
 	void set(float* p_data, math_id_t element_count) noexcept;
 	void

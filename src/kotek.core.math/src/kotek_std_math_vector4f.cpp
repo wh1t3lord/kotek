@@ -1,17 +1,15 @@
 #include "../include/kotek_std_math_vector4f.h"
 
-#include "../include/kotek_std_math_matrix1f_view.h"
-#include "../include/kotek_std_math_matrix2f_view.h"
-#include "../include/kotek_std_math_matrix3f_view.h"
-#include "../include/kotek_std_math_matrix4f_view.h"
-#include "../include/kotek_std_math_matrix1f_const_view.h"
-#include "../include/kotek_std_math_matrix2f_const_view.h"
-#include "../include/kotek_std_math_matrix3f_const_view.h"
-#include "../include/kotek_std_math_matrix4f_const_view.h"
+#include "../include/kotek_std_math_vectornf_view.h"
+#include "../include/kotek_std_math_vectornf_const_view.h"
+#include "../include/kotek_std_math_matrixnf_view.h"
+#include "../include/kotek_std_math_matrixnf_const_view.h"
 
 #include "../include/kotek_std_math_vector1f.h"
 #include "../include/kotek_std_math_vector2f.h"
 #include "../include/kotek_std_math_vector3f.h"
+
+#include "../include/kotek_std_math_functions_vector.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
@@ -56,155 +54,71 @@ vector4f::vector4f(const float* p_arr4, unsigned char size) :
 	KOTEK_ASSERT(size > 0 && size <= 4, "pass a valid size!");
 }
 
-vector4f::vector4f(const matrix4f_view_t& view) :
-	m_base(view.x(), view.y(), view.z(), view.w())
-{
-}
-
-vector4f::vector4f(const matrix3f_view_t& view) :
-	m_base(view.x(), view.y(), view.z(), 0.0f)
-{
-}
-
-vector4f::vector4f(const matrix2f_view_t& view) :
-	m_base(view.x(), view.y(), 0.0f, 0.0f)
-{
-}
-
-vector4f::vector4f(const matrix1f_view_t& view) :
-	m_base(view.x(), 0.0f, 0.0f, 0.0f)
-{
-}
-
-vector4f::vector4f(const matrix3f_view_t& view, float w) :
-	m_base(view.x(), view.y(), view.z(), w)
-{
-}
-
-vector4f::vector4f(
-	const matrix2f_view_t& view, float z, float w
-) : m_base(view.x(), view.y(), z, w)
-{
-}
-
-vector4f::vector4f(
-	const matrix1f_view_t& view, float y, float z, float w
-) : m_base(view.x(), y, z, w)
-{
-}
-
-vector4f::vector4f(
-	const matrix1f_view_t& view, float y, float z
-) : m_base(view.x(), y, z, 0.0f)
-{
-}
-
-vector4f::vector4f(const matrix1f_view_t& view, float y) :
-	m_base(view.x(), y, 0.0f, 0.0f)
-{
-}
-
-vector4f::vector4f(const matrix2f_view_t& view, float z) :
-	m_base(view.x(), view.y(), z, 0.0f)
-{
-}
-
-vector4f::vector4f(const matrix1f_const_view_t& view) :
-	m_base(view.x(), 0.0f, 0.0f, 0.0f)
-{
-}
-
-vector4f::vector4f(const matrix1f_const_view_t& view, float y) :
-	m_base(view.x(), y, 0.0f, 0.0f)
-{
-}
-
-vector4f::vector4f(
-	const matrix1f_const_view_t& view, float y, float z
-) : m_base(view.x(), y, z, 0.0f)
-{
-}
-
-vector4f::vector4f(
-	const matrix1f_const_view_t& view, float y, float z, float w
-) : m_base(view.x(), y, z, w)
-{
-}
-
-vector4f::vector4f(const matrix2f_const_view_t& view) :
-	m_base(view.x(), view.y(), 0.0f, 0.0f)
-{
-}
-
-vector4f::vector4f(const matrix2f_const_view_t& view, float z) :
-	m_base(view.x(), view.y(), z, 0.0f)
-{
-}
-
-vector4f::vector4f(
-	const matrix2f_const_view_t& view, float z, float w
-) : m_base(view.x(), view.y(), z, w)
-{
-}
-
-vector4f::vector4f(const matrix3f_const_view_t& view) :
-	m_base(view.x(), view.y(), view.z(), 0.0f)
-{
-}
-
-vector4f::vector4f(const matrix3f_const_view_t& view, float w) :
-	m_base(view.x(), view.y(), view.z(), w)
-{
-}
-
-vector4f::vector4f(const matrix4f_const_view_t& view) :
-	m_base(view.x(), view.y(), view.z(), view.w())
-{
-}
-
 vector4f::vector4f(const vector1f& data) :
-	m_base(data.x(), 0.0f, 0.0f, 0.0f)
+	m_base(get_math_component_x(data), 0.0f, 0.0f, 0.0f)
 {
 }
 
 vector4f::vector4f(const vector1f& data, float y) :
-	m_base(data.x(), y, 0.0f, 0.0f)
+	m_base(get_math_component_x(data), y, 0.0f, 0.0f)
 {
 }
 
 vector4f::vector4f(const vector1f& data, float y, float z) :
-	m_base(data.x(), y, z, 0.0f)
+	m_base(get_math_component_x(data), y, z, 0.0f)
 {
 }
 
 vector4f::vector4f(
 	const vector1f& data, float y, float z, float w
-) : m_base(data.x(), y, z, w)
+) : m_base(get_math_component_x(data), y, z, w)
 {
 }
 
 vector4f::vector4f(const vector2f& data) :
-	m_base(data.x(), data.y(), 0.0f, 0.0f)
+	m_base(
+		get_math_component_x(data),
+		get_math_component_y(data),
+		0.0f,
+		0.0f
+	)
 {
 }
 
 vector4f::vector4f(const vector2f& data, float z) :
-	m_base(data.x(), data.y(), z, 0.0f)
+	m_base(
+		get_math_component_x(data),
+		get_math_component_y(data),
+		z,
+		0.0f
+	)
 {
 }
 
 vector4f::vector4f(const vector2f& data, float z, float w) :
-	m_base(data.x(), data.y(), z, w)
+	m_base(
+		get_math_component_x(data), get_math_component_y(data), z, w
+	)
 {
 }
 
 vector4f::vector4f(const vector3f& data) :
-	m_base(data.x(), data.y(), data.z(), 0.0f)
+	m_base(
+		get_math_component_x(data),
+		get_math_component_y(data),
+		get_math_component_z(data),
+		0.0f
+	)
 {
 }
 
 vector4f::vector4f(const vector3f& data, float w) :
-	m_base(data.x(), data.y(), data.z(), w)
+	m_base(
+		get_math_component_x(data),
+		get_math_component_y(data),
+		get_math_component_z(data),
+		w
+	)
 {
 }
 
@@ -228,43 +142,6 @@ vector4f& vector4f::operator=(const vector4f& data) noexcept
 	return *this;
 }
 
-vector4f& vector4f::operator=(const matrix4f_view_t& data
-) noexcept
-{
-	this->m_base.x = data.x();
-	this->m_base.y = data.y();
-	this->m_base.z = data.z();
-	this->m_base.w = data.w();
-
-	return *this;
-}
-
-vector4f& vector4f::operator=(const matrix3f_view_t& data
-) noexcept
-{
-	this->m_base.x = data.x();
-	this->m_base.y = data.y();
-	this->m_base.z = data.z();
-
-	return *this;
-}
-
-vector4f& vector4f::operator=(const matrix2f_view_t& data
-) noexcept
-{
-	this->m_base.x = data.x();
-	this->m_base.y = data.y();
-
-	return *this;
-}
-
-vector4f& vector4f::operator=(const matrix1f_view_t& data
-) noexcept
-{
-	this->m_base.x = data.x();
-	return *this;
-}
-
 vector4f& vector4f::operator+=(const vector4f& data) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -277,70 +154,6 @@ vector4f& vector4f::operator+=(const vector4f& data) noexcept
 	this->m_base += data.m_base;
 #endif
 	return *this;
-}
-
-vector4f& vector4f::operator+=(const matrix4f_view_t& data
-) noexcept
-{
-	return this->operator+=(
-		base_vec4_t(data.x(), data.y(), data.z(), data.w())
-	);
-}
-
-vector4f& vector4f::operator+=(const matrix3f_view_t& data
-) noexcept
-{
-	return this->operator+=(
-		base_vec4_t(data.x(), data.y(), data.z(), 0.0f)
-	);
-}
-
-vector4f& vector4f::operator+=(const matrix2f_view_t& data
-) noexcept
-{
-	return this->operator+=(
-		base_vec4_t(data.x(), data.y(), 0.0f, 0.0f)
-	);
-}
-
-vector4f& vector4f::operator+=(const matrix1f_view_t& data
-) noexcept
-{
-	return this->operator+=(
-		base_vec4_t(data.x(), 0.0f, 0.0f, 0.0f)
-	);
-}
-
-vector4f& vector4f::operator+=(const matrix4f_const_view_t& data
-) noexcept
-{
-	return this->operator+=(
-		base_vec4_t(data.x(), data.y(), data.z(), data.w())
-	);
-}
-
-vector4f& vector4f::operator+=(const matrix3f_const_view_t& data
-) noexcept
-{
-	return this->operator+=(
-		base_vec4_t(data.x(), data.y(), data.z(), 0.0f)
-	);
-}
-
-vector4f& vector4f::operator+=(const matrix2f_const_view_t& data
-) noexcept
-{
-	return this->operator+=(
-		base_vec4_t(data.x(), data.y(), 0.0f, 0.0f)
-	);
-}
-
-vector4f& vector4f::operator+=(const matrix1f_const_view_t& data
-) noexcept
-{
-	return this->operator+=(
-		base_vec4_t(data.x(), 0.0f, 0.0f, 0.0f)
-	);
 }
 
 vector4f& vector4f::operator+=(const base_vec4_t& data) noexcept
@@ -371,70 +184,6 @@ vector4f& vector4f::operator-=(const vector4f& data) noexcept
 	this->m_base -= data.m_base;
 #endif
 	return *this;
-}
-
-vector4f& vector4f::operator-=(const matrix4f_view_t& data
-) noexcept
-{
-	return this->operator-=(
-		base_vec4_t(data.x(), data.y(), data.z(), data.w())
-	);
-}
-
-vector4f& vector4f::operator-=(const matrix3f_view_t& data
-) noexcept
-{
-	return this->operator-=(
-		base_vec4_t(data.x(), data.y(), data.z(), 0.0f)
-	);
-}
-
-vector4f& vector4f::operator-=(const matrix2f_view_t& data
-) noexcept
-{
-	return this->operator-=(
-		base_vec4_t(data.x(), data.y(), 0.0f, 0.0f)
-	);
-}
-
-vector4f& vector4f::operator-=(const matrix1f_view_t& data
-) noexcept
-{
-	return this->operator-=(
-		base_vec4_t(data.x(), 0.0f, 0.0f, 0.0f)
-	);
-}
-
-vector4f& vector4f::operator-=(const matrix4f_const_view_t& data
-) noexcept
-{
-	return this->operator-=(
-		base_vec4_t(data.x(), data.y(), data.z(), data.w())
-	);
-}
-
-vector4f& vector4f::operator-=(const matrix3f_const_view_t& data
-) noexcept
-{
-	return this->operator-=(
-		base_vec4_t(data.x(), data.y(), data.z(), 0.0f)
-	);
-}
-
-vector4f& vector4f::operator-=(const matrix2f_const_view_t& data
-) noexcept
-{
-	return this->operator-=(
-		base_vec4_t(data.x(), data.y(), 0.0f, 0.0f)
-	);
-}
-
-vector4f& vector4f::operator-=(const matrix1f_const_view_t& data
-) noexcept
-{
-	return this->operator-=(
-		base_vec4_t(data.x(), 0.0f, 0.0f, 0.0f)
-	);
 }
 
 vector4f& vector4f::operator-=(const base_vec4_t& data) noexcept
@@ -468,70 +217,6 @@ vector4f& vector4f::operator*=(const vector4f& data) noexcept
 	this->m_base *= data.m_base;
 #endif
 	return *this;
-}
-
-vector4f& vector4f::operator*=(const matrix4f_view_t& data
-) noexcept
-{
-	return this->operator*=(
-		base_vec4_t(data.x(), data.y(), data.z(), data.w())
-	);
-}
-
-vector4f& vector4f::operator*=(const matrix3f_view_t& data
-) noexcept
-{
-	return this->operator*=(
-		base_vec4_t(data.x(), data.y(), data.z(), 1.0f)
-	);
-}
-
-vector4f& vector4f::operator*=(const matrix2f_view_t& data
-) noexcept
-{
-	return this->operator*=(
-		base_vec4_t(data.x(), data.y(), 1.0f, 1.0f)
-	);
-}
-
-vector4f& vector4f::operator*=(const matrix1f_view_t& data
-) noexcept
-{
-	return this->operator*=(
-		base_vec4_t(data.x(), 1.0f, 1.0f, 1.0f)
-	);
-}
-
-vector4f& vector4f::operator*=(const matrix4f_const_view_t& data
-) noexcept
-{
-	return this->operator*=(
-		base_vec4_t(data.x(), data.y(), data.z(), data.w())
-	);
-}
-
-vector4f& vector4f::operator*=(const matrix3f_const_view_t& data
-) noexcept
-{
-	return this->operator*=(
-		base_vec4_t(data.x(), data.y(), data.z(), 1.0f)
-	);
-}
-
-vector4f& vector4f::operator*=(const matrix2f_const_view_t& data
-) noexcept
-{
-	return this->operator*=(
-		base_vec4_t(data.x(), data.y(), 1.0f, 1.0f)
-	);
-}
-
-vector4f& vector4f::operator*=(const matrix1f_const_view_t& data
-) noexcept
-{
-	return this->operator*=(
-		base_vec4_t(data.x(), 1.0f, 1.0f, 1.0f)
-	);
 }
 
 vector4f& vector4f::operator*=(const base_vec4_t& data) noexcept
@@ -578,70 +263,6 @@ vector4f& vector4f::operator/=(const vector4f& data) noexcept
 	this->m_base /= data.m_base;
 #endif
 	return *this;
-}
-
-vector4f& vector4f::operator/=(const matrix4f_view_t& data
-) noexcept
-{
-	return this->operator/=(
-		base_vec4_t(data.x(), data.y(), data.z(), data.w())
-	);
-}
-
-vector4f& vector4f::operator/=(const matrix3f_view_t& data
-) noexcept
-{
-	return this->operator/=(
-		base_vec4_t(data.x(), data.y(), data.z(), 1.0f)
-	);
-}
-
-vector4f& vector4f::operator/=(const matrix2f_view_t& data
-) noexcept
-{
-	return this->operator/=(
-		base_vec4_t(data.x(), data.y(), 1.0f, 1.0f)
-	);
-}
-
-vector4f& vector4f::operator/=(const matrix1f_view_t& data
-) noexcept
-{
-	return this->operator/=(
-		base_vec4_t(data.x(), 1.0f, 1.0f, 1.0f)
-	);
-}
-
-vector4f& vector4f::operator/=(const matrix4f_const_view_t& data
-) noexcept
-{
-	return this->operator/=(
-		base_vec4_t(data.x(), data.y(), data.z(), data.w())
-	);
-}
-
-vector4f& vector4f::operator/=(const matrix3f_const_view_t& data
-) noexcept
-{
-	return this->operator/=(
-		base_vec4_t(data.x(), data.y(), data.z(), 1.0f)
-	);
-}
-
-vector4f& vector4f::operator/=(const matrix2f_const_view_t& data
-) noexcept
-{
-	return this->operator/=(
-		base_vec4_t(data.x(), data.y(), 1.0f, 1.0f)
-	);
-}
-
-vector4f& vector4f::operator/=(const matrix1f_const_view_t& data
-) noexcept
-{
-	return this->operator/=(
-		base_vec4_t(data.x(), 1.0f, 1.0f, 1.0f)
-	);
 }
 
 vector4f& vector4f::operator/=(const base_vec4_t& data) noexcept
@@ -774,40 +395,6 @@ vector4f::operator DirectX::XMVECTOR() const noexcept
 }
 #endif
 
-float vector4f::x(void) const noexcept
-{
-	return this->m_base.x;
-}
-float vector4f::y(void) const noexcept
-{
-	return this->m_base.y;
-}
-float vector4f::z(void) const noexcept
-{
-	return this->m_base.z;
-}
-float vector4f::w(void) const noexcept
-{
-	return this->m_base.w;
-}
-
-float& vector4f::x(void) noexcept
-{
-	return this->m_base.x;
-}
-float& vector4f::y(void) noexcept
-{
-	return this->m_base.y;
-}
-float& vector4f::z(void) noexcept
-{
-	return this->m_base.z;
-}
-float& vector4f::w(void) noexcept
-{
-	return this->m_base.w;
-}
-
 const float* vector4f::data(void) const noexcept
 {
 	return &this->m_base.x;
@@ -839,6 +426,29 @@ base_vec4_t& vector4f::Get_Base(void) noexcept
 const base_vec4_t& vector4f::Get_Base(void) const noexcept
 {
 	return this->m_base;
+}
+
+float vector4f::e(math_id_t column_id, math_id_t row_id)
+	const noexcept
+{
+	return this->operator[](row_id);
+}
+
+float&
+vector4f::e(math_id_t column_id, math_id_t row_id) noexcept
+{
+	return this->operator[](row_id);
+}
+
+vectornf_view_t vector4f::c(math_id_t column_id) noexcept
+{
+	return vectornf_view_t(this->data(), 4);
+}
+
+vectornf_const_view_t vector4f::c(math_id_t column_id
+) const noexcept
+{
+	return vectornf_const_view_t(this->data(), 4);
 }
 
 KOTEK_END_NAMESPACE_MATH

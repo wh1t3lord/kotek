@@ -1,17 +1,15 @@
 #include "../include/kotek_std_math_vector2f.h"
 
-#include "../include/kotek_std_math_matrix1f_view.h"
-#include "../include/kotek_std_math_matrix2f_view.h"
-#include "../include/kotek_std_math_matrix3f_view.h"
-#include "../include/kotek_std_math_matrix4f_view.h"
-#include "../include/kotek_std_math_matrix1f_const_view.h"
-#include "../include/kotek_std_math_matrix2f_const_view.h"
-#include "../include/kotek_std_math_matrix3f_const_view.h"
-#include "../include/kotek_std_math_matrix4f_const_view.h"
+#include "../include/kotek_std_math_vectornf_view.h"
+#include "../include/kotek_std_math_vectornf_const_view.h"
+#include "../include/kotek_std_math_matrixnf_view.h"
+#include "../include/kotek_std_math_matrixnf_const_view.h"
 
 #include "../include/kotek_std_math_vector1f.h"
 #include "../include/kotek_std_math_vector3f.h"
 #include "../include/kotek_std_math_vector4f.h"
+
+#include "../include/kotek_std_math_functions_vector.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
@@ -55,62 +53,16 @@ vector2f::vector2f(const float* p_arr2, unsigned char size) :
 	}
 }
 
-vector2f::vector2f(const matrix4f_view_t& view) :
-	m_base(view.x(), view.y())
-{
-}
-vector2f::vector2f(const matrix3f_view_t& view) :
-	m_base(view.x(), view.y())
-{
-}
-vector2f::vector2f(const matrix2f_view_t& view) :
-	m_base(view.x(), view.y())
-{
-}
-vector2f::vector2f(const matrix1f_view_t& view) :
-	m_base(view.x(), 0.0f)
-{
-}
-
-vector2f::vector2f(const matrix1f_view_t& view, float y) :
-	m_base(view.x(), y)
-{
-}
-
-vector2f::vector2f(const matrix4f_const_view_t& view) :
-	m_base(view.x(), view.y())
-{
-}
-vector2f::vector2f(const matrix3f_const_view_t& view) :
-	m_base(view.x(), view.y())
-{
-}
-vector2f::vector2f(const matrix2f_const_view_t& view) :
-	m_base(view.x(), view.y())
-{
-}
-vector2f::vector2f(const matrix1f_const_view_t& view) :
-	m_base(view.x(), 0.0f)
-{
-}
-
-vector2f::vector2f(const matrix1f_const_view_t& view, float y) :
-	m_base(view.x(), y)
-{
-}
-
-vector2f::vector2f(const vector1f& data) :
-	m_base(data.x(), 0.0f)
+vector2f::vector2f(const vector1f& data) : m_base(x(data), 0.0f)
 {
 }
 
 vector2f::vector2f(const vector1f& data, float y) :
-	m_base(data.x(), y)
+	m_base(get_component_x(data), y)
 {
 }
 
-vector2f::vector2f(const vector3f& data) :
-	m_base(data.x(), data.y())
+vector2f::vector2f(const vector3f& data) : m_base(get_component_x(data), data.y())
 {
 }
 
@@ -154,54 +106,6 @@ vector2f& vector2f::operator+=(const vector2f& data) noexcept
 	return *this;
 }
 
-vector2f& vector2f::operator+=(const matrix4f_view_t& data
-) noexcept
-{
-	return this->operator+=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator+=(const matrix3f_view_t& data
-) noexcept
-{
-	return this->operator+=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator+=(const matrix2f_view_t& data
-) noexcept
-{
-	return this->operator+=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator+=(const matrix1f_view_t& data
-) noexcept
-{
-	return this->operator+=(base_vec2_t(data.x(), 0.0f));
-}
-
-vector2f& vector2f::operator+=(const matrix4f_const_view_t& data
-) noexcept
-{
-	return this->operator+=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator+=(const matrix3f_const_view_t& data
-) noexcept
-{
-	return this->operator+=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator+=(const matrix2f_const_view_t& data
-) noexcept
-{
-	return this->operator+=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator+=(const matrix1f_const_view_t& data
-) noexcept
-{
-	return this->operator+=(base_vec2_t(data.x(), 0.0f));
-}
-
 vector2f& vector2f::operator+=(const base_vec2_t& data) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -230,54 +134,6 @@ vector2f& vector2f::operator-=(const vector2f& data) noexcept
 	this->m_base -= data.m_base;
 #endif
 	return *this;
-}
-
-vector2f& vector2f::operator-=(const matrix4f_view_t& data
-) noexcept
-{
-	return this->operator-=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator-=(const matrix3f_view_t& data
-) noexcept
-{
-	return this->operator-=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator-=(const matrix2f_view_t& data
-) noexcept
-{
-	return this->operator-=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator-=(const matrix1f_view_t& data
-) noexcept
-{
-	return this->operator-=(base_vec2_t(data.x(), 0.0f));
-}
-
-vector2f& vector2f::operator-=(const matrix4f_const_view_t& data
-) noexcept
-{
-	return this->operator-=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator-=(const matrix3f_const_view_t& data
-) noexcept
-{
-	return this->operator-=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator-=(const matrix2f_const_view_t& data
-) noexcept
-{
-	return this->operator-=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator-=(const matrix1f_const_view_t& data
-) noexcept
-{
-	return this->operator-=(base_vec2_t(data.x(), 0.0f));
 }
 
 vector2f& vector2f::operator-=(const base_vec2_t& data) noexcept
@@ -313,54 +169,6 @@ vector2f& vector2f::operator*=(const vector2f& data) noexcept
 	return *this;
 }
 
-vector2f& vector2f::operator*=(const matrix4f_view_t& data
-) noexcept
-{
-	return this->operator*=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator*=(const matrix3f_view_t& data
-) noexcept
-{
-	return this->operator*=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator*=(const matrix2f_view_t& data
-) noexcept
-{
-	return this->operator*=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator*=(const matrix1f_view_t& data
-) noexcept
-{
-	return this->operator*=(base_vec2_t(data.x(), 1.0f));
-}
-
-vector2f& vector2f::operator*=(const matrix4f_const_view_t& data
-) noexcept
-{
-	return this->operator*=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator*=(const matrix3f_const_view_t& data
-) noexcept
-{
-	return this->operator*=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator*=(const matrix2f_const_view_t& data
-) noexcept
-{
-	return this->operator*=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator*=(const matrix1f_const_view_t& data
-) noexcept
-{
-	return this->operator*=(base_vec2_t(data.x(), 1.0f));
-}
-
 vector2f& vector2f::operator*=(const base_vec2_t& data) noexcept
 {
 	return this->operator*=(vector2f(data));
@@ -393,54 +201,6 @@ vector2f& vector2f::operator/=(const vector2f& data) noexcept
 	this->m_base /= data.m_base;
 #endif
 	return *this;
-}
-
-vector2f& vector2f::operator/=(const matrix4f_view_t& data
-) noexcept
-{
-	return this->operator/=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator/=(const matrix3f_view_t& data
-) noexcept
-{
-	return this->operator/=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator/=(const matrix2f_view_t& data
-) noexcept
-{
-	return this->operator/=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator/=(const matrix1f_view_t& data
-) noexcept
-{
-	return this->operator/=(base_vec2_t(data.x(), 1.0f));
-}
-
-vector2f& vector2f::operator/=(const matrix4f_const_view_t& data
-) noexcept
-{
-	return this->operator/=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator/=(const matrix3f_const_view_t& data
-) noexcept
-{
-	return this->operator/=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator/=(const matrix2f_const_view_t& data
-) noexcept
-{
-	return this->operator/=(base_vec2_t(data.x(), data.y()));
-}
-
-vector2f& vector2f::operator/=(const matrix1f_const_view_t& data
-) noexcept
-{
-	return this->operator/=(base_vec2_t(data.x(), 1.0f));
 }
 
 vector2f& vector2f::operator/=(const base_vec2_t& data) noexcept
@@ -561,24 +321,6 @@ vector2f::operator DirectX::XMVECTOR() const noexcept
 }
 #endif
 
-float vector2f::x(void) const noexcept
-{
-	return this->m_base.x;
-}
-float vector2f::y(void) const noexcept
-{
-	return this->m_base.y;
-}
-
-float& vector2f::x(void) noexcept
-{
-	return this->m_base.x;
-}
-float& vector2f::y(void) noexcept
-{
-	return this->m_base.y;
-}
-
 const float* vector2f::data(void) const noexcept
 {
 	return &this->m_base.x;
@@ -608,6 +350,30 @@ base_vec2_t& vector2f::Get_Base(void) noexcept
 const base_vec2_t& vector2f::Get_Base(void) const noexcept
 {
 	return this->m_base;
+}
+
+float vector2f::e(math_id_t column_id, math_id_t row_id)
+	const noexcept
+{
+	return this->operator[](row_id);
+}
+
+float&
+vector2f::e(math_id_t column_id, math_id_t row_id) noexcept
+{
+	return this->operator[](row_id);
+}
+
+vectornf_view_t
+vector2f::c(math_id_t column_id) noexcept
+{
+	return vectornf_view_t(this->data(), 2);
+}
+
+vectornf_const_view_t vector2f::c(math_id_t column_id
+) const noexcept
+{
+	return vectornf_const_view_t(this->data(), 2);
 }
 
 KOTEK_END_NAMESPACE_MATH

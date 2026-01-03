@@ -12,28 +12,127 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
 
-inline float x(const vector1f& vec) 
+/*
+ * FLOAT definitions
+ */
+
+inline float get_math_component_x(const vector1f& vec)
 {
 	return vec.e(0, 0);
 }
 
-inline float& x(vector1f& vec) 
+inline float& get_math_component_x(vector1f& vec)
 {
 	return vec.e(0, 0);
 }
 
-inline float x(const vectornf_view_t& view) 
+inline float get_math_component_x(const vector2f& vec)
+{
+	return vec.e(0, 0);
+}
+
+inline float& get_math_component_x(vector2f& vec)
+{
+	return vec.e(0, 0);
+}
+
+inline float get_math_component_x(const vector3f& vec)
+{
+	return vec.e(0, 0);
+}
+
+inline float& get_math_component_x(vector3f& vec)
+{
+	return vec.e(0, 0);
+}
+
+inline float get_math_component_x(const vector4f& vec) 
+{
+	return vec.e(0, 0);
+}
+
+inline float& get_math_component_x(vector4f& vec) 
+{
+	return vec.e(0, 0);
+}
+
+inline float get_math_component_x(const vectornf_view_t& view)
 {
 	return view.e(0, 0);
 }
 
-inline float& x(vectornf_view_t& view) 
+inline float& get_math_component_x(vectornf_view_t& view)
 {
 	return view.e(0, 0);
 }
 
+inline float
+get_math_component_x(const vectornf_const_view_t& view)
+{
+	return view.c(0, 0);
+}
 
-inline float const* value_ptr(const vector1f& data)
+inline float get_math_component_y(const vector2f& vec)
+{
+	return vec.e(0, 1);
+}
+
+inline float& get_math_component_y(vector2f& vec)
+{
+	return vec.e(0, 1);
+}
+
+inline float get_math_component_y(const vectornf_view_t& view)
+{
+	return view.e(0, 1);
+}
+
+inline float& get_math_component_y(vectornf_view_t& view)
+{
+	return view.e(0, 1);
+}
+
+inline float get_math_component_z(const vector3f& vec)
+{
+	return vec.e(0, 2);
+}
+
+inline float& get_math_component_z(vector3f& vec)
+{
+	return vec.e(0, 2);
+}
+
+inline float get_math_component_z(const vectornf_view_t& view)
+{
+	return view.e(0, 2);
+}
+
+inline float& get_math_component_z(vectornf_view_t& view)
+{
+	return view.e(0, 2);
+}
+
+inline float get_math_component_w(const vector4f& vec)
+{
+	return vec.e(0, 3);
+}
+
+inline float& get_math_component_w(vector4f& vec)
+{
+	return vec.e(0, 3);
+}
+
+inline float get_math_component_w(const vectornf_view_t& view)
+{
+	return view.e(0, 3);
+}
+
+inline float& get_math_component_w(vectornf_view_t& view)
+{
+	return view.e(0, 3);
+}
+
+inline float const* get_math_value_ptr(const vector1f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return &data.Get_Base();
@@ -42,7 +141,7 @@ inline float const* value_ptr(const vector1f& data)
 #endif
 }
 
-inline float const* value_ptr(const vector2f& data)
+inline float const* get_math_value_ptr(const vector2f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return reinterpret_cast<float const*>(&data.Get_Base());
@@ -51,7 +150,7 @@ inline float const* value_ptr(const vector2f& data)
 #endif
 }
 
-inline float const* value_ptr(const vector3f& data)
+inline float const* get_math_value_ptr(const vector3f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return reinterpret_cast<float const*>(&data.Get_Base());
@@ -60,7 +159,7 @@ inline float const* value_ptr(const vector3f& data)
 #endif
 }
 
-inline float const* value_ptr(const vector4f& data)
+inline float const* get_math_value_ptr(const vector4f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return reinterpret_cast<float const*>(&data.Get_Base());
@@ -69,15 +168,17 @@ inline float const* value_ptr(const vector4f& data)
 #endif
 }
 
-inline float length(const vector1f& data)
+inline float get_math_length(const vector1f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	return sqrt(data.x() * data.x());
+	float com_x = get_math_component_x(data);
+	return sqrt(com_x * com_x);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::length(data.Get_Base());
 #endif
 }
 
-inline float length(const vector2f& data)
+inline float get_math_length(const vector2f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	float result{};
@@ -88,11 +189,11 @@ inline float length(const vector2f& data)
 
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+	return glm::length(data.Get_Base());
 #endif
 }
 
-inline float length(const vector3f& data)
+inline float get_math_length(const vector3f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	float result{};
@@ -103,11 +204,11 @@ inline float length(const vector3f& data)
 
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+	return glm::length(data.Get_Base());
 #endif
 }
 
-inline float length(const vector4f& data)
+inline float get_math_length(const vector4f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	float result{};
@@ -118,20 +219,20 @@ inline float length(const vector4f& data)
 
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+	return glm::length(data.Get_Base());
 #endif
 }
 
-inline float length_squared(const vector1f& data)
+inline float get_math_length_squared(const vector1f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return data.x() * data.x();
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+	return glm::length2(data.Get_Base());
 #endif
 }
 
-inline float length_squared(const vector2f& data)
+inline float get_math_length_squared(const vector2f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	float result{};
@@ -139,11 +240,11 @@ inline float length_squared(const vector2f& data)
 	DirectX::XMStoreFloat(&result, length_sq);
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+	return glm::length2(data.Get_Base());
 #endif
 }
 
-inline float length_squared(const vector3f& data)
+inline float get_math_length_squared(const vector3f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	float result{};
@@ -151,10 +252,11 @@ inline float length_squared(const vector3f& data)
 	DirectX::XMStoreFloat(&result, length_sq);
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::length2(data.Get_Base());
 #endif
 }
 
-inline float length_squared(const vector4f& data)
+inline float get_math_length_squared(const vector4f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	float result{};
@@ -162,56 +264,23 @@ inline float length_squared(const vector4f& data)
 	DirectX::XMStoreFloat(&result, length_sq);
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::length2(data.Get_Base());
 #endif
 }
 
-inline float distance_squared(const vector1f& from, const vector1f& to)
+inline float
+get_math_dot(const vector1f& left, const vector1f& right)
 {
-	return length_squared((from - to));
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return get_math_component_x(left) *
+		get_math_component_x(right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::dot(left.Get_Base(), right.Get_Base());
+#endif
 }
 
-inline float distance_squared(const vector2f& from, const vector2f& to)
-{
-	return length_squared((from - to));
-}
-
-inline float distance_squared(const vector3f& from, const vector2f& to)
-{
-	vector3f result((from.x() - to.x()), (from.y() - to.y()), from.z());
-	return length_squared(result);
-}
-
-inline float distance_squared(const vector3f& from, const vector3f& to)
-{
-	return length_squared((from - to));
-}
-
-inline float distance_squared(const vector4f& from, const vector2f& to)
-{
-	vector4f result(
-		(from.x() - to.x()), (from.y() - to.y()), from.z(), from.w());
-	return length_squared(result);
-}
-
-inline float distance_squared(const vector4f& from, const vector3f& to)
-{
-	vector4f result((from.x() - to.x()), (from.y() - from.y()),
-		(from.z() - to.z()), from.w());
-
-	return length_squared(result);
-}
-
-inline float distance_squared(const vector4f& from, const vector4f& to)
-{
-	return length_squared((from - to));
-}
-
-inline float dot(const vector1f& left, const vector1f& right)
-{
-	return left.x() * left.x();
-}
-
-inline float dot(const vector2f& left, const vector2f& right)
+inline float
+get_math_dot(const vector2f& left, const vector2f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	auto dot = DirectX::XMVector2Dot(left, right);
@@ -220,35 +289,48 @@ inline float dot(const vector2f& left, const vector2f& right)
 
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+	return glm::dot(left.Get_Base(), right.Get_Base());
 #endif
 }
 
-inline vector2f cross(const vector2f& left, const vector2f& right)
+inline vector2f
+get_math_cross(const vector2f& left, const vector2f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector2Cross(left, right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return vector3f(glm::cross(
+		vector3f(left).Get_Base(), vector3f(right).Get_Base()
+	));
 #endif
 }
 
-inline vector2f cross(const vector2f& left, const vector3f& right)
+inline vector2f
+get_math_cross(const vector2f& left, const vector3f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector2Cross(left, right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return vector3f(
+		glm::cross(vector3f(left).Get_Base(), right.Get_Base())
+	);
 #endif
 }
 
-inline vector2f cross(const vector2f& left, const vector4f& right)
+inline vector2f
+get_math_cross(const vector2f& left, const vector4f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector2Cross(left, right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return vector3f(glm::cross(
+		vector3f(left).Get_Base(), vector3f(right).Get_Base()
+	));
 #endif
 }
 
-inline float dot(const vector3f& left, const vector3f& right)
+inline float
+get_math_dot(const vector3f& left, const vector3f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	auto dot = DirectX::XMVector3Dot(left, right);
@@ -257,27 +339,34 @@ inline float dot(const vector3f& left, const vector3f& right)
 
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+	return glm::dot(left.Get_Base(), right.Get_Base());
 #endif
 }
 
-inline vector3f cross(const vector3f& left, const vector3f& right)
+inline vector3f
+get_math_cross(const vector3f& left, const vector3f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector3Cross(left, right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::cross(left.Get_Base(), right.Get_Base());
 #endif
 }
 
-inline vector3f cross(const vector3f& left, const vector4f& right)
+inline vector3f
+get_math_cross(const vector3f& left, const vector4f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector3Cross(left, right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::cross(
+		left.Get_Base(), vector3f(right).Get_Base()
+	);
 #endif
 }
 
-inline float dot(const vector4f& left, const vector4f& right)
+inline float
+get_math_dot(const vector4f& left, const vector4f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	auto dot = DirectX::XMVector4Dot(left, right);
@@ -286,58 +375,73 @@ inline float dot(const vector4f& left, const vector4f& right)
 
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-
+	return glm::dot(left.Get_Base(), right.Get_Base());
 #endif
 }
 
-inline vector4f cross(const vector4f& left, const vector3f& right)
+inline vector4f
+get_math_cross(const vector4f& left, const vector3f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector3Cross(left, right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return vector3f(
+		glm::cross(vector3f(left).Get_Base(), right.Get_Base())
+	);
 #endif
 }
 
-inline vector4f cross(const vector4f& left, const vector4f& right)
+inline vector4f
+get_math_cross(const vector4f& left, const vector4f& right)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector3Cross(left, right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return vector3f(glm::cross(
+		vector3f(left).Get_Base(), vector3f(right).Get_Base()
+	));
 #endif
 }
 
-inline vector1f normalize(const vector1f& vec)
+inline vector1f get_math_normalize(const vector1f& vec)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return vector1f(1.0f);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::normalize(vec.Get_Base());
 #endif
 }
 
-inline vector2f normalize(const vector2f& vec)
+inline vector2f get_math_normalize(const vector2f& vec)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector2Normalize(vec);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::normalize(vec.Get_Base());
 #endif
 }
 
-inline vector3f normalize(const vector3f& vec)
+inline vector3f get_math_normalize(const vector3f& vec)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector3Normalize(vec);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::normalize(vec.Get_Base());
 #endif
 }
 
-inline vector4f normalize(const vector4f& vec)
+inline vector4f get_math_normalize(const vector4f& vec)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector4Normalize(vec);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::normalize(vec.Get_Base());
 #endif
 }
 
-// double
+/*
+ * DOUBLE definitions
+ */
 
-KOTEK_END_NAMESPACE_MATH KOTEK_END_NAMESPACE_KTK KOTEK_END_NAMESPACE_KOTEK
+KOTEK_END_NAMESPACE_MATH
+KOTEK_END_NAMESPACE_KTK KOTEK_END_NAMESPACE_KOTEK

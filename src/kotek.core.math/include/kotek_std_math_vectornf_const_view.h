@@ -8,6 +8,7 @@ KOTEK_BEGIN_NAMESPACE_MATH
 
 struct vectornf_const_view_t
 {
+	vectornf_const_view_t();
 	vectornf_const_view_t(const float* p_values, math_id_t row_count);
 
 	/// @brief e means element you access element by column and
@@ -51,9 +52,6 @@ private:
 	math_id_t m_row_count;
 	const float* m_p_values;
 };
-
-
-
 
 KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK

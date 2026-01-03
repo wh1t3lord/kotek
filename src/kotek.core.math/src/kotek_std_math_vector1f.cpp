@@ -9,6 +9,8 @@
 #include "../include/kotek_std_math_vector3f.h"
 #include "../include/kotek_std_math_vector4f.h"
 
+#include "../include/kotek_std_math_functions_vector.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
@@ -24,19 +26,29 @@ vector1f::vector1f(float x, float y, float z, float w) :
 }
 
 vector1f::vector1f(float* p_arr1, math_id_t size) :
-	m_base(p_arr1[0])
+	m_base(p_arr1 ? p_arr1[0] : 0.0f)
 {
 }
+
 vector1f::vector1f(const float* p_arr1, math_id_t size) :
-	m_base(p_arr1[0])
+	m_base(p_arr1 ? p_arr1[0] : 0.0f)
 {
 }
 
-vector1f::vector1f(const vector2f& data) : m_base(data.x()) {}
+vector1f::vector1f(const vector2f& data) :
+	m_base(get_math_component_x(data))
+{
+}
 
-vector1f::vector1f(const vector3f& data) : m_base(data.x()) {}
+vector1f::vector1f(const vector3f& data) :
+	m_base(get_math_component_x(data))
+{
+}
 
-vector1f::vector1f(const vector4f& data) : m_base(data.x()) {}
+vector1f::vector1f(const vector4f& data) :
+	m_base(get_math_component_x(data))
+{
+}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -55,11 +67,67 @@ vector1f::vector1f(const vectornf_view_t& view) {}
 
 vector1f::vector1f(const vectornf_const_view_t& view) {}
 
+vector1f::vector1f(const matrix2x2f& data) {}
+
+vector1f::vector1f(const matrix3x3f& data) {}
+
+vector1f::vector1f(const matrix4x4f& data) {}
+
 vector1f& vector1f::operator=(const vector1f& data)
 {
 	this->m_base = data.m_base;
 	return *this;
 }
+
+vector1f& vector1f::operator=(const matrixnf_view_t& data)
+{
+	return this->operator=(
+		vector1f(get_math_component_x(data.c(0)))
+	);
+}
+
+vector1f& vector1f::operator=(const matrixnf_const_view_t& data)
+{
+	return this->operator=(
+		vector1f(get_math_component_x(data.c(0)))
+	);
+}
+
+vector1f& vector1f::operator=(const vectornf_view_t& data)
+{
+	return this->operator=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator=(const vectornf_const_view_t& data)
+{
+	return this->operator=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator=(const vector2f& data)
+{
+	return this->operator=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator=(const vector3f& data)
+{
+	return this->operator=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator=(const vector4f& data)
+{
+	return this->operator=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator=(const matrix2x2f& data) {}
+
+vector1f& vector1f::operator=(const matrix3x3f& data) {}
+
+vector1f& vector1f::operator=(const matrix4x4f& data) {}
 
 vector1f& vector1f::operator+=(float value)
 {
@@ -72,6 +140,7 @@ vector1f& vector1f::operator+=(float value)
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base += value;
 #endif
+
 	return *this;
 }
 
@@ -83,50 +152,6 @@ vector1f& vector1f::operator+=(const vector1f& data)
 	this->m_base += data.m_base;
 #endif
 	return *this;
-}
-
-vector1f& vector1f::operator+=(const matrix4f_view_t& view)
-{
-	return this->operator+=(view.x());
-}
-
-vector1f& vector1f::operator+=(const matrix3f_view_t& view)
-{
-	return this->operator+=(view.x());
-}
-
-vector1f& vector1f::operator+=(const matrix2f_view_t& view)
-{
-	return this->operator+=(view.x());
-}
-
-vector1f& vector1f::operator+=(const matrix1f_view_t& view)
-{
-	return this->operator+=(view.x());
-}
-
-vector1f& vector1f::operator+=(const matrix4f_const_view_t& view
-)
-{
-	return this->operator+=(view.x());
-}
-
-vector1f& vector1f::operator+=(const matrix3f_const_view_t& view
-)
-{
-	return this->operator+=(view.x());
-}
-
-vector1f& vector1f::operator+=(const matrix2f_const_view_t& view
-)
-{
-	return this->operator+=(view.x());
-}
-
-vector1f& vector1f::operator+=(const matrix1f_const_view_t& view
-)
-{
-	return this->operator+=(view.x());
 }
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -142,26 +167,55 @@ vector1f& vector1f::operator+=(const base_vec1_t& data)
 
 vector1f& vector1f::operator+=(const matrixnf_view_t& view)
 {
-	return *this;
+	return this->operator+=(
+		vector1f(get_math_component_x(view.c(0)))
+	);
 }
 
 vector1f& vector1f::operator+=(const matrixnf_const_view_t& view
 )
 {
-	return *this;
+	return this->operator+=(
+		vector1f(get_math_component_x(view.c(0)))
+	);
 }
 
-vector1f&
-vector1f::operator+=(const vectornf_view_t& view)
+vector1f& vector1f::operator+=(const vectornf_view_t& view)
 {
-	return *this;
+	return this->operator+=(vector1f(get_math_component_x(view))
+	);
 }
 
-vector1f&
-vector1f::operator+=(const vectornf_const_view_t& view)
+vector1f& vector1f::operator+=(const vectornf_const_view_t& view
+)
 {
-	return *this;
+	return this->operator+=(vector1f(get_math_component_x(view))
+	);
 }
+
+vector1f& vector1f::operator+=(const vector2f& data)
+{
+	return this->operator+=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator+=(const vector3f& data)
+{
+	return this->operator+=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator+=(const vector4f& data)
+{
+	return this->operator+=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator+=(const matrix2x2f& data) {}
+
+vector1f& vector1f::operator+=(const matrix3x3f& data) {}
+
+vector1f& vector1f::operator+=(const matrix4x4f& data) {}
 
 vector1f& vector1f::operator-=(float value)
 {
@@ -189,50 +243,6 @@ vector1f& vector1f::operator-=(const vector1f& data)
 	return *this;
 }
 
-vector1f& vector1f::operator-=(const matrix4f_view_t& view)
-{
-	return this->operator-=(view.x());
-}
-
-vector1f& vector1f::operator-=(const matrix3f_view_t& view)
-{
-	return this->operator-=(view.x());
-}
-
-vector1f& vector1f::operator-=(const matrix2f_view_t& view)
-{
-	return this->operator-=(view.x());
-}
-
-vector1f& vector1f::operator-=(const matrix1f_view_t& view)
-{
-	return this->operator-=(view.x());
-}
-
-vector1f& vector1f::operator-=(const matrix4f_const_view_t& view
-)
-{
-	return this->operator-=(view.x());
-}
-
-vector1f& vector1f::operator-=(const matrix3f_const_view_t& view
-)
-{
-	return this->operator-=(view.x());
-}
-
-vector1f& vector1f::operator-=(const matrix2f_const_view_t& view
-)
-{
-	return this->operator-=(view.x());
-}
-
-vector1f& vector1f::operator-=(const matrix1f_const_view_t& view
-)
-{
-	return this->operator-=(view.x());
-}
-
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -257,50 +267,6 @@ vector1f& vector1f::operator*=(float value)
 	return *this;
 }
 
-vector1f& vector1f::operator*=(const matrix4f_view_t& view)
-{
-	return this->operator*=(view.x());
-}
-
-vector1f& vector1f::operator*=(const matrix3f_view_t& view)
-{
-	return this->operator*=(view.x());
-}
-
-vector1f& vector1f::operator*=(const matrix2f_view_t& view)
-{
-	return this->operator*=(view.x());
-}
-
-vector1f& vector1f::operator*=(const matrix1f_view_t& view)
-{
-	return this->operator*=(view.x());
-}
-
-vector1f& vector1f::operator*=(const matrix4f_const_view_t& view
-)
-{
-	return this->operator*=(view.x());
-}
-
-vector1f& vector1f::operator*=(const matrix3f_const_view_t& view
-)
-{
-	return this->operator*=(view.x());
-}
-
-vector1f& vector1f::operator*=(const matrix2f_const_view_t& view
-)
-{
-	return this->operator*=(view.x());
-}
-
-vector1f& vector1f::operator*=(const matrix1f_const_view_t& view
-)
-{
-	return this->operator*=(view.x());
-}
-
 vector1f& vector1f::operator*=(const vector1f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -316,6 +282,58 @@ vector1f& vector1f::operator*=(const vector1f& data)
 #endif
 	return *this;
 }
+
+vector1f& vector1f::operator*=(const matrixnf_view_t& view)
+{
+	return this->operator*=(
+		vector1f(get_math_component_x(view.c(0)))
+	);
+}
+
+vector1f& vector1f::operator*=(const matrixnf_const_view_t& view
+)
+{
+	return this->operator*=(
+		vector1f(get_math_component_x(view.c(0)))
+	);
+}
+
+vector1f& vector1f::operator*=(const vectornf_view_t& view)
+{
+	return this->operator*=(vector1f(get_math_component_x(view))
+	);
+}
+
+vector1f& vector1f::operator*=(const vectornf_const_view_t& view
+)
+{
+	return this->operator*=(vector1f(get_math_component_x(view))
+	);
+}
+
+vector1f& vector1f::operator*=(const vector2f& data)
+{
+	return this->operator*=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator*=(const vector3f& data)
+{
+	return this->operator*=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator*=(const vector4f& data)
+{
+	return this->operator*=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator*=(const matrix3x3f& data) {}
+
+vector1f& vector1f::operator*=(const matrix2x2f& data) {}
+
+vector1f& vector1f::operator*=(const matrix4x4f& data) {}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -344,50 +362,6 @@ vector1f& vector1f::operator/=(float value)
 	return *this;
 }
 
-vector1f& vector1f::operator/=(const matrix4f_view_t& view)
-{
-	return this->operator/=(view.x());
-}
-
-vector1f& vector1f::operator/=(const matrix3f_view_t& view)
-{
-	return this->operator/=(view.x());
-}
-
-vector1f& vector1f::operator/=(const matrix2f_view_t& view)
-{
-	return this->operator/=(view.x());
-}
-
-vector1f& vector1f::operator/=(const matrix1f_view_t& view)
-{
-	return this->operator/=(view.x());
-}
-
-vector1f& vector1f::operator/=(const matrix4f_const_view_t& view
-)
-{
-	return this->operator/=(view.x());
-}
-
-vector1f& vector1f::operator/=(const matrix3f_const_view_t& view
-)
-{
-	return this->operator/=(view.x());
-}
-
-vector1f& vector1f::operator/=(const matrix2f_const_view_t& view
-)
-{
-	return this->operator/=(view.x());
-}
-
-vector1f& vector1f::operator/=(const matrix1f_const_view_t& view
-)
-{
-	return this->operator/=(view.x());
-}
-
 vector1f& vector1f::operator/=(const vector1f& data)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -402,6 +376,58 @@ vector1f& vector1f::operator/=(const vector1f& data)
 	this->m_base /= data.m_base;
 #endif
 	return *this;
+}
+
+vector1f& vector1f::operator/=(const matrixnf_view_t& view)
+{
+	return this->operator/=(
+		vector1f(get_math_component_x(view.c(0)))
+	);
+}
+
+vector1f& vector1f::operator/=(const matrixnf_const_view_t& view
+)
+{
+	return this->operator/=(
+		vector1f(get_math_component_x(view.c(0)))
+	);
+}
+
+vector1f& vector1f::operator/=(const vectornf_const_view_t& view
+)
+{
+	return this->operator/=(vector1f(get_math_component_x(view))
+	);
+}
+
+vector1f& vector1f::operator/=(const vectornf_view_t& view)
+{
+	return this->operator/=(vector1f(get_math_component_x(view))
+	);
+}
+
+vector1f& vector1f::operator/=(const matrix2x2f& data) {}
+
+vector1f& vector1f::operator/=(const matrix3x3f& data) {}
+
+vector1f& vector1f::operator/=(const matrix4x4f& data) {}
+
+vector1f& vector1f::operator/=(const vector2f& data)
+{
+	return this->operator/=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator/=(const vector3f& data)
+{
+	return this->operator/=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator/=(const vector4f& data)
+{
+	return this->operator/=(vector1f(get_math_component_x(data))
+	);
 }
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -433,6 +459,66 @@ vector1f& vector1f::operator%=(const vector1f& data) noexcept
 	this->m_base.x = std::fmod(this->m_base.x, data.m_base.x);
 #endif
 	return *this;
+}
+
+vector1f& vector1f::operator%=(const vector2f& data) noexcept
+{
+	return this->operator%=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator%=(const vector3f& data) noexcept
+{
+	return this->operator%=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator%=(const vector4f& data) noexcept
+{
+	return this->operator%=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator%=(const vectornf_view_t& view
+) noexcept
+{
+	return this->operator%=(vector1f(get_math_component_x(view))
+	);
+}
+
+vector1f& vector1f::operator%=(const vectornf_const_view_t& view
+) noexcept
+{
+	return this->operator%=(vector1f(get_math_component_x(view))
+	);
+}
+
+vector1f& vector1f::operator%=(const matrixnf_view_t& view
+) noexcept
+{
+	return this->operator%=(
+		vector1f(get_math_component_x(view.c(0)))
+	);
+}
+
+vector1f& vector1f::operator%=(const matrixnf_const_view_t& view
+) noexcept
+{
+	return this->operator%=(
+		vector1f(get_math_component_x(view.c(0)))
+	);
+}
+
+vector1f& vector1f::operator%=(const matrix2x2f& data) noexcept
+{
+}
+
+vector1f& vector1f::operator%=(const matrix3x3f& data) noexcept
+{
+}
+
+vector1f& vector1f::operator%=(const matrix4x4f& data) noexcept
+{
 }
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -468,6 +554,50 @@ bool vector1f::operator==(const vector1f& data) const noexcept
 #endif
 }
 
+bool vector1f::operator==(const vector2f& data) const noexcept
+{
+}
+
+bool vector1f::operator==(const vector3f& data) const noexcept
+{
+}
+
+bool vector1f::operator==(const vector4f& data) const noexcept
+{
+}
+
+bool vector1f::operator==(const vectornf_view_t& view
+) const noexcept
+{
+}
+
+bool vector1f::operator==(const vectornf_const_view_t& view
+) const noexcept
+{
+}
+
+bool vector1f::operator==(const matrixnf_view_t& view
+) const noexcept
+{
+}
+
+bool vector1f::operator==(const matrixnf_const_view_t& view
+) const noexcept
+{
+}
+
+bool vector1f::operator==(const matrix2x2f& data) const noexcept
+{
+}
+
+bool vector1f::operator==(const matrix3x3f& data) const noexcept
+{
+}
+
+bool vector1f::operator==(const matrix4x4f& data) const noexcept
+{
+}
+
 bool vector1f::operator!=(const vector1f& data) const noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -480,6 +610,50 @@ bool vector1f::operator!=(const vector1f& data) const noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base != data.m_base;
 #endif
+}
+
+bool vector1f::operator!=(const vector2f& data) const noexcept
+{
+}
+
+bool vector1f::operator!=(const vector3f& data) const noexcept
+{
+}
+
+bool vector1f::operator!=(const vector4f& data) const noexcept
+{
+}
+
+bool vector1f::operator!=(const vectornf_view_t& view
+) const noexcept
+{
+}
+
+bool vector1f::operator!=(const vectornf_const_view_t& view
+) const noexcept
+{
+}
+
+bool vector1f::operator!=(const matrixnf_view_t& view
+) const noexcept
+{
+}
+
+bool vector1f::operator!=(const matrixnf_const_view_t& view
+) const noexcept
+{
+}
+
+bool vector1f::operator!=(const matrix2x2f& data) const noexcept
+{
+}
+
+bool vector1f::operator!=(const matrix3x3f& data) const noexcept
+{
+}
+
+bool vector1f::operator!=(const matrix4x4f& data) const noexcept
+{
 }
 
 float vector1f::operator[](math_id_t index) const
@@ -522,24 +696,6 @@ vector1f::operator DirectX::XMVECTOR() const noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 #endif
 
-float vector1f::x(void) const noexcept
-{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	return this->m_base;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-	return this->m_base.x;
-#endif
-}
-
-float& vector1f::x(void) noexcept
-{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	return this->m_base;
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-	return this->m_base.x;
-#endif
-}
-
 const float* vector1f::data(void) const noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -569,6 +725,26 @@ void vector1f::set(float x) noexcept
 #endif
 }
 
+constexpr math_id_t vector1f::size_of(void) noexcept
+{
+	static_assert(
+		sizeof(float[1]) == sizeof(m_base) &&
+		"we gurantee that base type is float[1] by size"
+	);
+	return sizeof(float[1]);
+}
+
+constexpr math_id_t vector1f::get_column_count(void
+) const noexcept
+{
+	return 1;
+}
+
+constexpr math_id_t vector1f::get_row_count(void) const noexcept
+{
+	return 1;
+}
+
 vector1f& vector1f::Set_Base(const base_vec1_t& data) noexcept
 {
 	this->m_base = data;
@@ -596,18 +772,68 @@ vector1f::e(math_id_t column_id, math_id_t row_id) noexcept
 	return this->operator[](row_id);
 }
 
-vector1f&
-vector1f::operator-=(const matrixnf_const_view_t& view)
+vector1f& vector1f::operator-=(const matrixnf_const_view_t& view
+)
 {
-	return *this;
+	return this->operator-=(
+		vector1f(get_math_component_x(view.c(0)))
+	);
 }
 
-vector1f&
-vector1f::operator-=(const matrixnf_view_t& view)
+vector1f& vector1f::operator-=(const matrixnf_view_t& view)
 {
-	return *this;
+	return this->operator-=(
+		vector1f(get_math_component_x(view.c(0)))
+	);
 }
+
+vectornf_view_t vector1f::c(math_id_t column_id) noexcept
+{
+	return vectornf_view_t(this->data(), 1);
+}
+
+vectornf_const_view_t vector1f::c(math_id_t column_id
+) const noexcept
+{
+	return vectornf_const_view_t(this->data(), 1);
+}
+
+vector1f& vector1f::operator-=(const vectornf_view_t& view)
+{
+	return this->operator-=(vector1f(get_math_component_x(view))
+	);
+}
+
+vector1f& vector1f::operator-=(const vectornf_const_view_t& view
+)
+{
+	return this->operator-=(vector1f(get_math_component_x(view))
+	);
+}
+
+vector1f& vector1f::operator-=(const vector2f& data)
+{
+	return this->operator-=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator-=(const vector3f& data)
+{
+	return this->operator-=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator-=(const vector4f& data)
+{
+	return this->operator-=(vector1f(get_math_component_x(data))
+	);
+}
+
+vector1f& vector1f::operator-=(const matrix2x2f& data) {}
+
+vector1f& vector1f::operator-=(const matrix3x3f& data) {}
+
+vector1f& vector1f::operator-=(const matrix4x4f& data) {}
 
 KOTEK_END_NAMESPACE_MATH
-KOTEK_END_NAMESPACE_KTK
-KOTEK_END_NAMESPACE_KOTEK
+KOTEK_END_NAMESPACE_KTK KOTEK_END_NAMESPACE_KOTEK

@@ -394,6 +394,11 @@ vectornf_view_t::operator/=(const matrix4x4f& mat) noexcept
 	return *this;
 }
 
+vectornf_const_view_t::vectornf_const_view_t() :
+	_m_default(0.0f), m_row_count(0), m_p_values(nullptr)
+{
+}
+
 vectornf_const_view_t::vectornf_const_view_t(
 	const float* p_values, math_id_t row_count
 ) :

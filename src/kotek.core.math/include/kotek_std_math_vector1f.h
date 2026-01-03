@@ -19,6 +19,10 @@ public:
 	vector1f(float* p_arr1, math_id_t size = 1);
 	vector1f(const float* p_arr1, math_id_t size = 1);
 
+	vector1f(const matrix2x2f& data);
+	vector1f(const matrix3x3f& data);
+	vector1f(const matrix4x4f& data);
+
 	vector1f(const matrixnf_view_t& view);
 	vector1f(const matrixnf_const_view_t& view);
 	vector1f(const vectornf_view_t& view);
@@ -38,8 +42,25 @@ public:
 	~vector1f() = default;
 
 	vector1f& operator=(const vector1f& data);
+	vector1f& operator=(const vector2f& data);
+	vector1f& operator=(const vector3f& data);
+	vector1f& operator=(const vector4f& data);
+	vector1f& operator=(const matrix2x2f& data);
+	vector1f& operator=(const matrix3x3f& data);
+	vector1f& operator=(const matrix4x4f& data);
+	vector1f& operator=(const matrixnf_view_t& data);
+	vector1f& operator=(const matrixnf_const_view_t& data);
+	vector1f& operator=(const vectornf_view_t& data);
+	vector1f& operator=(const vectornf_const_view_t& data);
+
 	vector1f& operator+=(float value);
 	vector1f& operator+=(const vector1f& data);
+	vector1f& operator+=(const vector2f& data);
+	vector1f& operator+=(const vector3f& data);
+	vector1f& operator+=(const vector4f& data);
+	vector1f& operator+=(const matrix2x2f& data);
+	vector1f& operator+=(const matrix3x3f& data);
+	vector1f& operator+=(const matrix4x4f& data);
 	vector1f& operator+=(const matrixnf_view_t& view);
 	vector1f& operator+=(const matrixnf_const_view_t& view);
 	vector1f& operator+=(const vectornf_view_t& view);
@@ -54,8 +75,16 @@ public:
 	vector1f& operator-=(float value);
 
 	vector1f& operator-=(const vector1f& data);
+	vector1f& operator-=(const vector2f& data);
+	vector1f& operator-=(const vector3f& data);
+	vector1f& operator-=(const vector4f& data);
+	vector1f& operator-=(const matrix2x2f& data);
+	vector1f& operator-=(const matrix3x3f& data);
+	vector1f& operator-=(const matrix4x4f& data);
 	vector1f& operator-=(const matrixnf_view_t& view);
 	vector1f& operator-=(const matrixnf_const_view_t& view);
+	vector1f& operator-=(const vectornf_view_t& view);
+	vector1f& operator-=(const vectornf_const_view_t& view);
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -64,9 +93,17 @@ public:
 #endif
 
 	vector1f& operator*=(float value);
+	vector1f& operator*=(const matrix2x2f& data);
+	vector1f& operator*=(const matrix3x3f& data);
+	vector1f& operator*=(const matrix4x4f& data);
 	vector1f& operator*=(const matrixnf_view_t& view);
 	vector1f& operator*=(const matrixnf_const_view_t& view);
+	vector1f& operator*=(const vectornf_view_t& view);
+	vector1f& operator*=(const vectornf_const_view_t& view);
 	vector1f& operator*=(const vector1f& data);
+	vector1f& operator*=(const vector2f& data);
+	vector1f& operator*=(const vector3f& data);
+	vector1f& operator*=(const vector4f& data);
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -75,9 +112,17 @@ public:
 #endif
 
 	vector1f& operator/=(float value);
+	vector1f& operator/=(const matrix2x2f& data);
+	vector1f& operator/=(const matrix3x3f& data);
+	vector1f& operator/=(const matrix4x4f& data);
 	vector1f& operator/=(const matrixnf_view_t& view);
 	vector1f& operator/=(const matrixnf_const_view_t& view);
+	vector1f& operator/=(const vectornf_view_t& view);
+	vector1f& operator/=(const vectornf_const_view_t& view);
 	vector1f& operator/=(const vector1f& data);
+	vector1f& operator/=(const vector2f& data);
+	vector1f& operator/=(const vector3f& data);
+	vector1f& operator/=(const vector4f& data);
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -88,6 +133,18 @@ public:
 	vector1f& operator%=(float value) noexcept;
 
 	vector1f& operator%=(const vector1f& data) noexcept;
+	vector1f& operator%=(const vector2f& data) noexcept;
+	vector1f& operator%=(const vector3f& data) noexcept;
+	vector1f& operator%=(const vector4f& data) noexcept;
+	vector1f& operator%=(const matrix2x2f& data) noexcept;
+	vector1f& operator%=(const matrix3x3f& data) noexcept;
+	vector1f& operator%=(const matrix4x4f& data) noexcept;
+	vector1f& operator%=(const vectornf_view_t& view) noexcept;
+	vector1f& operator%=(const vectornf_const_view_t& view
+	) noexcept;
+	vector1f& operator%=(const matrixnf_view_t& view) noexcept;
+	vector1f& operator%=(const matrixnf_const_view_t& view
+	) noexcept;
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -99,8 +156,32 @@ public:
 	vector1f operator-() const noexcept;
 
 	bool operator==(const vector1f& data) const noexcept;
+	bool operator==(const vector2f& data) const noexcept;
+	bool operator==(const vector3f& data) const noexcept;
+	bool operator==(const vector4f& data) const noexcept;
+	bool operator==(const matrix2x2f& data) const noexcept;
+	bool operator==(const matrix3x3f& data) const noexcept;
+	bool operator==(const matrix4x4f& data) const noexcept;
+	bool operator==(const vectornf_view_t& view) const noexcept;
+	bool operator==(const vectornf_const_view_t& view
+	) const noexcept;
+	bool operator==(const matrixnf_view_t& view) const noexcept;
+	bool operator==(const matrixnf_const_view_t& view
+	) const noexcept;
 
 	bool operator!=(const vector1f& data) const noexcept;
+	bool operator!=(const vector2f& data) const noexcept;
+	bool operator!=(const vector3f& data) const noexcept;
+	bool operator!=(const vector4f& data) const noexcept;
+	bool operator!=(const matrix2x2f& data) const noexcept;
+	bool operator!=(const matrix3x3f& data) const noexcept;
+	bool operator!=(const matrix4x4f& data) const noexcept;
+	bool operator!=(const vectornf_view_t& view) const noexcept;
+	bool operator!=(const vectornf_const_view_t& view
+	) const noexcept;
+	bool operator!=(const matrixnf_view_t& view) const noexcept;
+	bool operator!=(const matrixnf_const_view_t& view
+	) const noexcept;
 
 	float operator[](math_id_t index) const;
 
@@ -115,30 +196,18 @@ public:
 	e(math_id_t column_id, math_id_t row_id) const noexcept;
 	float& e(math_id_t column_id, math_id_t row_id) noexcept;
 
+	vectornf_view_t c(math_id_t column_id) noexcept;
+	vectornf_const_view_t c(math_id_t column_id) const noexcept;
+
 	const float* data(void) const noexcept;
 
 	float* data(void) noexcept;
 
 	void set(float x) noexcept;
 
-	inline constexpr math_id_t size_of(void) noexcept
-	{
-		static_assert(
-			sizeof(float[1]) == sizeof(m_base) &&
-			"we gurantee that base type is float[1] by size"
-		);
-		return sizeof(float[1]);
-	}
-
-	inline math_id_t get_column_count(void) const noexcept
-	{
-		return 1;
-	}
-
-	inline math_id_t get_row_count(void) const noexcept
-	{
-		return 1;
-	}
+	constexpr math_id_t size_of(void) noexcept;
+	constexpr math_id_t get_column_count(void) const noexcept;
+	constexpr math_id_t get_row_count(void) const noexcept;
 
 	vector1f& Set_Base(const base_vec1_t& data) noexcept;
 
@@ -169,6 +238,62 @@ operator+(const vector1f& a, const vector1f& b) noexcept
 #endif
 }
 
+inline vector1f operator+(
+	const vector1f& left, const matrixnf_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator+(
+	const matrixnf_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator+(
+	const vector1f& left, const matrixnf_const_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator+(
+	const matrixnf_const_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator+(
+	const vector1f& left, const vectornf_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator+(
+	const vectornf_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator+(
+	const vector1f& left, const vectornf_const_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator+(
+	const vectornf_const_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
 inline vector1f
 operator-(const vector1f& a, const vector1f& b) noexcept
 {
@@ -187,6 +312,62 @@ operator-(const vector1f& a, const vector1f& b) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (a.Get_Base() - b.Get_Base());
 #endif
+}
+
+inline vector1f operator-(
+	const vector1f& left, const matrixnf_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator-(
+	const matrixnf_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator-(
+	const vector1f& left, const matrixnf_const_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator-(
+	const matrixnf_const_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator-(
+	const vector1f& left, const vectornf_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator-(
+	const vectornf_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator-(
+	const vector1f& left, const vectornf_const_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator-(
+	const vectornf_const_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
 }
 
 inline vector1f
@@ -208,6 +389,62 @@ operator*(const vector1f& a, const vector1f& b) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (a.Get_Base() * b.Get_Base());
 #endif
+}
+
+inline vector1f operator*(
+	const vector1f& left, const matrixnf_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator*(
+	const matrixnf_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator*(
+	const vector1f& left, const matrixnf_const_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator*(
+	const matrixnf_const_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator*(
+	const vector1f& left, const vectornf_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator*(
+	const vectornf_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator*(
+	const vector1f& left, const vectornf_const_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator*(
+	const vectornf_const_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
 }
 
 inline vector1f operator*(const vector1f& a, float b) noexcept
@@ -253,6 +490,62 @@ operator/(const vector1f& a, const vector1f& b) noexcept
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (a.Get_Base() / b.Get_Base());
 #endif
+}
+
+inline vector1f operator/(
+	const vector1f& left, const matrixnf_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator/(
+	const matrixnf_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator/(
+	const vector1f& left, const matrixnf_const_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator/(
+	const matrixnf_const_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator/(
+	const vector1f& left, const vectornf_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator/(
+	const vectornf_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator/(
+	const vector1f& left, const vectornf_const_view_t& view
+) noexcept
+{
+	return vector1f();
+}
+
+inline vector1f operator/(
+	const vectornf_const_view_t& view, const vector1f& right
+) noexcept
+{
+	return vector1f();
 }
 
 inline vector1f operator/(const vector1f& a, float b) noexcept
