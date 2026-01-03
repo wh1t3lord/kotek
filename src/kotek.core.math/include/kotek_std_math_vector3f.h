@@ -10,8 +10,8 @@ class vector3f
 {
 public:
 	vector3f(float x, float y, float z);
-	vector3f(float* p_arr3, unsigned char size = 3);
-	vector3f(const float* p_arr3, unsigned char size = 3);
+	vector3f(float* p_arr3, math_id_t size = 3);
+	vector3f(const float* p_arr3, math_id_t size = 3);
 	vector3f(const vectornf_view_t& view);
 	vector3f(const vectornf_const_view_t& view);
 

@@ -15,50 +15,70 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
 
-vector3f::vector3f(float x) : m_base(x, 0.0f, 0.0f) {}
-vector3f::vector3f(float x, float y) : m_base(x, y, 0.0f) {}
 vector3f::vector3f(float x, float y, float z) : m_base(x, y, z)
 {
 }
-vector3f::vector3f(float x, float y, float z, float w) :
-	m_base(x, y, z)
+
+vector3f::vector3f(float* p_arr3, math_id_t size)
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	#error todo: impl
+#else
+	if (p_arr3)
+	{
+		KOTEK_ASSERT(size == 3, "wrong dimension");
+
+		if (size == 3)
+		{
+			this->m_base.x = p_arr3[0];
+			this->m_base.y = p_arr3[1];
+			this->m_base.z = p_arr3[2];
+		}
+		else
+		{
+			this->m_base.x = 0.0f;
+			this->m_base.y = 0.0f;
+			this->m_base.z = 0.0f;
+		}
+	}
+	else
+	{
+		this->m_base.x = 0.0f;
+		this->m_base.y = 0.0f;
+		this->m_base.z = 0.0f;
+	}
+#endif
 }
 
-vector3f::vector3f(float* p_arr3, unsigned char size) :
-	m_base(p_arr3[0], p_arr3[1], p_arr3[2])
+vector3f::vector3f(const float* p_arr3, math_id_t size)
 {
-	KOTEK_ASSERT(
-		size > 0 && size <= 3, "needed to be as valid value!"
-	);
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	#error todo: impl
+#else
+	if (p_arr3)
+	{
+		KOTEK_ASSERT(size == 3, "wrong dimension");
 
-	if (size == 2)
-	{
-		this->m_base.z = 0.0f;
+		if (size == 3)
+		{
+			this->m_base.x = p_arr3[0];
+			this->m_base.y = p_arr3[1];
+			this->m_base.z = p_arr3[2];
+		}
+		else
+		{
+			this->m_base.x = 0.0f;
+			this->m_base.y = 0.0f;
+			this->m_base.z = 0.0f;
+		}
 	}
-	else if (size == 1)
+	else
 	{
-		this->m_base.z = 0.0f;
+		this->m_base.x = 0.0f;
 		this->m_base.y = 0.0f;
-	}
-}
-
-vector3f::vector3f(const float* p_arr3, unsigned char size) :
-	m_base(p_arr3[0], p_arr3[1], p_arr3[2])
-{
-	KOTEK_ASSERT(
-		size > 0 && size <= 3, "needed to be as valid value!"
-	);
-
-	if (size == 2)
-	{
 		this->m_base.z = 0.0f;
 	}
-	else if (size == 1)
-	{
-		this->m_base.z = 0.0f;
-		this->m_base.y = 0.0f;
-	}
+#endif
 }
 
 vector3f::vector3f(const base_vec3_t& data) : m_base(data) {}
@@ -66,6 +86,13 @@ vector3f::vector3f(const vector3f& data) : m_base(data.m_base)
 {
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+vector3f::vector3f(float x) : m_base(x, 0.0f, 0.0f) {}
+vector3f::vector3f(float x, float y) : m_base(x, y, 0.0f) {}
+vector3f::vector3f(float x, float y, float z, float w) :
+	m_base(x, y, z)
+{
+}
 vector3f::vector3f(const vector1f& data) :
 	m_base(get_component_x(data), 0.0f, 0.0f)
 {
@@ -95,6 +122,7 @@ vector3f::vector3f(const vector2f& data, float z) :
 	m_base(data.x(), data.y(), z)
 {
 }
+#endif
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 vector3f::vector3f(const DirectX::XMVECTOR& xmvec)
@@ -434,32 +462,32 @@ constexpr math_id_t vector3f::get_row_count(void) const noexcept
 	return 3;
 }
 
-float vector3f::x(void) const noexcept 
+float vector3f::x(void) const noexcept
 {
 	return this->m_base.x;
 }
 
-float& vector3f::x(void) noexcept 
+float& vector3f::x(void) noexcept
 {
 	return this->m_base.x;
 }
 
-float vector3f::y(void) const noexcept 
+float vector3f::y(void) const noexcept
 {
 	return this->m_base.y;
 }
 
-float& vector3f::y(void) noexcept 
+float& vector3f::y(void) noexcept
 {
 	return this->m_base.y;
 }
 
-float vector3f::z(void) const noexcept 
+float vector3f::z(void) const noexcept
 {
 	return this->m_base.z;
 }
 
-float& vector3f::z(void) noexcept 
+float& vector3f::z(void) noexcept
 {
 	return this->m_base.z;
 }
