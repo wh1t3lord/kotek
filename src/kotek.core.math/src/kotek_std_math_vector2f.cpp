@@ -15,44 +15,72 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector2f::vector2f(float x) : m_base(x, 0.0f) {}
-vector2f::vector2f(float x, float y) : m_base(x, y) {}
 vector2f::vector2f(float x, float y, float z) : m_base(x, y) {}
 vector2f::vector2f(float x, float y, float z, float w) :
 	m_base(x, y)
 {
 }
+#endif
 
-vector2f::vector2f(float* p_arr2, unsigned char size) :
-	m_base(p_arr2[0], p_arr2[1])
+vector2f::vector2f(float x, float y) : m_base(x, y) {}
+
+vector2f::vector2f(float* p_arr2, math_id_t size)
 {
-	KOTEK_ASSERT(
-		size > 0 && size <= 2,
-		"something is wrong, size must be positive and less or "
-		"equal to 2"
-	);
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	#error todo: impl
 
-	if (size == 1)
+#else
+	if (p_arr2)
 	{
-		m_base.y = 0.0f;
+		KOTEK_ASSERT(size == 2, "wrong dimension");
+
+		if (size == 2)
+		{
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		#error todo: impl
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+			this->m_base.x = p_arr2[0];
+			this->m_base.y = p_arr2[1];
+	#endif
+		}
 	}
+#endif
 }
 
-vector2f::vector2f(const float* p_arr2, unsigned char size) :
-	m_base(p_arr2[0], p_arr2[1])
+vector2f::vector2f(const float* p_arr2, math_id_t size)
 {
-	KOTEK_ASSERT(
-		size > 0 && size <= 2,
-		"something is wrong, size must be positive and less or "
-		"equal to 2"
-	);
-
-	if (size == 1)
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+#else
+	if (p_arr2)
 	{
-		m_base.y = 0.0f;
+		KOTEK_ASSERT(size == 2, "wrong dimension");
+
+		if (size == 2)
+		{
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		#error todo: impl
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+			this->m_base.x = p_arr2[0];
+			this->m_base.y = p_arr2[1];
+	#endif
+		}
+		else
+		{
+			this->m_base.x = 0.0f;
+			this->m_base.y = 0.0f;
+		}
 	}
+	else
+	{
+		this->m_base.x = 0.0f;
+		this->m_base.y = 0.0f;
+	}
+#endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector2f::vector2f(const vector1f& data) : m_base(x(data), 0.0f)
 {
 }
@@ -62,7 +90,8 @@ vector2f::vector2f(const vector1f& data, float y) :
 {
 }
 
-vector2f::vector2f(const vector3f& data) : m_base(get_component_x(data), data.y())
+vector2f::vector2f(const vector3f& data) :
+	m_base(get_component_x(data), data.y())
 {
 }
 
@@ -70,6 +99,7 @@ vector2f::vector2f(const vector4f& data) :
 	m_base(data.x(), data.y())
 {
 }
+#endif
 
 vector2f::vector2f(const base_vec2_t& data) : m_base(data) {}
 vector2f::vector2f(const vector2f& data) : m_base(data.m_base)
@@ -364,8 +394,7 @@ vector2f::e(math_id_t column_id, math_id_t row_id) noexcept
 	return this->operator[](row_id);
 }
 
-vectornf_view_t
-vector2f::c(math_id_t column_id) noexcept
+vectornf_view_t vector2f::c(math_id_t column_id) noexcept
 {
 	return vectornf_view_t(this->data(), 2);
 }
@@ -374,6 +403,47 @@ vectornf_const_view_t vector2f::c(math_id_t column_id
 ) const noexcept
 {
 	return vectornf_const_view_t(this->data(), 2);
+}
+
+constexpr math_id_t vector2f::size_of(void) noexcept
+{
+	static_assert(
+		sizeof(float[2]) == sizeof(m_base),
+		"gurantee that float[2] will be your class"
+	);
+
+	return static_cast<math_id_t>(sizeof(float[2]));
+}
+
+constexpr math_id_t vector2f::get_column_count(void
+) const noexcept
+{
+	return 1;
+}
+
+constexpr math_id_t vector2f::get_row_count(void) const noexcept
+{
+	return 2;
+}
+
+float vector2f::x(void) const noexcept
+{
+	return this->m_base.x;
+}
+
+float& vector2f::x(void) noexcept 
+{
+	return this->m_base.x;
+}
+
+float vector2f::y(void) const noexcept 
+{
+	return this->m_base.y;
+}
+
+float& vector2f::y(void) noexcept 
+{
+	return this->m_base.y;
 }
 
 KOTEK_END_NAMESPACE_MATH

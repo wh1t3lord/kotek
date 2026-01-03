@@ -12,20 +12,70 @@ public:
 	matrix2x2f(float c0r0, float c0r1, float c1r0, float c1r1);
 	matrix2x2f(const base_mat2x2_t& data);
 	matrix2x2f(const matrix2x2f& data);
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix2x2f(const matrix3x3f& data);
+	matrix2x2f(const matrix4x4f& data);
+	matrix2x2f(const vector1f& data);
+	matrix2x2f(const vector2f& data);
+	matrix2x2f(const vector3f& data);
+	matrix2x2f(const vector4f& data);
+#endif
+
 	matrix2x2f(void);
 
 	~matrix2x2f(void) = default;
 
 	matrix2x2f& operator=(const matrix2x2f& data);
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix2x2f& operator=(const matrix3x3f& data);
+	matrix2x2f& operator=(const matrix4x4f& data);
+	matrix2x2f& operator=(const vector1f& data);
+	matrix2x2f& operator=(const vector2f& data);
+	matrix2x2f& operator=(const vector3f& data);
+	matrix2x2f& operator=(const vector4f& data);
+#endif
+
 	matrix2x2f& operator=(const base_mat2x2_t& data);
 
 	matrix2x2f& operator+=(const matrix2x2f& data) noexcept;
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix2x2f& operator+=(const matrix3x3f& data) noexcept;
+	matrix2x2f& operator+=(const matrix4x4f& data) noexcept;
+	matrix2x2f& operator+=(const vector1f& data) noexcept;
+	matrix2x2f& operator+=(const vector2f& data) noexcept;
+	matrix2x2f& operator+=(const vector3f& data) noexcept;
+	matrix2x2f& operator+=(const vector4f& data) noexcept;
+#endif
+
 	matrix2x2f& operator+=(const base_mat2x2_t& data) noexcept;
 
 	matrix2x2f& operator-=(const matrix2x2f& data) noexcept;
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix2x2f& operator-=(const matrix3x3f& data) noexcept;
+	matrix2x2f& operator-=(const matrix4x4f& data) noexcept;
+	matrix2x2f& operator-=(const vector1f& data) noexcept;
+	matrix2x2f& operator-=(const vector2f& data) noexcept;
+	matrix2x2f& operator-=(const vector3f& data) noexcept;
+	matrix2x2f& operator-=(const vector4f& data) noexcept;
+#endif
+
 	matrix2x2f& operator-=(const base_mat2x2_t& data) noexcept;
 
 	matrix2x2f& operator*=(const matrix2x2f& data) noexcept;
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix2x2f& operator*=(const matrix3x3f& data) noexcept;
+	matrix2x2f& operator*=(const matrix4x4f& data) noexcept;
+	matrix2x2f& operator*=(const vector1f& data) noexcept;
+	matrix2x2f& operator*=(const vector2f& data) noexcept;
+	matrix2x2f& operator*=(const vector3f& data) noexcept;
+	matrix2x2f& operator*=(const vector4f& data) noexcept;
+#endif
+
 	matrix2x2f& operator*=(const base_mat2x2_t& data) noexcept;
 	matrix2x2f& operator*=(float value) noexcept;
 
@@ -33,11 +83,14 @@ public:
 	// like
 	// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 	matrix2x2f& operator/=(const matrix2x2f& data) noexcept;
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	matrix2x2f& operator/=(const matrix3x3f& data) noexcept;
 	matrix2x2f& operator/=(const matrix4x4f& data) noexcept;
 	matrix2x2f& operator/=(const vector2f& data) noexcept;
 	matrix2x2f& operator/=(const vector3f& data) noexcept;
 	matrix2x2f& operator/=(const vector4f& data) noexcept;
+#endif
 
 	matrix2x2f& operator/=(float value) noexcept;
 	matrix2x2f& operator/=(const vector1f& vec) noexcept;
@@ -142,6 +195,50 @@ inline matrix2x2f operator+(
 #endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+inline matrix2x2f operator+(
+	const matrix2x2f& left, const matrix3x3f& right
+) noexcept
+{
+	return operator+(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator+(
+	const matrix2x2f& left, const matrix4x4f& right
+) noexcept
+{
+	return operator+(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator+(
+	const matrix2x2f& left, const vector1f& right
+) noexcept
+{
+	return operator+(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator+(
+	const matrix2x2f& left, const vector2f& right
+) noexcept
+{
+	return operator+(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator+(
+	const matrix2x2f& left, const vector3f& right
+) noexcept
+{
+	return operator+(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator+(
+	const matrix2x2f& left, const vector4f& right
+) noexcept
+{
+	return operator+(left, matrix2x2f(right));
+}
+#endif
+
 inline matrix2x2f operator-(
 	const matrix2x2f& left, const matrix2x2f& right
 ) noexcept
@@ -198,6 +295,50 @@ inline matrix2x2f operator-(
 	return (left.Get_Base() - right.Get_Base());
 #endif
 }
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+inline matrix2x2f operator-(
+	const matrix2x2f& left, const matrix3x3f& right
+) noexcept
+{
+	return operator-(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator-(
+	const matrix2x2f& left, const matrix4x4f& right
+) noexcept
+{
+	return operator-(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator-(
+	const matrix2x2f& left, const vector1f& right
+) noexcept
+{
+	return operator-(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator-(
+	const matrix2x2f& left, const vector2f& right
+) noexcept
+{
+	return operator-(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator-(
+	const matrix2x2f& left, const vector3f& right
+) noexcept
+{
+	return operator-(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator-(
+	const matrix2x2f& left, const vector4f& right
+) noexcept
+{
+	return operator-(left, matrix2x2f(right));
+}
+#endif
 
 inline matrix2x2f operator*(
 	const matrix2x2f& left, const matrix2x2f& right
@@ -268,6 +409,55 @@ operator*(float value, const matrix2x2f& right) noexcept
 	return operator*(right, value);
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+inline matrix2x2f operator*(
+	const matrix2x2f& left, const matrix3x3f& right
+) noexcept
+{
+	return operator*(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator*(
+	const matrix2x2f& left, const matrix4x4f& right
+) noexcept
+{
+	return operator*(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator*(
+	const matrix2x2f& left, const vector1f& right
+) noexcept
+{
+	return operator*(left, vector2f(right));
+}
+
+inline matrix2x2f operator*(
+	const matrix2x2f& left, const vector2f& right
+) noexcept
+{
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		#error todo: impl
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	glm::vec2 res = left.Get_Base() * right.Get_Base();
+	return matrix2x2f(res);
+	#endif
+}
+
+inline matrix2x2f operator*(
+	const matrix2x2f& left, const vector3f& right
+) noexcept
+{
+	return operator*(left, vector2f(right));
+}
+
+inline matrix2x2f operator*(
+	const matrix2x2f& left, const vector4f& right
+) noexcept
+{
+	return operator*(left, vector2f(right));
+}
+#endif
+
 inline matrix2x2f
 operator/(const matrix2x2f& left, float value) noexcept
 {
@@ -312,8 +502,7 @@ operator/(const matrix2x2f& left, float value) noexcept
 #endif
 }
 
-// TODO: provide preprocessor for user implementation here like
-// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 inline matrix2x2f operator/(
 	const matrix2x2f& left, const matrix2x2f& right
 ) noexcept
@@ -326,6 +515,52 @@ inline matrix2x2f operator/(
 	);
 	return matrix2x2f();
 }
+
+	#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+inline matrix2x2f operator/(
+	const matrix2x2f& left, const matrix3x3f& right
+) noexcept
+{
+	return operator/(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator/(
+	const matrix2x2f& left, const matrix4x4f& right
+) noexcept
+{
+	return operator/(left, matrix2x2f(right));
+}
+
+inline matrix2x2f operator/(
+	const matrix2x2f& left, const vector1f& right
+) noexcept
+{
+	return matrix2x2f();
+}
+
+inline matrix2x2f operator/(
+	const matrix2x2f& left, const vector2f& right
+) noexcept
+{
+	return matrix2x2f();
+}
+
+inline matrix2x2f operator/(
+	const matrix2x2f& left, const vector3f& right
+) noexcept
+{
+	return matrix2x2f();
+}
+
+inline matrix2x2f operator/(
+	const matrix2x2f& left, const vector4f& right
+) noexcept
+{
+	return matrix2x2f();
+}
+	#endif
+
+#endif
 
 KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK

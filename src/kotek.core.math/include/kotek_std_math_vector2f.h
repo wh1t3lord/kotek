@@ -9,23 +9,25 @@ KOTEK_BEGIN_NAMESPACE_MATH
 class vector2f
 {
 public:
-	vector2f(float x);
 	vector2f(float x, float y);
-	vector2f(float x, float y, float z);
-	vector2f(float x, float y, float z, float w);
 
-	vector2f(float* p_arr2, unsigned char size = 2);
-	vector2f(const float* p_arr2, unsigned char size = 2);
+	vector2f(float* p_arr2, math_id_t size = 2);
+	vector2f(const float* p_arr2, math_id_t size = 2);
 
 	vector2f(const vectornf_view_t& view);
 	vector2f(const vectornf_const_view_t& view);
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	vector2f(const matrixnf_view_t& view_mat);
 	vector2f(const matrixnf_const_view_t& view_mat);
-
+	vector2f(float x);
+	vector2f(float x, float y, float z);
+	vector2f(float x, float y, float z, float w);
 	vector2f(const vector1f& data);
 	vector2f(const vector1f& data, float y);
 	vector2f(const vector3f& data);
 	vector2f(const vector4f& data);
+#endif
 
 	vector2f(const base_vec2_t& data);
 	vector2f(const vector2f& data);
@@ -43,48 +45,67 @@ public:
 	vector2f& operator=(const vectornf_view_t& data) noexcept;
 	vector2f& operator=(const vectornf_const_view_t& data
 	) noexcept;
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	vector2f& operator=(const matrixnf_view_t& data) noexcept;
 	vector2f& operator=(const matrixnf_const_view_t& data
 	) noexcept;
+#endif
 
 	vector2f& operator+=(const vector2f& data) noexcept;
-	
+
 	vector2f& operator+=(const vectornf_view_t& data) noexcept;
-	vector2f& operator+=(const vectornf_const_view_t& data) noexcept;
+	vector2f& operator+=(const vectornf_const_view_t& data
+	) noexcept;
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	vector2f& operator+=(const matrixnf_view_t& data) noexcept;
-	vector2f& operator+=(const matrixnf_const_view_t& data) noexcept;
+	vector2f& operator+=(const matrixnf_const_view_t& data
+	) noexcept;
+#endif
 
 	vector2f& operator+=(const base_vec2_t& data) noexcept;
 
 	vector2f& operator-=(const vector2f& data) noexcept;
 
 	vector2f& operator-=(const vectornf_view_t& data) noexcept;
-	vector2f& operator-=(const vectornf_const_view_t& data) noexcept;
+	vector2f& operator-=(const vectornf_const_view_t& data
+	) noexcept;
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	vector2f& operator-=(const matrixnf_view_t& data) noexcept;
-	vector2f& operator-=(const matrixnf_const_view_t& data) noexcept;
+	vector2f& operator-=(const matrixnf_const_view_t& data
+	) noexcept;
+#endif
 
 	vector2f& operator-=(const base_vec2_t& data) noexcept;
 
 	vector2f& operator*=(const vector2f& data) noexcept;
-	
+
 	vector2f& operator*=(const vectornf_view_t& data) noexcept;
 	vector2f& operator*=(const vectornf_const_view_t& data
 	) noexcept;
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	vector2f& operator*=(const matrixnf_view_t& data) noexcept;
 	vector2f& operator*=(const matrixnf_const_view_t& data
 	) noexcept;
+#endif
 
 	vector2f& operator*=(const base_vec2_t& data) noexcept;
 	vector2f& operator*=(float value) noexcept;
 
 	vector2f& operator/=(const vector2f& data) noexcept;
-	
+
 	vector2f& operator/=(const vectornf_view_t& data) noexcept;
 	vector2f& operator/=(const vectornf_const_view_t& data
 	) noexcept;
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	vector2f& operator/=(const matrixnf_view_t& data) noexcept;
 	vector2f& operator/=(const matrixnf_const_view_t& data
 	) noexcept;
+#endif
 
 	vector2f& operator/=(const base_vec2_t& data) noexcept;
 	vector2f& operator/=(float value) noexcept;
@@ -104,8 +125,15 @@ public:
 	operator DirectX::XMVECTOR() const noexcept;
 #endif
 
-	float e(math_id_t column_id, math_id_t row_id) const noexcept;
+	float
+	e(math_id_t column_id, math_id_t row_id) const noexcept;
 	float& e(math_id_t column_id, math_id_t row_id) noexcept;
+
+	float x(void) const noexcept;
+	float& x(void) noexcept;
+
+	float y(void) const noexcept;
+	float& y(void) noexcept;
 
 	vectornf_view_t c(math_id_t column_id) noexcept;
 	vectornf_const_view_t c(math_id_t column_id) const noexcept;
@@ -115,12 +143,9 @@ public:
 
 	void set(float x, float y);
 
-	inline static constexpr unsigned char size_of(void) noexcept
-	{
-		static_assert(sizeof(float[2]) == sizeof(m_base) &&
-			"we gurantee that base type is float[2] by size");
-		return static_cast<unsigned char>(sizeof(float[2]));
-	}
+	constexpr math_id_t size_of(void) noexcept;
+	constexpr math_id_t get_column_count(void) const noexcept;
+	constexpr math_id_t get_row_count(void) const noexcept;
 
 	vector2f& Set_Base(const base_vec2_t& data) noexcept;
 
@@ -132,7 +157,8 @@ private:
 	base_vec2_t m_base;
 };
 
-inline vector2f operator+(const vector2f& left, const vector2f& right) noexcept
+inline vector2f
+operator+(const vector2f& left, const vector2f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
@@ -152,6 +178,7 @@ inline vector2f operator+(const vector2f& left, const vector2f& right) noexcept
 #endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 inline vector2f operator+(
 	const vector2f left, const matrixnf_view_t& view
 ) noexcept
@@ -179,6 +206,7 @@ inline vector2f operator+(
 {
 	return vector2f();
 }
+#endif
 
 inline vector2f operator+(
 	const vector2f& left, const vectornf_view_t& view
@@ -208,7 +236,8 @@ inline vector2f operator+(
 	return vector2f();
 }
 
-inline vector2f operator-(const vector2f& left, const vector2f& right) noexcept
+inline vector2f
+operator-(const vector2f& left, const vector2f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
@@ -228,6 +257,7 @@ inline vector2f operator-(const vector2f& left, const vector2f& right) noexcept
 #endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 inline vector2f operator-(
 	const vector2f& left, const matrixnf_view_t& view
 ) noexcept
@@ -255,6 +285,7 @@ inline vector2f operator-(
 {
 	return vector2f();
 }
+#endif
 
 inline vector2f operator-(
 	const vector2f& left, const vectornf_view_t& view
@@ -284,7 +315,8 @@ inline vector2f operator-(
 	return vector2f();
 }
 
-inline vector2f operator*(const vector2f& left, const vector2f& right) noexcept
+inline vector2f
+operator*(const vector2f& left, const vector2f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
@@ -304,6 +336,7 @@ inline vector2f operator*(const vector2f& left, const vector2f& right) noexcept
 #endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 inline vector2f operator*(
 	const vector2f& left, const matrixnf_view_t& view
 ) noexcept
@@ -331,6 +364,7 @@ inline vector2f operator*(
 {
 	return vector2f();
 }
+#endif
 
 inline vector2f operator*(
 	const vector2f& left, const vectornf_view_t& view
@@ -360,7 +394,8 @@ inline vector2f operator*(
 	return vector2f();
 }
 
-inline vector2f operator*(const vector2f& left, float right) noexcept
+inline vector2f
+operator*(const vector2f& left, float right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
@@ -379,12 +414,14 @@ inline vector2f operator*(const vector2f& left, float right) noexcept
 #endif
 }
 
-inline vector2f operator*(float left, const vector2f& right) noexcept
+inline vector2f
+operator*(float left, const vector2f& right) noexcept
 {
 	return operator*(right, left);
 }
 
-inline vector2f operator/(const vector2f& left, const vector2f& right) noexcept
+inline vector2f
+operator/(const vector2f& left, const vector2f& right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	DirectX::XMVECTOR v1 = left;
@@ -404,6 +441,7 @@ inline vector2f operator/(const vector2f& left, const vector2f& right) noexcept
 #endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 inline vector2f operator/(
 	const vector2f& left, const matrixnf_view_t& view
 ) noexcept
@@ -431,6 +469,7 @@ inline vector2f operator/(
 {
 	return vector2f();
 }
+#endif
 
 inline vector2f operator/(
 	const vector2f& left, const vectornf_view_t& view
@@ -460,7 +499,8 @@ inline vector2f operator/(
 	return vector2f();
 }
 
-inline vector2f operator/(const vector2f& left, float right) noexcept
+inline vector2f
+operator/(const vector2f& left, float right) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return operator*(left, 1.f / right);

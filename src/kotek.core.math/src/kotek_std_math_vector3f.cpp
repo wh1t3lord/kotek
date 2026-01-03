@@ -402,8 +402,7 @@ vector3f::e(math_id_t column_id, math_id_t row_id) noexcept
 	return this->operator[](row_id);
 }
 
-vectornf_view_t
-vector3f::c(math_id_t column_id) noexcept
+vectornf_view_t vector3f::c(math_id_t column_id) noexcept
 {
 	return vectornf_view_t(this->data(), 3);
 }
@@ -412,6 +411,57 @@ vectornf_const_view_t vector3f::c(math_id_t column_id
 ) const noexcept
 {
 	return vectornf_const_view_t(this->data(), 3);
+}
+
+constexpr math_id_t vector3f::size_of(void) noexcept
+{
+	static_assert(
+		sizeof(float[3]) == sizeof(m_base),
+		"gurantee that your class will be equal to float[3]"
+	);
+
+	return static_cast<math_id_t>(sizeof(float[3]));
+}
+
+constexpr math_id_t vector3f::get_column_count(void
+) const noexcept
+{
+	return 1;
+}
+
+constexpr math_id_t vector3f::get_row_count(void) const noexcept
+{
+	return 3;
+}
+
+float vector3f::x(void) const noexcept 
+{
+	return this->m_base.x;
+}
+
+float& vector3f::x(void) noexcept 
+{
+	return this->m_base.x;
+}
+
+float vector3f::y(void) const noexcept 
+{
+	return this->m_base.y;
+}
+
+float& vector3f::y(void) noexcept 
+{
+	return this->m_base.y;
+}
+
+float vector3f::z(void) const noexcept 
+{
+	return this->m_base.z;
+}
+
+float& vector3f::z(void) noexcept 
+{
+	return this->m_base.z;
 }
 
 KOTEK_END_NAMESPACE_MATH

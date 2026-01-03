@@ -15,6 +15,78 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
 
+vector4f::vector4f(float x, float y, float z, float w) :
+	m_base(x, y, z, w)
+{
+}
+vector4f::vector4f(float* p_arr4, math_id_t size)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	#error todo: impl
+#else
+	if (p_arr4)
+	{
+		KOTEK_ASSERT(size == 4, "wrong dimension");
+
+		if (size == 4)
+		{
+			this->m_base.x = p_arr4[0];
+			this->m_base.y = p_arr4[1];
+			this->m_base.z = p_arr4[2];
+			this->m_base.w = p_arr4[3];
+		}
+		else
+		{
+			this->m_base.x = 0.0f;
+			this->m_base.y = 0.0f;
+			this->m_base.z = 0.0f;
+			this->m_base.w = 0.0f;
+		}
+	}
+	else
+	{
+		this->m_base.x = 0.0f;
+		this->m_base.y = 0.0f;
+		this->m_base.z = 0.0f;
+		this->m_base.w = 0.0f;
+	}
+#endif
+}
+vector4f::vector4f(const float* p_arr4, math_id_t size)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+
+#else
+	if (p_arr4)
+	{
+		KOTEK_ASSERT(size == 4, "wrong dimension");
+
+		if (size == 4)
+		{
+			this->m_base.x = p_arr4[0];
+			this->m_base.y = p_arr4[1];
+			this->m_base.z = p_arr4[2];
+			this->m_base.w = p_arr4[3];
+		}
+		else
+		{
+			this->m_base.x = 0.0f;
+			this->m_base.y = 0.0f;
+			this->m_base.z = 0.0f;
+			this->m_base.w = 0.0f;
+		}
+	}
+	else
+	{
+		this->m_base.x = 0.0f;
+		this->m_base.y = 0.0f;
+		this->m_base.z = 0.0f;
+		this->m_base.w = 0.0f;
+	}
+#endif
+}
+
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector4f::vector4f(float x) : m_base(x, 0.0f, 0.0f, 0.0f) {}
 vector4f::vector4f(float x, float y) : m_base(x, y, 0.0f, 0.0f)
 {
@@ -22,36 +94,6 @@ vector4f::vector4f(float x, float y) : m_base(x, y, 0.0f, 0.0f)
 vector4f::vector4f(float x, float y, float z) :
 	m_base(x, y, z, 0.0f)
 {
-}
-vector4f::vector4f(float x, float y, float z, float w) :
-	m_base(x, y, z, w)
-{
-}
-vector4f::vector4f(float* p_arr4, unsigned char size) :
-	m_base(p_arr4[0], p_arr4[1], p_arr4[2], p_arr4[3])
-{
-	KOTEK_ASSERT(size > 0 && size <= 4, "pass a valid size");
-
-	if (size == 3)
-	{
-		m_base.w = 0.0f;
-	}
-	else if (size == 2)
-	{
-		m_base.w = 0.0f;
-		m_base.z = 0.0f;
-	}
-	else if (size == 1)
-	{
-		m_base.w = 0.0f;
-		m_base.z = 0.0f;
-		m_base.y = 0.0f;
-	}
-}
-vector4f::vector4f(const float* p_arr4, unsigned char size) :
-	m_base(p_arr4[0], p_arr4[1], p_arr4[2], p_arr4[3])
-{
-	KOTEK_ASSERT(size > 0 && size <= 4, "pass a valid size!");
 }
 
 vector4f::vector4f(const vector1f& data) :
@@ -97,7 +139,10 @@ vector4f::vector4f(const vector2f& data, float z) :
 
 vector4f::vector4f(const vector2f& data, float z, float w) :
 	m_base(
-		get_math_component_x(data), get_math_component_y(data), z, w
+		get_math_component_x(data),
+		get_math_component_y(data),
+		z,
+		w
 	)
 {
 }
@@ -121,6 +166,7 @@ vector4f::vector4f(const vector3f& data, float w) :
 	)
 {
 }
+#endif
 
 vector4f::vector4f(const base_vec4_t& data) : m_base(data) {}
 vector4f::vector4f(const vector4f& data) : m_base(data.m_base)
@@ -449,6 +495,67 @@ vectornf_const_view_t vector4f::c(math_id_t column_id
 ) const noexcept
 {
 	return vectornf_const_view_t(this->data(), 4);
+}
+
+constexpr math_id_t vector4f::size_of(void) noexcept
+{
+	static_assert(
+		sizeof(float[4]) == sizeof(m_base),
+		"gurantee that your class will be equal to float[4]"
+	);
+
+	return static_cast<math_id_t>(sizeof(float[4]));
+}
+
+constexpr math_id_t vector4f::get_column_count(void
+) const noexcept
+{
+	return 1;
+}
+
+constexpr math_id_t vector4f::get_row_count(void) const noexcept
+{
+	return 4;
+}
+
+float vector4f::x(void) const noexcept
+{
+	return this->m_base.x;
+}
+
+float& vector4f::x(void) noexcept
+{
+	return this->m_base.x;
+}
+
+float vector4f::y(void) const noexcept
+{
+	return this->m_base.y;
+}
+
+float& vector4f::y(void) noexcept
+{
+	return this->m_base.y;
+}
+
+float vector4f::z(void) const noexcept
+{
+	return this->m_base.z;
+}
+
+float& vector4f::z(void) noexcept
+{
+	return this->m_base.z;
+}
+
+float vector4f::w(void) const noexcept
+{
+	return this->m_base.w;
+}
+
+float& vector4f::w(void) noexcept
+{
+	return this->m_base.w;
 }
 
 KOTEK_END_NAMESPACE_MATH

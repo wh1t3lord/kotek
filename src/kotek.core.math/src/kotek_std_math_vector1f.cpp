@@ -18,23 +18,54 @@ KOTEK_BEGIN_NAMESPACE_MATH
 vector1f::vector1f(void) : m_base(0.0f) {}
 vector1f::vector1f(float x) : m_base(x) {}
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f::vector1f(float x, float y) : m_base(x) {}
 vector1f::vector1f(float x, float y, float z) : m_base(x) {}
 vector1f::vector1f(float x, float y, float z, float w) :
 	m_base(x)
 {
 }
+#endif
 
-vector1f::vector1f(float* p_arr1, math_id_t size) :
+vector1f::vector1f(float* p_arr1, math_id_t element_count) :
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	m_base(p_arr1 ? p_arr1[0] : 0.0f)
+#else
+	m_base(
+		p_arr1 ? element_count == 1 ? p_arr1[0] : 0.0f : 0.0f
+	)
+#endif
 {
+#ifndef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	KOTEK_ASSERT(
+		element_count == 1,
+		"implicit casting is not enabled it means you must "
+		"provide same dimension math objects!"
+	);
+#endif
 }
 
-vector1f::vector1f(const float* p_arr1, math_id_t size) :
+vector1f::vector1f(
+	const float* p_arr1, math_id_t element_count
+) :
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	m_base(p_arr1 ? p_arr1[0] : 0.0f)
+#else
+	m_base(
+		p_arr1 ? element_count == 1 ? p_arr1[0] : 0.0f : 0.0f
+	)
+#endif
 {
+#ifndef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	KOTEK_ASSERT(
+		element_count == 1,
+		"implicit casting is not enabled it means you must "
+		"provide same dimension math objects!"
+	);
+#endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f::vector1f(const vector2f& data) :
 	m_base(get_math_component_x(data))
 {
@@ -49,29 +80,35 @@ vector1f::vector1f(const vector4f& data) :
 	m_base(get_math_component_x(data))
 {
 }
+#endif
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 vector1f::vector1f(const base_vec1_t& data) : m_base(data) {}
 #endif
+
 vector1f::vector1f(const vector1f& data) : m_base(data.m_base)
 {
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f::vector1f(const matrixnf_view_t& view) {}
 
 vector1f::vector1f(const matrixnf_const_view_t& view) {}
+#endif
 
 vector1f::vector1f(const vectornf_view_t& view) {}
 
 vector1f::vector1f(const vectornf_const_view_t& view) {}
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f::vector1f(const matrix2x2f& data) {}
 
 vector1f::vector1f(const matrix3x3f& data) {}
 
 vector1f::vector1f(const matrix4x4f& data) {}
+#endif
 
 vector1f& vector1f::operator=(const vector1f& data)
 {
@@ -79,6 +116,7 @@ vector1f& vector1f::operator=(const vector1f& data)
 	return *this;
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator=(const matrixnf_view_t& data)
 {
 	return this->operator=(
@@ -92,6 +130,7 @@ vector1f& vector1f::operator=(const matrixnf_const_view_t& data)
 		vector1f(get_math_component_x(data.c(0)))
 	);
 }
+#endif
 
 vector1f& vector1f::operator=(const vectornf_view_t& data)
 {
@@ -105,6 +144,7 @@ vector1f& vector1f::operator=(const vectornf_const_view_t& data)
 	);
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator=(const vector2f& data)
 {
 	return this->operator=(vector1f(get_math_component_x(data))
@@ -128,6 +168,7 @@ vector1f& vector1f::operator=(const matrix2x2f& data) {}
 vector1f& vector1f::operator=(const matrix3x3f& data) {}
 
 vector1f& vector1f::operator=(const matrix4x4f& data) {}
+#endif
 
 vector1f& vector1f::operator+=(float value)
 {
@@ -165,6 +206,7 @@ vector1f& vector1f::operator+=(const base_vec1_t& data)
 
 #endif
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator+=(const matrixnf_view_t& view)
 {
 	return this->operator+=(
@@ -179,6 +221,7 @@ vector1f& vector1f::operator+=(const matrixnf_const_view_t& view
 		vector1f(get_math_component_x(view.c(0)))
 	);
 }
+#endif
 
 vector1f& vector1f::operator+=(const vectornf_view_t& view)
 {
@@ -193,6 +236,7 @@ vector1f& vector1f::operator+=(const vectornf_const_view_t& view
 	);
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator+=(const vector2f& data)
 {
 	return this->operator+=(vector1f(get_math_component_x(data))
@@ -216,6 +260,7 @@ vector1f& vector1f::operator+=(const matrix2x2f& data) {}
 vector1f& vector1f::operator+=(const matrix3x3f& data) {}
 
 vector1f& vector1f::operator+=(const matrix4x4f& data) {}
+#endif
 
 vector1f& vector1f::operator-=(float value)
 {
@@ -283,6 +328,7 @@ vector1f& vector1f::operator*=(const vector1f& data)
 	return *this;
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator*=(const matrixnf_view_t& view)
 {
 	return this->operator*=(
@@ -297,6 +343,7 @@ vector1f& vector1f::operator*=(const matrixnf_const_view_t& view
 		vector1f(get_math_component_x(view.c(0)))
 	);
 }
+#endif
 
 vector1f& vector1f::operator*=(const vectornf_view_t& view)
 {
@@ -311,6 +358,7 @@ vector1f& vector1f::operator*=(const vectornf_const_view_t& view
 	);
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator*=(const vector2f& data)
 {
 	return this->operator*=(vector1f(get_math_component_x(data))
@@ -334,6 +382,8 @@ vector1f& vector1f::operator*=(const matrix3x3f& data) {}
 vector1f& vector1f::operator*=(const matrix2x2f& data) {}
 
 vector1f& vector1f::operator*=(const matrix4x4f& data) {}
+
+#endif
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -378,6 +428,7 @@ vector1f& vector1f::operator/=(const vector1f& data)
 	return *this;
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator/=(const matrixnf_view_t& view)
 {
 	return this->operator/=(
@@ -392,6 +443,7 @@ vector1f& vector1f::operator/=(const matrixnf_const_view_t& view
 		vector1f(get_math_component_x(view.c(0)))
 	);
 }
+#endif
 
 vector1f& vector1f::operator/=(const vectornf_const_view_t& view
 )
@@ -406,6 +458,7 @@ vector1f& vector1f::operator/=(const vectornf_view_t& view)
 	);
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator/=(const matrix2x2f& data) {}
 
 vector1f& vector1f::operator/=(const matrix3x3f& data) {}
@@ -429,6 +482,7 @@ vector1f& vector1f::operator/=(const vector4f& data)
 	return this->operator/=(vector1f(get_math_component_x(data))
 	);
 }
+#endif
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 
@@ -461,6 +515,7 @@ vector1f& vector1f::operator%=(const vector1f& data) noexcept
 	return *this;
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator%=(const vector2f& data) noexcept
 {
 	return this->operator%=(vector1f(get_math_component_x(data))
@@ -478,6 +533,7 @@ vector1f& vector1f::operator%=(const vector4f& data) noexcept
 	return this->operator%=(vector1f(get_math_component_x(data))
 	);
 }
+#endif
 
 vector1f& vector1f::operator%=(const vectornf_view_t& view
 ) noexcept
@@ -493,6 +549,7 @@ vector1f& vector1f::operator%=(const vectornf_const_view_t& view
 	);
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator%=(const matrixnf_view_t& view
 ) noexcept
 {
@@ -520,6 +577,7 @@ vector1f& vector1f::operator%=(const matrix3x3f& data) noexcept
 vector1f& vector1f::operator%=(const matrix4x4f& data) noexcept
 {
 }
+#endif
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -554,6 +612,7 @@ bool vector1f::operator==(const vector1f& data) const noexcept
 #endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 bool vector1f::operator==(const vector2f& data) const noexcept
 {
 }
@@ -565,6 +624,7 @@ bool vector1f::operator==(const vector3f& data) const noexcept
 bool vector1f::operator==(const vector4f& data) const noexcept
 {
 }
+#endif
 
 bool vector1f::operator==(const vectornf_view_t& view
 ) const noexcept
@@ -576,6 +636,7 @@ bool vector1f::operator==(const vectornf_const_view_t& view
 {
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 bool vector1f::operator==(const matrixnf_view_t& view
 ) const noexcept
 {
@@ -597,6 +658,7 @@ bool vector1f::operator==(const matrix3x3f& data) const noexcept
 bool vector1f::operator==(const matrix4x4f& data) const noexcept
 {
 }
+#endif
 
 bool vector1f::operator!=(const vector1f& data) const noexcept
 {
@@ -612,6 +674,7 @@ bool vector1f::operator!=(const vector1f& data) const noexcept
 #endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 bool vector1f::operator!=(const vector2f& data) const noexcept
 {
 }
@@ -623,6 +686,7 @@ bool vector1f::operator!=(const vector3f& data) const noexcept
 bool vector1f::operator!=(const vector4f& data) const noexcept
 {
 }
+#endif
 
 bool vector1f::operator!=(const vectornf_view_t& view
 ) const noexcept
@@ -634,6 +698,7 @@ bool vector1f::operator!=(const vectornf_const_view_t& view
 {
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 bool vector1f::operator!=(const matrixnf_view_t& view
 ) const noexcept
 {
@@ -655,6 +720,7 @@ bool vector1f::operator!=(const matrix3x3f& data) const noexcept
 bool vector1f::operator!=(const matrix4x4f& data) const noexcept
 {
 }
+#endif
 
 float vector1f::operator[](math_id_t index) const
 {
@@ -772,6 +838,7 @@ vector1f::e(math_id_t column_id, math_id_t row_id) noexcept
 	return this->operator[](row_id);
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator-=(const matrixnf_const_view_t& view
 )
 {
@@ -786,6 +853,7 @@ vector1f& vector1f::operator-=(const matrixnf_view_t& view)
 		vector1f(get_math_component_x(view.c(0)))
 	);
 }
+#endif
 
 vectornf_view_t vector1f::c(math_id_t column_id) noexcept
 {
@@ -811,6 +879,7 @@ vector1f& vector1f::operator-=(const vectornf_const_view_t& view
 	);
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f& vector1f::operator-=(const vector2f& data)
 {
 	return this->operator-=(vector1f(get_math_component_x(data))
@@ -834,6 +903,26 @@ vector1f& vector1f::operator-=(const matrix2x2f& data) {}
 vector1f& vector1f::operator-=(const matrix3x3f& data) {}
 
 vector1f& vector1f::operator-=(const matrix4x4f& data) {}
+
+#endif
+
+float vector1f::x(void) const noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return this->m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return this->m_base.x;
+#endif
+}
+
+float& vector1f::x(void) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return this->m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return this->m_base.x;
+#endif
+}
 
 KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK KOTEK_END_NAMESPACE_KOTEK

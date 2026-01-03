@@ -11,7 +11,7 @@
 	#include <glm/glm.hpp>
 	#include <glm/gtx/quaternion.hpp>
 	#include <glm/gtc/type_ptr.hpp>
-#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM) // todo: when you use dxm you should re-write their code to column-based order since it is row-based and other math libraries if they have different order compared to columns then change to column-major
 	#include <DirectXMath.h>
 #endif
 

@@ -2,15 +2,6 @@
 
 #include "kotek_std_alias_math.h"
 
-#include "kotek_std_math_matrix1f_view.h"
-#include "kotek_std_math_matrix2f_view.h"
-#include "kotek_std_math_matrix3f_view.h"
-#include "kotek_std_math_matrix4f_view.h"
-#include "kotek_std_math_matrix1f_const_view.h"
-#include "kotek_std_math_matrix2f_const_view.h"
-#include "kotek_std_math_matrix3f_const_view.h"
-#include "kotek_std_math_matrix4f_const_view.h"
-
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
@@ -19,623 +10,168 @@ class matrix3x3f
 {
 public:
 	matrix3x3f(
-		float m00,
-		float m01,
-		float m02,
-		float m10,
-		float m11,
-		float m12,
-		float m20,
-		float m21,
-		float m22
-	) : m_base(m00, m01, m02, m10, m11, m12, m20, m21, m22)
-	{
-	}
-	matrix3x3f(const base_mat3x3_t& data) : m_base(data) {}
-	matrix3x3f(const matrix3x3f& data) : m_base(data.m_base) {}
+		float c0r0,
+		float c0r1,
+		float c0r2,
+		float c1r0,
+		float c1r1,
+		float c1r2,
+		float c2r0,
+		float c2r1,
+		float c2r2
+	);
+	matrix3x3f(const base_mat3x3_t& data);
+	matrix3x3f(const matrix3x3f& data);
+	matrix3x3f(const matrixnf_view_t& view);
+	matrix3x3f(const matrixnf_const_view_t& view);
+
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	matrix3x3f(const DirectX::XMMATRIX& data)
-	{
-		DirectX::XMStoreFloat3x3(&this->m_base, data);
-	}
+	matrix3x3f(const DirectX::XMMATRIX& data);
 #endif
 
-	matrix3x3f(void) : m_base{} {}
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix3x3f(const vector1f& data);
+	matrix3x3f(const vector2f& data);
+	matrix3x3f(const vector3f& data);
+	matrix3x3f(const vector4f& data);
+	matrix3x3f(const vectornf_const_view_t& view);
+	matrix3x3f(const vectornf_view_t& view);
+	matrix3x3f(const matrix2x2f& data);
+	matrix3x3f(const matrix4x4f& data);
+#endif
+
+	matrix3x3f(void);
 
 	~matrix3x3f(void) = default;
 
-	matrix3x3f& operator=(const matrix3x3f& data)
-	{
-		this->m_base = data.m_base;
-		return *this;
-	}
+	matrix3x3f& operator=(const matrix3x3f& data);
+	matrix3x3f& operator=(const base_mat3x3_t& data);
+	matrix3x3f& operator=(const matrixnf_view_t& view);
+	matrix3x3f& operator=(const matrixnf_const_view_t& view);
 
-	matrix3x3f& operator=(const base_mat3x3_t& data)
-	{
-		this->m_base = data;
-		return *this;
-	}
-
-	matrix3x3f& operator+=(const matrix3x3f& data) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_original_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_original_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._31
-				)
-			);
-
-		DirectX::XMVECTOR row_argument_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_argument_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_argument_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._31
-				)
-			);
-
-		row_original_0 = DirectX::XMVectorAdd(
-			row_original_0, row_argument_0
-		);
-		row_original_1 = DirectX::XMVectorAdd(
-			row_original_1, row_argument_1
-		);
-		row_original_2 = DirectX::XMVectorAdd(
-			row_original_2, row_argument_2
-		);
-
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._11
-			),
-			row_original_0
-		);
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._21
-			),
-			row_original_1
-		);
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._31
-			),
-			row_original_2
-		);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base += data.m_base;
-#endif
-		return *this;
-	}
-
-	matrix3x3f& operator+=(const base_mat3x3_t& data) noexcept
-	{
-		return this->operator+=(data);
-	}
-
-	matrix3x3f& operator-=(const matrix3x3f& data) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_original_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_original_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._31
-				)
-			);
-
-		DirectX::XMVECTOR row_argument_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_argument_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_argument_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._31
-				)
-			);
-
-		row_original_0 = DirectX::XMVectorSubtract(
-			row_original_0, row_argument_0
-		);
-		row_original_1 = DirectX::XMVectorSubtract(
-			row_original_1, row_argument_1
-		);
-		row_original_2 = DirectX::XMVectorSubtract(
-			row_original_2, row_argument_2
-		);
-
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._11
-			),
-			row_original_0
-		);
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._21
-			),
-			row_original_1
-		);
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._31
-			),
-			row_original_2
-		);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base -= data.m_base;
-#endif
-		return *this;
-	}
-
-	matrix3x3f& operator-=(const base_mat3x3_t& data) noexcept
-	{
-		return this->operator-=(data);
-	}
-
-	matrix3x3f& operator*=(const matrix3x3f& data) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMMATRIX m1 = *this;
-		DirectX::XMMATRIX m2 = data;
-
-		auto result = DirectX::XMMatrixMultiply(m1, m2);
-
-		DirectX::XMStoreFloat3x3(&this->m_base, result);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base *= data.m_base;
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix3x3f& operator=(const matrix2x2f& data);
+	matrix3x3f& operator=(const matrix4x4f& data);
+	matrix3x3f& operator=(const vector1f& data);
+	matrix3x3f& operator=(const vector2f& data);
+	matrix3x3f& operator=(const vector3f& data);
+	matrix3x3f& operator=(const vector4f& data);
+	matrix3x3f& operator=(const vectornf_view_t& view) noexcept;
+	matrix3x3f& operator=(const vectornf_const_view_t& view
+	) noexcept;
 #endif
 
-		return *this;
-	}
+	matrix3x3f& operator+=(const matrix3x3f& data) noexcept;
+	matrix3x3f& operator+=(const base_mat3x3_t& data) noexcept;
+	matrix3x3f& operator+=(const matrixnf_view_t& view
+	) noexcept;
+	matrix3x3f& operator+=(const matrixnf_const_view_t& view
+	) noexcept;
 
-	matrix3x3f& operator*=(const base_mat3x3_t& data) noexcept
-	{
-		return this->operator*=(data);
-	}
-
-	matrix3x3f& operator*=(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_original_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_original_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._31
-				)
-			);
-
-		row_original_0 =
-			DirectX::XMVectorScale(row_original_0, value);
-		row_original_1 =
-			DirectX::XMVectorScale(row_original_1, value);
-		row_original_2 =
-			DirectX::XMVectorScale(row_original_2, value);
-
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._11
-			),
-			row_original_0
-		);
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._21
-			),
-			row_original_1
-		);
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._31
-			),
-			row_original_2
-		);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base *= value;
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix3x3f& operator+=(const matrix2x2f& data) noexcept;
+	matrix3x3f& operator+=(const matrix4x4f& data) noexcept;
+	matrix3x3f& operator+=(const vector1f& data) noexcept;
+	matrix3x3f& operator+=(const vector2f& data) noexcept;
+	matrix3x3f& operator+=(const vector3f& data) noexcept;
+	matrix3x3f& operator+=(const vector4f& data) noexcept;
+	matrix3x3f& operator+=(const vectornf_view_t& view
+	) noexcept;
+	matrix3x3f& operator+=(const vectornf_const_view_t& view
+	) noexcept;
 #endif
 
-		return *this;
-	}
+	matrix3x3f& operator-=(const matrix3x3f& data) noexcept;
+	matrix3x3f& operator-=(const base_mat3x3_t& data) noexcept;
+	matrix3x3f& operator-=(const matrixnf_view_t& view
+	) noexcept;
+	matrix3x3f& operator-=(const matrixnf_const_view_t& view
+	) noexcept;
 
-	// TODO: provide preprocessor for user implementation here
-	// like
-	// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
-	matrix3x3f& operator/=(const matrix3x3f& data) noexcept
-	{
-		KOTEK_ASSERT(
-			false,
-			"formally it is undefined function in mathematics, "
-			"if it is needed "
-			"provide own version of a such operation"
-		);
-		return *this;
-	}
-
-	matrix3x3f& operator/=(float value) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_original_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_original_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._31
-				)
-			);
-
-		float factor = 1.f / value;
-
-		row_original_0 =
-			DirectX::XMVectorScale(row_original_0, factor);
-		row_original_1 =
-			DirectX::XMVectorScale(row_original_1, factor);
-		row_original_2 =
-			DirectX::XMVectorScale(row_original_2, factor);
-
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._11
-			),
-			row_original_0
-		);
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._21
-			),
-			row_original_1
-		);
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&this->m_base._31
-			),
-			row_original_2
-		);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		this->m_base /= value;
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix3x3f& operator-=(const matrix2x2f& data) noexcept;
+	matrix3x3f& operator-=(const matrix4x4f& data) noexcept;
+	matrix3x3f& operator-=(const vector1f& data) noexcept;
+	matrix3x3f& operator-=(const vector2f& data) noexcept;
+	matrix3x3f& operator-=(const vector3f& data) noexcept;
+	matrix3x3f& operator-=(const vector4f& data) noexcept;
+	matrix3x3f& operator-=(const vectornf_view_t& view
+	) noexcept;
+	matrix3x3f& operator-=(const vectornf_const_view_t& view
+	) noexcept;
 #endif
 
-		return *this;
-	}
-
-	matrix3x3f operator+() const noexcept { return *this; }
-
-	matrix3x3f operator-() const noexcept
-	{
-		matrix3x3f result;
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_original_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_original_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._31
-				)
-			);
-
-		row_original_0 =
-			DirectX::XMVectorNegate(row_original_0);
-		row_original_1 =
-			DirectX::XMVectorNegate(row_original_1);
-		row_original_2 =
-			DirectX::XMVectorNegate(row_original_2);
-
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&result.m_base._11
-			),
-			row_original_0
-		);
-
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&result.m_base._21
-			),
-			row_original_1
-		);
-
-		DirectX::XMStoreFloat3(
-			reinterpret_cast<DirectX::XMFLOAT3*>(
-				&result.m_base._31
-			),
-			row_original_2
-		);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		result = -this->m_base;
+	matrix3x3f& operator*=(const matrix3x3f& data) noexcept;
+	matrix3x3f& operator*=(const matrixnf_view_t& view
+	) noexcept;
+	matrix3x3f& operator*=(const matrixnf_const_view_t& view
+	) noexcept;
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix3x3f& operator*=(const matrix2x2f& data) noexcept;
+	matrix3x3f& operator*=(const matrix4x4f& data) noexcept;
+	matrix3x3f& operator*=(const vector1f& data) noexcept;
+	matrix3x3f& operator*=(const vector2f& data) noexcept;
+	matrix3x3f& operator*=(const vector3f& data) noexcept;
+	matrix3x3f& operator*=(const vector4f& data) noexcept;
+	matrix3x3f& operator*=(const vectornf_view_t& view
+	) noexcept;
+	matrix3x3f& operator*=(const vectornf_const_view_t& view
+	) noexcept;
 #endif
-		return result;
-	}
 
-	bool operator==(const matrix3x3f& data) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_original_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_original_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._31
-				)
-			);
+	matrix3x3f& operator*=(const base_mat3x3_t& data) noexcept;
+	matrix3x3f& operator*=(float value) noexcept;
 
-		DirectX::XMVECTOR row_argument_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_argument_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_argument_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._31
-				)
-			);
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	matrix3x3f& operator/=(const matrix3x3f& data) noexcept;
+	matrix3x3f& operator/=(const matrixnf_view_t& view
+	) noexcept;
+	matrix3x3f& operator/=(const matrixnf_const_view_t& view
+	) noexcept;
 
-		bool is_equal_0 = DirectX::XMVector3Equal(
-			row_original_0, row_argument_0
-		);
-		bool is_equal_1 = DirectX::XMVector3Equal(
-			row_original_1, row_argument_1
-		);
-		bool is_equal_2 = DirectX::XMVector3Equal(
-			row_original_2, row_argument_2
-		);
-
-		return (is_equal_0 && is_equal_1 && is_equal_2);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base == data.m_base;
+	#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	matrix3x3f& operator/=(const matrix2x2f& data) noexcept;
+	matrix3x3f& operator/=(const matrix4x4f& data) noexcept;
+	matrix3x3f& operator/=(const vector1f& data) noexcept;
+	matrix3x3f& operator/=(const vector2f& data) noexcept;
+	matrix3x3f& operator/=(const vector3f& data) noexcept;
+	matrix3x3f& operator/=(const vector4f& data) noexcept;
+	matrix3x3f& operator/=(const vectornf_view_t& view
+	) noexcept;
+	matrix3x3f& operator/=(const vectornf_const_view_t& view
+	) noexcept;
+	#endif
 #endif
-	}
 
-	bool operator!=(const matrix3x3f& data) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		DirectX::XMVECTOR row_original_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_original_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_original_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&this->m_base._31
-				)
-			);
+	matrix3x3f& operator/=(float value) noexcept;
+	matrix3x3f operator+() const noexcept;
+	matrix3x3f operator-() const noexcept;
 
-		DirectX::XMVECTOR row_argument_0 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._11
-				)
-			);
-		DirectX::XMVECTOR row_argument_1 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._21
-				)
-			);
-		DirectX::XMVECTOR row_argument_2 =
-			DirectX::XMLoadFloat3(
-				reinterpret_cast<const DirectX::XMFLOAT3*>(
-					&data.m_base._31
-				)
-			);
-
-		bool is_equal_0 = DirectX::XMVector3NotEqual(
-			row_original_0, row_argument_0
-		);
-		bool is_equal_1 = DirectX::XMVector3NotEqual(
-			row_original_1, row_argument_1
-		);
-		bool is_equal_2 = DirectX::XMVector3NotEqual(
-			row_original_2, row_argument_2
-		);
-
-		return (is_equal_0 || is_equal_1 || is_equal_2);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return this->m_base != data.m_base;
-#endif
-	}
+	bool operator==(const matrix3x3f& data) const noexcept;
+	bool operator!=(const matrix3x3f& data) noexcept;
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	operator DirectX::XMMATRIX(void) const noexcept
-	{
-		return DirectX::XMLoadFloat3x3(&this->m_base);
-	}
+	operator DirectX::XMMATRIX(void) const noexcept;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
 #endif
 
-	matrix3f_view_t operator[](unsigned char row)
-	{
-		KOTEK_ASSERT(
-			row != unsigned char(-1),
-			"out of range (probably you passed a negative "
-			"number)"
-		);
-		KOTEK_ASSERT(row <= 2, "out of range");
+	float
+	e(math_id_t column_id, math_id_t row_id) const noexcept;
+	float& e(math_id_t column_id, math_id_t row_id) noexcept;
 
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return matrix3f_view_t(&this->m_base.m[row][0]);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return &this->m_base[row][0];
-#else
-		return nullptr;
-#endif
-	}
+	vectornf_view_t c(math_id_t column_id) noexcept;
+	vectornf_const_view_t c(math_id_t column_id) const noexcept;
 
-	matrix3f_const_view_t operator[](unsigned char row) const
-	{
-		KOTEK_ASSERT(
-			row != unsigned char(-1),
-			"out of range (probably you passed a negative "
-			"number)"
-		);
-		KOTEK_ASSERT(row <= 2, "out of range!");
+	float* data(void) noexcept;
+	const float* data(void) const noexcept;
+	constexpr math_id_t size_of(void) const noexcept;
+	constexpr math_id_t get_column_count(void) const noexcept;
+	constexpr math_id_t get_row_count(void) const noexcept;
 
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return matrix3f_const_view_t(&this->m_base.m[row][0]);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return &this->m_base[row][0];
-#else
-		return nullptr;
-#endif
-	}
-
-	inline float* data(void) noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return &this->m_base.m[0][0];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return &this->m_base[0][0];
-#else
-	#error todo: provide implementation
-#endif
-	}
-
-	inline const float* data(void) const noexcept
-	{
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		return &this->m_base.m[0][0];
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
-		return &this->m_base[0][0];
-#else
-	#error todo: provide implementation
-#endif
-	}
-
-	inline constexpr unsigned char size_of(void) const noexcept
-	{
-		static_assert(
-			sizeof(float[3][3]) == sizeof(m_base) &&
-			"we gurantee that base type is equal to "
-			"float[3][3] by size"
-		);
-		return static_cast<unsigned char>(sizeof(float[3][3]));
-	}
-
-	inline constexpr unsigned char get_column_count(void
-	) const noexcept
-	{
-		return static_cast<unsigned char>(3);
-	}
-
-	inline constexpr unsigned char get_row_count(void
-	) const noexcept
-	{
-		return static_cast<unsigned char>(3);
-	}
-
-	matrix3x3f& Set_Base(const base_mat3x3_t& data) noexcept
-	{
-		this->m_base = data;
-		return *this;
-	}
-
-	base_mat3x3_t& Get_Base(void) noexcept
-	{
-		return this->m_base;
-	}
-	const base_mat3x3_t& Get_Base(void) const noexcept
-	{
-		return this->m_base;
-	}
+	matrix3x3f& Set_Base(const base_mat3x3_t& data) noexcept;
+	base_mat3x3_t& Get_Base(void) noexcept;
+	const base_mat3x3_t& Get_Base(void) const noexcept;
 
 private:
 	base_mat3x3_t m_base;
@@ -893,8 +429,7 @@ operator/(const matrix3x3f& left, float value) noexcept
 #endif
 }
 
-// TODO: provide preprocessor for user implementation here like
-// KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 inline matrix3x3f operator/(
 	const matrix3x3f& left, const matrix3x3f& right
 ) noexcept
@@ -907,6 +442,7 @@ inline matrix3x3f operator/(
 	);
 	return matrix3x3f();
 }
+#endif
 
 KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK

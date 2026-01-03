@@ -46,12 +46,12 @@ inline float& get_math_component_x(vector3f& vec)
 	return vec.e(0, 0);
 }
 
-inline float get_math_component_x(const vector4f& vec) 
+inline float get_math_component_x(const vector4f& vec)
 {
 	return vec.e(0, 0);
 }
 
-inline float& get_math_component_x(vector4f& vec) 
+inline float& get_math_component_x(vector4f& vec)
 {
 	return vec.e(0, 0);
 }
@@ -69,7 +69,7 @@ inline float& get_math_component_x(vectornf_view_t& view)
 inline float
 get_math_component_x(const vectornf_const_view_t& view)
 {
-	return view.c(0, 0);
+	return view.e(0, 0);
 }
 
 inline float get_math_component_y(const vector2f& vec)
@@ -293,41 +293,43 @@ get_math_dot(const vector2f& left, const vector2f& right)
 #endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 inline vector2f
 get_math_cross(const vector2f& left, const vector2f& right)
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector2Cross(left, right);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vector3f(glm::cross(
 		vector3f(left).Get_Base(), vector3f(right).Get_Base()
 	));
-#endif
+	#endif
 }
 
 inline vector2f
 get_math_cross(const vector2f& left, const vector3f& right)
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector2Cross(left, right);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vector3f(
 		glm::cross(vector3f(left).Get_Base(), right.Get_Base())
 	);
-#endif
+	#endif
 }
 
 inline vector2f
 get_math_cross(const vector2f& left, const vector4f& right)
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector2Cross(left, right);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vector3f(glm::cross(
 		vector3f(left).Get_Base(), vector3f(right).Get_Base()
 	));
-#endif
+	#endif
 }
+#endif
 
 inline float
 get_math_dot(const vector3f& left, const vector3f& right)
@@ -353,17 +355,19 @@ get_math_cross(const vector3f& left, const vector3f& right)
 #endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 inline vector3f
 get_math_cross(const vector3f& left, const vector4f& right)
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector3Cross(left, right);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::cross(
 		left.Get_Base(), vector3f(right).Get_Base()
 	);
-#endif
+	#endif
 }
+#endif
 
 inline float
 get_math_dot(const vector4f& left, const vector4f& right)
@@ -379,29 +383,33 @@ get_math_dot(const vector4f& left, const vector4f& right)
 #endif
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 inline vector4f
 get_math_cross(const vector4f& left, const vector3f& right)
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector3Cross(left, right);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vector3f(
 		glm::cross(vector3f(left).Get_Base(), right.Get_Base())
 	);
-#endif
+	#endif
 }
+#endif
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 inline vector4f
 get_math_cross(const vector4f& left, const vector4f& right)
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return DirectX::XMVector3Cross(left, right);
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vector3f(glm::cross(
 		vector3f(left).Get_Base(), vector3f(right).Get_Base()
 	));
-#endif
+	#endif
 }
+#endif
 
 inline vector1f get_math_normalize(const vector1f& vec)
 {
