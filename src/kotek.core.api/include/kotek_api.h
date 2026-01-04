@@ -1001,30 +1001,6 @@ class ktkIImguiWrapper
 public:
 	virtual ~ktkIImguiWrapper(void) {}
 
-	virtual void EditDragVec2f(
-		const char* label, ktk::math::vector2f* p_vec
-	) = 0;
-	virtual void EditDragVec3f(
-		const char* label, ktk::math::vector3f* p_vec
-	) = 0;
-	virtual void EditDragVec4f(
-		const char* label, ktk::math::vector4f* p_vec
-	) = 0;
-
-	virtual void EditDragMat2x2f(
-		const char* label, ktk::math::matrix2x2f* p_mat
-	) = 0;
-	virtual void EditDragMat3x3f(
-		const char* label, ktk::math::matrix3x3f* p_mat
-	) = 0;
-	virtual void EditDragMat4x4f(
-		const char* label, ktk::math::matrix4x4f* p_mat
-	) = 0;
-
-	virtual void EditDragQuatf(
-		const char* label, ktk::math::quaternionf* p_quat
-	) = 0;
-
 	virtual bool ImGui_ImplGlfw_InitForOpenGL(
 		GLFWwindow* window, bool install_callbacks
 	) = 0;

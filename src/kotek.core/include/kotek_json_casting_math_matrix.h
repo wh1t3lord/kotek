@@ -20,8 +20,8 @@ inline void tag_invoke(
 
 	json::array result;
 
-	row_1 = {data.Get_00(), data.Get_01()};
-	row_2 = {data.Get_10(), data.Get_11()};
+	row_1 = {data.e(0, 0), data.e(0, 1)};
+	row_2 = {data.e(1, 0), data.e(1, 1)};
 
 	result.push_back(row_1);
 	result.push_back(row_2);

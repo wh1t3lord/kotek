@@ -10,351 +10,31 @@ ktkImguiWrapper::ktkImguiWrapper(void) {}
 
 ktkImguiWrapper::~ktkImguiWrapper(void) {}
 
-void ktkImguiWrapper::EditDragVec2f(
-	const char* label, ktk::math::vector2f* p_vec)
-{
-	if (p_vec == nullptr)
-		return;
-
-	this->SeparatorText(label);
-
-	{
-		float value_x = p_vec->x();
-		if (this->DragFloat("X##EditDragVec2f", &value_x))
-		{
-			p_vec->x() = value_x;
-		}
-
-		float value_y = p_vec->y();
-		if (this->DragFloat("Y##EditDragVec2f", &value_y))
-		{
-			p_vec->y() = value_y;
-		}
-	}
-}
-
-void ktkImguiWrapper::EditDragVec3f(
-	const char* label, ktk::math::vector3f* p_vec)
-{
-	if (p_vec == nullptr)
-		return;
-
-	this->SeparatorText(label);
-
-	{
-		float value_x = p_vec->x();
-		if (this->DragFloat("X##EditDragVec3f", &value_x))
-		{
-			p_vec->x() = value_x;
-		}
-
-		float value_y = p_vec->y();
-		if (this->DragFloat("Y##EditDragVec3f", &value_y))
-		{
-			p_vec->y() = value_y;
-		}
-
-		float value_z = p_vec->z();
-		if (this->DragFloat("Z##EditDragVec3f", &value_z))
-		{
-			p_vec->z() = value_z;
-		}
-	}
-}
-
-void ktkImguiWrapper::EditDragVec4f(
-	const char* label, ktk::math::vector4f* p_vec)
-{
-	if (p_vec == nullptr)
-		return;
-
-	this->SeparatorText(label);
-
-	{
-		float value_x = p_vec->x();
-		if (this->DragFloat("X##EditDragVec4f", &value_x))
-		{
-			p_vec->x() = value_x;
-		}
-
-		float value_y = p_vec->y();
-		if (this->DragFloat("Y##EditDragVec4f", &value_y))
-		{
-			p_vec->y() = value_y;
-		}
-
-		float value_z = p_vec->z();
-		if (this->DragFloat("Z##EditDragVec4f", &value_z))
-		{
-			p_vec->z() = value_z;
-		}
-
-		float value_w = p_vec->w();
-		if (this->DragFloat("W##EditDragVec4f", &value_w))
-		{
-			p_vec->w() = value_w;
-		}
-	}
-}
-
-void ktkImguiWrapper::EditDragMat2x2f(
-	const char* label, ktk::math::matrix2x2f* p_mat)
-{
-	if (p_mat == nullptr)
-		return;
-
-	this->SeparatorText(label);
-
-	{
-		float value_x = p_mat->Get_00();
-		if (this->DragFloat("X##EditDragMat2x2f_00", &value_x))
-		{
-			p_mat->Set_00(value_x);
-		}
-		this->SameLine();
-		float value_y = p_mat->Get_01();
-		if (this->DragFloat("Y##EditDragMat2x2f_01", &value_y))
-		{
-			p_mat->Set_01(value_y);
-		}
-
-		value_x = p_mat->Get_10();
-		if (this->DragFloat("X##EditDragMat2x2f_10", &value_x))
-		{
-			p_mat->Set_10(value_x);
-		}
-		this->SameLine();
-		value_y = p_mat->Get_11();
-		if (this->DragFloat("Y##EditDragMat2x2f_11", &value_y))
-		{
-			p_mat->Set_11(value_y);
-		}
-	}
-}
-
-void ktkImguiWrapper::EditDragMat3x3f(
-	const char* label, ktk::math::matrix3x3f* p_mat)
-{
-	if (p_mat == nullptr)
-		return;
-
-	this->SeparatorText(label);
-
-	{
-		float value_x = p_mat->operator[](0)[0];
-		if (this->DragFloat("X##EditDragMat3x3f_00", &value_x))
-		{
-			p_mat->operator[](0)[0] = (value_x);
-		}
-		this->SameLine();
-		float value_y = p_mat->operator[](0)[1];
-		if (this->DragFloat("Y##EditDragMat3x3f_01", &value_y))
-		{
-			p_mat->operator[](0)[1] = (value_y);
-		}
-		this->SameLine();
-		float value_z = p_mat->operator[](0)[2];
-		if (this->DragFloat("Z##EditDragMat3x3f_02", &value_z))
-		{
-			p_mat->operator[](0)[2] = (value_z);
-		}
-
-		value_x = p_mat->operator[](1)[0];
-		if (this->DragFloat("X##EditDragMat3x3f_10", &value_x))
-		{
-			p_mat->operator[](1)[0] = (value_x);
-		}
-		this->SameLine();
-		value_y = p_mat->operator[](1)[1];
-		if (this->DragFloat("Y##EditDragMat3x3f_11", &value_y))
-		{
-			p_mat->operator[](1)[1] = (value_y);
-		}
-		this->SameLine();
-		value_z = p_mat->operator[](1)[2];
-		if (this->DragFloat("Z##EditDragMat3x3f_12", &value_z))
-		{
-			p_mat->operator[](1)[2] = (value_z);
-		}
-
-		value_x = p_mat->operator[](2)[0];
-		if (this->DragFloat("X##EditDragMat3x3f_20", &value_x))
-		{
-			p_mat->operator[](2)[0] = (value_x);
-		}
-		this->SameLine();
-		value_y = p_mat->operator[](2)[1];
-		if (this->DragFloat("Y##EditDragMat3x3f_21", &value_y))
-		{
-			p_mat->operator[](2)[1] = (value_y);
-		}
-		this->SameLine();
-		value_z = p_mat->operator[](2)[2];
-		if (this->DragFloat("Z##EditDragMat3x3f_22", &value_z))
-		{
-			p_mat->operator[](2)[2] = (value_z);
-		}
-	}
-}
-
-void ktkImguiWrapper::EditDragMat4x4f(
-	const char* label, ktk::math::matrix4x4f* p_mat)
-{
-	if (p_mat == nullptr)
-		return;
-
-	this->SeparatorText(label);
-
-	{
-		float value_x = p_mat->operator[](0)[0];
-		if (this->DragFloat("X##EditDragMat4x4f_00", &value_x))
-		{
-			p_mat->operator[](0)[0] = (value_x);
-		}
-		this->SameLine();
-		float value_y = p_mat->operator[](0)[1];
-		if (this->DragFloat("Y##EditDragMat4x4f_01", &value_y))
-		{
-			p_mat->operator[](0)[1] = (value_y);
-		}
-		this->SameLine();
-		float value_z = p_mat->operator[](0)[2];
-		if (this->DragFloat("Z##EditDragMat4x4f_02", &value_z))
-		{
-			p_mat->operator[](0)[2] = (value_z);
-		}
-		this->SameLine();
-		float value_w = p_mat->operator[](0)[3];
-		if (this->DragFloat("W##EditDragMat4x4f_03", &value_w))
-		{
-			p_mat->operator[](0)[3] = (value_w);
-		}
-
-		value_x = p_mat->operator[](1)[0];
-		if (this->DragFloat("X##EditDragMat4x4f_10", &value_x))
-		{
-			p_mat->operator[](1)[0] = (value_x);
-		}
-		this->SameLine();
-		value_y = p_mat->operator[](1)[1];
-		if (this->DragFloat("Y##EditDragMat4x4f_11", &value_y))
-		{
-			p_mat->operator[](1)[1] = (value_y);
-		}
-		this->SameLine();
-		value_z = p_mat->operator[](1)[2];
-		if (this->DragFloat("Z##EditDragMat4x4f_12", &value_z))
-		{
-			p_mat->operator[](1)[2] = (value_z);
-		}
-		this->SameLine();
-		value_w = p_mat->operator[](1)[3];
-		if (this->DragFloat("W##EditDragMat4x4f_13", &value_w))
-		{
-			p_mat->operator[](1)[3] = (value_w);
-		}
-
-		value_x = p_mat->operator[](2)[0];
-		if (this->DragFloat("X##EditDragMat4x4f_20", &value_x))
-		{
-			p_mat->operator[](2)[0] = (value_x);
-		}
-		this->SameLine();
-		value_y = p_mat->operator[](2)[1];
-		if (this->DragFloat("Y##EditDragMat4x4f_21", &value_y))
-		{
-			p_mat->operator[](2)[1] = (value_y);
-		}
-		this->SameLine();
-		value_z = p_mat->operator[](2)[2];
-		if (this->DragFloat("Z##EditDragMat4x4f_22", &value_z))
-		{
-			p_mat->operator[](2)[2] = (value_z);
-		}
-		this->SameLine();
-		value_w = p_mat->operator[](2)[3];
-		if (this->DragFloat("W##EditDragMat4x4f_23", &value_w))
-		{
-			p_mat->operator[](2)[3] = (value_w);
-		}
-
-		value_x = p_mat->operator[](3)[0];
-		if (this->DragFloat("X##EditDragMat4x4f_30", &value_x))
-		{
-			p_mat->operator[](3)[0] = (value_x);
-		}
-		this->SameLine();
-		value_y = p_mat->operator[](3)[1];
-		if (this->DragFloat("Y##EditDragMat4x4f_31", &value_y))
-		{
-			p_mat->operator[](3)[1] = (value_y);
-		}
-		this->SameLine();
-		value_z = p_mat->operator[](3)[2];
-		if (this->DragFloat("Z##EditDragMat4x4f_32", &value_z))
-		{
-			p_mat->operator[](3)[2] = (value_z);
-		}
-		this->SameLine();
-		value_w = p_mat->operator[](3)[3];
-		if (this->DragFloat("W##EditDragMat4x4f_33", &value_w))
-		{
-			p_mat->operator[](3)[3] = (value_w);
-		}
-	}
-}
-
-void ktkImguiWrapper::EditDragQuatf(
-	const char* label, ktk::math::quaternionf* p_quat)
-{
-	if (p_quat == nullptr)
-		return;
-
-	this->SeparatorText(label);
-
-	{
-		float value_x = p_quat->x();
-		if (this->DragFloat("X##editdragquatf", &value_x))
-		{
-			p_quat->x() = value_x;
-		}
-
-		float value_y = p_quat->y();
-		if (this->DragFloat("Y##editdragquatf", &value_y))
-		{
-			p_quat->y() = value_y;
-		}
-
-		float value_z = p_quat->z();
-		if (this->DragFloat("Z##editdragquatf", &value_z))
-		{
-			p_quat->z() = value_z;
-		}
-
-		float value_w = p_quat->w();
-		if (this->DragFloat("W##editdragquatf", &value_w))
-		{
-			p_quat->w() = value_w;
-		}
-	}
-}
-
 bool ktkImguiWrapper::ImGui_ImplGlfw_InitForOpenGL(
-	GLFWwindow* window, bool install_callbacks)
+	GLFWwindow* window, bool install_callbacks
+)
 {
-	return ::ImGui_ImplGlfw_InitForOpenGL(window, install_callbacks);
+	return ::ImGui_ImplGlfw_InitForOpenGL(
+		window, install_callbacks
+	);
 }
 
 bool ktkImguiWrapper::ImGui_ImplGlfw_InitForVulkan(
-	GLFWwindow* window, bool install_callbacks)
+	GLFWwindow* window, bool install_callbacks
+)
 {
-	return ::ImGui_ImplGlfw_InitForVulkan(window, install_callbacks);
+	return ::ImGui_ImplGlfw_InitForVulkan(
+		window, install_callbacks
+	);
 }
 
 bool ktkImguiWrapper::ImGui_ImplGlfw_InitForOther(
-	GLFWwindow* window, bool install_callbacks)
+	GLFWwindow* window, bool install_callbacks
+)
 {
-	return ::ImGui_ImplGlfw_InitForOther(window, install_callbacks);
+	return ::ImGui_ImplGlfw_InitForOther(
+		window, install_callbacks
+	);
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_Shutdown()
@@ -368,54 +48,72 @@ void ktkImguiWrapper::ImGui_ImplGlfw_NewFrame()
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_WindowFocusCallback(
-	GLFWwindow* window, int focused)
+	GLFWwindow* window, int focused
+)
 {
 	::ImGui_ImplGlfw_WindowFocusCallback(window, focused);
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_CursorEnterCallback(
-	GLFWwindow* window, int entered)
+	GLFWwindow* window, int entered
+)
 {
 	::ImGui_ImplGlfw_CursorEnterCallback(window, entered);
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_MouseButtonCallback(
-	GLFWwindow* window, int button, int action, int mods)
+	GLFWwindow* window, int button, int action, int mods
+)
 {
-	::ImGui_ImplGlfw_MouseButtonCallback(window, button, action, mods);
+	::ImGui_ImplGlfw_MouseButtonCallback(
+		window, button, action, mods
+	);
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_ScrollCallback(
-	GLFWwindow* window, double xoffset, double yoffset)
+	GLFWwindow* window, double xoffset, double yoffset
+)
 {
 	::ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_KeyCallback(
-	GLFWwindow* window, int key, int scancode, int action, int mods)
+	GLFWwindow* window,
+	int key,
+	int scancode,
+	int action,
+	int mods
+)
 {
-	::ImGui_ImplGlfw_KeyCallback(window, key, scancode, action, mods);
+	::ImGui_ImplGlfw_KeyCallback(
+		window, key, scancode, action, mods
+	);
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_CharCallback(
-	GLFWwindow* window, unsigned int c)
+	GLFWwindow* window, unsigned int c
+)
 {
 	::ImGui_ImplGlfw_CharCallback(window, c);
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_MonitorCallback(
-	GLFWmonitor* monitor, int event)
+	GLFWmonitor* monitor, int event
+)
 {
 	::ImGui_ImplGlfw_MonitorCallback(monitor, event);
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_CursorPosCallback(
-	GLFWwindow* window, double x, double y)
+	GLFWwindow* window, double x, double y
+)
 {
 	::ImGui_ImplGlfw_CursorPosCallback(window, x, y);
 }
 
-bool ktkImguiWrapper::ImGui_ImplOpenGL3_Init(const char* glsl_version)
+bool ktkImguiWrapper::ImGui_ImplOpenGL3_Init(
+	const char* glsl_version
+)
 {
 	return ::ImGui_ImplOpenGL3_Init(glsl_version);
 }
@@ -430,7 +128,9 @@ void ktkImguiWrapper::ImGui_ImplOpenGL3_NewFrame()
 	::ImGui_ImplOpenGL3_NewFrame();
 }
 
-void ktkImguiWrapper::ImGui_ImplOpenGL3_RenderDrawData(ImDrawData* draw_data)
+void ktkImguiWrapper::ImGui_ImplOpenGL3_RenderDrawData(
+	ImDrawData* draw_data
+)
 {
 	::ImGui_ImplOpenGL3_RenderDrawData(draw_data);
 }
@@ -457,12 +157,15 @@ void ktkImguiWrapper::ImGui_ImplOpenGL3_DestroyDeviceObjects()
 
 void* ktkImguiWrapper::CreateContext(void* shared_font_atlas)
 {
-	return ::ImGui::CreateContext(static_cast<ImFontAtlas*>(shared_font_atlas));
+	return ::ImGui::CreateContext(
+		static_cast<ImFontAtlas*>(shared_font_atlas)
+	);
 }
 
 void ktkImguiWrapper::DestroyContext(void* context)
 {
-	::ImGui::DestroyContext(static_cast<ImGuiContext*>(context));
+	::ImGui::DestroyContext(static_cast<ImGuiContext*>(context)
+	);
 }
 
 ImGuiIO& ktkImguiWrapper::GetIO(void)
@@ -551,7 +254,8 @@ void ktkImguiWrapper::StyleColorsClassic(ImGuiStyle* dst)
 	::ImGui::StyleColorsClassic(dst);
 }
 bool ktkImguiWrapper::Begin(
-	const char* name, bool* p_open, ImGuiWindowFlags flags)
+	const char* name, bool* p_open, ImGuiWindowFlags flags
+)
 {
 	return ::ImGui::Begin(name, p_open, flags);
 }
@@ -560,12 +264,20 @@ void ktkImguiWrapper::End()
 	::ImGui::End();
 }
 bool ktkImguiWrapper::BeginChild(
-	const char* str_id, const ImVec2& size, bool border, ImGuiWindowFlags flags)
+	const char* str_id,
+	const ImVec2& size,
+	bool border,
+	ImGuiWindowFlags flags
+)
 {
 	return ::ImGui::BeginChild(str_id, size, border, flags);
 }
 bool ktkImguiWrapper::BeginChild(
-	ImGuiID id, const ImVec2& size, bool border, ImGuiWindowFlags flags)
+	ImGuiID id,
+	const ImVec2& size,
+	bool border,
+	ImGuiWindowFlags flags
+)
 {
 	return ::ImGui::BeginChild(id, size, border, flags);
 }
@@ -610,26 +322,40 @@ float ktkImguiWrapper::GetWindowHeight()
 	return ::ImGui::GetWindowHeight();
 }
 void ktkImguiWrapper::SetNextWindowPos(
-	const ImVec2& pos, ImGuiCond cond, const ImVec2& pivot)
+	const ImVec2& pos, ImGuiCond cond, const ImVec2& pivot
+)
 {
 	::ImGui::SetNextWindowPos(pos, cond, pivot);
 }
-void ktkImguiWrapper::SetNextWindowSize(const ImVec2& size, ImGuiCond cond)
+void ktkImguiWrapper::SetNextWindowSize(
+	const ImVec2& size, ImGuiCond cond
+)
 {
 	::ImGui::SetNextWindowSize(size, cond);
 }
-void ktkImguiWrapper::SetNextWindowSizeConstraints(const ImVec2& size_min,
-	const ImVec2& size_max, ImGuiSizeCallback custom_callback,
-	void* custom_callback_data)
+void ktkImguiWrapper::SetNextWindowSizeConstraints(
+	const ImVec2& size_min,
+	const ImVec2& size_max,
+	ImGuiSizeCallback custom_callback,
+	void* custom_callback_data
+)
 {
 	::ImGui::SetNextWindowSizeConstraints(
-		size_min, size_max, custom_callback, custom_callback_data);
+		size_min,
+		size_max,
+		custom_callback,
+		custom_callback_data
+	);
 }
-void ktkImguiWrapper::SetNextWindowContentSize(const ImVec2& size)
+void ktkImguiWrapper::SetNextWindowContentSize(
+	const ImVec2& size
+)
 {
 	::ImGui::SetNextWindowContentSize(size);
 }
-void ktkImguiWrapper::SetNextWindowCollapsed(bool collapsed, ImGuiCond cond)
+void ktkImguiWrapper::SetNextWindowCollapsed(
+	bool collapsed, ImGuiCond cond
+)
 {
 	::ImGui::SetNextWindowCollapsed(collapsed, cond);
 }
@@ -649,15 +375,21 @@ void ktkImguiWrapper::SetNextWindowViewport(ImGuiID viewport_id)
 #endif
 }
 
-void ktkImguiWrapper::SetWindowPos(const ImVec2& pos, ImGuiCond cond)
+void ktkImguiWrapper::SetWindowPos(
+	const ImVec2& pos, ImGuiCond cond
+)
 {
 	::ImGui::SetWindowPos(pos, cond);
 }
-void ktkImguiWrapper::SetWindowSize(const ImVec2& size, ImGuiCond cond)
+void ktkImguiWrapper::SetWindowSize(
+	const ImVec2& size, ImGuiCond cond
+)
 {
 	::ImGui::SetWindowSize(size, cond);
 }
-void ktkImguiWrapper::SetWindowCollapsed(bool collapsed, ImGuiCond cond)
+void ktkImguiWrapper::SetWindowCollapsed(
+	bool collapsed, ImGuiCond cond
+)
 {
 	::ImGui::SetWindowCollapsed(collapsed, cond);
 }
@@ -670,17 +402,20 @@ void ktkImguiWrapper::SetWindowFontScale(float scale)
 	::ImGui::SetWindowFontScale(scale);
 }
 void ktkImguiWrapper::SetWindowPos(
-	const char* name, const ImVec2& pos, ImGuiCond cond)
+	const char* name, const ImVec2& pos, ImGuiCond cond
+)
 {
 	::ImGui::SetWindowPos(name, pos, cond);
 }
 void ktkImguiWrapper::SetWindowSize(
-	const char* name, const ImVec2& size, ImGuiCond cond)
+	const char* name, const ImVec2& size, ImGuiCond cond
+)
 {
 	::ImGui::SetWindowSize(name, size, cond);
 }
 void ktkImguiWrapper::SetWindowCollapsed(
-	const char* name, bool collapsed, ImGuiCond cond)
+	const char* name, bool collapsed, ImGuiCond cond
+)
 {
 	::ImGui::SetWindowCollapsed(name, collapsed, cond);
 }
@@ -721,11 +456,15 @@ void ktkImguiWrapper::SetScrollHereY(float center_y_ratio)
 {
 	::ImGui::SetScrollHereY(center_y_ratio);
 }
-void ktkImguiWrapper::SetScrollFromPosX(float local_x, float center_x_ratio)
+void ktkImguiWrapper::SetScrollFromPosX(
+	float local_x, float center_x_ratio
+)
 {
 	::ImGui::SetScrollFromPosX(local_x, center_x_ratio);
 }
-void ktkImguiWrapper::SetScrollFromPosY(float local_y, float center_y_ratio)
+void ktkImguiWrapper::SetScrollFromPosY(
+	float local_y, float center_y_ratio
+)
 {
 	::ImGui::SetScrollFromPosY(local_y, center_y_ratio);
 }
@@ -741,7 +480,9 @@ void ktkImguiWrapper::PushStyleColor(ImGuiCol idx, ImU32 col)
 {
 	::ImGui::PushStyleColor(idx, col);
 }
-void ktkImguiWrapper::PushStyleColor(ImGuiCol idx, const ImVec4& col)
+void ktkImguiWrapper::PushStyleColor(
+	ImGuiCol idx, const ImVec4& col
+)
 {
 	::ImGui::PushStyleColor(idx, col);
 }
@@ -753,7 +494,9 @@ void ktkImguiWrapper::PushStyleVar(ImGuiStyleVar idx, float val)
 {
 	::ImGui::PushStyleVar(idx, val);
 }
-void ktkImguiWrapper::PushStyleVar(ImGuiStyleVar idx, const ImVec2& val)
+void ktkImguiWrapper::PushStyleVar(
+	ImGuiStyleVar idx, const ImVec2& val
+)
 {
 	::ImGui::PushStyleVar(idx, val);
 }
@@ -761,7 +504,9 @@ void ktkImguiWrapper::PopStyleVar(int count)
 {
 	::ImGui::PopStyleVar(count);
 }
-void ktkImguiWrapper::PushAllowKeyboardFocus(bool allow_keyboard_focus)
+void ktkImguiWrapper::PushAllowKeyboardFocus(
+	bool allow_keyboard_focus
+)
 {
 	::ImGui::PushAllowKeyboardFocus(allow_keyboard_focus);
 }
@@ -813,7 +558,9 @@ ImVec2 ktkImguiWrapper::GetFontTexUvWhitePixel()
 {
 	return ::ImGui::GetFontTexUvWhitePixel();
 }
-ImU32 ktkImguiWrapper::GetColorU32(ImGuiCol idx, float alpha_mul)
+ImU32 ktkImguiWrapper::GetColorU32(
+	ImGuiCol idx, float alpha_mul
+)
 {
 	return ::ImGui::GetColorU32(idx, alpha_mul);
 }
@@ -840,7 +587,9 @@ void ktkImguiWrapper::SeparatorText(const char* p_text)
 	::ImGui::SeparatorText(p_text);
 }
 
-void ktkImguiWrapper::SameLine(float offset_from_start_x, float spacing)
+void ktkImguiWrapper::SameLine(
+	float offset_from_start_x, float spacing
+)
 {
 	::ImGui::SameLine(offset_from_start_x, spacing);
 }
@@ -925,7 +674,9 @@ void ktkImguiWrapper::PushID(const char* str_id)
 {
 	::ImGui::PushID(str_id);
 }
-void ktkImguiWrapper::PushID(const char* str_id_begin, const char* str_id_end)
+void ktkImguiWrapper::PushID(
+	const char* str_id_begin, const char* str_id_end
+)
 {
 	::ImGui::PushID(str_id_begin, str_id_end);
 }
@@ -945,7 +696,9 @@ ImGuiID ktkImguiWrapper::GetID(const char* str_id)
 {
 	return ::ImGui::GetID(str_id);
 }
-ImGuiID ktkImguiWrapper::GetID(const char* str_id_begin, const char* str_id_end)
+ImGuiID ktkImguiWrapper::GetID(
+	const char* str_id_begin, const char* str_id_end
+)
 {
 	return ::ImGui::GetID(str_id_begin, str_id_end);
 }
@@ -953,7 +706,9 @@ ImGuiID ktkImguiWrapper::GetID(const void* ptr_id)
 {
 	return ::ImGui::GetID(ptr_id);
 }
-void ktkImguiWrapper::TextUnformatted(const char* text, const char* text_end)
+void ktkImguiWrapper::TextUnformatted(
+	const char* text, const char* text_end
+)
 {
 	::ImGui::TextUnformatted(text, text_end);
 }
@@ -968,7 +723,9 @@ void ktkImguiWrapper::TextV(const char* fmt, va_list args)
 {
 	::ImGui::TextV(fmt, args);
 }
-void ktkImguiWrapper::TextColored(const ImVec4& col, const char* fmt, ...)
+void ktkImguiWrapper::TextColored(
+	const ImVec4& col, const char* fmt, ...
+)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -976,7 +733,8 @@ void ktkImguiWrapper::TextColored(const ImVec4& col, const char* fmt, ...)
 	va_end(args);
 }
 void ktkImguiWrapper::TextColoredV(
-	const ImVec4& col, const char* fmt, va_list args)
+	const ImVec4& col, const char* fmt, va_list args
+)
 {
 	::ImGui::TextColoredV(col, fmt, args);
 }
@@ -987,7 +745,9 @@ void ktkImguiWrapper::TextDisabled(const char* fmt, ...)
 	::ImGui::TextDisabledV(fmt, args);
 	va_end(args);
 }
-void ktkImguiWrapper::TextDisabledV(const char* fmt, va_list args)
+void ktkImguiWrapper::TextDisabledV(
+	const char* fmt, va_list args
+)
 {
 	::ImGui::TextDisabledV(fmt, args);
 }
@@ -998,11 +758,15 @@ void ktkImguiWrapper::TextWrapped(const char* fmt, ...)
 	::ImGui::TextWrappedV(fmt, args);
 	va_end(args);
 }
-void ktkImguiWrapper::TextWrappedV(const char* fmt, va_list args)
+void ktkImguiWrapper::TextWrappedV(
+	const char* fmt, va_list args
+)
 {
 	::ImGui::TextWrappedV(fmt, args);
 }
-void ktkImguiWrapper::LabelText(const char* label, const char* fmt, ...)
+void ktkImguiWrapper::LabelText(
+	const char* label, const char* fmt, ...
+)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -1010,7 +774,8 @@ void ktkImguiWrapper::LabelText(const char* label, const char* fmt, ...)
 	va_end(args);
 }
 void ktkImguiWrapper::LabelTextV(
-	const char* label, const char* fmt, va_list args)
+	const char* label, const char* fmt, va_list args
+)
 {
 	::ImGui::LabelTextV(label, fmt, args);
 }
@@ -1025,7 +790,9 @@ void ktkImguiWrapper::BulletTextV(const char* fmt, va_list args)
 {
 	::ImGui::BulletTextV(fmt, args);
 }
-bool ktkImguiWrapper::Button(const char* label, const ImVec2& size)
+bool ktkImguiWrapper::Button(
+	const char* label, const ImVec2& size
+)
 {
 	return ::ImGui::Button(label, size);
 }
@@ -1034,51 +801,85 @@ bool ktkImguiWrapper::SmallButton(const char* label)
 	return ::ImGui::SmallButton(label);
 }
 bool ktkImguiWrapper::InvisibleButton(
-	const char* str_id, const ImVec2& size, ImGuiButtonFlags flags)
+	const char* str_id,
+	const ImVec2& size,
+	ImGuiButtonFlags flags
+)
 {
 	return ::ImGui::InvisibleButton(str_id, size, flags);
 }
-bool ktkImguiWrapper::ArrowButton(const char* str_id, ImGuiDir dir)
+bool ktkImguiWrapper::ArrowButton(
+	const char* str_id, ImGuiDir dir
+)
 {
 	return ::ImGui::ArrowButton(str_id, dir);
 }
-void ktkImguiWrapper::Image(ImTextureID user_texture_id, const ImVec2& size,
-	const ImVec2& uv0, const ImVec2& uv1, const ImVec4& tint_col,
-	const ImVec4& border_col)
+void ktkImguiWrapper::Image(
+	ImTextureID user_texture_id,
+	const ImVec2& size,
+	const ImVec2& uv0,
+	const ImVec2& uv1,
+	const ImVec4& tint_col,
+	const ImVec4& border_col
+)
 {
-	::ImGui::Image(user_texture_id, size, uv0, uv1, tint_col, border_col);
+	::ImGui::Image(
+		user_texture_id, size, uv0, uv1, tint_col, border_col
+	);
 }
-bool ktkImguiWrapper::ImageButton(const char* str_id,
-	ImTextureID user_texture_id, const ImVec2& image_size, const ImVec2& uv0,
-	const ImVec2& uv1, const ImVec4& bg_col, const ImVec4& tint_col)
+bool ktkImguiWrapper::ImageButton(
+	const char* str_id,
+	ImTextureID user_texture_id,
+	const ImVec2& image_size,
+	const ImVec2& uv0,
+	const ImVec2& uv1,
+	const ImVec4& bg_col,
+	const ImVec4& tint_col
+)
 {
 	return ImGui::ImageButton(
-		str_id, user_texture_id, image_size, uv0, uv1, bg_col, tint_col);
+		str_id,
+		user_texture_id,
+		image_size,
+		uv0,
+		uv1,
+		bg_col,
+		tint_col
+	);
 }
 bool ktkImguiWrapper::Checkbox(const char* label, bool* v)
 {
 	return ::ImGui::Checkbox(label, v);
 }
 bool ktkImguiWrapper::CheckboxFlags(
-	const char* label, int* flags, int flags_value)
+	const char* label, int* flags, int flags_value
+)
 {
 	return ::ImGui::CheckboxFlags(label, flags, flags_value);
 }
 bool ktkImguiWrapper::CheckboxFlags(
-	const char* label, unsigned int* flags, unsigned int flags_value)
+	const char* label,
+	unsigned int* flags,
+	unsigned int flags_value
+)
 {
 	return ::ImGui::CheckboxFlags(label, flags, flags_value);
 }
-bool ktkImguiWrapper::RadioButton(const char* label, bool active)
+bool ktkImguiWrapper::RadioButton(
+	const char* label, bool active
+)
 {
 	return ::ImGui::RadioButton(label, active);
 }
-bool ktkImguiWrapper::RadioButton(const char* label, int* v, int v_button)
+bool ktkImguiWrapper::RadioButton(
+	const char* label, int* v, int v_button
+)
 {
 	return ::ImGui::RadioButton(label, v, v_button);
 }
 void ktkImguiWrapper::ProgressBar(
-	float fraction, const ImVec2& size_arg, const char* overlay)
+	float fraction, const ImVec2& size_arg, const char* overlay
+)
 {
 	::ImGui::ProgressBar(fraction, size_arg, overlay);
 }
@@ -1087,7 +888,10 @@ void ktkImguiWrapper::Bullet()
 	::ImGui::Bullet();
 }
 bool ktkImguiWrapper::BeginCombo(
-	const char* label, const char* preview_value, ImGuiComboFlags flags)
+	const char* label,
+	const char* preview_value,
+	ImGuiComboFlags flags
+)
 {
 	return ::ImGui::BeginCombo(label, preview_value, flags);
 }
@@ -1095,276 +899,673 @@ void ktkImguiWrapper::EndCombo()
 {
 	::ImGui::EndCombo();
 }
-bool ktkImguiWrapper::Combo(const char* label, int* current_item,
-	const char* const items[], int items_count, int popup_max_height_in_items)
+bool ktkImguiWrapper::Combo(
+	const char* label,
+	int* current_item,
+	const char* const items[],
+	int items_count,
+	int popup_max_height_in_items
+)
 {
 	return ::ImGui::Combo(
-		label, current_item, items, items_count, popup_max_height_in_items);
+		label,
+		current_item,
+		items,
+		items_count,
+		popup_max_height_in_items
+	);
 }
-bool ktkImguiWrapper::Combo(const char* label, int* current_item,
-	const char* items_separated_by_zeros, int popup_max_height_in_items)
+bool ktkImguiWrapper::Combo(
+	const char* label,
+	int* current_item,
+	const char* items_separated_by_zeros,
+	int popup_max_height_in_items
+)
 {
-	return ::ImGui::Combo(label, current_item, items_separated_by_zeros,
-		popup_max_height_in_items);
+	return ::ImGui::Combo(
+		label,
+		current_item,
+		items_separated_by_zeros,
+		popup_max_height_in_items
+	);
 }
-bool ktkImguiWrapper::Combo(const char* label, int* current_item,
-	bool (*items_getter)(void* data, int idx, const char** out_text),
-	void* data, int items_count, int popup_max_height_in_items)
+bool ktkImguiWrapper::Combo(
+	const char* label,
+	int* current_item,
+	bool (*items_getter)(
+		void* data, int idx, const char** out_text
+	),
+	void* data,
+	int items_count,
+	int popup_max_height_in_items
+)
 {
-	return ::ImGui::Combo(label, current_item, items_getter, data, items_count,
-		popup_max_height_in_items);
+	return ::ImGui::Combo(
+		label,
+		current_item,
+		items_getter,
+		data,
+		items_count,
+		popup_max_height_in_items
+	);
 }
-bool ktkImguiWrapper::DragFloat(const char* label, float* v, float v_speed,
-	float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragFloat(
+	const char* label,
+	float* v,
+	float v_speed,
+	float v_min,
+	float v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragFloat(label, v, v_speed, v_min, v_max, format, flags);
+	return ::ImGui::DragFloat(
+		label, v, v_speed, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::DragFloat2(const char* label, float v[2], float v_speed,
-	float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragFloat2(
+	const char* label,
+	float v[2],
+	float v_speed,
+	float v_min,
+	float v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragFloat2(label, v, v_speed, v_min, v_max, format, flags);
+	return ::ImGui::DragFloat2(
+		label, v, v_speed, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::DragFloat3(const char* label, float v[3], float v_speed,
-	float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragFloat3(
+	const char* label,
+	float v[3],
+	float v_speed,
+	float v_min,
+	float v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragFloat3(label, v, v_speed, v_min, v_max, format, flags);
+	return ::ImGui::DragFloat3(
+		label, v, v_speed, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::DragFloat4(const char* label, float v[4], float v_speed,
-	float v_min, float v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragFloat4(
+	const char* label,
+	float v[4],
+	float v_speed,
+	float v_min,
+	float v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragFloat4(label, v, v_speed, v_min, v_max, format, flags);
+	return ::ImGui::DragFloat4(
+		label, v, v_speed, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::DragFloatRange2(const char* label, float* v_current_min,
-	float* v_current_max, float v_speed, float v_min, float v_max,
-	const char* format, const char* format_max, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragFloatRange2(
+	const char* label,
+	float* v_current_min,
+	float* v_current_max,
+	float v_speed,
+	float v_min,
+	float v_max,
+	const char* format,
+	const char* format_max,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragFloatRange2(label, v_current_min, v_current_max,
-		v_speed, v_min, v_max, format, format_max, flags);
+	return ::ImGui::DragFloatRange2(
+		label,
+		v_current_min,
+		v_current_max,
+		v_speed,
+		v_min,
+		v_max,
+		format,
+		format_max,
+		flags
+	);
 }
-bool ktkImguiWrapper::DragInt(const char* label, int* v, float v_speed,
-	int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragInt(
+	const char* label,
+	int* v,
+	float v_speed,
+	int v_min,
+	int v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragInt(label, v, v_speed, v_min, v_max, format, flags);
+	return ::ImGui::DragInt(
+		label, v, v_speed, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::DragInt2(const char* label, int v[2], float v_speed,
-	int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragInt2(
+	const char* label,
+	int v[2],
+	float v_speed,
+	int v_min,
+	int v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragInt2(label, v, v_speed, v_min, v_max, format, flags);
+	return ::ImGui::DragInt2(
+		label, v, v_speed, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::DragInt3(const char* label, int v[3], float v_speed,
-	int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragInt3(
+	const char* label,
+	int v[3],
+	float v_speed,
+	int v_min,
+	int v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragInt3(label, v, v_speed, v_min, v_max, format, flags);
+	return ::ImGui::DragInt3(
+		label, v, v_speed, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::DragInt4(const char* label, int v[4], float v_speed,
-	int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragInt4(
+	const char* label,
+	int v[4],
+	float v_speed,
+	int v_min,
+	int v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragInt4(label, v, v_speed, v_min, v_max, format, flags);
+	return ::ImGui::DragInt4(
+		label, v, v_speed, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::DragIntRange2(const char* label, int* v_current_min,
-	int* v_current_max, float v_speed, int v_min, int v_max, const char* format,
-	const char* format_max, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragIntRange2(
+	const char* label,
+	int* v_current_min,
+	int* v_current_max,
+	float v_speed,
+	int v_min,
+	int v_max,
+	const char* format,
+	const char* format_max,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragIntRange2(label, v_current_min, v_current_max, v_speed,
-		v_min, v_max, format, format_max, flags);
+	return ::ImGui::DragIntRange2(
+		label,
+		v_current_min,
+		v_current_max,
+		v_speed,
+		v_min,
+		v_max,
+		format,
+		format_max,
+		flags
+	);
 }
-bool ktkImguiWrapper::DragScalar(const char* label, ImGuiDataType data_type,
-	void* p_data, float v_speed, const void* p_min, const void* p_max,
-	const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragScalar(
+	const char* label,
+	ImGuiDataType data_type,
+	void* p_data,
+	float v_speed,
+	const void* p_min,
+	const void* p_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
 	return ::ImGui::DragScalar(
-		label, data_type, p_data, v_speed, p_min, p_max, format, flags);
+		label,
+		data_type,
+		p_data,
+		v_speed,
+		p_min,
+		p_max,
+		format,
+		flags
+	);
 }
-bool ktkImguiWrapper::DragScalarN(const char* label, ImGuiDataType data_type,
-	void* p_data, int components, float v_speed, const void* p_min,
-	const void* p_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::DragScalarN(
+	const char* label,
+	ImGuiDataType data_type,
+	void* p_data,
+	int components,
+	float v_speed,
+	const void* p_min,
+	const void* p_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::DragScalarN(label, data_type, p_data, components, v_speed,
-		p_min, p_max, format, flags);
+	return ::ImGui::DragScalarN(
+		label,
+		data_type,
+		p_data,
+		components,
+		v_speed,
+		p_min,
+		p_max,
+		format,
+		flags
+	);
 }
-bool ktkImguiWrapper::SliderFloat(const char* label, float* v, float v_min,
-	float v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderFloat(
+	const char* label,
+	float* v,
+	float v_min,
+	float v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::SliderFloat(label, v, v_min, v_max, format, flags);
+	return ::ImGui::SliderFloat(
+		label, v, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::SliderFloat2(const char* label, float v[2], float v_min,
-	float v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderFloat2(
+	const char* label,
+	float v[2],
+	float v_min,
+	float v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::SliderFloat2(label, v, v_min, v_max, format, flags);
+	return ::ImGui::SliderFloat2(
+		label, v, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::SliderFloat3(const char* label, float v[3], float v_min,
-	float v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderFloat3(
+	const char* label,
+	float v[3],
+	float v_min,
+	float v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::SliderFloat3(label, v, v_min, v_max, format, flags);
+	return ::ImGui::SliderFloat3(
+		label, v, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::SliderFloat4(const char* label, float v[4], float v_min,
-	float v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderFloat4(
+	const char* label,
+	float v[4],
+	float v_min,
+	float v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::SliderFloat4(label, v, v_min, v_max, format, flags);
+	return ::ImGui::SliderFloat4(
+		label, v, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::SliderAngle(const char* label, float* v_rad,
-	float v_degrees_min, float v_degrees_max, const char* format,
-	ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderAngle(
+	const char* label,
+	float* v_rad,
+	float v_degrees_min,
+	float v_degrees_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
 	return ::ImGui::SliderAngle(
-		label, v_rad, v_degrees_min, v_degrees_max, format, flags);
+		label,
+		v_rad,
+		v_degrees_min,
+		v_degrees_max,
+		format,
+		flags
+	);
 }
-bool ktkImguiWrapper::SliderInt(const char* label, int* v, int v_min, int v_max,
-	const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderInt(
+	const char* label,
+	int* v,
+	int v_min,
+	int v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::SliderInt(label, v, v_min, v_max, format, flags);
+	return ::ImGui::SliderInt(
+		label, v, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::SliderInt2(const char* label, int v[2], int v_min,
-	int v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderInt2(
+	const char* label,
+	int v[2],
+	int v_min,
+	int v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::SliderInt2(label, v, v_min, v_max, format, flags);
+	return ::ImGui::SliderInt2(
+		label, v, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::SliderInt3(const char* label, int v[3], int v_min,
-	int v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderInt3(
+	const char* label,
+	int v[3],
+	int v_min,
+	int v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::SliderInt3(label, v, v_min, v_max, format, flags);
+	return ::ImGui::SliderInt3(
+		label, v, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::SliderInt4(const char* label, int v[4], int v_min,
-	int v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderInt4(
+	const char* label,
+	int v[4],
+	int v_min,
+	int v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::SliderInt4(label, v, v_min, v_max, format, flags);
+	return ::ImGui::SliderInt4(
+		label, v, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::SliderScalar(const char* label, ImGuiDataType data_type,
-	void* p_data, const void* p_min, const void* p_max, const char* format,
-	ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderScalar(
+	const char* label,
+	ImGuiDataType data_type,
+	void* p_data,
+	const void* p_min,
+	const void* p_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
 	return ::ImGui::SliderScalar(
-		label, data_type, p_data, p_min, p_max, format, flags);
+		label, data_type, p_data, p_min, p_max, format, flags
+	);
 }
-bool ktkImguiWrapper::SliderScalarN(const char* label, ImGuiDataType data_type,
-	void* p_data, int components, const void* p_min, const void* p_max,
-	const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::SliderScalarN(
+	const char* label,
+	ImGuiDataType data_type,
+	void* p_data,
+	int components,
+	const void* p_min,
+	const void* p_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
 	return ::ImGui::SliderScalarN(
-		label, data_type, p_data, components, p_min, p_max, format, flags);
+		label,
+		data_type,
+		p_data,
+		components,
+		p_min,
+		p_max,
+		format,
+		flags
+	);
 }
-bool ktkImguiWrapper::VSliderFloat(const char* label, const ImVec2& size,
-	float* v, float v_min, float v_max, const char* format,
-	ImGuiSliderFlags flags)
+bool ktkImguiWrapper::VSliderFloat(
+	const char* label,
+	const ImVec2& size,
+	float* v,
+	float v_min,
+	float v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::VSliderFloat(label, size, v, v_min, v_max, format, flags);
+	return ::ImGui::VSliderFloat(
+		label, size, v, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::VSliderInt(const char* label, const ImVec2& size, int* v,
-	int v_min, int v_max, const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::VSliderInt(
+	const char* label,
+	const ImVec2& size,
+	int* v,
+	int v_min,
+	int v_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
-	return ::ImGui::VSliderInt(label, size, v, v_min, v_max, format, flags);
+	return ::ImGui::VSliderInt(
+		label, size, v, v_min, v_max, format, flags
+	);
 }
-bool ktkImguiWrapper::VSliderScalar(const char* label, const ImVec2& size,
-	ImGuiDataType data_type, void* p_data, const void* p_min, const void* p_max,
-	const char* format, ImGuiSliderFlags flags)
+bool ktkImguiWrapper::VSliderScalar(
+	const char* label,
+	const ImVec2& size,
+	ImGuiDataType data_type,
+	void* p_data,
+	const void* p_min,
+	const void* p_max,
+	const char* format,
+	ImGuiSliderFlags flags
+)
 {
 	return ::ImGui::VSliderScalar(
-		label, size, data_type, p_data, p_min, p_max, format, flags);
+		label,
+		size,
+		data_type,
+		p_data,
+		p_min,
+		p_max,
+		format,
+		flags
+	);
 }
-bool ktkImguiWrapper::InputText(const char* label, char* buf, size_t buf_size,
-	ImGuiInputTextFlags flags, ImGuiInputTextCallback callback, void* user_data)
+bool ktkImguiWrapper::InputText(
+	const char* label,
+	char* buf,
+	size_t buf_size,
+	ImGuiInputTextFlags flags,
+	ImGuiInputTextCallback callback,
+	void* user_data
+)
 {
-	return ::ImGui::InputText(label, buf, buf_size, flags, callback, user_data);
+	return ::ImGui::InputText(
+		label, buf, buf_size, flags, callback, user_data
+	);
 }
-bool ktkImguiWrapper::InputTextMultiline(const char* label, char* buf,
-	size_t buf_size, const ImVec2& size, ImGuiInputTextFlags flags,
-	ImGuiInputTextCallback callback, void* user_data)
+bool ktkImguiWrapper::InputTextMultiline(
+	const char* label,
+	char* buf,
+	size_t buf_size,
+	const ImVec2& size,
+	ImGuiInputTextFlags flags,
+	ImGuiInputTextCallback callback,
+	void* user_data
+)
 {
 	return ::ImGui::InputTextMultiline(
-		label, buf, buf_size, size, flags, callback, user_data);
+		label, buf, buf_size, size, flags, callback, user_data
+	);
 }
-bool ktkImguiWrapper::InputTextWithHint(const char* label, const char* hint,
-	char* buf, size_t buf_size, ImGuiInputTextFlags flags,
-	ImGuiInputTextCallback callback, void* user_data)
+bool ktkImguiWrapper::InputTextWithHint(
+	const char* label,
+	const char* hint,
+	char* buf,
+	size_t buf_size,
+	ImGuiInputTextFlags flags,
+	ImGuiInputTextCallback callback,
+	void* user_data
+)
 {
 	return ::ImGui::InputTextWithHint(
-		label, hint, buf, buf_size, flags, callback, user_data);
+		label, hint, buf, buf_size, flags, callback, user_data
+	);
 }
-bool ktkImguiWrapper::InputFloat(const char* label, float* v, float step,
-	float step_fast, const char* format, ImGuiInputTextFlags flags)
+bool ktkImguiWrapper::InputFloat(
+	const char* label,
+	float* v,
+	float step,
+	float step_fast,
+	const char* format,
+	ImGuiInputTextFlags flags
+)
 {
-	return ::ImGui::InputFloat(label, v, step, step_fast, format, flags);
+	return ::ImGui::InputFloat(
+		label, v, step, step_fast, format, flags
+	);
 }
-bool ktkImguiWrapper::InputFloat2(const char* label, float v[2],
-	const char* format, ImGuiInputTextFlags flags)
+bool ktkImguiWrapper::InputFloat2(
+	const char* label,
+	float v[2],
+	const char* format,
+	ImGuiInputTextFlags flags
+)
 {
 	return ::ImGui::InputFloat2(label, v, format, flags);
 }
-bool ktkImguiWrapper::InputFloat3(const char* label, float v[3],
-	const char* format, ImGuiInputTextFlags flags)
+bool ktkImguiWrapper::InputFloat3(
+	const char* label,
+	float v[3],
+	const char* format,
+	ImGuiInputTextFlags flags
+)
 {
 	return ::ImGui::InputFloat3(label, v, format, flags);
 }
-bool ktkImguiWrapper::InputFloat4(const char* label, float v[4],
-	const char* format, ImGuiInputTextFlags flags)
+bool ktkImguiWrapper::InputFloat4(
+	const char* label,
+	float v[4],
+	const char* format,
+	ImGuiInputTextFlags flags
+)
 {
 	return ::ImGui::InputFloat4(label, v, format, flags);
 }
-bool ktkImguiWrapper::InputInt(const char* label, int* v, int step,
-	int step_fast, ImGuiInputTextFlags flags)
+bool ktkImguiWrapper::InputInt(
+	const char* label,
+	int* v,
+	int step,
+	int step_fast,
+	ImGuiInputTextFlags flags
+)
 {
 	return ::ImGui::InputInt(label, v, step, step_fast, flags);
 }
 bool ktkImguiWrapper::InputInt2(
-	const char* label, int v[2], ImGuiInputTextFlags flags)
+	const char* label, int v[2], ImGuiInputTextFlags flags
+)
 {
 	return ::ImGui::InputInt(label, v, flags);
 }
 bool ktkImguiWrapper::InputInt3(
-	const char* label, int v[3], ImGuiInputTextFlags flags)
+	const char* label, int v[3], ImGuiInputTextFlags flags
+)
 {
 	return ::ImGui::InputInt(label, v, flags);
 }
 bool ktkImguiWrapper::InputInt4(
-	const char* label, int v[4], ImGuiInputTextFlags flags)
+	const char* label, int v[4], ImGuiInputTextFlags flags
+)
 {
 	return ::ImGui::InputInt(label, v, flags);
 }
-bool ktkImguiWrapper::InputDouble(const char* label, double* v, double step,
-	double step_fast, const char* format, ImGuiInputTextFlags flags)
+bool ktkImguiWrapper::InputDouble(
+	const char* label,
+	double* v,
+	double step,
+	double step_fast,
+	const char* format,
+	ImGuiInputTextFlags flags
+)
 {
-	return ::ImGui::InputDouble(label, v, step, step_fast, format, flags);
+	return ::ImGui::InputDouble(
+		label, v, step, step_fast, format, flags
+	);
 }
-bool ktkImguiWrapper::InputScalar(const char* label, ImGuiDataType data_type,
-	void* p_data, const void* p_step, const void* p_step_fast,
-	const char* format, ImGuiInputTextFlags flags)
+bool ktkImguiWrapper::InputScalar(
+	const char* label,
+	ImGuiDataType data_type,
+	void* p_data,
+	const void* p_step,
+	const void* p_step_fast,
+	const char* format,
+	ImGuiInputTextFlags flags
+)
 {
 	return ::ImGui::InputScalar(
-		label, data_type, p_data, p_step, p_step_fast, format, flags);
+		label,
+		data_type,
+		p_data,
+		p_step,
+		p_step_fast,
+		format,
+		flags
+	);
 }
-bool ktkImguiWrapper::InputScalarN(const char* label, ImGuiDataType data_type,
-	void* p_data, int components, const void* p_step, const void* p_step_fast,
-	const char* format, ImGuiInputTextFlags flags)
+bool ktkImguiWrapper::InputScalarN(
+	const char* label,
+	ImGuiDataType data_type,
+	void* p_data,
+	int components,
+	const void* p_step,
+	const void* p_step_fast,
+	const char* format,
+	ImGuiInputTextFlags flags
+)
 {
-	return ::ImGui::InputScalarN(label, data_type, p_data, components, p_step,
-		p_step_fast, format, flags);
+	return ::ImGui::InputScalarN(
+		label,
+		data_type,
+		p_data,
+		components,
+		p_step,
+		p_step_fast,
+		format,
+		flags
+	);
 }
 bool ktkImguiWrapper::ColorEdit3(
-	const char* label, float col[3], ImGuiColorEditFlags flags)
+	const char* label, float col[3], ImGuiColorEditFlags flags
+)
 {
 	return ::ImGui::ColorEdit3(label, col, flags);
 }
 bool ktkImguiWrapper::ColorEdit4(
-	const char* label, float col[4], ImGuiColorEditFlags flags)
+	const char* label, float col[4], ImGuiColorEditFlags flags
+)
 {
 	return ::ImGui::ColorEdit4(label, col, flags);
 }
 bool ktkImguiWrapper::ColorPicker3(
-	const char* label, float col[3], ImGuiColorEditFlags flags)
+	const char* label, float col[3], ImGuiColorEditFlags flags
+)
 {
 	return ::ImGui::ColorPicker3(label, col, flags);
 }
-bool ktkImguiWrapper::ColorPicker4(const char* label, float col[4],
-	ImGuiColorEditFlags flags, const float* ref_col)
+bool ktkImguiWrapper::ColorPicker4(
+	const char* label,
+	float col[4],
+	ImGuiColorEditFlags flags,
+	const float* ref_col
+)
 {
 	return ::ImGui::ColorPicker4(label, col, flags, ref_col);
 }
-bool ktkImguiWrapper::ColorButton(const char* desc_id, const ImVec4& col,
-	ImGuiColorEditFlags flags, ImVec2 size)
+bool ktkImguiWrapper::ColorButton(
+	const char* desc_id,
+	const ImVec4& col,
+	ImGuiColorEditFlags flags,
+	ImVec2 size
+)
 {
 	return ::ImGui::ColorButton(desc_id, col, flags, size);
 }
-void ktkImguiWrapper::SetColorEditOptions(ImGuiColorEditFlags flags)
+void ktkImguiWrapper::SetColorEditOptions(
+	ImGuiColorEditFlags flags
+)
 {
 	return ::ImGui::SetColorEditOptions(flags);
 }
@@ -1372,7 +1573,9 @@ bool ktkImguiWrapper::TreeNode(const char* label)
 {
 	return ::ImGui::TreeNode(label);
 }
-bool ktkImguiWrapper::TreeNode(const char* str_id, const char* fmt, ...)
+bool ktkImguiWrapper::TreeNode(
+	const char* str_id, const char* fmt, ...
+)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -1381,7 +1584,9 @@ bool ktkImguiWrapper::TreeNode(const char* str_id, const char* fmt, ...)
 
 	return status;
 }
-bool ktkImguiWrapper::TreeNode(const void* ptr_id, const char* fmt, ...)
+bool ktkImguiWrapper::TreeNode(
+	const void* ptr_id, const char* fmt, ...
+)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -1391,21 +1596,29 @@ bool ktkImguiWrapper::TreeNode(const void* ptr_id, const char* fmt, ...)
 	return status;
 }
 bool ktkImguiWrapper::TreeNodeV(
-	const char* str_id, const char* fmt, va_list args)
+	const char* str_id, const char* fmt, va_list args
+)
 {
 	return ::ImGui::TreeNodeV(str_id, fmt, args);
 }
 bool ktkImguiWrapper::TreeNodeV(
-	const void* ptr_id, const char* fmt, va_list args)
+	const void* ptr_id, const char* fmt, va_list args
+)
 {
 	return ::ImGui::TreeNodeV(ptr_id, fmt, args);
 }
-bool ktkImguiWrapper::TreeNodeEx(const char* label, ImGuiTreeNodeFlags flags)
+bool ktkImguiWrapper::TreeNodeEx(
+	const char* label, ImGuiTreeNodeFlags flags
+)
 {
 	return ::ImGui::TreeNodeEx(label, flags);
 }
 bool ktkImguiWrapper::TreeNodeEx(
-	const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, ...)
+	const char* str_id,
+	ImGuiTreeNodeFlags flags,
+	const char* fmt,
+	...
+)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -1415,7 +1628,11 @@ bool ktkImguiWrapper::TreeNodeEx(
 	return status;
 }
 bool ktkImguiWrapper::TreeNodeEx(
-	const void* ptr_id, ImGuiTreeNodeFlags flags, const char* fmt, ...)
+	const void* ptr_id,
+	ImGuiTreeNodeFlags flags,
+	const char* fmt,
+	...
+)
 {
 	va_list args;
 	va_start(args, fmt);
@@ -1425,12 +1642,20 @@ bool ktkImguiWrapper::TreeNodeEx(
 	return status;
 }
 bool ktkImguiWrapper::TreeNodeExV(
-	const char* str_id, ImGuiTreeNodeFlags flags, const char* fmt, va_list args)
+	const char* str_id,
+	ImGuiTreeNodeFlags flags,
+	const char* fmt,
+	va_list args
+)
 {
 	return ::ImGui::TreeNodeExV(str_id, flags, fmt, args);
 }
 bool ktkImguiWrapper::TreeNodeExV(
-	const void* ptr_id, ImGuiTreeNodeFlags flags, const char* fmt, va_list args)
+	const void* ptr_id,
+	ImGuiTreeNodeFlags flags,
+	const char* fmt,
+	va_list args
+)
 {
 	return ::ImGui::TreeNodeExV(ptr_id, flags, fmt, args);
 }
@@ -1451,30 +1676,44 @@ float ktkImguiWrapper::GetTreeNodeToLabelSpacing()
 	return ::ImGui::GetTreeNodeToLabelSpacing();
 }
 bool ktkImguiWrapper::CollapsingHeader(
-	const char* label, ImGuiTreeNodeFlags flags)
+	const char* label, ImGuiTreeNodeFlags flags
+)
 {
 	return ::ImGui::CollapsingHeader(label, flags);
 }
 bool ktkImguiWrapper::CollapsingHeader(
-	const char* label, bool* p_visible, ImGuiTreeNodeFlags flags)
+	const char* label, bool* p_visible, ImGuiTreeNodeFlags flags
+)
 {
 	return ::ImGui::CollapsingHeader(label, p_visible, flags);
 }
-void ktkImguiWrapper::SetNextItemOpen(bool is_open, ImGuiCond cond)
+void ktkImguiWrapper::SetNextItemOpen(
+	bool is_open, ImGuiCond cond
+)
 {
 	::ImGui::SetNextItemOpen(is_open, cond);
 }
-bool ktkImguiWrapper::Selectable(const char* label, bool selected,
-	ImGuiSelectableFlags flags, const ImVec2& size)
+bool ktkImguiWrapper::Selectable(
+	const char* label,
+	bool selected,
+	ImGuiSelectableFlags flags,
+	const ImVec2& size
+)
 {
 	return ::ImGui::Selectable(label, selected, flags, size);
 }
-bool ktkImguiWrapper::Selectable(const char* label, bool* p_selected,
-	ImGuiSelectableFlags flags, const ImVec2& size)
+bool ktkImguiWrapper::Selectable(
+	const char* label,
+	bool* p_selected,
+	ImGuiSelectableFlags flags,
+	const ImVec2& size
+)
 {
 	return ::ImGui::Selectable(label, p_selected, flags, size);
 }
-bool ktkImguiWrapper::BeginListBox(const char* label, const ImVec2& size)
+bool ktkImguiWrapper::BeginListBox(
+	const char* label, const ImVec2& size
+)
 {
 	return ::ImGui::BeginListBox(label, size);
 }
@@ -1482,48 +1721,133 @@ void ktkImguiWrapper::EndListBox()
 {
 	::ImGui::EndListBox();
 }
-bool ktkImguiWrapper::ListBox(const char* label, int* current_item,
-	const char* const items[], int items_count, int height_in_items)
+bool ktkImguiWrapper::ListBox(
+	const char* label,
+	int* current_item,
+	const char* const items[],
+	int items_count,
+	int height_in_items
+)
 {
 	return ::ImGui::ListBox(
-		label, current_item, items, items_count, height_in_items);
+		label, current_item, items, items_count, height_in_items
+	);
 }
-bool ktkImguiWrapper::ListBox(const char* label, int* current_item,
-	bool (*items_getter)(void* data, int idx, const char** out_text),
-	void* data, int items_count, int height_in_items)
+bool ktkImguiWrapper::ListBox(
+	const char* label,
+	int* current_item,
+	bool (*items_getter)(
+		void* data, int idx, const char** out_text
+	),
+	void* data,
+	int items_count,
+	int height_in_items
+)
 {
 	return ::ImGui::ListBox(
-		label, current_item, items_getter, data, items_count, height_in_items);
+		label,
+		current_item,
+		items_getter,
+		data,
+		items_count,
+		height_in_items
+	);
 }
-void ktkImguiWrapper::PlotLines(const char* label, const float* values,
-	int values_count, int values_offset, const char* overlay_text,
-	float scale_min, float scale_max, ImVec2 graph_size, int stride)
+void ktkImguiWrapper::PlotLines(
+	const char* label,
+	const float* values,
+	int values_count,
+	int values_offset,
+	const char* overlay_text,
+	float scale_min,
+	float scale_max,
+	ImVec2 graph_size,
+	int stride
+)
 {
-	::ImGui::PlotLines(label, values, values_count, values_offset, overlay_text,
-		scale_min, scale_max, graph_size, stride);
+	::ImGui::PlotLines(
+		label,
+		values,
+		values_count,
+		values_offset,
+		overlay_text,
+		scale_min,
+		scale_max,
+		graph_size,
+		stride
+	);
 }
-void ktkImguiWrapper::PlotLines(const char* label,
-	float (*values_getter)(void* data, int idx), void* data, int values_count,
-	int values_offset, const char* overlay_text, float scale_min,
-	float scale_max, ImVec2 graph_size)
+void ktkImguiWrapper::PlotLines(
+	const char* label,
+	float (*values_getter)(void* data, int idx),
+	void* data,
+	int values_count,
+	int values_offset,
+	const char* overlay_text,
+	float scale_min,
+	float scale_max,
+	ImVec2 graph_size
+)
 {
-	::ImGui::PlotLines(label, values_getter, data, values_count, values_offset,
-		overlay_text, scale_min, scale_max, graph_size);
+	::ImGui::PlotLines(
+		label,
+		values_getter,
+		data,
+		values_count,
+		values_offset,
+		overlay_text,
+		scale_min,
+		scale_max,
+		graph_size
+	);
 }
-void ktkImguiWrapper::PlotHistogram(const char* label, const float* values,
-	int values_count, int values_offset, const char* overlay_text,
-	float scale_min, float scale_max, ImVec2 graph_size, int stride)
+void ktkImguiWrapper::PlotHistogram(
+	const char* label,
+	const float* values,
+	int values_count,
+	int values_offset,
+	const char* overlay_text,
+	float scale_min,
+	float scale_max,
+	ImVec2 graph_size,
+	int stride
+)
 {
-	::ImGui::PlotHistogram(label, values, values_count, values_offset,
-		overlay_text, scale_min, scale_max, graph_size, stride);
+	::ImGui::PlotHistogram(
+		label,
+		values,
+		values_count,
+		values_offset,
+		overlay_text,
+		scale_min,
+		scale_max,
+		graph_size,
+		stride
+	);
 }
-void ktkImguiWrapper::PlotHistogram(const char* label,
-	float (*values_getter)(void* data, int idx), void* data, int values_count,
-	int values_offset, const char* overlay_text, float scale_min,
-	float scale_max, ImVec2 graph_size)
+void ktkImguiWrapper::PlotHistogram(
+	const char* label,
+	float (*values_getter)(void* data, int idx),
+	void* data,
+	int values_count,
+	int values_offset,
+	const char* overlay_text,
+	float scale_min,
+	float scale_max,
+	ImVec2 graph_size
+)
 {
-	::ImGui::PlotHistogram(label, values_getter, data, values_count,
-		values_offset, overlay_text, scale_min, scale_max, graph_size);
+	::ImGui::PlotHistogram(
+		label,
+		values_getter,
+		data,
+		values_count,
+		values_offset,
+		overlay_text,
+		scale_min,
+		scale_max,
+		graph_size
+	);
 }
 void ktkImguiWrapper::Value(const char* prefix, bool b)
 {
@@ -1538,7 +1862,8 @@ void ktkImguiWrapper::Value(const char* prefix, unsigned int v)
 	::ImGui::Value(prefix, v);
 }
 void ktkImguiWrapper::Value(
-	const char* prefix, float v, const char* float_format)
+	const char* prefix, float v, const char* float_format
+)
 {
 	::ImGui::Value(prefix, v, float_format);
 }
@@ -1567,14 +1892,26 @@ void ktkImguiWrapper::EndMenu()
 	::ImGui::EndMenu();
 }
 bool ktkImguiWrapper::MenuItem(
-	const char* label, const char* shortcut, bool selected, bool enabled)
+	const char* label,
+	const char* shortcut,
+	bool selected,
+	bool enabled
+)
 {
-	return ::ImGui::MenuItem(label, shortcut, selected, enabled);
+	return ::ImGui::MenuItem(
+		label, shortcut, selected, enabled
+	);
 }
 bool ktkImguiWrapper::MenuItem(
-	const char* label, const char* shortcut, bool* p_selected, bool enabled)
+	const char* label,
+	const char* shortcut,
+	bool* p_selected,
+	bool enabled
+)
 {
-	return ::ImGui::MenuItem(label, shortcut, p_selected, enabled);
+	return ::ImGui::MenuItem(
+		label, shortcut, p_selected, enabled
+	);
 }
 void ktkImguiWrapper::BeginTooltip()
 {
@@ -1584,12 +1921,15 @@ void ktkImguiWrapper::EndTooltip()
 {
 	::ImGui::EndTooltip();
 }
-bool ktkImguiWrapper::BeginPopup(const char* str_id, ImGuiWindowFlags flags)
+bool ktkImguiWrapper::BeginPopup(
+	const char* str_id, ImGuiWindowFlags flags
+)
 {
 	return ::ImGui::BeginPopup(str_id, flags);
 }
 bool ktkImguiWrapper::BeginPopupModal(
-	const char* name, bool* p_open, ImGuiWindowFlags flags)
+	const char* name, bool* p_open, ImGuiWindowFlags flags
+)
 {
 	return ::ImGui::BeginPopupModal(name, p_open, flags);
 }
@@ -1597,16 +1937,21 @@ void ktkImguiWrapper::EndPopup()
 {
 	::ImGui::EndPopup();
 }
-void ktkImguiWrapper::OpenPopup(const char* str_id, ImGuiPopupFlags popup_flags)
+void ktkImguiWrapper::OpenPopup(
+	const char* str_id, ImGuiPopupFlags popup_flags
+)
 {
 	::ImGui::OpenPopup(str_id, popup_flags);
 }
-void ktkImguiWrapper::OpenPopup(ImGuiID id, ImGuiPopupFlags popup_flags)
+void ktkImguiWrapper::OpenPopup(
+	ImGuiID id, ImGuiPopupFlags popup_flags
+)
 {
 	::ImGui::OpenPopup(id, popup_flags);
 }
 void ktkImguiWrapper::OpenPopupOnItemClick(
-	const char* str_id, ImGuiPopupFlags popup_flags)
+	const char* str_id, ImGuiPopupFlags popup_flags
+)
 {
 	::ImGui::OpenPopupOnItemClick(str_id, popup_flags);
 }
@@ -1615,35 +1960,50 @@ void ktkImguiWrapper::CloseCurrentPopup()
 	::ImGui::CloseCurrentPopup();
 }
 bool ktkImguiWrapper::BeginPopupContextItem(
-	const char* str_id, ImGuiPopupFlags popup_flags)
+	const char* str_id, ImGuiPopupFlags popup_flags
+)
 {
 	return ::ImGui::BeginPopupContextItem(str_id, popup_flags);
 }
 bool ktkImguiWrapper::BeginPopupContextWindow(
-	const char* str_id, ImGuiPopupFlags popup_flags)
+	const char* str_id, ImGuiPopupFlags popup_flags
+)
 {
-	return ::ImGui::BeginPopupContextWindow(str_id, popup_flags);
+	return ::ImGui::BeginPopupContextWindow(
+		str_id, popup_flags
+	);
 }
 bool ktkImguiWrapper::BeginPopupContextVoid(
-	const char* str_id, ImGuiPopupFlags popup_flags)
+	const char* str_id, ImGuiPopupFlags popup_flags
+)
 {
 	return ::ImGui::BeginPopupContextVoid(str_id, popup_flags);
 }
-bool ktkImguiWrapper::IsPopupOpen(const char* str_id, ImGuiPopupFlags flags)
+bool ktkImguiWrapper::IsPopupOpen(
+	const char* str_id, ImGuiPopupFlags flags
+)
 {
 	return ::ImGui::IsPopupOpen(str_id, flags);
 }
-bool ktkImguiWrapper::BeginTable(const char* str_id, int column,
-	ImGuiTableFlags flags, const ImVec2& outer_size, float inner_width)
+bool ktkImguiWrapper::BeginTable(
+	const char* str_id,
+	int column,
+	ImGuiTableFlags flags,
+	const ImVec2& outer_size,
+	float inner_width
+)
 {
-	return ::ImGui::BeginTable(str_id, column, flags, outer_size, inner_width);
+	return ::ImGui::BeginTable(
+		str_id, column, flags, outer_size, inner_width
+	);
 }
 void ktkImguiWrapper::EndTable()
 {
 	::ImGui::EndTable();
 }
 void ktkImguiWrapper::TableNextRow(
-	ImGuiTableRowFlags row_flags, float min_row_height)
+	ImGuiTableRowFlags row_flags, float min_row_height
+)
 {
 	::ImGui::TableNextRow(row_flags, min_row_height);
 }
@@ -1655,10 +2015,16 @@ bool ktkImguiWrapper::TableSetColumnIndex(int column_n)
 {
 	return ::ImGui::TableSetColumnIndex(column_n);
 }
-void ktkImguiWrapper::TableSetupColumn(const char* label,
-	ImGuiTableColumnFlags flags, float init_width_or_weight, ImGuiID user_id)
+void ktkImguiWrapper::TableSetupColumn(
+	const char* label,
+	ImGuiTableColumnFlags flags,
+	float init_width_or_weight,
+	ImGuiID user_id
+)
 {
-	::ImGui::TableSetupColumn(label, flags, init_width_or_weight, user_id);
+	::ImGui::TableSetupColumn(
+		label, flags, init_width_or_weight, user_id
+	);
 }
 void ktkImguiWrapper::TableSetupScrollFreeze(int cols, int rows)
 {
@@ -1692,20 +2058,26 @@ const char* ktkImguiWrapper::TableGetColumnName(int column_n)
 {
 	return ::ImGui::TableGetColumnName(column_n);
 }
-ImGuiTableColumnFlags ktkImguiWrapper::TableGetColumnFlags(int column_n)
+ImGuiTableColumnFlags
+ktkImguiWrapper::TableGetColumnFlags(int column_n)
 {
 	return ::ImGui::TableGetColumnFlags();
 }
-void ktkImguiWrapper::TableSetColumnEnabled(int column_n, bool v)
+void ktkImguiWrapper::TableSetColumnEnabled(
+	int column_n, bool v
+)
 {
 	::ImGui::TableSetColumnEnabled(column_n, v);
 }
 void ktkImguiWrapper::TableSetBgColor(
-	ImGuiTableBgTarget target, ImU32 color, int column_n)
+	ImGuiTableBgTarget target, ImU32 color, int column_n
+)
 {
 	::ImGui::TableSetBgColor(target, color, column_n);
 }
-void ktkImguiWrapper::Columns(int count, const char* id, bool border)
+void ktkImguiWrapper::Columns(
+	int count, const char* id, bool border
+)
 {
 	::ImGui::Columns(count, id, border);
 }
@@ -1721,7 +2093,9 @@ float ktkImguiWrapper::GetColumnWidth(int column_index)
 {
 	return ::ImGui::GetColumnWidth(column_index);
 }
-void ktkImguiWrapper::SetColumnWidth(int column_index, float width)
+void ktkImguiWrapper::SetColumnWidth(
+	int column_index, float width
+)
 {
 	::ImGui::SetColumnWidth(column_index, width);
 }
@@ -1729,7 +2103,9 @@ float ktkImguiWrapper::GetColumnOffset(int column_index)
 {
 	return ::ImGui::GetColumnOffset(column_index);
 }
-void ktkImguiWrapper::SetColumnOffset(int column_index, float offset_x)
+void ktkImguiWrapper::SetColumnOffset(
+	int column_index, float offset_x
+)
 {
 	::ImGui::SetColumnOffset(column_index, offset_x);
 }
@@ -1737,7 +2113,9 @@ int ktkImguiWrapper::GetColumnsCount()
 {
 	return ::ImGui::GetColumnsCount();
 }
-bool ktkImguiWrapper::BeginTabBar(const char* str_id, ImGuiTabBarFlags flags)
+bool ktkImguiWrapper::BeginTabBar(
+	const char* str_id, ImGuiTabBarFlags flags
+)
 {
 	return ::ImGui::BeginTabBar(str_id, flags);
 }
@@ -1746,7 +2124,8 @@ void ktkImguiWrapper::EndTabBar()
 	::ImGui::EndTabBar();
 }
 bool ktkImguiWrapper::BeginTabItem(
-	const char* label, bool* p_open, ImGuiTabItemFlags flags)
+	const char* label, bool* p_open, ImGuiTabItemFlags flags
+)
 {
 	return ::ImGui::BeginTabItem(label, p_open, flags);
 }
@@ -1754,31 +2133,48 @@ void ktkImguiWrapper::EndTabItem()
 {
 	::ImGui::EndTabItem();
 }
-bool ktkImguiWrapper::TabItemButton(const char* label, ImGuiTabItemFlags flags)
+bool ktkImguiWrapper::TabItemButton(
+	const char* label, ImGuiTabItemFlags flags
+)
 {
 	return ::ImGui::TabItemButton(label, flags);
 }
-void ktkImguiWrapper::SetTabItemClosed(const char* tab_or_docked_window_label)
+void ktkImguiWrapper::SetTabItemClosed(
+	const char* tab_or_docked_window_label
+)
 {
 	::ImGui::SetTabItemClosed(tab_or_docked_window_label);
 }
 
 #ifdef KOTEK_USE_IMGUI_DOCKING
-ImGuiID ktkImguiWrapper::DockSpace(ImGuiID id, const ImVec2& size,
-	ImGuiDockNodeFlags flags, const ImGuiWindowClass* window_class)
+ImGuiID ktkImguiWrapper::DockSpace(
+	ImGuiID id,
+	const ImVec2& size,
+	ImGuiDockNodeFlags flags,
+	const ImGuiWindowClass* window_class
+)
 {
 	return ::ImGui::DockSpace(id, size, flags, window_class);
 }
-ImGuiID ktkImguiWrapper::DockSpaceOverViewport(const ImGuiViewport* viewport,
-	ImGuiDockNodeFlags flags, const ImGuiWindowClass* window_class)
+ImGuiID ktkImguiWrapper::DockSpaceOverViewport(
+	const ImGuiViewport* viewport,
+	ImGuiDockNodeFlags flags,
+	const ImGuiWindowClass* window_class
+)
 {
-	return ::ImGui::DockSpaceOverViewport(viewport, flags, window_class);
+	return ::ImGui::DockSpaceOverViewport(
+		viewport, flags, window_class
+	);
 }
-void ktkImguiWrapper::SetNextWindowDockID(ImGuiID dock_id, ImGuiCond cond)
+void ktkImguiWrapper::SetNextWindowDockID(
+	ImGuiID dock_id, ImGuiCond cond
+)
 {
 	::ImGui::SetNextWindowDockID(dock_id, cond);
 }
-void ktkImguiWrapper::SetNextWindowClass(const ImGuiWindowClass* window_class)
+void ktkImguiWrapper::SetNextWindowClass(
+	const ImGuiWindowClass* window_class
+)
 {
 	::ImGui::SetNextWindowClass(window_class);
 }
@@ -1796,7 +2192,9 @@ void ktkImguiWrapper::LogToTTY(int auto_open_depth)
 {
 	::ImGui::LogToTTY(auto_open_depth);
 }
-void ktkImguiWrapper::LogToFile(int auto_open_depth, const char* filename)
+void ktkImguiWrapper::LogToFile(
+	int auto_open_depth, const char* filename
+)
 {
 	::ImGui::LogToFile(auto_open_depth, filename);
 }
@@ -1812,12 +2210,18 @@ void ktkImguiWrapper::LogButtons()
 {
 	::ImGui::LogButtons();
 }
-bool ktkImguiWrapper::BeginDragDropSource(ImGuiDragDropFlags flags)
+bool ktkImguiWrapper::BeginDragDropSource(
+	ImGuiDragDropFlags flags
+)
 {
 	return ::ImGui::BeginDragDropSource(flags);
 }
 bool ktkImguiWrapper::SetDragDropPayload(
-	const char* type, const void* data, size_t sz, ImGuiCond cond)
+	const char* type,
+	const void* data,
+	size_t sz,
+	ImGuiCond cond
+)
 {
 	return ::ImGui::SetDragDropPayload(type, data, sz, cond);
 }
@@ -1830,7 +2234,8 @@ bool ktkImguiWrapper::BeginDragDropTarget()
 	return ::ImGui::BeginDragDropTarget();
 }
 const ImGuiPayload* ktkImguiWrapper::AcceptDragDropPayload(
-	const char* type, ImGuiDragDropFlags flags)
+	const char* type, ImGuiDragDropFlags flags
+)
 {
 	return ::ImGui::AcceptDragDropPayload(type, flags);
 }
@@ -1850,11 +2255,17 @@ void ktkImguiWrapper::EndDisabled()
 {
 	::ImGui::EndDisabled();
 }
-void ktkImguiWrapper::PushClipRect(const ImVec2& clip_rect_min,
-	const ImVec2& clip_rect_max, bool intersect_with_current_clip_rect)
+void ktkImguiWrapper::PushClipRect(
+	const ImVec2& clip_rect_min,
+	const ImVec2& clip_rect_max,
+	bool intersect_with_current_clip_rect
+)
 {
 	::ImGui::PushClipRect(
-		clip_rect_min, clip_rect_max, intersect_with_current_clip_rect);
+		clip_rect_min,
+		clip_rect_max,
+		intersect_with_current_clip_rect
+	);
 }
 void ktkImguiWrapper::PopClipRect()
 {
@@ -1880,7 +2291,9 @@ bool ktkImguiWrapper::IsItemFocused()
 {
 	return ::ImGui::IsItemFocused();
 }
-bool ktkImguiWrapper::IsItemClicked(ImGuiMouseButton mouse_button)
+bool ktkImguiWrapper::IsItemClicked(
+	ImGuiMouseButton mouse_button
+)
 {
 	return ::ImGui::IsItemClicked(mouse_button);
 }
@@ -1945,7 +2358,8 @@ bool ktkImguiWrapper::IsRectVisible(const ImVec2& size)
 	return ::ImGui::IsRectVisible(size);
 }
 bool ktkImguiWrapper::IsRectVisible(
-	const ImVec2& rect_min, const ImVec2& rect_max)
+	const ImVec2& rect_min, const ImVec2& rect_max
+)
 {
 	return ::ImGui::IsRectVisible(rect_min, rect_max);
 }
@@ -1966,7 +2380,8 @@ ImDrawList* ktkImguiWrapper::GetForegroundDrawList()
 	return ::ImGui::GetForegroundDrawList();
 }
 
-ImDrawList* ktkImguiWrapper::GetBackgroundDrawList(ImGuiViewport* viewport)
+ImDrawList*
+ktkImguiWrapper::GetBackgroundDrawList(ImGuiViewport* viewport)
 {
 #ifdef KOTEK_USE_IMGUI_DOCKING
 	return ::ImGui::GetBackgroundDrawList(viewport);
@@ -1974,7 +2389,8 @@ ImDrawList* ktkImguiWrapper::GetBackgroundDrawList(ImGuiViewport* viewport)
 	return nullptr;
 #endif
 }
-ImDrawList* ktkImguiWrapper::GetForegroundDrawList(ImGuiViewport* viewport)
+ImDrawList*
+ktkImguiWrapper::GetForegroundDrawList(ImGuiViewport* viewport)
 {
 #ifdef KOTEK_USE_IMGUI_DOCKING
 	return ::ImGui::GetForegroundDrawList(viewport);
@@ -1999,7 +2415,8 @@ ImGuiStorage* ktkImguiWrapper::GetStateStorage()
 	return ::ImGui::GetStateStorage();
 }
 bool ktkImguiWrapper::BeginChildFrame(
-	ImGuiID id, const ImVec2& size, ImGuiWindowFlags flags)
+	ImGuiID id, const ImVec2& size, ImGuiWindowFlags flags
+)
 {
 	return ::ImGui::BeginChildFrame(id, size, flags);
 }
@@ -2007,11 +2424,16 @@ void ktkImguiWrapper::EndChildFrame()
 {
 	::ImGui::EndChildFrame();
 }
-ImVec2 ktkImguiWrapper::CalcTextSize(const char* text, const char* text_end,
-	bool hide_text_after_double_hash, float wrap_width)
+ImVec2 ktkImguiWrapper::CalcTextSize(
+	const char* text,
+	const char* text_end,
+	bool hide_text_after_double_hash,
+	float wrap_width
+)
 {
 	return ::ImGui::CalcTextSize(
-		text, text_end, hide_text_after_double_hash, wrap_width);
+		text, text_end, hide_text_after_double_hash, wrap_width
+	);
 }
 ImVec4 ktkImguiWrapper::ColorConvertU32ToFloat4(ImU32 in)
 {
@@ -2022,12 +2444,24 @@ ImU32 ktkImguiWrapper::ColorConvertFloat4ToU32(const ImVec4& in)
 	return ::ImGui::ColorConvertFloat4ToU32(in);
 }
 void ktkImguiWrapper::ColorConvertRGBtoHSV(
-	float r, float g, float b, float& out_h, float& out_s, float& out_v)
+	float r,
+	float g,
+	float b,
+	float& out_h,
+	float& out_s,
+	float& out_v
+)
 {
 	::ImGui::ColorConvertRGBtoHSV(r, g, b, out_h, out_s, out_v);
 }
 void ktkImguiWrapper::ColorConvertHSVtoRGB(
-	float h, float s, float v, float& out_r, float& out_g, float& out_b)
+	float h,
+	float s,
+	float v,
+	float& out_r,
+	float& out_g,
+	float& out_b
+)
 {
 	::ImGui::ColorConvertHSVtoRGB(h, s, v, out_r, out_g, out_b);
 }
@@ -2037,32 +2471,47 @@ int ktkImguiWrapper::GetKeyIndex(ImGuiKey imgui_key)
 }
 bool ktkImguiWrapper::IsKeyDown(int user_key_index)
 {
-	return ::ImGui::IsKeyDown(static_cast<ImGuiKey>(user_key_index));
+	return ::ImGui::IsKeyDown(
+		static_cast<ImGuiKey>(user_key_index)
+	);
 }
-bool ktkImguiWrapper::IsKeyPressed(int user_key_index, bool repeat)
+bool ktkImguiWrapper::IsKeyPressed(
+	int user_key_index, bool repeat
+)
 {
-	return ::ImGui::IsKeyPressed(static_cast<ImGuiKey>(user_key_index), repeat);
+	return ::ImGui::IsKeyPressed(
+		static_cast<ImGuiKey>(user_key_index), repeat
+	);
 }
 bool ktkImguiWrapper::IsKeyReleased(int user_key_index)
 {
-	return ::ImGui::IsKeyReleased(static_cast<ImGuiKey>(user_key_index));
+	return ::ImGui::IsKeyReleased(
+		static_cast<ImGuiKey>(user_key_index)
+	);
 }
 int ktkImguiWrapper::GetKeyPressedAmount(
-	int key_index, float repeat_delay, float rate)
+	int key_index, float repeat_delay, float rate
+)
 {
 	return ::ImGui::GetKeyPressedAmount(
-		static_cast<ImGuiKey>(key_index), repeat_delay, rate);
+		static_cast<ImGuiKey>(key_index), repeat_delay, rate
+	);
 }
 void ktkImguiWrapper::SetNextFrameWantCaptureKeyboard(
-	bool want_capture_keyboard_value)
+	bool want_capture_keyboard_value
+)
 {
-	::ImGui::SetNextFrameWantCaptureKeyboard(want_capture_keyboard_value);
+	::ImGui::SetNextFrameWantCaptureKeyboard(
+		want_capture_keyboard_value
+	);
 }
 bool ktkImguiWrapper::IsMouseDown(ImGuiMouseButton button)
 {
 	return ::ImGui::IsMouseDown(button);
 }
-bool ktkImguiWrapper::IsMouseClicked(ImGuiMouseButton button, bool repeat)
+bool ktkImguiWrapper::IsMouseClicked(
+	ImGuiMouseButton button, bool repeat
+)
 {
 	return ::ImGui::IsMouseClicked(button, repeat);
 }
@@ -2070,12 +2519,15 @@ bool ktkImguiWrapper::IsMouseReleased(ImGuiMouseButton button)
 {
 	return ::ImGui::IsMouseReleased(button);
 }
-bool ktkImguiWrapper::IsMouseDoubleClicked(ImGuiMouseButton button)
+bool ktkImguiWrapper::IsMouseDoubleClicked(
+	ImGuiMouseButton button
+)
 {
 	return ::ImGui::IsMouseDoubleClicked(button);
 }
 bool ktkImguiWrapper::IsMouseHoveringRect(
-	const ImVec2& r_min, const ImVec2& r_max, bool clip)
+	const ImVec2& r_min, const ImVec2& r_max, bool clip
+)
 {
 	return ::ImGui::IsMouseHoveringRect(r_min, r_max, clip);
 }
@@ -2096,16 +2548,20 @@ ImVec2 ktkImguiWrapper::GetMousePosOnOpeningCurrentPopup()
 	return ::ImGui::GetMousePosOnOpeningCurrentPopup();
 }
 bool ktkImguiWrapper::IsMouseDragging(
-	ImGuiMouseButton button, float lock_threshold)
+	ImGuiMouseButton button, float lock_threshold
+)
 {
 	return ::ImGui::IsMouseDragging(button, lock_threshold);
 }
 ImVec2 ktkImguiWrapper::GetMouseDragDelta(
-	ImGuiMouseButton button, float lock_threshold)
+	ImGuiMouseButton button, float lock_threshold
+)
 {
 	return ::ImGui::GetMouseDragDelta(button, lock_threshold);
 }
-void ktkImguiWrapper::ResetMouseDragDelta(ImGuiMouseButton button)
+void ktkImguiWrapper::ResetMouseDragDelta(
+	ImGuiMouseButton button
+)
 {
 	::ImGui::ResetMouseDragDelta(button);
 }
@@ -2113,14 +2569,19 @@ ImGuiMouseCursor ktkImguiWrapper::GetMouseCursor()
 {
 	return ::ImGui::GetMouseCursor();
 }
-void ktkImguiWrapper::SetMouseCursor(ImGuiMouseCursor cursor_type)
+void ktkImguiWrapper::SetMouseCursor(
+	ImGuiMouseCursor cursor_type
+)
 {
 	::ImGui::SetMouseCursor(cursor_type);
 }
 void ktkImguiWrapper::SetNextFrameWantCaptureMouse(
-	bool want_capture_mouse_value)
+	bool want_capture_mouse_value
+)
 {
-	::ImGui::SetNextFrameWantCaptureMouse(want_capture_mouse_value);
+	::ImGui::SetNextFrameWantCaptureMouse(
+		want_capture_mouse_value
+	);
 }
 const char* ktkImguiWrapper::GetClipboardText()
 {
@@ -2130,39 +2591,68 @@ void ktkImguiWrapper::SetClipboardText(const char* text)
 {
 	::ImGui::SetClipboardText(text);
 }
-void ktkImguiWrapper::LoadIniSettingsFromDisk(const char* ini_filename)
+void ktkImguiWrapper::LoadIniSettingsFromDisk(
+	const char* ini_filename
+)
 {
 	::ImGui::LoadIniSettingsFromDisk(ini_filename);
 }
 void ktkImguiWrapper::LoadIniSettingsFromMemory(
-	const char* ini_data, size_t ini_size)
+	const char* ini_data, size_t ini_size
+)
 {
 	::ImGui::LoadIniSettingsFromMemory(ini_data, ini_size);
 }
-void ktkImguiWrapper::SaveIniSettingsToDisk(const char* ini_filename)
+void ktkImguiWrapper::SaveIniSettingsToDisk(
+	const char* ini_filename
+)
 {
 	::ImGui::SaveIniSettingsToDisk(ini_filename);
 }
-const char* ktkImguiWrapper::SaveIniSettingsToMemory(size_t* out_ini_size)
+const char*
+ktkImguiWrapper::SaveIniSettingsToMemory(size_t* out_ini_size)
 {
 	return ::ImGui::SaveIniSettingsToMemory(out_ini_size);
 }
-bool ktkImguiWrapper::DebugCheckVersionAndDataLayout(const char* version_str,
-	size_t sz_io, size_t sz_style, size_t sz_vec2, size_t sz_vec4,
-	size_t sz_drawvert, size_t sz_drawidx)
+bool ktkImguiWrapper::DebugCheckVersionAndDataLayout(
+	const char* version_str,
+	size_t sz_io,
+	size_t sz_style,
+	size_t sz_vec2,
+	size_t sz_vec4,
+	size_t sz_drawvert,
+	size_t sz_drawidx
+)
 {
-	return ::ImGui::DebugCheckVersionAndDataLayout(version_str, sz_io, sz_style,
-		sz_vec2, sz_vec4, sz_drawvert, sz_drawidx);
+	return ::ImGui::DebugCheckVersionAndDataLayout(
+		version_str,
+		sz_io,
+		sz_style,
+		sz_vec2,
+		sz_vec4,
+		sz_drawvert,
+		sz_drawidx
+	);
 }
 void ktkImguiWrapper::SetAllocatorFunctions(
-	ImGuiMemAllocFunc alloc_func, ImGuiMemFreeFunc free_func, void* user_data)
+	ImGuiMemAllocFunc alloc_func,
+	ImGuiMemFreeFunc free_func,
+	void* user_data
+)
 {
-	::ImGui::SetAllocatorFunctions(alloc_func, free_func, user_data);
+	::ImGui::SetAllocatorFunctions(
+		alloc_func, free_func, user_data
+	);
 }
-void ktkImguiWrapper::GetAllocatorFunctions(ImGuiMemAllocFunc* p_alloc_func,
-	ImGuiMemFreeFunc* p_free_func, void** p_user_data)
+void ktkImguiWrapper::GetAllocatorFunctions(
+	ImGuiMemAllocFunc* p_alloc_func,
+	ImGuiMemFreeFunc* p_free_func,
+	void** p_user_data
+)
 {
-	::ImGui::GetAllocatorFunctions(p_alloc_func, p_free_func, p_user_data);
+	::ImGui::GetAllocatorFunctions(
+		p_alloc_func, p_free_func, p_user_data
+	);
 }
 void* ktkImguiWrapper::MemAlloc(size_t size)
 {
@@ -2186,11 +2676,13 @@ void ktkImguiWrapper::UpdatePlatformWindows()
 #endif
 }
 void ktkImguiWrapper::RenderPlatformWindowsDefault(
-	void* platform_render_arg, void* renderer_render_arg)
+	void* platform_render_arg, void* renderer_render_arg
+)
 {
 #ifdef KOTEK_USE_IMGUI_DOCKING
 	::ImGui::RenderPlatformWindowsDefault(
-		platform_render_arg, renderer_render_arg);
+		platform_render_arg, renderer_render_arg
+	);
 #endif
 }
 void ktkImguiWrapper::DestroyPlatformWindows()
@@ -2208,10 +2700,12 @@ ImGuiViewport* ktkImguiWrapper::FindViewportByID(ImGuiID id)
 #endif
 }
 ImGuiViewport* ktkImguiWrapper::FindViewportByPlatformHandle(
-	void* platform_handle)
+	void* platform_handle
+)
 {
 #ifdef KOTEK_USE_IMGUI_DOCKING
-	return ::ImGui::FindViewportByPlatformHandle(platform_handle);
+	return ::ImGui::FindViewportByPlatformHandle(platform_handle
+	);
 #else
 	return nullptr;
 #endif
@@ -2239,6 +2733,404 @@ void ktkImguiWrapper::LogText(const char* fmt, ...)
 void ktkImguiWrapper::LogTextV(const char* fmt, va_list args)
 {
 	::ImGui::LogTextV(fmt, args);
+}
+
+KOTEK_END_NAMESPACE_MATH
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_UI
+
+void DragVec2f(
+	kun_kotek kun_core ktkIImguiWrapper* p_interface,
+	const char* label,
+	kun_ktk kun_math vector2f* p_vec
+)
+{
+	if (p_vec == nullptr)
+		return;
+
+	if (p_interface == nullptr)
+		return;
+
+	p_interface->SeparatorText(label);
+
+	{
+		float value_x = p_vec->x();
+		if (p_interface->DragFloat(
+				"X##EditDragVec2f", &value_x
+			))
+		{
+			p_vec->x() = value_x;
+		}
+
+		float value_y = p_vec->y();
+		if (p_interface->DragFloat(
+				"Y##EditDragVec2f", &value_y
+			))
+		{
+			p_vec->y() = value_y;
+		}
+	}
+}
+
+void DragVec3f(
+	kun_kotek kun_core ktkIImguiWrapper* p_interface,
+	const char* label,
+	kun_ktk kun_math vector3f* p_vec
+)
+{
+	if (p_vec == nullptr)
+		return;
+
+	if (p_interface == nullptr)
+		return;
+
+	p_interface->SeparatorText(label);
+
+	{
+		float value_x = p_vec->x();
+		if (p_interface->DragFloat(
+				"X##EditDragVec3f", &value_x
+			))
+		{
+			p_vec->x() = value_x;
+		}
+
+		float value_y = p_vec->y();
+		if (p_interface->DragFloat(
+				"Y##EditDragVec3f", &value_y
+			))
+		{
+			p_vec->y() = value_y;
+		}
+
+		float value_z = p_vec->z();
+		if (p_interface->DragFloat(
+				"Z##EditDragVec3f", &value_z
+			))
+		{
+			p_vec->z() = value_z;
+		}
+	}
+}
+
+void DragVec4f(
+	kun_kotek kun_core ktkIImguiWrapper* p_interface,
+	const char* label,
+	kun_ktk kun_math vector4f* p_vec
+)
+{
+	if (p_vec == nullptr)
+		return;
+
+	p_interface->SeparatorText(label);
+
+	{
+		float value_x = p_vec->x();
+		if (p_interface->DragFloat(
+				"X##EditDragVec4f", &value_x
+			))
+		{
+			p_vec->x() = value_x;
+		}
+
+		float value_y = p_vec->y();
+		if (p_interface->DragFloat(
+				"Y##EditDragVec4f", &value_y
+			))
+		{
+			p_vec->y() = value_y;
+		}
+
+		float value_z = p_vec->z();
+		if (p_interface->DragFloat(
+				"Z##EditDragVec4f", &value_z
+			))
+		{
+			p_vec->z() = value_z;
+		}
+
+		float value_w = p_vec->w();
+		if (p_interface->DragFloat(
+				"W##EditDragVec4f", &value_w
+			))
+		{
+			p_vec->w() = value_w;
+		}
+	}
+}
+
+void DragMat2x2f(
+	kun_kotek kun_core ktkIImguiWrapper* p_interface,
+	const char* label,
+	kun_ktk kun_math matrix2x2f* p_mat
+)
+{
+	if (p_mat == nullptr)
+		return;
+
+	if (p_interface == nullptr)
+		return;
+
+	p_interface->SeparatorText(label);
+
+	{
+		float value_x = p_mat->e(0, 0);
+
+		if (p_interface->DragFloat(
+				"[0][0]##EditDragMat2x2f_00", &value_x
+			))
+		{
+			p_mat->e(0, 0) = value_x;
+		}
+
+		p_interface->BeginTooltip();
+		p_interface->Text("e:[0][0]");
+		p_interface->EndTooltip();
+
+		p_interface->SameLine();
+		float value_y = p_mat->e(0, 1);
+		if (p_interface->DragFloat(
+				"[0][1]##EditDragMat2x2f_01", &value_y
+			))
+		{
+			p_mat->e(0, 1) = value_y;
+		}
+		p_interface->BeginTooltip();
+		p_interface->Text("e:[0][1]");
+		p_interface->EndTooltip();
+
+		value_x = p_mat->e(1, 0);
+		if (p_interface->DragFloat(
+				"[1][0]##EditDragMat2x2f_10", &value_x
+			))
+		{
+			p_mat->e(1, 0) = value_x;
+		}
+		p_interface->BeginTooltip();
+		p_interface->Text("e:[1][0]");
+		p_interface->EndTooltip();
+
+		p_interface->SameLine();
+		value_y = p_mat->e(1, 1);
+		if (p_interface->DragFloat(
+				"[1][1]##EditDragMat2x2f_11", &value_y
+			))
+		{
+			p_mat->e(1, 1) = value_y;
+		}
+
+		p_interface->BeginTooltip();
+		p_interface->Text("e:[1][1]");
+		p_interface->EndTooltip();
+	}
+}
+
+void DragMat3x3f(
+	kun_kotek kun_core ktkIImguiWrapper* p_interface,
+	const char* label,
+	kun_ktk kun_math matrix3x3f* p_mat
+)
+{
+	if (p_mat == nullptr)
+		return;
+
+	if (p_interface == nullptr)
+		return;
+
+	p_interface->SeparatorText(label);
+
+	{
+		auto element_editing =
+			[p_mat, p_interface](unsigned char i) -> void
+		{
+			unsigned char column_index =
+				static_cast<unsigned char>(
+					i / static_cast<unsigned char>(3)
+				);
+			unsigned char row_index =
+				static_cast<unsigned char>(
+					i % static_cast<unsigned char>(3)
+				);
+			char buf_name[48];
+
+			float current_value =
+				p_mat->e(column_index, row_index);
+
+			kun_kotek kun_ktk sprintf(
+				buf_name,
+				sizeof(buf_name),
+				"[%d][%d]##EditDragMat3x3f_%d%d",
+				column_index,
+				row_index,
+				column_index,
+				row_index
+			);
+
+			if (p_interface->DragFloat(
+					buf_name, &current_value
+				))
+			{
+				p_mat->e(column_index, row_index) =
+					current_value;
+			}
+
+			p_interface->BeginTooltip();
+			char tooltip_name[16];
+			kun_kotek kun_ktk sprintf(
+				tooltip_name,
+				sizeof(tooltip_name),
+				"e:[%d][%d]",
+				column_index,
+				row_index
+			);
+			p_interface->Text(tooltip_name);
+			p_interface->EndTooltip();
+
+			p_interface->SameLine();
+		};
+
+		const unsigned char _kEC =
+			static_cast<unsigned char>(p_mat->get_column_count()
+		    ) *
+			static_cast<unsigned char>(p_mat->get_row_count());
+		for (unsigned char i = 0; i < _kEC; ++i)
+		{
+			element_editing(i);
+		}
+	}
+}
+
+void DragMat4x4f(
+	kun_kotek kun_core ktkIImguiWrapper* p_interface,
+	const char* label,
+	kun_ktk kun_math matrix4x4f* p_mat
+)
+{
+	if (p_mat == nullptr)
+		return;
+
+	if (p_interface == nullptr)
+		return;
+
+	p_interface->SeparatorText(label);
+
+	{
+		p_interface->SeparatorText(label);
+
+		{
+			auto element_editing = [p_mat, this](unsigned char i
+			                       ) -> void
+			{
+				unsigned char column_index =
+					static_cast<unsigned char>(
+						i / static_cast<unsigned char>(4)
+					);
+				unsigned char row_index =
+					static_cast<unsigned char>(
+						i % static_cast<unsigned char>(4)
+					);
+
+				char buf_name[48];
+				float current_value =
+					p_mat->e(column_index, row_index);
+
+				kun_kotek kun_ktk sprintf(
+					buf_name,
+					sizeof(buf_name),
+					"[%d][%d]##EditDragMat4x4f_%d%d",
+					column_index,
+					row_index,
+					column_index,
+					row_index
+				);
+
+				if (p_interface->DragFloat(
+						buf_name, &current_value
+					))
+				{
+					p_mat->e(column_index, row_index) =
+						current_value;
+				}
+
+				p_interface->BeginTooltip();
+				char tooltip_name[16];
+				kun_kotek kun_ktk sprintf(
+					tooltip_name,
+					sizeof(tooltip_name),
+					"e:[%d][%d]",
+					column_index,
+					row_index
+				);
+				p_interface->Text(tooltip_name);
+				p_interface->EndTooltip();
+
+				p_interface->SameLine();
+			};
+
+			const unsigned char _kEC =
+				static_cast<unsigned char>(
+					p_mat->get_column_count()
+				) *
+				static_cast<unsigned char>(p_mat->get_row_count(
+				));
+			for (unsigned char i = 0; i < _kEC; ++i)
+			{
+				element_editing(i);
+			}
+		}
+	}
+}
+
+void DragQuatf(
+	kun_kotek kun_core ktkIImguiWrapper* p_interface,
+	const char* label,
+	kun_ktk kun_math quaternionf* p_quat
+)
+{
+	if (p_quat == nullptr)
+		return;
+
+	if (p_interface == nullptr)
+		return;
+
+	p_interface->SeparatorText(label);
+
+	{
+		float value_x = p_quat->x();
+		if (p_interface->DragFloat(
+				"X##editdragquatf", &value_x
+			))
+		{
+			p_quat->x() = value_x;
+		}
+
+		float value_y = p_quat->y();
+		if (p_interface->DragFloat(
+				"Y##editdragquatf", &value_y
+			))
+		{
+			p_quat->y() = value_y;
+		}
+
+		float value_z = p_quat->z();
+		if (p_interface->DragFloat(
+				"Z##editdragquatf", &value_z
+			))
+		{
+			p_quat->z() = value_z;
+		}
+
+		float value_w = p_quat->w();
+		if (p_interface->DragFloat(
+				"W##editdragquatf", &value_w
+			))
+		{
+			p_quat->w() = value_w;
+		}
+	}
 }
 
 KOTEK_END_NAMESPACE_UI

@@ -58,7 +58,7 @@ cstring to_lower(const cstring& str)
 }
 
 int sprintf(
-	char* const p_string,
+	char* p_string,
 	const std::size_t buffer_count,
 	char const* const p_format,
 	...
