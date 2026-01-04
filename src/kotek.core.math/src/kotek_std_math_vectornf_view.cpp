@@ -394,6 +394,158 @@ vectornf_view_t::operator/=(const matrix4x4f& mat) noexcept
 	return *this;
 }
 
+float vectornf_view_t::x(void) const noexcept 
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(
+		this->m_row_count >= 1,
+		"initialized or correct dimension?"
+	);
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 1)
+		{
+			return this->m_p_values[0];
+		}
+	}
+
+	return _m_default;
+}
+
+float& vectornf_view_t::x(void) noexcept 
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(
+		this->m_row_count >= 1,
+		"initialized or correct dimension?"
+	);
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 2)
+		{
+			return this->m_p_values[0];
+		}
+	}
+
+	return _m_default;
+}
+
+float vectornf_view_t::y(void) const noexcept 
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(
+		this->m_row_count >= 2,
+		"initialized or correct dimension?"
+	);
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 2)
+		{
+			return this->m_p_values[1];
+		}
+	}
+
+	return _m_default;
+}
+
+float& vectornf_view_t::y(void) noexcept
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(
+		this->m_row_count >= 2,
+		"initialized or correct dimension?"
+	);
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 2)
+		{
+			return this->m_p_values[1];
+		}
+	}
+
+	return _m_default;
+}
+
+float vectornf_view_t::z(void) const noexcept 
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(
+		this->m_row_count >= 3,
+		"initialized or correct dimension?"
+	);
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 3)
+		{
+			return this->m_p_values[2];
+		}
+	}
+
+	return _m_default;
+}
+
+float& vectornf_view_t::z(void) noexcept 
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(
+		this->m_row_count >= 3,
+		"initialized or correct dimension?"
+	);
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 3)
+		{
+			return this->m_p_values[2];
+		}
+	}
+
+	return _m_default;
+}
+
+float vectornf_view_t::w(void) const noexcept
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(
+		this->m_row_count >= 4,
+		"initialized or correct dimension?"
+	);
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 4)
+		{
+			return this->m_p_values[3];
+		}
+	}
+
+	return _m_default;
+}
+
+float& vectornf_view_t::w(void) noexcept 
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(
+		this->m_row_count >= 4,
+		"initialized or correct dimension?"
+	);
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 4)
+		{
+			return this->m_p_values[3];
+		}
+	}
+
+	return _m_default;
+}
+
 vectornf_const_view_t::vectornf_const_view_t() :
 	_m_default(0.0f), m_row_count(0), m_p_values(nullptr)
 {
@@ -428,6 +580,74 @@ vectornf_const_view_t::c(math_id_t column_id) const noexcept
 {
 	return *this;
 }
+
+float vectornf_const_view_t::x(void) const noexcept 
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(this->m_row_count >= 1, "initialized or correct dimension?");
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 1)
+		{
+			return this->m_p_values[0];
+		}
+	}
+
+	return _m_default;
+}
+
+float vectornf_const_view_t::y(void) const noexcept 
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(this->m_row_count >= 2, "initialized or correct dimension?");
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 2)
+		{
+			return this->m_p_values[1];
+		}
+	}
+
+	return _m_default;
+}
+
+float vectornf_const_view_t::z(void) const noexcept 
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(this->m_row_count >= 3, "initialized or correct dimension?");
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 3)
+		{
+			return this->m_p_values[2];
+		}
+	}
+
+	return _m_default;
+}
+
+float vectornf_const_view_t::w(void) const noexcept 
+{
+	KOTEK_ASSERT(this->m_p_values, "initialized?");
+	KOTEK_ASSERT(
+		this->m_row_count >= 4,
+		"initialized or correct dimension?"
+	);
+
+	if (this->m_p_values)
+	{
+		if (this->m_row_count >= 4)
+		{
+			return this->m_p_values[3];
+		}
+	}
+
+	return _m_default;
+}
+
 
 const float vectornf_const_view_t::operator[](math_id_t row_id
 ) const noexcept

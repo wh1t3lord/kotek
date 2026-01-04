@@ -11,13 +11,13 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 
 			if ("${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
-				find_package(Boost COMPONENTS json REQUIRED)
+				find_package(Boost COMPONENTS json CONFIG REQUIRED)
 			else()
 
-				find_package(Boost COMPONENTS json REQUIRED)
+				find_package(Boost COMPONENTS json CONFIG REQUIRED)
 				
 				if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
-					find_package(Boost COMPONENTS filesystem REQUIRED)
+					find_package(Boost COMPONENTS filesystem CONFIG REQUIRED)
 				endif()
 				
 			endif()
@@ -42,12 +42,12 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 			endif()
 
 			if ("${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
-				find_package(Boost COMPONENTS json REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+				find_package(Boost COMPONENTS json CONFIG REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 			else()
-				find_package(Boost COMPONENTS json REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+				find_package(Boost COMPONENTS json CONFIG REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 
 				if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
-					find_package(Boost COMPONENTS filesystem REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+					find_package(Boost COMPONENTS filesystem CONFIG REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
 				endif()
 			endif()
 		endif()

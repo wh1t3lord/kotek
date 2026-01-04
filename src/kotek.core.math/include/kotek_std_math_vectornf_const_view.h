@@ -37,6 +37,10 @@ struct vectornf_const_view_t
 	/// @return just itself
 	vectornf_const_view_t c(math_id_t column_id) const noexcept;
 
+	float x(void) const noexcept;
+	float y(void) const noexcept;
+	float z(void) const noexcept;
+	float w(void) const noexcept;
 
 	const float operator[](math_id_t row_id) const noexcept;
 	const float& operator[](math_id_t row_id) noexcept;

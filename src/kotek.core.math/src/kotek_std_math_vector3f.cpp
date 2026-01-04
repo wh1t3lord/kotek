@@ -133,6 +133,54 @@ vector3f::vector3f(const DirectX::XMVECTOR& xmvec)
 
 vector3f::vector3f(void) : m_base(0.0f, 0.0f, 0.0f) {}
 
+vector3f::vector3f(const vectornf_view_t& view) 
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	#error todo: impl
+#else
+
+	KOTEK_ASSERT(view.data(), "not initialized or corrupted");
+	KOTEK_ASSERT(
+		view.get_row_count() == get_row_count(),
+		"wrong dimension"
+	);
+
+	if (view.data())
+	{
+		if (view.get_row_count() == get_row_count())
+		{
+			this->m_base.x = view.x();
+			this->m_base.y = view.y();
+			this->m_base.z = view.z();
+		}
+	}
+#endif
+}
+
+vector3f::vector3f(const vectornf_const_view_t& view)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	#error todo: impl
+#else
+
+	KOTEK_ASSERT(view.data(), "not initialized or corrupted");
+	KOTEK_ASSERT(
+		view.get_row_count() == get_row_count(),
+		"wrong dimension"
+	);
+
+	if (view.data())
+	{
+		if (view.get_row_count() == get_row_count())
+		{
+			this->m_base.x = view.x();
+			this->m_base.y = view.y();
+			this->m_base.z = view.z();
+		}
+	}
+#endif
+}
+
 vector3f& vector3f::operator=(const vector3f& data) noexcept
 {
 	this->m_base = data.m_base;

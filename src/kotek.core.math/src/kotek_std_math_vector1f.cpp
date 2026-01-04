@@ -98,9 +98,57 @@ vector1f::vector1f(const matrixnf_view_t& view) {}
 vector1f::vector1f(const matrixnf_const_view_t& view) {}
 #endif
 
-vector1f::vector1f(const vectornf_view_t& view) {}
+vector1f::vector1f(const vectornf_view_t& view)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	#error todo: impl
+#else
 
-vector1f::vector1f(const vectornf_const_view_t& view) {}
+	KOTEK_ASSERT(view.data(), "not initialized or corrupted");
+	KOTEK_ASSERT(
+		view.get_row_count() == get_row_count(),
+		"wrong dimension"
+	);
+
+	if (view.data())
+	{
+		if (view.get_row_count() == get_row_count())
+		{
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+			this->m_base = view.x();
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+			this->m_base.x = view.x();
+	#endif
+		}
+	}
+#endif
+}
+
+vector1f::vector1f(const vectornf_const_view_t& view)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	#error todo: impl
+#else
+
+	KOTEK_ASSERT(view.data(), "not initialized or corrupted");
+	KOTEK_ASSERT(
+		view.get_row_count() == get_row_count(),
+		"wrong dimension"
+	);
+
+	if (view.data())
+	{
+		if (view.get_row_count() == get_row_count())
+		{
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+			this->m_base = view.x();
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+			this->m_base.x = view.x();
+	#endif
+		}
+	}
+#endif
+}
 
 #ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 vector1f::vector1f(const matrix2x2f& data) {}

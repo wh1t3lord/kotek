@@ -36,6 +36,18 @@ struct vectornf_view_t
 	/// @return just itself
 	vectornf_view_t c(math_id_t column_id) const noexcept;
 
+	float x(void) const noexcept;
+	float& x(void) noexcept;
+
+	float y(void) const noexcept;
+	float& y(void) noexcept;
+
+	float z(void) const noexcept;
+	float& z(void) noexcept;
+
+	float w(void) const noexcept;
+	float& w(void) noexcept;
+
 	/// @brief 
 	/// @param c 
 	/// @param element_count 
