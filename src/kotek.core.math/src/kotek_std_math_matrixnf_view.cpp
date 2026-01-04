@@ -373,6 +373,18 @@ math_id_t matrixnf_view_t::get_row_count(void) const noexcept
 	return this->m_row_count;
 }
 
+vectornf_view_t
+matrixnf_view_t::operator[](math_id_t column_id) noexcept
+{
+	return this->c(column_id);
+}
+
+vectornf_const_view_t
+matrixnf_view_t::operator[](math_id_t column_id) const noexcept
+{
+	return this->c(column_id);
+}
+
 matrixnf_const_view_t::matrixnf_const_view_t(
 	const float* p_values,
 	math_id_t column_count,
@@ -415,6 +427,13 @@ matrixnf_const_view_t::c(math_id_t column_id) const noexcept
 		&this->m_p_values[column_id * this->get_row_count()],
 		this->get_row_count()
 	);
+}
+
+vectornf_const_view_t
+matrixnf_const_view_t::operator[](math_id_t column_id
+) const noexcept
+{
+	return this->c(column_id);
 }
 
 const float* matrixnf_const_view_t::data(void) const noexcept

@@ -163,6 +163,10 @@ public:
 	vectornf_view_t c(math_id_t column_id) noexcept;
 	vectornf_const_view_t c(math_id_t column_id) const noexcept;
 
+	vectornf_view_t operator[](math_id_t column_id) noexcept;
+	vectornf_const_view_t operator[](math_id_t column_id
+	) const noexcept;
+
 	float* data(void) noexcept;
 	const float* data(void) const noexcept;
 	constexpr math_id_t size_of(void) const noexcept;

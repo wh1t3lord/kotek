@@ -781,6 +781,18 @@ vectornf_const_view_t matrix2x2f::c(math_id_t column_id
 #endif
 }
 
+vectornf_view_t
+matrix2x2f::operator[](math_id_t column_id) noexcept
+{
+	return this->c(column_id);
+}
+
+vectornf_const_view_t matrix2x2f::operator[](math_id_t column_id
+) const noexcept
+{
+	return this->c(column_id);
+}
+
 const float* matrix2x2f::data(void) const noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM

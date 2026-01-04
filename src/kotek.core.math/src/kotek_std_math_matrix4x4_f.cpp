@@ -855,6 +855,18 @@ vectornf_const_view_t matrix4x4f::c(math_id_t column_id
 #endif
 }
 
+vectornf_view_t matrix4x4f::operator[](math_id_t column_id
+) noexcept
+{
+	return this->c(column_id);
+}
+
+vectornf_const_view_t matrix4x4f::operator[](math_id_t column_id
+) const noexcept
+{
+	return this->c(column_id);
+}
+
 KOTEK_END_NAMESPACE_MATH
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK

@@ -677,6 +677,18 @@ vectornf_const_view_t matrix3x3f::c(math_id_t column_id
 #endif
 }
 
+vectornf_view_t
+matrix3x3f::operator[](math_id_t column_id) noexcept
+{
+	return this->c(column_id);
+}
+
+vectornf_const_view_t matrix3x3f::operator[](math_id_t column_id
+) const noexcept
+{
+	return this->c(column_id);
+}
+
 inline float* matrix3x3f::data(void) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
