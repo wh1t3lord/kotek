@@ -4495,19 +4495,19 @@ TEST(Math, matrixnf_view_t_minus_operators)
 	); // 10-9
 	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(2, 1), 0.0f)
 	); // 10-10
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(2, 2), –1.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(2, 2), -1.0f)
 	); // 10-11
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(2, 3), –2.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(2, 3), -2.0f)
 	); // 10-12
 
 	// row 3
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(3, 0), –3.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(3, 0), -3.0f)
 	); // 10-13
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(3, 1), –4.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(3, 1), -4.0f)
 	); // 10-14
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(3, 2), –5.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(3, 2), -5.0f)
 	); // 10-15
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(3, 3), –6.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(3, 3), -6.0f)
 	); // 10-16
 
 		#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
@@ -4535,17 +4535,17 @@ TEST(Math, matrixnf_view_t_minus_operators)
 	);
 
 	// row 1
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(1, 0), –5.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(1, 0), -5.0f)
 	); // 5-10
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(1, 1), –4.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(1, 1), -4.0f)
 	); // 6-10
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(1, 2), –3.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(1, 2), -3.0f)
 	); // 7-10
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(1, 3), –2.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(1, 3), -2.0f)
 	); // 8-10
 
 	// row 2
-	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(2, 0), –1.0f)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(2, 0), -1.0f)
 	); // 9-10
 	EXPECT_TRUE(kun_kotek kun_ktk is_equal(res4.e(2, 1), 0.0f)
 	); // 10-10

@@ -38,21 +38,22 @@ matrix2x2f::matrix2x2f(const matrix2x2f& data) :
 {
 }
 
+#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 matrix2x2f::matrix2x2f(const matrix3x3f& data)
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	: m_base{}
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	: m_base{}
-#endif
+	#endif
 {
 }
 
 matrix2x2f::matrix2x2f(const matrix4x4f& data)
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	: m_base{}
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	: m_base{}
-#endif
+	#endif
 {
 }
 
@@ -90,6 +91,7 @@ matrix2x2f::matrix2x2f(const vector4f& data) :
 	}
 {
 }
+#endif
 
 matrix2x2f::matrix2x2f(void) : m_base{} {}
 
@@ -454,7 +456,7 @@ matrix2x2f& matrix2x2f::operator/=(const matrix2x2f& data
 	return *this;
 }
 
-#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
+	#ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 matrix2x2f& matrix2x2f::operator/=(const matrix3x3f& data
 ) noexcept
 {
@@ -519,7 +521,7 @@ matrix2x2f& matrix2x2f::operator/=(const vector1f& vec) noexcept
 {
 	return this->operator/=(get_math_component_x(vec));
 }
-#endif
+	#endif
 
 #endif
 
@@ -781,8 +783,8 @@ vectornf_const_view_t matrix2x2f::c(math_id_t column_id
 #endif
 }
 
-vectornf_view_t
-matrix2x2f::operator[](math_id_t column_id) noexcept
+vectornf_view_t matrix2x2f::operator[](math_id_t column_id
+) noexcept
 {
 	return this->c(column_id);
 }
