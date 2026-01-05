@@ -2735,10 +2735,11 @@ void ktkImguiWrapper::LogTextV(const char* fmt, va_list args)
 	::ImGui::LogTextV(fmt, args);
 }
 
-KOTEK_END_NAMESPACE_MATH
-KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_UI
 KOTEK_END_NAMESPACE_KOTEK
+// end of interface implementation
 
+// custom helper functions
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
@@ -3021,7 +3022,7 @@ void DragMat4x4f(
 		p_interface->SeparatorText(label);
 
 		{
-			auto element_editing = [p_mat, this](unsigned char i
+			auto element_editing = [p_mat, p_interface](unsigned char i
 			                       ) -> void
 			{
 				unsigned char column_index =
