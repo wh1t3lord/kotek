@@ -4,8 +4,8 @@ project(kotek.ui.videoplayer.avif VERSION 1 LANGUAGES CXX)
 
 # TODO: try to find the stuff from vcpkg, but you should add guard because it depends dav1d doesn't use cmake at all
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	file(GLOB nuget_dav1d_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Dav1d.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)

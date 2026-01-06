@@ -268,6 +268,53 @@ inline float get_math_length_squared(const vector4f& data)
 #endif
 }
 
+inline float get_math_distance_squared(
+	const vector4f& left, const vector4f& right
+)
+{
+	return get_math_length_squared(left - right);
+}
+
+inline float get_math_distance_squared(
+	const vector3f& left, const vector3f& right
+)
+{
+	return get_math_length_squared(left - right);
+}
+
+inline float get_math_distance_squared(
+	const vector2f& left, const vector2f& right
+)
+{
+	return get_math_length_squared(left - right);
+}
+
+inline float get_math_distance_squared(const vector1f& left, const vector1f& right)
+{
+	return get_math_length_squared(left - right);
+}
+
+inline float get_math_distance(const vector4f& left, const vector4f& right)
+{
+	return get_math_length(left - right);
+}
+
+inline float get_math_distance(const vector3f& left, const vector3f& right)
+{
+	return get_math_length(left - right);
+}
+
+inline float get_math_distance(const vector2f& left, const vector2f& right)
+{
+	return get_math_length(left - right);
+}
+
+inline float
+get_math_distance(const vector1f& left, const vector1f& right)
+{
+	return get_math_length(left - right);
+}
+
 inline float
 get_math_dot(const vector1f& left, const vector1f& right)
 {

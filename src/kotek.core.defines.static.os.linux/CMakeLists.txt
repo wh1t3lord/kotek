@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.21)
 
 project(kotek.core.defines.static.os.linux VERSION 1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 
 if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "")
 	set(KOTEK_WINDOW_LIBRARY "GLFW" CACHE INTERNAL "")
@@ -53,7 +53,7 @@ else()
 endif()
 
 add_library(${PROJECT_NAME} STATIC
-	"include/kotek_std_preprocessors.h"
+	"${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}"
 	"include/kotek_core_defines_static_os_linux.h"
 	"src/main_core_defines_static_os_linux_dll.cpp")
 	

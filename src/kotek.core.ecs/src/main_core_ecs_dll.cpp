@@ -2,6 +2,11 @@
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
+#ifdef KOTEK_USE_ECS_BACKEND_PICO
+	#define PICO_ECS_IMPLEMENTATION
+	#include "../include/pico_ecs.h"
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 

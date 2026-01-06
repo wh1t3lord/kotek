@@ -4,8 +4,8 @@ project(kotek.core.enum.core VERSION 1 LANGUAGES CXX)
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 	if ("${KOTEK_TESTS}" STREQUAL "ON")

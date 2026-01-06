@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.21)
 
 project(kotek.core.defines.static.profilers VERSION 1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 
 if ("${KOTEK_CPU_PROFILER}" STREQUAL "")
 	if ("${CMAKE_BUILD_TYPE}" STREQUAL "Debug")
@@ -57,7 +57,7 @@ else()
 endif()
 
 add_library(${PROJECT_NAME} STATIC
-	"include/kotek_std_preprocessors.h"
+	"${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}"
 	"include/kotek_core_defines_static_profilers.h"
 	"src/main_core_defines_static_profilers_dll.cpp")
 	

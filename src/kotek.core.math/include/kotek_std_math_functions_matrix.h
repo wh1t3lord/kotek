@@ -32,6 +32,12 @@ inline matrix4x4f perspective(float_t field_of_view_angle_in_radians,
 	return DirectX::XMMatrixPerspectiveFovRH(field_of_view_angle_in_radians,
 		aspect_ratio, plane_near_z, plane_far_z);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::perspective(
+		field_of_view_angle_in_radians,
+		aspect_ratio,
+		plane_near_z,
+		plane_far_z
+	);
 #else
 // implement yours here
 #endif

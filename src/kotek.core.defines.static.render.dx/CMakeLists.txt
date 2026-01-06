@@ -2,8 +2,8 @@ cmake_minimum_required(VERSION 3.21)
 
 project(kotek.core.defines.static.render.dx VERSION 1 LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+
 
 if (WIN32)
 
@@ -44,7 +44,7 @@ endif()
 
 add_library(${PROJECT_NAME} STATIC
 	"include/kotek_core_defines_static_render_dx.h"
-	"include/kotek_std_preprocessors.h"
+	"${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}"
 	"src/main_core_defines_static_render_dx_dll.cpp")
 	
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/independent")
