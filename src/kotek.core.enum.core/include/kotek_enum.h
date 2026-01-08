@@ -50,12 +50,8 @@ enum class eFileSystemPriorityType : kun_ktk uint8_t{
 	kEndOfEnum = kZlib
 };
 
-enum class eFileSystemSeekType : kun_ktk uint8_t
-{
-	kBegin,
-	kCurrent,
-	kEnd,
-	kEndOfEnum
+enum class eFileSystemSeekType : kun_ktk uint8_t{
+	kBegin, kCurrent, kEnd, kEndOfEnum
 };
 
 enum class eFileSystemFeatureType : kun_ktk uint16_t{
@@ -80,11 +76,13 @@ enum class eFileSystemFeatureType : kun_ktk uint16_t{
 
 constexpr int _kEndOfEnum_eFileSystemFeatureType =
 	std::countr_zero(
-		static_cast<std::underlying_type_t<eFileSystemFeatureType>>(eFileSystemFeatureType::kJSONPrettyFormatting)
+		static_cast<
+			std::underlying_type_t<eFileSystemFeatureType>>(
+			eFileSystemFeatureType::kJSONPrettyFormatting
+		)
 	);
 
-enum class eFileSystemStreamingType : kun_ktk uint8_t
-{
+enum class eFileSystemStreamingType : kun_ktk uint8_t{
 	kAuto,
 	kReadOnly,
 	/// @brief todo: implement
@@ -98,8 +96,7 @@ KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
 	eFileSystemFeatureType, kun_ktk uint16_t
 );
 
-enum class eUserEngineLibraryCallbacks : kun_ktk uint8_t
-{
+enum class eUserEngineLibraryCallbacks : kun_ktk uint8_t{
 	kGame_Init,
 	kGame_Shutdown,
 	kGame_Update,
@@ -225,8 +222,8 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 /// ��� ����������� kEngine_Feature_SDK ��������, ����� �� ����
 /// �� ����� ������� �� ������������� ��� ������� �� ����. ���
 /// ����� ������� � �����������. �������, ���� ������� �
-/// Kotek::Core::ktkFrameworkConfig, ��� ���� "��������", �� ����
-/// ������ ���:
+/// Kotek::Core::ktkFrameworkConfig, ��� ���� "��������", ��
+/// ���� ������ ���:
 /// - ������������ ���������� �������� ������� �������
 /// ���������� ������ �����������;
 /// - ������������ ������ ��� ����������� �������;
@@ -305,27 +302,27 @@ enum class eWindowTitleType : kun_ktk enum_base_t{
 /// enumeration. When you want to tell a user that some feature
 /// is supported by Engine in code (at runtime), you need to
 /// call IsFeatureEnabled method from
-/// Kotek::Core::ktkFrameworkConfig instance in order to get status
-/// of the appropriate feature. Like if you implement your SDK
-/// you put the calling of setting feature with true status that
-/// means this feature is working in Engine right now. Otherwise
-/// the feature can't exist or it is not working like status is
-/// false. So you need to treat it like a flag when something
-/// was initialized in Engine and at runtime you want to check
-/// it through one place like Kotek::Core::ktkFrameworkConfig, but
-/// it is not a flag to tell Engine that Engine must enable
-/// (call it) because you passed the flag, no! So it is just
-/// writing current features that called somewhere and they
-/// work. Also determing when a feature should be enabled based
-/// on console command arguments that user passed to
-/// application. Like if I want to enable SDK I should pass a
-/// flag '--sdk' so formally you need to check if this flag
-/// contains in command argument line and if it is true you
-/// should put this to feature in config, but only when
-/// initialization was called and successfully completed
-/// otherwise it doesn't make any sense if you tell a user that
-/// this feature is enabled, but in real nothing was called for
-/// its existance in Engine.
+/// Kotek::Core::ktkFrameworkConfig instance in order to get
+/// status of the appropriate feature. Like if you implement
+/// your SDK you put the calling of setting feature with true
+/// status that means this feature is working in Engine right
+/// now. Otherwise the feature can't exist or it is not working
+/// like status is false. So you need to treat it like a flag
+/// when something was initialized in Engine and at runtime you
+/// want to check it through one place like
+/// Kotek::Core::ktkFrameworkConfig, but it is not a flag to
+/// tell Engine that Engine must enable (call it) because you
+/// passed the flag, no! So it is just writing current features
+/// that called somewhere and they work. Also determing when a
+/// feature should be enabled based on console command arguments
+/// that user passed to application. Like if I want to enable
+/// SDK I should pass a flag '--sdk' so formally you need to
+/// check if this flag contains in command argument line and if
+/// it is true you should put this to feature in config, but
+/// only when initialization was called and successfully
+/// completed otherwise it doesn't make any sense if you tell a
+/// user that this feature is enabled, but in real nothing was
+/// called for its existance in Engine.
 ///
 /// For example:
 ///
@@ -398,7 +395,8 @@ enum class eEngineFeature : kun_ktk uint32_t{
 	/// will
 	/// return kEngine_Feature_Unknown.
 	///
-	/// For understanding check Kotek::Core::ktkFrameworkConfig's
+	/// For understanding check
+    /// Kotek::Core::ktkFrameworkConfig's
 	/// method
 	/// GetRenderFeature.
 	/// \~russian @brief ������ ���� ��������� � ������������
@@ -538,7 +536,8 @@ enum class eEngineFeatureSDK : kun_ktk uint32_t{
 	/// ������������
 	/// ��� ����� ��������, ��� ���� �� ����� ��������� ��������
 	/// ��
-	/// ����� ����������� (���� � Kotek::Core::ktkFrameworkConfig),
+	/// ����� ����������� (���� �
+    /// Kotek::Core::ktkFrameworkConfig),
 	/// �� ���
 	/// ��������������� ������� ���� ��������� ��� ����, �����
 	/// ����������������/������� SDK ����������� �� ImGui.
@@ -814,9 +813,11 @@ enum class eConsoleCommandIndex : kun_ktk enum_base_t{
 	/// @brief
 	kConsoleCommand_SDK_SelectEntity,
 	/// @brief
-	kConsoleCommand_SDK_DeleteComponentFromEntity,
+	kConsoleCommand_SDK_DeleteComponentFromEntityByName,
+	kConsoleCommand_SDK_DeleteComponentFromEntityByEnum,
 	/// @brief
-	kConsoleCommand_SDK_CreateComponentForEntity,
+	kConsoleCommand_SDK_CreateComponentForEntityByName,
+	kConsoleCommand_SDK_CreateComponentForEntityByEnum,
 	kConsoleCommand_SDK_CreateEntity,
 	/// @brief
 	kConsoleCommand_SDK_DeleteEntity,

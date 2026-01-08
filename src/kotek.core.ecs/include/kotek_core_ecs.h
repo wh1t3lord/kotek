@@ -22,6 +22,11 @@ using view_entities_t = entt::basic_view<
 		const entt::entity>>,
 	entt::exclude_t<>,
 	void>;
+using entity_t = entt::entity;
+constexpr entity_t kInvalidECSEntity = entt::null;
+#elif defined(KOTEK_USE_ECS_BACKEND_PICO)
+using entity_t = ecs_entity_t;
+inline const auto kInvalidECSEntity = ecs_invalid_entity();
 #endif
 
 KOTEK_END_NAMESPACE_KTK
@@ -34,6 +39,8 @@ KOTEK_END_NAMESPACE_CORE
 
 #ifdef KOTEK_USE_ECS_BACKEND_ENTT
 using view_entities_t = KUN_KOTEK KUN_KTK view_entities_t;
+#elif defined(KOTEK_USE_ECS_BACKEND_PICO)
+using entity_t = ecs_entity_t;
 #endif
 
 KOTEK_END_NAMESPACE_KOTEK

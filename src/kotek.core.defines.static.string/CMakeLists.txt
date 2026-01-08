@@ -6,7 +6,7 @@ project(kotek.core.defines.static.string VERSION 1 LANGUAGES CXX)
 
 
 if ("${KOTEK_UNICODE}" STREQUAL "")
-	set(KOTEK_UNICODE "ON")
+	set(KOTEK_UNICODE "ON" CACHE INTERNAL "")
 endif()
 
 message("[${PROJECT_NAME}]: UNICODE is '${KOTEK_UNICODE}'")

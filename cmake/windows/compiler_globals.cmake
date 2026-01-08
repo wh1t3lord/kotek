@@ -16,7 +16,6 @@ add_compile_definitions(
 # todo: add switching model to Windows XP compiling
 set(CMAKE_CXX_STANDARD 20)
 
-
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 message(STATUS "${CMAKE_CURRENT_LIST_FILE} is applied!")
