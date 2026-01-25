@@ -131,8 +131,6 @@ matrix3x3f(const DirectX::XMMATRIX& data)
 
 matrix3x3f::matrix3x3f(void) : m_base{} {}
 
-matrix3x3f::~matrix3x3f(void) = default;
-
 matrix3x3f& matrix3x3f::operator=(const matrix3x3f& data)
 {
 	this->m_base = data.m_base;

@@ -160,8 +160,6 @@ matrix4x4f::matrix4x4f(const DirectX::XMMATRIX& data)
 
 matrix4x4f::matrix4x4f(void) : m_base{} {}
 
-matrix4x4f::~matrix4x4f(void) = default;
-
 matrix4x4f& matrix4x4f::operator=(const matrix4x4f& data)
 {
 	this->m_base = data.m_base;

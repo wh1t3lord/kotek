@@ -12,6 +12,7 @@ public:
 	matrix2x2f(float c0r0, float c0r1, float c1r0, float c1r1);
 	matrix2x2f(const base_mat2x2_t& data);
 	matrix2x2f(const matrix2x2f& data);
+	matrix2x2f(const matrixnf_view_t& view);
 
 #ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	matrix2x2f(const matrix3x3f& data);
@@ -27,7 +28,7 @@ public:
 	~matrix2x2f(void) = default;
 
 	matrix2x2f& operator=(const matrix2x2f& data);
-
+	matrix2x2f& operator=(const matrixnf_view_t& view);
 #ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 	matrix2x2f& operator=(const matrix3x3f& data);
 	matrix2x2f& operator=(const matrix4x4f& data);

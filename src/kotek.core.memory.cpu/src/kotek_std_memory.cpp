@@ -118,9 +118,19 @@ namespace memory
 				throw std::runtime_error("Filename conversion failed");
 
 			// 5) Build your final string
+			#if defined(KOTEK_UNICODE) || defined(UNICODE)
 			wchar_t p_temp[256] = {0};
 			wsprintf(p_temp, L"Local\\ktkMemoryAllocationCounter_%s_%d",
 				wFilename, index);
+			#else
+			char p_temp[256] = {0};
+			std::sprintf(
+				p_temp,
+				"Local\\ktkMemoryAllocationCounter_%s_%d",
+				filename,
+				index
+			);
+			#endif
 
 			handles[index] = ::CreateFileMapping(INVALID_HANDLE_VALUE, nullptr,
 				PAGE_READWRITE, 0, sizeof(ktkMemoryAllocationCounter), p_temp);

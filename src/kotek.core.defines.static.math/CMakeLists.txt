@@ -29,6 +29,10 @@ if ("${KOTEK_MATH_LIBRARY_IMPLICIT_CASTING}" STREQUAL "ON")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_MATH_LIBRARY_IMPLICIT_CASTING)
 endif()
 
+if ("${KOTEK_MATH_LIBRARY_BROADCASTING}" STREQUAL "ON")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_MATH_LIBRARY_BROADCASTING)
+endif()
+
 if ("${KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED}" STREQUAL "ON")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED)
 endif()
@@ -53,6 +57,18 @@ if (NOT "${KOTEK_MATH_LIBRARY}" STREQUAL "")
 
 	#ifdef KOTEK_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 		#define KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	#endif
+
+	/// @brief \~english if enabled (defined KOTEK_MATH_LIBRARY_BROADCASTING) means 
+	/// there're operations sum,minus will align matrix/vector dims for example 
+	/// matrix3x3 + vec2 leads to this = part of matrix3x3 taken as matrix2x2 then summed with vec2
+	/// [0][1][2] + [10]   [10][11][ 2]
+	/// [3][4][5] + [20] = [23][24][ 5]
+	/// [6][7][8]          [ 6][ 7][ 8]
+	/// SO if a such macro not defined we strictly follow linear math rules from books
+	/// (like sum between arbitrary matrix and vector are not defined)
+	#ifdef KOTEK_MATH_LIBRARY_BROADCASTING
+		#define KOTEK_USE_MATH_LIBRARY_BROADCASTING
 	#endif
 	")
 else()

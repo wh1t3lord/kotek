@@ -38,6 +38,29 @@ matrix2x2f::matrix2x2f(const matrix2x2f& data) :
 {
 }
 
+matrix2x2f::matrix2x2f(const matrixnf_view_t& view)
+{
+	KOTEK_ASSERT(
+		view.get_column_count() >= get_column_count(),
+		"out-of-range"
+	);
+
+	KOTEK_ASSERT(
+		view.get_row_count() >= get_row_count(), "out-of-range"
+	);
+
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	this->m_base[0].x = view.e(0, 0);
+	this->m_base[0].y = view.e(0, 1);
+	this->m_base[1].x = view.e(1, 0);
+	this->m_base[1].y = view.e(1, 1);
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: impl
+#else
+	#error unknown library
+#endif
+}
+
 #ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
 matrix2x2f::matrix2x2f(const matrix3x3f& data)
 	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
@@ -99,6 +122,11 @@ matrix2x2f& matrix2x2f::operator=(const matrix2x2f& data)
 {
 	this->m_base = data.m_base;
 	return *this;
+}
+
+matrix2x2f& matrix2x2f::operator=(const matrixnf_view_t& view)
+{
+	return this->operator=(matrix2x2f(view));
 }
 
 #ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
