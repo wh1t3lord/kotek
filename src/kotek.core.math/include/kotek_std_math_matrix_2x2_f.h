@@ -2,6 +2,8 @@
 
 #include "kotek_std_alias_math.h"
 
+#include "kotek_std_math_vector2f.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
@@ -412,6 +414,46 @@ inline matrix2x2f
 operator*(float value, const matrix2x2f& right) noexcept
 {
 	return operator*(right, value);
+}
+
+inline vector2f
+operator*(const matrix2x2f& left, const vector2f& vec)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return left.Get_Base() * vec.Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm impl
+#endif
+}
+
+inline vector2f
+operator*(const vector2f& vec, const matrix2x2f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return vec.Get_Base() * right.Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm impl
+#endif
+}
+
+inline vector2f
+operator*(const matrix2x2f& left, const vectornf_view_t& view)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return left * vector2f(view);
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm impl
+#endif
+}
+
+inline vector2f
+operator*(const vectornf_view_t& view, const matrix2x2f& right)
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return right * vector2f(view);
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm impl
+#endif
 }
 
 #ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING

@@ -29,14 +29,14 @@ struct matrixnf_view_t
 	set(math_id_t column_id,
 	    float* p_data,
 	    math_id_t element_count) noexcept;
-	void set(const vectornf_view_t& view) noexcept;
+	void set(const vectornf_view_t& view, math_id_t column_id) noexcept;
 
 	void set(const matrixnf_view_t& view) noexcept;
 
-	void set(const vector1f& vec) noexcept;
-	void set(const vector2f& vec) noexcept;
-	void set(const vector3f& vec) noexcept;
-	void set(const vector4f& vec) noexcept;
+	void set(const vector1f& vec, math_id_t column_id) noexcept;
+	void set(const vector2f& vec, math_id_t column_id) noexcept;
+	void set(const vector3f& vec, math_id_t column_id) noexcept;
+	void set(const vector4f& vec, math_id_t column_id) noexcept;
 
 	void set(const matrix2x2f& mat) noexcept;
 	void set(const matrix3x3f& mat) noexcept;

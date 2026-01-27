@@ -2,6 +2,8 @@
 
 #include "kotek_std_alias_math.h"
 
+#include "kotek_std_math_vector4f.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
@@ -402,6 +404,48 @@ inline matrix4x4f
 operator*(float value, const matrix4x4f& right) noexcept
 {
 	return operator*(right, value);
+}
+
+inline vector4f
+operator*(const matrix4x4f& left, const vector4f& vec) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return left.Get_Base() * vec.Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm
+#endif
+}
+
+inline vector4f
+operator*(const vector4f& vec, const matrix4x4f& right) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return vec.Get_Base() * right.Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm
+#endif
+}
+
+inline vector4f operator*(
+	const matrix4x4f& left, const vectornf_view_t& view
+) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return left * vector4f(view);
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm
+#endif
+}
+
+inline vector4f operator*(
+	const vectornf_view_t& view, const matrix4x4f& right
+) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return vector4f(view) * right;
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm
+#endif
 }
 
 inline matrix4x4f

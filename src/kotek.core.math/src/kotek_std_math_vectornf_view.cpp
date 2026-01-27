@@ -671,7 +671,7 @@ const float& vectornf_const_view_t::operator[](math_id_t row_id
 	KOTEK_ASSERT(this->m_p_values, "data must be valid");
 
 	if (this->m_p_values == nullptr)
-		return 0.0f;
+		return _m_default;
 
 	KOTEK_ASSERT(row_id < this->m_row_count, "invalid row");
 
@@ -681,7 +681,10 @@ const float& vectornf_const_view_t::operator[](math_id_t row_id
 	return this->m_p_values[row_id];
 }
 
-math_id_t vectornf_const_view_t::size_of(void) const noexcept {}
+math_id_t vectornf_const_view_t::size_of(void) const noexcept
+{
+	return this->get_row_count() * sizeof(float);
+}
 
 math_id_t vectornf_const_view_t::get_column_count(void
 ) const noexcept

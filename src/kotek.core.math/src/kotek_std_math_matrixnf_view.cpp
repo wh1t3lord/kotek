@@ -116,6 +116,10 @@ matrixnf_view_t::operator+=(const matrixnf_view_t& view
 	{
 	case 2:
 	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 2, "expected quad matrix"
+		);
+
 		matrix2x2f left(*this);
 		matrix2x2f right(view);
 
@@ -131,6 +135,10 @@ matrixnf_view_t::operator+=(const matrixnf_view_t& view
 	}
 	case 3:
 	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 3, "expected quad matrix"
+		);
+
 		matrix3x3f left(*this);
 		matrix3x3f right(view);
 
@@ -152,6 +160,10 @@ matrixnf_view_t::operator+=(const matrixnf_view_t& view
 	}
 	case 4:
 	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 4, "expected quad matrix"
+		);
+
 		matrix4x4f left(*this);
 		matrix4x4f right(view);
 
@@ -179,6 +191,11 @@ matrixnf_view_t::operator+=(const matrixnf_view_t& view
 
 		break;
 	}
+	default:
+	{
+		KOTEK_ASSERT(false, "unhanled case");
+		break;
+	}
 	}
 #endif
 
@@ -190,17 +207,21 @@ matrixnf_view_t& matrixnf_view_t::operator+=(const vector1f& vec
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
 	KOTEK_ASSERT(
-		this->m_column_count >= vec.get_column_count(),
+		this->get_column_count() >= vec.get_column_count(),
 		"out-of-range"
 	);
 
 	KOTEK_ASSERT(
-		this->m_row_count >= vec.get_row_count(), "out of range"
+		this->get_row_count() >= vec.get_row_count(),
+		"out of range"
 	);
 
-	if (this->m_row_count >= vec.get_row_count())
+	if (this->get_row_count() >= vec.get_row_count())
 	{
-		this->c(0) += vec;
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) += vec;
+		}
 	}
 #else
 	KOTEK_ASSERT(
@@ -234,17 +255,21 @@ matrixnf_view_t& matrixnf_view_t::operator+=(const vector2f& vec
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
 	KOTEK_ASSERT(
-		this->m_column_count >= vec.get_column_count(),
+		this->get_column_count() >= vec.get_column_count(),
 		"out-of-range"
 	);
 
 	KOTEK_ASSERT(
-		this->m_row_count >= vec.get_row_count(), "out of range"
+		this->get_row_count() >= vec.get_row_count(),
+		"out of range"
 	);
 
-	if (this->m_row_count >= vec.get_row_count())
+	if (this->get_row_count() >= vec.get_row_count())
 	{
-		this->c(0) += vec;
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) += vec;
+		}
 	}
 #else
 	KOTEK_ASSERT(
@@ -278,17 +303,21 @@ matrixnf_view_t& matrixnf_view_t::operator+=(const vector3f& vec
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
 	KOTEK_ASSERT(
-		this->m_column_count >= vec.get_column_count(),
+		this->get_column_count() >= vec.get_column_count(),
 		"out-of-range"
 	);
 
 	KOTEK_ASSERT(
-		this->m_row_count >= vec.get_row_count(), "out of range"
+		this->get_row_count() >= vec.get_row_count(),
+		"out of range"
 	);
 
-	if (this->m_row_count >= vec.get_row_count())
+	if (this->get_row_count() >= vec.get_row_count())
 	{
-		this->c(0) += vec;
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) += vec;
+		}
 	}
 #else
 	KOTEK_ASSERT(
@@ -322,17 +351,21 @@ matrixnf_view_t& matrixnf_view_t::operator+=(const vector4f& vec
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
 	KOTEK_ASSERT(
-		this->m_column_count >= vec.get_column_count(),
+		this->get_column_count() >= vec.get_column_count(),
 		"out-of-range"
 	);
 
 	KOTEK_ASSERT(
-		this->m_row_count >= vec.get_row_count(), "out of range"
+		this->get_row_count() >= vec.get_row_count(),
+		"out of range"
 	);
 
-	if (this->m_row_count >= vec.get_row_count())
+	if (this->get_row_count() >= vec.get_row_count())
 	{
-		this->c(0) += vec;
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) += vec;
+		}
 	}
 #else
 	KOTEK_ASSERT(
@@ -366,16 +399,17 @@ matrixnf_view_t::operator+=(const matrix2x2f& mat) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
 	KOTEK_ASSERT(
-		this->m_column_count >= mat.get_column_count(),
+		this->get_column_count() >= mat.get_column_count(),
 		"out-of-range"
 	);
 	KOTEK_ASSERT(
-		this->m_row_count >= mat.get_row_count(), "out-of-range"
+		this->get_row_count() >= mat.get_row_count(),
+		"out-of-range"
 	);
 
-	if (this->m_column_count >= mat.get_column_count())
+	if (this->get_column_count() >= mat.get_column_count())
 	{
-		if (this->m_row_count >= mat.get_row_count())
+		if (this->get_row_count() >= mat.get_row_count())
 		{
 			matrix2x2f casted(*this);
 			casted += mat;
@@ -389,13 +423,13 @@ matrixnf_view_t::operator+=(const matrix2x2f& mat) noexcept
 	KOTEK_ASSERT(
 		this->get_column_count() == mat.get_column_count(),
 		"strict linear algebra rule, otherwise enable "
-	    "broadcasting"
+		"broadcasting"
 	);
 
 	KOTEK_ASSERT(
 		this->get_row_count() == mat.get_row_count(),
 		"strict linear algebra rule, otherwise enable "
-	    "broadcasting"
+		"broadcasting"
 	);
 
 	if (this->get_row_count() == mat.get_row_count() &&
@@ -420,14 +454,14 @@ matrixnf_view_t::operator+=(const matrix3x3f& mat) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
 	KOTEK_ASSERT(
-		this->m_column_count >= mat.get_column_count(),
+		this->get_column_count() >= mat.get_column_count(),
 		"out-of-range"
 	);
 	KOTEK_ASSERT(
 		this->m_row_count >= mat.get_row_count(), "out-of-range"
 	);
 
-	if (this->m_column_count >= mat.get_column_count())
+	if (this->get_column_count() >= mat.get_column_count())
 	{
 		if (this->m_row_count >= mat.get_row_count())
 		{
@@ -480,14 +514,14 @@ matrixnf_view_t::operator+=(const matrix4x4f& mat) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
 	KOTEK_ASSERT(
-		this->m_column_count >= mat.get_column_count(),
+		this->get_column_count() >= mat.get_column_count(),
 		"out-of-range"
 	);
 	KOTEK_ASSERT(
 		this->m_row_count >= mat.get_row_count(), "out-of-range"
 	);
 
-	if (this->m_column_count >= mat.get_column_count())
+	if (this->get_column_count() >= mat.get_column_count())
 	{
 		if (this->m_row_count >= mat.get_row_count())
 		{
@@ -547,30 +581,47 @@ matrixnf_view_t&
 matrixnf_view_t::operator-=(const vectornf_view_t& view
 ) noexcept
 {
-	if (view.get_column_count() > 4 || view.get_row_count() > 4)
-	{
-		KOTEK_ASSERT(
-			false,
-			"not yet impl, todo: provide vectornf and matrixnf "
-			"impls"
-		);
-	}
-	else
-	{
-		KOTEK_ASSERT(
-			this->get_row_count() >= view.get_row_count(),
-			"out-of-range"
-		);
-		KOTEK_ASSERT(
-			this->get_column_count() >= view.get_column_count(),
-			"out-of-range"
-		);
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	KOTEK_ASSERT(
+		this->get_column_count() >= view.get_column_count(),
+		"out-of-range"
+	);
 
-		if (this->get_row_count() >= view.get_row_count())
+	KOTEK_ASSERT(
+		this->get_row_count() >= view.get_row_count(),
+		"out of range"
+	);
+
+	if (this->get_row_count() >= view.get_row_count())
+	{
+		for (math_id_t i = 0; i < view.get_row_count(); ++i)
 		{
-			this->c(0) -= view;
+			this->c(i) -= view;
 		}
 	}
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == view.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting!"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() == view.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	if (this->get_row_count() == view.get_row_count() &&
+	    this->get_column_count() == view.get_row_count())
+	{
+		for (math_id_t i = 0; i < view.get_row_count(); ++i)
+		{
+			this->c(i) -= view;
+		}
+	}
+
+#endif
 
 	return *this;
 }
@@ -579,135 +630,1137 @@ matrixnf_view_t&
 matrixnf_view_t::operator-=(const matrixnf_view_t& view
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == view.get_column_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() == view.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	switch (this->get_column_count())
+	{
+	case 2:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 2, "expected quad matrix"
+		);
+
+		matrix2x2f left(*this);
+		matrix2x2f right(view);
+
+		left -= right;
+
+		this->c(0).x() = left.e(0, 0);
+		this->c(0).y() = left.e(0, 1);
+
+		this->c(1).x() = left.e(1, 0);
+		this->c(1).y() = left.e(1, 1);
+
+		break;
+	}
+	case 3:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 3, "expected quad matrix"
+		);
+
+		matrix3x3f left(*this);
+		matrix3x3f right(view);
+
+		left -= right;
+
+		this->c(0).x() = left.e(0, 0);
+		this->c(0).y() = left.e(0, 1);
+		this->c(0).z() = left.e(0, 2);
+
+		this->c(1).x() = left.e(1, 0);
+		this->c(1).y() = left.e(1, 1);
+		this->c(1).z() = left.e(1, 2);
+
+		this->c(2).x() = left.e(2, 0);
+		this->c(2).y() = left.e(2, 1);
+		this->c(2).z() = left.e(2, 2);
+
+		break;
+	}
+	case 4:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 4, "expected quad matrix"
+		);
+
+		matrix4x4f left(*this);
+		matrix4x4f right(view);
+
+		left -= right;
+
+		this->c(0).x() = left.e(0, 0);
+		this->c(0).y() = left.e(0, 1);
+		this->c(0).z() = left.e(0, 2);
+		this->c(0).w() = left.e(0, 3);
+
+		this->c(1).x() = left.e(1, 0);
+		this->c(1).y() = left.e(1, 1);
+		this->c(1).z() = left.e(1, 2);
+		this->c(2).w() = left.e(1, 3);
+
+		this->c(2).x() = left.e(2, 0);
+		this->c(2).y() = left.e(2, 1);
+		this->c(2).z() = left.e(2, 2);
+		this->c(2).w() = left.e(2, 3);
+
+		this->c(3).x() = left.e(3, 0);
+		this->c(3).y() = left.e(3, 1);
+		this->c(3).z() = left.e(3, 2);
+		this->c(3).w() = left.e(3, 3);
+
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "unhanled case");
+		break;
+	}
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator-=(const vector1f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	KOTEK_ASSERT(
+		this->get_column_count() >= vec.get_column_count(),
+		"out-of-range"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() >= vec.get_row_count(),
+		"out of range"
+	);
+
+	if (this->get_row_count() >= vec.get_row_count())
+	{
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) -= vec;
+		}
+	}
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting!"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	if (this->get_row_count() == vec.get_row_count() &&
+	    this->get_column_count() == vec.get_row_count())
+	{
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) -= vec;
+		}
+	}
+
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator-=(const vector2f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	KOTEK_ASSERT(
+		this->get_column_count() >= vec.get_column_count(),
+		"out-of-range"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() >= vec.get_row_count(),
+		"out of range"
+	);
+
+	if (this->get_row_count() >= vec.get_row_count())
+	{
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) -= vec;
+		}
+	}
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting!"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	if (this->get_row_count() == vec.get_row_count() &&
+	    this->get_column_count() == vec.get_row_count())
+	{
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) -= vec;
+		}
+	}
+
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator-=(const vector3f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	KOTEK_ASSERT(
+		this->get_column_count() >= vec.get_column_count(),
+		"out-of-range"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() >= vec.get_row_count(),
+		"out of range"
+	);
+
+	if (this->get_row_count() >= vec.get_row_count())
+	{
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) -= vec;
+		}
+	}
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting!"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	if (this->get_row_count() == vec.get_row_count() &&
+	    this->get_column_count() == vec.get_row_count())
+	{
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) -= vec;
+		}
+	}
+
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator-=(const vector4f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	KOTEK_ASSERT(
+		this->get_column_count() >= vec.get_column_count(),
+		"out-of-range"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() >= vec.get_row_count(),
+		"out of range"
+	);
+
+	if (this->get_row_count() >= vec.get_row_count())
+	{
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) -= vec;
+		}
+	}
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting!"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	if (this->get_row_count() == vec.get_row_count() &&
+	    this->get_column_count() == vec.get_row_count())
+	{
+		for (math_id_t i = 0; i < vec.get_row_count(); ++i)
+		{
+			this->c(i) -= vec;
+		}
+	}
+
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator-=(const matrix2x2f& mat) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	KOTEK_ASSERT(
+		this->get_column_count() >= mat.get_column_count(),
+		"out-of-range"
+	);
+	KOTEK_ASSERT(
+		this->get_row_count() >= mat.get_row_count(),
+		"out-of-range"
+	);
+
+	if (this->get_column_count() >= mat.get_column_count())
+	{
+		if (this->get_row_count() >= mat.get_row_count())
+		{
+			matrix2x2f casted(*this);
+			casted += mat;
+			this->c(0).x() = casted[0][0];
+			this->c(0).y() = casted[0][1];
+			this->c(1).x() = casted[1][0];
+			this->c(1).y() = casted[1][1];
+		}
+	}
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == mat.get_column_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() == mat.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	if (this->get_row_count() == mat.get_row_count() &&
+	    this->get_column_count() == mat.get_column_count())
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 2,
+			"expected quad matrix otherwise provide "
+			"implementation and dimension of a such matrix!"
+		);
+
+		matrix2x2f casted(*this);
+		casted -= mat;
+
+		this->c(0).x() = casted[0][0];
+		this->c(0).y() = casted[0][1];
+
+		this->c(1).x() = casted[1][0];
+		this->c(1).y() = casted[1][1];
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator-=(const matrix3x3f& mat) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	KOTEK_ASSERT(
+		this->get_column_count() >= mat.get_column_count(),
+		"out-of-range"
+	);
+	KOTEK_ASSERT(
+		this->m_row_count >= mat.get_row_count(), "out-of-range"
+	);
+
+	if (this->get_column_count() >= mat.get_column_count())
+	{
+		if (this->m_row_count >= mat.get_row_count())
+		{
+			matrix2x2f casted(*this);
+			casted += mat;
+			this->c(0).x() = casted[0][0];
+			this->c(0).y() = casted[0][1];
+			this->c(1).x() = casted[1][0];
+			this->c(1).y() = casted[1][1];
+		}
+	}
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == mat.get_column_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() == mat.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	if (this->get_row_count() == mat.get_row_count() &&
+	    this->get_column_count() == mat.get_column_count())
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 3,
+			"expected quad matrix otherwise provide "
+			"implementation and dimension of a such matrix!"
+		);
+
+		matrix3x3f casted(*this);
+		casted -= mat;
+
+		this->c(0).x() = casted[0][0];
+		this->c(0).y() = casted[0][1];
+		this->c(0).z() = casted[0][2];
+
+		this->c(1).x() = casted[1][0];
+		this->c(1).y() = casted[1][1];
+		this->c(1).z() = casted[1][2];
+
+		this->c(2).x() = casted[2][0];
+		this->c(2).y() = casted[2][1];
+		this->c(2).z() = casted[2][2];
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator-=(const matrix4x4f& mat) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	KOTEK_ASSERT(
+		this->get_column_count() >= mat.get_column_count(),
+		"out-of-range"
+	);
+	KOTEK_ASSERT(
+		this->get_row_count() >= mat.get_row_count(),
+		"out-of-range"
+	);
+
+	if (this->get_column_count() >= mat.get_column_count())
+	{
+		if (this->get_row_count() >= mat.get_row_count())
+		{
+			matrix2x2f casted(*this);
+			casted += mat;
+			this->c(0).x() = casted[0][0];
+			this->c(0).y() = casted[0][1];
+			this->c(1).x() = casted[1][0];
+			this->c(1).y() = casted[1][1];
+		}
+	}
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == mat.get_column_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() == mat.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	if (this->get_row_count() == mat.get_row_count() &&
+	    this->get_column_count() == mat.get_column_count())
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 4,
+			"expected quad matrix otherwise provide "
+			"implementation and dimension of a such matrix!"
+		);
+
+		matrix4x4f casted(*this);
+		casted -= mat;
+
+		this->c(0).x() = casted[0][0];
+		this->c(0).y() = casted[0][1];
+		this->c(0).z() = casted[0][2];
+		this->c(0).w() = casted[0][3];
+
+		this->c(1).x() = casted[1][0];
+		this->c(1).y() = casted[1][1];
+		this->c(1).z() = casted[1][2];
+		this->c(1).w() = casted[1][3];
+
+		this->c(2).x() = casted[2][0];
+		this->c(2).y() = casted[2][1];
+		this->c(2).z() = casted[2][2];
+		this->c(2).w() = casted[2][3];
+
+		this->c(3).x() = casted[3][0];
+		this->c(3).y() = casted[3][1];
+		this->c(3).z() = casted[3][2];
+		this->c(3).w() = casted[3][3];
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator*=(const vectornf_view_t& view
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == view.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	// todo: think about it because our matrix that was a view
+	// now becomes a vector due to matrix x vector
+	// multiplication
+	switch (this->get_column_count())
+	{
+	case 2:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 2,
+			"expected quad matrix otherwise provide "
+			"implementation and dimension of a such matrix!"
+		);
+
+		matrix2x2f casted(*this);
+
+		const vector2f& result = casted * view;
+
+		this->m_column_count = 1;
+		this->m_row_count = 2;
+
+		this->e(0, 0) = result.x();
+		this->e(0, 1) = result.y();
+
+		break;
+	}
+	case 3:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 3,
+			"expected quad matrix otherwise provide "
+			"implementation and dimension of a such matrix!"
+		);
+
+		matrix3x3f casted(*this);
+
+		const vector3f& result = casted * view;
+
+		this->m_column_count = 1;
+		this->m_row_count = 3;
+
+		this->e(0, 0) = result.x();
+		this->e(0, 1) = result.y();
+		this->e(0, 2) = result.z();
+
+		break;
+	}
+	case 4:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == 4,
+			"expected quad matrix otherwise provide "
+			"implementation and dimension of a such matrix!"
+		);
+
+		matrix4x4f casted(*this);
+
+		const vector4f& result = casted * view;
+
+		this->m_column_count = 1;
+		this->m_row_count = 4;
+
+		this->e(0, 0) = result.x();
+		this->e(0, 1) = result.y();
+		this->e(0, 2) = result.z();
+		this->e(0, 3) = result.w();
+
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "unhandled situation");
+		break;
+	}
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator*=(const matrixnf_view_t& view
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: is it even can be broadcasted??
+#else
+	KOTEK_ASSERT(
+		this->get_row_count() == view.get_column_count(),
+		"strict linear algebra rules"
+	);
+
+	if (this->get_row_count() == view.get_column_count())
+	{
+		switch (this->get_row_count())
+		{
+		case 2:
+		{
+			KOTEK_ASSERT(
+				this->get_column_count() == 2,
+				"expected quad matrix otherwise provide impl "
+				"for a such matrix dimension!"
+			);
+
+			matrix2x2f left(*this);
+			matrix2x2f right(view);
+
+			left *= right;
+
+			this->e(0, 0) = left.e(0, 0);
+			this->e(0, 1) = left.e(0, 1);
+			this->e(1, 0) = left.e(1, 0);
+			this->e(1, 1) = left.e(1, 1);
+
+			break;
+		}
+		case 3:
+		{
+			KOTEK_ASSERT(
+				this->get_column_count() == 3,
+				"expected quad matrix otherwise provide impl "
+				"for a such matrix dimension!"
+			);
+
+			matrix3x3f left(*this);
+			matrix3x3f right(view);
+
+			left *= right;
+
+			this->e(0, 0) = left.e(0, 0);
+			this->e(0, 1) = left.e(0, 1);
+			this->e(0, 2) = left.e(0, 2);
+
+			this->e(1, 0) = left.e(1, 0);
+			this->e(1, 1) = left.e(1, 1);
+			this->e(1, 2) = left.e(1, 2);
+
+			this->e(2, 0) = left.e(2, 0);
+			this->e(2, 1) = left.e(2, 1);
+			this->e(2, 2) = left.e(2, 2);
+
+			break;
+		}
+		case 4:
+		{
+			KOTEK_ASSERT(
+				this->get_column_count() == 4,
+				"expected quad matrix otherwise provide impl "
+				"for a such matrix dimension!"
+			);
+
+			matrix4x4f left(*this);
+			matrix4x4f right(view);
+
+			left *= right;
+
+			this->e(0, 0) = left.e(0, 0);
+			this->e(0, 1) = left.e(0, 1);
+			this->e(0, 2) = left.e(0, 2);
+			this->e(0, 3) = left.e(0, 3);
+
+			this->e(1, 0) = left.e(1, 0);
+			this->e(1, 1) = left.e(1, 1);
+			this->e(1, 2) = left.e(1, 2);
+			this->e(1, 3) = left.e(1, 3);
+
+			this->e(2, 0) = left.e(2, 0);
+			this->e(2, 1) = left.e(2, 1);
+			this->e(2, 2) = left.e(2, 2);
+			this->e(2, 3) = left.e(2, 3);
+
+			break;
+		}
+		default:
+		{
+			KOTEK_ASSERT(false, "unhandled situation");
+			break;
+		}
+		}
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator*=(const vector1f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	switch (this->get_column_count())
+	{
+	case 1:
+	{
+		this->e(0, 0) *= vec.x();
+
+		this->m_row_count = vec.get_row_count();
+		this->m_column_count = 1;
+
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "expected mat1x1");
+		break;
+	}
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator*=(const vector2f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	switch (this->get_column_count())
+	{
+	case 2:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == vec.get_row_count(),
+			"expected quad 2x2 mat, otherwise provide impl for "
+			"different dimension"
+		);
+
+		matrix2x2f casted(*this);
+
+		const vector2f& res = casted * vec;
+
+		this->e(0, 0) = res.x();
+		this->e(0, 1) = res.y();
+
+		this->m_row_count = vec.get_row_count();
+		this->m_column_count = 1;
+
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "expected mat2x2");
+		break;
+	}
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator*=(const vector3f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	switch (this->get_column_count())
+	{
+	case 3:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == vec.get_row_count(),
+			"expected quad 3x3 mat, otherwise provide impl for "
+			"different dimension"
+		);
+
+		matrix3x3f casted(*this);
+
+		const vector3f& res = casted * vec;
+
+		this->e(0, 0) = res.x();
+		this->e(0, 1) = res.y();
+		this->e(0, 2) = res.z();
+
+		this->m_row_count = vec.get_row_count();
+		this->m_column_count = 1;
+
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "expected mat1x1");
+		break;
+	}
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator*=(const vector4f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == vec.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	switch (this->get_column_count())
+	{
+	case 4:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == vec.get_row_count(),
+			"expected quad 4x4 mat, otherwise provide impl for "
+			"different dimension"
+		);
+
+		matrix4x4f casted(*this);
+
+		const vector4f& res = casted * vec;
+
+		this->e(0, 0) = res.x();
+		this->e(0, 1) = res.y();
+		this->e(0, 2) = res.z();
+		this->e(0, 3) = res.w();
+
+		this->m_row_count = vec.get_row_count();
+		this->m_column_count = 1;
+
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "expected mat1x1");
+		break;
+	}
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator*=(const matrix2x2f& mat) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == mat.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	switch (this->get_column_count())
+	{
+	case 2:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == mat.get_row_count(),
+			"expected quad 2x2 matrix, otherwise provide impl "
+			"for different dimension"
+		);
+
+		matrix2x2f casted(*this);
+
+		casted *= mat;
+
+		this->e(0, 0) = casted.e(0, 0);
+		this->e(0, 1) = casted.e(0, 1);
+
+		this->e(1, 0) = casted.e(1, 0);
+		this->e(1, 1) = casted.e(1, 1);
+
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "expected mat2x2");
+		break;
+	}
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator*=(const matrix3x3f& mat) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == mat.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	switch (this->get_column_count())
+	{
+	case 3:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == mat.get_row_count(),
+			"expected quad 3x3 matrix, otherwise provide impl "
+			"for different dimension"
+		);
+
+		matrix3x3f casted(*this);
+
+		casted *= mat;
+
+		this->e(0, 0) = casted.e(0, 0);
+		this->e(0, 1) = casted.e(0, 1);
+		this->e(0, 2) = casted.e(0, 2);
+
+		this->e(1, 0) = casted.e(1, 0);
+		this->e(1, 1) = casted.e(1, 1);
+		this->e(1, 2) = casted.e(1, 2);
+
+		this->e(2, 0) = casted.e(2, 0);
+		this->e(2, 1) = casted.e(2, 1);
+		this->e(2, 2) = casted.e(2, 2);
+
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "expected mat3x3");
+		break;
+	}
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator*=(const matrix4x4f& mat) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() == mat.get_row_count(),
+		"strict linear algebra rule, otherwise enable "
+		"broadcasting"
+	);
+
+	switch (this->get_column_count())
+	{
+	case 4:
+	{
+		KOTEK_ASSERT(
+			this->get_row_count() == mat.get_row_count(),
+			"expected quad 4x4 matrix, otherwise provide impl "
+			"for different dimension"
+		);
+
+		matrix4x4f casted(*this);
+
+		casted *= mat;
+
+		this->e(0, 0) = casted.e(0, 0);
+		this->e(0, 1) = casted.e(0, 1);
+		this->e(0, 2) = casted.e(0, 2);
+		this->e(0, 3) = casted.e(0, 3);
+
+		this->e(1, 0) = casted.e(1, 0);
+		this->e(1, 1) = casted.e(1, 1);
+		this->e(1, 2) = casted.e(1, 2);
+		this->e(1, 3) = casted.e(1, 3);
+
+		this->e(2, 0) = casted.e(2, 0);
+		this->e(2, 1) = casted.e(2, 1);
+		this->e(2, 2) = casted.e(2, 2);
+		this->e(2, 3) = casted.e(2, 3);
+
+		this->e(3, 0) = casted.e(3, 0);
+		this->e(3, 1) = casted.e(3, 1);
+		this->e(3, 2) = casted.e(3, 2);
+		this->e(3, 3) = casted.e(3, 3);
+
+		break;
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "expected mat3x3");
+		break;
+	}
+	}
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator/=(const vectornf_view_t& view
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	#error todo: impl
+#else
+	KOTEK_ASSERT(false, "undefined linear algebra operator");
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator/=(const matrixnf_view_t& view
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	#error todo: impl
+#else
+	KOTEK_ASSERT(false, "undefined linear algebra operator");
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator/=(const vector1f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	#error todo: impl
+#else
+	KOTEK_ASSERT(false, "undefined linear algebra operator");
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator/=(const vector2f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	#error todo: impl
+#else
+	KOTEK_ASSERT(false, "undefined linear algebra operator");
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator/=(const vector3f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	#error todo: impl
+#else
+	KOTEK_ASSERT(false, "undefined linear algebra operator");
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t& matrixnf_view_t::operator/=(const vector4f& vec
 ) noexcept
 {
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	#error todo: impl
+#else
+	KOTEK_ASSERT(false, "undefined linear algebra operator");
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator/=(const matrix2x2f& mat) noexcept
 {
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	#error todo: impl
+#else
+	KOTEK_ASSERT(false, "undefined linear algebra operator");
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator/=(const matrix3x3f& mat) noexcept
 {
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	#error todo: impl
+#else
+	KOTEK_ASSERT(false, "undefined linear algebra operator");
+#endif
+
+	return *this;
 }
 
 matrixnf_view_t&
 matrixnf_view_t::operator/=(const matrix4x4f& mat) noexcept
 {
+#ifdef KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
+	#error todo: impl
+#else
+	KOTEK_ASSERT(false, "undefined linear algebra operator");
+#endif
+
+	return *this;
 }
 
 vectornf_view_t matrixnf_view_t::c(math_id_t column_id) noexcept
@@ -830,27 +1883,257 @@ void matrixnf_view_t::set(
 	}
 }
 
-void matrixnf_view_t::set(const vectornf_view_t& view) noexcept
+void matrixnf_view_t::set(
+	const vectornf_view_t& view, math_id_t column_id
+) noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		column_id < this->get_column_count(), "out-of-range"
+	);
+
+	if (column_id < this->get_column_count())
+	{
+		KOTEK_ASSERT(
+			this->c(column_id).get_row_count() ==
+				view.get_row_count(),
+			"out-of-range"
+		);
+
+		if (this->c(column_id).get_row_count() ==
+		    view.get_row_count())
+		{
+			for (math_id_t i = 0; i < view.get_row_count(); ++i)
+			{
+				this->c(column_id).e(0, i) = view.e(0, i);
+			}
+		}
+	}
+#endif
 }
 
 void matrixnf_view_t::set(const matrixnf_view_t& view) noexcept
 {
 }
 
-void matrixnf_view_t::set(const vector1f& vec) noexcept {}
+void matrixnf_view_t::set(
+	const vector1f& vec, math_id_t column_id
+) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		column_id < this->get_column_count(), "out-of-range"
+	);
 
-void matrixnf_view_t::set(const vector2f& vec) noexcept {}
+	if (column_id < this->get_column_count())
+	{
+		KOTEK_ASSERT(
+			this->c(column_id).get_row_count() >=
+				vec.get_row_count(),
+			"out-of-range"
+		);
 
-void matrixnf_view_t::set(const vector3f& vec) noexcept {}
+		if (this->c(column_id).get_row_count() >=
+		    vec.get_row_count())
+		{
+			this->c(column_id).e(0, 0) = vec.e(0, 0);
+		}
+	}
+#endif
+}
 
-void matrixnf_view_t::set(const vector4f& vec) noexcept {}
+void matrixnf_view_t::set(
+	const vector2f& vec, math_id_t column_id
+) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		column_id < this->get_column_count(), "out-of-range"
+	);
 
-void matrixnf_view_t::set(const matrix2x2f& mat) noexcept {}
+	if (column_id < this->get_column_count())
+	{
+		KOTEK_ASSERT(
+			this->c(column_id).get_row_count() >=
+				vec.get_row_count(),
+			"out-of-range"
+		);
 
-void matrixnf_view_t::set(const matrix3x3f& mat) noexcept {}
+		if (this->c(column_id).get_row_count() >=
+		    vec.get_row_count())
+		{
+			this->c(column_id).e(0, 0) = vec.e(0, 0);
+			this->c(column_id).e(0, 1) = vec.e(0, 1);
+		}
+	}
+#endif
+}
 
-void matrixnf_view_t::set(const matrix4x4f& mat) noexcept {}
+void matrixnf_view_t::set(
+	const vector3f& vec, math_id_t column_id
+) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		column_id < this->get_column_count(), "out-of-range"
+	);
+
+	if (column_id < this->get_column_count())
+	{
+		KOTEK_ASSERT(
+			this->c(column_id).get_row_count() >=
+				vec.get_row_count(),
+			"out-of-range"
+		);
+
+		if (this->c(column_id).get_row_count() >=
+		    vec.get_row_count())
+		{
+			this->c(column_id).e(0, 0) = vec.e(0, 0);
+			this->c(column_id).e(0, 1) = vec.e(0, 1);
+			this->c(column_id).e(0, 2) = vec.e(0, 2);
+		}
+	}
+#endif
+}
+
+void matrixnf_view_t::set(
+	const vector4f& vec, math_id_t column_id
+) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		column_id < this->get_column_count(), "out-of-range"
+	);
+
+	if (column_id < this->get_column_count())
+	{
+		KOTEK_ASSERT(
+			this->c(column_id).get_row_count() >=
+				vec.get_row_count(),
+			"out-of-range"
+		);
+
+		if (this->c(column_id).get_row_count() >=
+		    vec.get_row_count())
+		{
+			this->c(column_id).e(0, 0) = vec.e(0, 0);
+			this->c(column_id).e(0, 1) = vec.e(0, 1);
+			this->c(column_id).e(0, 2) = vec.e(0, 2);
+			this->c(column_id).e(0, 3) = vec.e(0, 3);
+		}
+	}
+#endif
+}
+
+void matrixnf_view_t::set(const matrix2x2f& mat) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() >= mat.get_column_count(),
+		"out-of-range"
+	);
+	KOTEK_ASSERT(
+		this->get_row_count() >= mat.get_row_count(),
+		"out-of-range"
+	);
+
+	if (this->get_column_count() >= mat.get_column_count() &&
+	    this->get_row_count() >= mat.get_row_count())
+	{
+		this->e(0, 0) = mat.e(0, 0);
+		this->e(0, 1) = mat.e(0, 1);
+		this->e(1, 0) = mat.e(1, 0);
+		this->e(1, 1) = mat.e(1, 1);
+	}
+#endif
+}
+
+void matrixnf_view_t::set(const matrix3x3f& mat) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_column_count() >= mat.get_column_count(),
+		"out-of-range"
+	);
+
+	KOTEK_ASSERT(
+		this->get_row_count() >= mat.get_row_count(),
+		"out-of-range"
+	);
+
+	if (this->get_row_count() >= mat.get_row_count() &&
+	    this->get_column_count() >= mat.get_column_count())
+	{
+		this->e(0, 0) = mat.e(0, 0);
+		this->e(0, 1) = mat.e(0, 1);
+		this->e(0, 2) = mat.e(0, 2);
+
+		this->e(1, 0) = mat.e(1, 0);
+		this->e(1, 1) = mat.e(1, 1);
+		this->e(1, 2) = mat.e(1, 2);
+
+		this->e(2, 0) = mat.e(2, 0);
+		this->e(2, 1) = mat.e(2, 1);
+		this->e(2, 2) = mat.e(2, 2);
+	}
+#endif
+}
+
+void matrixnf_view_t::set(const matrix4x4f& mat) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_BROADCASTING
+	#error todo: impl
+#else
+	KOTEK_ASSERT(
+		this->get_row_count() >= mat.get_row_count(),
+		"out-of-range"
+	);
+
+	KOTEK_ASSERT(
+		this->get_column_count() >= mat.get_column_count(),
+		"out-of-range"
+	);
+
+	if (this->get_column_count() >= mat.get_column_count() &&
+	    this->get_row_count() >= mat.get_row_count())
+	{
+		this->e(0, 0) = mat.e(0, 0);
+		this->e(0, 1) = mat.e(0, 1);
+		this->e(0, 2) = mat.e(0, 2);
+		this->e(0, 3) = mat.e(0, 3);
+
+		this->e(1, 0) = mat.e(1, 0);
+		this->e(1, 1) = mat.e(1, 1);
+		this->e(1, 2) = mat.e(1, 2);
+		this->e(1, 3) = mat.e(1, 3);
+
+		this->e(2, 0) = mat.e(2, 0);
+		this->e(2, 1) = mat.e(2, 1);
+		this->e(2, 2) = mat.e(2, 2);
+		this->e(2, 3) = mat.e(2, 3);
+
+		this->e(3, 0) = mat.e(3, 0);
+		this->e(3, 1) = mat.e(3, 1);
+		this->e(3, 2) = mat.e(3, 2);
+		this->e(3, 3) = mat.e(3, 3);
+	}
+#endif
+}
 
 math_id_t matrixnf_view_t::size_of(void) const noexcept
 {

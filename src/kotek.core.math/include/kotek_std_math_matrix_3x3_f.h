@@ -2,6 +2,8 @@
 
 #include "kotek_std_alias_math.h"
 
+#include "kotek_std_math_vector3f.h"
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
@@ -380,6 +382,47 @@ inline matrix3x3f
 operator*(float value, const matrix3x3f& right) noexcept
 {
 	return operator*(right, value);
+}
+
+inline vector3f
+operator*(const matrix3x3f& left, const vector3f& vec) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return left.Get_Base() * vec;
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm
+#endif
+}
+
+inline vector3f
+operator*(const vector3f& vec, const matrix3x3f& right) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return right.Get_Base() * vec.Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm
+#endif
+}
+
+inline vector3f operator*(
+	const matrix3x3f& left, const vectornf_view_t& view
+) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return left * vector3f(view);
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+	#error todo: dxm
+#endif
+}
+
+inline vector3f operator*(
+	const vectornf_view_t& view, const matrix3x3f& right
+) noexcept
+{
+#ifdef KOTEK_USE_MATH_LIBRARY_GLM
+	return vector3f(view) * right;
+#elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
+#endif
 }
 
 inline matrix3x3f

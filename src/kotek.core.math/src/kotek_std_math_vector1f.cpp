@@ -677,11 +677,23 @@ bool vector1f::operator==(const vector4f& data) const noexcept
 bool vector1f::operator==(const vectornf_view_t& view
 ) const noexcept
 {
+	KOTEK_ASSERT(
+		this->get_row_count() >= view.get_row_count(),
+		"not valid"
+	);
+
+	return this->e(0, 0) == view.e(0, 0);
 }
 
 bool vector1f::operator==(const vectornf_const_view_t& view
 ) const noexcept
 {
+	KOTEK_ASSERT(
+		this->get_row_count() >= view.get_row_count(),
+		"not valid"
+	);
+
+	return this->e(0, 0) == view.e(0, 0);
 }
 
 #ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
@@ -739,11 +751,23 @@ bool vector1f::operator!=(const vector4f& data) const noexcept
 bool vector1f::operator!=(const vectornf_view_t& view
 ) const noexcept
 {
+	KOTEK_ASSERT(
+		view.get_row_count() >= this->get_row_count(),
+		"must be equal"
+	);
+
+	return this->e(0, 0) != view.e(0, 0);
 }
 
 bool vector1f::operator!=(const vectornf_const_view_t& view
 ) const noexcept
 {
+	KOTEK_ASSERT(
+		view.get_row_count() >= this->get_row_count(),
+		"must be equal"
+	);
+
+	return this->e(0, 0) != view.e(0, 0);
 }
 
 #ifdef KOTEK_USE_MATH_LIBRARY_IMPLICIT_CASTING
