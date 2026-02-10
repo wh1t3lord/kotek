@@ -55,3 +55,34 @@ bool ShutdownModule_Core_ECS(ktkMainManager* p_manager);
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK
+
+#include <kotek.core.format/include/kotek_core_format.h>
+
+#ifdef KOTEK_USE_ECS_BACKEND_PICO
+template <>
+struct std::formatter<kun_kotek kun_ktk entity_t, char>
+{
+	template <typename ParseContext>
+	constexpr inline auto parse(ParseContext& ctx)
+	{
+		return ctx.begin();
+	}
+
+	inline auto format(
+		kun_kotek kun_ktk entity_t const& entity, auto& ctx
+	) const
+	{
+		kun_kotek kun_ktk static_cstring<16> buf;
+
+		std::vformat_to(
+			std::back_insert_iterator{buf},
+			"{}",
+			std::make_format_args(entity.id)
+		);
+
+		return buf.c_str();
+	}
+};
+#elif defined(KOTEK_USE_ECS_BACKEND_ENTT)
+	#error todo: provide impl
+#endif

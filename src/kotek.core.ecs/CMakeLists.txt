@@ -28,6 +28,7 @@ target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.ecs)
+target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.format)
 
 if ("${KOTEK_ECS_BACKEND}" STREQUAL "ENTT")
 
