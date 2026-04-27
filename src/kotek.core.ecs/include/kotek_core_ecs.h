@@ -86,3 +86,17 @@ struct std::formatter<kun_kotek kun_ktk entity_t, char>
 #elif defined(KOTEK_USE_ECS_BACKEND_ENTT)
 	#error todo: provide impl
 #endif
+
+#ifdef KOTEK_USE_ECS_BACKEND_PICO
+inline bool
+operator!=(const kun_kotek kun_ktk entity_t& left, const kun_kotek kun_ktk entity_t& right)
+{
+	return left.id != right.id;
+}
+
+inline bool
+operator==(const kun_kotek kun_ktk entity_t& left, const kun_kotek kun_ktk entity_t& right)
+{
+	return left.id == right.id;
+}
+#endif
