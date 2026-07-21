@@ -5,7 +5,7 @@ project(kotek.core.defines VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_core_defines.h"
 	"src/main_core_defines_dll.cpp")
 

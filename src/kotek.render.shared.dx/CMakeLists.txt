@@ -7,7 +7,7 @@ project(kotek.render.shared.dx VERSION 1 LANGUAGES CXX)
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_render_shared_dx.h"
 	"src/main_render_shared_dx_dll.cpp"
 )

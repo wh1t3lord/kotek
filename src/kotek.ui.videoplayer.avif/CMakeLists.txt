@@ -22,7 +22,7 @@ else()
 endif()
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_ui_videoplayer_avif.h"
 	"src/main_ui_videoplayer_avif_dll.cpp"
 	"include/kotek_ui_videoplayer.h"

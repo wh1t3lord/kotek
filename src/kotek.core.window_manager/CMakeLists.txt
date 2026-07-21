@@ -5,7 +5,7 @@ project(kotek.core.window_manager VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_window_manager.h"
 	"src/kotek_window_manager.cpp"
 	"include/kotek_core_window_manager.h"

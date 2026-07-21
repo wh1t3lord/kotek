@@ -139,6 +139,21 @@ const float* vectornf_view_t::data(void) const noexcept
 	return this->m_p_values;
 }
 
+math_id_t vectornf_view_t::size_of(void) const noexcept
+{
+	return this->get_row_count() * sizeof(float);
+}
+
+math_id_t vectornf_view_t::get_column_count(void) const noexcept
+{
+	return 1;
+}
+
+math_id_t vectornf_view_t::get_row_count(void) const noexcept
+{
+	return this->m_row_count;
+}
+
 float vectornf_view_t::operator[](math_id_t row_id
 ) const noexcept
 {

@@ -138,8 +138,14 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 					"don't use ANGLE for Windows as DX11, "
 					"because it was written bad and is not "
 					"efficient as Vulkan implementation for ANGLE");
+#ifdef KOTEK_USE_RENDER_ANGLE_GLES23
 				status = InitializeModule_Render_ANGLE_GLES23(
 					main_manager, p_engine_config->GetRendererVersionEnum());
+#else
+				KOTEK_ASSERT(false,
+					"angle gles23 module is not built in this "
+					"configuration (KOTEK_CONFIGURATION_TYPE=minimal)");
+#endif
 			}
 		}
 		else
@@ -321,7 +327,13 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 			}
 			else if (isANGLE)
 			{
+#ifdef KOTEK_USE_RENDER_ANGLE_GLES23
 				status = ShutdownModule_Render_ANGLE_GLES23(main_manager);
+#else
+				KOTEK_ASSERT(false,
+					"angle gles23 module is not built in this "
+					"configuration (KOTEK_CONFIGURATION_TYPE=minimal)");
+#endif
 			}
 		}
 		else

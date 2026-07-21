@@ -5,7 +5,7 @@ project(kotek.core.defines.static.render VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_core_defines_render.h"
 	"src/main_core_defines_render_dll.cpp")
 	

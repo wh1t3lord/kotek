@@ -5,7 +5,7 @@ project(kotek.core.filesystem.file_text VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_file_text.h"
 	"src/kotek_file_text.cpp"
 	"include/kotek_core_filesystem_file_text.h"

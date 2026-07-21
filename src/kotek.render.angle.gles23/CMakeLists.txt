@@ -63,7 +63,7 @@ set(to_include_module_files
 
 set(to_include_memory_management_files)
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
     ${to_include_render_graph_simplified_files}
     ${to_include_managers_files}
     ${to_include_core_files}

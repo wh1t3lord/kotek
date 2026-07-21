@@ -20,6 +20,11 @@ inline matrix4x4f look_at(const vector3f& camera_position,
 	return DirectX::XMMatrixLookAtRH(
 		camera_position, target_position, up_vector);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return glm::lookAt(
+		camera_position.Get_Base(),
+		target_position.Get_Base(),
+		up_vector.Get_Base()
+	);
 #else
 // implement yours here
 #endif

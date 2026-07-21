@@ -52,7 +52,7 @@ endif()
 
 message("[${PROJECT_NAME}]: math library is '${KOTEK_MATH_LIBRARY}'")
 
-add_library(${PROJECT_NAME} STATIC 
+kotek_add_library(${PROJECT_NAME} 
 	"include/kotek_std_alias_math.h"
 	"include/kotek_std_math_vector1f.h"
 	"include/kotek_std_math_vector2f.h"

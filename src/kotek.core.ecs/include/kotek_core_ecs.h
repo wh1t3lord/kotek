@@ -72,20 +72,14 @@ struct std::formatter<kun_kotek kun_ktk entity_t, char>
 		kun_kotek kun_ktk entity_t const& entity, auto& ctx
 	) const
 	{
-		kun_kotek kun_ktk static_cstring<16> buf;
-
-		std::vformat_to(
-			std::back_insert_iterator{buf},
-			"{}",
-			std::make_format_args(entity.id)
-		);
-
-		return buf.c_str();
+		return std::format_to(ctx.out(), "{}", entity.id);
 	}
 };
 #elif defined(KOTEK_USE_ECS_BACKEND_ENTT)
 	#error todo: provide impl
 #endif
+
+#include <kotek.core.utility/include/kotek_std_utility_variant.h>
 
 #ifdef KOTEK_USE_ECS_BACKEND_PICO
 inline bool
@@ -99,4 +93,26 @@ operator==(const kun_kotek kun_ktk entity_t& left, const kun_kotek kun_ktk entit
 {
 	return left.id == right.id;
 }
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_KTK
+
+/// @brief \~english string->entity conversion for console
+/// command argument parsing, entity id under pico is a dense
+/// numeric index so it converts as a plain unsigned integer
+template <>
+inline entity_t convert_impl<entity_t>(
+	std::string_view str, bool& status, custom_tag
+)
+{
+	entity_t result = kInvalidECSEntity;
+
+	result.id =
+		convert_impl<ecs_id_t>(str, status, integral_tag{});
+
+	return result;
+}
+
+KOTEK_END_NAMESPACE_KTK
+KOTEK_END_NAMESPACE_KOTEK
 #endif

@@ -5,7 +5,7 @@ project(kotek.core.types.numerics VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_alias_numerics.h"
 	"include/kotek_core_types_numerics.h"
 	"src/main_core_numerics_dll.cpp")

@@ -37,7 +37,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_alias_unordered_map.h"
 	"include/kotek_std_alias_hybrid_unordered_map.h"
 	"include/kotek_std_alias_static_unordered_map.h"

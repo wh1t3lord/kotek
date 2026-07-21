@@ -5,7 +5,7 @@ project(kotek.core.containers.multithreading.thread VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_alias_thread.h"
 	"include/kotek_core_containers_multithreading_thread.h"
 	"src/main_core_containers_multithreading_thread_dll.cpp")

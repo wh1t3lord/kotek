@@ -16,7 +16,7 @@ if ("${KOTEK_CPU_PROFILER}" STREQUAL "ON")
 else()
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_core_profilers.h"
 	"include/kotek_profiler.h"
 	"src/kotek_profiler.cpp"

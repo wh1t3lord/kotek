@@ -42,7 +42,7 @@ else()
 
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_core_defines_static_render_dx.h"
 	"${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}"
 	"src/main_core_defines_static_render_dx_dll.cpp")

@@ -5,7 +5,7 @@ project(kotek.core.profilers.cpu VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_core_profilers_cpu.h"
 	"src/main_core_profilers_cpu_dll.cpp")
 	

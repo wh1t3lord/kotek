@@ -5,7 +5,7 @@ project(kotek.core.containers.queue VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_alias_queue.h"
 	"include/kotek_std_alias_hybrid_queue.h"
 	"include/kotek_std_alias_static_queue.h"

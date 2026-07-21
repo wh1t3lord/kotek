@@ -549,6 +549,10 @@ namespace Engine
 		KOTEK_MESSAGE(
 			"Compiled with: Visual Studio 2022 version 17.14"
 		);
+	#elif (_MSC_VER == 1951)
+		KOTEK_MESSAGE(
+			"Compiled with: Visual Studio 2026 version 18.6"
+		);
 	#else
 		#error update this preprocessor and add new _MSC_VER
 	#endif

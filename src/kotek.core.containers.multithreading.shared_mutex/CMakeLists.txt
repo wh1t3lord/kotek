@@ -5,7 +5,7 @@ project(kotek.core.containers.multithreading.shared_mutex VERSION 1 LANGUAGES CX
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_alias_shared_mutex.h"
 	"include/kotek_core_containers_multithreading_shared_mutex.h"
 	"src/main_core_containers_multithreading_shared_mutex_dll.cpp")

@@ -10,7 +10,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_ui_imgui.h"
 	"include/kotek_ui_imgui_wrapper.h"
 	"include/imgui_impl_dx9.h"
@@ -47,6 +47,12 @@ add_library(${PROJECT_NAME} STATIC
 	"src/main_ui_imgui_dll.cpp")
 	
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
+
+if (WIN32)
+	# imgui_impl_opengl2/3 backends call OpenGL directly
+	target_link_libraries(${PROJECT_NAME} PUBLIC opengl32)
+endif()
+
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)

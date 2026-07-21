@@ -30,7 +30,7 @@ endif()
 
 message("[${PROJECT_NAME}]: memory allocator for CPU = ${KOTEK_MEMORY_ALLOCATOR_CPU}")
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_memory.h"
 	"include/kotek_core_memory_cpu.h" 
 	"include/offsetAllocator.hpp"

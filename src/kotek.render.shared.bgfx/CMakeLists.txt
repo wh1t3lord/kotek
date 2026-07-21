@@ -18,7 +18,7 @@ set(to_include_render_graph_simplified_files
 #	"src/kotek_render_graph_simplified_types_output.cpp"
 )
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	${to_include_render_graph_simplified_files}
 	"include/kotek_render_shared_bgfx.h"
 	"include/kotek_render_data_types.h"

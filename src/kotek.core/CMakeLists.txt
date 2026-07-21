@@ -79,7 +79,7 @@ endif()
 
 message("[${PROJECT_NAME}]: files to attach (KOTEK_TESTS): ${to_include_tests}")
 
-add_library(${PROJECT_NAME} STATIC 
+kotek_add_library(${PROJECT_NAME} 
 	"src/main_core_dll.cpp"
 	"include/kotek_core.h"
 	"include/kotek_json_casting_math_matrix.h"

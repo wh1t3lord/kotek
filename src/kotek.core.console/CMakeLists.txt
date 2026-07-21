@@ -5,7 +5,7 @@ project(kotek.core.console VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_console.h"
 	"src/kotek_console.cpp"
 	"include/kotek_core_console.h"

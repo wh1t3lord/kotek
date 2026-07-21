@@ -5,7 +5,7 @@ project(kotek.ui.videoplayer VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_ui_videoplayer.h"
 	"src/main_ui_videoplayer_dll.cpp")
 

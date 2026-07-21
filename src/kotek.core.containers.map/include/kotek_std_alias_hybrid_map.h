@@ -377,20 +377,20 @@ public:
 	template <class... Args>
 	std::pair<iterator, bool> try_emplace(const Key& k, Args&&... args)
 	{
-		return mem.con.try_emplace<Args>(k, std::forward<Args>(args)...);
+		return mem.con.try_emplace(k, std::forward<Args>(args)...);
 	}
 
 	template <class... Args>
 	std::pair<iterator, bool> try_emplace(Key&& k, Args&&... args)
 	{
-		return mem.con.try_emplace<Args>(
+		return mem.con.try_emplace(
 			std::move(k), std::forward<Args>(args)...);
 	}
 
 	template <class... Args>
 	iterator try_emplace(const_iterator hint, const Key& k, Args&&... args)
 	{
-		return mem.con.try_emplace<Args>(hint, k, std::forward<Args>(args)...);
+		return mem.con.try_emplace(hint, k, std::forward<Args>(args)...);
 	}
 
 	template <class... Args>

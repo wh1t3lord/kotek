@@ -5,7 +5,7 @@ project(kotek.core.containers.multithreading.semaphore VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_alias_semaphore.h"
 	"include/kotek_core_containers_multithreading_semaphore.h"
 	"src/main_core_containers_multithreading_semaphore_dll.cpp")

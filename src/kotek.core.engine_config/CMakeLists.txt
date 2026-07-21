@@ -5,7 +5,7 @@ project(kotek.core.engine_config VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_config.h"
 	"src/kotek_std_config.cpp"
 	"include/kotek_core_engine_config.h"

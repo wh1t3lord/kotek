@@ -5,7 +5,7 @@ project(kotek.core.containers.any VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_alias_any.h"
 	"include/kotek_core_containers_any.h"
 	"src/main_core_containers_any_dll.cpp")

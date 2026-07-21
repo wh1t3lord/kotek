@@ -7,7 +7,7 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_enum_7.h"
 	"include/kotek_enum_8.h"
 	"include/kotek_enum_9.h"

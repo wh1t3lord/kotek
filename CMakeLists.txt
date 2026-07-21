@@ -12,6 +12,21 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 message("[${PROJECT_NAME}]: CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}")
 message("[${PROJECT_NAME}]: CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}")
 
+#### DEPENDENCY TRIPLET / CRT CONSISTENCY ####
+# The vcpkg triplet must match the CRT from cmake/windows/compiler_globals.cmake:
+# static CRT (/MT, the default) -> x64-windows-static, dynamic CRT (/MD) -> x64-windows.
+if ("${KOTEK_VCPKG_TRIPLET}" STREQUAL "")
+	set(KOTEK_VCPKG_TRIPLET "x64-windows-static" CACHE INTERNAL "vcpkg triplet for installing and finding dependencies")
+endif()
+
+# consumed by the vcpkg.cmake toolchain include below
+set(VCPKG_TARGET_TRIPLET "${KOTEK_VCPKG_TRIPLET}")
+
+message("[${PROJECT_NAME}]: vcpkg triplet is '${KOTEK_VCPKG_TRIPLET}'")
+
+#### LIBRARY LINKAGE MODEL (global + per-module overrides) ####
+include("cmake/library.cmake")
+
 # it is our requirement for generating the library e.g. don't just write 'cmake ..' - OUTDATED
 # By new standard you can pass a empty string, but we need to generate solution for debug build. It is required for including/generating stuff for better debug experience
 # Memory leak manager, etc

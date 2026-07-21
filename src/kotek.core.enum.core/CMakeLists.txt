@@ -21,7 +21,7 @@ else()
 	endif()
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_enum.h"
 	"include/kotek_translation.h"
 	"include/kotek_core_enum_core.h"

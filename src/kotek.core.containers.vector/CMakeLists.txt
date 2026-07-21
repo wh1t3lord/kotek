@@ -37,7 +37,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_alias_vector.h"
 	"include/kotek_core_containers_vector.h"
 	"include/kotek_std_alias_hybrid_vector.h"

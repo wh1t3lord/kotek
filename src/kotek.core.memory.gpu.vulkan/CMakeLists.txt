@@ -5,7 +5,7 @@ project(kotek.core.memory.gpu.vulkan VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_core_memory_gpu_vulkan.h"
 	"include/vk_mem_alloc.h"
 	"src/main_core_memory_gpu_vulkan_dll.cpp")

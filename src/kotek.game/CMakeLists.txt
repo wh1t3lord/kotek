@@ -15,7 +15,7 @@ if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 	include_directories(../../../${KOTEK_USER_GAME_PROJECT_NAME})
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_engine.h"
 	"include/kotek_game.h"
 	"src/kotek_update.cpp"

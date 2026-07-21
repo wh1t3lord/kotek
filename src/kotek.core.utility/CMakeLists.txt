@@ -23,7 +23,7 @@ endif()
 
 set(to_include_unit_tests "tests/kotek_std_utility_tests.cpp")
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_utility.h"
 	"src/kotek_std_utility.cpp"
 	"include/kotek_std_utility_variant.h"

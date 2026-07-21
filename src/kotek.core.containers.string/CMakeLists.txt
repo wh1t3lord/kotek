@@ -48,7 +48,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 		endif()
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"tests/kotek_core_test_string.cpp"
 	"include/kotek_std_alias_string.h"
 	"include/kotek_std_alias_static_string.h"

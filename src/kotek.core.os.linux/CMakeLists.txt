@@ -27,7 +27,7 @@ if ("${KOTEK_VULKAN}" STREQUAL "ON")
 	find_package(Vulkan REQUIRED)
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_os.h"
 	"include/kotek_core_os_linux.h"
 	"src/main_core_os_linux_dll.cpp")

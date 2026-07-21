@@ -17,7 +17,7 @@ else()
 	set(IMPLEMENTATION_FILES_CEF "")
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_ui_cef.h"
 	${IMPLEMENTATION_FILES_CEF}
 	"src/main_ui_cef_dll.cpp")

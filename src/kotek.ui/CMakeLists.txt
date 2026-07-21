@@ -5,7 +5,7 @@ project(kotek.ui VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_ui.h"
 	"src/main_ui_dll.cpp")
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui")

@@ -12,7 +12,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_core_window_glfw.h"
 	"include/kotek_std_window.h"
 	"src/kotek_std_window.cpp"

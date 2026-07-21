@@ -5,7 +5,7 @@ project(kotek.core.main_manager VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_main_manager.h"
 	"src/kotek_main_manager.cpp"
 	"include/kotek_core_main_manager.h"

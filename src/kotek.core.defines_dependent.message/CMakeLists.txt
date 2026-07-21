@@ -5,7 +5,7 @@ project(kotek.core.defines_dependent.message VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_dependent_preprocessors.h"
 	"include/kotek_core_defines_dependent_message.h"
 	"src/main_core_defines_dependent_message_dll.cpp")

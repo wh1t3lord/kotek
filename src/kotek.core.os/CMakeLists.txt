@@ -5,7 +5,7 @@ project(kotek.core.os VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_core_os.h"
 	"src/main_core_os_dll.cpp")
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/os")

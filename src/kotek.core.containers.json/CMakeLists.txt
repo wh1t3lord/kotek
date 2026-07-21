@@ -20,7 +20,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_alias_json.h"
 	"include/kotek_std_json.h"
 	"src/kotek_std_json.cpp"
@@ -32,7 +32,10 @@ if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
 endif()
 
-if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+# boost.json is the backend for both BOOST and STD library
+# modes (see kotek_std_alias_json.h), so the import lib must
+# be linked in both cases
+if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST" OR "${KOTEK_STD_LIBRARY}" STREQUAL "STD")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
 			message("[${PROJECT_NAME}]: boost package included directory")

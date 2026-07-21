@@ -3724,7 +3724,12 @@ namespace ImGui
 #pragma warning (pop)
 #endif
 
-#define IMGUI_IMPL_OPENGL_ES3
+// todo(zircon): this define forces the imgui opengl3 backend to
+// compile against ANGLE GLES3 headers whose import libs
+// (libGLESv2/libEGL) are not present in the minimal vcpkg
+// configuration, so kotek.exe fails to link. Re-enable when
+// ANGLE is available (KOTEK_CONFIGURATION_TYPE != minimal).
+// #define IMGUI_IMPL_OPENGL_ES3
 
 // Include imgui_user.h at the end of imgui.h
 // May be convenient for some users to only explicitly include vanilla imgui.h and have extra stuff included.

@@ -18,7 +18,7 @@ if ("${KOTEK_ECS_BACKEND}" STREQUAL "ENTT")
 
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_core_ecs.h"
 	"src/main_core_ecs_dll.cpp")
 

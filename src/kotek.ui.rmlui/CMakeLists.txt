@@ -5,10 +5,15 @@ project(kotek.ui.rmlui VERSION 1 LANGUAGES CXX)
 
 
 
+# static triplet: freetype's link interface references ZLIB::ZLIB, BZip2::BZip2
+# and PNG::PNG (transitive deps of static libs), so they must be found first
+find_package(ZLIB REQUIRED)
+find_package(BZip2 REQUIRED)
+find_package(PNG REQUIRED)
 find_package(Freetype CONFIG REQUIRED)
 find_package(RmlUi CONFIG REQUIRED)
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_ui_game_ui_manager.h"
 	"src/kotek_ui_game_ui_manager.cpp"
 

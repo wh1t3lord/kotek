@@ -5,7 +5,7 @@ project(kotek.core.constants.ecs VERSION 1 LANGUAGES CXX)
 
 
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_constants.h"
 	"include/kotek_core_constants_ecs.h"
 	"src/main_core_constants_ecs_dll.cpp")

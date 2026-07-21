@@ -2143,6 +2143,18 @@ math_id_t matrixnf_view_t::size_of(void) const noexcept
 	);
 }
 
+float matrixnf_view_t::e(math_id_t column_id, math_id_t row_id)
+	const noexcept
+{
+	return this->c(column_id).e(0, row_id);
+}
+
+float& matrixnf_view_t::e(math_id_t column_id, math_id_t row_id
+) noexcept
+{
+	return this->c(column_id).e(0, row_id);
+}
+
 math_id_t matrixnf_view_t::get_column_count(void) const noexcept
 {
 	return this->m_column_count;

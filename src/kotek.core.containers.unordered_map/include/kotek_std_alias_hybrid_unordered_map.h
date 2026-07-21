@@ -560,7 +560,7 @@ public:
 	std::pair<iterator, bool>
 	try_emplace(const Key& k, Args&&... args)
 	{
-		return mem.con.try_emplace<Args>(
+		return mem.con.try_emplace(
 			k, std::forward<Args>(args)...
 		);
 	}
@@ -569,7 +569,7 @@ public:
 	std::pair<iterator, bool>
 	try_emplace(Key&& k, Args&&... args)
 	{
-		return mem.con.try_emplace<Args>(
+		return mem.con.try_emplace(
 			std::move(k), std::forward<Args>(args)...
 		);
 	}
@@ -579,7 +579,7 @@ public:
 		const_iterator hint, const Key& k, Args&&... args
 	)
 	{
-		return mem.con.try_emplace<Args>(
+		return mem.con.try_emplace(
 			hint, k, std::forward<Args>(args)...
 		);
 	}

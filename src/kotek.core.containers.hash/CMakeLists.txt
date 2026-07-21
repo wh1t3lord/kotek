@@ -22,7 +22,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
 	"include/kotek_std_alias_hash.h"
 	"include/kotek_core_containers_hash.h"
 	"src/main_core_containers_hash_dll.cpp")

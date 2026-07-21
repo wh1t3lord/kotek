@@ -48,7 +48,7 @@ set(to_include_memory_management_files
     "src/kotek_render_allocator_ring_with_tabs.cpp"
     "src/kotek_render_allocator_ring.cpp")
 
-add_library(${PROJECT_NAME} STATIC
+kotek_add_library(${PROJECT_NAME}
     ${to_include_render_graph_simplified_files}
     ${to_include_managers_files}
     ${to_include_core_files}

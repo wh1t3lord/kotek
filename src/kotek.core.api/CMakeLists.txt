@@ -7,7 +7,7 @@ project(kotek.core.api VERSION 1 LANGUAGES CXX)
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-add_library(${PROJECT_NAME} STATIC 
+kotek_add_library(${PROJECT_NAME} 
 	"src/main_api_dll.cpp"
 	"include/kotek_api.h"
 	"include/kotek_api_no_std.h"
