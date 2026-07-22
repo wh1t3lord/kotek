@@ -52,7 +52,7 @@ endif()
 
 message("[${PROJECT_NAME}]: math library is '${KOTEK_MATH_LIBRARY}'")
 
-kotek_add_library(${PROJECT_NAME} 
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Math SHUTDOWN ShutdownModule_Core_Math 
 	"include/kotek_std_alias_math.h"
 	"include/kotek_std_math_vector1f.h"
 	"include/kotek_std_math_vector2f.h"
@@ -107,27 +107,27 @@ endif()
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 			GTest::gtest 
 			GTest::gmock
 		)
 	endif()
 else()
 	if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
-		target_link_libraries(${PROJECT_NAME} PUBLIC glm::glm)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC glm::glm)
 	elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-		target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
 	endif()
 
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 			GTest::gtest 
 			GTest::gmock
 		)
 	endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.math)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.utility)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.math)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.utility)

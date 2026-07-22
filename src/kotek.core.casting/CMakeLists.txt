@@ -17,17 +17,17 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Casting SHUTDOWN ShutdownModule_Core_Casting
 	"include/kotek_core_casting.h"
 	"src/main_core_casting_dll.cpp")
 
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 	if (NOT "${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
-		target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost)
 	endif()
 endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/casting")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.string)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.lexical)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.lexical)

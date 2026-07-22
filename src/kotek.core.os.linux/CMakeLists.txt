@@ -27,16 +27,16 @@ if ("${KOTEK_VULKAN}" STREQUAL "ON")
 	find_package(Vulkan REQUIRED)
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_OS_Linux SHUTDOWN ShutdownModule_Core_OS_Linux
 	"include/kotek_os.h"
 	"include/kotek_core_os_linux.h"
 	"src/main_core_os_linux_dll.cpp")
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/os/vendor")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.linux)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.linux)
 
 if ("${KOTEK_VULKAN}" STREQUAL "ON")
-	target_link_libraries(${PROJECT_NAME} PUBLIC Vulkan::Vulkan)
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Vulkan::Vulkan)
 endif()
 
 if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "GLFW")
@@ -50,8 +50,9 @@ if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "GLFW")
 			message(FATAL_ERROR "provide implementation")
 		endif()
 	else()
-		target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
 	endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)

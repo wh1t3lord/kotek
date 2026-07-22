@@ -16,21 +16,23 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	endif()
 elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 	find_package(PkgConfig REQUIRED)
-	pkg_check_modules(dav1d REQUIRED IMPORTED_TARGET dav1d)
+	# GLOBAL: the imported target must be visible outside this directory —
+	# PLUGIN mode re-applies it to consumers via kotek_finalize_plugin_links
+	pkg_check_modules(dav1d REQUIRED IMPORTED_TARGET GLOBAL dav1d)
 else()
 	message(FATAL_ERROR "provide implementation")
 endif()
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_UI_VideoPlayer_AVIF SHUTDOWN ShutdownModule_UI_VideoPlayer_AVIF
 	"include/kotek_ui_videoplayer_avif.h"
 	"src/main_ui_videoplayer_avif_dll.cpp"
 	"include/kotek_ui_videoplayer.h"
 	"src/kotek_ui_videoplayer.cpp"
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
@@ -40,12 +42,12 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 
 	if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/dav1d.lib")
 		message("[${PROJECT_NAME}][Debug]: adding dav1d.lib to Debug configuration")
-		target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/dav1d.lib)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/dav1d.lib)
 	endif()
 
 	if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/dav1d.lib")
 		message("[${PROJECT_NAME}][None-Debug]: adding dav1d.lib to not Debug configurations")
-		target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/dav1d.lib)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/dav1d.lib)
 	endif()
 
 	set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_dav1d_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
@@ -68,7 +70,7 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
    )
 
 elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-	target_link_libraries(${PROJECT_NAME} PUBLIC PkgConfig::dav1d)
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC PkgConfig::dav1d)
 else()
 	message(FATAL_ERROR "provide implementation")
 endif()

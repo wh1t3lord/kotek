@@ -31,10 +31,10 @@ else()
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static_SDK SHUTDOWN ShutdownModule_Core_Defines_Static_SDK
 	"${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}"
 	"include/kotek_core_defines_static_sdk.h"
 	"src/main_core_defines_static_sdk_dll.cpp")
 	
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/independent")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

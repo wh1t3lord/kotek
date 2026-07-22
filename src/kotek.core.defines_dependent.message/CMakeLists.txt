@@ -5,13 +5,13 @@ project(kotek.core.defines_dependent.message VERSION 1 LANGUAGES CXX)
 
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Dependent_Message SHUTDOWN ShutdownModule_Core_Defines_Dependent_Message
 	"include/kotek_std_dependent_preprocessors.h"
 	"include/kotek_core_defines_dependent_message.h"
 	"src/main_core_defines_dependent_message_dll.cpp")
 	
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/dependent")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.log)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.string)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.text)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.format)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.log)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.text)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.format)

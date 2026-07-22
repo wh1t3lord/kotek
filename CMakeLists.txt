@@ -87,6 +87,13 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
 	include("${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
 endif()
 
+# the vcpkg toolchain must be active on EVERY configure, not only the first
+# one (cached *_DIR vars only cover packages that were already found once;
+# any new find_package would fail without the toolchain paths)
+if (WIN32 AND "${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
+	include("${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/scripts/buildsystems/vcpkg.cmake")
+endif()
+
 if ("${KOTEK_CPP_ASAN}" STREQUAL "")
 	if ("$<CONFIG:Debug>" STREQUAL "1")
 		message("[${PROJECT_NAME}]: enabling address sanitizer (ASAN)")
@@ -137,6 +144,36 @@ if ("${KOTEK_STARTUP_RENDERER}" STREQUAL "")
 endif()
 
 include_directories("src")
+
+# Imported targets created by find_package are directory-scoped by default,
+# which breaks usage propagation across module directories (most visibly in
+# KOTEK_LINKAGE=PLUGIN where erased plugin edges are re-applied to consumers
+# by kotek_finalize_plugin_links). Re-find the shared packages with GLOBAL
+# before any module is processed; the per-module find_package calls then
+# no-op on the already-existing targets.
+if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+	find_package(zstd CONFIG REQUIRED GLOBAL)
+	find_package(etl CONFIG REQUIRED GLOBAL)
+	find_package(GTest CONFIG REQUIRED GLOBAL)
+	find_package(Boost COMPONENTS json CONFIG REQUIRED GLOBAL)
+	find_package(Boost COMPONENTS container CONFIG REQUIRED GLOBAL)
+	find_package(Ktx CONFIG REQUIRED GLOBAL)
+	find_package(ZLIB REQUIRED GLOBAL)
+	find_package(Vulkan REQUIRED GLOBAL)
+	find_package(glfw3 CONFIG REQUIRED GLOBAL)
+	find_package(bgfx CONFIG REQUIRED GLOBAL)
+	find_package(utf8cpp CONFIG REQUIRED GLOBAL)
+	find_package(spdlog CONFIG REQUIRED GLOBAL)
+	find_package(glm CONFIG REQUIRED GLOBAL)
+	find_package(fmt CONFIG REQUIRED GLOBAL)
+	find_package(Tracy REQUIRED GLOBAL)
+	find_package(TBB REQUIRED GLOBAL)
+	find_package(RmlUi CONFIG REQUIRED GLOBAL)
+	find_package(PkgConfig REQUIRED GLOBAL)
+	find_package(PNG REQUIRED GLOBAL)
+	find_package(BZip2 REQUIRED GLOBAL)
+	find_package(Freetype CONFIG REQUIRED GLOBAL)
+endif()
 
 add_subdirectory("src/kotek.core.defines.static.tests")
 add_subdirectory("src/kotek.core.defines.static.cpp")
@@ -284,6 +321,18 @@ endif()
 add_subdirectory("src/kotek.render.bgfx")
 
 add_subdirectory("src/kotek.exe")
+
+# PLUGIN mode: re-apply erased-edge usage (see library.cmake), then emit the
+# explicit-loading manifest and make it visible to
+# kotek.core.main_manager (static leaf linked into every plugin and into the
+# exe — it implements the ktkPluginInvoke* loader, see kotek_plugin_invoke.cpp)
+if ("${KOTEK_LINKAGE}" STREQUAL "PLUGIN")
+	kotek_finalize_plugin_links()
+	set(KOTEK_PLUGIN_MANIFEST_FILE "${CMAKE_BINARY_DIR}/generated/kotek_plugin_manifest.h")
+	file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/generated")
+	kotek_generate_plugin_manifest("${KOTEK_PLUGIN_MANIFEST_FILE}")
+	target_include_directories(kotek.core.main_manager PRIVATE "${CMAKE_BINARY_DIR}/generated")
+endif()
 
 # TODO: when CMake will fix that we can restore but for now we can't use this due to breaking USE_FOLDERS feature...
 # TODO2: Rename cmake default filter folder CMakePredefinedTargets as just plain 'targets' word

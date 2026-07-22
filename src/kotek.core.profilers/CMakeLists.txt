@@ -16,17 +16,17 @@ if ("${KOTEK_CPU_PROFILER}" STREQUAL "ON")
 else()
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Profilers SHUTDOWN ShutdownModule_Core_Profilers
 	"include/kotek_core_profilers.h"
 	"include/kotek_profiler.h"
 	"src/kotek_profiler.cpp"
 	"src/main_core_profilers_dll.cpp")
 	
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/profilers")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.profilers)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.profilers.cpu)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.profilers.gpu)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.profilers)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.profilers.cpu)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.profilers.gpu)
 
 if ("${KOTEK_CPU_PROFILER}" STREQUAL "ON")
-	target_link_libraries(${PROJECT_NAME} PUBLIC Tracy::TracyClient)
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Tracy::TracyClient)
 endif()

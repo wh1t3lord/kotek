@@ -30,7 +30,7 @@ endif()
 
 message("[${PROJECT_NAME}]: memory allocator for CPU = ${KOTEK_MEMORY_ALLOCATOR_CPU}")
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Memory_CPU SHUTDOWN ShutdownModule_Core_Memory_CPU
 	"include/kotek_std_memory.h"
 	"include/kotek_core_memory_cpu.h" 
 	"include/offsetAllocator.hpp"
@@ -48,12 +48,12 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 
 		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/mimalloc-debug.lib")
 			message("[${PROJECT_NAME}][Debug]: adding mimalloc-debug.lib to Debug configuration")
-			target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/mimalloc-debug.lib)
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/mimalloc-debug.lib)
 		endif()
 
 		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/mimalloc.lib")
 			message("[${PROJECT_NAME}][None-Debug]: adding mimalloc.lib to not Debug configurations")
-			target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/mimalloc.lib)
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/mimalloc.lib)
 		endif()
 
 		set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_mimalloc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
@@ -83,14 +83,15 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 else()
 	if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC")
 		if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
-			target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc-static)
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc-static)
 		endif()
 	else()
 		if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
-			target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc)
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC mimalloc)
 		endif()
 	endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)

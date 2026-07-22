@@ -22,7 +22,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 endif()
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Input SHUTDOWN ShutdownModule_Core_Input
 	"include/kotek_input.h"
 	"src/kotek_input.cpp"
 	"include/kotek_core_input.h"
@@ -34,22 +34,22 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 			GTest::gtest 
 			GTest::gmock
 		)
 	endif()
 else()
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 			GTest::gtest 
 			GTest::gmock
 		)
 	endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.window)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.window)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)

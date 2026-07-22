@@ -21,7 +21,7 @@ else()
 	endif()
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Enum_Core SHUTDOWN ShutdownModule_Core_Enum_Core
 	"include/kotek_enum.h"
 	"include/kotek_translation.h"
 	"include/kotek_core_enum_core.h"
@@ -30,19 +30,19 @@ kotek_add_library(${PROJECT_NAME}
 	"tests/kotek_core_enum_core_test_translation.cpp"
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/enum")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 		GTest::gtest 
 		GTest::gmock
 		)
 	endif()
 else()
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 		GTest::gtest 
 		GTest::gmock
 		)

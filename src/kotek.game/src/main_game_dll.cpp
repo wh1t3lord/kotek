@@ -1,4 +1,5 @@
 #include "../include/kotek_callbacks.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include "../include/kotek_engine.h"
 #include "../include/kotek_game.h"
 #include <kotek.render/include/kotek_render.h>
@@ -679,7 +680,7 @@ namespace Engine
 			p_main_manager->Get_Splash()->Set_Progress();
 		}
 
-		kun_core InitializeModule_Core(p_main_manager);
+		KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core, p_main_manager);
 
 		// TODO: must gurantee that write/read operations are
 		// not in InitializeStage, InitializeStage only
@@ -693,7 +694,7 @@ namespace Engine
 
 		kun_game InitializeModule_Game(p_main_manager);
 
-		kun_ui InitializeModule_UI(p_main_manager);
+		KOTEK_INVOKE_MODULE_INIT_NS(kun_ui, InitializeModule_UI, p_main_manager);
 
 #ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 		if (p_user_callback_initialize_render_from_game_library)
@@ -764,8 +765,8 @@ namespace Engine
 		Serialize_Engine(p_main_manager);
 
 		kun_game ShutdownModule_Game(p_main_manager);
-		kun_ui ShutdownModule_UI(p_main_manager);
-		kun_core ShutdownModule_Core(p_main_manager);
+		KOTEK_INVOKE_MODULE_SHUTDOWN_NS(kun_ui, ShutdownModule_UI, p_main_manager);
+		KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core, p_main_manager);
 
 		return true;
 	}

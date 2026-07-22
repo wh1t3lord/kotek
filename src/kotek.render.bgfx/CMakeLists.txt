@@ -48,7 +48,7 @@ set(to_include_memory_management_files
     "src/kotek_render_allocator_ring_with_tabs.cpp"
     "src/kotek_render_allocator_ring.cpp")
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Render_BGFX SHUTDOWN ShutdownModule_Render_BGFX
     ${to_include_render_graph_simplified_files}
     ${to_include_managers_files}
     ${to_include_core_files}
@@ -70,9 +70,9 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<ko
 
 #target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC 
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
     bgfx::bx 
     bgfx::bgfx 
     bgfx::bimg 

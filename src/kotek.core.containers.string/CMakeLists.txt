@@ -48,7 +48,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 		endif()
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Containers_String SHUTDOWN ShutdownModule_Core_Containers_String
 	"tests/kotek_core_test_string.cpp"
 	"include/kotek_std_alias_string.h"
 	"include/kotek_std_alias_static_string.h"
@@ -62,11 +62,11 @@ if(MSVC)
     target_compile_options(${PROJECT_NAME} PUBLIC "/Zc:__cplusplus")
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.string)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.lexical)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.string)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.hash)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.format)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.lexical)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.hash)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.format)
 
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
@@ -83,20 +83,20 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	endif()
 
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 		GTest::gtest 
 		GTest::gmock
 		)
 	endif()
 else()
-	target_link_libraries(${PROJECT_NAME} PUBLIC utf8::cpp utf8cpp::utf8cpp)
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC utf8::cpp utf8cpp::utf8cpp)
 
 	if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC etl::etl)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC etl::etl)
 	endif()
 
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 		GTest::gtest 
 		GTest::gmock
 		)

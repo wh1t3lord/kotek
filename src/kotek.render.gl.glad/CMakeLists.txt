@@ -28,4 +28,4 @@ endif()
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)

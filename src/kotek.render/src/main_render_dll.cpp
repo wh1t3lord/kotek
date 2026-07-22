@@ -1,4 +1,5 @@
 #include "../include/kotek_render.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
@@ -24,7 +25,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 {
 	// TODO: сделать выбор рендера
 
-	InitializeModule_Render_Shared(main_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Render_Shared, main_manager);
 
 	auto* p_engine_config = main_manager->Get_EngineConfig();
 
@@ -185,7 +186,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 				for (auto version : enum_vk_versions)
 				{
 					is_inited =
-						InitializeModule_Render_VK(main_manager, version);
+						KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_VK, main_manager, version);
 
 					if (is_inited)
 						break;
@@ -203,7 +204,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 				for (auto version : enum_gl_versions)
 				{
 					is_inited =
-						InitializeModule_Render_GL(main_manager, version);
+						KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_GL, main_manager, version);
 
 					if (is_inited)
 						break;
@@ -264,12 +265,12 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine())
 	{
-		status = ShutdownModule_Render_GL(main_manager);
+		status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_GL, main_manager);
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
 	{
 #ifdef KOTEK_USE_RENDER_VULKAN
-		status = ShutdownModule_Render_VK(main_manager);
+		status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_VK, main_manager);
 #endif
 	}
 	else
@@ -301,12 +302,12 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 
 		if (is_gl)
 		{
-			status = ShutdownModule_Render_GL(main_manager);
+			status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_GL, main_manager);
 		}
 		else if (is_vk)
 		{
 #ifdef KOTEK_USE_RENDER_VULKAN
-			status = ShutdownModule_Render_VK(main_manager);
+			status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_VK, main_manager);
 #endif
 		}
 		else if (is_dx)
@@ -323,12 +324,12 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 
 			if (isBGFX)
 			{
-				status = ShutdownModule_Render_BGFX(main_manager);
+				status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_BGFX, main_manager);
 			}
 			else if (isANGLE)
 			{
 #ifdef KOTEK_USE_RENDER_ANGLE_GLES23
-				status = ShutdownModule_Render_ANGLE_GLES23(main_manager);
+				status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_ANGLE_GLES23, main_manager);
 #else
 				KOTEK_ASSERT(false,
 					"angle gles23 module is not built in this "

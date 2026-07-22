@@ -42,7 +42,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
     endif()
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Render_VK SHUTDOWN ShutdownModule_Render_VK
 	"include/kotek_render_vk.h"
     "include/kotek_render_allocator_ring.h"
     "include/kotek_render_allocator_ring_with_tabs.h"
@@ -104,22 +104,22 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<ko
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.imgui)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.imgui)
 
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
     if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC" OR UNIX)
-        target_link_libraries(${PROJECT_NAME} PUBLIC zstd::libzstd_static)
-        target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
+        kotek_target_link_libraries(${PROJECT_NAME} PUBLIC zstd::libzstd_static)
+        kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
     else()
     endif()
 
-    target_link_libraries(${PROJECT_NAME} PUBLIC KTX::ktx)
+    kotek_target_link_libraries(${PROJECT_NAME} PUBLIC KTX::ktx)
 elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
     if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC" OR UNIX)
-        target_link_libraries(${PROJECT_NAME} PUBLIC zstd::libzstd_static)
-        target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
+        kotek_target_link_libraries(${PROJECT_NAME} PUBLIC zstd::libzstd_static)
+        kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
     else()
     endif()
 
@@ -136,12 +136,12 @@ elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
     if (WIN32)
         if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/tbb12_debug.lib")
             message("[${PROJECT_NAME}][Debug]: adding ktx.lib to Debug configuration")
-            target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/ktx.lib)
+            kotek_target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/ktx.lib)
         endif()
         
         if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/tbb12.lib")
             message("[${PROJECT_NAME}][None-Debug]: adding ktx.lib to not Debug configurations")
-            target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/ktx.lib)
+            kotek_target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/ktx.lib)
         endif()
 
         set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
@@ -169,16 +169,16 @@ elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
         AND EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/shaderc_util.lib"
         )
             message("[${PROJECT_NAME}][Debug]: adding ktx.lib to Debug configuration")
-            target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/shaderc.lib)
-            target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/shaderc_util.lib)
+            kotek_target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/shaderc.lib)
+            kotek_target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/shaderc_util.lib)
         endif()
         
         if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/shaderc.lib"
             AND EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/shaderc_util.lib"
         )
             message("[${PROJECT_NAME}][None-Debug]: adding ktx.lib to not Debug configurations")
-            target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/shaderc.lib)
-            target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/shaderc_util.lib)
+            kotek_target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/shaderc.lib)
+            kotek_target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_shaderc_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/shaderc_util.lib)
         endif()
 
     else()

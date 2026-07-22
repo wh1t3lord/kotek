@@ -17,10 +17,10 @@ else()
 	set(IMPLEMENTATION_FILES_CEF "")
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_UI_CEF SHUTDOWN ShutdownModule_UI_CEF
 	"include/kotek_ui_cef.h"
 	${IMPLEMENTATION_FILES_CEF}
 	"src/main_ui_cef_dll.cpp")
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)

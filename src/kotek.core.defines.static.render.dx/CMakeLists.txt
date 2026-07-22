@@ -42,7 +42,7 @@ else()
 
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static_Render_DirectX SHUTDOWN ShutdownModule_Core_Defines_Static_Render_DirectX
 	"include/kotek_core_defines_static_render_dx.h"
 	"${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}"
 	"src/main_core_defines_static_render_dx_dll.cpp")
@@ -50,4 +50,4 @@ kotek_add_library(${PROJECT_NAME}
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/independent")
 target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

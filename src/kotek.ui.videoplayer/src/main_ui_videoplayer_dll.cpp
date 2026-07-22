@@ -1,4 +1,5 @@
 #include "../include/kotek_ui_videoplayer.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
@@ -13,13 +14,13 @@ bool InitializeModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
 		p_main_manager->Get_Splash()->Set_Progress();
 	}
 
-	InitializeModule_UI_VideoPlayer_AVIF(p_main_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_UI_VideoPlayer_AVIF, p_main_manager);
 
 	return true;
 }
 bool ShutdownModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
 {
-	ShutdownModule_UI_VideoPlayer_AVIF(p_main_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_UI_VideoPlayer_AVIF, p_main_manager);
 
 
 	return true;

@@ -22,15 +22,15 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Types_String SHUTDOWN ShutdownModule_Core_Types_String
 	"include/kotek_std_alias_string.h"
 	"include/kotek_core_types_string.h"
 	"src/main_core_types_string_dll.cpp")
 	
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/aliases")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.char)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.char)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.string)
 
 if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
@@ -39,6 +39,6 @@ if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
 			target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_etl_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
 		endif()
 	else()
-		target_link_libraries(${PROJECT_NAME} PUBLIC etl::etl)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC etl::etl)
 	endif()
 endif()

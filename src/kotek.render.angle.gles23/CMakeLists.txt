@@ -63,7 +63,7 @@ set(to_include_module_files
 
 set(to_include_memory_management_files)
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Render_ANGLE_GLES23 SHUTDOWN ShutdownModule_Render_ANGLE_GLES23
     ${to_include_render_graph_simplified_files}
     ${to_include_managers_files}
     ${to_include_core_files}
@@ -81,28 +81,28 @@ target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<ko
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
     # Spirv-Tools, TODO: add when you will change all projects to SHARED, STATIC and HYBRID (most of them static, but zircon.game is shared and glad projects too!)
     # if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "SHARED")
-    #     target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-shared)
+    #     kotek_target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-shared)
     # elseif("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
-    #     target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-static)
+    #     kotek_target_link_libraries(${PROJECT_NAME} PUBLIC SPIRV-Tools-static)
     # else()
     #     message(FATAL_ERROR "[${PROJECT_NAME}]: you must specify development type as 'SHARED' or 'STATIC'")
     # endif()
 
     if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC" OR UNIX)
-        target_link_libraries(${PROJECT_NAME} PUBLIC zstd::libzstd_static)
-        target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
+        kotek_target_link_libraries(${PROJECT_NAME} PUBLIC zstd::libzstd_static)
+        kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
     endif()
-    target_link_libraries(${PROJECT_NAME} PUBLIC KTX::ktx)
+    kotek_target_link_libraries(${PROJECT_NAME} PUBLIC KTX::ktx)
 elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
     if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC" OR UNIX)
-        target_link_libraries(${PROJECT_NAME} PUBLIC zstd::libzstd_static)
-        target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
+        kotek_target_link_libraries(${PROJECT_NAME} PUBLIC zstd::libzstd_static)
+        kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Threads::Threads)
     endif()
 
     if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
@@ -113,12 +113,12 @@ elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
     if (WIN32)
     if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/tbb12_debug.lib")
         message("[${PROJECT_NAME}][Debug]: adding ktx.lib to Debug configuration")
-        target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/ktx.lib)
+        kotek_target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/ktx.lib)
     endif()
 
     if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/tbb12.lib")
         message("[${PROJECT_NAME}][None-Debug]: adding ktx.lib to not Debug configurations")
-        target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/ktx.lib)
+        kotek_target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/ktx.lib)
     endif()
 
     set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_ktx_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")

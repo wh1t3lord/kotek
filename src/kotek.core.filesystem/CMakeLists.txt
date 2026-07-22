@@ -5,7 +5,7 @@ project(kotek.core.filesystem VERSION 1 LANGUAGES CXX)
 
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_FileSystem SHUTDOWN ShutdownModule_Core_FileSystem
 	"include/kotek_filesystem.h"
 	"include/kotek_filesystem_native.h"
 	"include/kotek_filesystem_zlib.h"
@@ -20,6 +20,6 @@ kotek_add_library(${PROJECT_NAME}
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/filesystem")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.filesystem.file_text)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.filesystem.file_text)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)

@@ -20,17 +20,17 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Log SHUTDOWN ShutdownModule_Core_Log
 	"include/kotek_log.h"
 	"include/kotek_core_log.h"
 	"src/main_core_log_dll.cpp")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
@@ -40,12 +40,12 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 
 	if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/spdlogd.lib")
 		message("[${PROJECT_NAME}][Debug]: adding spdlogd.lib to Debug configuration")
-		target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/spdlogd.lib)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_onetbb_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/spdlogd.lib)
 	endif()
 
 	if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/spdlog.lib")
 		message("[${PROJECT_NAME}][None-Debug]: adding spdlog.lib to not Debug configurations")
-		target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/spdlog.lib)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/spdlog.lib)
 	endif()
 
 	set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_spdlog_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
@@ -72,5 +72,5 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 
    target_compile_definitions(${PROJECT_NAME} PUBLIC SPDLOG_USE_STD_FORMAT)
 else()
-	target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog_header_only)
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog_header_only)
 endif()

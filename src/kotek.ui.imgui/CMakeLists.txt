@@ -10,7 +10,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_UI_IMGUI SHUTDOWN ShutdownModule_UI_IMGUI
 	"include/kotek_ui_imgui.h"
 	"include/kotek_ui_imgui_wrapper.h"
 	"include/imgui_impl_dx9.h"
@@ -50,12 +50,12 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
 
 if (WIN32)
 	# imgui_impl_opengl2/3 backends call OpenGL directly
-	target_link_libraries(${PROJECT_NAME} PUBLIC opengl32)
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC opengl32)
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.math)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.math)

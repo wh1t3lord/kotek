@@ -9,7 +9,7 @@ find_package(Vulkan REQUIRED)
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Render_Shared_VK SHUTDOWN ShutdownModule_Render_Shared_VK
 	"include/kotek_render_shared_vk.h"
 	"include/kotek_render_format.h"
 	"src/main_render_shared_vk_dll.cpp"
@@ -21,4 +21,4 @@ endif()
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)

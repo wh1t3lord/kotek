@@ -5,9 +5,9 @@ project(kotek.core.containers.shared_ptr VERSION 1 LANGUAGES CXX)
 
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Containers_Shared_Ptr SHUTDOWN ShutdownModule_Core_Containers_Shared_Ptr
 	"include/kotek_std_alias_shared_ptr.h"
 	"include/kotek_core_containers_shared_ptr.h"
 	"src/main_core_containers_shared_ptr_dll.cpp")
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

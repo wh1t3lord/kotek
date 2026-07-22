@@ -5,11 +5,11 @@ project(kotek.core.types VERSION 1 LANGUAGES CXX)
 
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Types SHUTDOWN ShutdownModule_Core_Types
 	"include/kotek_core_types.h"
 	"src/main_core_types_dll.cpp")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/aliases")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.char)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.char)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.string)

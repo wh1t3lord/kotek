@@ -16,7 +16,7 @@ set(to_include_render_graph_simplified_files
 	"src/kotek_render_graph_simplified_types_input.cpp"
 	"src/kotek_render_graph_simplified_types_output.cpp")
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Render_Shared_GL SHUTDOWN ShutdownModule_Render_Shared_GL
 	${to_include_render_graph_simplified_files}
 	"include/kotek_render_shared_gl.h"
 	"include/kotek_render_data_types.h"
@@ -34,5 +34,5 @@ source_group("Render Graph/Simplified" FILES ${to_include_render_graph_simplifie
 
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)

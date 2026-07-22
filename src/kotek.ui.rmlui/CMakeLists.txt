@@ -13,7 +13,7 @@ find_package(PNG REQUIRED)
 find_package(Freetype CONFIG REQUIRED)
 find_package(RmlUi CONFIG REQUIRED)
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_UI_RMLUI SHUTDOWN ShutdownModule_UI_RMLUI
 	"include/kotek_ui_game_ui_manager.h"
 	"src/kotek_ui_game_ui_manager.cpp"
 
@@ -29,13 +29,13 @@ if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 	target_compile_definitions(${PROJECT_NAME} PUBLIC -DRMLUI_STATIC_LIB)
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC Freetype::Freetype)
-target_link_libraries(${PROJECT_NAME} PUBLIC RmlUi::RmlUi)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Freetype::Freetype)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC RmlUi::RmlUi)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window)

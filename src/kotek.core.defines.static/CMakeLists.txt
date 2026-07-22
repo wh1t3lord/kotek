@@ -5,17 +5,17 @@ project(kotek.core.defines.static VERSION 1 LANGUAGES CXX)
 
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static SHUTDOWN ShutdownModule_Core_Defines_Static
 	"include/kotek_core_defines_static.h"
 	"src/main_core_defines_static_dll.cpp")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/macros/independent")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.git)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.math)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.profilers)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.sdk)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.string)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.tests)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.git)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.math)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.profilers)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.sdk)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.tests)

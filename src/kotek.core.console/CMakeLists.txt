@@ -5,7 +5,7 @@ project(kotek.core.console VERSION 1 LANGUAGES CXX)
 
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Console SHUTDOWN ShutdownModule_Core_Console
 	"include/kotek_console.h"
 	"src/kotek_console.cpp"
 	"include/kotek_core_console.h"
@@ -17,13 +17,13 @@ endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.queue)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.pair)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.function)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.message)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.ecs)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.queue)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.pair)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.function)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.message)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.ecs)

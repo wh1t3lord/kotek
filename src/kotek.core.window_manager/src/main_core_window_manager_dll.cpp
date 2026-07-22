@@ -1,4 +1,5 @@
 #include "../include/kotek_core_window_manager.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
@@ -14,7 +15,7 @@ bool InitializeModule_Core_Window_Manager(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	InitializeModule_Core_Window(p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Window, p_manager);
 
 	p_manager->Get_WindowManager()->Initialize();
 
@@ -37,7 +38,7 @@ bool DeserializeModule_Core_Window_Manager(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core_Window_Manager(ktkMainManager* p_manager)
 {
-	ShutdownModule_Core_Window(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Window, p_manager);
 
 	ktkWindowManager* p_window_manager =
 		dynamic_cast<ktkWindowManager*>(p_manager->Get_WindowManager());

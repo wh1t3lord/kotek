@@ -23,7 +23,7 @@ endif()
 
 set(to_include_unit_tests "tests/kotek_std_utility_tests.cpp")
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Utility SHUTDOWN ShutdownModule_Core_Utility
 	"include/kotek_std_utility.h"
 	"src/kotek_std_utility.cpp"
 	"include/kotek_std_utility_variant.h"
@@ -36,26 +36,26 @@ kotek_add_library(${PROJECT_NAME}
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 			GTest::gtest 
 			GTest::gmock
 		)
 	endif()
 else()
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 			GTest::gtest 
 			GTest::gmock
 		)
 	endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.math)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.variant)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.function)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.queue)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.filesystem.path)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.message)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.math)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.variant)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.function)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.queue)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.filesystem.path)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.message)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)

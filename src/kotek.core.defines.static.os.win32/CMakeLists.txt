@@ -41,7 +41,7 @@ else()
 	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static_OS_Windows SHUTDOWN ShutdownModule_Core_Defines_Static_OS_Windows
 	"${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}"
 	"include/kotek_core_defines_static_os_win32.h"
 	"src/main_core_defines_static_os_win32_dll.cpp")
@@ -51,4 +51,4 @@ if (WIN32)
     target_compile_definitions(${PROJECT_NAME} PUBLIC ${KOTEK_OUTPUT_FLAGS})
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

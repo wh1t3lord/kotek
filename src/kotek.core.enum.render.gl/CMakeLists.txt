@@ -7,7 +7,7 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Enum_Render_GL SHUTDOWN ShutdownModule_Core_Enum_Render_GL
 	"include/kotek_enum.h"
 	"include/kotek_translation.h"
 	"include/kotek_core_enum_render_gl.h" 
@@ -15,5 +15,5 @@ kotek_add_library(${PROJECT_NAME}
 	"src/kotek_translation.cpp"
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/enum")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)

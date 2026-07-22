@@ -114,6 +114,42 @@ kotek is **layer 1** of a three-layer stack:
   own implementation when reasonable; keep the "no-dependencies + kotek's own impl"
   configuration buildable for every module.
 
+## 5a. Linkage scenarios (added 2026-07-22, task K18)
+
+`cmake/library.cmake` implements the three output scenarios the owner requires;
+`KOTEK_LINKAGE` selects one globally, `KOTEK_LINKAGE_FORCE_STATIC/FORCE_SHARED`
+override per module:
+
+1. **STATIC** (default): everything `.lib` into `kotek.exe`. Cycles tolerated.
+   Status: **green, validated**.
+2. **SHARED** = "dll implicit" (load-time): modules are `.dll` + import `.lib`,
+   consumers call exports directly (`WINDOWS_EXPORT_ALL_SYMBOLS`; data globals
+   still need export macros). Requires an **acyclic** module graph — kotek's
+   graph is currently cyclic (272 edges) so full-SHARED kotek does not
+   generate; zircon layer minus the editor cluster works (see zircon Z9).
+3. **PLUGIN** = "dll explicit" (run-time): feature modules are `.dll`s loaded
+   by `LoadLibrary`/`GetProcAddress` at startup. Each module keeps its
+   `InitializeModule_*/ShutdownModule_*` entry points, registered via
+   `kotek_add_library(... INIT x SHUTDOWN y)` and compiled into
+   `kotek_plugin_manifest.h` (generated into `<build>/generated/`).
+   Orchestrators call entries through `KOTEK_INVOKE_MODULE_INIT/SHUTDOWN`
+   (`KOTEK_INVOKE_MODULE_INIT_V` for version-taking render backends), which
+   compile to direct calls in modes 1-2 and to `ktkPluginInvoke*` (implemented
+   in `kotek.core.main_manager/src/kotek_plugin_invoke.cpp`, dll handles
+   cached, `ktkPluginUnloadAll` at shutdown) in mode 3. Static leaves
+   (defines/types/constants/containers/enum/casting/api/main_manager/utility/
+   math/format/pch/game — `KOTEK_PLUGIN_STATIC_MODULES` + prefix groups) are
+   linked into whichever binary needs them. `kotek_target_link_libraries`
+   erases link edges to plugin modules and propagates only usage requirements
+   (genex include dirs/defs) — **plugin code may only talk to other modules
+   through `ktkMainManager` interfaces; a direct call fails at link time. That
+   is the enforcement of interface purity.**
+   Known constraints: allocation ownership across dll boundaries (memory.cpu
+   override story, task K9), duplicated static-leaf state per dll (documented,
+   acceptable for stateless/header-only leaves), plugin init ORDER matters
+   (engine_config before filesystem...) — orchestration order is preserved by
+   the converted orchestrators, runtime validation pending.
+
 ## 6. Coding style
 
 - `#pragma once` (never include guards in own code). `.clang-format` at repo root.
@@ -204,8 +240,9 @@ Status values: `open` / `in-progress` / `done` / `blocked` / `dropped(reason)`.
 | K15 | Decide whether kotek keeps render backend projects at all (vs. zircon-only); position kotek as standardization layer | open | see §10 |
 | K16 | Produce & upload NuGet packages to owner's nuget.org account | blocked | needs API key from owner (use CI secret) |
 | K17 | Implement the planned-but-missing backends | open | enumerate after K11/K15 decisions |
-| K18 | CRT consistency + linkage model (all-.lib / all-.dll / mixed per-module) | in-progress (2026-07-22) | DONE: /MT restored + `KOTEK_VCPKG_TRIPLET=x64-windows-static` (validated green: kotek.exe + game.ktk); `cmake/library.cmake` (`kotek_add_library`, `KOTEK_LINKAGE`, `KOTEK_LINKAGE_FORCE_STATIC/SHARED`); 130 modules migrated; compiler globals now applied tree-wide from the engine root. RESULTS: all-.lib /MT = **green**. all-.dll = **blocked structurally**: kotek's module graph is cyclic (272 cross-module back-edges found by CMake) and DLLs forbid cycles — needs cycle-breaking (merge modules or extract INTERFACE libs) before all-SHARED can even generate. mixed (kotek .lib + zircon .dll) = generates cleanly; zircon core/ecs/game/game.session/world DLLs link green, editor cluster blocked by cycles (zircon AGENTS.md Z9) — handling rules in §8 |
+| K18 | CRT consistency + linkage model (all-.lib / all-.dll / mixed per-module) | in-progress (2026-07-22) | DONE: /MT + `KOTEK_VCPKG_TRIPLET=x64-windows-static` (green); `cmake/library.cmake` with THREE scenarios — STATIC (green, validated), SHARED implicit (works for acyclic layers; kotek itself is cyclic=blocked), PLUGIN explicit (manifest + `ktkPluginInvoke*` + `KOTEK_INVOKE_MODULE_*`; configure+link pass). PLUGIN status: generates, most modules build (23 binaries incl. all plugin DLLs); remaining ~221 link errors = interface-purity violations → K20. Supporting fixes made: vcpkg toolchain now included every configure; global `find_package(... GLOBAL)` hoist block; `kotek_finalize_plugin_links` BFS pass; `pkg_check_modules GLOBAL dav1d`; `format` links fmt on Windows (latent bug); explicit deps added (main_manager/os.win32/filesystem.path/console-see-K20) |
 | K19 | C++17 compatibility for Windows XP targets | open | switch added 2026-07-22: `KOTEK_WINDOWS_XP=ON` (or `-DKOTEK_CPP_STANDARD=17`) in `compiler_globals.cmake` + `KOTEK_USE_CPP_STANDARD` def; needs `v141_xp` toolset. Audit not done: known C++20-only hotspots — `std::format` (kotek.core.format), concepts, consteval; codebase must compile under BOTH standards |
+| K20 | Interface purity for PLUGIN/SHARED modes (worklist) | open | the remaining ~221 PLUGIN link errors (2026-07-22) are direct cross-module calls into plugin modules — fix by routing through `ktkMainManager` interfaces (preferred, = the architecture) or demoting the callee. Hotspots: `ktkConsole::Push/Execute_Command` (console), `ktk::memory::memcpy/memset/...` (memory.cpu), `ktkRenderGraphSimplifiedRenderPass` vtables (render pass bases gl/bgfx/shared), ImGui direct use in zircon editor pass, residual in kotek.render.gl/.vk, kotek.core aggregator, kotek.core.filesystem, kotek.ui. `ecs` demoted to static leaf (header-only backend), `log` demoted to implicit DLL (global-state infra) — both rationales documented in library.cmake |
 
 ## 10. Architecture validation summary (2026-07-21)
 

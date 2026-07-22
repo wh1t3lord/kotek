@@ -1,4 +1,5 @@
 #include "../include/kotek_core_os.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
@@ -14,9 +15,9 @@ bool InitializeModule_Core_OS(ktkMainManager* p_manager)
 	}
 
 #ifdef KOTEK_PLATFORM_WINDOWS
-	InitializeModule_Core_OS_Win32(p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_OS_Win32, p_manager);
 #elif defined(KOTEK_PLATFORM_LINUX)
-	InitializeModule_Core_OS_Linux(p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_OS_Linux, p_manager);
 #else
     #error Unknown platform
 #endif
@@ -51,9 +52,9 @@ bool DeserializeModule_Core_OS(ktkMainManager* p_manager)
 bool ShutdownModule_Core_OS(ktkMainManager* p_manager)
 {
 #ifdef KOTEK_PLATFORM_WINDOWS
-	ShutdownModule_Core_OS_Win32(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_OS_Win32, p_manager);
 #elif defined(KOTEK_PLATFORM_LINUX)
-	ShutdownModule_Core_OS_Linux(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_OS_Linux, p_manager);
 #else
     #error Unknown platform
 #endif

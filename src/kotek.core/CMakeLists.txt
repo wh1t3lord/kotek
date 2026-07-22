@@ -79,7 +79,7 @@ endif()
 
 message("[${PROJECT_NAME}]: files to attach (KOTEK_TESTS): ${to_include_tests}")
 
-kotek_add_library(${PROJECT_NAME} 
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core SHUTDOWN ShutdownModule_Core 
 	"src/main_core_dll.cpp"
 	"include/kotek_core.h"
 	"include/kotek_json_casting_math_matrix.h"
@@ -100,12 +100,12 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 		
 				if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_filesystem-vc140-mt-gd.lib")
 					message("[${PROJECT_NAME}][Debug]: adding boost_filesystem-vc140-mt-gd.lib to Debug configuration")
-					target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_filesystem-vc140-mt-gd.lib)
+					kotek_target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_filesystem-vc140-mt-gd.lib)
 				endif()
 
 				if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_filesystem-vc140-mt.lib")
 					message("[${PROJECT_NAME}][None-Debug]: adding boost_filesystem-vc140-mt.lib to not Debug configurations")
-					target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_filesystem-vc140-mt.lib)
+					kotek_target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_filesystem-vc140-mt.lib)
 				endif()
 
 				set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
@@ -141,26 +141,26 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 		endif()
 
 		if ("${KOTEK_TESTS}" STREQUAL "ON")
-			target_link_libraries(${PROJECT_NAME} PUBLIC 
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 				GTest::gtest 
 				GTest::gmock
 			)
 		endif()
 	else()
 
-		target_link_libraries(${PROJECT_NAME} PUBLIC
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC
 			Boost::json
 		)
 
 		if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
-			target_link_libraries(${PROJECT_NAME} PUBLIC 
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 				Boost::headers 
 				Boost::filesystem
 			)
 		endif()
 
 		if ("${KOTEK_TESTS}" STREQUAL "ON")
-			target_link_libraries(${PROJECT_NAME} PUBLIC 
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 				GTest::gtest 
 				GTest::gmock
 			)
@@ -170,24 +170,24 @@ endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.console)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.math)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.filesystem)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.format)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.log)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window_manager)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.ecs)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.input)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.utility)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.profilers)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.engine_config)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.casting)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.console)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.math)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.filesystem)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.format)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.log)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window_manager)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.ecs)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.input)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.utility)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.profilers)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.engine_config)

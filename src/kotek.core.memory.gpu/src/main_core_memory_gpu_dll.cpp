@@ -1,4 +1,5 @@
 #include "../include/kotek_core_memory_gpu.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
@@ -16,14 +17,14 @@ bool InitializeModule_Core_Memory_GPU(ktkMainManager* p_manager)
 		}
 	}
 
-	InitializeModule_Core_Memory_GPU_Vulkan(p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Memory_GPU_Vulkan, p_manager);
 
 	return true;
 }
 
 bool ShutdownModule_Core_Memory_GPU(ktkMainManager* p_manager)
 {
-	ShutdownModule_Core_Memory_GPU_Vulkan(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Memory_GPU_Vulkan, p_manager);
 
 	return true;
 }

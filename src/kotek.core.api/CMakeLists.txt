@@ -7,7 +7,7 @@ project(kotek.core.api VERSION 1 LANGUAGES CXX)
 
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-kotek_add_library(${PROJECT_NAME} 
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_API SHUTDOWN ShutdownModule_Core_API 
 	"src/main_api_dll.cpp"
 	"include/kotek_api.h"
 	"include/kotek_api_no_std.h"
@@ -16,11 +16,11 @@ kotek_add_library(${PROJECT_NAME}
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.shared_ptr)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.any)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.filesystem.path)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.io)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.ecs)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.enum)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.shared_ptr)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.any)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.filesystem.path)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.io)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.ecs)

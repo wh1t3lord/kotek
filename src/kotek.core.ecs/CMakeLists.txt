@@ -18,17 +18,17 @@ if ("${KOTEK_ECS_BACKEND}" STREQUAL "ENTT")
 
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_ECS SHUTDOWN ShutdownModule_Core_ECS
 	"include/kotek_core_ecs.h"
 	"src/main_core_ecs_dll.cpp")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.ecs)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.format)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.ecs)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.format)
 
 if ("${KOTEK_ECS_BACKEND}" STREQUAL "ENTT")
 
@@ -38,7 +38,7 @@ if ("${KOTEK_ECS_BACKEND}" STREQUAL "ENTT")
 			target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_entt_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
 		endif()
 	else()
-		target_link_libraries(${PROJECT_NAME} PUBLIC EnTT::EnTT)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC EnTT::EnTT)
 	endif()
 
 endif()

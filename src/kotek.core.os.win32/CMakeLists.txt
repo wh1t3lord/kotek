@@ -59,14 +59,14 @@ if ("${KOTEK_VULKAN}" STREQUAL "ON")
 	find_package(Vulkan REQUIRED)
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_OS_Win32 SHUTDOWN ShutdownModule_Core_OS_Win32
 	"include/kotek_os.h"
 	"include/kotek_core_os_win32.h"
 	"src/main_core_os_win32_dll.cpp")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/os/vendor")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.win32)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os.win32)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render)
 
 # TODO: flag for using gles detection like for vulkan KOTEK_VULKAN but KOTEK_GLES and specify what version of gles and shipping
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
@@ -78,12 +78,12 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 
 		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/glfw3dll.lib")
 			message("[${PROJECT_NAME}][Debug]: adding glfw3dll.lib to Debug configuration")
-			target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/glfw3dll.lib)
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/glfw3dll.lib)
 		endif()
 
 		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/glfw3dll.lib")
 			message("[${PROJECT_NAME}][None-Debug]: glfw3dll.lib to not Debug configurations")
-			target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/glfw3dll.lib)
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/glfw3dll.lib)
 		endif()
 
 		set(path_to_bins "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glfw3_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}")
@@ -105,7 +105,7 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	endif()
 
 	if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 			unofficial::angle::libEGL
 			unofficial::angle::libANGLE
 			unofficial::angle::libGLESv2
@@ -113,7 +113,7 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	endif()
 
 	if ("${KOTEK_BGFX}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 			bgfx::bx 
 			bgfx::bgfx 
 			bgfx::bimg 
@@ -129,7 +129,7 @@ elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 	endif()
 
 	if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 			unofficial::angle::libEGL
 			unofficial::angle::libANGLE
 			unofficial::angle::libGLESv2
@@ -137,7 +137,7 @@ elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 	endif()
 
 	if ("${KOTEK_BGFX}" STREQUAL "ON")
-		target_link_libraries(${PROJECT_NAME} PUBLIC 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
 			bgfx::bx 
 			bgfx::bgfx 
 			bgfx::bimg 
@@ -148,16 +148,19 @@ else()
 	message(FATAL_ERROR "provide implementation for custom folder and compiled by user")
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
 
 if ("${KOTEK_VULKAN}" STREQUAL "ON")
-	target_link_libraries(${PROJECT_NAME} PUBLIC Vulkan::Vulkan)
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Vulkan::Vulkan)
 endif()
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	# nothing here
 else()
 	if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "GLFW")
-		target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
 	endif()
 endif()
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC bgfx::bgfx)

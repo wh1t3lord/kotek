@@ -5,10 +5,10 @@ project(kotek.core.constants.render VERSION 1 LANGUAGES CXX)
 
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Constants_Render SHUTDOWN ShutdownModule_Core_Constants_Render
 	"include/kotek_std_constants.h"
 	"include/kotek_core_constants_render.h"
 	"src/main_core_constants_render_dll.cpp")
 	
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/constants")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)

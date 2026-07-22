@@ -12,7 +12,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Window_GLFW SHUTDOWN ShutdownModule_Core_Window_GLFW
 	"include/kotek_core_window_glfw.h"
 	"include/kotek_std_window.h"
 	"src/kotek_std_window.cpp"
@@ -24,12 +24,12 @@ if (UNIX)
 endif()
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-	target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
+	kotek_target_link_libraries(${PROJECT_NAME} PRIVATE glfw)
 else()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)

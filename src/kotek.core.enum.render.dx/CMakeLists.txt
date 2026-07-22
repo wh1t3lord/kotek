@@ -7,7 +7,7 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Enum_Render_DX SHUTDOWN ShutdownModule_Core_Enum_Render_DX
 	"include/kotek_enum_7.h"
 	"include/kotek_enum_8.h"
 	"include/kotek_enum_9.h"
@@ -18,5 +18,5 @@ kotek_add_library(${PROJECT_NAME}
 	"src/main_core_enum_render_dx_dll.cpp"
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/enum")
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.dx)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.dx)

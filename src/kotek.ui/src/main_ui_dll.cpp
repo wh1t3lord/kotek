@@ -1,4 +1,5 @@
 #include "../include/kotek_ui.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
@@ -13,29 +14,29 @@ bool InitializeModule_UI(Core::ktkMainManager* p_main_manager)
 		p_main_manager->Get_Splash()->Set_Progress();
 	}
 
-	InitializeModule_UI_IMGUI(p_main_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_UI_IMGUI, p_main_manager);
 
 #ifdef KOTEK_USE_CEF_LIBRARY
-	InitializeModule_UI_CEF(p_main_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_UI_CEF, p_main_manager);
 #elif defined(KOTEK_USE_RMLUI_LIBRARY)
-	InitializeModule_UI_RMLUI(p_main_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_UI_RMLUI, p_main_manager);
 #endif
 
-	InitializeModule_UI_VideoPlayer(p_main_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_UI_VideoPlayer, p_main_manager);
 
 	return true;
 }
 bool ShutdownModule_UI(Core::ktkMainManager* p_main_manager)
 {
-	ShutdownModule_UI_IMGUI(p_main_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_UI_IMGUI, p_main_manager);
 
 #ifdef KOTEK_USE_CEF_LIBRARY
-	ShutdownModule_UI_CEF(p_main_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_UI_CEF, p_main_manager);
 #elif defined(KOTEK_USE_RMLUI_LIBRARY)
-	ShutdownModule_UI_RMLUI(p_main_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_UI_RMLUI, p_main_manager);
 #endif
 
-	ShutdownModule_UI_VideoPlayer(p_main_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_UI_VideoPlayer, p_main_manager);
 
 	return true;
 }

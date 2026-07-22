@@ -37,7 +37,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	endif()
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Containers_Array SHUTDOWN ShutdownModule_Core_Containers_Array
 	"include/kotek_std_alias_array.h"
 	"include/kotek_std_alias_static_array.h"
 	"include/kotek_core_containers_array.h"
@@ -52,12 +52,12 @@ if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
 			target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
 		endif()
 	else()
-		target_link_libraries(${PROJECT_NAME} PUBLIC Boost::container)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Boost::container)
 	endif()
 endif()
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
 
 if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
@@ -66,6 +66,6 @@ if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
 			target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_etl_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
 		endif()
 	else()
-		target_link_libraries(${PROJECT_NAME} PUBLIC etl::etl)
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC etl::etl)
 	endif()
 endif()

@@ -15,7 +15,7 @@ if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 	include_directories(../../../${KOTEK_USER_GAME_PROJECT_NAME})
 endif()
 
-kotek_add_library(${PROJECT_NAME}
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Game SHUTDOWN ShutdownModule_Game
 	"include/kotek_engine.h"
 	"include/kotek_game.h"
 	"src/kotek_update.cpp"
@@ -25,14 +25,14 @@ kotek_add_library(${PROJECT_NAME}
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/user dll loading")
 target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render)
-target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui)
 
 if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
 	if ("${KOTEK_USER_GAME_MODULE_FOR_LINK_NAME}" STREQUAL "")
 		message(FATAL_ERROR "you must specify KOTEK_USER_GAME_MODULE_FOR_LINK_NAME for linking to kotek.game project. See zircon example ")
 	endif()
 
-	target_link_libraries(${PROJECT_NAME} PUBLIC ${KOTEK_USER_GAME_MODULE_FOR_LINK_NAME})
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC ${KOTEK_USER_GAME_MODULE_FOR_LINK_NAME})
 endif()
