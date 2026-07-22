@@ -310,21 +310,12 @@ endif()
 
 add_subdirectory("src/kotek.render")
 
+# render backends: bgfx (raster) is the only built-in one; NRI (dx12/vk + ray
+# tracing) is planned. gl/vk/software/angle/glad and their shared modules were
+# removed (2026-07-22, owner decision); the per-backend defines/enum config
+# modules stay for enum stability and future NRI reuse.
 add_subdirectory("src/kotek.render.shared")
-add_subdirectory("src/kotek.render.shared.vk")
-add_subdirectory("src/kotek.render.shared.gl")
-add_subdirectory("src/kotek.render.shared.dx")
 add_subdirectory("src/kotek.render.shared.bgfx")
-add_subdirectory("src/kotek.render.vk")
-add_subdirectory("src/kotek.render.gl")
-add_subdirectory("src/kotek.render.gl.glad")
-add_subdirectory("src/kotek.render.software")
-
-if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
-	add_subdirectory("src/kotek.render.angle.gles")
-	add_subdirectory("src/kotek.render.angle.gles23")
-endif()
-
 add_subdirectory("src/kotek.render.bgfx")
 
 add_subdirectory("src/kotek.exe")

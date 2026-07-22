@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
+#include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 #include <kotek.core.memory.cpu/include/kotek_core_memory_cpu.h>
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
@@ -365,7 +366,7 @@ public:
 
 	void swap(hybrid_unordered_set& other) 
 	{
-		throw "stl doesn't support swap operation";
+		KOTEK_ASSERT(false, "hybrid_unordered_set::swap is not supported with polymorphic allocators");
 	}
 
 	void swap(container_type& other) noexcept { mem.con.swap(other); }
@@ -378,14 +379,14 @@ public:
 	void merge(
 		hybrid_unordered_set<Type, H2, P2, ElementCount, Realloc>& source)
 	{
-		throw "stl polymorphic_allocator doesn't support merge";
+		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
 		//		mem.con.merge(source.mem.con);
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_set<Type, H2, P2>& source)
 	{
-		throw "stl polymorphic_allocator doesn't support merge";
+		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
 	//	mem.con.merge(source);
 	}
 
@@ -393,28 +394,28 @@ public:
 	void merge(
 		hybrid_unordered_set<Type, H2, P2, ElementCount, Realloc>&& source)
 	{
-		throw "stl polymorphic_allocator doesn't support merge";
+		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
 	//	mem.con.merge(std::move(source.mem.con));
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_set<Type, H2, P2>&& source)
 	{
-		throw "stl polymorphic_allocator doesn't support merge";
+		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
 	//	mem.con.merge(std::move(source));
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_multiset<Type, H2, P2>& source)
 	{
-		throw "stl polymorphic_allocator doesn't support merge";
+		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
 	//	mem.con.merge(source);
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_multiset<Type, H2, P2>&& source)
 	{
-		throw "stl polymorphic_allocator doesn't support merge";
+		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
 	//	mem.con.merge(std::move(source));
 	}
 

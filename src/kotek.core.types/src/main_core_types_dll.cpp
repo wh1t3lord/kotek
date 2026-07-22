@@ -6,9 +6,9 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Types(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Types_Char, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Types_Numerics, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Types_String, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Types_Char, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Types_Numerics, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Types_String, p_manager);
 
 	return true;
 }
@@ -33,9 +33,9 @@ bool DeserializeModule_Core_Types(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core_Types(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Types_Char, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Types_Numerics, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Types_String, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Types_Char, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Types_Numerics, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Types_String, p_manager);
 
 	return true;
 }

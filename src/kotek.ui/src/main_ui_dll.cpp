@@ -14,57 +14,57 @@ bool InitializeModule_UI(Core::ktkMainManager* p_main_manager)
 		p_main_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_UI_IMGUI, p_main_manager);
+	KOTEK_INVOKE_MODULE(INIT, UI, InitializeModule_UI_IMGUI, p_main_manager);
 
 #ifdef KOTEK_USE_CEF_LIBRARY
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_UI_CEF, p_main_manager);
+	KOTEK_INVOKE_MODULE(INIT, UI, InitializeModule_UI_CEF, p_main_manager);
 #elif defined(KOTEK_USE_RMLUI_LIBRARY)
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_UI_RMLUI, p_main_manager);
+	KOTEK_INVOKE_MODULE(INIT, UI, InitializeModule_UI_RMLUI, p_main_manager);
 #endif
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_UI_VideoPlayer, p_main_manager);
+	KOTEK_INVOKE_MODULE(INIT, UI, InitializeModule_UI_VideoPlayer, p_main_manager);
 
 	return true;
 }
 bool ShutdownModule_UI(Core::ktkMainManager* p_main_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_UI_IMGUI, p_main_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, UI, ShutdownModule_UI_IMGUI, p_main_manager);
 
 #ifdef KOTEK_USE_CEF_LIBRARY
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_UI_CEF, p_main_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, UI, ShutdownModule_UI_CEF, p_main_manager);
 #elif defined(KOTEK_USE_RMLUI_LIBRARY)
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_UI_RMLUI, p_main_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, UI, ShutdownModule_UI_RMLUI, p_main_manager);
 #endif
 
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_UI_VideoPlayer, p_main_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, UI, ShutdownModule_UI_VideoPlayer, p_main_manager);
 
 	return true;
 }
 bool SerializeModule_UI(Core::ktkMainManager* p_main_manager)
 {
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_UI_IMGUI, p_main_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, UI, SerializeModule_UI_IMGUI, p_main_manager);
 
 #ifdef KOTEK_USE_CEF_LIBRARY
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_UI_CEF, p_main_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, UI, SerializeModule_UI_CEF, p_main_manager);
 #elif defined(KOTEK_USE_RMLUI_LIBRARY)
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_UI_RMLUI, p_main_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, UI, SerializeModule_UI_RMLUI, p_main_manager);
 #endif
 
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_UI_VideoPlayer, p_main_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, UI, SerializeModule_UI_VideoPlayer, p_main_manager);
 
 	return true;
 }
 bool DeserializeModule_UI(Core::ktkMainManager* p_main_manager)
 {
-	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_UI_IMGUI, p_main_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, UI, DeserializeModule_UI_IMGUI, p_main_manager);
 
 #ifdef KOTEK_USE_CEF_LIBRARY
-	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_UI_CEF, p_main_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, UI, DeserializeModule_UI_CEF, p_main_manager);
 #elif defined(KOTEK_USE_RMLUI_LIBRARY)
-	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_UI_RMLUI, p_main_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, UI, DeserializeModule_UI_RMLUI, p_main_manager);
 #endif
 
-	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_UI_VideoPlayer, p_main_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, UI, DeserializeModule_UI_VideoPlayer, p_main_manager);
 
 	return true;
 }

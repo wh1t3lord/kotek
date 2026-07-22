@@ -96,8 +96,9 @@ const ktk::ustring& gl::ktkRenderGraphShaderTextInfo::Get_ShaderName(
 	return this->m_shader_name;
 }
 
-ktkRenderGraphBufferInfo::ktkRenderGraphBufferInfo(GLenum type, GLenum usage,
-	const ktk::cstring& uniform_block_name, GLuint binding_point,
+ktkRenderGraphBufferInfo::ktkRenderGraphBufferInfo(
+	eRenderGraphBufferObject type, eRenderGraphBufferUsage usage,
+	const ktk::cstring& uniform_block_name, ktk::uint32_t binding_point,
 	ktk::size_t memory_for_allocation, ktk::size_t align_of_memory,
 	const ktk::ustring& shader_name, const ktk::cstring& buffer_name) :
 	m_buffer_object{type},
@@ -113,24 +114,28 @@ ktkRenderGraphBufferInfo::ktkRenderGraphBufferInfo(GLenum type, GLenum usage,
 }
 
 ktkRenderGraphBufferInfo::ktkRenderGraphBufferInfo(void) :
-	m_buffer_object{GL_UNIFORM_BUFFER}, m_usage{GL_STATIC_DRAW},
+	m_buffer_object{eRenderGraphBufferObject::kUniform},
+	m_usage{eRenderGraphBufferUsage::kStatic},
 	m_binding_point_index{}, m_memory{}, m_memory_align_value{}
 {
 }
 
 ktkRenderGraphBufferInfo::~ktkRenderGraphBufferInfo(void) {}
 
-GLenum ktkRenderGraphBufferInfo::Get_BufferObject(void) const noexcept
+eRenderGraphBufferObject ktkRenderGraphBufferInfo::Get_BufferObject(void
+) const noexcept
 {
 	return this->m_buffer_object;
 }
 
-GLenum ktkRenderGraphBufferInfo::Get_Usage(void) const noexcept
+eRenderGraphBufferUsage ktkRenderGraphBufferInfo::Get_Usage(void
+) const noexcept
 {
 	return this->m_usage;
 }
 
-GLuint ktkRenderGraphBufferInfo::Get_BindingPointIndex(void) const noexcept
+ktk::uint32_t ktkRenderGraphBufferInfo::Get_BindingPointIndex(void
+) const noexcept
 {
 	return this->m_binding_point_index;
 }

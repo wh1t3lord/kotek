@@ -47,9 +47,9 @@ private:
 #ifdef KOTEK_DEBUG
 	// todo: provide switching between static (stack/embedded)
 	// implementation and dynamic
-	kun_ktk unordered_map<GLuint, bool> m_user_called_destroy_shaders;
-	kun_ktk unordered_map<GLuint, bool> m_user_called_destroy_buffers;
-	kun_ktk unordered_map<GLuint, bool> m_user_called_destroy_programs;
+	kun_ktk unordered_map<kun_ktk uint32_t, bool> m_user_called_destroy_shaders;
+	kun_ktk unordered_map<kun_ktk uint32_t, bool> m_user_called_destroy_buffers;
+	kun_ktk unordered_map<kun_ktk uint32_t, bool> m_user_called_destroy_programs;
 #endif
 };
 

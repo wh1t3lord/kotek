@@ -15,9 +15,9 @@ bool InitializeModule_Core_OS(ktkMainManager* p_manager)
 	}
 
 #ifdef KOTEK_PLATFORM_WINDOWS
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_OS_Win32, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_OS_Win32, p_manager);
 #elif defined(KOTEK_PLATFORM_LINUX)
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_OS_Linux, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_OS_Linux, p_manager);
 #else
     #error Unknown platform
 #endif
@@ -27,9 +27,9 @@ bool InitializeModule_Core_OS(ktkMainManager* p_manager)
 bool SerializeModule_Core_OS(ktkMainManager* p_manager)
 {
 #ifdef KOTEK_PLATFORM_WINDOWS
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_OS_Win32, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_OS_Win32, p_manager);
 #elif defined(KOTEK_PLATFORM_LINUX)
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_OS_Linux, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_OS_Linux, p_manager);
 #else
     #error Unknown platform
 #endif
@@ -39,9 +39,9 @@ bool SerializeModule_Core_OS(ktkMainManager* p_manager)
 bool DeserializeModule_Core_OS(ktkMainManager* p_manager)
 {
 #ifdef KOTEK_PLATFORM_WINDOWS
-	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_Core_OS_Win32, p_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, CORE, DeserializeModule_Core_OS_Win32, p_manager);
 #elif defined(KOTEK_PLATFORM_LINUX)
-	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_Core_OS_Linux, p_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, CORE, DeserializeModule_Core_OS_Linux, p_manager);
 #else
     #error Unknown platform
 #endif
@@ -52,9 +52,9 @@ bool DeserializeModule_Core_OS(ktkMainManager* p_manager)
 bool ShutdownModule_Core_OS(ktkMainManager* p_manager)
 {
 #ifdef KOTEK_PLATFORM_WINDOWS
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_OS_Win32, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_OS_Win32, p_manager);
 #elif defined(KOTEK_PLATFORM_LINUX)
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_OS_Linux, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_OS_Linux, p_manager);
 #else
     #error Unknown platform
 #endif

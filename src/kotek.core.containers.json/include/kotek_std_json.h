@@ -73,7 +73,7 @@ public:
 	{
 		ReturnType result{};
 
-#ifdef KOTEK_USE_BOOST_LIBRARY
+#if defined(KOTEK_USE_NOT_CUSTOM_LIBRARY)
 		if (key_name.empty())
 		{
 			KOTEK_MESSAGE_WARNING("passed an empty key");
@@ -286,7 +286,7 @@ public:
 	{
 		ReturnType result{};
 
-#ifdef KOTEK_USE_BOOST_LIBRARY
+#if defined(KOTEK_USE_NOT_CUSTOM_LIBRARY)
 		if (key_name.empty())
 		{
 			KOTEK_MESSAGE_WARNING("passed an empty key");

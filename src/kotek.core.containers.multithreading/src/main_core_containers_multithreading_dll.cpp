@@ -14,13 +14,13 @@ bool InitializeModule_Core_Containers_MultiThreading(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_MultiThreading_Atomic, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_MultiThreading_Mutex, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_MultiThreading_Semaphore, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_MultiThreading_Shared_Mutex, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_MultiThreading_TBB, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_MultiThreading_Thread, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_MultiThreading_Queue, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Containers_MultiThreading_Atomic, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Containers_MultiThreading_Mutex, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Containers_MultiThreading_Semaphore, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Containers_MultiThreading_Shared_Mutex, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Containers_MultiThreading_TBB, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Containers_MultiThreading_Thread, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Containers_MultiThreading_Queue, p_manager);
 	InitializeModule_Core_Containers_MultiThreading_Condition_Variable(
 		p_manager);
 
@@ -29,14 +29,14 @@ bool InitializeModule_Core_Containers_MultiThreading(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core_Containers_MultiThreading(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_MultiThreading_Atomic, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_MultiThreading_Mutex, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_MultiThreading_Semaphore, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_MultiThreading_Shared_Mutex, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_MultiThreading_TBB, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_MultiThreading_Thread, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_MultiThreading_Queue, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_MultiThreading_Condition_Variable, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Containers_MultiThreading_Atomic, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Containers_MultiThreading_Mutex, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Containers_MultiThreading_Semaphore, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Containers_MultiThreading_Shared_Mutex, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Containers_MultiThreading_TBB, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Containers_MultiThreading_Thread, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Containers_MultiThreading_Queue, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Containers_MultiThreading_Condition_Variable, p_manager);
 
 	return true;
 }

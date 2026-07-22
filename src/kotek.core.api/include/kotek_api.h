@@ -893,6 +893,10 @@ public:
 	virtual bool IsApplicationWorking(void) const noexcept = 0;
 	virtual void SetApplicationWorking(bool status
 	) noexcept = 0;
+
+	/// @brief \~english value of --kotek_frames=N: exit the main loop after N
+	/// frames (smoke testing / CI); 0 means unlimited
+	virtual kun_ktk uint32_t Get_FramesLimit(void) const noexcept = 0;
 	virtual void
 	Set_UserLibrary(const ktk_filesystem_path& path_to_library
 	) noexcept = 0;

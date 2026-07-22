@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
+#include <kotek.core.defines_dependent.assert/include/kotek_core_defines_dependent_assert.h>
 #include <kotek.core.memory.cpu/include/kotek_core_memory_cpu.h>
 
 #ifdef KOTEK_USE_BOOST_LIBRARY
@@ -234,7 +235,11 @@ public:
 
 	void swap(hybrid_vector_impl& other)
 	{
-		throw "std doesn't support swapping polymorphic allocators (C++20)";
+		// std doesn't support swapping polymorphic allocators (C++20);
+		// no exceptions in this codebase — fail loudly instead
+		KOTEK_ASSERT(false,
+			"hybrid_vector_impl::swap is not supported with polymorphic "
+			"allocators (C++20)");
 		//	_kotek_hv_container_namespace_swap::swap(mem.con, other.mem.con);
 	}
 

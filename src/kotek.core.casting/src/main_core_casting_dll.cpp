@@ -13,16 +13,16 @@ bool InitializeModule_Core_Casting(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Casting_Lexical, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Casting_String, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Casting_Lexical, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Casting_String, p_manager);
 
 	return true;
 }
 
 bool ShutdownModule_Core_Casting(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Casting_Lexical, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Casting_String, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Casting_Lexical, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Casting_String, p_manager);
 
 	return true;
 }

@@ -14,16 +14,16 @@ bool InitializeModule_Core_Defines(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Dependent, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Static, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Dependent, p_manager);
 
 	return true;
 }
 
 bool ShutdownModule_Core_Defines(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Dependent, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Static, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Dependent, p_manager);
 
 	return true;
 }

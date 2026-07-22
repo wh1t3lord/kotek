@@ -14,16 +14,16 @@ bool InitializeModule_Core_Memory(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Memory_CPU, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Memory_GPU, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Memory_CPU, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Memory_GPU, p_manager);
 
 	return true;
 }
 
 bool ShutdownModule_Core_Memory(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Memory_GPU, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Memory_CPU, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Memory_GPU, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Memory_CPU, p_manager);
 
 
 	return true;
@@ -31,16 +31,16 @@ bool ShutdownModule_Core_Memory(ktkMainManager* p_manager)
 
 bool SerializeModule_Core_Memory(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Memory_CPU, p_manager);
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Memory_GPU, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_Memory_CPU, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_Memory_GPU, p_manager);
 
 	return true;
 }
 
 bool DeserializeModule_Core_Memory(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Memory_CPU, p_manager);
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Memory_GPU, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_Memory_CPU, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_Memory_GPU, p_manager);
 
 	return true;
 }

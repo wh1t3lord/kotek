@@ -23,28 +23,28 @@ bool InitializeModule_Core_Window(ktkMainManager* p_manager)
 	ktkWindowConsole* p_console_instance = new ktkWindowConsole();
 	p_manager->Set_WindowConsole(p_console_instance);
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Window_GLFW, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Window_GLFW, p_manager);
 
 	return true;
 }
 
 bool SerializeModule_Core_Window(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Window_GLFW, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_Window_GLFW, p_manager);
 
 	return true;
 }
 
 bool DeserializeModule_Core_Window(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_Core_Window_GLFW, p_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, CORE, DeserializeModule_Core_Window_GLFW, p_manager);
 
 	return true;
 }
 
 bool ShutdownModule_Core_Window(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Window_GLFW, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Window_GLFW, p_manager);
 
 	ktkIWindowConsole* p_console_interface =
 		p_manager->Get_WindowConsole();

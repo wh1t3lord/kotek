@@ -5,6 +5,7 @@
 #ifdef KOTEK_USE_BOOST_LIBRARY
 	#include <boost/dll.hpp>
 #elif defined(KOTEK_USE_STD_LIBRARY)
+#include <filesystem>
 namespace dll
 {
 	struct shared_library
@@ -13,6 +14,14 @@ namespace dll
 		shared_library(const char* p_path);
 		~shared_library();
 
+		// owning handle: non-copyable, movable (the temporary in
+		// `x = shared_library(path)` must not FreeLibrary the handle
+		// it just transferred)
+		shared_library(const shared_library&) = delete;
+		shared_library& operator=(const shared_library&) = delete;
+		shared_library(shared_library&& other) noexcept;
+		shared_library& operator=(shared_library&& other) noexcept;
+
 		bool load(const char* p_path);
 		bool unload();
 
@@ -20,6 +29,11 @@ namespace dll
 
 		void* p_lib;
 	};
+
+	/// @brief \~english full path of the running executable (mirrors
+	/// boost::dll::program_location so both library configurations share the
+	/// same call site)
+	std::filesystem::path program_location();
 }
 #else
 #endif

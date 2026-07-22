@@ -21,7 +21,4 @@ endif()
 kotek_target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
-kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.shared.gl)
-kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.shared.dx)
-kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.shared.vk)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.shared.bgfx)

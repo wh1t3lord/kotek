@@ -5,20 +5,9 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 bool InitializeModule_Render_Shared(Core::ktkMainManager* p_main_manager)
 {
-#ifdef KOTEK_USE_DIRECTX
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Render_Shared_DX, p_main_manager);
-#endif
-
-#ifdef KOTEK_USE_OPENGL
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Render_Shared_GL, p_main_manager);
-#endif
-
-#ifdef KOTEK_USE_VULKAN
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Render_Shared_VK, p_main_manager);
-#endif
-
 #ifdef KOTEK_USE_BGFX
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Render_Shared_BGFX, p_main_manager);
+	KOTEK_INVOKE_MODULE(
+		INIT, RENDER, InitializeModule_Render_Shared_BGFX, p_main_manager);
 #endif
 
 	return true;
@@ -26,20 +15,9 @@ bool InitializeModule_Render_Shared(Core::ktkMainManager* p_main_manager)
 
 bool ShutdownModule_Render_Shared(Core::ktkMainManager* p_main_manager)
 {
-#ifdef KOTEK_USE_DIRECTX
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_Shared_DX, p_main_manager);
-#endif
-
-#ifdef KOTEK_USE_OPENGL
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_Shared_GL, p_main_manager);
-#endif
-
-#ifdef KOTEK_USE_VULKAN
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_Shared_VK, p_main_manager);
-#endif
-
 #ifdef KOTEK_USE_BGFX
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_Shared_BGFX, p_main_manager);
+	KOTEK_INVOKE_MODULE(
+		SHUTDOWN, RENDER, ShutdownModule_Render_Shared_BGFX, p_main_manager);
 #endif
 
 	return true;

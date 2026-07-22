@@ -15,22 +15,22 @@ bool InitializeModule_Core_Constants(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Constants_Math, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Constants_Window, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Constants_ECS, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Constants_String, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Constants_Render, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Constants_Math, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Constants_Window, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Constants_ECS, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Constants_String, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Constants_Render, p_manager);
 
 	return true;
 }
 
 bool ShutdownModule_Core_Constants(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Constants_Math, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Constants_Window, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Constants_ECS, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Constants_String, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Constants_Render, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Constants_Math, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Constants_Window, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Constants_ECS, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Constants_String, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Constants_Render, p_manager);
 
 	return true;
 }

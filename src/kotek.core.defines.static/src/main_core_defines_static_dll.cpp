@@ -14,30 +14,30 @@ bool InitializeModule_Core_Defines_Static(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_CPP, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_Git, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_Math, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_OS, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_Profilers, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_SDK, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_String, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_Tests, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_Render, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Static_CPP, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Static_Git, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Static_Math, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Static_OS, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Static_Profilers, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Static_SDK, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Static_String, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Static_Tests, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines_Static_Render, p_manager);
 
 	return true;
 }
 
 bool ShutdownModule_Core_Defines_Static(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_CPP, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_Git, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_Math, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_OS, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_Profilers, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_SDK, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_String, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_Tests, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_Render, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Static_CPP, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Static_Git, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Static_Math, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Static_OS, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Static_Profilers, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Static_SDK, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Static_String, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Static_Tests, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines_Static_Render, p_manager);
 
 	return true;
 }

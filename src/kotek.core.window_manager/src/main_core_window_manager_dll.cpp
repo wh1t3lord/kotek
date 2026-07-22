@@ -15,7 +15,7 @@ bool InitializeModule_Core_Window_Manager(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Window, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Window, p_manager);
 
 	p_manager->Get_WindowManager()->Initialize();
 
@@ -24,21 +24,21 @@ bool InitializeModule_Core_Window_Manager(ktkMainManager* p_manager)
 
 bool SerializeModule_Core_Window_Manager(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Window, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_Window, p_manager);
 
 	return true;
 }
 
 bool DeserializeModule_Core_Window_Manager(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_Core_Window, p_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, CORE, DeserializeModule_Core_Window, p_manager);
 
 	return true;
 }
 
 bool ShutdownModule_Core_Window_Manager(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Window, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Window, p_manager);
 
 	ktkWindowManager* p_window_manager =
 		dynamic_cast<ktkWindowManager*>(p_manager->Get_WindowManager());

@@ -38,26 +38,26 @@ void RegisterAllTests(void)
 
 bool InitializeModule_Core(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Engine_Config, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Memory, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Enum, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_API, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Math, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Casting, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Constants, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Console, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_FileSystem, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Log, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Format, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Profilers, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_OS, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Window_Manager, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Utility, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_ECS, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Input, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Main_Manager, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Engine_Config, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Memory, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Enum, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_API, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Math, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Casting, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Constants, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Defines, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Console, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Containers, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_FileSystem, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Log, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Format, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Profilers, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_OS, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Window_Manager, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Utility, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_ECS, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Input, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Main_Manager, p_manager);
 
 	RegisterCommands(p_manager);
 
@@ -66,7 +66,7 @@ bool InitializeModule_Core(ktkMainManager* p_manager)
 
 bool SerializeModule_Core(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Engine_Config, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_Engine_Config, p_manager);
 
 	return true;
 }
@@ -86,27 +86,27 @@ bool DeserializeModule_Core(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Enum, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Math, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_API, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Casting, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Constants, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Console, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_FileSystem, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Format, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Profilers, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_OS, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Window_Manager, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Log, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_ECS, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Input, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Utility, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Engine_Config, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Enum, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Math, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_API, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Casting, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Constants, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Defines, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Console, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Containers, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_FileSystem, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Format, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Profilers, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_OS, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Window_Manager, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Log, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_ECS, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Input, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Utility, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Engine_Config, p_manager);
 
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Main_Manager, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Memory, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Main_Manager, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Memory, p_manager);
 
 	return true;
 }

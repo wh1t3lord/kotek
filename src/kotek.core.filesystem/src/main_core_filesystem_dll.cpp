@@ -15,7 +15,7 @@ bool InitializeModule_Core_FileSystem(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_FileSystem_File_Text, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_FileSystem_File_Text, p_manager);
 
 	ktkFileSystem* p_instance = new ktkFileSystem();
 	p_instance->Initialize(p_manager->Get_EngineConfig());
@@ -27,21 +27,21 @@ bool InitializeModule_Core_FileSystem(ktkMainManager* p_manager)
 
 bool SerializeModule_Core_FileSystem(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_FileSystem_File_Text, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_FileSystem_File_Text, p_manager);
 
 	return true;
 }
 
 bool DeserializeModule_Core_FileSystem(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_Core_FileSystem_File_Text, p_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, CORE, DeserializeModule_Core_FileSystem_File_Text, p_manager);
 
 	return true;
 }
 
 bool ShutdownModule_Core_FileSystem(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_FileSystem_File_Text, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_FileSystem_File_Text, p_manager);
 
 	ktkFileSystem* p_instance =
 		dynamic_cast<ktkFileSystem*>(p_manager->GetFileSystem());

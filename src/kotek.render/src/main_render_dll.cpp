@@ -3,17 +3,6 @@
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
-#ifdef KOTEK_USE_RENDER_OPENGL
-	#include <kotek.render.gl/include/kotek_render_gl.h>
-#endif
-
-// TODO: preprocessor for enabling gles and for other renderers add pls
-#include <kotek.render.angle.gles23/include/kotek_render_angle_gles23.h>
-
-#ifdef KOTEK_USE_RENDER_VULKAN
-	#include <kotek.render.vk/include/kotek_render_vk.h>
-#endif
-
 #ifdef KOTEK_USE_RENDER_BGFX
 	#include <kotek.render.bgfx/include/kotek_render_bgfx.h>
 #endif
@@ -25,7 +14,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 {
 	// TODO: сделать выбор рендера
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Render_Shared, main_manager);
+	KOTEK_INVOKE_MODULE(INIT, RENDER, InitializeModule_Render_Shared, main_manager);
 
 	auto* p_engine_config = main_manager->Get_EngineConfig();
 
@@ -55,25 +44,12 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		}
 		// TODO: add directx
 	}
-	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine())
+	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine() ||
+		p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
 	{
-		KOTEK_MESSAGE(
-			"you pass command line to application for initializing {}",
-			Kotek::Core::helper::Translate_EngineSupportedRenderer(
-				p_engine_config->GetRendererVersionEnum()));
-		status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_GL,
-			main_manager, p_engine_config->GetRendererVersionEnum());
-	}
-	else if (p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
-	{
-#ifdef KOTEK_USE_RENDER_VULKAN
-		KOTEK_MESSAGE(
-			"you pass command line to application for initializing {}",
-			Kotek::Core::helper::Translate_EngineSupportedVulkanVersion(
-				p_engine_config->GetVulkanVersionFromCommandLine()));
-		status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_VK,
-			main_manager, p_engine_config->GetVulkanVersionFromCommandLine());
-#endif
+		KOTEK_ASSERT(false,
+			"OpenGL/Vulkan backends were removed (2026-07-22): use bgfx "
+			"(raster) or NRI (dx12/vk + ray tracing, planned)");
 	}
 	else
 	{
@@ -102,51 +78,31 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
 					kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser);
 
-		if (is_gl)
+		if (is_gl || is_vk)
 		{
-			status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_GL,
-				main_manager, p_engine_config->GetRendererVersionEnum());
-		}
-		else if (is_vk)
-		{
-#ifdef KOTEK_USE_RENDER_VULKAN
-			status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_VK,
-				main_manager, p_engine_config->GetVulkanVersionForLoading());
-#endif
+			KOTEK_ASSERT(false,
+				"OpenGL/Vulkan backends were removed (2026-07-22): bgfx is the "
+				"raster backend, NRI (dx12/vk + ray tracing) is planned");
 		}
 		else if (is_dx)
 		{
-			KOTEK_ASSERT(false, "not implemented");
+			KOTEK_ASSERT(false, "not implemented: waits for the NRI backend");
 		}
 		else if (is_gles)
 		{
 			bool isBGFX = p_engine_config->IsFeatureEnabled(
 				kun_core eEngineFeatureRendererVendor::kBGFX);
 
-			bool isANGLE = p_engine_config->IsFeatureEnabled(
-				kun_core eEngineFeatureRendererVendor::kANGLE);
-
 			if (isBGFX)
 			{
-				status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_BGFX,
-					main_manager, p_engine_config->GetRendererVersionEnum());
+				status = KOTEK_INVOKE_MODULE(INIT, RENDER,
+					InitializeModule_Render_BGFX, main_manager);
 			}
-			else if (isANGLE)
+			else
 			{
-				// todo: when vcpkg will support angle[vulkan] package delete
-				// this message below
-				KOTEK_MESSAGE_WARNING(
-					"don't use ANGLE for Windows as DX11, "
-					"because it was written bad and is not "
-					"efficient as Vulkan implementation for ANGLE");
-#ifdef KOTEK_USE_RENDER_ANGLE_GLES23
-				status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_ANGLE_GLES23,
-					main_manager, p_engine_config->GetRendererVersionEnum());
-#else
 				KOTEK_ASSERT(false,
-					"angle gles23 module is not built in this "
-					"configuration (KOTEK_CONFIGURATION_TYPE=minimal)");
-#endif
+					"only BGFX is supported as a vendor for OpenGL ES "
+					"(ANGLE was removed 2026-07-22)");
 			}
 		}
 		else
@@ -173,56 +129,15 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 			}
 			case Core::eEngineFeatureRenderer::
 				kEngine_Feature_Renderer_Software:
-			{
-				break;
-			}
 			case Core::eEngineFeatureRenderer::
 				kEngine_Feature_Renderer_Vulkan_SpecifiedByUser:
-			{
-#ifdef KOTEK_USE_RENDER_VULKAN
-				const auto& enum_vk_versions =
-					p_engine_config->GetFallbackRendererVersions();
-
-				for (auto version : enum_vk_versions)
-				{
-					is_inited =
-						KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_VK, main_manager, version);
-
-					if (is_inited)
-						break;
-				}
-#endif
-
-				break;
-			}
 			case Core::eEngineFeatureRenderer::
 				kEngine_Feature_Renderer_OpenGL_SpecifiedByUser:
-			{
-				const auto& enum_gl_versions =
-					p_engine_config->GetFallbackRendererVersions();
-
-				for (auto version : enum_gl_versions)
-				{
-					is_inited =
-						KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_GL, main_manager, version);
-
-					if (is_inited)
-						break;
-				}
-
-				break;
-			}
 			case Core::eEngineFeatureRenderer::
 				kEngine_Feature_Renderer_DirectX_SpecifiedByUser:
 			{
-				const auto& enum_dx_versions =
-					p_engine_config->GetFallbackRendererVersions();
-
-				for (auto version : enum_dx_versions)
-				{
-					KOTEK_ASSERT(false, "not implemented");
-				}
-
+				// software/vk/gl backends were removed (2026-07-22); directx
+				// waits for the NRI backend
 				break;
 			}
 			default:
@@ -263,15 +178,12 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 	{
 		// TODO: add DirectX here
 	}
-	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine())
+	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine() ||
+		p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
 	{
-		status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_GL, main_manager);
-	}
-	else if (p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
-	{
-#ifdef KOTEK_USE_RENDER_VULKAN
-		status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_VK, main_manager);
-#endif
+		KOTEK_ASSERT(false,
+			"OpenGL/Vulkan backends were removed (2026-07-22): use bgfx "
+			"(raster) or NRI (dx12/vk + ray tracing, planned)");
 	}
 	else
 	{
@@ -301,40 +213,30 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 					kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser);
 
 		if (is_gl)
+		if (is_gl || is_vk)
 		{
-			status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_GL, main_manager);
-		}
-		else if (is_vk)
-		{
-#ifdef KOTEK_USE_RENDER_VULKAN
-			status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_VK, main_manager);
-#endif
+			KOTEK_ASSERT(false,
+				"OpenGL/Vulkan backends were removed (2026-07-22): use bgfx "
+				"(raster) or NRI (dx12/vk + ray tracing, planned)");
 		}
 		else if (is_dx)
 		{
-			KOTEK_ASSERT(false, "not implemented");
+			KOTEK_ASSERT(false, "not implemented: waits for the NRI backend");
 		}
 		else if (is_gles)
 		{
 			bool isBGFX = p_engine_config->IsFeatureEnabled(
 				kun_core eEngineFeatureRendererVendor::kBGFX);
 
-			bool isANGLE = p_engine_config->IsFeatureEnabled(
-				kun_core eEngineFeatureRendererVendor::kANGLE);
-
 			if (isBGFX)
 			{
-				status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_BGFX, main_manager);
+				status = KOTEK_INVOKE_MODULE(SHUTDOWN, RENDER, ShutdownModule_Render_BGFX, main_manager);
 			}
-			else if (isANGLE)
+			else
 			{
-#ifdef KOTEK_USE_RENDER_ANGLE_GLES23
-				status = KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Render_ANGLE_GLES23, main_manager);
-#else
 				KOTEK_ASSERT(false,
-					"angle gles23 module is not built in this "
-					"configuration (KOTEK_CONFIGURATION_TYPE=minimal)");
-#endif
+					"only BGFX is supported as a vendor for OpenGL ES "
+					"(ANGLE was removed 2026-07-22)");
 			}
 		}
 		else

@@ -1,5 +1,7 @@
+#include <cstdio>
 #pragma once
 
+#include <cstdio>
 #include <kotek.core.api/include/kotek_api.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 #include <kotek.core.containers.unordered_map/include/kotek_core_containers_unordered_map.h>

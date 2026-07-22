@@ -124,6 +124,10 @@ constexpr const char* kConsoleCommandArg_Editor_ImGui = "--editor_imgui";
 /// @brief removes splash window on startup of application
 constexpr const char* kConsoleCommandArg_No_Splash = "--no_splash";
 
+/// @brief \~english runs the application for exactly N frames and then exits
+/// (smoke testing / CI): "--kotek_frames=300"; absent or 0 means unlimited
+constexpr const char* kConsoleCommandArg_Kotek_Frames = "--kotek_frames=";
+
 /**
  * Constant expresses that we specify width for our executable.
  *

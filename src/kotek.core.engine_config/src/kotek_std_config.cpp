@@ -5,7 +5,7 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 ktkFrameworkConfig::ktkFrameworkConfig(void) :
 	m_fs_priority_list{}, m_fs_features_flag{}, m_argc{-1},
-	m_argv{}, m_is_running{true},
+	m_argv{}, m_is_running{true}, m_frames_limit{0},
 	m_engine_feature_flags{eEngineFeature::kEngine_Feature_None
     },
 	m_engine_feature_render_flags{
@@ -791,6 +791,11 @@ bool ktkFrameworkConfig::IsApplicationWorking(void) const noexcept
 	return this->m_is_running;
 }
 
+kun_ktk uint32_t ktkFrameworkConfig::Get_FramesLimit(void) const noexcept
+{
+	return this->m_frames_limit;
+}
+
 void ktkFrameworkConfig::SetApplicationWorking(bool status
 ) noexcept
 {
@@ -855,6 +860,21 @@ void ktkFrameworkConfig::Parse_CommandLine(void) noexcept
 		KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT>(
 		this->m_argv, this->m_argv + this->m_argc
 	);
+
+	// --kotek_frames=N: smoke-test exit after N frames (0/absent = unlimited)
+	for (int i = 0; i < this->m_argc; ++i)
+	{
+		const char* p_argument = this->m_argv[i];
+		constexpr kun_ktk size_t _prefix_length = 15; // "--kotek_frames="
+
+		if (p_argument &&
+			strncmp(p_argument, "--kotek_frames=", _prefix_length) == 0)
+		{
+			this->m_frames_limit = static_cast<kun_ktk uint32_t>(
+				atoi(p_argument + _prefix_length));
+			break;
+		}
+	}
 }
 
 eEngineFeatureRendererVendor

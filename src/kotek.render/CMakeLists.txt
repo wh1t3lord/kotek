@@ -27,20 +27,13 @@ if (WIN32)
 endif()
 
 
-kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl)
 
 # TODO: Vulkan you implement in the last stage of development. First gl and gl without shaderc!
-kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.vk) 
 
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.bgfx)
 
-kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.software)
 
 # angle modules are only added when KOTEK_CONFIGURATION_TYPE is
 # not "minimal" (see kotek/CMakeLists.txt)
-if (TARGET kotek.render.angle.gles23)
-	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.angle.gles23)
-	target_compile_definitions(${PROJECT_NAME} PRIVATE KOTEK_USE_RENDER_ANGLE_GLES23)
-endif()
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render")

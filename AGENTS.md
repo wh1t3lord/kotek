@@ -228,8 +228,27 @@ owner machine: `Visual Studio 18 2026`.
 - `ktk::memory::expand/strndndup` stubs return nullptr without mimalloc.
 - `KOTEK_CPP_ASAN` genex check in `kotek/CMakeLists.txt` is broken.
 - `kotek.render.dx12` commented out; ANGLE modules only in non-minimal configs.
-- Interfaces in `kotek.core.api/kotek_api.h` are pure C++ (no C ABI) — binary-level
+- **Interfaces in `kotek.core.api/kotek_api.h` are pure C++ (no C ABI) — binary-level
   cross-compiler replaceability is not guaranteed (see validation notes, task K3).
+- **Runtime status (2026-07-22/23)**: `kotek.exe` boots from any cwd (json config
+  parses, `game.ktk` loads, bgfx D3D11 + render modules initialize, console
+  initializes). Fixes made this session: STD-mode `ktkJson::Get` was an empty stub
+  behind `#ifdef KOTEK_USE_BOOST_LIBRARY` (engine could never read nested config in
+  STD mode — now `KOTEK_USE_NOT_CUSTOM_LIBRARY`); `dll::shared_library` gained move
+  semantics (temporary `FreeLibrary`d the handle — `GetProcAddress` always failed);
+  `ktk::dll::program_location()` added (user library resolves next to the exe, not
+  cwd); 8 exception `throw`s in hybrid containers replaced by `KOTEK_ASSERT` (this
+  codebase is exception-free by policy; the leak tracker still `throw`s — see K9);
+  `KOTEK_INVOKE_MODULE` unified to ONE macro `(verb, ns, symbol, manager)` with a
+  uniform `bool(ktkMainManager*)` entry signature (bgfx init reads version from
+  engine config internally now). OPEN runtime issues: (a) the splash window is
+  created on a detached thread and can hang window init — bounded-wait mitigation
+  in place, proper fix = create windows on the main thread only; (b) SEGFAULT in
+  zircon's `RegisterConsole_Commands` on the FIRST `Register_Command` (store into
+  the console's command map — reproduces with both etl static and std dynamic maps;
+  object address sane; needs a native debugger to pin the exact instruction);
+  (c) `KOTEK_ASSERT` failure opens a MODAL CRT dialog in Debug — CI must run
+  Release or a non-modal assert handler.
 - ~130 micro-modules: fine-grained replaceability but heavy configure/IDE cost.
 - Recurring TODO clusters: `kotek.render.gl` buffer reallocations/sync,
   `kotek.core.containers` unimplemented `shared_mutex/semaphore`, `kotek.game` update
@@ -249,10 +268,10 @@ Status values: `open` / `in-progress` / `done` / `blocked` / `dropped(reason)`.
 | K6 | CMake command printing all kotek options + meaning (help) | open | e.g. `cmake -D KOTEK_HELP=ON` or custom target |
 | K7 | Short, laconic documentation of kotek concepts | open | explicitly LAST task |
 | K8 | AGENTS.md progress tracking | done (2026-07-21) | this file; keep updating |
-| K9 | Fix new/delete override situation (mimalloc problems; dead leak tracker) | open | see §8 |
+| K9 | Fix new/delete override situation (mimalloc problems; dead leak tracker) | in-progress | tracker made opt-in via `KOTEK_USE_MEMORY_TRACKER` (was silently on in Debug); its code `throw`s (violates the no-exceptions rule) and races under concurrent allocation — rework pending |
 | K10 | Deps UX: nuget (github.com/wh1t3lord/kotek-nuget), vcpkg-only, manual folder mode; flags to select; make manual mode friendly (no hand-typed path lists) | open | validate all three modes actually work |
-| K11 | Delete GAPI/render backends except bgfx; add NVIDIA NRI backend (kotek + zircon) | open | delete: gl/gles/angle/vk (+software? confirm); keep bgfx; new `kotek.render.nri` |
-| K12 | Final commit+push via `git acp "msg"` | blocked | ⚠ alias `acp` does NOT exist in git config — define it or use explicit add/commit/push; kotek is a submodule (commit there separately, then bump in zircon) |
+| K11 | Delete GAPI/render backends except bgfx; add NVIDIA NRI backend (kotek + zircon) | in-progress (2026-07-22) | DELETED: kotek.render.{gl,vk,software,angle.gles,angle.gles23,gl.glad,shared.gl,shared.vk,shared.dx} + zircon render/{gles3,vk}; bgfx kept & de-GL'd (raw GL calls/types removed from shared.bgfx/bgfx, agnostic `eRenderGraphBufferObject/Usage` added); defines/enum per-backend config modules KEPT for enum stability + NRI reuse; startup renderer routes to bgfx; NRI backend (dx12/vk + ray tracing) still to implement (`kotek.render.nri` + zircon passes, see Z5) |
+| K12 | Final commit+push via `git acp "msg"` | in-progress | alias now exists (verified); used for phase commits; kotek is a submodule (commit there first, then bump in zircon) |
 | K13 | ImGui: analyze multi-context support; design MT-safe usage | done (2026-07-22) | ANALYSIS: Dear ImGui supports multiple ImGuiContexts, but the current-context pointer (GImGui) is a plain global, NOT thread-local — concurrent multi-context use across threads is unsafe by default. Only two safe models, both now supported: (1) single-UI-thread (default, unchanged); (2) context-per-thread + serialization. IMPLEMENTED: `ktkIImguiContextManager` (kotek.core.api) + `ktkImguiContextManager` (kotek.ui.imgui, owned by the wrapper, exposed via `ktkIImguiWrapper::Get_ContextManager`); per-thread `CreateContextForThread`/`BindThreadContext` (thread_local binding), `Lock`/`Unlock` (mutex + SetCurrentContext to the caller's context), RAII `ktkImguiLockGuard` in `kotek_ui_imgui_context_manager.h`, debug asserts on unbound/no-context use; editor imgui pass adopts its context as the default. Zircon editor/game sessions should map 1:1 to named contexts when MT UI is enabled |
 | K14 | Video: dav1d as default backend behind `ktkIVideoPlayer*`; document that own codec impl is out of scope; design user-backend hook | open | current: `kotek.ui.videoplayer[.avif]` |
 | K15 | Decide whether kotek keeps render backend projects at all (vs. zircon-only); position kotek as standardization layer | open | see §10 |

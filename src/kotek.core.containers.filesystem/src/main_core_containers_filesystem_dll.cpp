@@ -15,7 +15,7 @@ bool InitializeModule_Core_Containers_FileSystem(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_FileSystem_Path, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Containers_FileSystem_Path, p_manager);
 
 	return true;
 }
@@ -36,7 +36,7 @@ bool DeserializeModule_Core_Containers_FileSystem(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core_Containers_FileSystem(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_FileSystem_Path, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Containers_FileSystem_Path, p_manager);
 
 	return true;
 }

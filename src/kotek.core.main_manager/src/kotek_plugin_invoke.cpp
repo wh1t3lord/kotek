@@ -162,23 +162,6 @@ bool ktkPluginInvokeInit(ktkMainManager* p_manager, const char* p_init_symbol_na
 	return plugin_invoke(p_manager, p_init_symbol_name, true);
 }
 
-bool ktkPluginInvokeInitVersion(
-	ktkMainManager* p_manager, const char* p_init_symbol_name,
-	unsigned version)
-{
-	const ktkPluginModuleDesc* p_desc = plugin_find(p_init_symbol_name, true);
-
-	if (p_desc == nullptr)
-		return false;
-
-	void* p_function = plugin_resolve_in_dll(p_desc, p_init_symbol_name);
-
-	if (p_function == nullptr)
-		return false;
-
-	return reinterpret_cast<ktkPluginModuleEntryVersion_t>(
-		p_function)(p_manager, version);
-}
 
 bool ktkPluginInvokeShutdown(
 	ktkMainManager* p_manager, const char* p_shutdown_symbol_name)
@@ -223,10 +206,6 @@ KOTEK_BEGIN_NAMESPACE_CORE
 // these are never invoked; provided only so the symbols exist if someone
 // calls them explicitly.
 bool ktkPluginInvokeInit(ktkMainManager*, const char*) { return false; }
-bool ktkPluginInvokeInitVersion(ktkMainManager*, const char*, unsigned)
-{
-	return false;
-}
 bool ktkPluginInvokeShutdown(ktkMainManager*, const char*) { return false; }
 bool ktkPluginInvokeSerialize(ktkMainManager*, const char*) { return false; }
 bool ktkPluginInvokeDeserialize(ktkMainManager*, const char*) { return false; }

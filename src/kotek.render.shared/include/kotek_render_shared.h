@@ -1,17 +1,5 @@
 #pragma once
 
-#ifdef KOTEK_USE_OPENGL
-	#include <kotek.render.shared.gl/include/kotek_render_shared_gl.h>
-#endif
-
-#ifdef KOTEK_USE_VULKAN
-	#include <kotek.render.shared.vk/include/kotek_render_shared_vk.h>
-#endif
-
-#ifdef KOTEK_USE_DIRECTX
-	#include <kotek.render.shared.dx/include/kotek_render_shared_dx.h>
-#endif
-
 #ifdef KOTEK_USE_BGFX
 	#include <kotek.render.shared.bgfx/include/kotek_render_shared_bgfx.h>
 #endif

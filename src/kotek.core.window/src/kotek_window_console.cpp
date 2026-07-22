@@ -430,9 +430,13 @@ void ktkWindowConsole::Initialize(
 			p_impl->p_fs = p_fs;
 			p_impl->p_owner = this;
 
-			KOTEK_ASSERT(false, "implement");
-			/* todo: re-write using actual filesystem and
-			   streaming handle to file
+			// todo: re-write using actual filesystem and streaming handle to
+			// file — the log-file reader is not implemented yet, the console
+			// works without it (Update skips an invalid handle)
+			KOTEK_MESSAGE_WARNING(
+				"window console log-file reader is not implemented, "
+				"continuing without it");
+			/*
 			            ktkResourceFileStreamRequest request;
 
 			            request.path_to_file =

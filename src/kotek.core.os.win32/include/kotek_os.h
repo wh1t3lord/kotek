@@ -42,8 +42,6 @@
 		#endif
 	#endif
 
-	#include <kotek.render.gl.glad/include/kotek_render_gl_glad.h>
-
 	#ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
 		#define GLFW_INCLUDE_NONE
 		#include <GLFW/glfw3.h>

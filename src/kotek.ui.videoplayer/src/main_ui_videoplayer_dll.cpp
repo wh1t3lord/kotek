@@ -14,26 +14,26 @@ bool InitializeModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
 		p_main_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_UI_VideoPlayer_AVIF, p_main_manager);
+	KOTEK_INVOKE_MODULE(INIT, UI, InitializeModule_UI_VideoPlayer_AVIF, p_main_manager);
 
 	return true;
 }
 bool ShutdownModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_UI_VideoPlayer_AVIF, p_main_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, UI, ShutdownModule_UI_VideoPlayer_AVIF, p_main_manager);
 
 
 	return true;
 }
 bool SerializeModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
 {
-	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_UI_VideoPlayer_AVIF, p_main_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, UI, SerializeModule_UI_VideoPlayer_AVIF, p_main_manager);
 
 	return true;
 }
 bool DeserializeModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
 {
-	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_UI_VideoPlayer_AVIF, p_main_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, UI, DeserializeModule_UI_VideoPlayer_AVIF, p_main_manager);
 
 
 	return true;

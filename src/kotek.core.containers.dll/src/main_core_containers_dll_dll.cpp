@@ -10,6 +10,47 @@ namespace dll
 {
 	shared_library::shared_library() : p_lib{} {}
 
+	shared_library::shared_library(shared_library&& other) noexcept :
+		p_lib{other.p_lib}
+	{
+		other.p_lib = nullptr;
+	}
+
+	shared_library& shared_library::operator=(
+		shared_library&& other) noexcept
+	{
+		if (this != &other)
+		{
+			if (this->p_lib)
+			{
+				this->unload();
+			}
+
+			this->p_lib = other.p_lib;
+			other.p_lib = nullptr;
+		}
+
+		return *this;
+	}
+
+	std::filesystem::path program_location()
+	{
+	#ifdef KOTEK_USE_PLATFORM_WINDOWS
+		char path_buffer[MAX_PATH];
+		DWORD written = GetModuleFileNameA(nullptr, path_buffer, MAX_PATH);
+		return std::filesystem::path(std::string(path_buffer, written));
+	#else
+		// todo: implement per-platform (readlink /proc/self/exe on linux,
+		// _NSGetExecutablePath on macos)
+		#include <unistd.h>
+		char path_buffer[4096] = {};
+		ssize_t written =
+			readlink("/proc/self/exe", path_buffer, sizeof(path_buffer) - 1);
+		return std::filesystem::path(
+			std::string(path_buffer, written > 0 ? written : 0));
+	#endif
+	}
+
 	shared_library::shared_library(const char* p_path_to_file) :
 		p_lib{}
 	{

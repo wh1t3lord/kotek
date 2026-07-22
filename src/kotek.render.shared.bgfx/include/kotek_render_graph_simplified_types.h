@@ -52,21 +52,41 @@ private:
 	ktk::uint32_t m_format;
 };
 
+/// \~english @brief backend-agnostic buffer target (replaces the former GL
+/// constants GL_*_BUFFER; the render backends were removed 2026-07-22 and
+/// shared types must not carry any GAPI types)
+enum class eRenderGraphBufferObject : ktk::uint32_t
+{
+	kUniform = 0,
+	kVertex,
+	kIndex,
+	kStorage
+};
+
+/// \~english @brief backend-agnostic buffer usage (replaces the former GL
+/// constants GL_*_DRAW)
+enum class eRenderGraphBufferUsage : ktk::uint32_t
+{
+	kStatic = 0,
+	kDynamic
+};
+
 // todo: probably deleete it!
 class ktkRenderGraphBufferInfo
 {
 public:
-	ktkRenderGraphBufferInfo(GLenum type, GLenum usage,
-		const ktk::cstring& uniform_block_name, GLuint binding_point,
+	ktkRenderGraphBufferInfo(eRenderGraphBufferObject type,
+		eRenderGraphBufferUsage usage,
+		const ktk::cstring& uniform_block_name, ktk::uint32_t binding_point,
 		ktk::size_t memory_for_allocation, ktk::size_t align_of_memory,
 		const ktk::ustring& shader_name, const ktk::cstring& buffer_name);
 
 	ktkRenderGraphBufferInfo(void);
 	~ktkRenderGraphBufferInfo(void);
 
-	GLenum Get_BufferObject(void) const noexcept;
-	GLenum Get_Usage(void) const noexcept;
-	GLuint Get_BindingPointIndex(void) const noexcept;
+	eRenderGraphBufferObject Get_BufferObject(void) const noexcept;
+	eRenderGraphBufferUsage Get_Usage(void) const noexcept;
+	ktk::uint32_t Get_BindingPointIndex(void) const noexcept;
 	ktk::size_t Get_Memory(void) const noexcept;
 	ktk::size_t Get_AlignOfMemory(void) const noexcept;
 
@@ -75,18 +95,16 @@ public:
 	const ktk::cstring& Get_BufferName(void) const noexcept;
 
 private:
-	/// \~english @brief buffer object in OpenGL see this
-	/// https://www.khronos.org/opengl/wiki/Buffer_Object#:~:text=Buffer%20Objects%20are%20OpenGL%20Objects%20that%20store%20an%20array%20of%20unformatted%20memory%20allocated%20by%20the%20OpenGL%20context%20(AKA%20the%20GPU).%20These%20can%20be%20used%20to%20store%20vertex%20data%2C%20pixel%20data%20retrieved%20from%20images%20or%20the%20framebuffer%2C%20and%20a%20variety%20of%20other%20things.
-	GLenum m_buffer_object;
+	/// \~english @brief backend-agnostic buffer target (uniform, vertex,
+	/// index, storage)
+	eRenderGraphBufferObject m_buffer_object;
 
-	/// \~english @brief you specify usage of this field like GL_STATIC_DRAW
-	/// and etc see this
-	/// https://www.khronos.org/opengl/wiki/Buffer_Object#:~:text=There%20are%20three%20hints%20for%20how%20frequently%20the%20user%20will%20be%20changing%20the%20buffer%27s%20data.
-	GLenum m_usage;
+	/// \~english @brief backend-agnostic buffer usage (static or dynamic)
+	eRenderGraphBufferUsage m_usage;
 
 	/// \~english @brief this is what you write in layout(std140, binding=index)
 	/// where index is represented by this field (m_binding_point_index)
-	GLuint m_binding_point_index;
+	ktk::uint32_t m_binding_point_index;
 
 	/// \~english @brief how much memory should be allocated to this
 	/// instance

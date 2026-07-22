@@ -148,7 +148,6 @@ else()
 	message(FATAL_ERROR "provide implementation for custom folder and compiled by user")
 endif()
 
-kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.gl.glad)
 
 if ("${KOTEK_VULKAN}" STREQUAL "ON")
 	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Vulkan::Vulkan)

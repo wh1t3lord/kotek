@@ -130,19 +130,11 @@ namespace Game
 
 		kun_kotek static_path_t path_to_user_dll;
 		{
-	#ifdef KOTEK_USE_BOOST_LIBRARY
+			// resolve the user library next to the running executable, not
+			// the current working directory — kotek.exe must run from anywhere
 			const auto& root_path =
 				ktk::dll::program_location().parent_path();
-			path_to_user_dll = root_path.c_str();
-	#elif defined(KOTEK_USE_STD_LIBRARY)
-			KUN_KOTEK static_path_t root_path;
-			p_main_manager->GetFileSystem()->Make_Path(
-				root_path,
-				KUN_KOTEK KUN_CORE
-					eFolderIndex::kFolderIndex_Root
-			);
-			path_to_user_dll = root_path.c_str();
-	#endif
+			path_to_user_dll = root_path.string().c_str();
 			path_to_user_dll /=
 				p_config->Get_UserLibrary_Name();
 		}
@@ -568,8 +560,7 @@ namespace Engine
 	{
 		// TODO: remember status from every calling you can't
 		// return hardcoded true result...
-		KOTEK_INVOKE_MODULE_SERIALIZE_NS(
-			kun_core, SerializeModule_Core, p_main_manager);
+		KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core, p_main_manager);
 
 		return true;
 	}
@@ -585,8 +576,7 @@ namespace Engine
 		}
 
 		// TODO: remember status from every calling
-		KOTEK_INVOKE_MODULE_DESERIALIZE_NS(
-			kun_core, DeserializeModule_Core, p_manager);
+		KOTEK_INVOKE_MODULE(DESERIALIZE, CORE, DeserializeModule_Core, p_manager);
 
 		return true;
 	}
@@ -671,9 +661,26 @@ namespace Engine
 			);
 			thread_splash.detach();
 
-			while (p_window_splash->Is_Initialized() == false ||
-			       p_window_splash->Is_Show() == false)
+			// the splash runs on its own thread; wait for it with a bound —
+			// if it fails to come up (no display, headless, init failure)
+			// continue without it instead of spinning forever
 			{
+				kun_ktk uint32_t splash_wait_iterations{};
+
+				while ((p_window_splash->Is_Initialized() == false ||
+					       p_window_splash->Is_Show() == false) &&
+				       splash_wait_iterations < 100000000)
+				{
+					++splash_wait_iterations;
+				}
+
+				if (p_window_splash->Is_Initialized() == false ||
+					p_window_splash->Is_Show() == false)
+				{
+					KOTEK_MESSAGE_WARNING(
+						"splash window failed to initialize/show, "
+						"continuing without it (headless run?)");
+				}
 			}
 		}
 
@@ -683,7 +690,7 @@ namespace Engine
 			p_main_manager->Get_Splash()->Set_Progress();
 		}
 
-		KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core, p_main_manager);
+		KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core, p_main_manager);
 
 		// TODO: must gurantee that write/read operations are
 		// not in InitializeStage, InitializeStage only
@@ -697,7 +704,7 @@ namespace Engine
 
 		kun_game InitializeModule_Game(p_main_manager);
 
-		KOTEK_INVOKE_MODULE_INIT_NS(kun_ui, InitializeModule_UI, p_main_manager);
+		KOTEK_INVOKE_MODULE(INIT, UI, InitializeModule_UI, p_main_manager);
 
 #ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 		if (p_user_callback_initialize_render_from_game_library)
@@ -768,8 +775,8 @@ namespace Engine
 		Serialize_Engine(p_main_manager);
 
 		kun_game ShutdownModule_Game(p_main_manager);
-		KOTEK_INVOKE_MODULE_SHUTDOWN_NS(kun_ui, ShutdownModule_UI, p_main_manager);
-		KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core, p_main_manager);
+		KOTEK_INVOKE_MODULE(SHUTDOWN, UI, ShutdownModule_UI, p_main_manager);
+		KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core, p_main_manager);
 
 		return true;
 	}

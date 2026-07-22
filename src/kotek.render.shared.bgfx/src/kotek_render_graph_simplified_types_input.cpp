@@ -65,9 +65,11 @@ void ktkRenderGraphSimplifiedStorageInput::Add_Buffer(
 	KOTEK_ASSERT(shader_name.empty() == false,
 		"we can't detect to what shader you want to allocate the buffer!");
 
-	KOTEK_ASSERT(info_buffer.Get_BufferObject() != GL_ARRAY_BUFFER,
+	KOTEK_ASSERT(
+		info_buffer.Get_BufferObject() != eRenderGraphBufferObject::kVertex,
 		"you must not pass this thing here");
-	KOTEK_ASSERT(info_buffer.Get_BufferObject() != GL_ELEMENT_ARRAY_BUFFER,
+	KOTEK_ASSERT(
+		info_buffer.Get_BufferObject() != eRenderGraphBufferObject::kIndex,
 		"you must not pass this thing here");
 
 	auto& map_buffer_name_and_info = this->m_input_buffers[shader_name];

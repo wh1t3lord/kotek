@@ -28,8 +28,8 @@ public:
 	ktkBufferModule(void);
 	~ktkBufferModule(void);
 
-	GLuint Get_Buffer(void) const noexcept;
-	GLenum Get_BufferObjectType(void) const noexcept;
+	ktk::uint32_t Get_Buffer(void) const noexcept;
+	ktk::uint32_t Get_BufferObjectType(void) const noexcept;
 
 private:
 #ifdef KOTEK_DEBUG

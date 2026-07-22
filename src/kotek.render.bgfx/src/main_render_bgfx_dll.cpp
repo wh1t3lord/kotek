@@ -5,10 +5,11 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
-bool InitializeModule_Render_BGFX(kun_core ktkMainManager* p_main_manager,
-	kun_core eEngineSupportedRenderer version)
+bool InitializeModule_Render_BGFX(kun_core ktkMainManager* p_main_manager)
 {
 	auto* p_engine_config = p_main_manager->Get_EngineConfig();
+
+	auto version = p_engine_config->GetRendererVersionEnum();
 
 	p_engine_config->SetFeatureStatus(version, true);
 

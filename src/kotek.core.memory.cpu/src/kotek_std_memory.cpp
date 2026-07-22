@@ -8,7 +8,10 @@
 		#include <mimalloc-new-delete.h>
 	#else
 
-		#ifdef KOTEK_DEBUG
+	#ifdef KOTEK_USE_MEMORY_TRACKER
+			// opt-in only: the custom new/delete leak tracker (shared-memory
+			// counter + stack capture per allocation) — historically caused
+			// crashes under concurrent allocation (2026-07-22, K9)
 			#define __PLACEMENT_NEW_INLINE
 			#include <unordered_map>
 			#include <vector>

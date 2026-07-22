@@ -15,16 +15,16 @@ bool InitializeModule_Core_Enum(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Enum_Core, p_manager);
-	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Enum_Render, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Enum_Core, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Enum_Render, p_manager);
 
 	return true;
 }
 
 bool ShutdownModule_Core_Enum(ktkMainManager* p_manager)
 {
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Enum_Core, p_manager);
-	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Enum_Render, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Enum_Core, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Enum_Render, p_manager);
 
 	return true;
 }
