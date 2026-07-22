@@ -2,6 +2,7 @@
 #include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include "../include/kotek_engine.h"
 #include "../include/kotek_game.h"
+#include "../include/kotek_window_splash.h"
 #include <kotek.render/include/kotek_render.h>
 
 #ifdef KOTEK_DEBUG
@@ -567,7 +568,8 @@ namespace Engine
 	{
 		// TODO: remember status from every calling you can't
 		// return hardcoded true result...
-		kun_core SerializeModule_Core(p_main_manager);
+		KOTEK_INVOKE_MODULE_SERIALIZE_NS(
+			kun_core, SerializeModule_Core, p_main_manager);
 
 		return true;
 	}
@@ -583,7 +585,8 @@ namespace Engine
 		}
 
 		// TODO: remember status from every calling
-		kun_core DeserializeModule_Core(p_manager);
+		KOTEK_INVOKE_MODULE_DESERIALIZE_NS(
+			kun_core, DeserializeModule_Core, p_manager);
 
 		return true;
 	}

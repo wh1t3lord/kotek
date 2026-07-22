@@ -1,4 +1,5 @@
 #include "../include/kotek_core_defines_static_os.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
@@ -14,9 +15,9 @@ bool InitializeModule_Core_Defines_Static_OS(ktkMainManager* p_manager)
 	}
 
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-    InitializeModule_Core_Defines_Static_OS_Windows(p_manager);
+    KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_OS_Windows, p_manager);
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
-    InitializeModule_Core_Defines_Static_OS_Linux(p_manager);
+    KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_OS_Linux, p_manager);
 #endif
 
 	return true;
@@ -25,9 +26,9 @@ bool InitializeModule_Core_Defines_Static_OS(ktkMainManager* p_manager)
 bool ShutdownModule_Core_Defines_Static_OS(ktkMainManager* p_manager)
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	ShutdownModule_Core_Defines_Static_OS_Windows(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_OS_Windows, p_manager);
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
-	ShutdownModule_Core_Defines_Static_OS_Linux(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_OS_Linux, p_manager);
 #endif
 
 	return true;

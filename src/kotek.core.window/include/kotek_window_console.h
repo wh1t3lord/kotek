@@ -17,7 +17,7 @@ KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 /// @brief GUI implemenetation based on OS's GUI
-class ktkWindowConsole
+class ktkWindowConsole : public ktkIWindowConsole
 {
 public:
 	ktkWindowConsole();
@@ -28,12 +28,12 @@ public:
 	void Initialize(ktkIWindow* p_window, ktkIFileSystem* p_manager,
 		ktkIInput* p_input, ktkILogger* p_logger, ktkIConsole* p_console,
 		int imgui_mainmenubar_height,
-		const ktk_filesystem_path& full_path_to_log_file);
-	void Shutdown();
-	void Update();
+		const ktk_filesystem_path& full_path_to_log_file) override;
+	void Shutdown() override;
+	void Update() override;
 
-	void Show();
-	void Hide();
+	void Show() override;
+	void Hide() override;
 
 private:
 	void Impl_ShowOrHide(bool show);

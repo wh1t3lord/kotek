@@ -35,9 +35,10 @@ public:
 	/// <returns></returns>
 	void CloseWindow(void) noexcept;
 	void ShowWindow(void) noexcept;
-	void HideWindow(void) noexcept;
+	void HideWindow(void) noexcept override;
 
-	void RegisterUserMainManager(Core::ktkMainManager* p_manager) noexcept;
+	void RegisterUserMainManager(
+		Core::ktkMainManager* p_manager) noexcept override;
 
 	int GetWidth(void) const noexcept override;
 	int GetHeight(void) const noexcept override;

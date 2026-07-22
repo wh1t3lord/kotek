@@ -2,6 +2,8 @@
 
 #include "kotek_render_format.h"
 #include "kotek_render_data_types.h"
+#include "kotek_render_graph_simplified.h"
+#include "kotek_render_graph_simplified_render_pass.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE

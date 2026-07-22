@@ -29,6 +29,8 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_UI_IMGUI SHUTDOWN Shutdo
 	"include/imstb_rectpack.h"
 	"include/imstb_textedit.h"
 	"include/imstb_truetype.h"
+	"include/kotek_ui_imgui_context_manager.h"
+	"src/kotek_ui_imgui_context_manager.cpp"
 	"src/imgui_impl_dx9.cpp"
 	"src/imgui_impl_dx10.cpp"
 	"src/imgui_impl_dx11.cpp"

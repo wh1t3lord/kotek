@@ -1,7 +1,7 @@
 #include "../include/kotek_render_resource_manager.h"
 #include "../include/kotek_render_texture_manager.h"
-#include "../include/kotek_render_shader_manager.h"
-#include "../include/kotek_render_geometry_manager.h"
+#include <kotek.render.shared.gl/include/kotek_render_shader_manager.h>
+#include <kotek.render.shared.gl/include/kotek_render_geometry_manager.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
@@ -215,19 +215,6 @@ namespace gl
 	) const noexcept
 	{
 		return this->m_p_render_manager_texture;
-	}
-
-	ktkRenderShaderManager*
-	ktkRenderResourceManager::Get_ManagerShader(void
-	) const noexcept
-	{
-		return this->m_p_render_manager_shader;
-	}
-	ktkRenderGeometryManager*
-	ktkRenderResourceManager::Get_ManagerGeometry(void
-	) const noexcept
-	{
-		return this->m_p_render_manager_geometry;
 	}
 
 	ktkRenderStats* ktkRenderResourceManager::Get_Statistic(

@@ -15,34 +15,6 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
-// TODO: create wrapper for std::variant!!!
-using console_command_variant_t = std::variant<
-	kun_ktk int64_t,
-	kun_ktk int32_t,
-	kun_ktk int16_t,
-	kun_ktk int8_t,
-	kun_ktk uint64_t,
-	kun_ktk uint32_t,
-	kun_ktk uint16_t,
-	kun_ktk uint8_t,
-	kun_ktk entity_t,
-	ktk_cstring<1024>,
-	ktk_cstring<512>,
-	ktk_cstring<256>,
-	ktk_cstring<128>,
-	ktk_cstring<64>,
-	ktk_cstring<32>,
-	ktk_cstring<16>,
-	ktk_cstring<8>,
-	ktk_cstring<4>,
-	ktk_cstring<2>,
-	ktk_cstring<1>,
-	ktk_cstring<2048>,
-	kun_kotek static_path_t,
-	const char*,
-	ktk_cstring_view,
-	std::monostate>;
-
 static_assert(
 	is_in_variant_v<
 		kun_ktk enum_base_t,
@@ -56,14 +28,6 @@ static_assert(
 		console_command_variant_t>,
 	"you didn't register this type in variant"
 );
-
-using console_command_base_t = ktk_vector<
-	console_command_variant_t,
-	KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>;
-
-using console_command_args_t = const console_command_base_t&;
-using console_command_signature_function_t =
-	bool(console_command_args_t);
 
 using console_command_t =
 	kun_ktk ivfunction<console_command_variant_t, bool>*;
@@ -120,16 +84,16 @@ public:
 	void Push_Command(
 		ktk::enum_base_t id,
 		ktk::console_command_args_t data = {}
-	) noexcept;
+	) noexcept override;
 	void Execute_Command(
 		ktk::enum_base_t id,
 		ktk::console_command_args_t data = {}
-	) noexcept;
+	) noexcept override;
 
 	bool Push_Command(const char* p_text) override;
 	bool Execute_Command(const char* p_text) override;
 
-	void Flush(void);
+	void Flush(void) override;
 
 private:
 	bool Parse_ConsoleCommandAsString(

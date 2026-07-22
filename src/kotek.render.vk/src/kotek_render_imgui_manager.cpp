@@ -31,22 +31,38 @@ namespace Kotek
 			void kotek_render_imgui_manager::initialize(
 				Core::ktkMainManager& main_manager) noexcept
 			{
-				IMGUI_CHECKVERSION();
-				ImGui::CreateContext();
+				this->m_p_imgui_wrapper = main_manager.Get_ImguiWrapper();
 
-				auto& io = ImGui::GetIO();
+				KOTEK_ASSERT(this->m_p_imgui_wrapper,
+					"kotek.ui.imgui must register an imgui wrapper before the "
+					"vk imgui manager initializes");
+
+				if (this->m_p_imgui_wrapper == nullptr)
+					return;
+
+				this->m_p_imgui_wrapper->DebugCheckVersionAndDataLayout(
+					IMGUI_VERSION,
+					sizeof(ImGuiIO),
+					sizeof(ImGuiStyle),
+					sizeof(ImVec2),
+					sizeof(ImVec4),
+					sizeof(ImDrawVert),
+					sizeof(ImDrawIdx));
+				this->m_p_imgui_wrapper->CreateContext();
+
+				auto& io = this->m_p_imgui_wrapper->GetIO();
 
 				io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 #ifdef KOTEK_USE_IMGUI_DOCKING
 				io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
 #endif
 
-				ImGui::StyleColorsDark();
+				this->m_p_imgui_wrapper->StyleColorsDark();
 
 #ifdef KOTEK_USE_IMGUI_DOCKING
 				if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
 				{
-					ImGuiStyle& style = ImGui::GetStyle();
+					ImGuiStyle& style = this->m_p_imgui_wrapper->GetStyle();
 
 					style.WindowRounding = 0.0f;
 					style.Colors[ImGuiCol_WindowBg].w = 1.0f;
@@ -73,11 +89,14 @@ namespace Kotek
 			void kotek_render_imgui_manager::shutdown(
 				Core::ktkIRenderDevice* p_raw_device) noexcept
 			{
-				ImGui_ImplVulkan_Shutdown();
+				if (this->m_p_imgui_wrapper)
+				{
+					this->m_p_imgui_wrapper->ImGui_ImplVulkan_Shutdown();
 
-				ImGui_ImplGlfw_Shutdown();
+					this->m_p_imgui_wrapper->ImGui_ImplGlfw_Shutdown();
 
-				ImGui::DestroyContext();
+					this->m_p_imgui_wrapper->DestroyContext();
+				}
 
 				ktkRenderDevice* p_render_device =
 					static_cast<ktkRenderDevice*>(p_raw_device);
@@ -97,9 +116,9 @@ namespace Kotek
 				KOTEK_ASSERT(this->m_p_pipeline,
 					"you must create pipeline before call the draw method!");
 
-				ImGui::Render();
+				this->m_p_imgui_wrapper->Render();
 
-				auto* p_draw_data = ImGui::GetDrawData();
+				auto* p_draw_data = this->m_p_imgui_wrapper->GetDrawData();
 
 				char* p_verts = nullptr;
 				char* p_indecies = nullptr;
@@ -152,8 +171,8 @@ namespace Kotek
 
 				{
 					float L = 0.0f;
-					float R = ImGui::GetIO().DisplaySize.x;
-					float B = ImGui::GetIO().DisplaySize.y;
+					float R = this->m_p_imgui_wrapper->GetIO().DisplaySize.x;
+					float B = this->m_p_imgui_wrapper->GetIO().DisplaySize.y;
 					float T = 0.0f;
 					float mvp[4][4] = {
 						{2.0f / (R - L), 0.0f, 0.0f, 0.0f},
@@ -169,9 +188,10 @@ namespace Kotek
 				VkViewport viewport;
 
 				viewport.x = 0;
-				viewport.y = ImGui::GetIO().DisplaySize.y;
-				viewport.width = ImGui::GetIO().DisplaySize.x;
-				viewport.height = -(ImGui::GetIO().DisplaySize.y);
+				viewport.y = this->m_p_imgui_wrapper->GetIO().DisplaySize.y;
+				viewport.width = this->m_p_imgui_wrapper->GetIO().DisplaySize.x;
+				viewport.height =
+					-(this->m_p_imgui_wrapper->GetIO().DisplaySize.y);
 				viewport.minDepth = 0.0f;
 				viewport.maxDepth = 1.0f;
 
@@ -377,7 +397,8 @@ namespace Kotek
 				ktk::uint8_t* p_data = nullptr;
 				int width, height;
 
-				ImGui::GetIO().Fonts->GetTexDataAsRGBA32(
+				this->m_p_imgui_wrapper->FontAtlas_GetTexDataAsRGBA32(
+					this->m_p_imgui_wrapper->GetIO().Fonts,
 					&p_data, &width, &height);
 
 				VkImageCreateInfo info = {};
@@ -509,7 +530,8 @@ namespace Kotek
 				int width, height;
 				ktk::uint8_t* p_data;
 
-				ImGui::GetIO().Fonts->GetTexDataAsRGBA32(
+				this->m_p_imgui_wrapper->FontAtlas_GetTexDataAsRGBA32(
+					this->m_p_imgui_wrapper->GetIO().Fonts,
 					&p_data, &width, &height);
 
 				region.imageSubresource.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
@@ -547,13 +569,15 @@ namespace Kotek
 			void kotek_render_imgui_manager::writeDataToSuballocatedPartOfHeap(
 				ktkRenderResourceManager* p_render_resource_manager) noexcept
 			{
-				ImGui::GetIO().Fonts->SetTexID(
+				this->m_p_imgui_wrapper->FontAtlas_SetTexID(
+					this->m_p_imgui_wrapper->GetIO().Fonts,
 					reinterpret_cast<ImTextureID>(this->m_p_image));
 
 				ktk::uint8_t* p_data;
 				int width, height;
 
-				ImGui::GetIO().Fonts->GetTexDataAsRGBA32(
+				this->m_p_imgui_wrapper->FontAtlas_GetTexDataAsRGBA32(
+					this->m_p_imgui_wrapper->GetIO().Fonts,
 					&p_data, &width, &height);
 
 				kotek_render_upload_heap* p_heap =

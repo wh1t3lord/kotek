@@ -1,13 +1,14 @@
 #include "../include/kotek_core_types.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
 bool InitializeModule_Core_Types(ktkMainManager* p_manager)
 {
-	InitializeModule_Core_Types_Char(p_manager);
-	InitializeModule_Core_Types_Numerics(p_manager);
-	InitializeModule_Core_Types_String(p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Types_Char, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Types_Numerics, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Types_String, p_manager);
 
 	return true;
 }
@@ -32,9 +33,9 @@ bool DeserializeModule_Core_Types(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core_Types(ktkMainManager* p_manager)
 {
-	ShutdownModule_Core_Types_Char(p_manager);
-	ShutdownModule_Core_Types_Numerics(p_manager);
-	ShutdownModule_Core_Types_String(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Types_Char, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Types_Numerics, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Types_String, p_manager);
 
 	return true;
 }

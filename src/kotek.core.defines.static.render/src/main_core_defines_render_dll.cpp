@@ -1,4 +1,5 @@
 #include "../include/kotek_core_defines_render.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
@@ -15,19 +16,19 @@ bool InitializeModule_Core_Defines_Static_Render(ktkMainManager* p_manager)
 	}
 
 #ifdef KOTEK_USE_DIRECTX
-	InitializeModule_Core_Defines_Static_Render_DirectX(p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_Render_DirectX, p_manager);
 #endif
 
 #ifdef KOTEK_USE_OPENGL
-	InitializeModule_Core_Defines_Static_Render_OpenGL(p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_Render_OpenGL, p_manager);
 #endif
 
 #ifdef KOTEK_USE_VULKAN
-	InitializeModule_Core_Defines_Static_Render_Vulkan(p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_Render_Vulkan, p_manager);
 #endif
 
 #ifdef KOTEK_USE_BGFX
-	InitializeModule_Core_Defines_Static_Render_BGFX(p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Defines_Static_Render_BGFX, p_manager);
 #endif
 
 	return true;
@@ -36,19 +37,19 @@ bool InitializeModule_Core_Defines_Static_Render(ktkMainManager* p_manager)
 bool ShutdownModule_Core_Defines_Static_Render(ktkMainManager* p_manager)
 {
 #ifdef KOTEK_USE_DIRECTX
-	ShutdownModule_Core_Defines_Static_Render_DirectX(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_Render_DirectX, p_manager);
 #endif
 
 #ifdef KOTEK_USE_OPENGL
-	ShutdownModule_Core_Defines_Static_Render_OpenGL(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_Render_OpenGL, p_manager);
 #endif
 
 #ifdef KOTEK_USE_VULKAN
-	ShutdownModule_Core_Defines_Static_Render_Vulkan(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_Render_Vulkan, p_manager);
 #endif
 
 #ifdef KOTEK_USE_BGFX
-	ShutdownModule_Core_Defines_Static_Render_BGFX(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Defines_Static_Render_BGFX, p_manager);
 #endif
 
 	return true;

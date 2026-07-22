@@ -27,6 +27,13 @@ message("[${PROJECT_NAME}]: vcpkg triplet is '${KOTEK_VCPKG_TRIPLET}'")
 #### LIBRARY LINKAGE MODEL (global + per-module overrides) ####
 include("cmake/library.cmake")
 
+# PLUGIN mode: the generated kotek_entry_config.h / kotek_plugin_manifest.h
+# must be includable from every module (KOTEK_INVOKE_MODULE_* macros)
+if ("${KOTEK_LINKAGE}" STREQUAL "PLUGIN")
+	file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/generated")
+	include_directories("${CMAKE_BINARY_DIR}/generated")
+endif()
+
 # it is our requirement for generating the library e.g. don't just write 'cmake ..' - OUTDATED
 # By new standard you can pass a empty string, but we need to generate solution for debug build. It is required for including/generating stuff for better debug experience
 # Memory leak manager, etc
@@ -330,8 +337,8 @@ if ("${KOTEK_LINKAGE}" STREQUAL "PLUGIN")
 	kotek_finalize_plugin_links()
 	set(KOTEK_PLUGIN_MANIFEST_FILE "${CMAKE_BINARY_DIR}/generated/kotek_plugin_manifest.h")
 	file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/generated")
-	kotek_generate_plugin_manifest("${KOTEK_PLUGIN_MANIFEST_FILE}")
-	target_include_directories(kotek.core.main_manager PRIVATE "${CMAKE_BINARY_DIR}/generated")
+	kotek_generate_plugin_manifest("${KOTEK_PLUGIN_MANIFEST_FILE}" "${CMAKE_BINARY_DIR}/generated/kotek_entry_config.h")
+	target_include_directories(kotek.core.main_manager PUBLIC "${CMAKE_BINARY_DIR}/generated")
 endif()
 
 # TODO: when CMake will fix that we can restore but for now we can't use this due to breaking USE_FOLDERS feature...

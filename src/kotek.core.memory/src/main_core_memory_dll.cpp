@@ -31,16 +31,16 @@ bool ShutdownModule_Core_Memory(ktkMainManager* p_manager)
 
 bool SerializeModule_Core_Memory(ktkMainManager* p_manager)
 {
-	SerializeModule_Core_Memory_CPU(p_manager);
-	SerializeModule_Core_Memory_GPU(p_manager);
+	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Memory_CPU, p_manager);
+	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Memory_GPU, p_manager);
 
 	return true;
 }
 
 bool DeserializeModule_Core_Memory(ktkMainManager* p_manager)
 {
-	SerializeModule_Core_Memory_CPU(p_manager);
-	SerializeModule_Core_Memory_GPU(p_manager);
+	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Memory_CPU, p_manager);
+	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Memory_GPU, p_manager);
 
 	return true;
 }

@@ -60,11 +60,20 @@ public:
 	) override;
 
 	// call only in render thread
-	void Update(void) noexcept;
+	void Update(void) noexcept override;
 
 	ktkRenderTextureManager* Get_ManagerTexture(void) const noexcept;
-	ktkRenderShaderManager* Get_ManagerShader(void) const noexcept;
-	ktkRenderGeometryManager* Get_ManagerGeometry(void) const noexcept;
+	// inlined: user passes call these through a dynamic_cast of
+	// ktkIRenderResourceManager*; out-of-line definitions would make them
+	// symbols of the backend plugin dll that user code cannot link
+	ktkRenderShaderManager* Get_ManagerShader(void) const noexcept
+	{
+		return this->m_p_render_manager_shader;
+	}
+	ktkRenderGeometryManager* Get_ManagerGeometry(void) const noexcept
+	{
+		return this->m_p_render_manager_geometry;
+	}
 
 	ktkRenderStats* Get_Statistic(
 		Core::eRenderStatistics type) noexcept override;

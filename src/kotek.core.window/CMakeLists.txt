@@ -6,8 +6,6 @@ project(kotek.core.window VERSION 1 LANGUAGES CXX)
 
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Window SHUTDOWN ShutdownModule_Core_Window
-	"include/kotek_window_splash.h"
-	"src/kotek_window_splash.cpp"
 	"include/kotek_window_console.h"
 	"src/kotek_window_console.cpp"
 	"include/kotek_core_window.h"

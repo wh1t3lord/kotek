@@ -33,22 +33,15 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 endif()
 
 set(to_include_render_graph_simplified_files
-    "../kotek.render.gl/include/kotek_render_graph_simplified.h"
-    "../kotek.render.gl/src/kotek_render_graph_simplified.cpp"
-    "../kotek.render.gl/include/kotek_render_graph_simplified_render_pass.h"
-    "../kotek.render.gl/src/kotek_render_graph_simplified_render_pass.cpp")
+	# lives in kotek.render.shared.gl now (linked below); the gl backend
+	# plugin no longer owns these classes
+)
 
 set(to_include_managers_files
-    "../kotek.render.gl/include/kotek_render_shader_manager.h"
-    "../kotek.render.gl/src/kotek_render_shader_manager.cpp"
     "../kotek.render.gl/include/kotek_render_texture_manager.h"
     "../kotek.render.gl/src/kotek_render_texture_manager.cpp"
     "../kotek.render.gl/include/kotek_render_resource_manager.h"
     "../kotek.render.gl/src/kotek_render_resource_manager.cpp"
-    "../kotek.render.gl/include/kotek_render_buffer.h"
-    "../kotek.render.gl/src/kotek_render_buffer.cpp"
-    "../kotek.render.gl/include/kotek_render_geometry_manager.h"
-    "../kotek.render.gl/src/kotek_render_geometry_manager.cpp"
 )
 
 set(to_include_core_files
@@ -77,11 +70,15 @@ source_group("Core" FILES ${to_include_core_files})
 source_group("Module" FILES ${to_include_module_files})
 source_group("Memory management" FILES ${to_include_memory_management_files})
 
-target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
+kotek_target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
+# simplified render graph + shader/geometry/buffer managers moved here
+# from kotek.render.gl
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.shared)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.shared.gl)
 
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")

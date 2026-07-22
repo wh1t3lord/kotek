@@ -69,7 +69,7 @@ public:
 	) override;
 
 	// call only in render thread
-	void Update(void) noexcept;
+	void Update(void) noexcept override;
 
 	ktkRenderTextureManager* Get_ManagerTexture(void
 	) const noexcept;

@@ -100,12 +100,15 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Render_VK SHUTDOWN Shutd
     "src/main_render_vk_dll.cpp"
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/vk")
-target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
+kotek_target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.ui.imgui)
+# the GPU allocator backend (vendored VMA implementation TU) is a static
+# leaf in PLUGIN mode; the vk backend calls vmaCreate* directly
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.gpu.vulkan)
 
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")

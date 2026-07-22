@@ -87,6 +87,9 @@ namespace Kotek
 
 			private:
 				ktk::uint32_t m_current_descriptor_index;
+				// routed through the main manager's imgui wrapper: the imgui
+				// implementation lives in kotek.ui.imgui (plugin dll)
+				Core::ktkIImguiWrapper* m_p_imgui_wrapper;
 				VkImage m_p_image;
 				VkImageView m_p_image_view;
 				VkDeviceMemory m_p_device_memory;

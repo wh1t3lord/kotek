@@ -7,9 +7,11 @@
 #include <kotek.core.containers.any/include/kotek_core_containers_any.h>
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
 #include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
+#include <kotek.core.containers.filesystem.path/include/kotek_core_containers_filesystem_path.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
 #include <kotek.core.defines_dependent.text/include/kotek_core_defines_dependent_text.h>
 #include <kotek.core.containers.io/include/kotek_core_containers_io.h>
+#include <kotek.core.ecs/include/kotek_core_ecs.h>
 
 // TODO: add ifdef for
 // appropriate things if gl3 we
@@ -36,6 +38,7 @@ class ktkIRenderResourceManager;
 class ktkIRenderer;
 class ktkProfiler;
 class ktkConsole;
+class ktkIConsole;
 class ktkIFrameworkConfig;
 KOTEK_END_NAMESPACE_CORE
 
@@ -162,6 +165,11 @@ public:
 		ktkIRenderDevice* p_raw_device,
 		ktkIRenderSwapchain* p_raw_swapchain
 	) = 0;
+
+	/// @brief \~english called once per frame by the user's renderer so the
+	/// backend manager can upload/update its internal resources; backends
+	/// that need per-frame updates override it, the rest keep the no-op
+	virtual void Update(void) {}
 
 	virtual kun_render ktkRenderStats*
 	Get_Statistic(kun_core eRenderStatistics type) noexcept = 0;
@@ -617,7 +625,7 @@ public:
 	virtual ktkProfiler* GetProfiler(void) const noexcept = 0;
 	virtual int GetWindowWidth(void) const noexcept = 0;
 	virtual int GetWindowHeight(void) const noexcept = 0;
-	virtual ktkConsole* GetConsole(void) const noexcept = 0;
+	virtual ktkIConsole* GetConsole(void) const noexcept = 0;
 
 	// @ returns USER render
 	// resource manager it's not
@@ -634,6 +642,55 @@ public:
 using console_user_callback_enum_translation_t =
 	std::function<int(std::string_view)>;
 
+// the aliases live in Kotek::ktk (like in the original kotek_console.h),
+// so the Core namespace must be closed and reopened around them
+KOTEK_END_NAMESPACE_CORE
+
+KOTEK_BEGIN_NAMESPACE_KTK
+
+// TODO: create wrapper for std::variant!!!
+// @brief \~english argument types that a console command can accept;
+// lives in the API module (not in the console implementation) because
+// ktkIConsole exposes command execution with these types
+using console_command_variant_t = std::variant<
+	kun_ktk int64_t,
+	kun_ktk int32_t,
+	kun_ktk int16_t,
+	kun_ktk int8_t,
+	kun_ktk uint64_t,
+	kun_ktk uint32_t,
+	kun_ktk uint16_t,
+	kun_ktk uint8_t,
+	kun_ktk entity_t,
+	ktk_cstring<1024>,
+	ktk_cstring<512>,
+	ktk_cstring<256>,
+	ktk_cstring<128>,
+	ktk_cstring<64>,
+	ktk_cstring<32>,
+	ktk_cstring<16>,
+	ktk_cstring<8>,
+	ktk_cstring<4>,
+	ktk_cstring<2>,
+	ktk_cstring<1>,
+	ktk_cstring<2048>,
+	kun_kotek static_path_t,
+	const char*,
+	ktk_cstring_view,
+	std::monostate>;
+
+using console_command_base_t = ktk_vector<
+	console_command_variant_t,
+	KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT>;
+
+using console_command_args_t = const console_command_base_t&;
+using console_command_signature_function_t =
+	bool(console_command_args_t);
+
+KOTEK_END_NAMESPACE_KTK
+
+KOTEK_BEGIN_NAMESPACE_CORE
+
 class ktkIConsole
 {
 public:
@@ -646,6 +703,17 @@ public:
 
 	virtual bool Push_Command(const char* p_text) = 0;
 	virtual bool Execute_Command(const char* p_text) = 0;
+
+	virtual void Push_Command(
+		ktk::enum_base_t id,
+		ktk::console_command_args_t data = {}
+	) noexcept = 0;
+	virtual void Execute_Command(
+		ktk::enum_base_t id,
+		ktk::console_command_args_t data = {}
+	) noexcept = 0;
+
+	virtual void Flush(void) = 0;
 };
 
 class ktkIProfiler
@@ -919,6 +987,37 @@ public:
 
 	virtual void Set_InputType(ktk::enum_base_t type
 	) noexcept = 0;
+
+	virtual void HideWindow(void) noexcept = 0;
+	virtual void RegisterUserMainManager(
+		ktkMainManager* p_manager
+	) noexcept = 0;
+};
+
+/// @brief \~english GUI console window over the OS window (log output,
+/// command input); default implementation is ktkWindowConsole in
+/// kotek.core.window, registered into ktkMainManager at module init
+class ktkIWindowConsole
+{
+public:
+	virtual ~ktkIWindowConsole(void) {}
+
+	/// @brief window in order to obtain parent's window handle, resource
+	/// manager for creating file for reading (log file)
+	virtual void Initialize(
+		ktkIWindow* p_window,
+		ktkIFileSystem* p_manager,
+		ktkIInput* p_input,
+		ktkILogger* p_logger,
+		ktkIConsole* p_console,
+		int imgui_mainmenubar_height,
+		const ktk_filesystem_path& full_path_to_log_file
+	) = 0;
+	virtual void Shutdown(void) = 0;
+	virtual void Update(void) = 0;
+
+	virtual void Show(void) = 0;
+	virtual void Hide(void) = 0;
 };
 
 class ktkIWindowManager
@@ -986,6 +1085,55 @@ public:
 
 /// \~russian @brief данный
 /// класс создан чтобы
+/// @brief \~english Multithreaded-imgui context manager interface.
+///
+/// Dear ImGui supports multiple ImGuiContext objects, but the
+/// current-context pointer (GImGui) is a plain global, not thread-local.
+/// Two threads must therefore never interleave ImGui calls on different
+/// contexts without external serialization. This manager implements the
+/// only two safe models:
+///   1. default single-UI-thread model (one context, no locking needed)
+///   2. context-per-thread + serialization: each thread that wants UI gets
+///      its own context (CreateContextForThread + BindThreadContext) and
+///      brackets every ImGui section with Lock()/Unlock() (or the RAII
+///      guard in kotek_ui_imgui_context_manager.h), which serializes access
+///      and binds the caller's own context before any ImGui call.
+/// In debug builds the implementation asserts that a thread only touches
+/// the context bound to it.
+class ktkIImguiContextManager
+{
+public:
+	virtual ~ktkIImguiContextManager(void) {}
+
+	/// @brief \~english creates and owns a new named imgui context (call
+	/// once per UI-producing thread, from any thread)
+	virtual bool CreateContextForThread(const char* p_name) = 0;
+
+	/// @brief \~english binds a previously created named context to the
+	/// CALLING thread (call once at that thread's start)
+	virtual bool BindThreadContext(const char* p_name) = 0;
+
+	/// @brief \~english unbinds the calling thread (optional at thread end)
+	virtual void UnbindThreadContext(void) = 0;
+
+	/// @brief \~english context bound to the calling thread, or the default
+	/// context when unbound (single-threaded model)
+	virtual ImGuiContext* Get_ThreadContext(void) = 0;
+
+	/// @brief \~english adopts an externally created context as the default
+	/// one (e.g. the context the render pass created first)
+	virtual void AdoptDefaultContext(ImGuiContext* p_context) = 0;
+
+	/// @brief \~english serializes imgui access and SetCurrentContext to the
+	/// calling thread's bound context; pair every Lock with Unlock
+	virtual void Lock(void) = 0;
+	virtual void Unlock(void) = 0;
+
+	/// @brief \~english destroys every owned context (adopted default is NOT
+	/// destroyed — ownership stays with its creator)
+	virtual void Shutdown(void) = 0;
+};
+
 /// пользователь и разработчик
 /// могли определять текущий
 /// wrapper для imgui
@@ -1000,6 +1148,11 @@ class ktkIImguiWrapper
 {
 public:
 	virtual ~ktkIImguiWrapper(void) {}
+
+	/// @brief \~english multithreaded-imgui context manager owned by this
+	/// wrapper (see ktkIImguiContextManager docs for the two safe models)
+	virtual ktkIImguiContextManager* Get_ContextManager(void) = 0;
+
 
 	virtual bool ImGui_ImplGlfw_InitForOpenGL(
 		GLFWwindow* window, bool install_callbacks
@@ -1053,6 +1206,37 @@ public:
 	virtual void ImGui_ImplOpenGL3_DestroyFontsTexture() = 0;
 	virtual bool ImGui_ImplOpenGL3_CreateDeviceObjects() = 0;
 	virtual void ImGui_ImplOpenGL3_DestroyDeviceObjects() = 0;
+
+	virtual void ImGui_ImplVulkan_Shutdown() = 0;
+
+	/// @brief \~english constructs a default ImFontConfig inside the imgui
+	/// implementation (the ImFontConfig ctor is a library symbol, callers
+	/// must not invoke it directly across module boundaries)
+	virtual ImFontConfig ImFontConfig_Create(void) = 0;
+
+	/// @brief \~english ImFontAtlas member functions routed through the
+	/// interface (atlas pointer is obtained from GetIO().Fonts)
+	virtual ImFont* FontAtlas_AddFontFromMemoryTTF(
+		ImFontAtlas* p_atlas,
+		void* p_font_data,
+		int font_data_size,
+		float size_pixels,
+		const ImFontConfig* p_font_cfg = NULL,
+		const ImWchar* p_glyph_ranges = NULL
+	) = 0;
+	virtual const ImWchar* FontAtlas_GetGlyphRangesCyrillic(
+		ImFontAtlas* p_atlas
+	) = 0;
+	virtual void FontAtlas_GetTexDataAsRGBA32(
+		ImFontAtlas* p_atlas,
+		unsigned char** pp_out_pixels,
+		int* p_out_width,
+		int* p_out_height,
+		int* p_out_bytes_per_pixel = NULL
+	) = 0;
+	virtual void FontAtlas_SetTexID(
+		ImFontAtlas* p_atlas, ImTextureID tex_id
+	) = 0;
 
 	virtual void*
 	CreateContext(void* shared_font_atlas = NULL) = 0;

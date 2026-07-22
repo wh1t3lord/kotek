@@ -77,6 +77,14 @@ set(KOTEK_PLUGIN_STATIC_MODULES
 	# TU; a runtime plugin is meaningless for them — backend choice is a
 	# build-time switch (KOTEK_ECS_BACKEND), not a runtime one
 	"kotek.core.ecs"
+	# allocator backend (KOTEK_MEMORY_ALLOCATOR_CPU) is likewise a build-time
+	# switch; ktk::memory::* wrappers are called directly everywhere
+	"kotek.core.memory.cpu"
+	# GPU allocator backend (vendored VMA) is called directly by the render
+	# backends (vmaCreateBuffer etc.), same demotion rationale as memory.cpu:
+	# it is an allocator implementation selected at build time, not a
+	# runtime-replaceable service reached through ktkMainManager
+	"kotek.core.memory.gpu.vulkan"
 	CACHE INTERNAL "modules that remain .lib when KOTEK_LINKAGE=PLUGIN")
 
 # modules that are implicitly-linked DLLs even in PLUGIN mode (import lib is
@@ -97,6 +105,9 @@ set(KOTEK_PLUGIN_STATIC_GROUPS
 	"kotek.core.containers"
 	"kotek.core.enum"
 	"kotek.core.casting"
+	# render glue/base classes (pass bases, shared utilities) are framework
+	# support code, not runtime services
+	"kotek.render.shared"
 	CACHE INTERNAL "module-name prefixes that remain .lib when KOTEK_LINKAGE=PLUGIN")
 
 if (NOT "${KOTEK_LINKAGE}" STREQUAL "STATIC" OR NOT "${KOTEK_LINKAGE_FORCE_SHARED}" STREQUAL "")
@@ -171,6 +182,31 @@ function(kotek_resolve_linkage out_var target_name)
 	set(${out_var} ${_type} PARENT_SCOPE)
 endfunction()
 
+# kotek_target_precompile_headers(<target> <visibility> <header...>)
+# PCH is unusable for implicitly-linked dlls (see the sentinel note in
+# kotek_add_library), so for them the header is merely force-included with
+# /FI: identical include semantics, no cmake_pch.obj, no sentinel symbol.
+# PLUGIN-mode plugin dlls keep the real PCH (their export surface is the
+# generated minimal .def, the sentinel never reaches it).
+function(kotek_target_precompile_headers target_name visibility)
+	get_target_property(_kotek_target_type ${target_name} TYPE)
+	set(_kotek_is_plugin FALSE)
+	if ("${KOTEK_LINKAGE}" STREQUAL "PLUGIN")
+		_kotek_is_plugin_destined("${target_name}" _kotek_is_plugin)
+	endif()
+	if ("${_kotek_target_type}" STREQUAL "SHARED_LIBRARY" AND NOT _kotek_is_plugin)
+		# extract the header path from either plain (<kotek.pch/pch.h>) or
+		# genex-wrapped ($<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>) form
+		string(REGEX MATCH "[A-Za-z0-9_.]+/[A-Za-z0-9_./]+\\.h" _kotek_pch "${ARGV2}")
+		if ("${_kotek_pch}" STREQUAL "")
+			message(FATAL_ERROR "[kotek]: cannot extract PCH header from '${ARGV2}'")
+		endif()
+		target_compile_options(${target_name} ${visibility} "/FI${_kotek_pch}")
+	else()
+		target_precompile_headers(${target_name} ${visibility} ${ARGN})
+	endif()
+endfunction()
+
 # drop-in replacement for add_library(<target> STATIC ...). Extra optional
 # metadata: INIT <InitializeModule_X symbol> SHUTDOWN <ShutdownModule_X symbol>
 # (needed for the PLUGIN manifest; harmless in other modes).
@@ -182,27 +218,83 @@ function(kotek_add_library target_name)
 	kotek_resolve_linkage(_kotek_linkage "${target_name}")
 	add_library(${target_name} ${_kotek_linkage} ${KOTEK_LIB_UNPARSED_ARGUMENTS})
 
+	_kotek_is_plugin_destined("${target_name}" _is_plugin_destined_early)
+
 	if ("${_kotek_linkage}" STREQUAL "SHARED")
-		set_target_properties(${target_name} PROPERTIES WINDOWS_EXPORT_ALL_SYMBOLS ON)
+		if ("${KOTEK_LINKAGE}" STREQUAL "PLUGIN" AND _is_plugin_destined_early)
+			# plugin dlls are consumed ONLY through their entry points
+			# (GetProcAddress via the loader) and interface vtables, so the
+			# export surface is exactly the module contract. Exporting
+			# everything (WINDOWS_EXPORT_ALL_SYMBOLS) also leaks junk
+			# symbols from static dependencies — including each static
+			# lib's PCH sentinel (__@@_PchSym_@...), which CMake's
+			# create_def truncates to '__' and which then fails the link
+			# whenever 2+ PCH-bearing static libs meet in one dll
+			# (ambiguous match, LNK4022/LNK2001).
+			set(_kotek_def_entries "EXPORTS\n")
+			if (NOT "${KOTEK_LIB_INIT}" STREQUAL "")
+				string(APPEND _kotek_def_entries "\t${KOTEK_LIB_INIT}\n")
+			endif()
+			if (NOT "${KOTEK_LIB_SHUTDOWN}" STREQUAL "")
+				string(APPEND _kotek_def_entries "\t${KOTEK_LIB_SHUTDOWN}\n")
+			endif()
+			# SerializeModule_*/DeserializeModule_* follow the strict
+			# naming convention (verb change on the init symbol); export
+			# them only if the module actually defines them
+			if ("${KOTEK_LIB_INIT}" MATCHES "^InitializeModule_(.+)$")
+				set(_kotek_entry_suffix "${CMAKE_MATCH_1}")
+				foreach (_verb Serialize Deserialize)
+					set(_has_entry FALSE)
+					foreach (_src IN LISTS KOTEK_LIB_UNPARSED_ARGUMENTS)
+						if (_src MATCHES "\\.cpp$" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_src}")
+							file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/${_src}"
+								_kotek_found REGEX "${_verb}Module_${_kotek_entry_suffix}")
+							if (_kotek_found)
+								set(_has_entry TRUE)
+							endif()
+						endif()
+					endforeach()
+					if (_has_entry)
+						string(APPEND _kotek_def_entries "\t${_verb}Module_${_kotek_entry_suffix}\n")
+					endif()
+				endforeach()
+			endif()
+			set(_kotek_def_file "${CMAKE_CURRENT_BINARY_DIR}/${target_name}.def")
+			file(WRITE "${_kotek_def_file}" "${_kotek_def_entries}")
+			target_sources(${target_name} PRIVATE "${_kotek_def_file}")
+		else()
+			# implicit dll: full export surface needed (consumers call classes
+			# directly). PCH is handled by kotek_target_precompile_headers,
+			# which for implicit dlls degrades to /FI force-include: each
+			# PCH-bearing object carries a sentinel symbol (__@@_PchSym_@...)
+			# that CMake's create_def truncates to '__', producing an
+			# unresolvable/ambiguous export (LNK2001/LNK4022).
+			set_target_properties(${target_name} PROPERTIES
+				WINDOWS_EXPORT_ALL_SYMBOLS ON)
+		endif()
 		string(TOUPPER "${target_name}" _kotek_upper)
 		string(REPLACE "." "_" _kotek_upper "${_kotek_upper}")
 		target_compile_definitions(${target_name} PUBLIC KOTEK_USE_SHARED_${_kotek_upper})
 	endif()
 
-	# PLUGIN bookkeeping: record entry symbols of every module that has them
+	# PLUGIN bookkeeping: record entry symbols + resolved linkage of every
+	# module that has them (order of registration = dependency order, because
+	# kotek/CMakeLists.txt adds modules in dependency order)
 	if (NOT "${KOTEK_LIB_INIT}" STREQUAL "")
+		set_property(GLOBAL APPEND PROPERTY KOTEK_MODULE_REGISTRATION_ORDER "${target_name}")
 		set_property(GLOBAL PROPERTY KOTEK_MODULE_INIT_${target_name} "${KOTEK_LIB_INIT}")
 		set_property(GLOBAL PROPERTY KOTEK_MODULE_SHUTDOWN_${target_name} "${KOTEK_LIB_SHUTDOWN}")
+		set_property(GLOBAL PROPERTY KOTEK_MODULE_LINKAGE_${target_name} "${_kotek_linkage}")
 	endif()
 
-	# PLUGIN membership: only modules with registered entry symbols become
-	# explicitly-loaded plugins; other SHARED modules stay implicitly linked
-	# (order of registration = dependency order, because kotek/CMakeLists.txt
-	# adds modules in dependency order)
-	if ("${KOTEK_LINKAGE}" STREQUAL "PLUGIN" AND "${_kotek_linkage}" STREQUAL "SHARED"
-		AND NOT "${target_name}" IN_LIST KOTEK_LINKAGE_FORCE_SHARED
-		AND NOT "${KOTEK_LIB_INIT}" STREQUAL "")
-		set_property(GLOBAL APPEND PROPERTY KOTEK_PLUGIN_LOAD_ORDER "${target_name}")
+	# PLUGIN membership: only modules that are plugin-destined AND have
+	# registered entry symbols become explicitly-loaded plugins; other SHARED
+	# modules stay implicitly linked
+	if ("${KOTEK_LINKAGE}" STREQUAL "PLUGIN")
+		_kotek_is_plugin_destined("${target_name}" _is_plugin)
+		if (_is_plugin AND NOT "${KOTEK_LIB_INIT}" STREQUAL "")
+			set_property(GLOBAL APPEND PROPERTY KOTEK_PLUGIN_LOAD_ORDER "${target_name}")
+		endif()
 	endif()
 
 	message(STATUS "[${target_name}]: linkage is '${_kotek_linkage}'")
@@ -334,28 +426,46 @@ function(kotek_finalize_plugin_links)
 	set_property(GLOBAL PROPERTY KOTEK_PLUGIN_ERASED_EDGES "")
 endfunction()
 
-# writes kotek_plugin_manifest.h: the ordered table of plugin modules with
-# their dll file names and init/shutdown symbols. Call once after all modules
-# are added (end of kotek/CMakeLists.txt).
-function(kotek_generate_plugin_manifest output_file)
-	get_property(_modules GLOBAL PROPERTY KOTEK_PLUGIN_LOAD_ORDER)
+# writes two generated headers:
+#  - kotek_plugin_manifest.h: the table of PLUGIN modules only (dll file name
+#    + init/shutdown symbol names) for the runtime loader.
+#  - kotek_entry_config.h: for EVERY module with entry points, a
+#    KOTEK_ENTRY_<symbol> flag that is 1 when the module is linked (static or
+#    implicit dll) and 0 when it is an explicitly-loaded plugin. The
+#    KOTEK_INVOKE_MODULE_* macros expand this flag at compile time and select
+#    a direct call (1) or a loader lookup (0) per call site — correct in ANY
+#    configuration without link-time tricks.
+function(kotek_generate_plugin_manifest output_file config_file)
+	get_property(_modules GLOBAL PROPERTY KOTEK_MODULE_REGISTRATION_ORDER)
+	get_property(_plugins GLOBAL PROPERTY KOTEK_PLUGIN_LOAD_ORDER)
 
 	set(_entries "")
+	set(_defines "")
 	set(_count 0)
 	foreach (_module IN LISTS _modules)
 		get_property(_init GLOBAL PROPERTY KOTEK_MODULE_INIT_${_module})
 		get_property(_shutdown GLOBAL PROPERTY KOTEK_MODULE_SHUTDOWN_${_module})
-		if ("${_init}" STREQUAL "")
-			message(WARNING "[kotek]: plugin module '${_module}' has no INIT/SHUTDOWN symbols registered, skipping in manifest")
-			continue()
+
+		if ("${_module}" IN_LIST _plugins)
+			string(APPEND _entries "\t{\"${_module}.dll\", \"${_init}\", \"${_shutdown}\"},\n")
+			math(EXPR _count "${_count}+1")
+			string(APPEND _defines "#define KOTEK_ENTRY_${_init} 0\n#define KOTEK_ENTRY_${_shutdown} 0\n")
+			# serialize/deserialize entry flags follow the module naming
+			# convention (verb change on the init symbol)
+			if ("${_init}" MATCHES "^InitializeModule_(.+)$")
+				string(APPEND _defines "#define KOTEK_ENTRY_SerializeModule_${CMAKE_MATCH_1} 0\n#define KOTEK_ENTRY_DeserializeModule_${CMAKE_MATCH_1} 0\n")
+			endif()
+		else()
+			string(APPEND _defines "#define KOTEK_ENTRY_${_init} 1\n#define KOTEK_ENTRY_${_shutdown} 1\n")
+			if ("${_init}" MATCHES "^InitializeModule_(.+)$")
+				string(APPEND _defines "#define KOTEK_ENTRY_SerializeModule_${CMAKE_MATCH_1} 1\n#define KOTEK_ENTRY_DeserializeModule_${CMAKE_MATCH_1} 1\n")
+			endif()
 		endif()
-		string(APPEND _entries "\t{\"${_module}.dll\", \"${_init}\", \"${_shutdown}\"},\n")
-		math(EXPR _count "${_count}+1")
 	endforeach()
 
 	file(WRITE "${output_file}"
 		"// generated by cmake/library.cmake kotek_generate_plugin_manifest() — do not edit\n"
-		"// KOTEK_LINKAGE=PLUGIN: explicit-loading table, in dependency order\n"
+		"// KOTEK_LINKAGE=PLUGIN: explicitly-loaded plugin dlls, in dependency order\n"
 		"#pragma once\n\n"
 		"struct ktkPluginModuleDesc\n"
 		"{\n"
@@ -368,7 +478,14 @@ function(kotek_generate_plugin_manifest output_file)
 		"${_entries}};\n\n"
 		"static const unsigned long g_kotek_plugin_modules_count = ${_count}UL;\n")
 
-	message(STATUS "[kotek]: plugin manifest has ${_count} modules -> ${output_file}")
+	file(WRITE "${config_file}"
+		"// generated by cmake/library.cmake kotek_generate_plugin_manifest() — do not edit\n"
+		"// per-entry linkage flags for the KOTEK_INVOKE_MODULE_* macros:\n"
+		"// 1 = linked (static/implicit -> direct call), 0 = plugin (loader lookup)\n"
+		"#pragma once\n\n"
+		"${_defines}")
+
+	message(STATUS "[kotek]: module entry manifest has ${_count} plugin dlls -> ${output_file}")
 endfunction()
 
 message(STATUS "${CMAKE_CURRENT_LIST_FILE} is applied!")

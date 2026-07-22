@@ -1,4 +1,5 @@
 #include "../include/kotek_core_containers.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
 
@@ -12,28 +13,28 @@ bool InitializeModule_Core_Containers(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
-	InitializeModule_Core_Containers_Any(p_manager);
-	InitializeModule_Core_Containers_Array(p_manager);
-	InitializeModule_Core_Containers_Deque(p_manager);
-	InitializeModule_Core_Containers_DLL(p_manager);
-	InitializeModule_Core_Containers_FileSystem(p_manager);
-	InitializeModule_Core_Containers_Function(p_manager);
-	InitializeModule_Core_Containers_Hash(p_manager);
-	InitializeModule_Core_Containers_IO(p_manager);
-	InitializeModule_Core_Containers_JSON(p_manager);
-	InitializeModule_Core_Containers_Map(p_manager);
-	InitializeModule_Core_Containers_Microsoft(p_manager);
-	InitializeModule_Core_Containers_MultiThreading(p_manager);
-	InitializeModule_Core_Containers_Pair(p_manager);
-	InitializeModule_Core_Containers_Queue(p_manager);
-	InitializeModule_Core_Containers_Shared_Ptr(p_manager);
-	InitializeModule_Core_Containers_String(p_manager);
-	InitializeModule_Core_Containers_Unique_Ptr(p_manager);
-	InitializeModule_Core_Containers_Unordered_Map(p_manager);
-	InitializeModule_Core_Containers_Unordered_Set(p_manager);
-	InitializeModule_Core_Containers_Variant(p_manager);
-	InitializeModule_Core_Containers_Vector(p_manager);
-	InitializeModule_Core_Containers_List(p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Any, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Array, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Deque, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_DLL, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_FileSystem, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Function, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Hash, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_IO, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_JSON, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Map, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Microsoft, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_MultiThreading, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Pair, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Queue, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Shared_Ptr, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_String, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Unique_Ptr, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Unordered_Map, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Unordered_Set, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Variant, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_Vector, p_manager);
+	KOTEK_INVOKE_MODULE_INIT(InitializeModule_Core_Containers_List, p_manager);
 
 	return true;
 }
@@ -96,28 +97,28 @@ bool DeserializeModule_Core_Containers(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core_Containers(ktkMainManager* p_manager)
 {
-	ShutdownModule_Core_Containers_Any(p_manager);
-	ShutdownModule_Core_Containers_Array(p_manager);
-	ShutdownModule_Core_Containers_Deque(p_manager);
-	ShutdownModule_Core_Containers_DLL(p_manager);
-	ShutdownModule_Core_Containers_FileSystem_Path(p_manager);
-	ShutdownModule_Core_Containers_Function(p_manager);
-	ShutdownModule_Core_Containers_Hash(p_manager);
-	ShutdownModule_Core_Containers_IO(p_manager);
-	ShutdownModule_Core_Containers_JSON(p_manager);
-	ShutdownModule_Core_Containers_Map(p_manager);
-	ShutdownModule_Core_Containers_Microsoft(p_manager);
-	ShutdownModule_Core_Containers_MultiThreading(p_manager);
-	ShutdownModule_Core_Containers_Pair(p_manager);
-	ShutdownModule_Core_Containers_Queue(p_manager);
-	ShutdownModule_Core_Containers_Shared_Ptr(p_manager);
-	ShutdownModule_Core_Containers_String(p_manager);
-	ShutdownModule_Core_Containers_Unique_Ptr(p_manager);
-	ShutdownModule_Core_Containers_Unordered_Map(p_manager);
-	ShutdownModule_Core_Containers_Unordered_Set(p_manager);
-	ShutdownModule_Core_Containers_Variant(p_manager);
-	ShutdownModule_Core_Containers_Vector(p_manager);
-	ShutdownModule_Core_Containers_List(p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Any, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Array, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Deque, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_DLL, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_FileSystem_Path, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Function, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Hash, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_IO, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_JSON, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Map, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Microsoft, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_MultiThreading, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Pair, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Queue, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Shared_Ptr, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_String, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Unique_Ptr, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Unordered_Map, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Unordered_Set, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Variant, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_Vector, p_manager);
+	KOTEK_INVOKE_MODULE_SHUTDOWN(ShutdownModule_Core_Containers_List, p_manager);
 
 	return true;
 }

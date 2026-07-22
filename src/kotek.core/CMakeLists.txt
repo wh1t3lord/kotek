@@ -53,7 +53,11 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 		endif()
 endif()
 
-if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON")
+if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AND NOT "${KOTEK_LINKAGE}" STREQUAL "PLUGIN")
+	# tests are a static-linkage feature: they instantiate concrete classes
+	# from feature modules (ktkFileSystem, ktkFileSystem_VFM,
+	# ktkFrameworkConfig, ...), which is forbidden in PLUGIN mode (no link
+	# edges between plugin dlls)
 	message("[${PROJECT_NAME}]: adding tests for runtime in project ${PROJECT_NAME}")
 	set(to_include_tests 
 		"tests/kotek_core_test_filesystem.cpp"

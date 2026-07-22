@@ -20,10 +20,15 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Game SHUTDOWN ShutdownMo
 	"include/kotek_game.h"
 	"src/kotek_update.cpp"
 	"include/kotek_callbacks.h"
+	# the splash overlay is created by the engine bootstrapper BEFORE any
+	# module/plugin is initialized, so it cannot live in a plugin module
+	# (moved from kotek.core.window)
+	"include/kotek_window_splash.h"
+	"src/kotek_window_splash.cpp"
 	"src/main_game_dll.cpp"
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/user dll loading")
-target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
+kotek_target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render)

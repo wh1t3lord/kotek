@@ -20,6 +20,8 @@ class ktkIGameUIManager;
 class ktkILogger;
 class ktkIWindowSplash;
 class ktkIRenderGraph;
+class ktkIConsole;
+class ktkIWindowConsole;
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK
@@ -81,6 +83,12 @@ public:
 	ktkIWindowSplash* Get_Splash(void) const noexcept;
 	void Set_Splash(ktkIWindowSplash* p_window) noexcept;
 
+	ktkIConsole* Get_Console(void) const noexcept;
+	void Set_Console(ktkIConsole* p_console) noexcept;
+
+	ktkIWindowConsole* Get_WindowConsole(void) const noexcept;
+	void Set_WindowConsole(ktkIWindowConsole* p_console) noexcept;
+
 	int Get_ARGC(void) const noexcept;
 	char** Get_ARGV(void) const noexcept;
 
@@ -105,6 +113,8 @@ private:
 	ktkIGameUIManager* m_p_game_ui_engine;
 	ktkILogger* m_p_logger;
 	ktkIWindowSplash* m_p_splash;
+	ktkIConsole* m_p_console;
+	ktkIWindowConsole* m_p_window_console;
 };
 
 KOTEK_END_NAMESPACE_CORE

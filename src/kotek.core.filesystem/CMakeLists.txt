@@ -23,3 +23,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/filesyst
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.filesystem.file_text)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)
+# provides ktk::filesystem::create_directory/exists/current_path used by
+# kotek_filesystem.cpp; in PLUGIN mode undeclared static-leaf deps are
+# unresolved (in STATIC mode the exe resolved them implicitly)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.filesystem)

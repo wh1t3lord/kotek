@@ -6,9 +6,14 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
-ktkImguiWrapper::ktkImguiWrapper(void) {}
+ktkImguiWrapper::ktkImguiWrapper(void) : m_context_manager{} {}
 
-ktkImguiWrapper::~ktkImguiWrapper(void) {}
+ktkImguiWrapper::~ktkImguiWrapper(void) { m_context_manager.Shutdown(); }
+
+kun_core ktkIImguiContextManager* ktkImguiWrapper::Get_ContextManager(void)
+{
+	return &m_context_manager;
+}
 
 bool ktkImguiWrapper::ImGui_ImplGlfw_InitForOpenGL(
 	GLFWwindow* window, bool install_callbacks
@@ -153,6 +158,61 @@ bool ktkImguiWrapper::ImGui_ImplOpenGL3_CreateDeviceObjects()
 void ktkImguiWrapper::ImGui_ImplOpenGL3_DestroyDeviceObjects()
 {
 	::ImGui_ImplOpenGL3_DestroyDeviceObjects();
+}
+
+void ktkImguiWrapper::ImGui_ImplVulkan_Shutdown()
+{
+	::ImGui_ImplVulkan_Shutdown();
+}
+
+ImFontConfig ktkImguiWrapper::ImFontConfig_Create(void)
+{
+	return ImFontConfig();
+}
+
+ImFont* ktkImguiWrapper::FontAtlas_AddFontFromMemoryTTF(
+	ImFontAtlas* p_atlas,
+	void* p_font_data,
+	int font_data_size,
+	float size_pixels,
+	const ImFontConfig* p_font_cfg,
+	const ImWchar* p_glyph_ranges
+)
+{
+	return p_atlas->AddFontFromMemoryTTF(
+		p_font_data,
+		font_data_size,
+		size_pixels,
+		p_font_cfg,
+		p_glyph_ranges
+	);
+}
+
+const ImWchar* ktkImguiWrapper::FontAtlas_GetGlyphRangesCyrillic(
+	ImFontAtlas* p_atlas
+)
+{
+	return p_atlas->GetGlyphRangesCyrillic();
+}
+
+void ktkImguiWrapper::FontAtlas_GetTexDataAsRGBA32(
+	ImFontAtlas* p_atlas,
+	unsigned char** pp_out_pixels,
+	int* p_out_width,
+	int* p_out_height,
+	int* p_out_bytes_per_pixel
+)
+{
+	p_atlas->GetTexDataAsRGBA32(
+		pp_out_pixels, p_out_width, p_out_height, p_out_bytes_per_pixel
+	);
+}
+
+void ktkImguiWrapper::FontAtlas_SetTexID(
+	ImFontAtlas* p_atlas, ImTextureID tex_id
+)
+{
+	p_atlas->SetTexID(tex_id);
 }
 
 void* ktkImguiWrapper::CreateContext(void* shared_font_atlas)

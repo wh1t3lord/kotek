@@ -10,10 +10,9 @@ add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 find_package(bgfx CONFIG REQUIRED)
 
 set(to_include_render_graph_simplified_files
-	"include/kotek_render_graph_simplified.h"
-    "src/kotek_render_graph_simplified.cpp"
-    "include/kotek_render_graph_simplified_render_pass.h"
-    "src/kotek_render_graph_simplified_render_pass.cpp")
+	# moved to kotek.render.shared.bgfx (framework glue used by both the
+	# backend and user passes; a plugin must not own these symbols)
+)
 
 set(to_include_managers_files
     "include/kotek_render_shader_manager.h"
@@ -66,7 +65,7 @@ source_group("Core" FILES ${to_include_core_files})
 source_group("Module" FILES ${to_include_module_files})
 source_group("Memory management" FILES ${to_include_memory_management_files})
 
-target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
+kotek_target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 #target_compile_definitions(${PROJECT_NAME} PUBLIC KHRONOS_STATIC)
 

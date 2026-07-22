@@ -24,14 +24,14 @@ bool InitializeModule_Core_Window_Manager(ktkMainManager* p_manager)
 
 bool SerializeModule_Core_Window_Manager(ktkMainManager* p_manager)
 {
-	SerializeModule_Core_Window(p_manager);
+	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_Core_Window, p_manager);
 
 	return true;
 }
 
 bool DeserializeModule_Core_Window_Manager(ktkMainManager* p_manager)
 {
-	DeserializeModule_Core_Window(p_manager);
+	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_Core_Window, p_manager);
 
 	return true;
 }

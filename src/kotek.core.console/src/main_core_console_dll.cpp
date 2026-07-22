@@ -14,6 +14,13 @@ bool InitializeModule_Core_Console(ktkMainManager* p_manager)
 		p_manager->Get_Splash()->Set_Progress();
 	}
 
+	// the console is a default-implementation service: the module owns the
+	// instance and users obtain it through the ktkIConsole slot instead of
+	// constructing ktkConsole directly. The user's translation callback is
+	// passed later via ktkIConsole::Initialize by the game layer.
+	ktkConsole* p_instance = new ktkConsole();
+	p_manager->Set_Console(p_instance);
+
 	return true;
 }
 
@@ -29,6 +36,19 @@ bool DeserializeModule_Core_Console(ktkMainManager* p_manager)
 
 bool ShutdownModule_Core_Console(ktkMainManager* p_manager)
 {
+	ktkIConsole* p_interface = p_manager->Get_Console();
+
+	if (p_interface)
+	{
+		ktkConsole* p_instance =
+			dynamic_cast<ktkConsole*>(p_interface);
+
+		p_interface->Shutdown();
+
+		delete p_instance;
+		p_manager->Set_Console(nullptr);
+	}
+
 	return true;
 }
 

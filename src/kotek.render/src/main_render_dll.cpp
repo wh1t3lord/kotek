@@ -61,7 +61,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 			"you pass command line to application for initializing {}",
 			Kotek::Core::helper::Translate_EngineSupportedRenderer(
 				p_engine_config->GetRendererVersionEnum()));
-		status = InitializeModule_Render_GL(
+		status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_GL,
 			main_manager, p_engine_config->GetRendererVersionEnum());
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
@@ -71,7 +71,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 			"you pass command line to application for initializing {}",
 			Kotek::Core::helper::Translate_EngineSupportedVulkanVersion(
 				p_engine_config->GetVulkanVersionFromCommandLine()));
-		status = InitializeModule_Render_VK(
+		status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_VK,
 			main_manager, p_engine_config->GetVulkanVersionFromCommandLine());
 #endif
 	}
@@ -104,13 +104,13 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 
 		if (is_gl)
 		{
-			status = InitializeModule_Render_GL(
+			status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_GL,
 				main_manager, p_engine_config->GetRendererVersionEnum());
 		}
 		else if (is_vk)
 		{
 #ifdef KOTEK_USE_RENDER_VULKAN
-			status = InitializeModule_Render_VK(
+			status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_VK,
 				main_manager, p_engine_config->GetVulkanVersionForLoading());
 #endif
 		}
@@ -128,7 +128,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 
 			if (isBGFX)
 			{
-				status = InitializeModule_Render_BGFX(
+				status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_BGFX,
 					main_manager, p_engine_config->GetRendererVersionEnum());
 			}
 			else if (isANGLE)
@@ -140,7 +140,7 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 					"because it was written bad and is not "
 					"efficient as Vulkan implementation for ANGLE");
 #ifdef KOTEK_USE_RENDER_ANGLE_GLES23
-				status = InitializeModule_Render_ANGLE_GLES23(
+				status = KOTEK_INVOKE_MODULE_INIT_V(InitializeModule_Render_ANGLE_GLES23,
 					main_manager, p_engine_config->GetRendererVersionEnum());
 #else
 				KOTEK_ASSERT(false,

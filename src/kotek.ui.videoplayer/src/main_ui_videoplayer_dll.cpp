@@ -27,13 +27,13 @@ bool ShutdownModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
 }
 bool SerializeModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
 {
-	SerializeModule_UI_VideoPlayer_AVIF(p_main_manager);
+	KOTEK_INVOKE_MODULE_SERIALIZE(SerializeModule_UI_VideoPlayer_AVIF, p_main_manager);
 
 	return true;
 }
 bool DeserializeModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
 {
-	DeserializeModule_UI_VideoPlayer_AVIF(p_main_manager);
+	KOTEK_INVOKE_MODULE_DESERIALIZE(DeserializeModule_UI_VideoPlayer_AVIF, p_main_manager);
 
 
 	return true;

@@ -5,6 +5,7 @@
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_glfw.h"
+#include "kotek_ui_imgui_context_manager.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
@@ -69,6 +70,10 @@ public:
 	ktkImguiWrapper(void);
 	~ktkImguiWrapper(void);
 
+	/// @brief \~english multithreaded-imgui context manager (see
+	/// ktkIImguiContextManager for the two supported models)
+	kun_core ktkIImguiContextManager* Get_ContextManager(void) override;
+
 	bool ImGui_ImplGlfw_InitForOpenGL(
 		GLFWwindow* window, bool install_callbacks
 	) override;
@@ -121,6 +126,32 @@ public:
 	void ImGui_ImplOpenGL3_DestroyFontsTexture() override;
 	bool ImGui_ImplOpenGL3_CreateDeviceObjects() override;
 	void ImGui_ImplOpenGL3_DestroyDeviceObjects() override;
+
+	void ImGui_ImplVulkan_Shutdown() override;
+
+	ImFontConfig ImFontConfig_Create(void) override;
+
+	ImFont* FontAtlas_AddFontFromMemoryTTF(
+		ImFontAtlas* p_atlas,
+		void* p_font_data,
+		int font_data_size,
+		float size_pixels,
+		const ImFontConfig* p_font_cfg = NULL,
+		const ImWchar* p_glyph_ranges = NULL
+	) override;
+	const ImWchar* FontAtlas_GetGlyphRangesCyrillic(
+		ImFontAtlas* p_atlas
+	) override;
+	void FontAtlas_GetTexDataAsRGBA32(
+		ImFontAtlas* p_atlas,
+		unsigned char** pp_out_pixels,
+		int* p_out_width,
+		int* p_out_height,
+		int* p_out_bytes_per_pixel = NULL
+	) override;
+	void FontAtlas_SetTexID(
+		ImFontAtlas* p_atlas, ImTextureID tex_id
+	) override;
 
 	void*
 	CreateContext(void* shared_font_atlas = NULL) override;
@@ -1261,6 +1292,9 @@ public:
 	ImGuiViewport*
 	FindViewportByPlatformHandle(void* platform_handle
 	) override;
+
+private:
+	ktkImguiContextManager m_context_manager;
 };
 KOTEK_END_NAMESPACE_UI
 KOTEK_END_NAMESPACE_KOTEK

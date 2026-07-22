@@ -9,7 +9,8 @@ ktkMainManager::ktkMainManager(int argc, char** argv) :
 	m_p_manager_input{}, m_p_manager_render_device{},
 	m_p_manager_render_resource{}, m_p_manager_render_graph{},
 	m_p_manager_swapchain{}, m_p_manager_profiler{}, m_p_manager_window{},
-	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{}, m_p_splash{}
+	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{},
+	m_p_splash{}, m_p_console{}, m_p_window_console{}
 {
 }
 
@@ -20,7 +21,7 @@ ktkMainManager::ktkMainManager() :
 	m_p_manager_render_resource{}, m_p_manager_render_graph{},
 	m_p_manager_swapchain{}, m_p_manager_profiler{}, m_p_manager_window{},
 	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{},
-	m_p_splash{}
+	m_p_splash{}, m_p_console{}, m_p_window_console{}
 {
 }
 
@@ -159,6 +160,26 @@ ktkIWindowSplash* ktkMainManager::Get_Splash(void) const noexcept
 void ktkMainManager::Set_Splash(ktkIWindowSplash* p_window) noexcept 
 {
 	this->m_p_splash = p_window;
+}
+
+ktkIConsole* ktkMainManager::Get_Console(void) const noexcept
+{
+	return this->m_p_console;
+}
+
+void ktkMainManager::Set_Console(ktkIConsole* p_console) noexcept
+{
+	this->m_p_console = p_console;
+}
+
+ktkIWindowConsole* ktkMainManager::Get_WindowConsole(void) const noexcept
+{
+	return this->m_p_window_console;
+}
+
+void ktkMainManager::Set_WindowConsole(ktkIWindowConsole* p_console) noexcept
+{
+	this->m_p_window_console = p_console;
 }
 
 int ktkMainManager::Get_ARGC(void) const noexcept

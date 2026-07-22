@@ -1,5 +1,8 @@
 #pragma once
 
+// ktkRenderStats (m_stats member) lives in the backend-agnostic shared leaf
+#include <kotek.render.shared/include/kotek_render_data_types.h>
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 

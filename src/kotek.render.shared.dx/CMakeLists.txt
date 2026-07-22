@@ -12,6 +12,6 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Render_Shared_DX SHUTDOW
 	"src/main_render_shared_dx_dll.cpp"
 )
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/render/shared")
-target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
+kotek_target_precompile_headers(${PROJECT_NAME} PRIVATE "$<$<COMPILE_LANGUAGE:CXX>:<kotek.pch/pch.h>>")
 
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core)

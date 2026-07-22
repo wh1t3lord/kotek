@@ -3,8 +3,13 @@
 #include "kotek_render_graph_simplified_types.h"
 #include "kotek_render_graph_simplified_types_input.h"
 #include "kotek_render_graph_simplified_types_output.h"
+#include "kotek_render_graph_simplified.h"
+#include "kotek_render_graph_simplified_render_pass.h"
 #include "kotek_render_data_types.h"
 #include "kotek_render_format.h"
+#include "kotek_render_buffer.h"
+#include "kotek_render_shader_manager.h"
+#include "kotek_render_geometry_manager.h"
 
 #ifdef KOTEK_DEBUG
 	#define KOTEK_GL_ASSERT()                                            \
