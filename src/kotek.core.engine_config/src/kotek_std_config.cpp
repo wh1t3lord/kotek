@@ -6,6 +6,7 @@ KOTEK_BEGIN_NAMESPACE_CORE
 ktkFrameworkConfig::ktkFrameworkConfig(void) :
 	m_fs_priority_list{}, m_fs_features_flag{}, m_argc{-1},
 	m_argv{}, m_is_running{true}, m_frames_limit{0},
+	m_plugins_template{false}, m_plugins_modules{false},
 	m_engine_feature_flags{eEngineFeature::kEngine_Feature_None
     },
 	m_engine_feature_render_flags{
@@ -796,6 +797,16 @@ kun_ktk uint32_t ktkFrameworkConfig::Get_FramesLimit(void) const noexcept
 	return this->m_frames_limit;
 }
 
+bool ktkFrameworkConfig::Is_PluginsTemplateRequested(void) const noexcept
+{
+	return this->m_plugins_template;
+}
+
+bool ktkFrameworkConfig::Is_PluginsModulesRequested(void) const noexcept
+{
+	return this->m_plugins_modules;
+}
+
 void ktkFrameworkConfig::SetApplicationWorking(bool status
 ) noexcept
 {
@@ -875,6 +886,19 @@ void ktkFrameworkConfig::Parse_CommandLine(void) noexcept
 			break;
 		}
 	}
+
+	// plugin override system (task K21): both flags are terminal codegen
+	// actions handled by ktkPluginOverrideStartup (writes the file into
+	// plugins/, prints, exits with code 0)
+	this->m_plugins_template =
+		this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_Kotek_Plugins_Template
+		) != this->m_parsed_command_line_arguments.end();
+
+	this->m_plugins_modules =
+		this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_Kotek_Plugins_Modules
+		) != this->m_parsed_command_line_arguments.end();
 }
 
 eEngineFeatureRendererVendor

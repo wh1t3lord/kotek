@@ -897,6 +897,18 @@ public:
 	/// @brief \~english value of --kotek_frames=N: exit the main loop after N
 	/// frames (smoke testing / CI); 0 means unlimited
 	virtual kun_ktk uint32_t Get_FramesLimit(void) const noexcept = 0;
+
+	/// @brief \~english true when --kotek_plugins_template was passed: the
+	/// engine writes plugins/plugins.template.json (every known module with
+	/// an empty dll field) and exits with code 0 (plugin override system,
+	/// task K21)
+	virtual bool Is_PluginsTemplateRequested(void) const noexcept = 0;
+
+	/// @brief \~english true when --kotek_plugins_modules was passed: the
+	/// engine writes plugins/plugins.modules.json (plain array of the known
+	/// module names) and exits with code 0 (plugin override system, task
+	/// K21)
+	virtual bool Is_PluginsModulesRequested(void) const noexcept = 0;
 	virtual void
 	Set_UserLibrary(const ktk_filesystem_path& path_to_library
 	) noexcept = 0;

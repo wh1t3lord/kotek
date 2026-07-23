@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
+#include <kotek.core.main_manager/include/kotek_plugin_override.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -54,12 +55,16 @@ KOTEK_END_NAMESPACE_KOTEK
 /// (INIT/SHUTDOWN/SERIALIZE/DESERIALIZE). Usage everywhere:
 ///     KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core, p_manager);
 ///     KOTEK_INVOKE_MODULE(SHUTDOWN, UI, ShutdownModule_UI, p_manager);
-/// In PLUGIN mode the generated KOTEK_ENTRY_<symbol> flag selects the
-/// explicit loader (0) or a direct call (1) per call site; in all other
-/// linkage modes it compiles to a plain namespace-qualified direct call.
-/// All module entry points share the uniform signature
-/// bool(ktkMainManager*) — that uniformity is what makes a single macro
-/// possible.
+/// OVERRIDE-FIRST (task K21): every invocation first consults the plugin
+/// override registry via ktkPluginTryOverride (tri-state: negative = no
+/// override registered -> built-in fallback; non-negative = the override
+/// entry was called and the value is its bool result). The built-in
+/// fallback keeps the previous behavior: in PLUGIN mode the generated
+/// KOTEK_ENTRY_<symbol> flag selects the explicit loader (0) or a direct
+/// call (1) per call site; in all other linkage modes it is a plain
+/// namespace-qualified direct call. All module entry points share the
+/// uniform signature bool(ktkMainManager*) — that uniformity is what makes
+/// a single macro possible.
 	#define KOTEK_INVOKE_ENTRY_0_INIT(ns, symbol, manager) \
 		::KUN_KOTEK KUN_CORE ktkPluginInvokeInit(manager, #symbol)
 	#define KOTEK_INVOKE_ENTRY_0_SHUTDOWN(ns, symbol, manager) \
@@ -81,9 +86,26 @@ KOTEK_END_NAMESPACE_KOTEK
 	#define KOTEK_INVOKE_PICK(verb, flag, ns, symbol, manager) \
 		KOTEK_INVOKE_PICK_(verb, flag, ns, symbol, manager)
 
-	#define KOTEK_INVOKE_MODULE(verb, ns, symbol, manager) \
-		KOTEK_INVOKE_PICK(verb, KOTEK_ENTRY_##symbol, ns, symbol, manager)
+	#define KOTEK_INVOKE_MODULE(verb, ns, symbol, manager)                  \
+		([&]() -> bool {                                                     \
+			const int _kotek_plugin_override_status =                        \
+				::KUN_KOTEK KUN_CORE ktkPluginTryOverride(                   \
+					::KUN_KOTEK KUN_CORE ePluginOverrideVerb::k##verb,       \
+					#symbol, manager);                                       \
+			if (_kotek_plugin_override_status >= 0)                          \
+				return _kotek_plugin_override_status != 0;                   \
+			return KOTEK_INVOKE_PICK(                                        \
+				verb, KOTEK_ENTRY_##symbol, ns, symbol, manager);            \
+		}())
 #else
-	#define KOTEK_INVOKE_MODULE(verb, ns, symbol, manager) \
-		::KUN_KOTEK KUN_##ns symbol(manager)
+	#define KOTEK_INVOKE_MODULE(verb, ns, symbol, manager)                  \
+		([&]() -> bool {                                                     \
+			const int _kotek_plugin_override_status =                        \
+				::KUN_KOTEK KUN_CORE ktkPluginTryOverride(                   \
+					::KUN_KOTEK KUN_CORE ePluginOverrideVerb::k##verb,       \
+					#symbol, manager);                                       \
+			if (_kotek_plugin_override_status >= 0)                          \
+				return _kotek_plugin_override_status != 0;                   \
+			return ::KUN_KOTEK KUN_##ns symbol(manager);                     \
+		}())
 #endif

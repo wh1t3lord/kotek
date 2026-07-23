@@ -215,6 +215,32 @@ function(kotek_add_library target_name)
 	set(_one_value INIT SHUTDOWN)
 	cmake_parse_arguments(KOTEK_LIB "${_options}" "${_one_value}" "" ${ARGN})
 
+	# detect whether the module actually defines SerializeModule_*/
+	# DeserializeModule_* (the strict naming convention: verb change on the
+	# init symbol). Used by the plugin .def export list AND by the generated
+	# module registry (kotek_plugin_registry.h) which must not advertise
+	# symbols that do not exist.
+	set(_kotek_has_serialize FALSE)
+	set(_kotek_has_deserialize FALSE)
+	if ("${KOTEK_LIB_INIT}" MATCHES "^InitializeModule_(.+)$")
+		set(_kotek_entry_suffix "${CMAKE_MATCH_1}")
+		foreach (_verb Serialize Deserialize)
+			foreach (_src IN LISTS KOTEK_LIB_UNPARSED_ARGUMENTS)
+				if (_src MATCHES "\\.cpp$" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_src}")
+					file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/${_src}"
+						_kotek_found REGEX "${_verb}Module_${_kotek_entry_suffix}")
+					if (_kotek_found)
+						if ("${_verb}" STREQUAL "Serialize")
+							set(_kotek_has_serialize TRUE)
+						else()
+							set(_kotek_has_deserialize TRUE)
+						endif()
+					endif()
+				endif()
+			endforeach()
+		endforeach()
+	endif()
+
 	kotek_resolve_linkage(_kotek_linkage "${target_name}")
 	add_library(${target_name} ${_kotek_linkage} ${KOTEK_LIB_UNPARSED_ARGUMENTS})
 
@@ -240,24 +266,16 @@ function(kotek_add_library target_name)
 			endif()
 			# SerializeModule_*/DeserializeModule_* follow the strict
 			# naming convention (verb change on the init symbol); export
-			# them only if the module actually defines them
+			# them only if the module actually defines them (detected at
+			# the top of this function)
 			if ("${KOTEK_LIB_INIT}" MATCHES "^InitializeModule_(.+)$")
 				set(_kotek_entry_suffix "${CMAKE_MATCH_1}")
-				foreach (_verb Serialize Deserialize)
-					set(_has_entry FALSE)
-					foreach (_src IN LISTS KOTEK_LIB_UNPARSED_ARGUMENTS)
-						if (_src MATCHES "\\.cpp$" AND EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${_src}")
-							file(STRINGS "${CMAKE_CURRENT_SOURCE_DIR}/${_src}"
-								_kotek_found REGEX "${_verb}Module_${_kotek_entry_suffix}")
-							if (_kotek_found)
-								set(_has_entry TRUE)
-							endif()
-						endif()
-					endforeach()
-					if (_has_entry)
-						string(APPEND _kotek_def_entries "\t${_verb}Module_${_kotek_entry_suffix}\n")
-					endif()
-				endforeach()
+				if (_kotek_has_serialize)
+					string(APPEND _kotek_def_entries "\tSerializeModule_${_kotek_entry_suffix}\n")
+				endif()
+				if (_kotek_has_deserialize)
+					string(APPEND _kotek_def_entries "\tDeserializeModule_${_kotek_entry_suffix}\n")
+				endif()
 			endif()
 			set(_kotek_def_file "${CMAKE_CURRENT_BINARY_DIR}/${target_name}.def")
 			file(WRITE "${_kotek_def_file}" "${_kotek_def_entries}")
@@ -285,6 +303,8 @@ function(kotek_add_library target_name)
 		set_property(GLOBAL PROPERTY KOTEK_MODULE_INIT_${target_name} "${KOTEK_LIB_INIT}")
 		set_property(GLOBAL PROPERTY KOTEK_MODULE_SHUTDOWN_${target_name} "${KOTEK_LIB_SHUTDOWN}")
 		set_property(GLOBAL PROPERTY KOTEK_MODULE_LINKAGE_${target_name} "${_kotek_linkage}")
+		set_property(GLOBAL PROPERTY KOTEK_MODULE_HAS_SERIALIZE_${target_name} "${_kotek_has_serialize}")
+		set_property(GLOBAL PROPERTY KOTEK_MODULE_HAS_DESERIALIZE_${target_name} "${_kotek_has_deserialize}")
 	endif()
 
 	# PLUGIN membership: only modules that are plugin-destined AND have
@@ -426,7 +446,7 @@ function(kotek_finalize_plugin_links)
 	set_property(GLOBAL PROPERTY KOTEK_PLUGIN_ERASED_EDGES "")
 endfunction()
 
-# writes two generated headers:
+# writes three generated headers:
 #  - kotek_plugin_manifest.h: the table of PLUGIN modules only (dll file name
 #    + init/shutdown symbol names) for the runtime loader.
 #  - kotek_entry_config.h: for EVERY module with entry points, a
@@ -435,16 +455,38 @@ endfunction()
 #    KOTEK_INVOKE_MODULE_* macros expand this flag at compile time and select
 #    a direct call (1) or a loader lookup (0) per call site — correct in ANY
 #    configuration without link-time tricks.
-function(kotek_generate_plugin_manifest output_file config_file)
+#  - kotek_plugin_registry.h: for EVERY module with entry points, the
+#    module-name <-> entry-symbol table (folder/target name is the source of
+#    truth) consumed by the plugin override system (task K21). Emitted in
+#    EVERY linkage mode: an override dll must be resolvable also for static
+#    and shared builds, not only for PLUGIN-mode plugins.
+function(kotek_generate_plugin_manifest output_file config_file registry_file)
 	get_property(_modules GLOBAL PROPERTY KOTEK_MODULE_REGISTRATION_ORDER)
 	get_property(_plugins GLOBAL PROPERTY KOTEK_PLUGIN_LOAD_ORDER)
 
 	set(_entries "")
 	set(_defines "")
+	set(_registry_entries "")
 	set(_count 0)
 	foreach (_module IN LISTS _modules)
 		get_property(_init GLOBAL PROPERTY KOTEK_MODULE_INIT_${_module})
 		get_property(_shutdown GLOBAL PROPERTY KOTEK_MODULE_SHUTDOWN_${_module})
+		get_property(_has_serialize GLOBAL PROPERTY KOTEK_MODULE_HAS_SERIALIZE_${_module})
+		get_property(_has_deserialize GLOBAL PROPERTY KOTEK_MODULE_HAS_DESERIALIZE_${_module})
+
+		# registry row: serialize/deserialize symbol names only when the
+		# module actually defines them (nullptr otherwise)
+		set(_serialize_symbol "nullptr")
+		set(_deserialize_symbol "nullptr")
+		if ("${_init}" MATCHES "^InitializeModule_(.+)$")
+			if (_has_serialize)
+				set(_serialize_symbol "\"SerializeModule_${CMAKE_MATCH_1}\"")
+			endif()
+			if (_has_deserialize)
+				set(_deserialize_symbol "\"DeserializeModule_${CMAKE_MATCH_1}\"")
+			endif()
+		endif()
+		string(APPEND _registry_entries "\t{\"${_module}\", \"${_init}\", \"${_shutdown}\", ${_serialize_symbol}, ${_deserialize_symbol}},\n")
 
 		if ("${_module}" IN_LIST _plugins)
 			string(APPEND _entries "\t{\"${_module}.dll\", \"${_init}\", \"${_shutdown}\"},\n")
@@ -462,6 +504,8 @@ function(kotek_generate_plugin_manifest output_file config_file)
 			endif()
 		endif()
 	endforeach()
+
+	list(LENGTH _modules _registry_count)
 
 	file(WRITE "${output_file}"
 		"// generated by cmake/library.cmake kotek_generate_plugin_manifest() — do not edit\n"
@@ -485,7 +529,26 @@ function(kotek_generate_plugin_manifest output_file config_file)
 		"#pragma once\n\n"
 		"${_defines}")
 
+	file(WRITE "${registry_file}"
+		"// generated by cmake/library.cmake kotek_generate_plugin_manifest() — do not edit\n"
+		"// ALL modules with entry points (every linkage mode): module-name <->\n"
+		"// entry-symbol table for the plugin override system (task K21)\n"
+		"#pragma once\n\n"
+		"struct ktkPluginRegistryDesc\n"
+		"{\n"
+		"\tconst char* p_module_name;\n"
+		"\tconst char* p_init_symbol;\n"
+		"\tconst char* p_shutdown_symbol;\n"
+		"\tconst char* p_serialize_symbol;\n"
+		"\tconst char* p_deserialize_symbol;\n"
+		"};\n\n"
+		"static const ktkPluginRegistryDesc g_kotek_plugin_registry[] =\n"
+		"{\n"
+		"${_registry_entries}};\n\n"
+		"static const unsigned long g_kotek_plugin_registry_count = ${_registry_count}UL;\n")
+
 	message(STATUS "[kotek]: module entry manifest has ${_count} plugin dlls -> ${output_file}")
+	message(STATUS "[kotek]: module registry has ${_registry_count} modules -> ${registry_file}")
 endfunction()
 
 message(STATUS "${CMAKE_CURRENT_LIST_FILE} is applied!")

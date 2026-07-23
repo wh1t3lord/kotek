@@ -712,8 +712,8 @@ namespace Engine
 				p_main_manager
 			);
 #elif defined(KOTEK_USE_DEVELOPMENT_TYPE_STATIC)
-		::KOTEK_USER_FUNCTION_INITIALIZE /
-			_MODULE_RENDER(p_main_manager);
+		::KOTEK_USER_FUNCTION_INITIALIZE_MODULE_RENDER(
+			p_main_manager);
 #else
 	#error Unknown development type, see what you specified in your cmd/cmake GUI. The macro accepts only two variables STATIC or SHARED
 #endif

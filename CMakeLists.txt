@@ -8,6 +8,14 @@ endif()
 
 project(kotek.engine)
 
+# K6: `cmake -DKOTEK_HELP=ON` prints every kotek option with its meaning and
+# stops before dependencies/modules are processed (fast, no vcpkg fetch)
+include("cmake/options_help.cmake")
+if ("${KOTEK_HELP}" STREQUAL "ON")
+	kotek_print_options_help()
+	return()
+endif()
+
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 message("[${PROJECT_NAME}]: CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}")
 message("[${PROJECT_NAME}]: CMAKE_CURRENT_SOURCE_DIR=${CMAKE_CURRENT_SOURCE_DIR}")
@@ -27,12 +35,12 @@ message("[${PROJECT_NAME}]: vcpkg triplet is '${KOTEK_VCPKG_TRIPLET}'")
 #### LIBRARY LINKAGE MODEL (global + per-module overrides) ####
 include("cmake/library.cmake")
 
-# PLUGIN mode: the generated kotek_entry_config.h / kotek_plugin_manifest.h
-# must be includable from every module (KOTEK_INVOKE_MODULE_* macros)
-if ("${KOTEK_LINKAGE}" STREQUAL "PLUGIN")
-	file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/generated")
-	include_directories("${CMAKE_BINARY_DIR}/generated")
-endif()
+# the generated kotek_entry_config.h / kotek_plugin_manifest.h /
+# kotek_plugin_registry.h must be includable from every module
+# (KOTEK_INVOKE_MODULE_* macros in PLUGIN mode; the module registry feeds the
+# plugin override system in EVERY linkage mode, task K21)
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/generated")
+include_directories("${CMAKE_BINARY_DIR}/generated")
 
 # it is our requirement for generating the library e.g. don't just write 'cmake ..' - OUTDATED
 # By new standard you can pass a empty string, but we need to generate solution for debug build. It is required for including/generating stuff for better debug experience
@@ -336,17 +344,23 @@ add_subdirectory("src/kotek.render.bgfx")
 
 add_subdirectory("src/kotek.exe")
 
-# PLUGIN mode: re-apply erased-edge usage (see library.cmake), then emit the
-# explicit-loading manifest and make it visible to
-# kotek.core.main_manager (static leaf linked into every plugin and into the
-# exe — it implements the ktkPluginInvoke* loader, see kotek_plugin_invoke.cpp)
+# PLUGIN mode: re-apply erased-edge usage (see library.cmake)
 if ("${KOTEK_LINKAGE}" STREQUAL "PLUGIN")
 	kotek_finalize_plugin_links()
-	set(KOTEK_PLUGIN_MANIFEST_FILE "${CMAKE_BINARY_DIR}/generated/kotek_plugin_manifest.h")
-	file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/generated")
-	kotek_generate_plugin_manifest("${KOTEK_PLUGIN_MANIFEST_FILE}" "${CMAKE_BINARY_DIR}/generated/kotek_entry_config.h")
-	target_include_directories(kotek.core.main_manager PUBLIC "${CMAKE_BINARY_DIR}/generated")
 endif()
+
+# in EVERY linkage mode: emit the explicit-loading manifest (PLUGIN loader),
+# the per-entry linkage flags (KOTEK_INVOKE_MODULE_* selection) and the
+# module-name<->symbol registry (plugin override system, task K21 — an
+# override dll must also work for static/shared builds), then make them
+# visible to kotek.core.main_manager (static leaf linked into every plugin
+# and into the exe — it implements the ktkPluginInvoke* loader and the
+# ktkPluginTryOverride override lookup, see kotek_plugin_invoke.cpp /
+# kotek_plugin_override.cpp)
+set(KOTEK_PLUGIN_MANIFEST_FILE "${CMAKE_BINARY_DIR}/generated/kotek_plugin_manifest.h")
+file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/generated")
+kotek_generate_plugin_manifest("${KOTEK_PLUGIN_MANIFEST_FILE}" "${CMAKE_BINARY_DIR}/generated/kotek_entry_config.h" "${CMAKE_BINARY_DIR}/generated/kotek_plugin_registry.h")
+target_include_directories(kotek.core.main_manager PUBLIC "${CMAKE_BINARY_DIR}/generated")
 
 # TODO: when CMake will fix that we can restore but for now we can't use this due to breaking USE_FOLDERS feature...
 # TODO2: Rename cmake default filter folder CMakePredefinedTargets as just plain 'targets' word

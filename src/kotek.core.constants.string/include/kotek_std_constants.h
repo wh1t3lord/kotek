@@ -128,6 +128,19 @@ constexpr const char* kConsoleCommandArg_No_Splash = "--no_splash";
 /// (smoke testing / CI): "--kotek_frames=300"; absent or 0 means unlimited
 constexpr const char* kConsoleCommandArg_Kotek_Frames = "--kotek_frames=";
 
+/// @brief \~english writes plugins/plugins.template.json (every known module
+/// name with an empty dll field, ready to be filled as plugins.json —
+/// plugin override registration variant B, task K21), prints a message and
+/// exits with code 0; works in every linkage mode
+constexpr const char* kConsoleCommandArg_Kotek_Plugins_Template =
+	"--kotek_plugins_template";
+
+/// @brief \~english writes plugins/plugins.modules.json (a plain json array
+/// of the known module names — codegen output for tooling, task K21),
+/// prints a message and exits with code 0; works in every linkage mode
+constexpr const char* kConsoleCommandArg_Kotek_Plugins_Modules =
+	"--kotek_plugins_modules";
+
 /**
  * Constant expresses that we specify width for our executable.
  *

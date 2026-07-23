@@ -139,6 +139,9 @@ public:
 
 	kun_ktk uint32_t Get_FramesLimit(void) const noexcept override;
 
+	bool Is_PluginsTemplateRequested(void) const noexcept override;
+	bool Is_PluginsModulesRequested(void) const noexcept override;
+
 	void
 	Set_UserLibrary(const ktk_filesystem_path& path_to_library
 	) noexcept override;
@@ -209,6 +212,8 @@ private:
 	char** m_argv;
 	kun_ktk kun_mt atomic<bool> m_is_running;
 	kun_ktk uint32_t m_frames_limit;
+	bool m_plugins_template;
+	bool m_plugins_modules;
 	eEngineFeature m_engine_feature_flags;
 	eEngineFeatureRender m_engine_feature_render_flags;
 	eEngineFeatureRenderer m_engine_feature_renderer_flags;
