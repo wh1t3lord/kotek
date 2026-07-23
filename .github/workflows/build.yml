@@ -53,6 +53,28 @@ jobs:
       - name: setup msvc
         uses: ilammy/msvc-dev-cmd@v1.13.0
 
+      # install deps explicitly, grouped, BEFORE configure: the configure
+      # step also runs these installs (vcpkg_nuget_minimal.cmake) and is
+      # idempotent then, but grouping them here makes the failing port group
+      # visible in public step conclusions (job logs need admin rights)
+      - name: deps base (zstd, etl, utfcpp, glm, cgltf, spdlog, tbb, pkgconf)
+        run: |
+          if (-not (Test-Path vcpkg/vcpkg.exe)) {
+            if (-not (Test-Path vcpkg/.git)) { git clone https://github.com/microsoft/vcpkg.git vcpkg }
+            git -C vcpkg checkout 1bf999414d7def6fea4c3c310d613ceed039f929
+            vcpkg/bootstrap-vcpkg.bat
+          }
+          foreach ($p in @("zstd","etl","utfcpp","glm","cgltf","spdlog","tbb","pkgconf")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+      - name: deps graphics (vulkan, bgfx, glfw3, ktx)
+        run: |
+          foreach ($p in @("vulkan","bgfx[multithreaded]","glfw3","ktx")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+      - name: deps media/ui (rmlui, freetype, dav1d)
+        run: |
+          foreach ($p in @("rmlui[freetype]","freetype","dav1d")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+      - name: deps tests/profilers (gtest, tracy, boost-json)
+        run: |
+          foreach ($p in @("gtest","tracy","boost-json")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+
       - name: configure
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }} ${{ matrix.linkage.flags }}
 
