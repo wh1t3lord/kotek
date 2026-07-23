@@ -13,13 +13,26 @@ concurrency:
 
 jobs:
   windows:
-    name: windows (${{ matrix.config }})
+    name: windows (${{ matrix.config }}, ${{ matrix.linkage.name }})
     runs-on: windows-2022
     timeout-minutes: 90
+    # full dynamic is blocked today by the cyclic module graph (K18):
+    # visible-but-non-blocking leg until the cycles are broken
+    continue-on-error: ${{ matrix.linkage.experimental }}
     strategy:
       fail-fast: false
       matrix:
         config: [Debug, Release]
+        linkage:
+          # owner requirement (2026-07-23): CI compiles the linkage
+          # configurations; the third (kotek.exe + game.ktk) is covered by
+          # the zircon repo's matrix (game.ktk is built there)
+          - name: static
+            flags: ""
+            experimental: false
+          - name: dynamic
+            flags: "-DKOTEK_LINKAGE=SHARED"
+            experimental: true
 
     steps:
       - uses: actions/checkout@v4
@@ -41,7 +54,7 @@ jobs:
         uses: ilammy/msvc-dev-cmd@v1.13.0
 
       - name: configure
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }} ${{ matrix.linkage.flags }}
 
       - name: build
         run: cmake --build build --config ${{ matrix.config }} --parallel
@@ -57,6 +70,6 @@ jobs:
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: build-logs-${{ matrix.config }}
+          name: build-logs-${{ matrix.config }}-${{ matrix.linkage.name }}
           path: build/**/*.log
           retention-days: 7
