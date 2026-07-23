@@ -1,0 +1,57 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    name: unit tests (windows, Debug)
+    runs-on: windows-2022
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: |
+            vcpkg/installed
+            vcpkg/packages
+            vcpkg/buildtrees
+            vcpkg/vcpkg.exe
+          key: vcpkg-${{ runner.os }}-x64-windows-static-v1
+
+      - name: setup msvc
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+
+      - name: configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON
+
+      - name: build
+        run: cmake --build build --config Debug --parallel
+
+      # NOTE: the runtime test entry point runs inside kotek.exe at engine
+      # init (RUN_ALL_TESTS). It requires a working boot chain; failures here
+      # are REAL engine bugs surfaced by CI, not test-harness noise.
+      - name: run unit tests
+        working-directory: build/bin/Debug
+        run: |
+          & ./kotek.exe --no_splash --kotek_frames=30 2>&1 | Tee-Object -FilePath test-run.log
+          exit $LASTEXITCODE
+
+      - name: upload test log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-run-log
+          path: build/bin/Debug/test-run.log
+          retention-days: 7

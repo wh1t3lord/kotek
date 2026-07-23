@@ -1,0 +1,61 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  windows:
+    name: windows (${{ matrix.config }})
+    runs-on: windows-2022
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [Debug, Release]
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: |
+            vcpkg/installed
+            vcpkg/packages
+            vcpkg/buildtrees
+            vcpkg/vcpkg.exe
+          key: vcpkg-${{ runner.os }}-x64-windows-static-v1
+
+      - name: setup msvc
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+
+      - name: configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }}
+
+      - name: build
+        run: cmake --build build --config ${{ matrix.config }} --parallel
+
+      - name: verify outputs
+        shell: pwsh
+        run: |
+          if (-not (Test-Path "build/bin/${{ matrix.config }}/kotek.exe")) {
+            throw "kotek.exe was not produced"
+          }
+
+      - name: upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs-${{ matrix.config }}
+          path: build/**/*.log
+          retention-days: 7

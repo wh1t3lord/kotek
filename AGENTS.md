@@ -40,6 +40,32 @@ kotek is **layer 1** of a three-layer stack:
    but platform code cannot live in the public repo. (PS3 is unrealistic for a C++20
    codebase — treat as dropped unless the owner insists.)
 
+## 1a. Module backend philosophy (owner directive 2026-07-23 — keep current)
+
+Every kotek module should, **where reasonable**, offer backends from **popular,
+community-proven, well-API-designed libraries** (the way math already does with
+GLM/DirectXMath) — chosen because they solve real problems and have deep
+community recognition — **plus our own no-dependency implementation** so the
+module always builds with zero external requirements. The rule of three for every
+module's backend matrix: {own no-dep impl} ∪ {proven open-source backends} ∪
+{user-provided impl via the ktkI* interface}. Examples by module:
+- math: GLM / DirectXMath / own `kotek_std_math_*` classes
+- containers: std / boost(+boost::container) / ETL (static) / own pmr hybrids
+- logging: spdlog / own
+- serialization/json: boost::json / own
+- filesystem: native / zlib archives
+- window: GLFW / (future SDL)
+- UI: ImGui / RmlUi / CEF / own
+- ECS: pico_ecs (vendored) / entt / own
+- render: bgfx (raster) / NRI (dx12/vk + RT, planned) / user impl
+- video: dav1d default / user impl (own codec is out of scope)
+- threading: std / TBB
+Build validation must cover **each combination of these backends**, not only the
+default: curated named configurations (minimal / full / no-deps / per-backend
+variants) run in CI so backend switches never bit-rot. When adding a new module,
+write its entry here in the same form and register its backends in the config
+matrix (K4).
+
 ## 2. Module conventions (follow exactly)
 
 - Modules are flat siblings under `kotek/src/`, named `kotek.<layer>[.<group>[.<name>[.<backend>]]]`
@@ -243,10 +269,11 @@ owner machine: `Visual Studio 18 2026`.
   uniform `bool(ktkMainManager*)` entry signature (bgfx init reads version from
   engine config internally now). OPEN runtime issues: (a) the splash window is
   created on a detached thread and can hang window init — bounded-wait mitigation
-  in place, proper fix = create windows on the main thread only; (b) SEGFAULT in
-  zircon's `RegisterConsole_Commands` on the FIRST `Register_Command` (store into
-  the console's command map — reproduces with both etl static and std dynamic maps;
-  object address sane; needs a native debugger to pin the exact instruction);
+  in place, proper fix = create windows on the main thread only; (b) the
+  `RegisterConsole_Commands` crash was **root-caused 2026-07-23: etl pool
+  exhaustion** — the console's static command map (was 128) fills, etl's
+  `ipool.h:605` assert fires; raised `KOTEK_DEF_COMMAND_CONSOLE_COMMAND_STORAGE_COUNT`
+  to 512 (see zircon AGENTS.md §5 for the full forensic trail);
   (c) `KOTEK_ASSERT` failure opens a MODAL CRT dialog in Debug — CI must run
   Release or a non-modal assert handler.
 - ~130 micro-modules: fine-grained replaceability but heavy configure/IDE cost.

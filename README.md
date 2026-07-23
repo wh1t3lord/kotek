@@ -1,5 +1,10 @@
 # 🐈 kotek
 
+[![build](https://github.com/wh1t3lord/kotek/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/wh1t3lord/kotek/actions/workflows/build.yml)
+[![modules](https://github.com/wh1t3lord/kotek/actions/workflows/modules.yml/badge.svg?branch=main)](https://github.com/wh1t3lord/kotek/actions/workflows/modules.yml)
+[![tests](https://github.com/wh1t3lord/kotek/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/wh1t3lord/kotek/actions/workflows/tests.yml)
+[![matrix](https://github.com/wh1t3lord/kotek/actions/workflows/matrix.yml/badge.svg)](https://github.com/wh1t3lord/kotek/actions/workflows/matrix.yml)
+
 Kotek Engine is a modern, extensible C++ framework designed to facilitate the creation of games and interactive applications. It emphasizes modularity, cross-platform compatibility, and ease of use, making it suitable for both rapid prototyping and production-ready projects.
 
 ## 🎯 Who Is This For?

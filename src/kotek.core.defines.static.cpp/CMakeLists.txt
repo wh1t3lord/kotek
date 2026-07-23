@@ -584,7 +584,11 @@ if ("${KOTEK_LIBRARY_TYPE}" STREQUAL "EMB")
 	endif()
 
 	if ("${KOTEK_DEF_COMMAND_CONSOLE_COMMAND_STORAGE_COUNT}" STREQUAL "")
-		set(KOTEK_DEF_COMMAND_CONSOLE_COMMAND_STORAGE_COUNT 128)
+		# 2026-07-23: 128 was too small — the engine registers more commands
+		# than that (etl pool exhaustion asserted as a segfault in
+		# RegisterConsole_Commands). Measured by runtime analysis; keep
+		# headroom for editor/SDK commands.
+		set(KOTEK_DEF_COMMAND_CONSOLE_COMMAND_STORAGE_COUNT 512)
 	endif()
 
 	if ("${KOTEK_DEF_CONSOLE_FUNCTION_MAX_ARGUMENT_COUNT}" STREQUAL "")
