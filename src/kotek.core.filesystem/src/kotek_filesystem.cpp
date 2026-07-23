@@ -786,7 +786,6 @@ bool ktkFileSystem::Read_File(
 			}
 			else
 			{
-				KOTEK_ASSERT(false, "failed to obtain file!");
 				KOTEK_MESSAGE_WARNING(
 					"can't read file: {} because all file "
 					"systems couldn't obtain it",
@@ -1124,7 +1123,6 @@ bool ktkFileSystem::Write_File(
 			}
 			else
 			{
-				KOTEK_ASSERT(false, "failed to obtain file!");
 				KOTEK_MESSAGE_WARNING(
 					"can't read file: {} because all file "
 					"systems couldn't obtain it",
@@ -1409,7 +1407,6 @@ bool ktkFileSystem::Write_File(
 			}
 			else
 			{
-				KOTEK_ASSERT(false, "failed to obtain file!");
 				KOTEK_MESSAGE_WARNING(
 					"can't read file: because all file "
 					"systems couldn't obtain it"
@@ -2150,9 +2147,8 @@ void ktkFileSystem::Fill_FrameworkConfigDefaults()
 			static_cast<kun_ktk uint16_t>(
 				eFileSystemFeatureType::kVFMRead
 			);
-		fs_features |= static_cast<kun_ktk uint16_t>(
-			eFileSystemFeatureType::kVFMCacheEnabled
-		);
+		// 2026-07-23: do NOT enable kVFMCacheEnabled by default — the cache
+		// is not implemented and asserts in kotek_filesystem_native.cpp
 		fs_features |= static_cast<kun_ktk uint16_t>(
 			eFileSystemFeatureType::
 				kEnablePriorityWhenFailedToOpenFile
@@ -2471,7 +2467,6 @@ ktkFileHandleType ktkFileSystem::Open_File(
 			}
 			else
 			{
-				KOTEK_ASSERT(false, "failed to obtain file!");
 				KOTEK_MESSAGE_WARNING(
 					"can't read file: {} because all file "
 					"systems couldn't obtain it",
@@ -2751,7 +2746,6 @@ bool ktkFileSystem::Close_File(
 			}
 			else
 			{
-				KOTEK_ASSERT(false, "failed to obtain file!");
 				KOTEK_MESSAGE_WARNING(
 					"can't read file: because all file "
 					"systems couldn't obtain it"
@@ -3030,7 +3024,6 @@ bool ktkFileSystem::Get_FileSize(
 			}
 			else
 			{
-				KOTEK_ASSERT(false, "failed to obtain file!");
 				KOTEK_MESSAGE_WARNING(
 					"can't read file: because all file "
 					"systems couldn't obtain it"
@@ -3325,7 +3318,6 @@ bool ktkFileSystem::Seek(
 			}
 			else
 			{
-				KOTEK_ASSERT(false, "failed to obtain file!");
 				KOTEK_MESSAGE_WARNING(
 					"can't read file: because all file "
 					"systems couldn't obtain it"
@@ -3603,7 +3595,6 @@ bool ktkFileSystem::Tell(
 			}
 			else
 			{
-				KOTEK_ASSERT(false, "failed to obtain file!");
 				KOTEK_MESSAGE_WARNING(
 					"can't read file: because all file "
 					"systems couldn't obtain it"

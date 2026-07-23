@@ -740,10 +740,10 @@ float matrix2x2f::e(math_id_t column_id, math_id_t row_id)
 	const noexcept
 {
 	KOTEK_ASSERT(
-		column_id >= this->get_column_count(), "out-of-range"
+		column_id < this->get_column_count(), "out-of-range"
 	);
 	KOTEK_ASSERT(
-		row_id >= this->get_row_count(), "out-of-range"
+		row_id < this->get_row_count(), "out-of-range"
 	);
 
 	if (column_id >= this->get_column_count())
@@ -759,10 +759,10 @@ float&
 matrix2x2f::e(math_id_t column_id, math_id_t row_id) noexcept
 {
 	KOTEK_ASSERT(
-		column_id >= this->get_column_count(), "out-of-range"
+		column_id < this->get_column_count(), "out-of-range"
 	);
 	KOTEK_ASSERT(
-		row_id >= this->get_row_count(), "out-of-range"
+		row_id < this->get_row_count(), "out-of-range"
 	);
 
 	if (column_id >= this->get_column_count())
@@ -780,7 +780,7 @@ vectornf_view_t matrix2x2f::c(math_id_t column_id) noexcept
 	#error todo: impl
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	KOTEK_ASSERT(
-		column_id >= this->get_column_count(), "out-of-range"
+		column_id < this->get_column_count(), "out-of-range"
 	);
 
 	if (column_id >= this->get_column_count())
@@ -799,7 +799,7 @@ vectornf_const_view_t matrix2x2f::c(math_id_t column_id
 	#error todo: impl
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	KOTEK_ASSERT(
-		column_id >= this->get_column_count(), "out-of-range"
+		column_id < this->get_column_count(), "out-of-range"
 	);
 
 	if (column_id >= this->get_column_count())

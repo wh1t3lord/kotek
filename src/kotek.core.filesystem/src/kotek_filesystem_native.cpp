@@ -76,15 +76,20 @@ bool ktkFileSystem_Native::Read_File(
 	{
 		if (is_vfm_cache_enabled)
 		{
-			// todo: implement this
-			KOTEK_ASSERT(false, "implement this");
+			// todo: implement vfm cache — degrade gracefully instead of
+			// asserting so configs that enable it still boot
+			KOTEK_MESSAGE_WARNING(
+				"vfm cache is not implemented, continuing without it");
 		}
 
 		// todo: think about read and write operations... like
 		// what if i enable write but not read or something ????
 		// what are other variants of vfm usage?
+
+		// todo: implement vfm read — until packed-file support lands
+		// fall through to the native path so files on disk still load
 	}
-	else
+
 	{
 		// use traditional fopen/fwrite
 
@@ -106,7 +111,13 @@ bool ktkFileSystem_Native::Read_File(
 			if (file_size <= length_of_buffer)
 			{
 				fread(p_buffer, file_size, 1, p_file);
-				p_buffer[file_size] = '\0';
+
+				// no room for the terminator when the file fills the
+				// caller's buffer exactly — don't write past the end
+				if (file_size < length_of_buffer)
+				{
+					p_buffer[file_size] = '\0';
+				}
 				KOTEK_ASSERT(
 					ferror(p_file) == 0, "fread failed!"
 				);
@@ -117,7 +128,7 @@ bool ktkFileSystem_Native::Read_File(
 			else
 			{
 				KOTEK_ASSERT(
-					file_size <=
+					file_size <
 						sizeof(this->m_reserved_cache) /
 							sizeof(this->m_reserved_cache[0]),
 					"overflow, resize your cache or use "
@@ -125,7 +136,7 @@ bool ktkFileSystem_Native::Read_File(
 					"loading this data"
 				);
 
-				if (file_size <=
+				if (file_size <
 				    sizeof(this->m_reserved_cache) /
 				        sizeof(this->m_reserved_cache[0]))
 				{

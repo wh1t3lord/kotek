@@ -256,26 +256,39 @@ owner machine: `Visual Studio 18 2026`.
 - `kotek.render.dx12` commented out; ANGLE modules only in non-minimal configs.
 - **Interfaces in `kotek.core.api/kotek_api.h` are pure C++ (no C ABI) — binary-level
   cross-compiler replaceability is not guaranteed (see validation notes, task K3).
-- **Runtime status (2026-07-22/23)**: `kotek.exe` boots from any cwd (json config
-  parses, `game.ktk` loads, bgfx D3D11 + render modules initialize, console
-  initializes). Fixes made this session: STD-mode `ktkJson::Get` was an empty stub
-  behind `#ifdef KOTEK_USE_BOOST_LIBRARY` (engine could never read nested config in
-  STD mode — now `KOTEK_USE_NOT_CUSTOM_LIBRARY`); `dll::shared_library` gained move
-  semantics (temporary `FreeLibrary`d the handle — `GetProcAddress` always failed);
-  `ktk::dll::program_location()` added (user library resolves next to the exe, not
-  cwd); 8 exception `throw`s in hybrid containers replaced by `KOTEK_ASSERT` (this
-  codebase is exception-free by policy; the leak tracker still `throw`s — see K9);
-  `KOTEK_INVOKE_MODULE` unified to ONE macro `(verb, ns, symbol, manager)` with a
-  uniform `bool(ktkMainManager*)` entry signature (bgfx init reads version from
-  engine config internally now). OPEN runtime issues: (a) the splash window is
-  created on a detached thread and can hang window init — bounded-wait mitigation
-  in place, proper fix = create windows on the main thread only; (b) the
-  `RegisterConsole_Commands` crash was **root-caused 2026-07-23: etl pool
-  exhaustion** — the console's static command map (was 128) fills, etl's
-  `ipool.h:605` assert fires; raised `KOTEK_DEF_COMMAND_CONSOLE_COMMAND_STORAGE_COUNT`
-  to 512 (see zircon AGENTS.md §5 for the full forensic trail);
-  (c) `KOTEK_ASSERT` failure opens a MODAL CRT dialog in Debug — CI must run
-  Release or a non-modal assert handler.
+- **Runtime status (2026-07-23, CLEAN RUN)**: `kotek.exe --no_splash
+  --kotek_frames=30` boots → 14/14 zircon + 163/163 kotek tests → 30 frames →
+  full shutdown → **exit 0**. Earlier fixes: STD-mode `ktkJson::Get` stub →
+  `KOTEK_USE_NOT_CUSTOM_LIBRARY`; `dll::shared_library` move semantics;
+  `ktk::dll::program_location()`; 8 hybrid-container `throw`s → `KOTEK_ASSERT`;
+  `KOTEK_INVOKE_MODULE` unified. 2026-07-23 fixes: (a) console
+  `Register_Command` segfault — **etl intrusive-list terminator is a
+  module-local static**: a container constructed by the exe terminates buckets
+  with an address game.ktk never compares equal to, so cross-module
+  insert/erase walks off the bucket (null+8 read). Fixed zircon-side by
+  constructing the console in the consuming module (see rule below); the
+  earlier `KOTEK_DEF_COMMAND_CONSOLE_COMMAND_STORAGE_COUNT` 128→512 bump was
+  NOT the cause but stays as headroom. (b) render shutdown dispatch: stray
+  `if (is_gl)` line swallowed the whole else-if chain — bgfx shutdown never
+  ran. (c) filesystem: native `Read_File` VFM branch returned false for
+  existing files (VFM unimplemented → now falls through to `fopen`); two
+  off-by-one terminator writes (`file_size == buffer/cache size` overflowed by
+  1 byte); 8 redundant `KOTEK_ASSERT(false)` dropped where the warning right
+  after already degrades. (d) `matrix2x2_f::e/c`: 6 inverted range asserts.
+  (e) cross-CRT heap frees root-caused + mitigated (see rule below);
+  `ShutdownModule_Core_Engine_Config` intentionally leaks the config until K9.
+  Residual: ~5 CRT-startup heap asserts; splash window is created on a
+  detached thread (bounded-wait mitigation; fix = main thread only).
+- **Module-boundary rules (verified 2026-07-23, apply to every layer)**:
+  (1) any object whose inline/template methods touch **etl intrusive
+  containers** must be constructed AND destroyed in the module that uses
+  those methods — etl terminators are module-local statics, foreign-built
+  containers corrupt on cross-module mutation; (2) any **heap-owning**
+  object (std::string / containers / `new`d members) must not be freed by a
+  different module — `/MT` gives each module its own CRT debug-heap list;
+  mitigation today = `_CRTDBG_ALLOC_MEM_DF` off via `#pragma init_seg(compiler)`
+  statics in both binaries (blocks free straight to the shared process heap),
+  real fix = **K9 shared allocator** so no cross-CRT free exists.
 - ~130 micro-modules: fine-grained replaceability but heavy configure/IDE cost.
 - Recurring TODO clusters: `kotek.render.gl` buffer reallocations/sync,
   `kotek.core.containers` unimplemented `shared_mutex/semaphore`, `kotek.game` update

@@ -329,8 +329,14 @@ bool ShutdownModule_Core_Engine_Config(ktkMainManager* p_manager
 	);
 
 	p_instance->Shutdown();
-	delete p_instance;
 
+	// NOTE: intentionally leaked. The config lives for the whole process
+	// and is deleted two calls before exit anyway; destroying it walks
+	// cross-module std::string/container members whose blocks were
+	// allocated by another module's CRT and the debug-heap unlink storms
+	// (millions of __acrt_first_block asserts, hangs the shutdown). The
+	// real fix is the shared allocator (K9), until then the OS reclaims
+	// it at process exit.
 	return true;
 }
 

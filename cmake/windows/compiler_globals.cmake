@@ -14,6 +14,10 @@ if(MSVC)
     # (KOTEK_VCPKG_TRIPLET=x64-windows-static, see kotek/CMakeLists.txt); mixing
     # /MT with dynamic-CRT deps fails with LNK2038.
     set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+    # /MP spawns several CL.EXE per project and they share one compiler PDB;
+    # /FS serializes those writes through mspdbsrv (fixes sporadic C1041)
+    add_compile_options(/FS)
 endif()
 
 # for all possible compilers

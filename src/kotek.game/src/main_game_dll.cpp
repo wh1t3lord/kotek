@@ -775,7 +775,9 @@ namespace Engine
 		Serialize_Engine(p_main_manager);
 
 		kun_game ShutdownModule_Game(p_main_manager);
+
 		KOTEK_INVOKE_MODULE(SHUTDOWN, UI, ShutdownModule_UI, p_main_manager);
+
 		KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core, p_main_manager);
 
 		return true;

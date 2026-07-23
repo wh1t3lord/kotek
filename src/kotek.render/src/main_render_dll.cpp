@@ -212,7 +212,6 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 			p_engine_config->IsFeatureEnabled(Core::eEngineFeatureRenderer::
 					kEngine_Feature_Renderer_OpenGLES_SpecifiedByUser);
 
-		if (is_gl)
 		if (is_gl || is_vk)
 		{
 			KOTEK_ASSERT(false,

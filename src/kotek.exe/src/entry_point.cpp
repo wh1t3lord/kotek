@@ -3,6 +3,7 @@
 
 #if defined(KOTEK_DEBUG) && defined(KOTEK_PLATFORM_WINDOWS)
 	#include <crtdbg.h>
+	#include <cstdio>
 	#include <stdlib.h>
 #endif
 
@@ -44,6 +45,22 @@ int main(int argc, char** argv)
 	kun_kotek Engine::InitializeEngine(&main_manager);
 	kun_kotek Engine::ExecuteEngine(&main_manager);
 	kun_kotek Engine::ShutdownEngine(&main_manager);
+
+#if defined(KOTEK_DEBUG) && defined(KOTEK_PLATFORM_WINDOWS)
+	// kotek.core.memory.cpu enabled the CRT exit leak dump
+	// (_CRTDBG_LEAK_CHECK_DF) at core init, but in a multi-CRT
+	// process (static MTd per module) with heap-owning objects
+	// crossing module boundaries the debug block lists are
+	// cross-poisoned by then, and the dump walks them into
+	// foreign/corrupted entries — the megabyte-scale
+	// __acrt_first_block assert flood at process exit. The dump is
+	// unsound here, so it is disabled again before teardown;
+	// allocation tracking itself stays on (see zircon/AGENTS.md §5).
+	_CrtSetDbgFlag(
+		_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) &
+		~_CRTDBG_LEAK_CHECK_DF
+	);
+#endif
 
 	return 0;
 }
