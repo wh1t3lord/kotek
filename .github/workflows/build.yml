@@ -29,12 +29,13 @@ jobs:
       - name: cache vcpkg
         uses: actions/cache@v4
         with:
+          # only the installed triplet tree + the tool itself: packages/ and
+          # buildtrees/ are recreatable intermediates and blow the 10 GB
+          # cache quota (locally >1.2 GB each); key bumps on the dep list
           path: |
             vcpkg/installed
-            vcpkg/packages
-            vcpkg/buildtrees
             vcpkg/vcpkg.exe
-          key: vcpkg-${{ runner.os }}-x64-windows-static-v1
+          key: vcpkg-${{ runner.os }}-x64-windows-static-v2-${{ hashFiles('cmake/windows/vcpkg_nuget_minimal.cmake') }}
 
       - name: setup msvc
         uses: ilammy/msvc-dev-cmd@v1.13.0

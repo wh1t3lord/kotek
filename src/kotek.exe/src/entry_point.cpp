@@ -29,9 +29,12 @@
 int main(int argc, char** argv)
 {
 #if defined(KOTEK_DEBUG) && defined(KOTEK_PLATFORM_WINDOWS)
-	// never show the modal CRT dialog for asserts/errors in debug builds:
-	// report to stderr and fail fast instead (CI and automated runs must
-	// not hang on an invisible dialog)
+#ifdef KOTEK_USE_ASSERT_STDERR_ROUTING
+	// automation configuration (CI/agents,
+	// -DKOTEK_ASSERT_STDERR_ROUTING=ON): never show the modal CRT dialog
+	// for asserts/errors in debug builds — report to stderr and fail
+	// fast instead (automated runs must not hang on an invisible
+	// dialog). The default configuration keeps the stock modal dialog.
 	_CrtSetReportMode(
 		_CRT_ASSERT, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE);
 	_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
@@ -39,6 +42,7 @@ int main(int argc, char** argv)
 		_CRT_ERROR, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE);
 	_CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
 	_set_error_mode(_OUT_TO_STDERR);
+#endif
 #endif
 
 	kun_kotek kun_core ktkMainManager main_manager(argc, argv);

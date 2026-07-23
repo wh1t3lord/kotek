@@ -94,6 +94,11 @@ matrix (K4).
 - Aggregator modules (e.g. `kotek.core.containers`) only link their children PUBLIC.
 - Modules are added in `kotek/CMakeLists.txt` via plain `add_subdirectory` **in
   dependency order** — there is no per-module cmake macro. Keep that order sane.
+- **Unit tests are living code — always actualized** (owner directive 2026-07-23):
+  every test must match the current codebase's contracts; when behavior changes,
+  the test changes in the same commit. A test that no longer matches reality is
+  refactored or deleted (context decides) — never left rotting. Tests are
+  functional proofs of what a class/module PROMISES, not per-method formalities.
 
 ## 3. Container taxonomy (core concept — do not break)
 
@@ -106,6 +111,16 @@ matrix (K4).
 - All aliases live in `Kotek::ktk`; `_t` twins are exported at `Kotek::` scope.
 - Umbrella headers map `ktk_<name>` to one category via `KOTEK_USE_LIBRARY_TYPE_EMB/DYN/HYB`
   + `static_assert(is_same_v<...>)` + `#error unknown configuration`.
+- **Availability vs resolution (verified 2026-07-23)**: `KOTEK_LIBRARY_TYPE`
+  (default `EMB`) picks which category `ktk_*` resolves to; the independent
+  `KOTEK_STD_LIBRARY_{STATIC,HYBRID,DYNAMIC}_CONTAINERS` switches (all default
+  ON) control whether a category is *available* at all. The **embedded
+  configuration** consumers like zircon require is: `EMB` + `STATIC=ON`
+  (zircon hard-guards this with a force-included `#error` header, zircon task
+  Z12); the strict shipping variant additionally sets `HYBRID=OFF DYNAMIC=OFF`
+  so those categories are not even declarable. Hardening TODO: make umbrella
+  headers include only enabled categories' alias headers and `#error` on
+  direct includes of disabled ones (today a disabled category still declares).
 - Allocator: `KOTEK_USE_MEMORY_ALLOCATOR_CLASS` = `mi_stl_allocator` (mimalloc) or
   `std::allocator`, from `KOTEK_MEMORY_ALLOCATOR_CPU` (see `kotek.core.memory.cpu`).
 
@@ -115,7 +130,8 @@ matrix (K4).
    `KOTEK_LIBRARY_TYPE=EMB|DYN|HYB`, `KOTEK_CONFIGURATION_TYPE=minimal|...`,
    `KOTEK_DEPS_FOLDER=vcpkg|nuget`, `KOTEK_DEVELOPMENT_TYPE=SHARED|STATIC`,
    `KOTEK_GAME_OUTPUT_LIBRARY_NAME=game.ktk`, `KOTEK_MATH_LIBRARY=GLM|DXM`,
-   `KOTEK_WINDOW_LIBRARY=GLFW`, `KOTEK_ECS_BACKEND=PICO`, profilers, tests, …
+   `KOTEK_WINDOW_LIBRARY=GLFW`, `KOTEK_ECS_BACKEND=PICO`,
+   `KOTEK_ASSERT_STDERR_ROUTING=ON|OFF`, profilers, tests, …
    (full list: `kotek/CMakeLists.txt` + `kotek.core.defines.static.*/CMakeLists.txt`).
 2. `kotek.core.defines.static.*` modules accumulate `-DKOTEK_*` compile definitions
    (PUBLIC → propagate everywhere).
@@ -223,6 +239,25 @@ owner machine: `Visual Studio 18 2026`.
   `KOTEK_VCPKG_TRIPLET` (default `x64-windows-static`) wired in
   `kotek/CMakeLists.txt` + both `vcpkg_nuget*.cmake`. If you ever switch CRT to
   `/MD`, switch the triplet to `x64-windows` too — mixing fails with LNK2038.
+- **Assert presentation flag (2026-07-23)**: default = stock modal CRT dialog
+  (what users/manual debugging expect). `KOTEK_ASSERT_STDERR_ROUTING=ON` →
+  `KOTEK_USE_ASSERT_STDERR_ROUTING`, routes CRT asserts/errors to stderr +
+  fail-fast in both binaries (exe entry + game module init); mandatory for
+  CI/agents — a modal dialog on a headless runner hangs the job. The flag
+  covers CRT-level reports only; `KOTEK_ASSERT` logs through the engine
+  logger in every configuration.
+- **CI state (2026-07-23)**: GitHub workflows (`build/tests/modules`) run on
+  every push but were RED at the configure step on the CI image (vcpkg builds
+  the full minimal dep set — vulkan SDK, bgfx, boost-json, tracy, dav1d —
+  from source; a port fails there, exact one needs the admin-only job log).
+  Local standalone configure+build is green. Fixed so far: vcpkg cache
+  trimmed from ~6.5 GB (installed+packages+buildtrees) to ~1.2 GB
+  (installed+tool, quota-safe, key v2 hashed on the dep list); kotek
+  `tests.yml` is now build-only (runtime gtests need `game.ktk` from zircon —
+  they live in the zircon repo's tests workflow, which also runs the real
+  engine boot with `KOTEK_ASSERT_STDERR_ROUTING=ON`). Durable fix = vcpkg
+  binary caching over the owner's nuget feed (blocked on K16: API key as CI
+  secret vs local).
 - **SHARED linkage limitations** (`KOTEK_LINKAGE=SHARED`, K18):
   `WINDOWS_EXPORT_ALL_SYMBOLS` exports functions but not data globals;
   circular target dependencies (tolerated by .lib) break .dll linking —
@@ -282,13 +317,17 @@ owner machine: `Visual Studio 18 2026`.
 - **Module-boundary rules (verified 2026-07-23, apply to every layer)**:
   (1) any object whose inline/template methods touch **etl intrusive
   containers** must be constructed AND destroyed in the module that uses
-  those methods — etl terminators are module-local statics, foreign-built
-  containers corrupt on cross-module mutation; (2) any **heap-owning**
-  object (std::string / containers / `new`d members) must not be freed by a
-  different module — `/MT` gives each module its own CRT debug-heap list;
-  mitigation today = `_CRTDBG_ALLOC_MEM_DF` off via `#pragma init_seg(compiler)`
-  statics in both binaries (blocks free straight to the shared process heap),
-  real fix = **K9 shared allocator** so no cross-CRT free exists.
+  those methods — etl terminators (`intrusive_forward_list_base<TLink>::
+  terminator`) are module-local statics, foreign-built containers corrupt
+  on cross-module mutation; (2) any **heap-owning** object (std::string /
+  containers / `new`d members) must not be freed by a different module —
+  `/MT` gives each module its own CRT debug-heap block list, cross-frees
+  assert `__acrt_first_block == header` and poison the lists. Today's
+  containment: allocation tracking stays ON (do not hide reports), the
+  unsound **exit leak dump** (`_CRTDBG_LEAK_CHECK_DF`, force-enabled by
+  kotek.core.memory.cpu) is disabled at each module's shutdown, and the
+  engine config is intentionally leaked; real fix = **K9 shared
+  allocator** so no cross-CRT free exists.
 - ~130 micro-modules: fine-grained replaceability but heavy configure/IDE cost.
 - Recurring TODO clusters: `kotek.render.gl` buffer reallocations/sync,
   `kotek.core.containers` unimplemented `shared_mutex/semaphore`, `kotek.game` update

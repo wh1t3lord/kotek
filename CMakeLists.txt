@@ -70,6 +70,22 @@ if ("${KOTEK_LIBRARY_TYPE}" STREQUAL "")
 	message("[${PROJECT_NAME}]: library development - ${KOTEK_LIBRARY_TYPE} (EMB is embedded and DYN is dynamic and HYB is hybrid, check documentation about these definitions)")
 endif()
 
+# Assert presentation: by DEFAULT a failed CRT assert opens the stock modal
+# dialog (Abort/Retry/Ignore) — that is what end users and manual debugging
+# expect. Automation (agents, CI/CD) must not hang on an invisible dialog,
+# so they configure -DKOTEK_ASSERT_STDERR_ROUTING=ON which routes CRT
+# asserts/errors to stderr and fails fast. This covers CRT-level reports
+# (debug_heap, invalid parameter, _CrtDbgReport); KOTEK_ASSERT itself logs
+# through the engine logger in every configuration.
+if ("${KOTEK_ASSERT_STDERR_ROUTING}" STREQUAL "")
+	set(KOTEK_ASSERT_STDERR_ROUTING "OFF" CACHE INTERNAL "route CRT asserts to stderr instead of the modal dialog (use ON for CI/agents)")
+endif()
+
+if ("${KOTEK_ASSERT_STDERR_ROUTING}" STREQUAL "ON")
+	add_compile_definitions(KOTEK_USE_ASSERT_STDERR_ROUTING)
+	message("[${PROJECT_NAME}]: CRT asserts route to stderr (no modal dialog)")
+endif()
+
 message("[${PROJECT_NAME}]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}'")
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
