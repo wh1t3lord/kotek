@@ -1,10 +1,17 @@
 message(STATUS "Downloading vcpkg for downloading big packages because of nuget limitations...")
 
+# pin vcpkg to the snapshot the dep set is validated against (2026-05-27);
+# cloning floating master makes CI builds non-deterministic — a port that
+# builds on the owner's machine can be broken upstream two weeks later
+set(KOTEK_VCPKG_PINNED_COMMIT "1bf999414d7def6fea4c3c310d613ceed039f929")
+
 if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
     message(STATUS "You didn't have vcpkg so we clone it")
     execute_process(COMMAND "git" clone https://github.com/microsoft/vcpkg.git WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
+# fresh clones land on master HEAD — reset to the validated snapshot
+execute_process(COMMAND "git" checkout ${KOTEK_VCPKG_PINNED_COMMIT} WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
 
 if (WIN32)
     execute_process(COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.bat")
