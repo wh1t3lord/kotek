@@ -1,6 +1,11 @@
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.game/include/kotek_engine.h>
 
+#if defined(KOTEK_DEBUG) && defined(KOTEK_PLATFORM_WINDOWS)
+	#include <crtdbg.h>
+	#include <stdlib.h>
+#endif
+
 /**
  * @brief Entry point of the application of computer OSes.
  *
@@ -22,6 +27,19 @@
  */
 int main(int argc, char** argv)
 {
+#if defined(KOTEK_DEBUG) && defined(KOTEK_PLATFORM_WINDOWS)
+	// never show the modal CRT dialog for asserts/errors in debug builds:
+	// report to stderr and fail fast instead (CI and automated runs must
+	// not hang on an invisible dialog)
+	_CrtSetReportMode(
+		_CRT_ASSERT, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE);
+	_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
+	_CrtSetReportMode(
+		_CRT_ERROR, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE);
+	_CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
+	_set_error_mode(_OUT_TO_STDERR);
+#endif
+
 	kun_kotek kun_core ktkMainManager main_manager(argc, argv);
 	kun_kotek Engine::InitializeEngine(&main_manager);
 	kun_kotek Engine::ExecuteEngine(&main_manager);
