@@ -7,6 +7,11 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# the ci-logs/badges publishing steps push branches — the default
+# GITHUB_TOKEN is read-only, so pushes 403 silently without this
+permissions:
+  contents: write
+
 concurrency:
   group: modules-${{ github.ref }}
   cancel-in-progress: true
