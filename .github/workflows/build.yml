@@ -20,7 +20,7 @@ jobs:
   windows:
     name: windows (${{ matrix.config }}, ${{ matrix.linkage.name }})
     runs-on: windows-2022
-    timeout-minutes: 90
+    timeout-minutes: 180
     # full dynamic is blocked today by the cyclic module graph (K18):
     # visible-but-non-blocking leg until the cycles are broken
     continue-on-error: ${{ matrix.linkage.experimental }}
@@ -76,37 +76,41 @@ jobs:
           git -C vcpkg checkout FETCH_HEAD
           if (-not (Test-Path vcpkg/vcpkg.exe)) { vcpkg/bootstrap-vcpkg.bat }
           foreach ($p in @("zstd","etl","utfcpp","glm","cgltf","spdlog","tbb","pkgconf","mimalloc")) {
+            $safe = $p -replace '[^a-zA-Z0-9]', '_'
             foreach ($attempt in 1..3) {
-              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$p.log"
+              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$safe.log"
               if ($LASTEXITCODE -eq 0) { break }
-              if ($attempt -eq 3) { Get-Content "deps-$p.log" -Tail 40; exit $LASTEXITCODE }
+              if ($attempt -eq 3) { Get-Content "deps-$safe.log" -Tail 40; exit $LASTEXITCODE }
             }
           }
       - name: deps graphics (vulkan, bgfx, glfw3, ktx)
         run: |
           foreach ($p in @("vulkan","bgfx[multithreaded]","glfw3","ktx")) {
+            $safe = $p -replace '[^a-zA-Z0-9]', '_'
             foreach ($attempt in 1..3) {
-              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$p.log"
+              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$safe.log"
               if ($LASTEXITCODE -eq 0) { break }
-              if ($attempt -eq 3) { Get-Content "deps-$p.log" -Tail 40; exit $LASTEXITCODE }
+              if ($attempt -eq 3) { Get-Content "deps-$safe.log" -Tail 40; exit $LASTEXITCODE }
             }
           }
       - name: deps media/ui (rmlui, freetype, dav1d)
         run: |
           foreach ($p in @("rmlui[freetype]","freetype","dav1d")) {
+            $safe = $p -replace '[^a-zA-Z0-9]', '_'
             foreach ($attempt in 1..3) {
-              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$p.log"
+              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$safe.log"
               if ($LASTEXITCODE -eq 0) { break }
-              if ($attempt -eq 3) { Get-Content "deps-$p.log" -Tail 40; exit $LASTEXITCODE }
+              if ($attempt -eq 3) { Get-Content "deps-$safe.log" -Tail 40; exit $LASTEXITCODE }
             }
           }
       - name: deps tests/profilers (gtest, tracy, boost-json)
         run: |
           foreach ($p in @("gtest","tracy","boost-json")) {
+            $safe = $p -replace '[^a-zA-Z0-9]', '_'
             foreach ($attempt in 1..3) {
-              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$p.log"
+              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$safe.log"
               if ($LASTEXITCODE -eq 0) { break }
-              if ($attempt -eq 3) { Get-Content "deps-$p.log" -Tail 40; exit $LASTEXITCODE }
+              if ($attempt -eq 3) { Get-Content "deps-$safe.log" -Tail 40; exit $LASTEXITCODE }
             }
           }
 
