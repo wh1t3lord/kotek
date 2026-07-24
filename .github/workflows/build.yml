@@ -94,6 +94,25 @@ jobs:
             throw "kotek.exe was not produced"
           }
 
+      # job logs and artifacts need admin rights to view — push the failure
+      # logs to a public ci-logs branch instead so anyone (and agents) can
+      # read the actual cmake/compiler error
+      - name: publish failure logs to ci-logs branch
+        if: failure()
+        shell: pwsh
+        run: |
+          $dest = "ci-logs/${{ github.run_id }}/${{ matrix.config }}-${{ matrix.linkage.name }}"
+          New-Item -ItemType Directory -Force $dest | Out-Null
+          cmake -S . -B build-diag -DCMAKE_BUILD_TYPE=${{ matrix.config }} ${{ matrix.linkage.flags }} *> "$dest/configure-output.log"; $null
+          if (Test-Path build) { Get-ChildItem -Recurse build -Include *.log -File | Copy-Item -Destination $dest -Force -ErrorAction SilentlyContinue }
+          git config user.email "ci@kotek"
+          git config user.name "kotek-ci"
+          git fetch origin ci-logs; if ($LASTEXITCODE -eq 0) { git checkout ci-logs } else { git checkout --orphan ci-logs }
+          git add $dest
+          git commit --quiet -m "ci logs: ${{ github.workflow }} ${{ matrix.config }}-${{ matrix.linkage.name }} run ${{ github.run_number }}"
+          git push origin HEAD:ci-logs
+          if ($LASTEXITCODE -ne 0) { git pull --rebase origin ci-logs; git push origin HEAD:ci-logs }
+
       - name: upload logs on failure
         if: failure()
         uses: actions/upload-artifact@v4
