@@ -72,13 +72,27 @@ jobs:
           New-Item -ItemType Directory -Force $dest | Out-Null
           cmake -S . -B build-diag -DCMAKE_BUILD_TYPE=Debug -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON *> "$dest/configure-output.log"; $null
           if (Test-Path build) { Get-ChildItem -Recurse build -Include *.log -File | Copy-Item -Destination $dest -Force -ErrorAction SilentlyContinue }
-          git config user.email "ci@kotek"
-          git config user.name "kotek-ci"
-          git fetch origin ci-logs; if ($LASTEXITCODE -eq 0) { git checkout ci-logs } else { git checkout --orphan ci-logs }
-          git add $dest
-          git commit --quiet -m "ci logs: tests run ${{ github.run_number }}"
-          git push origin HEAD:ci-logs
-          if ($LASTEXITCODE -ne 0) { git pull --rebase origin ci-logs; git push origin HEAD:ci-logs }
+
+          # push from a SEPARATE clone: branch switching inside the job's
+          # checkout proved too fragile (shallow refspecs, orphan states)
+          $tmp = "$env:RUNNER_TEMP/ci-logs-push"
+          Remove-Item -Recurse -Force $tmp -ErrorAction SilentlyContinue
+          $repo = "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git"
+          git clone --depth 1 --branch ci-logs $repo $tmp
+          if ($LASTEXITCODE -ne 0) {
+            git clone --depth 1 $repo $tmp
+            git -C $tmp checkout --orphan ci-logs
+            git -C $tmp rm -rf --quiet .
+          }
+          New-Item -ItemType Directory -Force "$tmp/$dest" | Out-Null
+          Copy-Item -Recurse "$dest/*" "$tmp/$dest/" -Force
+          git -C $tmp config user.email "ci@kotek"
+          git -C $tmp config user.name "kotek-ci"
+          git -C $tmp add $dest
+          git -C $tmp diff --cached --quiet
+          if ($LASTEXITCODE -eq 0) { Write-Host "no new logs to publish"; exit 0 }
+          git -C $tmp commit --quiet -m "ci logs: tests run ${{ github.run_number }}"
+          git -C $tmp push origin ci-logs
 
       - name: upload logs on failure
         if: failure()
