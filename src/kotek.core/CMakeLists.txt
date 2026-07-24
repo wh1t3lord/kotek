@@ -109,9 +109,9 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AN
 endif()
 
 # math backend parity tests (kotek_core_test_math_backends.cpp) compute
-# reference values with raw GLM calls; under the DXM backend glm does not
-# propagate from kotek.core.math, so pull it here explicitly
-if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
+# reference values with raw GLM calls; under the DXM/OWN backends glm does
+# not propagate from kotek.core.math, so pull it here explicitly
+if ("${KOTEK_TESTS}" STREQUAL "ON" AND ("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM" OR "${KOTEK_MATH_LIBRARY}" STREQUAL "KOTEK_OWN"))
 	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		file(GLOB nuget_glm_folder_tests RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Glm.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
 		if ("${nuget_glm_folder_tests}" MATCHES "Kotek.Packages.Glm.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")

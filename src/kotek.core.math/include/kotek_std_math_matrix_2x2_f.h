@@ -117,8 +117,10 @@ public:
 	}
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+
 #else
-	#error Unknown math library
+	#error unknown math library
 #endif
 
 	float
@@ -197,6 +199,10 @@ inline matrix2x2f operator+(
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() + right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() + right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -296,6 +302,10 @@ inline matrix2x2f operator-(
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() - right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() - right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -365,6 +375,10 @@ inline matrix2x2f operator*(
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() * right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() * right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -406,6 +420,10 @@ operator*(const matrix2x2f& left, float value) noexcept
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() * value);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() * value);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -435,6 +453,10 @@ operator*(const matrix2x2f& left, const vector2f& vec)
 	);
 
 	return casted;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return left.Get_Base() * vec.Get_Base();
+#else
+	#error unknown math library
 #endif
 }
 
@@ -460,6 +482,10 @@ operator*(const vector2f& vec, const matrix2x2f& right)
 	);
 
 	return casted;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vec.Get_Base() * right.Get_Base();
+#else
+	#error unknown math library
 #endif
 }
 
@@ -470,6 +496,10 @@ operator*(const matrix2x2f& left, const vectornf_view_t& view)
 	return left * vector2f(view);
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
 	return left * vector2f(view);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return left * vector2f(view);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -480,6 +510,10 @@ operator*(const vectornf_view_t& view, const matrix2x2f& right)
 	return right * vector2f(view);
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
 	return right * vector2f(view);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return right * vector2f(view);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -572,6 +606,10 @@ operator/(const matrix2x2f& left, float value) noexcept
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() / value);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() / value);
+#else
+	#error unknown math library
 #endif
 }
 

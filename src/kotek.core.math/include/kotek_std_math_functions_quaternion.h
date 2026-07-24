@@ -19,6 +19,10 @@ inline quaternionf get_math_normalize(const quaternionf& quat)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::normalize(quat.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return normalize(quat.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -41,6 +45,12 @@ inline quaternionf get_math_slerp(
 	return glm::slerp(
 		left.Get_Base(), right.Get_Base(), factor
 	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return slerp(
+		left.Get_Base(), right.Get_Base(), factor
+	);
+#else
+	#error unknown math library
 #endif
 }
 

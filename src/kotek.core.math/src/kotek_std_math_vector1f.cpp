@@ -118,6 +118,8 @@ vector1f::vector1f(const vectornf_view_t& view)
 			this->m_base = view.x();
 	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 			this->m_base.x = view.x();
+	#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			this->m_base = view.x();
 	#endif
 		}
 	}
@@ -144,6 +146,8 @@ vector1f::vector1f(const vectornf_const_view_t& view)
 			this->m_base = view.x();
 	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 			this->m_base.x = view.x();
+	#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			this->m_base = view.x();
 	#endif
 		}
 	}
@@ -228,6 +232,8 @@ vector1f& vector1f::operator+=(float value)
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base += value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base += value;
 #endif
 
 	return *this;
@@ -238,6 +244,8 @@ vector1f& vector1f::operator+=(const vector1f& data)
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	this->operator+=(data.m_base);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	this->m_base += data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
 	this->m_base += data.m_base;
 #endif
 	return *this;
@@ -322,6 +330,8 @@ vector1f& vector1f::operator-=(float value)
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base -= value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base -= value;
 #endif
 	return *this;
 }
@@ -331,6 +341,8 @@ vector1f& vector1f::operator-=(const vector1f& data)
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	this->operator-=(data.m_base);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	this->m_base -= data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
 	this->m_base -= data.m_base;
 #endif
 	return *this;
@@ -356,6 +368,8 @@ vector1f& vector1f::operator*=(float value)
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base *= value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base *= value;
 #endif
 	return *this;
 }
@@ -371,6 +385,8 @@ vector1f& vector1f::operator*=(const vector1f& data)
 
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	this->m_base *= data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
 	this->m_base *= data.m_base;
 #endif
 	return *this;
@@ -456,6 +472,8 @@ vector1f& vector1f::operator/=(float value)
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base /= value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base /= value;
 #endif
 	return *this;
 }
@@ -471,6 +489,8 @@ vector1f& vector1f::operator/=(const vector1f& data)
 
 	DirectX::XMStoreFloat(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	this->m_base /= data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
 	this->m_base /= data.m_base;
 #endif
 	return *this;
@@ -548,6 +568,8 @@ vector1f& vector1f::operator%=(float value) noexcept
 	this->m_base = std::fmod(this->m_base, value);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base.x = std::fmod(this->m_base.x, value);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base = std::fmod(this->m_base, value);
 #endif
 
 	return *this;
@@ -559,6 +581,8 @@ vector1f& vector1f::operator%=(const vector1f& data) noexcept
 	this->m_base = std::fmod(this->m_base, data.m_base);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base.x = std::fmod(this->m_base.x, data.m_base.x);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base = std::fmod(this->m_base, data.m_base);
 #endif
 	return *this;
 }
@@ -657,6 +681,8 @@ bool vector1f::operator==(const vector1f& data) const noexcept
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base == data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base == data.m_base;
 #endif
 }
 
@@ -730,6 +756,8 @@ bool vector1f::operator!=(const vector1f& data) const noexcept
 		casted_original, casted_argument
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+	return this->m_base != data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
 	return this->m_base != data.m_base;
 #endif
 }
@@ -808,6 +836,10 @@ float vector1f::operator[](math_id_t index) const
 	return p_array[index];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base[index];
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -823,6 +855,10 @@ float& vector1f::operator[](math_id_t index)
 	return p_array[index];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base[index];
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -840,6 +876,10 @@ const float* vector1f::data(void) const noexcept
 	return &this->m_base;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return &this->m_base.x;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &this->m_base;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -849,6 +889,10 @@ float* vector1f::data(void) noexcept
 	return &this->m_base;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return &this->m_base.x;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &this->m_base;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -858,8 +902,10 @@ void vector1f::set(float x) noexcept
 	this->m_base = x;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base.x = x;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base = x;
 #else
-	#error todo: provide implementation
+	#error unknown math library
 #endif
 }
 
@@ -984,6 +1030,10 @@ float vector1f::x(void) const noexcept
 	return this->m_base;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base.x;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -993,6 +1043,10 @@ float& vector1f::x(void) noexcept
 	return this->m_base;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base.x;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base;
+#else
+	#error unknown math library
 #endif
 }
 

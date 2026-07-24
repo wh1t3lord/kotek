@@ -37,6 +37,14 @@ matrix2x2f::matrix2x2f(
 ) : m_base{c0r0, c0r1, c1r0, c1r1}
 {
 }
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+matrix2x2f::matrix2x2f(
+	float c0r0, float c0r1, float c1r0, float c1r1
+) : m_base{c0r0, c0r1, c1r0, c1r1}
+{
+}
+#else
+	#error unknown math library
 #endif
 
 matrix2x2f::matrix2x2f(const base_mat2x2_t& data) : m_base{data}
@@ -71,8 +79,13 @@ matrix2x2f::matrix2x2f(const matrixnf_view_t& view)
 	this->m_base.m[0][1] = view.e(0, 1);
 	this->m_base.m[1][0] = view.e(1, 0);
 	this->m_base.m[1][1] = view.e(1, 1);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base[0].x = view.e(0, 0);
+	this->m_base[0].y = view.e(0, 1);
+	this->m_base[1].x = view.e(1, 0);
+	this->m_base[1].y = view.e(1, 1);
 #else
-	#error unknown library
+	#error unknown math library
 #endif
 }
 
@@ -205,6 +218,10 @@ matrix2x2f& matrix2x2f::operator+=(const matrix2x2f& data
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base += data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base += data.m_base;
+#else
+	#error unknown math library
 #endif
 	return *this;
 }
@@ -296,6 +313,10 @@ matrix2x2f& matrix2x2f::operator-=(const matrix2x2f& data
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base -= data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base -= data.m_base;
+#else
+	#error unknown math library
 #endif
 	return *this;
 }
@@ -358,6 +379,10 @@ matrix2x2f& matrix2x2f::operator*=(const matrix2x2f& data
 	DirectX::XMStoreFloat3x3(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base *= data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base *= data.m_base;
+#else
+	#error unknown math library
 #endif
 
 	return *this;
@@ -443,6 +468,10 @@ matrix2x2f& matrix2x2f::operator*=(float value) noexcept
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base *= value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base *= value;
+#else
+	#error unknown math library
 #endif
 
 	return *this;
@@ -479,6 +508,10 @@ matrix2x2f& matrix2x2f::operator/=(float value) noexcept
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base /= value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base /= value;
+#else
+	#error unknown math library
 #endif
 
 	return *this;
@@ -607,6 +640,10 @@ matrix2x2f matrix2x2f::operator-() const noexcept
 
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	result = -this->m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	result = -this->m_base;
+#else
+	#error unknown math library
 #endif
 	return result;
 }
@@ -657,8 +694,10 @@ bool matrix2x2f::operator==(const matrix2x2f& data
 	return (is_equal_0 && is_equal_1 && is_equal_2);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base == data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base == data.m_base;
 #else
-	#error Unknown math library
+	#error unknown math library
 #endif
 }
 
@@ -710,8 +749,10 @@ bool matrix2x2f::operator!=(const matrix2x2f& data) noexcept
 	return (is_equal_0 || is_equal_1 || is_equal_2);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base != data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base != data.m_base;
 #else
-	#error Unknown math library
+	#error unknown math library
 #endif
 }
 
@@ -730,6 +771,14 @@ constexpr math_id_t matrix2x2f::size_of(void) const noexcept
 		"we gurantee that base type is equal to "
 		"float[2][2] by size"
 	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	static_assert(
+		sizeof(float[2][2]) == sizeof(m_base) &&
+		"we gurantee that base type is equal to "
+		"float[2][2] by size"
+	);
+#else
+	#error unknown math library
 #endif
 	return static_cast<math_id_t>(sizeof(float[2][2]));
 }
@@ -782,6 +831,10 @@ float matrix2x2f::e(math_id_t column_id, math_id_t row_id)
 	return this->m_base.m[column_id][row_id];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base[column_id][row_id];
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base.m[column_id][row_id];
+#else
+	#error unknown math library
 #endif
 }
 
@@ -805,6 +858,10 @@ matrix2x2f::e(math_id_t column_id, math_id_t row_id) noexcept
 	return this->m_base.m[column_id][row_id];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base[column_id][row_id];
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base.m[column_id][row_id];
+#else
+	#error unknown math library
 #endif
 }
 
@@ -825,6 +882,12 @@ vectornf_view_t matrix2x2f::c(math_id_t column_id) noexcept
 	return vectornf_view_t(
 		&this->m_base[column_id].x, this->get_row_count()
 	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vectornf_view_t(
+		&this->m_base.m[column_id][0], this->get_row_count()
+	);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -846,6 +909,12 @@ vectornf_const_view_t matrix2x2f::c(math_id_t column_id
 	return vectornf_const_view_t(
 		&this->m_base[column_id].x, this->get_row_count()
 	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vectornf_const_view_t(
+		&this->m_base.m[column_id][0], this->get_row_count()
+	);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -867,6 +936,10 @@ const float* matrix2x2f::data(void) const noexcept
 	return &this->m_base.m[0][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(this->m_base);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &this->m_base.m[0][0];
+#else
+	#error unknown math library
 #endif
 }
 
@@ -876,6 +949,10 @@ float* matrix2x2f::data(void) noexcept
 	return &this->m_base.m[0][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(this->m_base);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &this->m_base.m[0][0];
+#else
+	#error unknown math library
 #endif
 }
 

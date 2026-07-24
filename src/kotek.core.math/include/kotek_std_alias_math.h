@@ -13,6 +13,12 @@
 	#include <glm/gtc/type_ptr.hpp>
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM) // todo: when you use dxm you should re-write their code to column-based order since it is row-based and other math libraries if they have different order compared to columns then change to column-major
 	#include <DirectXMath.h>
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	// kotek's own dependency-free backend: backing POD types + scalar
+	// implementations of every operation the GLM/DXM branches use
+	#include "kotek_std_math_own.h"
+#else
+	#error unknown math library
 #endif
 
 #include <limits>
@@ -100,6 +106,19 @@ using base_mat3x3_t = DirectX::XMFLOAT3X3;
 using base_mat4x4_t = DirectX::XMFLOAT4X4;
 
 using base_quat_t = base_vec4_t;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+using base_vec1_t = base_decimal_t;
+using base_vec2_t = vec2;
+using base_vec3_t = vec3;
+using base_vec4_t = vec4;
+
+using base_mat2x2_t = mat2x2;
+using base_mat3x3_t = mat3x3;
+using base_mat4x4_t = mat4x4;
+
+using base_quat_t = quat;
+#else
+	#error unknown math library
 #endif
 
 KOTEK_END_NAMESPACE_MATH

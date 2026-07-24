@@ -58,8 +58,9 @@ endif()
 
 message("[${PROJECT_NAME}]: math library is '${KOTEK_MATH_LIBRARY}'")
 
-kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Math SHUTDOWN ShutdownModule_Core_Math 
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Math SHUTDOWN ShutdownModule_Core_Math
 	"include/kotek_std_alias_math.h"
+	"include/kotek_std_math_own.h"
 	"include/kotek_std_math_vector1f.h"
 	"include/kotek_std_math_vector2f.h"
 	"include/kotek_std_math_vector3f.h"

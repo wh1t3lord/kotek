@@ -18,7 +18,9 @@
 	// compares them. Under KOTEK_MATH_LIBRARY=GLM this validates the test
 	// logic itself; under KOTEK_MATH_LIBRARY=DXM it proves that the
 	// DirectXMath backend honors the same observable contract
-	// (column-major e(column, row), c(column) views, same algebra).
+	// (column-major e(column, row), c(column) views, same algebra), and
+	// under KOTEK_MATH_LIBRARY=KOTEK_OWN it proves the same for kotek's
+	// own dependency-free scalar backend.
 	#include <glm/glm.hpp>
 	#include <glm/gtc/quaternion.hpp>
 	#include <glm/gtc/type_ptr.hpp>

@@ -18,7 +18,7 @@ set(KOTEK_OPTIONS_REGISTRY
 	"KOTEK_LINKAGE|STATIC|module linkage scenario: STATIC=all modules .lib, SHARED=all modules .dll implicit (needs acyclic graph), PLUGIN=explicit LoadLibrary via manifest + KOTEK_INVOKE_MODULE"
 	"KOTEK_LINKAGE_FORCE_STATIC|(empty)|semicolon list of module targets forced STATIC inside a SHARED/PLUGIN scenario (cyclic clusters)"
 	"KOTEK_LINKAGE_FORCE_SHARED|(empty)|semicolon list of module targets forced SHARED inside a STATIC scenario"
-	"KOTEK_MATH_LIBRARY|GLM|math backend: GLM (vcpkg) / DXM (DirectXMath, planned) / kotek own no-deps (planned)"
+	"KOTEK_MATH_LIBRARY|GLM|math backend: GLM (vcpkg) / DXM (DirectXMath, Windows SDK) / KOTEK_OWN (kotek's own no-deps scalar impl)"
 	"KOTEK_WINDOW_LIBRARY|GLFW|windowing backend"
 	"KOTEK_ECS_BACKEND|PICO|ECS backend: PICO (pico_ecs) / ENTT (planned)"
 	"KOTEK_STARTUP_RENDERER|OpenGLES_SpecifiedByUser|startup renderer enum name (today routes to bgfx, NRI planned)"

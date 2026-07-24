@@ -251,6 +251,10 @@ inline matrix4x4f operator+(
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() + right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() + right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -344,6 +348,10 @@ inline matrix4x4f operator-(
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() - right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() - right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -368,6 +376,10 @@ inline matrix4x4f operator*(
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() * right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() * right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -435,6 +447,10 @@ operator*(const matrix4x4f& left, float value) noexcept
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() * value);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() * value);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -463,6 +479,10 @@ operator*(const matrix4x4f& left, const vector4f& vec) noexcept
 	);
 
 	return casted;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return left.Get_Base() * vec.Get_Base();
+#else
+	#error unknown math library
 #endif
 }
 
@@ -487,6 +507,10 @@ operator*(const vector4f& vec, const matrix4x4f& right) noexcept
 	);
 
 	return casted;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vec.Get_Base() * right.Get_Base();
+#else
+	#error unknown math library
 #endif
 }
 
@@ -498,6 +522,10 @@ inline vector4f operator*(
 	return left * vector4f(view);
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
 	return left * vector4f(view);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return left * vector4f(view);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -509,6 +537,10 @@ inline vector4f operator*(
 	return vector4f(view) * right;
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
 	return vector4f(view) * right;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vector4f(view) * right;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -578,6 +610,10 @@ operator/(const matrix4x4f& left, float value) noexcept
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() / value);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() / value);
+#else
+	#error unknown math library
 #endif
 }
 

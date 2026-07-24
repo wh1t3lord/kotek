@@ -138,6 +138,10 @@ inline float const* get_math_value_ptr(const vector1f& data)
 	return &data.Get_Base();
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &data.Get_Base();
+#else
+	#error unknown math library
 #endif
 }
 
@@ -147,6 +151,10 @@ inline float const* get_math_value_ptr(const vector2f& data)
 	return reinterpret_cast<float const*>(&data.Get_Base());
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &data.Get_Base().x;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -156,6 +164,10 @@ inline float const* get_math_value_ptr(const vector3f& data)
 	return reinterpret_cast<float const*>(&data.Get_Base());
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &data.Get_Base().x;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -165,6 +177,10 @@ inline float const* get_math_value_ptr(const vector4f& data)
 	return reinterpret_cast<float const*>(&data.Get_Base());
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &data.Get_Base().x;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -175,6 +191,11 @@ inline float get_math_length(const vector1f& data)
 	return sqrt(com_x * com_x);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::length(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	float com_x = get_math_component_x(data);
+	return std::sqrt(com_x * com_x);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -190,6 +211,10 @@ inline float get_math_length(const vector2f& data)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::length(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return length(data.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -205,6 +230,10 @@ inline float get_math_length(const vector3f& data)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::length(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return length(data.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -220,6 +249,10 @@ inline float get_math_length(const vector4f& data)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::length(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return length(data.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -229,6 +262,10 @@ inline float get_math_length_squared(const vector1f& data)
 	return data.x() * data.x();
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::length2(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return data.x() * data.x();
+#else
+	#error unknown math library
 #endif
 }
 
@@ -241,6 +278,10 @@ inline float get_math_length_squared(const vector2f& data)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::length2(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return length_squared(data.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -253,6 +294,10 @@ inline float get_math_length_squared(const vector3f& data)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::length2(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return length_squared(data.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -265,6 +310,10 @@ inline float get_math_length_squared(const vector4f& data)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::length2(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return length_squared(data.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -323,6 +372,11 @@ get_math_dot(const vector1f& left, const vector1f& right)
 		get_math_component_x(right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::dot(left.Get_Base(), right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return get_math_component_x(left) *
+		get_math_component_x(right);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -337,6 +391,10 @@ get_math_dot(const vector2f& left, const vector2f& right)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::dot(left.Get_Base(), right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return dot(left.Get_Base(), right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -350,6 +408,12 @@ get_math_cross(const vector2f& left, const vector2f& right)
 	return vector3f(glm::cross(
 		vector3f(left).Get_Base(), vector3f(right).Get_Base()
 	));
+	#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vector3f(cross(
+		vector3f(left).Get_Base(), vector3f(right).Get_Base()
+	));
+	#else
+		#error unknown math library
 	#endif
 }
 
@@ -362,6 +426,12 @@ get_math_cross(const vector2f& left, const vector3f& right)
 	return vector3f(
 		glm::cross(vector3f(left).Get_Base(), right.Get_Base())
 	);
+	#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vector3f(
+		cross(vector3f(left).Get_Base(), right.Get_Base())
+	);
+	#else
+		#error unknown math library
 	#endif
 }
 
@@ -374,6 +444,12 @@ get_math_cross(const vector2f& left, const vector4f& right)
 	return vector3f(glm::cross(
 		vector3f(left).Get_Base(), vector3f(right).Get_Base()
 	));
+	#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vector3f(cross(
+		vector3f(left).Get_Base(), vector3f(right).Get_Base()
+	));
+	#else
+		#error unknown math library
 	#endif
 }
 #endif
@@ -389,6 +465,10 @@ get_math_dot(const vector3f& left, const vector3f& right)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::dot(left.Get_Base(), right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return dot(left.Get_Base(), right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -399,6 +479,10 @@ get_math_cross(const vector3f& left, const vector3f& right)
 	return DirectX::XMVector3Cross(left, right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::cross(left.Get_Base(), right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return cross(left.Get_Base(), right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -412,6 +496,12 @@ get_math_cross(const vector3f& left, const vector4f& right)
 	return glm::cross(
 		left.Get_Base(), vector3f(right).Get_Base()
 	);
+	#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return cross(
+		left.Get_Base(), vector3f(right).Get_Base()
+	);
+	#else
+		#error unknown math library
 	#endif
 }
 #endif
@@ -427,6 +517,10 @@ get_math_dot(const vector4f& left, const vector4f& right)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::dot(left.Get_Base(), right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return dot(left.Get_Base(), right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -440,6 +534,12 @@ get_math_cross(const vector4f& left, const vector3f& right)
 	return vector3f(
 		glm::cross(vector3f(left).Get_Base(), right.Get_Base())
 	);
+	#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vector3f(
+		cross(vector3f(left).Get_Base(), right.Get_Base())
+	);
+	#else
+		#error unknown math library
 	#endif
 }
 #endif
@@ -454,6 +554,12 @@ get_math_cross(const vector4f& left, const vector4f& right)
 	return vector3f(glm::cross(
 		vector3f(left).Get_Base(), vector3f(right).Get_Base()
 	));
+	#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vector3f(cross(
+		vector3f(left).Get_Base(), vector3f(right).Get_Base()
+	));
+	#else
+		#error unknown math library
 	#endif
 }
 #endif
@@ -467,6 +573,13 @@ inline vector1f get_math_normalize(const vector1f& vec)
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::normalize(vec.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	// glm::normalize of a 1D vector is x / |x|
+	return vector1f(
+		get_math_component_x(vec) / get_math_length(vec)
+	);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -476,6 +589,10 @@ inline vector2f get_math_normalize(const vector2f& vec)
 	return DirectX::XMVector2Normalize(vec);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::normalize(vec.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return normalize(vec.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -485,6 +602,10 @@ inline vector3f get_math_normalize(const vector3f& vec)
 	return DirectX::XMVector3Normalize(vec);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::normalize(vec.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return normalize(vec.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -494,6 +615,10 @@ inline vector4f get_math_normalize(const vector4f& vec)
 	return DirectX::XMVector4Normalize(vec);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::normalize(vec.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return normalize(vec.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 

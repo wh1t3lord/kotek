@@ -147,6 +147,8 @@ TEST(
 	EXPECT_TRUE(kun_kotek kun_ktk is_equal(some2.x(), some));
 		#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	EXPECT_TRUE(kun_kotek kun_ktk is_equal(some2.x(), some.x));
+		#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	EXPECT_TRUE(kun_kotek kun_ktk is_equal(some2.x(), some));
 		#endif
 }
 

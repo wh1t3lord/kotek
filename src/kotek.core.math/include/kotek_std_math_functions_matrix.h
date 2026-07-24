@@ -25,8 +25,15 @@ inline matrix4x4f look_at(const vector3f& camera_position,
 		target_position.Get_Base(),
 		up_vector.Get_Base()
 	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	// right-handed, like glm::lookAt
+	return look_at_rh(
+		camera_position.Get_Base(),
+		target_position.Get_Base(),
+		up_vector.Get_Base()
+	);
 #else
-// implement yours here
+	#error unknown math library
 #endif
 }
 
@@ -43,8 +50,16 @@ inline matrix4x4f perspective(float_t field_of_view_angle_in_radians,
 		plane_near_z,
 		plane_far_z
 	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	// right-handed with the GLM default [-1, 1] depth range
+	return perspective_rh_no(
+		field_of_view_angle_in_radians,
+		aspect_ratio,
+		plane_near_z,
+		plane_far_z
+	);
 #else
-// implement yours here
+	#error unknown math library
 #endif
 }
 
@@ -54,6 +69,10 @@ inline float const* value_ptr(const matrix2x2f& data)
 	return &data.Get_Base().m[0][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &data.Get_Base().m[0][0];
+#else
+	#error unknown math library
 #endif
 }
 
@@ -63,6 +82,10 @@ inline float const* value_ptr(const matrix3x3f& data)
 	return &data.Get_Base().m[0][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &data.Get_Base().m[0][0];
+#else
+	#error unknown math library
 #endif
 }
 
@@ -72,6 +95,10 @@ inline float const* value_ptr(const matrix4x4f& data)
 	return &data.Get_Base().m[0][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(data.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &data.Get_Base().m[0][0];
+#else
+	#error unknown math library
 #endif
 }
 
@@ -88,6 +115,10 @@ inline matrix2x2f transpose(const matrix2x2f& mat)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::transpose(mat.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return transpose(mat.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -97,6 +128,10 @@ inline matrix3x3f transpose(const matrix3x3f& mat)
 	return DirectX::XMMatrixTranspose(mat);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::transpose(mat.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return transpose(mat.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -106,6 +141,10 @@ inline matrix4x4f transpose(const matrix4x4f& mat)
 	return DirectX::XMMatrixTranspose(mat);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::transpose(mat.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return transpose(mat.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -117,6 +156,10 @@ inline float get_math_determinant(const matrix2x2f& mat)
 	return mat.e(0, 0) * mat.e(1, 1) - mat.e(1, 0) * mat.e(0, 1);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::determinant(mat.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return determinant(mat.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -133,6 +176,10 @@ inline float get_math_determinant(const matrix3x3f& mat)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::determinant(mat.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return determinant(mat.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -149,6 +196,10 @@ inline float get_math_determinant(const matrix4x4f& mat)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::determinant(mat.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return determinant(mat.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -179,6 +230,10 @@ inline matrix2x2f get_math_inverse(const matrix2x2f& mat)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::inverse(mat.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return inverse(mat.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -207,6 +262,10 @@ inline matrix3x3f get_math_inverse(const matrix3x3f& mat)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::inverse(mat.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return inverse(mat.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -235,6 +294,10 @@ inline matrix4x4f get_math_inverse(const matrix4x4f& mat)
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::inverse(mat.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return inverse(mat.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 

@@ -16,6 +16,12 @@ KOTEK_BEGIN_NAMESPACE_MATH
 		// glm::quat's 4-scalar constructor takes (w, x, y, z) while
 		// kotek's contract is (x, y, z, w)
 			m_base(w, x, y, z)
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+		// own backend stores (x, y, z, w) like DXM does — the kotek
+		// contract order
+			m_base(x, y, z, w)
+#else
+	#error unknown math library
 #endif
 		{
 		}
@@ -46,6 +52,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 
 			DirectX::XMStoreFloat4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			this->m_base += data.m_base;
+#else
+	#error unknown math library
 #endif
 			return *this;
 		}
@@ -60,6 +70,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 			DirectX::XMStoreFloat4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
             this->m_base += data;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			this->m_base += data;
+#else
+	#error unknown math library
 #endif
 			return *this;
 		}
@@ -75,6 +89,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 			DirectX::XMStoreFloat4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
             this->m_base -= data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			this->m_base -= data.m_base;
+#else
+	#error unknown math library
 #endif
 			return *this;
 		}
@@ -90,6 +108,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 			DirectX::XMStoreFloat4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
             this->m_base -= data;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			this->m_base -= data;
+#else
+	#error unknown math library
 #endif
 			return *this;
 		}
@@ -108,6 +130,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 			DirectX::XMStoreFloat4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
             this->m_base *= data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			this->m_base *= data.m_base;
+#else
+	#error unknown math library
 #endif
 			return *this;
 		}
@@ -123,6 +149,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 			DirectX::XMStoreFloat4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
             this->m_base *= data;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			this->m_base *= data;
+#else
+	#error unknown math library
 #endif
 			return *this;
 		}
@@ -143,6 +173,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
             auto inversed = glm::inverse(data.m_base);
             this->m_base *= inversed;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			this->m_base *= inverse(data.m_base);
+#else
+	#error unknown math library
 #endif
 			return *this;
 		}
@@ -160,6 +194,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
             auto inversed = glm::inverse(data);
             this->m_base *= inversed;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			this->m_base *= inverse(data);
+#else
+	#error unknown math library
 #endif
 			return *this;
 		}
@@ -201,6 +239,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 			return DirectX::XMQuaternionEqual(casted_original, casted_argument);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
             return this->m_base == data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			return this->m_base == data.m_base;
+#else
+	#error unknown math library
 #endif
 		}
 
@@ -214,6 +256,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 				casted_original, casted_argument);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
             return this->m_base != data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+			return this->m_base != data.m_base;
+#else
+	#error unknown math library
 #endif
 		}
 
@@ -274,6 +320,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
         return (left.Get_Base() + right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+		return (left.Get_Base() + right.Get_Base());
+#else
+	#error unknown math library
 #endif
 	}
 
@@ -295,6 +345,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
         return (left.Get_Base() - right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+		return (left.Get_Base() - right.Get_Base());
+#else
+	#error unknown math library
 #endif
 	}
 
@@ -319,6 +373,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
         return (left.Get_Base() * right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+		return (left.Get_Base() * right.Get_Base());
+#else
+	#error unknown math library
 #endif
 	}
 
@@ -338,6 +396,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
         return (left.Get_Base() * right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+		return (left.Get_Base() * right);
+#else
+	#error unknown math library
 #endif
 	}
 
@@ -368,6 +430,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 		return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
         return (left.Get_Base() / right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+		return (left.Get_Base() / right.Get_Base());
+#else
+	#error unknown math library
 #endif
 	}
 

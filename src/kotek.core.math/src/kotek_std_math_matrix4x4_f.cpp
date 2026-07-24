@@ -114,6 +114,13 @@ matrix4x4f::matrix4x4f(const matrixnf_view_t& view)
 		this->m_base[1] = vector4f(view.c(1)).Get_Base();
 		this->m_base[2] = vector4f(view.c(2)).Get_Base();
 		this->m_base[3] = vector4f(view.c(3)).Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+		this->m_base[0] = vector4f(view.c(0)).Get_Base();
+		this->m_base[1] = vector4f(view.c(1)).Get_Base();
+		this->m_base[2] = vector4f(view.c(2)).Get_Base();
+		this->m_base[3] = vector4f(view.c(3)).Get_Base();
+#else
+	#error unknown math library
 #endif
 	}
 #endif
@@ -149,6 +156,13 @@ matrix4x4f::matrix4x4f(const matrixnf_const_view_t& view)
 		this->m_base[1] = vector4f(view.c(1)).Get_Base();
 		this->m_base[2] = vector4f(view.c(2)).Get_Base();
 		this->m_base[3] = vector4f(view.c(3)).Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+		this->m_base[0] = vector4f(view.c(0)).Get_Base();
+		this->m_base[1] = vector4f(view.c(1)).Get_Base();
+		this->m_base[2] = vector4f(view.c(2)).Get_Base();
+		this->m_base[3] = vector4f(view.c(3)).Get_Base();
+#else
+	#error unknown math library
 #endif
 	}
 #else
@@ -179,6 +193,13 @@ matrix4x4f::matrix4x4f(const matrixnf_const_view_t& view)
 		this->m_base[1] = vector4f(view.c(1)).Get_Base();
 		this->m_base[2] = vector4f(view.c(2)).Get_Base();
 		this->m_base[3] = vector4f(view.c(3)).Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+		this->m_base[0] = vector4f(view.c(0)).Get_Base();
+		this->m_base[1] = vector4f(view.c(1)).Get_Base();
+		this->m_base[2] = vector4f(view.c(2)).Get_Base();
+		this->m_base[3] = vector4f(view.c(3)).Get_Base();
+#else
+	#error unknown math library
 #endif
 	}
 #endif
@@ -291,6 +312,10 @@ matrix4x4f& matrix4x4f::operator+=(const matrix4x4f& data
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base += data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base += data.m_base;
+#else
+	#error unknown math library
 #endif
 	return *this;
 }
@@ -380,6 +405,10 @@ matrix4x4f& matrix4x4f::operator-=(const matrix4x4f& data
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base -= data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base -= data.m_base;
+#else
+	#error unknown math library
 #endif
 	return *this;
 }
@@ -398,6 +427,10 @@ matrix4x4f& matrix4x4f::operator*=(const matrix4x4f& data
 	DirectX::XMStoreFloat4x4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base *= data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base *= data.m_base;
+#else
+	#error unknown math library
 #endif
 
 	return *this;
@@ -462,6 +495,10 @@ matrix4x4f& matrix4x4f::operator*=(float value) noexcept
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base *= value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base *= value;
+#else
+	#error unknown math library
 #endif
 	return *this;
 }
@@ -541,6 +578,10 @@ matrix4x4f& matrix4x4f::operator/=(float value) noexcept
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	this->m_base /= value;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	this->m_base /= value;
+#else
+	#error unknown math library
 #endif
 
 	return *this;
@@ -610,6 +651,10 @@ matrix4x4f matrix4x4f::operator-() const noexcept
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	result = -this->m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	result = -this->m_base;
+#else
+	#error unknown math library
 #endif
 	return result;
 }
@@ -674,6 +719,10 @@ bool matrix4x4f::operator==(const matrix4x4f& data
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base == data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base == data.m_base;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -740,6 +789,10 @@ bool matrix4x4f::operator!=(const matrix4x4f& data) noexcept
 	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base != data.m_base;
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return this->m_base != data.m_base;
+#else
+	#error unknown math library
 #endif
 }
 
@@ -758,8 +811,10 @@ float* matrix4x4f::data(void) noexcept
 	return &this->m_base.m[0][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return &this->m_base[0][0];
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &this->m_base.m[0][0];
 #else
-	#error todo: provide implementation
+	#error unknown math library
 #endif
 }
 const float* matrix4x4f::data(void) const noexcept
@@ -768,8 +823,10 @@ const float* matrix4x4f::data(void) const noexcept
 	return &this->m_base.m[0][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return &this->m_base[0][0];
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return &this->m_base.m[0][0];
 #else
-	#error todo: provide implementation
+	#error unknown math library
 #endif
 }
 
@@ -872,6 +929,12 @@ vectornf_view_t matrix4x4f::c(math_id_t column_id) noexcept
 	return vectornf_view_t(
 		&this->m_base[column_id][0], get_row_count()
 	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vectornf_view_t(
+		&this->m_base.m[column_id][0], get_row_count()
+	);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -889,6 +952,12 @@ vectornf_const_view_t matrix4x4f::c(math_id_t column_id
 	return vectornf_const_view_t(
 		&this->m_base[column_id][0], get_row_count()
 	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return vectornf_const_view_t(
+		&this->m_base.m[column_id][0], get_row_count()
+	);
+#else
+	#error unknown math library
 #endif
 }
 

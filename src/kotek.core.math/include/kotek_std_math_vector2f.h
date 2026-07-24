@@ -175,6 +175,10 @@ operator+(const vector2f& left, const vector2f& right) noexcept
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() + right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() + right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -254,6 +258,10 @@ operator-(const vector2f& left, const vector2f& right) noexcept
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() - right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() - right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -333,6 +341,10 @@ operator*(const vector2f& left, const vector2f& right) noexcept
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() * right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() * right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -411,6 +423,10 @@ operator*(const vector2f& left, float right) noexcept
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() * right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() * right);
+#else
+	#error unknown math library
 #endif
 }
 
@@ -438,6 +454,10 @@ operator/(const vector2f& left, const vector2f& right) noexcept
 	return result;
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() / right.Get_Base());
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() / right.Get_Base());
+#else
+	#error unknown math library
 #endif
 }
 
@@ -506,6 +526,10 @@ operator/(const vector2f& left, float right) noexcept
 	return operator*(left, 1.f / right);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return (left.Get_Base() / right);
+#elif defined(KOTEK_USE_MATH_LIBRARY_OWN)
+	return (left.Get_Base() / right);
+#else
+	#error unknown math library
 #endif
 }
 
