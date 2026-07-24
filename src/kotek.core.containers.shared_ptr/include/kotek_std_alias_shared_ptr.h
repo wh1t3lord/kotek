@@ -13,6 +13,9 @@ KOTEK_BEGIN_NAMESPACE_KTK
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 template <typename T>
 using shared_ptr = std::shared_ptr<T>;
+
+using std::allocate_shared;
+using std::make_shared;
 #else
 #endif
 
