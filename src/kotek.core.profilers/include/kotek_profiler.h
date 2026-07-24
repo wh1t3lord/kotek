@@ -12,6 +12,11 @@
 		#include "./tracy/TracyVulkan.hpp"
 	#endif
 
+	// tracy's FrameMark macro collides with the ktkProfiler::FrameMark
+	// method name below (it macro-expands the declaration into garbage on
+	// profiler-enabled builds); call sites use tracy::SendFrameMark
+	// explicitly instead
+	#undef FrameMark
 #endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
