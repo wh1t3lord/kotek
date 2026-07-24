@@ -182,6 +182,9 @@ if (WIN32)
             endif()
             
             
+            # the rename scratch dir is not tracked by git (empty dirs are not
+            # versioned), so it is absent on fresh checkouts (CI!) — create it
+            file(MAKE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename)
             file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/${KOTEK_NUGET_FILENAME} DESTINATION ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename)
             if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/cmake/${KOTEK_NUGET_CMAKE_FOLDER_PLATFORM_NAME}/rename/${KOTEK_NUGET_FILENAME}")
                 message(FATAL_ERROR "failed to copy file, request more rights for CMake, aborting...")

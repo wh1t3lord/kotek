@@ -47,6 +47,45 @@ void ktkWindow::HideWindow(void) noexcept
 	glfwHideWindow(this->m_p_window);
 }
 
+void ktkWindow::Set_Fullscreen(bool status) noexcept
+{
+	if (!this->m_p_window)
+	{
+		KOTEK_MESSAGE_WARNING(
+			"you can't switch fullscreen until you initialize the window");
+		return;
+	}
+
+	if (status)
+	{
+		GLFWmonitor* p_monitor = glfwGetPrimaryMonitor();
+
+		if (!p_monitor)
+		{
+			KOTEK_MESSAGE_WARNING(
+				"no primary monitor, staying windowed");
+			return;
+		}
+
+		const GLFWvidmode* p_mode = glfwGetVideoMode(p_monitor);
+
+		glfwSetWindowMonitor(
+			this->m_p_window, p_monitor, 0, 0,
+			p_mode ? p_mode->width : this->m_screen_size_width,
+			p_mode ? p_mode->height : this->m_screen_size_height,
+			p_mode ? p_mode->refreshRate : GLFW_DONT_CARE
+		);
+	}
+	else
+	{
+		glfwSetWindowMonitor(
+			this->m_p_window, nullptr, 64, 64,
+			this->m_screen_size_width, this->m_screen_size_height,
+			GLFW_DONT_CARE
+		);
+	}
+}
+
 int ktkWindow::GetWidth(void) const noexcept
 {
 	if (this->m_p_window == nullptr)

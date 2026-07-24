@@ -148,6 +148,9 @@ public:
 	kun_ktk uint8_t Get_ExecCommandCount(void) const noexcept override;
 	const char* Get_ExecCommand(kun_ktk uint8_t index
 	) const noexcept override;
+	bool Is_FullscreenMode(void) const noexcept override;
+	bool Is_VSyncEnabled(void) const noexcept override;
+	bool Is_Headless(void) const noexcept override;
 
 	void
 	Set_UserLibrary(const ktk_filesystem_path& path_to_library
@@ -224,6 +227,9 @@ private:
 	bool m_help_requested;
 	bool m_log_file_specified;
 	kun_ktk cstring m_log_file;
+	bool m_fullscreen;
+	bool m_vsync;
+	bool m_headless;
 	// queued --exec="<cmd>" console commands (task K23); bounded by the
 	// command-line argument count — each command is one argument, so there
 	// can never be more of them than that

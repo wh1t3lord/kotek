@@ -36,6 +36,7 @@ public:
 	void CloseWindow(void) noexcept;
 	void ShowWindow(void) noexcept;
 	void HideWindow(void) noexcept override;
+	void Set_Fullscreen(bool status) noexcept override;
 
 	void RegisterUserMainManager(
 		Core::ktkMainManager* p_manager) noexcept override;

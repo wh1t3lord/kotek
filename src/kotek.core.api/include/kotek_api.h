@@ -113,7 +113,8 @@ public:
 	) = 0;
 
 	virtual void Resize(
-		ktkIRenderDevice* p_render_device, int width, int height
+		ktkIRenderDevice* p_render_device, int width, int height,
+		bool vsync
 	) = 0;
 
 	virtual void Present(
@@ -931,6 +932,18 @@ public:
 	virtual const char* Get_ExecCommand(kun_ktk uint8_t index
 	) const noexcept = 0;
 
+	/// @brief \~english true when --fullscreen was passed (and --windowed
+	/// was not): the main window starts fullscreen (task K23)
+	virtual bool Is_FullscreenMode(void) const noexcept = 0;
+
+	/// @brief \~english vsync state from flags (task K23): true = enabled
+	/// (--vsync or default), false = disabled (--novsync)
+	virtual bool Is_VSyncEnabled(void) const noexcept = 0;
+
+	/// @brief \~english true when --headless was passed: the main window
+	/// starts hidden while rendering and logic keep running (task K23)
+	virtual bool Is_Headless(void) const noexcept = 0;
+
 	virtual void
 	Set_UserLibrary(const ktk_filesystem_path& path_to_library
 	) noexcept = 0;
@@ -1027,6 +1040,10 @@ public:
 	) noexcept = 0;
 
 	virtual void HideWindow(void) noexcept = 0;
+
+	/// @brief \~english switch the window between fullscreen (on the primary
+	/// monitor) and windowed mode (task K23, --fullscreen/--windowed)
+	virtual void Set_Fullscreen(bool status) noexcept = 0;
 	virtual void RegisterUserMainManager(
 		ktkMainManager* p_manager
 	) noexcept = 0;

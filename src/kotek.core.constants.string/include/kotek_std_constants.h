@@ -156,6 +156,28 @@ constexpr const char* kConsoleCommandArg_Kotek_Help = "--kotek_help";
 /// instead of the default (task K23): "--log_file=path/to/file.log"
 constexpr const char* kConsoleCommandArg_Log_File = "--log_file=";
 
+/// @brief \~english starts the application with a fullscreen main window
+/// (task K23; default is windowed)
+constexpr const char* kConsoleCommandArg_Fullscreen = "--fullscreen";
+
+/// @brief \~english starts the application with a windowed (not fullscreen)
+/// main window (task K23; explicit default, wins over --fullscreen when both
+/// are passed)
+constexpr const char* kConsoleCommandArg_Windowed = "--windowed";
+
+/// @brief \~english enables vertical synchronization (task K23; bgfx
+/// BGFX_RESET_VSYNC — already the implicit default)
+constexpr const char* kConsoleCommandArg_VSync = "--vsync";
+
+/// @brief \~english disables vertical synchronization (task K23; removes
+/// BGFX_RESET_VSYNC from the swapchain reset flags)
+constexpr const char* kConsoleCommandArg_NoVSync = "--novsync";
+
+/// @brief \~english starts with the main window hidden (task K23; rendering
+/// and logic keep running — smoke tests and CI on machines without a
+/// desktop)
+constexpr const char* kConsoleCommandArg_Headless = "--headless";
+
 /**
  * Constant expresses that we specify width for our executable.
  *

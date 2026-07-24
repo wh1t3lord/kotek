@@ -50,8 +50,24 @@ bool InitializeModule_Render_BGFX(kun_core ktkMainManager* p_main_manager)
 
 	close_splash.detach();
 
-	p_main_manager->Get_WindowManager()->Get_ActiveWindow()->Initialize(
+	auto* p_active_window =
+		p_main_manager->Get_WindowManager()->Get_ActiveWindow();
+
+	p_active_window->Initialize(
 		version, p_engine_config->GetEngineFeatureRendererVendor());
+
+	// task K23 window-mode flags, applied right after creation:
+	// --headless hides the window (rendering and logic keep running),
+	// --fullscreen switches it to the primary monitor
+	if (p_engine_config->Is_Headless())
+	{
+		p_active_window->HideWindow();
+	}
+
+	if (p_engine_config->Is_FullscreenMode())
+	{
+		p_active_window->Set_Fullscreen(true);
+	}
 
 	// TODO: load from user settings
 	p_render_device->SetWidth(

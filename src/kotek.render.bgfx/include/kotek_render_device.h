@@ -32,6 +32,7 @@ namespace bgfx
 	private:
 		int m_width;
 		int m_height;
+		bool m_vsync_enabled{true};
 	};
 } // namespace gl
 KOTEK_END_NAMESPACE_KOTEK

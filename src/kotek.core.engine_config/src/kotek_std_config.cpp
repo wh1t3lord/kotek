@@ -8,6 +8,7 @@ ktkFrameworkConfig::ktkFrameworkConfig(void) :
 	m_argv{}, m_is_running{true}, m_frames_limit{0},
 	m_plugins_template{false}, m_plugins_modules{false},
 	m_help_requested{false}, m_log_file_specified{false}, m_log_file{},
+	m_fullscreen{false}, m_vsync{true}, m_headless{false},
 	m_exec_commands{}, m_exec_command_count{0},
 	m_engine_feature_flags{eEngineFeature::kEngine_Feature_None
     },
@@ -840,6 +841,21 @@ const char* ktkFrameworkConfig::Get_ExecCommand(
 	return this->m_exec_commands[index].c_str();
 }
 
+bool ktkFrameworkConfig::Is_FullscreenMode(void) const noexcept
+{
+	return this->m_fullscreen;
+}
+
+bool ktkFrameworkConfig::Is_VSyncEnabled(void) const noexcept
+{
+	return this->m_vsync;
+}
+
+bool ktkFrameworkConfig::Is_Headless(void) const noexcept
+{
+	return this->m_headless;
+}
+
 void ktkFrameworkConfig::SetApplicationWorking(bool status
 ) noexcept
 {
@@ -936,6 +952,26 @@ void ktkFrameworkConfig::Parse_CommandLine(void) noexcept
 	this->m_help_requested =
 		this->m_parsed_command_line_arguments.find(
 			kConsoleCommandArg_Kotek_Help
+		) != this->m_parsed_command_line_arguments.end();
+
+	// --windowed wins when both window-mode flags are passed (explicit
+	// beats explicit, last-resort default)
+	this->m_fullscreen =
+		this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_Fullscreen
+		) != this->m_parsed_command_line_arguments.end() &&
+		this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_Windowed
+		) == this->m_parsed_command_line_arguments.end();
+
+	this->m_vsync =
+		this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_NoVSync
+		) == this->m_parsed_command_line_arguments.end();
+
+	this->m_headless =
+		this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_Headless
 		) != this->m_parsed_command_line_arguments.end();
 
 	// --log_file=<path> and --exec="<cmd>" (repeatable, task K23)
@@ -1103,6 +1139,11 @@ void ktkPrintCommandLineHelp(void) noexcept
 	fprintf(stdout, "  --exec=\"<console command>\"    queue a console command to run after console registration; repeatable, executes in order\n");
 	fprintf(stdout, "  --kotek_help                  print this list and exit 0\n");
 	fprintf(stdout, "  --log_file=<path>             redirect the engine log to the given file (bare name = inside data_user)\n");
+	fprintf(stdout, "  --fullscreen                  start the main window fullscreen on the primary monitor\n");
+	fprintf(stdout, "  --windowed                    start the main window windowed (explicit default, wins over --fullscreen)\n");
+	fprintf(stdout, "  --vsync                       enable vsync (BGFX_RESET_VSYNC — the default)\n");
+	fprintf(stdout, "  --novsync                     disable vsync\n");
+	fprintf(stdout, "  --headless                    start with the main window hidden (rendering and logic keep running; for CI)\n");
 	fprintf(stdout, "  --width <px>                  window width\n");
 	fprintf(stdout, "  --height <px>                 window height\n");
 	fprintf(stdout, "  --render_<api>_<version>      renderer selection (bgfx today, NRI planned): the --render_* family\n");

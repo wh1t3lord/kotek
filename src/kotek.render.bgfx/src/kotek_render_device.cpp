@@ -56,8 +56,13 @@ void ktkRenderDevice::Initialize(kun_core ktkMainManager* p_main_manager)
 	init.resolution.width = this->m_width;
 	init.resolution.height = this->m_height;
 
-	// todo: provide option that we can bypass
-	init.resolution.reset = BGFX_RESET_VSYNC;
+	// --vsync (default) / --novsync (task K23); cached so Resize can
+	// re-apply the same flag through the swapchain
+	this->m_vsync_enabled =
+		p_main_manager->Get_EngineConfig()->Is_VSyncEnabled();
+
+	init.resolution.reset =
+		this->m_vsync_enabled ? BGFX_RESET_VSYNC : 0;
 
 	bool status = ::bgfx::init(init);
 	KOTEK_ASSERT(status, "failed to initialize bgfx!");
@@ -85,7 +90,7 @@ void ktkRenderDevice::Resize(kun_core ktkIRenderSwapchain* p_raw_swapchain,
 	this->m_width = width;
 	this->m_height = height;
 
-	p_raw_swapchain->Resize(this, width, height);
+	p_raw_swapchain->Resize(this, width, height, this->m_vsync_enabled);
 	p_raw_renderer->Resize();
 }
 

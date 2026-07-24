@@ -11,10 +11,11 @@ void ktkRenderSwapchain::Initialize(Core::ktkIRenderDevice* p_render_device) {}
 void ktkRenderSwapchain::Shutdown(Core::ktkIRenderDevice* p_render_device) {}
 
 void ktkRenderSwapchain::Resize(
-	Core::ktkIRenderDevice* p_render_device, int width, int height)
+	Core::ktkIRenderDevice* p_render_device, int width, int height,
+	bool vsync)
 {
 	::bgfx::reset(static_cast<uint32_t>(width), static_cast<uint32_t>(height),
-		BGFX_RESET_VSYNC);
+		vsync ? BGFX_RESET_VSYNC : 0);
 }
 
 void ktkRenderSwapchain::Present(Core::ktkMainManager* p_main_manager,
