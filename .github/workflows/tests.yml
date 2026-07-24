@@ -36,8 +36,16 @@ jobs:
 
       - name: configure
         # KOTEK_ASSERT_STDERR_ROUTING=ON: any automated run of the produced
-        # binaries must never hit the stock modal CRT dialog
-        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON
+        # binaries must never hit the stock modal CRT dialog.
+        # retry: vcpkg downloads flake on runners but installs resume cleanly
+        shell: pwsh
+        run: |
+          foreach ($attempt in 1..3) {
+            cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON
+            if ($LASTEXITCODE -eq 0) { break }
+            if ($attempt -eq 3) { exit $LASTEXITCODE }
+            Write-Host "configure attempt $attempt failed, retrying (vcpkg resumes)..."
+          }
 
       - name: build
         run: cmake --build build --config Debug --parallel
