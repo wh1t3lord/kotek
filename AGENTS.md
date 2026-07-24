@@ -50,7 +50,8 @@ community recognition — **plus our own no-dependency implementation** so the
 module always builds with zero external requirements. The rule of three for every
 module's backend matrix: {own no-dep impl} ∪ {proven open-source backends} ∪
 {user-provided impl via the ktkI* interface}. Examples by module:
-- math: GLM / DirectXMath / own `kotek_std_math_*` classes
+- math: GLM / DirectXMath / own `kotek_std_math_own.h` (all three landed
+  2026-07-24, GLM-parity tested at 1e-5)
 - containers: std / boost(+boost::container) / ETL (static) / own pmr hybrids
 - logging: spdlog / own
 - serialization/json: boost::json / own
@@ -58,9 +59,19 @@ module's backend matrix: {own no-dep impl} ∪ {proven open-source backends} ∪
 - window: GLFW / (future SDL)
 - UI: ImGui / RmlUi / CEF / own
 - ECS: pico_ecs (vendored) / entt / own
-- render: bgfx (raster) / NRI (dx12/vk + RT, planned) / user impl
+- render: bgfx (raster) / NRI (dx12/vk + RT, in progress K11) / user impl
 - video: dav1d default / user impl (own codec is out of scope)
 - threading: std / TBB
+
+**User-impl mechanism (K4)**: the compile-time backend enum per module is
+`KOTEK_USE_<MODULE>_BACKEND_<NAME>`; the "user provides their own
+implementation" path is the K21 plugin override system (§5a — drop a
+`plugins/<module>.dll` replacement for ANY module, in any linkage mode) or a
+direct-path registration of a custom `ktkI*` implementation into the main
+manager's service-locator slot at module init. Guards like
+`KOTEK_USE_<MODULE>_BACKEND_USER` are added where a compile-time user impl is
+meaningful (math is the reference: GLM/DXM/OWN are compile-time switches;
+runtime replacement of the math module itself happens via plugins).
 Build validation must cover **each combination of these backends**, not only the
 default: curated named configurations (minimal / full / no-deps / per-backend
 variants) run in CI so backend switches never bit-rot. When adding a new module,
@@ -435,7 +446,7 @@ Status values: `open` / `in-progress` / `done` / `blocked` / `dropped(reason)`.
 | K6 | CMake command printing all kotek options + meaning (help) | open | e.g. `cmake -D KOTEK_HELP=ON` or custom target |
 | K7 | Short, laconic documentation of kotek concepts | open | explicitly LAST task |
 | K8 | AGENTS.md progress tracking | done (2026-07-21) | this file; keep updating |
-| K9 | Fix new/delete override situation (mimalloc problems; dead leak tracker) | in-progress | tracker made opt-in via `KOTEK_USE_MEMORY_TRACKER` (was silently on in Debug); its code `throw`s (violates the no-exceptions rule) and races under concurrent allocation — rework pending |
+| K9 | Fix new/delete override situation (mimalloc problems; dead leak tracker) | in-progress (2026-07-24 analysis) | tracker made opt-in via `KOTEK_USE_MEMORY_TRACKER` (was silently on in Debug). CURRENT STATE: two allocation paths — (a) mimalloc's own new/delete (`mimalloc-new-delete.h`, active in Release where `KOTEK_MEMORY_ALLOCATOR_CPU=MIMALLOC`), (b) manual global `operator new` in `kotek_std_memory.cpp` (std::malloc + leak-tracker map, active in Debug where leak detection disables the custom allocator). PROBLEMS: (1) the manual override `throw`s `std::bad_alloc` (4 sites) and tracker paths throw `runtime_error` (3 sites) — violates the no-exceptions rule; (2) the Debug CRT-malloc fallback is exactly what creates per-module CRT debug heaps → the whole cross-CRT `__acrt_first_block` assert family (§8); (3) mimalloc instances are per-module too (static link), so Release shares the same cross-heap class in milder form; (4) tracker races + unconditional `CaptureStackBackTrace` cost. PLAN: v1 — purge all `throw`s (assert+fatal semantics, no bad_alloc exceptions); route the Debug fallback through `mi_malloc/mi_free` as well (mimalloc in every config, its own debug checks replace the CRT debug heap's role → kills the cross-CRT assert family at the source); keep the tracker opt-in and make it race-safe (sharded map or mimalloc stats). v2 (the real enabler for free .dll swapping): one shared allocator service behind `ktkIMemoryAllocator` so every module allocates from ONE heap regardless of CRT — needs owner sign-off on the exact mimalloc problem he hit before adopting it everywhere |
 | K10 | Deps UX: nuget (github.com/wh1t3lord/kotek-nuget), vcpkg-only, manual folder mode; flags to select; make manual mode friendly (no hand-typed path lists) | open | validate all three modes actually work |
 | K11 | Delete GAPI/render backends except bgfx; add NVIDIA NRI backend (kotek + zircon) | in-progress (2026-07-22) | DELETED: kotek.render.{gl,vk,software,angle.gles,angle.gles23,gl.glad,shared.gl,shared.vk,shared.dx} + zircon render/{gles3,vk}; bgfx kept & de-GL'd (raw GL calls/types removed from shared.bgfx/bgfx, agnostic `eRenderGraphBufferObject/Usage` added); defines/enum per-backend config modules KEPT for enum stability + NRI reuse; startup renderer routes to bgfx; NRI backend (dx12/vk + ray tracing) still to implement (`kotek.render.nri` + zircon passes, see Z5) |
 | K12 | Final commit+push via `git acp "msg"` | in-progress | alias now exists (verified); used for phase commits; kotek is a submodule (commit there first, then bump in zircon) |
