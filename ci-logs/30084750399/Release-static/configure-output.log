@@ -1,0 +1,132 @@
+-- applying D:/a/kotek/kotek/cmake/windows/compiler_globals.cmake
+-- [kotek]: C++ standard is C++20 (KOTEK_WINDOWS_XP=OFF)
+-- D:/a/kotek/kotek/cmake/windows/compiler_globals.cmake is applied!
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.20348.
+[kotek.engine]: CMAKE_SOURCE_DIR=D:/a/kotek/kotek
+[kotek.engine]: CMAKE_CURRENT_SOURCE_DIR=D:/a/kotek/kotek
+[kotek.engine]: vcpkg triplet is 'x64-windows-static'
+-- applying D:/a/kotek/kotek/cmake/library.cmake
+-- [kotek]: linkage scenario is 'STATIC' (force static: '', force shared: '')
+-- D:/a/kotek/kotek/cmake/library.cmake is applied!
+[kotek.engine]: Your overriden kotek.exe [kotek]
+[kotek.engine]: build type is 'Release'
+[kotek.engine]: filename for generating preprocessors: 'D:/a/kotek/kotek/build/generated/kotek_std_preprocessors.h'
+[kotek.engine]: your dependency folder is 'vcpkg'
+-- Found Freetype target Freetype::Freetype - Freetype font engine enabled
+[kotek.core.defines.static.tests]: TESTS is 'ON'
+[kotek.core.defines.static.tests]: TESTS use in runtime is 'ON'
+-- [kotek.core.defines.static.tests]: linkage is 'STATIC'
+[kotek.core.defines.static.cpp]: KOTEK_STD_LIBRARY=STD
+[kotek.core.defines.static.cpp]: standard library is Standard library
+[kotek.core.defines.static.cpp]: string configuration is 'OPTIMIZED'
+[kotek.core.defines.static.cpp]: development is for EMB environment
+[kotek.core.defines.static.cpp]: log backend is 
+-- [kotek.core.defines.static.cpp]: using filesystem feature: KOTEK_FILESYSTEM_FEATURE_VFM=
+-- [kotek.core.defines.static.cpp]: using filesystem type: KOTEK_FILESYSTEM_TYPE_NATIVE=
+-- [kotek.core.defines.static.cpp]: using filesystem type: KOTEK_FILESYSTEM_TYPE_ZLIB=
+-- [kotek.core.defines.static.cpp]: linkage is 'STATIC'
+-- [kotek.core.defines.static.git]: linkage is 'STATIC'
+-- [kotek.core.defines.static.render]: linkage is 'STATIC'
+[kotek.core.defines.static.render.dx]: DirectX is 'ON'
+-- [kotek.core.defines.static.render.dx]: linkage is 'STATIC'
+-- [kotek.core.defines.static.render.gl]: linkage is 'STATIC'
+[kotek.core.defines.static.render.vk]: Vulkan is 'ON'
+-- [kotek.core.defines.static.render.vk]: linkage is 'STATIC'
+[kotek.core.defines.static.render.bgfx]: BGFX is 'ON'
+-- [kotek.core.defines.static.render.bgfx]: linkage is 'STATIC'
+[kotek.core.defines.static.math]: math library is 'GLM'
+-- [kotek.core.defines.static.math]: linkage is 'STATIC'
+-- [kotek.core.defines.static.os]: linkage is 'STATIC'
+[kotek.core.defines.static.os.win32]: window library is [GLFW]
+[kotek.core.defines.static.os.win32]: platform 'Windows NT'
+-- [kotek.core.defines.static.os.win32]: linkage is 'STATIC'
+[kotek.core.defines.static.os.linux]: window library is [GLFW]
+-- [kotek.core.defines.static.os.linux]: linkage is 'STATIC'
+[kotek.core.defines.static.profilers]: CPU Profiler is 'ON'
+[kotek.core.defines.static.profilers]: GPU Profiler is 'ON'
+-- [kotek.core.defines.static.profilers]: linkage is 'STATIC'
+-- [kotek.core.defines.static.sdk]: linkage is 'STATIC'
+[kotek.core.defines.static.string]: UNICODE is 'ON'
+-- [kotek.core.defines.static.string]: linkage is 'STATIC'
+-- [kotek.core.defines.static]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent.text]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent.message]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent.assert]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent.ecs] selected ecs backend: PICO
+-- [kotek.core.defines_dependent.ecs]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent]: linkage is 'STATIC'
+-- [kotek.core.defines]: linkage is 'STATIC'
+[kotek.core]: adding tests for runtime in project kotek.core
+[kotek.core]: files to attach (KOTEK_TESTS): tests/kotek_core_test_filesystem.cpp;tests/kotek_core_test_json.cpp;tests/kotek_core_test_string.cpp;tests/kotek_core_test_container_deque.cpp;tests/kotek_core_test_container_vector.cpp;tests/kotek_core_test_container_unordered_set.cpp;tests/kotek_core_test_container_unordered_map.cpp;tests/kotek_core_test_container_set.cpp;tests/kotek_core_test_container_queue.cpp;tests/kotek_core_test_container_map.cpp;tests/kotek_core_test_container_list.cpp;tests/kotek_core_test_plugin_override.cpp;tests/kotek_core_test_math_backends.cpp
+-- [kotek.core]: linkage is 'STATIC'
+-- [kotek.core.api]: linkage is 'STATIC'
+-- [kotek.core.types]: linkage is 'STATIC'
+-- [kotek.core.types.char]: linkage is 'STATIC'
+-- [kotek.core.types.numerics]: linkage is 'STATIC'
+-- [kotek.core.types.string]: linkage is 'STATIC'
+-- [kotek.core.casting]: linkage is 'STATIC'
+-- [kotek.core.casting.lexical]: linkage is 'STATIC'
+-- [kotek.core.casting.string]: linkage is 'STATIC'
+-- [kotek.core.constants]: linkage is 'STATIC'
+-- [kotek.core.constants.math]: linkage is 'STATIC'
+-- [kotek.core.constants.ecs]: linkage is 'STATIC'
+-- [kotek.core.constants.string]: linkage is 'STATIC'
+-- [kotek.core.constants.window]: linkage is 'STATIC'
+-- [kotek.core.constants.render]: linkage is 'STATIC'
+-- [kotek.core.containers]: linkage is 'STATIC'
+-- [kotek.core.containers.any]: linkage is 'STATIC'
+-- [kotek.core.containers.array]: linkage is 'STATIC'
+-- [kotek.core.containers.string]: linkage is 'STATIC'
+-- [kotek.core.containers.hash]: linkage is 'STATIC'
+-- [kotek.core.containers.deque]: linkage is 'STATIC'
+-- [kotek.core.containers.dll]: linkage is 'STATIC'
+-- [kotek.core.containers.filesystem]: linkage is 'STATIC'
+-- [kotek.core.containers.filesystem.path]: linkage is 'STATIC'
+-- [kotek.core.containers.function]: linkage is 'STATIC'
+-- [kotek.core.containers.io]: linkage is 'STATIC'
+-- [kotek.core.containers.json]: linkage is 'STATIC'
+-- [kotek.core.containers.map]: linkage is 'STATIC'
+-- [kotek.core.containers.microsoft]: linkage is 'STATIC'
+-- [kotek.core.containers.microsoft.wrl.comptr]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.tbb]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.atomic]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.mutex]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.shared_mutex]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.thread]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.semaphore]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.queue]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.condition_variable]: linkage is 'STATIC'
+-- [kotek.core.containers.pair]: linkage is 'STATIC'
+-- [kotek.core.containers.queue]: linkage is 'STATIC'
+-- [kotek.core.containers.shared_ptr]: linkage is 'STATIC'
+-- [kotek.core.containers.unique_ptr]: linkage is 'STATIC'
+-- [kotek.core.containers.unordered_map]: linkage is 'STATIC'
+-- [kotek.core.containers.unordered_set]: linkage is 'STATIC'
+-- [kotek.core.containers.variant]: linkage is 'STATIC'
+-- [kotek.core.containers.vector]: linkage is 'STATIC'
+-- [kotek.core.containers.list]: linkage is 'STATIC'
+-- [kotek.core.filesystem]: linkage is 'STATIC'
+-- [kotek.core.filesystem.file_text]: linkage is 'STATIC'
+-- [kotek.core.format]: linkage is 'STATIC'
+-- [kotek.core.memory]: linkage is 'STATIC'
+CMake Error at vcpkg/scripts/buildsystems/vcpkg.cmake:910 (_find_package):
+  By not providing "Findmimalloc.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "mimalloc",
+  but CMake did not find one.
+
+  Could not find a package configuration file provided by "mimalloc" with any
+  of the following names:
+
+    mimallocConfig.cmake
+    mimalloc-config.cmake
+
+  Add the installation prefix of "mimalloc" to CMAKE_PREFIX_PATH or set
+  "mimalloc_DIR" to a directory containing one of the above files.  If
+  "mimalloc" provides a separate development package or SDK, be sure it has
+  been installed.
+Call Stack (most recent call first):
+  src/kotek.core.memory.cpu/CMakeLists.txt:13 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
