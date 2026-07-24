@@ -75,16 +75,40 @@ jobs:
           git -C vcpkg fetch --depth 1 origin 1bf999414d7def6fea4c3c310d613ceed039f929
           git -C vcpkg checkout FETCH_HEAD
           if (-not (Test-Path vcpkg/vcpkg.exe)) { vcpkg/bootstrap-vcpkg.bat }
-          foreach ($p in @("zstd","etl","utfcpp","glm","cgltf","spdlog","tbb","pkgconf","mimalloc")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+          foreach ($p in @("zstd","etl","utfcpp","glm","cgltf","spdlog","tbb","pkgconf","mimalloc")) {
+            foreach ($attempt in 1..3) {
+              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$p.log"
+              if ($LASTEXITCODE -eq 0) { break }
+              if ($attempt -eq 3) { Get-Content "deps-$p.log" -Tail 40; exit $LASTEXITCODE }
+            }
+          }
       - name: deps graphics (vulkan, bgfx, glfw3, ktx)
         run: |
-          foreach ($p in @("vulkan","bgfx[multithreaded]","glfw3","ktx")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+          foreach ($p in @("vulkan","bgfx[multithreaded]","glfw3","ktx")) {
+            foreach ($attempt in 1..3) {
+              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$p.log"
+              if ($LASTEXITCODE -eq 0) { break }
+              if ($attempt -eq 3) { Get-Content "deps-$p.log" -Tail 40; exit $LASTEXITCODE }
+            }
+          }
       - name: deps media/ui (rmlui, freetype, dav1d)
         run: |
-          foreach ($p in @("rmlui[freetype]","freetype","dav1d")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+          foreach ($p in @("rmlui[freetype]","freetype","dav1d")) {
+            foreach ($attempt in 1..3) {
+              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$p.log"
+              if ($LASTEXITCODE -eq 0) { break }
+              if ($attempt -eq 3) { Get-Content "deps-$p.log" -Tail 40; exit $LASTEXITCODE }
+            }
+          }
       - name: deps tests/profilers (gtest, tracy, boost-json)
         run: |
-          foreach ($p in @("gtest","tracy","boost-json")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+          foreach ($p in @("gtest","tracy","boost-json")) {
+            foreach ($attempt in 1..3) {
+              vcpkg/vcpkg install "${p}:x64-windows-static" *> "deps-$p.log"
+              if ($LASTEXITCODE -eq 0) { break }
+              if ($attempt -eq 3) { Get-Content "deps-$p.log" -Tail 40; exit $LASTEXITCODE }
+            }
+          }
 
       # vcpkg downloads occasionally flake on GH runners mid-install (the
       # failure is resumable — a retry continues from the failed port, as
@@ -121,6 +145,7 @@ jobs:
           New-Item -ItemType Directory -Force $dest | Out-Null
           if (Test-Path configure-output.log) { Copy-Item configure-output.log $dest -Force }
           if (Test-Path build-output.log) { Copy-Item build-output.log $dest -Force }
+          Get-ChildItem -Path . -Filter "deps-*.log" -File | Copy-Item -Destination $dest -Force -ErrorAction SilentlyContinue
           cmake -S . -B build-diag -DCMAKE_BUILD_TYPE=${{ matrix.config }} ${{ matrix.linkage.flags }} *> "$dest/diag-configure-output.log"; $null
           if (Test-Path build) { Get-ChildItem -Recurse build -Include *.log -File | Copy-Item -Destination $dest -Force -ErrorAction SilentlyContinue }
 
