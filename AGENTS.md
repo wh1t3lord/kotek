@@ -72,6 +72,13 @@ matrix (K4).
 - Modules are flat siblings under `kotek/src/`, named `kotek.<layer>[.<group>[.<name>[.<backend>]]]`
   (e.g. `kotek.core.containers.vector`, `kotek.render.bgfx`, `kotek.core.os.win32`).
   Directory name == CMake target name.
+- **Namespace form**: the real namespace is `Kotek` (capital, renamable via
+  `KOTEK_BEGIN_NAMESPACE_KOTEK`); kotek's own code uses the `KUN_*`/`kun_*`
+  macros. `kotek.core/include/kotek_core.h` defines lowercase aliases
+  (`namespace kotek/core/render = Kotek::Core/...`) and **consumers (zircon and
+  above) must use those, never `Kotek::` directly** — the alias layer is what
+  keeps the cmake namespace-rename feature working. Direct-`Kotek::` sites are
+  debt (measured 2026-07-24: 43 in kotek, 258 in zircon — zircon Z16 sweep).
 - Internal layout per module:
   ```
   kotek.x.y/
