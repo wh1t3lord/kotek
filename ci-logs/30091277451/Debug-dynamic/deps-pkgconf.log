@@ -1,0 +1,84 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    pkgconf:x64-windows-static@2.5.1#4
+  * vcpkg-cmake-get-vars:x64-windows@2025-05-29
+  * vcpkg-tool-meson:x64-windows@1.9.0#8
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 93.8 us. Use --debug to see more details.
+Installing 1/3 vcpkg-cmake-get-vars:x64-windows@2025-05-29...
+vcpkg-cmake-get-vars:x64-windows@2025-05-29 package ABI: ed4bdc726c241976bca21e1a717e96e974d25987fd2b80d2798d320d2f2aec25
+Building vcpkg-cmake-get-vars:x64-windows@2025-05-29...
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake-get-vars_x64-windows/share/vcpkg-cmake-get-vars/vcpkg_cmake_get_vars.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake-get-vars_x64-windows/share/vcpkg-cmake-get-vars/cmake_get_vars
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake-get-vars_x64-windows/share/vcpkg-cmake-get-vars/cmake_get_vars/CMakeLists.txt
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake-get-vars_x64-windows/share/vcpkg-cmake-get-vars/cmake-get-vars.cmake.in
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake-get-vars_x64-windows/share/vcpkg-cmake-get-vars/vcpkg-port-config.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake-get-vars_x64-windows/share/vcpkg-cmake-get-vars/copyright
+-- Performing post-build validation
+Starting submission of vcpkg-cmake-get-vars:x64-windows@2025-05-29 to 1 binary cache(s) in the background
+Elapsed time to handle vcpkg-cmake-get-vars:x64-windows: 46.7 ms
+Installing 2/3 vcpkg-tool-meson:x64-windows@1.9.0#8...
+vcpkg-tool-meson:x64-windows@1.9.0#8 package ABI: b7477213f635902e447dca5259601a8c30692ef1c80e2a3b0be84916f2287675
+Building vcpkg-tool-meson:x64-windows@1.9.0#8...
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-tool-meson_x64-windows/share/vcpkg-tool-meson/copyright
+Downloading https://github.com/mesonbuild/meson/archive/1.9.0.tar.gz -> meson-1.9.0.tar.gz
+Successfully downloaded meson-1.9.0.tar.gz
+-- Applying patch D:/a/kotek/kotek/vcpkg/packages/vcpkg-tool-meson_x64-windows/share/vcpkg-tool-meson/meson-intl.patch
+-- Applying patch D:/a/kotek/kotek/vcpkg/packages/vcpkg-tool-meson_x64-windows/share/vcpkg-tool-meson/adjust-python-dep.patch
+-- Applying patch D:/a/kotek/kotek/vcpkg/packages/vcpkg-tool-meson_x64-windows/share/vcpkg-tool-meson/adjust-args.patch
+-- Applying patch D:/a/kotek/kotek/vcpkg/packages/vcpkg-tool-meson_x64-windows/share/vcpkg-tool-meson/remove-pkgconfig-specialization.patch
+-- Applying patch D:/a/kotek/kotek/vcpkg/packages/vcpkg-tool-meson_x64-windows/share/vcpkg-tool-meson/meson-56879d5.diff
+Downloading https://www.python.org/ftp/python/3.14.2/python-3.14.2-embed-amd64.zip -> python-3.14.2-embed-amd64.zip
+Successfully downloaded python-3.14.2-embed-amd64.zip
+-- Found Python version '3.14.2 at D:/a/kotek/kotek/vcpkg/downloads/tools/python/python-3.14.2-x64-1/python.exe'
+-- Using meson: D:/a/kotek/kotek/vcpkg/downloads/tools/meson-1.9.0-12a69e/meson.py
+-- Performing post-build validation
+Starting submission of vcpkg-tool-meson:x64-windows@1.9.0#8 to 1 binary cache(s) in the background
+Elapsed time to handle vcpkg-tool-meson:x64-windows: 1.1 s
+Completed submission of vcpkg-cmake-get-vars:x64-windows@2025-05-29 to 1 binary cache(s) in 54.1 ms
+Installing 3/3 pkgconf:x64-windows-static@2.5.1#4...
+pkgconf:x64-windows-static@2.5.1#4 package ABI: 478345800377a8d469dd4fbb88ff32cbb358b6a546a0b33cb5f3d044d2ffa520
+Building pkgconf:x64-windows-static@2.5.1#4...
+-- Found Python version '3.14.2 at D:/a/kotek/kotek/vcpkg/downloads/tools/python/python-3.14.2-x64-1/python.exe'
+-- Using meson: D:/a/kotek/kotek/vcpkg/downloads/tools/meson-1.9.0-12a69e/meson.py
+Downloading https://github.com/pkgconf/pkgconf/archive/pkgconf-2.5.1.tar.gz -> pkgconf-pkgconf-pkgconf-2.5.1.tar.gz
+Successfully downloaded pkgconf-pkgconf-pkgconf-2.5.1.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/pkgconf-pkgconf-pkgconf-2.5.1.tar.gz
+-- Applying patch 001-unveil-fixes.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/pkgconf/src/conf-2.5.1-5bc6f0da3f.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static-dbg
+-- Getting CMake variables for x64-windows-static
+-- Loading CMake variables from D:/a/kotek/kotek/vcpkg/buildtrees/pkgconf/cmake-get-vars_C_CXX-x64-windows-static.cmake.log
+-- Configuring x64-windows-static-dbg done
+-- Configuring x64-windows-static-rel
+-- Configuring x64-windows-static-rel done
+-- Package x64-windows-static-dbg
+-- Package x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/pkgconf_x64-windows-static/lib/pkgconfig/libpkgconf.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/pkgconf_x64-windows-static/debug/lib/pkgconfig/libpkgconf.pc
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/pkgconf_x64-windows-static/share/pkgconf/copyright
+-- Performing post-build validation
+Starting submission of pkgconf:x64-windows-static@2.5.1#4 to 1 binary cache(s) in the background
+Elapsed time to handle pkgconf:x64-windows-static: 14 s
+Total install time: 15 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Some packages did not declare an SPDX license. Check the `copyright` file for each package for more information about their licensing.
+Packages installed in this vcpkg installation declare the following licenses:
+Apache-2.0
+MIT
+pkgconf provides pkg-config modules:
+
+  # a library for accessing and manipulating development framework configuration
+  libpkgconf
+
+Completed submission of vcpkg-tool-meson:x64-windows@1.9.0#8 to 1 binary cache(s) in 56.4 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of pkgconf:x64-windows-static@2.5.1#4 to 1 binary cache(s) in 138 ms (1/1)
+All requested installations completed successfully in: 15 s

@@ -1,0 +1,76 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+Successfully downloaded cmake-4.3.2-windows-x86_64.zip
+Extracting cmake...
+The following packages will be built and installed:
+  * vcpkg-cmake:x64-windows@2024-04-23
+  * vcpkg-cmake-config:x64-windows@2024-05-23
+    zstd:x64-windows-static@1.5.7
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 121 us. Use --debug to see more details.
+Installing 1/3 vcpkg-cmake:x64-windows@2024-04-23...
+vcpkg-cmake:x64-windows@2024-04-23 package ABI: 930638e2c7390533de087ea988aa18704c3726fb067ee2463a244249d8da28d4
+Building vcpkg-cmake:x64-windows@2024-04-23...
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake_x64-windows/share/vcpkg-cmake/vcpkg_cmake_configure.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake_x64-windows/share/vcpkg-cmake/vcpkg_cmake_build.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake_x64-windows/share/vcpkg-cmake/vcpkg_cmake_install.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake_x64-windows/share/vcpkg-cmake/vcpkg-port-config.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake_x64-windows/share/vcpkg-cmake/copyright
+-- Performing post-build validation
+Starting submission of vcpkg-cmake:x64-windows@2024-04-23 to 1 binary cache(s) in the background
+Elapsed time to handle vcpkg-cmake:x64-windows: 40.1 ms
+Installing 2/3 vcpkg-cmake-config:x64-windows@2024-05-23...
+vcpkg-cmake-config:x64-windows@2024-05-23 package ABI: 344c668ae16927e5cf6f69e7986d26eeade7f55333dfcdc5511c712540959786
+Building vcpkg-cmake-config:x64-windows@2024-05-23...
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake-config_x64-windows/share/vcpkg-cmake-config/vcpkg_cmake_config_fixup.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake-config_x64-windows/share/vcpkg-cmake-config/vcpkg-port-config.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-cmake-config_x64-windows/share/vcpkg-cmake-config/copyright
+-- Skipping post-build validation due to VCPKG_POLICY_EMPTY_PACKAGE
+Starting submission of vcpkg-cmake-config:x64-windows@2024-05-23 to 1 binary cache(s) in the background
+Elapsed time to handle vcpkg-cmake-config:x64-windows: 37 ms
+Installing 3/3 zstd:x64-windows-static@1.5.7...
+zstd:x64-windows-static@1.5.7 package ABI: 0a4d05aba4d8529f26dbd4d7874af11e7148e0b83324208299c4fe4f7a6d57a7
+Building zstd:x64-windows-static@1.5.7...
+Downloading https://github.com/facebook/zstd/archive/v1.5.7.tar.gz -> facebook-zstd-v1.5.7.tar.gz
+Successfully downloaded facebook-zstd-v1.5.7.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/facebook-zstd-v1.5.7.tar.gz
+-- Applying patch no-static-suffix.patch
+-- Applying patch fix-emscripten-and-clang-cl.patch
+-- Applying patch fix-windows-rc-compile.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/zstd/src/v1.5.7-bb6cae2b2e.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/zstd_x64-windows-static/lib/pkgconfig/libzstd.pc
+Downloading msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst, trying https://mirror.msys2.org/mingw/mingw64/mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+Successfully downloaded msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+Downloading msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/zstd_x64-windows-static/debug/lib/pkgconfig/libzstd.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/zstd_x64-windows-static/share/zstd/usage
+-- Performing post-build validation
+Starting submission of zstd:x64-windows-static@1.5.7 to 1 binary cache(s) in the background
+Elapsed time to handle zstd:x64-windows-static: 20 s
+Total install time: 20 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+(BSD-3-Clause OR GPL-2.0-only)
+MIT
+zstd provides CMake targets:
+
+  find_package(zstd CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE zstd::libzstd)
+
+Completed submission of vcpkg-cmake:x64-windows@2024-04-23 to 1 binary cache(s) in 74.8 ms
+Completed submission of vcpkg-cmake-config:x64-windows@2024-05-23 to 1 binary cache(s) in 52.5 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of zstd:x64-windows-static@1.5.7 to 1 binary cache(s) in 822 ms (1/1)
+All requested installations completed successfully in: 20 s

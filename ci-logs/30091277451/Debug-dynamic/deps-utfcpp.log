@@ -1,0 +1,34 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    utfcpp:x64-windows-static@4.1.1
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 54.4 us. Use --debug to see more details.
+Installing 1/1 utfcpp:x64-windows-static@4.1.1...
+utfcpp:x64-windows-static@4.1.1 package ABI: b288da5a745f3d5bda7887de6aa598c39ca4a17775f9f5b009da99dfad2e58a4
+Building utfcpp:x64-windows-static@4.1.1...
+Downloading https://github.com/nemtrif/utfcpp/archive/v4.1.1.tar.gz -> nemtrif-utfcpp-v4.1.1.tar.gz
+Successfully downloaded nemtrif-utfcpp-v4.1.1.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/nemtrif-utfcpp-v4.1.1.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/utfcpp/src/v4.1.1-a4242085af.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/utfcpp_x64-windows-static/share/utfcpp/copyright
+-- Performing post-build validation
+Starting submission of utfcpp:x64-windows-static@4.1.1 to 1 binary cache(s) in the background
+Elapsed time to handle utfcpp:x64-windows-static: 1.2 s
+Total install time: 1.2 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+BSL-1.0
+utfcpp provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(utf8cpp CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE utf8::cpp utf8cpp::utf8cpp)
+
+Waiting for 1 remaining binary cache submissions...
+Completed submission of utfcpp:x64-windows-static@4.1.1 to 1 binary cache(s) in 49 ms (1/1)
+All requested installations completed successfully in: 1.2 s
