@@ -1,0 +1,30 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    cgltf:x64-windows-static@1.15
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 66.7 us. Use --debug to see more details.
+Installing 1/1 cgltf:x64-windows-static@1.15...
+cgltf:x64-windows-static@1.15 package ABI: 347defe4691f0893a342ef31405cb0caabb7fe4751c881cebb98a472b0799699
+Building cgltf:x64-windows-static@1.15...
+Downloading https://github.com/jkuhlmann/cgltf/archive/v1.15.tar.gz -> jkuhlmann-cgltf-v1.15.tar.gz
+Successfully downloaded jkuhlmann-cgltf-v1.15.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/jkuhlmann-cgltf-v1.15.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/cgltf/src/v1.15-841da1ba58.clean
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/cgltf_x64-windows-static/share/cgltf/copyright
+-- Performing post-build validation
+Starting submission of cgltf:x64-windows-static@1.15 to 1 binary cache(s) in the background
+Elapsed time to handle cgltf:x64-windows-static: 578 ms
+Total install time: 579 ms
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+MIT
+cgltf is header-only and can be used from CMake via:
+
+  find_path(CGLTF_INCLUDE_DIRS "cgltf.h")
+  target_include_directories(main PRIVATE ${CGLTF_INCLUDE_DIRS})
+
+Waiting for 1 remaining binary cache submissions...
+Completed submission of cgltf:x64-windows-static@1.15 to 1 binary cache(s) in 74 ms (1/1)
+All requested installations completed successfully in: 579 ms

@@ -1,0 +1,34 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    etl:x64-windows-static@20.47.1
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 79.1 us. Use --debug to see more details.
+Installing 1/1 etl:x64-windows-static@20.47.1...
+etl:x64-windows-static@20.47.1 package ABI: 64eee3d7eb27e2955f8ce74ca052f24690695a422baa538b68b3c124f4f8e196
+Building etl:x64-windows-static@20.47.1...
+Downloading https://github.com/ETLCPP/etl/archive/20.47.1.tar.gz -> ETLCPP-etl-20.47.1.tar.gz
+Successfully downloaded ETLCPP-etl-20.47.1.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/ETLCPP-etl-20.47.1.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/etl/src/20.47.1-f017f1cda5.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/etl_x64-windows-static/share/etl/copyright
+-- Performing post-build validation
+Starting submission of etl:x64-windows-static@20.47.1 to 1 binary cache(s) in the background
+Elapsed time to handle etl:x64-windows-static: 2.5 s
+Total install time: 2.5 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+MIT
+etl provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(etl CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE etl::etl)
+
+Waiting for 1 remaining binary cache submissions...
+Completed submission of etl:x64-windows-static@20.47.1 to 1 binary cache(s) in 270 ms (1/1)
+All requested installations completed successfully in: 2.5 s

@@ -1,0 +1,39 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    glm:x64-windows-static@1.0.3
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 84.1 us. Use --debug to see more details.
+Installing 1/1 glm:x64-windows-static@1.0.3...
+glm:x64-windows-static@1.0.3 package ABI: 7e4d928c278a8ee9db0b20b7b0d546138b737b237eee7e557ce46d32c231a18a
+Building glm:x64-windows-static@1.0.3...
+Downloading https://github.com/g-truc/glm/archive/1.0.3.tar.gz -> g-truc-glm-1.0.3.tar.gz
+Successfully downloaded g-truc-glm-1.0.3.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/g-truc-glm-1.0.3.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/glm/src/1.0.3-65552ff9f1.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/glm_x64-windows-static/share/glm/copyright
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/glm_x64-windows-static/share/glm/usage
+-- Performing post-build validation
+Starting submission of glm:x64-windows-static@1.0.3 to 1 binary cache(s) in the background
+Elapsed time to handle glm:x64-windows-static: 5.8 s
+Total install time: 5.8 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+MIT
+The package glm provides CMake targets:
+
+    find_package(glm CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE glm::glm)
+
+    # Or use the header-only version
+    find_package(glm CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE glm::glm-header-only)
+
+Waiting for 1 remaining binary cache submissions...
+Completed submission of glm:x64-windows-static@1.0.3 to 1 binary cache(s) in 438 ms (1/1)
+All requested installations completed successfully in: 5.8 s

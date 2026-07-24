@@ -1,0 +1,68 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+  * fmt:x64-windows-static@12.1.0
+    spdlog[core,fmt,tz-offset]:x64-windows-static@1.17.0
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 107 us. Use --debug to see more details.
+Installing 1/2 fmt:x64-windows-static@12.1.0...
+fmt:x64-windows-static@12.1.0 package ABI: c4cffc748f7f4efc3b70ca938f8b7a39c314fcbfc9464fa95662b1fcc42ef510
+Building fmt:x64-windows-static@12.1.0...
+Downloading https://github.com/fmtlib/fmt/archive/12.1.0.tar.gz -> fmtlib-fmt-12.1.0.tar.gz
+Successfully downloaded fmtlib-fmt-12.1.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/fmtlib-fmt-12.1.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/fmt/src/12.1.0-54f1f91231.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/fmt_x64-windows-static/lib/pkgconfig/fmt.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/fmt_x64-windows-static/debug/lib/pkgconfig/fmt.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/fmt_x64-windows-static/share/fmt/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/fmt_x64-windows-static/share/fmt/copyright
+-- Performing post-build validation
+Starting submission of fmt:x64-windows-static@12.1.0 to 1 binary cache(s) in the background
+Elapsed time to handle fmt:x64-windows-static: 5.3 s
+Installing 2/2 spdlog[core,fmt,tz-offset]:x64-windows-static@1.17.0...
+spdlog[core,fmt,tz-offset]:x64-windows-static@1.17.0 package ABI: 64063ef6ff963500247b594bd09d042375722ada928aac0660d0836902caa685
+Building spdlog[core,fmt,tz-offset]:x64-windows-static@1.17.0...
+Downloading https://github.com/gabime/spdlog/archive/v1.17.0.tar.gz -> gabime-spdlog-v1.17.0.tar.gz
+Successfully downloaded gabime-spdlog-v1.17.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/gabime-spdlog-v1.17.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/spdlog/src/v1.17.0-2617b3696e.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/spdlog_x64-windows-static/lib/pkgconfig/spdlog.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/spdlog_x64-windows-static/debug/lib/pkgconfig/spdlog.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/spdlog_x64-windows-static/share/spdlog/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/spdlog_x64-windows-static/share/spdlog/copyright
+-- Performing post-build validation
+Starting submission of spdlog[core,fmt,tz-offset]:x64-windows-static@1.17.0 to 1 binary cache(s) in the background
+Elapsed time to handle spdlog:x64-windows-static: 12 s
+Total install time: 17 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+MIT
+The package spdlog provides CMake targets:
+
+    find_package(spdlog CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE spdlog::spdlog)
+
+    # Or use the header-only version
+    find_package(spdlog CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE spdlog::spdlog_header_only)
+
+Completed submission of fmt:x64-windows-static@12.1.0 to 1 binary cache(s) in 423 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of spdlog[core,fmt,tz-offset]:x64-windows-static@1.17.0 to 1 binary cache(s) in 1.7 s (1/1)
+All requested installations completed successfully in: 17 s
