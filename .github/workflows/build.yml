@@ -88,9 +88,9 @@ jobs:
         shell: pwsh
         run: |
           foreach ($attempt in 1..3) {
-            cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }} ${{ matrix.linkage.flags }}
+            cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.config }} ${{ matrix.linkage.flags }} *> configure-output.log
             if ($LASTEXITCODE -eq 0) { break }
-            if ($attempt -eq 3) { exit $LASTEXITCODE }
+            if ($attempt -eq 3) { Get-Content configure-output.log -Tail 60; exit $LASTEXITCODE }
             Write-Host "configure attempt $attempt failed, retrying (vcpkg resumes)..."
           }
 
@@ -113,7 +113,8 @@ jobs:
         run: |
           $dest = "ci-logs/${{ github.run_id }}/${{ matrix.config }}-${{ matrix.linkage.name }}"
           New-Item -ItemType Directory -Force $dest | Out-Null
-          cmake -S . -B build-diag -DCMAKE_BUILD_TYPE=${{ matrix.config }} ${{ matrix.linkage.flags }} *> "$dest/configure-output.log"; $null
+          if (Test-Path configure-output.log) { Copy-Item configure-output.log $dest -Force }
+          cmake -S . -B build-diag -DCMAKE_BUILD_TYPE=${{ matrix.config }} ${{ matrix.linkage.flags }} *> "$dest/diag-configure-output.log"; $null
           if (Test-Path build) { Get-ChildItem -Recurse build -Include *.log -File | Copy-Item -Destination $dest -Force -ErrorAction SilentlyContinue }
           git config user.email "ci@kotek"
           git config user.name "kotek-ci"
