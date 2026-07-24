@@ -1,0 +1,45 @@
+cmake_minimum_required(VERSION 3.21)
+
+project(kotek.core.containers.multithreading.queue VERSION 1 LANGUAGES CXX)
+
+
+
+
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+			find_package(Boost COMPONENTS container REQUIRED)
+		elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+			file(GLOB nuget_boost_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
+			if ("${nuget_boost_folder}" MATCHES "Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+				message("[${PROJECT_NAME}][nuget]: package boost exists!")
+			else()
+				message(FATAL_ERROR "failed to find boost package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
+			endif()
+		else()
+			find_package(Boost COMPONENTS container REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+		endif()
+	endif()
+endif()
+
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Containers_MultiThreading_Queue SHUTDOWN ShutdownModule_Core_Containers_MultiThreading_Queue
+	"include/kotek_std_alias_queue.h"
+	"include/kotek_core_containers_multithreading_queue.h"
+	"src/main_core_containers_multithreading_queue_dll.cpp")
+
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers/multithreading")
+
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.queue)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.multithreading.mutex)
+
+if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
+			message("[${PROJECT_NAME}]: boost package included directory")
+			target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
+		endif()
+	else()
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Boost::boost Boost::container)
+	endif()
+endif()

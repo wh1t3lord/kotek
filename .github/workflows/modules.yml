@@ -1,0 +1,125 @@
+name: modules
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: modules-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  module:
+    name: ${{ matrix.name }}
+    runs-on: windows-2022
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: defines, targets: "kotek.core.defines" }
+          - { name: types-constants-enum, targets: "kotek.core.types kotek.core.constants kotek.core.enum" }
+          - { name: containers, targets: "kotek.core.containers" }
+          - { name: math-format-utility, targets: "kotek.core.math kotek.core.format kotek.core.utility" }
+          - { name: api-main_manager, targets: "kotek.core.api kotek.core.main_manager" }
+          - { name: os-window-input, targets: "kotek.core.os kotek.core.window kotek.core.window.glfw kotek.core.window_manager kotek.core.input" }
+          - { name: memory, targets: "kotek.core.memory" }
+          - { name: filesystem-log-console-config, targets: "kotek.core.filesystem kotek.core.log kotek.core.console kotek.core.engine_config" }
+          - { name: render, targets: "kotek.render" }
+          - { name: ui, targets: "kotek.ui" }
+          - { name: core-game, targets: "kotek.core kotek.game kotek" }
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: cache vcpkg
+        uses: actions/cache@v4
+        with:
+          # only the installed triplet tree + the tool itself: packages/ and
+          # buildtrees/ are recreatable intermediates and blow the 10 GB
+          # cache quota (locally >1.2 GB each); key bumps on the dep list
+          path: |
+            vcpkg/installed
+            vcpkg/vcpkg.exe
+          key: vcpkg-${{ runner.os }}-x64-windows-static-v2-${{ hashFiles('cmake/windows/vcpkg_nuget_minimal.cmake') }}
+
+      - name: setup msvc
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+
+      - name: configure
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug
+
+      - name: build module targets
+        shell: pwsh
+        run: |
+          foreach ($t in "${{ matrix.targets }}".Split(' ')) {
+            cmake --build build --config Debug --target $t --parallel
+            if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          }
+
+      # job logs and artifacts need admin rights to view — push the failure
+      # logs to a public ci-logs branch instead
+      - name: publish failure logs to ci-logs branch
+        if: failure()
+        shell: pwsh
+        run: |
+          $dest = "ci-logs/${{ github.run_id }}/${{ matrix.name }}"
+          New-Item -ItemType Directory -Force $dest | Out-Null
+          cmake -S . -B build-diag -DCMAKE_BUILD_TYPE=Debug *> "$dest/configure-output.log"; $null
+          if (Test-Path build) { Get-ChildItem -Recurse build -Include *.log -File | Copy-Item -Destination $dest -Force -ErrorAction SilentlyContinue }
+          git config user.email "ci@kotek"
+          git config user.name "kotek-ci"
+          git fetch origin ci-logs; if ($LASTEXITCODE -eq 0) { git checkout ci-logs } else { git checkout --orphan ci-logs }
+          git add $dest
+          git commit --quiet -m "ci logs: modules ${{ matrix.name }} run ${{ github.run_number }}"
+          git push origin HEAD:ci-logs
+          if ($LASTEXITCODE -ne 0) { git pull --rebase origin ci-logs; git push origin HEAD:ci-logs }
+
+      - name: emit badge
+        if: always()
+        shell: pwsh
+        run: |
+          $color = if ($LASTEXITCODE -eq 0) { "brightgreen" } else { "red" }
+          $msg = if ($LASTEXITCODE -eq 0) { "passing" } else { "failing" }
+          @{
+            schemaVersion = 1
+            label = "${{ matrix.name }}"
+            message = $msg
+            color = $color
+          } | ConvertTo-Json -Compress | Out-File -FilePath "${{ matrix.name }}.json" -Encoding utf8
+
+      - name: upload badge
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: badge-${{ matrix.name }}
+          path: ${{ matrix.name }}.json
+          retention-days: 1
+
+  badges:
+    name: publish badges
+    runs-on: windows-2022
+    needs: [module]
+    if: always() && github.event_name != 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: badges
+          continue-on-error: true
+
+      - name: collect badges
+        uses: actions/download-artifact@v4
+        with:
+          pattern: badge-*
+          path: .
+
+      - name: publish to badges branch
+        run: |
+          git config user.name "kotek-ci"
+          git config user.email "ci@kotek.local"
+          git add *.json
+          git commit -m "badges: ${{ github.sha }}" || exit 0
+          git push origin badges

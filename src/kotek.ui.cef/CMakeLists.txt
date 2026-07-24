@@ -1,0 +1,26 @@
+cmake_minimum_required(VERSION 3.21)
+
+project(kotek.ui.cef VERSION 1 LANGUAGES CXX)
+
+
+
+
+find_package(CEF REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+
+if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
+	set(IMPLEMENTATION_FILES_CEF 
+		"include/kotek_ui_game_ui_manager.h"
+		"src/kotek_ui_game_ui_manager.cpp"
+		"include/kotek_ui_cef_application.h"
+		"src/kotek_ui_cef_application.cpp")
+else()
+	set(IMPLEMENTATION_FILES_CEF "")
+endif()
+
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_UI_CEF SHUTDOWN ShutdownModule_UI_CEF
+	"include/kotek_ui_cef.h"
+	${IMPLEMENTATION_FILES_CEF}
+	"src/main_ui_cef_dll.cpp")
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)

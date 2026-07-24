@@ -1,0 +1,43 @@
+#include "../include/kotek_ui_videoplayer.h"
+#include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
+#include <kotek.core.main_manager/include/kotek_core_main_manager.h>
+#include <kotek.core.api/include/kotek_api_no_std.h>
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_UI
+
+bool InitializeModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
+{
+	if (p_main_manager->Get_Splash())
+	{
+		p_main_manager->Get_Splash()->Set_Text("[ui]: init [videoplayer]");
+		p_main_manager->Get_Splash()->Set_Progress();
+	}
+
+	KOTEK_INVOKE_MODULE(INIT, UI, InitializeModule_UI_VideoPlayer_AVIF, p_main_manager);
+
+	return true;
+}
+bool ShutdownModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
+{
+	KOTEK_INVOKE_MODULE(SHUTDOWN, UI, ShutdownModule_UI_VideoPlayer_AVIF, p_main_manager);
+
+
+	return true;
+}
+bool SerializeModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
+{
+	KOTEK_INVOKE_MODULE(SERIALIZE, UI, SerializeModule_UI_VideoPlayer_AVIF, p_main_manager);
+
+	return true;
+}
+bool DeserializeModule_UI_VideoPlayer(Core::ktkMainManager* p_main_manager)
+{
+	KOTEK_INVOKE_MODULE(DESERIALIZE, UI, DeserializeModule_UI_VideoPlayer_AVIF, p_main_manager);
+
+
+	return true;
+}
+
+KOTEK_END_NAMESPACE_UI
+KOTEK_END_NAMESPACE_KOTEK

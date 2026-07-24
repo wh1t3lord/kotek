@@ -1,0 +1,44 @@
+# exclude all dot files except .git, appveyor and travis files
+.*
+!azure-pipelines.yml
+!.clang-format
+!.git*
+!.appveyor*
+!.travis.yml
+
+[Xx]64/
+[Bb]uild/
+[Bb]uild*/
+
+# exclude binaries and temporary files
+CMakeCache.txt
+cmake_install.cmake
+install_manifest.txt
+bin*/
+kotek-engine-deps-*/
+vcpkg*/
+intermediate/
+intermediate_plugs/
+out/
+CMakeFiles/
+*.aps
+*.user
+*.PVS-Studio.*
+*.gch
+*.so
+*.a
+*.o
+*.cache
+# exclude doxygen output
+doc/doxygen/html/*
+documentation/*
+!documentation/Doxyfile
+!documentation/git/
+!documentation/shared/
+user_data/
+!cmake/*.cmake
+!cmake/*.config
+[Nn]uget/
+cmake/**/packages.config
+src/**/kotek_std_preprocessors.h
+kotek_formatter_static_cstring.h

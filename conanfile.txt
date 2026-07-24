@@ -1,0 +1,14 @@
+[requires]
+boost/1.80.0
+bullet3/3.24
+glm/0.9.9.8
+eigen/3.4.0
+glfw/3.3.8
+imguizmo/cci.20210223
+implot/0.14
+ktx/4.0.0
+mimalloc/2.0.7
+tracy/cci.20220130
+shaderc/2021.1
+onetbb/2021.7.0
+imgui/cci.20220621+1.88.docking

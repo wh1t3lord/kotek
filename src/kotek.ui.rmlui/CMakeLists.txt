@@ -1,0 +1,40 @@
+cmake_minimum_required(VERSION 3.21)
+
+project(kotek.ui.rmlui VERSION 1 LANGUAGES CXX)
+
+
+
+
+# static triplet: freetype's link interface references ZLIB::ZLIB, BZip2::BZip2
+# and PNG::PNG (transitive deps of static libs), so they must be found first
+find_package(ZLIB REQUIRED)
+find_package(BZip2 REQUIRED)
+find_package(PNG REQUIRED)
+find_package(Freetype CONFIG REQUIRED)
+find_package(RmlUi CONFIG REQUIRED)
+
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_UI_RMLUI SHUTDOWN ShutdownModule_UI_RMLUI
+	"include/kotek_ui_game_ui_manager.h"
+	"src/kotek_ui_game_ui_manager.cpp"
+
+	"include/kotek_ui_rmlui.h"
+	"src/main_ui_rmlui_dll.cpp")
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
+if ("${KOTEK_DEVELOPMENT_TYPE}" STREQUAL "STATIC")
+	target_compile_definitions(${PROJECT_NAME} PUBLIC -DRMLUI_STATIC_LIB)
+endif()
+
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Freetype::Freetype)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC RmlUi::RmlUi)
+
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.render.gl)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window)

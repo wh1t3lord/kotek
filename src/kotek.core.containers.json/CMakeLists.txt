@@ -1,0 +1,66 @@
+cmake_minimum_required(VERSION 3.21)
+
+project(kotek.core.containers.json VERSION 1 LANGUAGES CXX)
+
+
+
+
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+		find_package(Boost COMPONENTS json CONFIG REQUIRED)
+	elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+		file(GLOB nuget_boost_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
+		if ("${nuget_boost_folder}" MATCHES "Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+			message("[${PROJECT_NAME}][nuget]: package boost exists!")
+		else()
+			message(FATAL_ERROR "failed to find boost package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
+		endif()
+	else()
+		find_package(Boost COMPONENTS json CONFIG REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+	endif()
+endif()
+
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Containers_JSON SHUTDOWN ShutdownModule_Core_Containers_JSON
+	"include/kotek_std_alias_json.h"
+	"include/kotek_std_json.h"
+	"src/kotek_std_json.cpp"
+	"include/kotek_core_containers_json.h"
+	"src/main_core_containers_json_dll.cpp")
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
+# boost.json is the backend for both BOOST and STD library
+# modes (see kotek_std_alias_json.h), so the import lib must
+# be linked in both cases
+if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST" OR "${KOTEK_STD_LIBRARY}" STREQUAL "STD")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
+			message("[${PROJECT_NAME}]: boost package included directory")
+			target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
+		endif()
+
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_json-vc140-mt-gd.lib")
+			message("[${PROJECT_NAME}][Debug]: adding boost_json-vc140-mt-gd.lib to Debug configuration")
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC debug ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Debug/boost_json-vc140-mt-gd.lib)
+		endif()
+
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_json-vc140-mt.lib")
+			message("[${PROJECT_NAME}][None-Debug]: adding boost_json-vc140-mt.lib to not Debug configurations")
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC optimized ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/lib/Release/boost_json-vc140-mt.lib)
+		endif()
+	else()
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC  
+			Boost::json
+		)
+	endif()
+endif()
+
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.message)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.string)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.vector)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.any)

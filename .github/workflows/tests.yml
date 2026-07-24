@@ -1,0 +1,76 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit:
+    name: unit tests (windows, Debug)
+    runs-on: windows-2022
+    timeout-minutes: 90
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: cache vcpkg
+        uses: actions/cache@v4
+        with:
+          # only the installed triplet tree + the tool itself: packages/ and
+          # buildtrees/ are recreatable intermediates and blow the 10 GB
+          # cache quota (locally >1.2 GB each); key bumps on the dep list
+          path: |
+            vcpkg/installed
+            vcpkg/vcpkg.exe
+          key: vcpkg-${{ runner.os }}-x64-windows-static-v2-${{ hashFiles('cmake/windows/vcpkg_nuget_minimal.cmake') }}
+
+      - name: setup msvc
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+
+      - name: configure
+        # KOTEK_ASSERT_STDERR_ROUTING=ON: any automated run of the produced
+        # binaries must never hit the stock modal CRT dialog
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON
+
+      - name: build
+        run: cmake --build build --config Debug --parallel
+
+      # NOTE: kotek's gtest suites run inside the engine boot (RUN_ALL_TESTS
+      # at engine init), which needs game.ktk — the user game module built
+      # by ZIRCON, not by this repo. So runtime/unit-test execution lives in
+      # the zircon repo's tests workflow (full stack); this workflow proves
+      # that kotek itself configures and compiles cleanly with the test
+      # harness enabled.
+
+      # job logs and artifacts need admin rights to view — push the failure
+      # logs to a public ci-logs branch instead
+      - name: publish failure logs to ci-logs branch
+        if: failure()
+        shell: pwsh
+        run: |
+          $dest = "ci-logs/${{ github.run_id }}/tests"
+          New-Item -ItemType Directory -Force $dest | Out-Null
+          cmake -S . -B build-diag -DCMAKE_BUILD_TYPE=Debug -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON *> "$dest/configure-output.log"; $null
+          if (Test-Path build) { Get-ChildItem -Recurse build -Include *.log -File | Copy-Item -Destination $dest -Force -ErrorAction SilentlyContinue }
+          git config user.email "ci@kotek"
+          git config user.name "kotek-ci"
+          git fetch origin ci-logs; if ($LASTEXITCODE -eq 0) { git checkout ci-logs } else { git checkout --orphan ci-logs }
+          git add $dest
+          git commit --quiet -m "ci logs: tests run ${{ github.run_number }}"
+          git push origin HEAD:ci-logs
+          if ($LASTEXITCODE -ne 0) { git pull --rebase origin ci-logs; git push origin HEAD:ci-logs }
+
+      - name: upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: build/**/*.log
+          retention-days: 7

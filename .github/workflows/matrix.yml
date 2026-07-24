@@ -1,0 +1,54 @@
+name: matrix
+
+on:
+  schedule:
+    - cron: "23 3 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: matrix-nightly
+  cancel-in-progress: false
+
+jobs:
+  config:
+    name: ${{ matrix.name }}
+    runs-on: windows-2022
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { name: minimal-debug, cmake: "-DCMAKE_BUILD_TYPE=Debug" }
+          - { name: minimal-release, cmake: "-DCMAKE_BUILD_TYPE=Release" }
+          - { name: plugin-linkage, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_LINKAGE=PLUGIN -DKOTEK_LINKAGE_FORCE_STATIC=\"zircon.core;zircon.ecs;zircon.editor;zircon.editor.commands;zircon.editor.session;zircon.editor.ui;zircon.game;zircon.game.session;zircon.render;zircon.world\"" }
+          - { name: math-glm, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM" }
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: |
+            vcpkg/installed
+            vcpkg/packages
+            vcpkg/buildtrees
+            vcpkg/vcpkg.exe
+          key: vcpkg-${{ runner.os }}-x64-windows-static-v1
+
+      - name: setup msvc
+        uses: ilammy/msvc-dev-cmd@v1.13.0
+
+      - name: configure
+        run: cmake -S . -B build ${{ matrix.cmake }}
+
+      - name: build
+        run: cmake --build build --config Debug --parallel 4
+
+      - name: upload logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: matrix-logs-${{ matrix.name }}
+          path: build/**/*.log
+          retention-days: 14

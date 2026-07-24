@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.21)
+
+project(kotek.core.containers.filesystem VERSION 1 LANGUAGES CXX)
+
+
+
+
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Containers_FileSystem SHUTDOWN ShutdownModule_Core_Containers_FileSystem
+	"include/kotek_std_alias_filesystem.h"
+	"include/kotek_core_containers_filesystem.h"
+	"src/kotek_std_alias_filesystem.cpp"
+	"src/main_core_containers_filesystem_dll.cpp")
+	
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.filesystem.path)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.os)
+
+if ("${KOTEK_MEMORY_ALLOCATOR_CPU}" STREQUAL "MIMALLOC")
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
+endif()

@@ -1,0 +1,71 @@
+cmake_minimum_required(VERSION 3.21)
+
+project(kotek.core.containers.array VERSION 1 LANGUAGES CXX)
+
+
+
+
+if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
+	if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+			find_package(Boost COMPONENTS container REQUIRED)
+		elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+			file(GLOB nuget_boost_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
+			if ("${nuget_boost_folder}" MATCHES "Kotek.Packages.Boost.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+				message("[${PROJECT_NAME}][nuget]: package boost exists!")
+			else()
+				message(FATAL_ERROR "failed to find boost package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
+			endif()
+		else()
+			find_package(Boost COMPONENTS container REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+		endif()
+	endif()
+
+	if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
+		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+			find_package(etl CONFIG REQUIRED)
+		elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+			file(GLOB nuget_etl_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Etl.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
+			if ("${nuget_etl_folder}" MATCHES "Kotek.Packages.Etl.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+				message("[${PROJECT_NAME}][nuget]: package etl exists!")
+			else()
+				message(FATAL_ERROR "failed to find etl package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
+			endif()
+		else()
+			find_package(etl REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+		endif()
+	endif()
+endif()
+
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Containers_Array SHUTDOWN ShutdownModule_Core_Containers_Array
+	"include/kotek_std_alias_array.h"
+	"include/kotek_std_alias_static_array.h"
+	"include/kotek_core_containers_array.h"
+	"src/main_core_containers_array_dll.cpp")
+
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
+
+if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
+			message("[${PROJECT_NAME}]: boost package included directory")
+			target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_boost_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
+		endif()
+	else()
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Boost::container)
+	endif()
+endif()
+
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.cpp)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
+
+if ("${KOTEK_STD_LIBRARY_STATIC_CONTAINERS}" STREQUAL "ON")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+		if (EXISTS "${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_etl_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include")
+			message("[${PROJECT_NAME}]: etl package included directory")
+			target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_etl_folder}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
+		endif()
+	else()
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC etl::etl)
+	endif()
+endif()

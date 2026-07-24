@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.21)
+
+project(kotek.core.enum.render.vk VERSION 1 LANGUAGES CXX)
+
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
+
+
+
+
+kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Enum_Render_VK SHUTDOWN ShutdownModule_Core_Enum_Render_VK
+	"include/kotek_enum.h"
+	"include/kotek_core_enum_render_vk.h" 
+	"src/main_core_enum_render_vk_dll.cpp"
+)
+set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/enum")
+if (UNIX)
+    set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.types.numerics)
