@@ -1,0 +1,515 @@
+MSBuild version 17.14.51+25f168cee for .NET Framework
+
+  1>Checking Build System
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.cpp/CMakeLists.txt
+  main_core_defines_static_cpp_dll.cpp
+  kotek.core.defines.static.cpp.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.cpp\Debug\kotek.core.defines.static.cpp.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.types.numerics/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.mutex/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.render.gl/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.shared_mutex/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.hash/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.string/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.semaphore/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants.window/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.render.dx/CMakeLists.txt
+  main_core_defines_static_string_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.condition_variable/CMakeLists.txt
+  main_core_containers_hash_dll.cpp
+  main_core_constants_window_dll.cpp
+  main_core_defines_static_render_gl_dll.cpp
+  main_core_defines_static_render_dx_dll.cpp
+  kotek.core.defines.static.string.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.string\Debug\kotek.core.defines.static.string.lib
+  main_core_containers_multithreading_mutex_dll.cpp
+  main_core_numerics_dll.cpp
+  main_core_containers_multithreading_condition_variable_dll.cpp
+  kotek.core.defines.static.render.dx.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.render.dx\Debug\kotek.core.defines.static.render.dx.lib
+  kotek.core.defines.static.render.gl.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.render.gl\Debug\kotek.core.defines.static.render.gl.lib
+  kotek.core.containers.hash.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.hash\Debug\kotek.core.containers.hash.lib
+  main_core_containers_multithreading_shared_mutex_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.os.win32/CMakeLists.txt
+  kotek.core.constants.window.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants.window\Debug\kotek.core.constants.window.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.function/CMakeLists.txt
+  main_core_defines_static_os_win32_dll.cpp
+  main_core_containers_function_dll.cpp
+  kotek.core.defines.static.os.win32.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.os.win32\Debug\kotek.core.defines.static.os.win32.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.any/CMakeLists.txt
+  main_core_containers_any_dll.cpp
+  kotek.core.containers.multithreading.mutex.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.mutex\Debug\kotek.core.containers.multithreading.mutex.lib
+  kotek.core.containers.multithreading.condition_variable.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.condition_variable\Debug\kotek.core.containers.multithreading.condition_variable.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.tbb/CMakeLists.txt
+  kotek.core.containers.function.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.function\Debug\kotek.core.containers.function.lib
+  kotek.core.containers.multithreading.shared_mutex.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.shared_mutex\Debug\kotek.core.containers.multithreading.shared_mutex.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.thread/CMakeLists.txt
+  main_core_containers_multithreading_semaphore_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.atomic/CMakeLists.txt
+  main_core_containers_multithreading_tbb_dll.cpp
+  main_core_containers_multithreading_atomic_dll.cpp
+  main_core_containers_multithreading_thread_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.pair/CMakeLists.txt
+  kotek.core.containers.multithreading.semaphore.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.semaphore\Debug\kotek.core.containers.multithreading.semaphore.lib
+  kotek.core.containers.any.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.any\Debug\kotek.core.containers.any.lib
+  main_core_containers_pair_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants.render/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.unique_ptr/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.os/CMakeLists.txt
+  main_core_containers_unique_ptr_dll.cpp
+  main_core_constants_render_dll.cpp
+  kotek.core.types.numerics.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.types.numerics\Debug\kotek.core.types.numerics.lib
+  main_core_defines_static_os_dll.cpp
+  kotek.core.containers.pair.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.pair\Debug\kotek.core.containers.pair.lib
+  kotek.core.constants.render.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants.render\Debug\kotek.core.constants.render.lib
+  kotek.core.defines.static.os.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.os\Debug\kotek.core.defines.static.os.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants.ecs/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants.math/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.render.vk/CMakeLists.txt
+  main_core_constants_ecs_dll.cpp
+  main_core_constants_math_dll.cpp
+  main_core_enum_render_vk_dll.cpp
+  kotek.core.containers.multithreading.thread.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.thread\Debug\kotek.core.containers.multithreading.thread.lib
+  kotek.core.constants.ecs.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants.ecs\Debug\kotek.core.constants.ecs.lib
+  kotek.core.containers.unique_ptr.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.unique_ptr\Debug\kotek.core.containers.unique_ptr.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines_dependent.text/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.array/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.types.char/CMakeLists.txt
+  main_core_containers_array_dll.cpp
+  main_core_types_char_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.variant/CMakeLists.txt
+  main_core_defines_dependent_text_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.microsoft.wrl.comptr/CMakeLists.txt
+  kotek.core.types.char.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.types.char\Debug\kotek.core.types.char.lib
+  main_core_containers_variant_dll.cpp
+  main_core_containers_microsoft_wrl_comptr_dll.cpp
+  kotek.core.defines_dependent.text.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines_dependent.text\Debug\kotek.core.defines_dependent.text.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.git/CMakeLists.txt
+  kotek.core.enum.render.vk.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.render.vk\Debug\kotek.core.enum.render.vk.lib
+  kotek.core.constants.math.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants.math\Debug\kotek.core.constants.math.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.render.dx/CMakeLists.txt
+  kotek.core.containers.multithreading.atomic.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.atomic\Debug\kotek.core.containers.multithreading.atomic.lib
+  main_core_defines_static_git_dll.cpp
+  kotek.core.containers.microsoft.wrl.comptr.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.microsoft.wrl.comptr\Debug\kotek.core.containers.microsoft.wrl.comptr.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.render.vk/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.math/CMakeLists.txt
+  kotek.core.containers.multithreading.tbb.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.tbb\Debug\kotek.core.containers.multithreading.tbb.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.profilers/CMakeLists.txt
+  kotek.core.defines.static.git.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.git\Debug\kotek.core.defines.static.git.lib
+  main_core_defines_static_render_vk_dll.cpp
+  main_core_defines_static_profilers_dll.cpp
+  main_core_defines_static_math_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.sdk/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.render.bgfx/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.tests/CMakeLists.txt
+  kotek.core.containers.variant.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.variant\Debug\kotek.core.containers.variant.lib
+  main_core_defines_static_render_bgfx_dll.cpp
+  main_core_defines_static_sdk_dll.cpp
+  kotek.core.defines.static.render.vk.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.render.vk\Debug\kotek.core.defines.static.render.vk.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.io/CMakeLists.txt
+  main_core_defines_static_tests_dll.cpp
+  kotek.core.defines.static.profilers.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.profilers\Debug\kotek.core.defines.static.profilers.lib
+  kotek.core.defines.static.render.bgfx.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.render.bgfx\Debug\kotek.core.defines.static.render.bgfx.lib
+  main_core_enum_render_dx_dll.cpp
+  kotek.core.defines.static.math.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.math\Debug\kotek.core.defines.static.math.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.shared_ptr/CMakeLists.txt
+  kotek.core.defines.static.sdk.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.sdk\Debug\kotek.core.defines.static.sdk.lib
+  kotek.core.defines.static.tests.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.tests\Debug\kotek.core.defines.static.tests.lib
+  main_core_containers_io_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants.string/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core/tests/kotek.core.tests.plugin/CMakeLists.txt
+  main_core_containers_shared_ptr_dll.cpp
+  kotek.core.containers.array.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.array\Debug\kotek.core.containers.array.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.microsoft/CMakeLists.txt
+  plugin_override_double.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.render/CMakeLists.txt
+  kotek.core.containers.shared_ptr.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.shared_ptr\Debug\kotek.core.containers.shared_ptr.lib
+  main_core_constants_string_dll.cpp
+  kotek.core.containers.io.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.io\Debug\kotek.core.containers.io.lib
+  main_core_containers_microsoft_dll.cpp
+  main_core_defines_render_dll.cpp
+     Creating library D:/a/kotek/kotek/build/src/kotek.core/tests/kotek.core.tests.plugin/Debug/kotek.core.tests.plugin.lib and object D:/a/kotek/kotek/build/src/kotek.core/tests/kotek.core.tests.plugin/Debug/kotek.core.tests.plugin.exp
+  kotek.core.constants.string.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants.string\Debug\kotek.core.constants.string.lib
+  kotek.core.tests.plugin.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core\tests\kotek.core.tests.plugin\Debug\kotek.core.tests.plugin.dll
+  kotek.core.defines.static.render.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.render\Debug\kotek.core.defines.static.render.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.os.linux/CMakeLists.txt
+  main_core_defines_static_os_linux_dll.cpp
+  kotek.core.defines.static.os.linux.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.os.linux\Debug\kotek.core.defines.static.os.linux.lib
+  kotek.core.enum.render.dx.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.render.dx\Debug\kotek.core.enum.render.dx.lib
+  kotek.core.containers.microsoft.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.microsoft\Debug\kotek.core.containers.microsoft.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants/CMakeLists.txt
+  main_core_defines_static_dll.cpp
+  main_core_constants_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.render.bgfx/CMakeLists.txt
+  kotek.core.defines.static.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static\Debug\kotek.core.defines.static.lib
+  main_core_enum_render_bgfx_dll.cpp
+  kotek_translation.cpp
+  kotek.core.constants.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants\Debug\kotek.core.constants.lib
+  kotek.core.enum.render.bgfx.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.render.bgfx\Debug\kotek.core.enum.render.bgfx.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.render.gl/CMakeLists.txt
+  main_core_enum_render_gl_dll.cpp
+  kotek_translation.cpp
+  kotek.core.enum.render.gl.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.render.gl\Debug\kotek.core.enum.render.gl.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.render/CMakeLists.txt
+  kotek_translation.cpp
+  main_core_enum_render_dll.cpp
+  kotek.core.enum.render.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.render\Debug\kotek.core.enum.render.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.core/CMakeLists.txt
+  kotek_translation.cpp
+  main_core_enum_core_dll.cpp
+  kotek_core_enum_core_test_translation.cpp
+  kotek.core.enum.core.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.core\Debug\kotek.core.enum.core.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum/CMakeLists.txt
+  main_core_enum_dll.cpp
+  kotek.core.enum.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum\Debug\kotek.core.enum.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.ecs/CMakeLists.txt
+  main_core_ecs_dll.cpp
+  kotek.core.ecs.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.ecs\Debug\kotek.core.ecs.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.main_manager/CMakeLists.txt
+  kotek_main_manager.cpp
+  kotek_plugin_invoke.cpp
+  kotek_plugin_override.cpp
+  main_core_main_manager_dll.cpp
+  Generating Code...
+  kotek.core.main_manager.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.main_manager\Debug\kotek.core.main_manager.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.engine_config/CMakeLists.txt
+  kotek_std_config.cpp
+  main_core_engine_config_dll.cpp
+  Generating Code...
+  kotek.core.engine_config.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.engine_config\Debug\kotek.core.engine_config.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.log/CMakeLists.txt
+  main_core_log_dll.cpp
+  kotek.core.log.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.log\Debug\kotek.core.log.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.os.win32/CMakeLists.txt
+  main_core_os_win32_dll.cpp
+  kotek.core.os.win32.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.os.win32\Debug\kotek.core.os.win32.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.os/CMakeLists.txt
+  main_core_os_dll.cpp
+  kotek.core.os.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.os\Debug\kotek.core.os.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.memory.cpu/CMakeLists.txt
+  main_core_memory_cpu_dll.cpp
+  kotek_std_memory.cpp
+  offsetAllocator.cpp
+  kotek.core.memory.cpu.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.memory.cpu\Debug\kotek.core.memory.cpu.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.format/CMakeLists.txt
+  main_core_format_dll.cpp
+  kotek.core.format.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.format\Debug\kotek.core.format.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.vector/CMakeLists.txt
+  main_core_containers_vector_dll.cpp
+  kotek.core.containers.vector.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.vector\Debug\kotek.core.containers.vector.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.unordered_set/CMakeLists.txt
+  main_core_containers_unordered_set_dll.cpp
+  kotek.core.containers.unordered_set.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.unordered_set\Debug\kotek.core.containers.unordered_set.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.unordered_map/CMakeLists.txt
+  main_core_containers_unordered_map_dll.cpp
+  kotek.core.containers.unordered_map.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.unordered_map\Debug\kotek.core.containers.unordered_map.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.filesystem.path/CMakeLists.txt
+  main_core_containers_filesystem_path_dll.cpp
+  kotek.core.containers.filesystem.path.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.filesystem.path\Debug\kotek.core.containers.filesystem.path.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.dll/CMakeLists.txt
+  main_core_containers_dll_dll.cpp
+  kotek.core.containers.dll.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.dll\Debug\kotek.core.containers.dll.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.string/CMakeLists.txt
+  kotek_core_test_string.cpp
+  main_core_containers_string_dll.cpp
+  kotek_std_alias_string.cpp
+  Generating Code...
+  kotek.core.containers.string.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.string\Debug\kotek.core.containers.string.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.casting.string/CMakeLists.txt
+  main_core_casting_string_dll.cpp
+  kotek_std_alias_casting.cpp
+  Generating Code...
+  kotek.core.casting.string.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.casting.string\Debug\kotek.core.casting.string.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.casting.lexical/CMakeLists.txt
+  main_core_casting_lexical_dll.cpp
+  kotek.core.casting.lexical.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.casting.lexical\Debug\kotek.core.casting.lexical.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.types.string/CMakeLists.txt
+  main_core_types_string_dll.cpp
+  kotek.core.types.string.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.types.string\Debug\kotek.core.types.string.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.api/CMakeLists.txt
+  main_api_dll.cpp
+  kotek.core.api.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.api\Debug\kotek.core.api.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines_dependent.ecs/CMakeLists.txt
+  main_core_defines_dependent_ecs_dll.cpp
+  kotek.core.defines_dependent.ecs.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines_dependent.ecs\Debug\kotek.core.defines_dependent.ecs.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines_dependent.assert/CMakeLists.txt
+  main_core_defines_dependent_assert_dll.cpp
+  kotek.core.defines_dependent.assert.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines_dependent.assert\Debug\kotek.core.defines_dependent.assert.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines_dependent.message/CMakeLists.txt
+  main_core_defines_dependent_message_dll.cpp
+  kotek.core.defines_dependent.message.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines_dependent.message\Debug\kotek.core.defines_dependent.message.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.memory.gpu.vulkan/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.input/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.casting/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.json/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.profilers.gpu/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.list/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.window.glfw/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.types/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.deque/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.ui.videoplayer.avif/CMakeLists.txt
+  main_core_containers_deque_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines_dependent/CMakeLists.txt
+  kotek_std_json.cpp
+  main_ui_videoplayer_avif_dll.cpp
+  main_core_profilers_gpu_dll.cpp
+  kotek_ui_videoplayer.cpp
+  main_core_containers_list_dll.cpp
+  kotek.core.profilers.gpu.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.profilers.gpu\Debug\kotek.core.profilers.gpu.lib
+  main_core_defines_dependent_dll.cpp
+  main_core_memory_gpu_vulkan_dll.cpp
+  kotek.core.containers.list.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.list\Debug\kotek.core.containers.list.lib
+  kotek.core.containers.deque.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.deque\Debug\kotek.core.containers.deque.lib
+  kotek_input.cpp
+  main_core_casting_dll.cpp
+  main_core_containers_json_dll.cpp
+  kotek.core.defines_dependent.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines_dependent\Debug\kotek.core.defines_dependent.lib
+  kotek.core.casting.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.casting\Debug\kotek.core.casting.lib
+  kotek_std_window.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.queue/CMakeLists.txt
+  Generating Code...
+  kotek.core.memory.gpu.vulkan.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.memory.gpu.vulkan\Debug\kotek.core.memory.gpu.vulkan.lib
+  kotek.core.containers.json.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.json\Debug\kotek.core.containers.json.lib
+  main_core_types_dll.cpp
+  Generating Code...
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.memory.gpu/CMakeLists.txt
+  kotek.ui.videoplayer.avif.vcxproj -> D:\a\kotek\kotek\build\src\kotek.ui.videoplayer.avif\Debug\kotek.ui.videoplayer.avif.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.ui.videoplayer/CMakeLists.txt
+  main_core_memory_gpu_dll.cpp
+  main_core_containers_queue_dll.cpp
+  kotek.core.containers.queue.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.queue\Debug\kotek.core.containers.queue.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.queue/CMakeLists.txt
+  main_core_containers_multithreading_queue_dll.cpp
+  main_core_input_dll.cpp
+  main_ui_videoplayer_dll.cpp
+  kotek.ui.videoplayer.vcxproj -> D:\a\kotek\kotek\build\src\kotek.ui.videoplayer\Debug\kotek.ui.videoplayer.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.map/CMakeLists.txt
+  kotek.core.containers.multithreading.queue.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.queue\Debug\kotek.core.containers.multithreading.queue.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.os.linux/CMakeLists.txt
+  main_core_containers_map_dll.cpp
+  main_core_os_linux_dll.cpp
+  kotek.core.types.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.types\Debug\kotek.core.types.lib
+  kotek.core.os.linux.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.os.linux\Debug\kotek.core.os.linux.lib
+  kotek.core.memory.gpu.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.memory.gpu\Debug\kotek.core.memory.gpu.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.filesystem.file_text/CMakeLists.txt
+  kotek_file_text.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.memory/CMakeLists.txt
+  kotek.core.containers.map.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.map\Debug\kotek.core.containers.map.lib
+  main_core_memory_dll.cpp
+  main_core_window_glfw_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.filesystem/CMakeLists.txt
+  main_core_filesystem_file_text_dll.cpp
+  kotek_std_alias_filesystem.cpp
+  kotek_core_test_input.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.console/CMakeLists.txt
+  Generating Code...
+  kotek.core.memory.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.memory\Debug\kotek.core.memory.lib
+  kotek.core.filesystem.file_text.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.filesystem.file_text\Debug\kotek.core.filesystem.file_text.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.profilers.cpu/CMakeLists.txt
+  kotek_console.cpp
+  Generating Code...
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.utility/CMakeLists.txt
+  kotek.core.window.glfw.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.window.glfw\Debug\kotek.core.window.glfw.lib
+  kotek_std_utility.cpp
+  main_core_containers_filesystem_dll.cpp
+  Generating Code...
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.window/CMakeLists.txt
+  main_core_profilers_cpu_dll.cpp
+  kotek.core.input.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.input\Debug\kotek.core.input.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading/CMakeLists.txt
+  kotek_window_console.cpp
+  main_core_console_dll.cpp
+  kotek_std_utility_tests.cpp
+  Generating Code...
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines/CMakeLists.txt
+  kotek.core.profilers.cpu.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.profilers.cpu\Debug\kotek.core.profilers.cpu.lib
+  kotek.core.containers.filesystem.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.filesystem\Debug\kotek.core.containers.filesystem.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.filesystem/CMakeLists.txt
+  main_core_containers_multithreading_dll.cpp
+  kotek_filesystem.cpp
+  main_core_defines_dll.cpp
+  kotek.core.containers.multithreading.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading\Debug\kotek.core.containers.multithreading.lib
+  main_core_window_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.profilers/CMakeLists.txt
+  Generating Code...
+  kotek.core.defines.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines\Debug\kotek.core.defines.lib
+  kotek.core.console.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.console\Debug\kotek.core.console.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers/CMakeLists.txt
+  kotek_profiler.cpp
+  main_core_utility_dll.cpp
+  main_core_containers_dll.cpp
+  kotek_filesystem_native.cpp
+  Generating Code...
+  Generating Code...
+  main_core_profilers_dll.cpp
+  kotek.core.window.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.window\Debug\kotek.core.window.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.ui.rmlui/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.window_manager/CMakeLists.txt
+  kotek.core.utility.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.utility\Debug\kotek.core.utility.lib
+  kotek_window_manager.cpp
+  kotek_ui_game_ui_manager.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.math/CMakeLists.txt
+  kotek_filesystem_zlib.cpp
+  kotek.core.containers.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers\Debug\kotek.core.containers.lib
+  kotek_core_test_math.cpp
+  Generating Code...
+  main_core_window_manager_dll.cpp
+  main_ui_rmlui_dll.cpp
+  kotek.core.profilers.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.profilers\Debug\kotek.core.profilers.lib
+  kotek_virtualfilemapper.cpp
+  kotek_std_math_vector1f.cpp
+  Generating Code...
+  kotek.core.window_manager.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.window_manager\Debug\kotek.core.window_manager.lib
+  Generating Code...
+  kotek.ui.rmlui.vcxproj -> D:\a\kotek\kotek\build\src\kotek.ui.rmlui\Debug\kotek.ui.rmlui.lib
+  kotek_std_math_vector2f.cpp
+  main_core_filesystem_dll.cpp
+  kotek_std_math_vector3f.cpp
+  kotek_std_math_vector4f.cpp
+  kotek_std_math_matrix2x2_f.cpp
+  Generating Code...
+  kotek.core.filesystem.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.filesystem\Debug\kotek.core.filesystem.lib
+  kotek_std_math_matrix3x3_f.cpp
+  kotek_std_math_matrix4x4_f.cpp
+  kotek_std_math_vectornf_view.cpp
+  kotek_std_math_matrixnf_view.cpp
+  main_core_math_dll.cpp
+  Generating Code...
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix3x3_f.cpp(373,1): warning C4717: 'Kotek::ktk::math::matrix3x3f::operator-=': recursive on all control paths, function will cause runtime stack overflow [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix3x3_f.cpp(415,1): warning C4717: 'Kotek::ktk::math::matrix3x3f::operator*=': recursive on all control paths, function will cause runtime stack overflow [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix3x3_f.cpp(286,1): warning C4717: 'Kotek::ktk::math::matrix3x3f::operator+=': recursive on all control paths, function will cause runtime stack overflow [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix2x2_f.cpp(271,1): warning C4717: 'Kotek::ktk::math::matrix2x2f::operator+=': recursive on all control paths, function will cause runtime stack overflow [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix2x2_f.cpp(440,1): warning C4717: 'Kotek::ktk::math::matrix2x2f::operator*=': recursive on all control paths, function will cause runtime stack overflow [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix2x2_f.cpp(366,1): warning C4717: 'Kotek::ktk::math::matrix2x2f::operator-=': recursive on all control paths, function will cause runtime stack overflow [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+  kotek.core.math.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.math\Debug\kotek.core.math.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.ui.imgui/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core/CMakeLists.txt
+  kotek_ui_imgui_context_manager.cpp
+  main_core_dll.cpp
+  kotek_core_test_filesystem.cpp
+  kotek_core_test_json.cpp
+  kotek_core_test_string.cpp
+  imgui_impl_dx9.cpp
+  imgui_impl_dx10.cpp
+  imgui_impl_dx11.cpp
+  imgui_impl_dx12.cpp
+  kotek_core_test_container_deque.cpp
+  kotek_core_test_container_vector.cpp
+  kotek_core_test_container_unordered_set.cpp
+  kotek_core_test_container_unordered_map.cpp
+  kotek_core_test_container_set.cpp
+  kotek_core_test_container_queue.cpp
+  kotek_core_test_container_map.cpp
+  kotek_core_test_container_list.cpp
+  kotek_core_test_plugin_override.cpp
+  imgui_impl_glfw.cpp
+  kotek_core_test_math_backends.cpp
+  imgui_impl_opengl2.cpp
+  imgui_impl_opengl3.cpp
+  imgui_impl_vulkan.cpp
+  imgui_impl_win32.cpp
+  imgui.cpp
+  imgui_demo.cpp
+  imgui_draw.cpp
+  imgui_tables.cpp
+  imgui_widgets.cpp
+  kotek_ui_imgui_wrapper.cpp
+  kotek.core.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core\Debug\kotek.core.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.render.bgfx/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.render.shared.bgfx/CMakeLists.txt
+  cmake_pch.cxx
+  cmake_pch.cxx
+  main_ui_imgui_dll.cpp
+  Generating Code...
+  kotek.ui.imgui.vcxproj -> D:\a\kotek\kotek\build\src\kotek.ui.imgui\Debug\kotek.ui.imgui.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.ui/CMakeLists.txt
+  main_ui_dll.cpp
+  kotek_render_shader_manager.cpp
+  kotek_render_texture_manager.cpp
+  kotek_render_resource_manager.cpp
+  kotek_render_buffer.cpp
+  kotek_render_graph_simplified.cpp
+  kotek_render_graph_simplified_render_pass.cpp
+  kotek_render_data_types.cpp
+  kotek_render_geometry_manager.cpp
+  kotek_render_device.cpp
+  main_render_shared_bgfx_dll.cpp
+  kotek_render_swapchain.cpp
+  main_render_bgfx_dll.cpp
+  kotek_render_static_buffer_pool.cpp
+  kotek_render_static_buffer_pool_with_linear_allocator.cpp
+  kotek_render_allocator_ring_with_tabs.cpp
+  kotek_render_allocator_ring.cpp
+  kotek.render.shared.bgfx.vcxproj -> D:\a\kotek\kotek\build\src\kotek.render.shared.bgfx\Debug\kotek.render.shared.bgfx.lib
+  kotek.render.bgfx.vcxproj -> D:\a\kotek\kotek\build\src\kotek.render.bgfx\Debug\kotek.render.bgfx.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.render.shared/CMakeLists.txt
+  cmake_pch.cxx
+  kotek.ui.vcxproj -> D:\a\kotek\kotek\build\src\kotek.ui\Debug\kotek.ui.lib
+  kotek_render_data_types.cpp
+  main_render_shared_dll.cpp
+  kotek.render.shared.vcxproj -> D:\a\kotek\kotek\build\src\kotek.render.shared\Debug\kotek.render.shared.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.render/CMakeLists.txt
+  cmake_pch.cxx
+  main_render_dll.cpp
+  kotek.render.vcxproj -> D:\a\kotek\kotek\build\src\kotek.render\Debug\kotek.render.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.game/CMakeLists.txt
+  cmake_pch.cxx
+  kotek_update.cpp
+  kotek_window_splash.cpp
+  main_game_dll.cpp
+  kotek.game.vcxproj -> D:\a\kotek\kotek\build\src\kotek.game\Debug\kotek.game.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.exe/CMakeLists.txt
+  entry_point.cpp
+boost_json-vc143-mt-gd-x64-1_91.lib(src.cpp.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+msvcprtd.lib(MSVCP140D.dll) : error LNK2005: "public: __cdecl std::_Locinfo::_Locinfo(char const *)" (??0_Locinfo@std@@QEAA@PEBD@Z) already defined in boost_json-vc143-mt-gd-x64-1_91.lib(src.cpp.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+msvcprtd.lib(MSVCP140D.dll) : error LNK2005: "public: __cdecl std::_Locinfo::~_Locinfo(void)" (??1_Locinfo@std@@QEAA@XZ) already defined in boost_json-vc143-mt-gd-x64-1_91.lib(src.cpp.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+msvcprtd.lib(MSVCP140D.dll) : error LNK2005: "public: char const * __cdecl std::_Yarn<char>::c_str(void)const " (?c_str@?$_Yarn@D@std@@QEBAPEBDXZ) already defined in boost_json-vc143-mt-gd-x64-1_91.lib(src.cpp.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+msvcprtd.lib(MSVCP140D.dll) : error LNK2005: "public: static void * __cdecl std::_Crt_new_delete::operator new(unsigned __int64)" (??2_Crt_new_delete@std@@SAPEAX_K@Z) already defined in boost_json-vc143-mt-gd-x64-1_91.lib(src.cpp.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+msvcprtd.lib(MSVCP140D.dll) : error LNK2005: "public: static void __cdecl std::_Crt_new_delete::operator delete(void *)" (??3_Crt_new_delete@std@@SAXPEAX@Z) already defined in boost_json-vc143-mt-gd-x64-1_91.lib(src.cpp.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+msvcprtd.lib(MSVCP140D.dll) : error LNK2005: "protected: __cdecl std::locale::facet::facet(unsigned __int64)" (??0facet@locale@std@@IEAA@_K@Z) already defined in boost_json-vc143-mt-gd-x64-1_91.lib(src.cpp.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+msvcprtd.lib(MSVCP140D.dll) : error LNK2005: "protected: virtual __cdecl std::locale::facet::~facet(void)" (??1facet@locale@std@@MEAA@XZ) already defined in boost_json-vc143-mt-gd-x64-1_91.lib(src.cpp.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale0.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale0.obj) : error LNK2005: "void __cdecl std::_Facet_Register(class std::_Facet_base *)" (?_Facet_Register@std@@YAXPEAV_Facet_base@1@@Z) already defined in msvcprtd.lib(locale0_implib.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale0.obj) : error LNK2005: "private: static class std::locale::_Locimp * __cdecl std::locale::_Getgloballocale(void)" (?_Getgloballocale@locale@std@@CAPEAV_Locimp@12@XZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale0.obj) : error LNK2005: "private: static class std::locale::_Locimp * __cdecl std::locale::_Init(bool)" (?_Init@locale@std@@CAPEAV_Locimp@12@_N@Z) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale0.obj) : error LNK2005: "public: static void __cdecl std::_Locinfo::_Locinfo_ctor(class std::_Locinfo *,char const *)" (?_Locinfo_ctor@_Locinfo@std@@SAXPEAV12@PEBD@Z) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale0.obj) : error LNK2005: "public: static void __cdecl std::_Locinfo::_Locinfo_dtor(class std::_Locinfo *)" (?_Locinfo_dtor@_Locinfo@std@@SAXPEAV12@@Z) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(ios.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale.obj) : error LNK2005: "public: struct _Cvtvec __cdecl std::_Locinfo::_Getcvt(void)const " (?_Getcvt@_Locinfo@std@@QEBA?AU_Cvtvec@@XZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale.obj) : error LNK2005: "public: char const * __cdecl std::_Locinfo::_Getfalse(void)const " (?_Getfalse@_Locinfo@std@@QEBAPEBDXZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale.obj) : error LNK2005: "public: struct lconv const * __cdecl std::_Locinfo::_Getlconv(void)const " (?_Getlconv@_Locinfo@std@@QEBAPEBUlconv@@XZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(locale.obj) : error LNK2005: "public: char const * __cdecl std::_Locinfo::_Gettrue(void)const " (?_Gettrue@_Locinfo@std@@QEBAPEBDXZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(iosptrs.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xwctomb.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(wlocale.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(wlocale.obj) : error LNK2005: "public: struct _Cvtvec __cdecl std::_Locinfo::_Getcvt(void)const " (?_Getcvt@_Locinfo@std@@QEBA?AU_Cvtvec@@XZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(wlocale.obj) : error LNK2005: "public: char const * __cdecl std::_Locinfo::_Getfalse(void)const " (?_Getfalse@_Locinfo@std@@QEBAPEBDXZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(wlocale.obj) : error LNK2005: "public: struct lconv const * __cdecl std::_Locinfo::_Getlconv(void)const " (?_Getlconv@_Locinfo@std@@QEBAPEBUlconv@@XZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(wlocale.obj) : error LNK2005: "public: char const * __cdecl std::_Locinfo::_Gettrue(void)const " (?_Gettrue@_Locinfo@std@@QEBAPEBDXZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(wlocale.obj) : error LNK2005: "public: unsigned short const * __cdecl std::_Locinfo::_W_Getdays(void)const " (?_W_Getdays@_Locinfo@std@@QEBAPEBGXZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(wlocale.obj) : error LNK2005: "public: unsigned short const * __cdecl std::_Locinfo::_W_Getmonths(void)const " (?_W_Getmonths@_Locinfo@std@@QEBAPEBGXZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xlocale.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xlocale.obj) : error LNK2005: "public: struct _Cvtvec __cdecl std::_Locinfo::_Getcvt(void)const " (?_Getcvt@_Locinfo@std@@QEBA?AU_Cvtvec@@XZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xlocale.obj) : error LNK2005: "public: struct lconv const * __cdecl std::_Locinfo::_Getlconv(void)const " (?_Getlconv@_Locinfo@std@@QEBAPEBUlconv@@XZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xstol.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xstoul.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xstoll.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xstoull.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xlock.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xlock.obj) : error LNK2005: "public: __cdecl std::_Lockit::_Lockit(int)" (??0_Lockit@std@@QEAA@H@Z) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xlock.obj) : error LNK2005: "public: __cdecl std::_Lockit::~_Lockit(void)" (??1_Lockit@std@@QEAA@XZ) already defined in msvcprtd.lib(MSVCP140D.dll) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xstrcoll.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xdateord.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xmbtowc.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xwcscoll.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xwcsxfrm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xgetwctype.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xtowlower.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xtowupper.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xstrxfrm.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(xmtx.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(StlCompareStringA.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(StlCompareStringW.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(StlLCMapStringW.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+libcpmtd.lib(StlLCMapStringA.obj) : error LNK2038: mismatch detected for 'RuntimeLibrary': value 'MTd_StaticDebug' doesn't match value 'MDd_DynamicDebug' in kotek.game.lib(main_game_dll.obj) [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+LINK : warning LNK4098: defaultlib 'LIBCMTD' conflicts with use of other libs; use /NODEFAULTLIB:library [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
+D:\a\kotek\kotek\build\src\kotek.exe\Debug\kotek.exe : fatal error LNK1169: one or more multiply defined symbols found [D:\a\kotek\kotek\build\src\kotek.exe\kotek.vcxproj]
