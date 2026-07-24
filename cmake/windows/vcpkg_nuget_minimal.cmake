@@ -10,8 +10,21 @@ if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
     execute_process(COMMAND "git" clone https://github.com/microsoft/vcpkg.git WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
-# fresh clones land on master HEAD — reset to the validated snapshot
-execute_process(COMMAND "git" checkout ${KOTEK_VCPKG_PINNED_COMMIT} WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
+# a cache-restored vcpkg/ (installed tree + exe, no checkout) is not a vcpkg
+# root — git init + fetch the pin in place instead of cloning into a
+# non-empty dir (CI cache hit case)
+if (NOT EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/.git")
+    execute_process(COMMAND "git" init WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
+    execute_process(COMMAND "git" remote add origin https://github.com/microsoft/vcpkg.git WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
+endif()
+
+# reset to the validated snapshot, but only when not already there —
+# fetch hits the network and would run on every configure otherwise
+execute_process(COMMAND "git" rev-parse HEAD WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg" OUTPUT_VARIABLE _kotek_vcpkg_head OUTPUT_STRIP_TRAILING_WHITESPACE ERROR_QUIET)
+if (NOT "${_kotek_vcpkg_head}" STREQUAL "${KOTEK_VCPKG_PINNED_COMMIT}")
+    execute_process(COMMAND "git" fetch --depth 1 origin ${KOTEK_VCPKG_PINNED_COMMIT} WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
+    execute_process(COMMAND "git" checkout FETCH_HEAD WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg")
+endif()
 
 if (WIN32)
     execute_process(COMMAND "${CMAKE_CURRENT_SOURCE_DIR}/vcpkg/bootstrap-vcpkg.bat")
