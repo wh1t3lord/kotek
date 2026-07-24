@@ -28,7 +28,7 @@ void ktkProfiler::Shutdown(void)
 void ktkProfiler::FrameMark(void)
 {
 #ifdef KOTEK_CPU_PROFILER
-	tracy::SendFrameMark(nullptr);
+	tracy::Profiler::SendFrameMark(nullptr);
 #endif
 }
 
