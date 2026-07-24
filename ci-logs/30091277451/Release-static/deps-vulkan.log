@@ -1,0 +1,93 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    vulkan:x64-windows-static@2023-12-17
+  * vulkan-headers:x64-windows-static@1.4.350.0
+  * vulkan-loader:x64-windows-static@1.4.350.0
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 92.8 us. Use --debug to see more details.
+Installing 1/3 vulkan-headers:x64-windows-static@1.4.350.0...
+vulkan-headers:x64-windows-static@1.4.350.0 package ABI: b57c949eb0848ad3a980ea2337cb95802ba874a55efb3bc05edeb8c98ded7986
+Building vulkan-headers:x64-windows-static@1.4.350.0...
+Downloading https://github.com/KhronosGroup/Vulkan-Headers/archive/vulkan-sdk-1.4.350.0.tar.gz -> KhronosGroup-Vulkan-Headers-vulkan-sdk-1.4.350.0.tar.gz
+Successfully downloaded KhronosGroup-Vulkan-Headers-vulkan-sdk-1.4.350.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/KhronosGroup-Vulkan-Headers-vulkan-sdk-1.4.350.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/vulkan-headers/src/-1.4.350.0-d7a945c0fb.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vulkan-headers_x64-windows-static/share/vulkan-headers/copyright
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vulkan-headers_x64-windows-static/share/vulkan-headers/usage
+-- Performing post-build validation
+Starting submission of vulkan-headers:x64-windows-static@1.4.350.0 to 1 binary cache(s) in the background
+Elapsed time to handle vulkan-headers:x64-windows-static: 2.9 s
+Installing 2/3 vulkan-loader:x64-windows-static@1.4.350.0...
+vulkan-loader:x64-windows-static@1.4.350.0 package ABI: c2116b3538df959beccf8209b4aca3d9d5c0a0ee6e2fa7debe962b8854133c35
+Building vulkan-loader:x64-windows-static@1.4.350.0...
+Downloading https://github.com/KhronosGroup/Vulkan-Loader/archive/vulkan-sdk-1.4.350.0.tar.gz -> KhronosGroup-Vulkan-Loader-vulkan-sdk-1.4.350.0.tar.gz
+Successfully downloaded KhronosGroup-Vulkan-Loader-vulkan-sdk-1.4.350.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/KhronosGroup-Vulkan-Loader-vulkan-sdk-1.4.350.0.tar.gz
+-- Applying patch link-directfb.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/vulkan-loader/src/-1.4.350.0-eb3e77a373.clean
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+CMake Warning at installed/x64-windows/share/vcpkg-cmake/vcpkg_cmake_configure.cmake:344 (message):
+  The following variables are not used in CMakeLists.txt:
+
+      BUILD_WSI_DIRECTFB_SUPPORT
+      BUILD_WSI_WAYLAND_SUPPORT
+      BUILD_WSI_XCB_SUPPORT
+      BUILD_WSI_XLIB_SUPPORT
+      Python3_EXECUTABLE
+
+  Please recheck them and remove the unnecessary options from the
+  `vcpkg_cmake_configure` call.
+
+  If these options should still be passed for whatever reason, please use the
+  `MAYBE_UNUSED_VARIABLES` argument.
+Call Stack (most recent call first):
+  ports/vulkan-loader/portfile.cmake:26 (vcpkg_cmake_configure)
+  scripts/ports.cmake:206 (include)
+
+
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/vulkan-loader_x64-windows-static/lib/pkgconfig/vulkan.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/vulkan-loader_x64-windows-static/debug/lib/pkgconfig/vulkan.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vulkan-loader_x64-windows-static/share/vulkan-loader/copyright
+-- Performing post-build validation
+Starting submission of vulkan-loader:x64-windows-static@1.4.350.0 to 1 binary cache(s) in the background
+Elapsed time to handle vulkan-loader:x64-windows-static: 11 s
+Completed submission of vulkan-headers:x64-windows-static@1.4.350.0 to 1 binary cache(s) in 1.7 s
+Installing 3/3 vulkan:x64-windows-static@2023-12-17...
+vulkan:x64-windows-static@2023-12-17 package ABI: bda72ae2346cdeb941a9f05efa737709a05570c97e7489ca00bf5a48428a7306
+Building vulkan:x64-windows-static@2023-12-17...
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Found Vulkan 1.4.350 (D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/lib/vulkan-1.lib)
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vulkan_x64-windows-static/share/vulkan/detect-vulkan/CMakeLists.txt
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vulkan_x64-windows-static/share/vulkan/detect-vulkan/vulkan-result.cmake.in
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vulkan_x64-windows-static/share/vulkan/usage
+-- Skipping post-build validation due to VCPKG_POLICY_EMPTY_PACKAGE
+Starting submission of vulkan:x64-windows-static@2023-12-17 to 1 binary cache(s) in the background
+Elapsed time to handle vulkan:x64-windows-static: 1.3 s
+Total install time: 15 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Some packages did not declare an SPDX license. Check the `copyright` file for each package for more information about their licensing.
+Packages installed in this vcpkg installation declare the following licenses:
+(Apache-2.0 OR MIT)
+vulkan is compatible with built-in CMake targets:
+
+    # https://cmake.org/cmake/help/latest/module/FindVulkan.html
+    find_package(Vulkan REQUIRED)
+    target_link_libraries(main PRIVATE Vulkan::Vulkan)
+
+Completed submission of vulkan-loader:x64-windows-static@1.4.350.0 to 1 binary cache(s) in 363 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of vulkan:x64-windows-static@2023-12-17 to 1 binary cache(s) in 47.6 ms (1/1)
+All requested installations completed successfully in: 15 s

@@ -1,0 +1,1443 @@
+-- Building for: Visual Studio 17 2022
+-- applying D:/a/kotek/kotek/cmake/windows/compiler_globals.cmake
+-- [kotek]: C++ standard is C++20 (KOTEK_WINDOWS_XP=OFF)
+-- D:/a/kotek/kotek/cmake/windows/compiler_globals.cmake is applied!
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.20348.
+-- The C compiler identification is MSVC 19.44.35228.0
+-- The CXX compiler identification is MSVC 19.44.35228.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+[kotek.engine]: CMAKE_SOURCE_DIR=D:/a/kotek/kotek
+[kotek.engine]: CMAKE_CURRENT_SOURCE_DIR=D:/a/kotek/kotek
+[kotek.engine]: vcpkg triplet is 'x64-windows-static'
+-- applying D:/a/kotek/kotek/cmake/library.cmake
+-- [kotek]: linkage scenario is 'STATIC' (force static: '', force shared: '')
+-- D:/a/kotek/kotek/cmake/library.cmake is applied!
+[kotek.engine]: Setting default name for kotek.exe folder: kotek
+[kotek.engine]: KOTEK_DEPS_FOLDER is enabled! Now you should specified your dependency folder name (but not its path)
+[kotek.engine]: build type is 'Release'
+[kotek.engine]: library development - EMB (EMB is embedded and DYN is dynamic and HYB is hybrid, check documentation about these definitions)
+[kotek.engine]: filename for generating preprocessors: 'D:/a/kotek/kotek/build-diag/generated/kotek_std_preprocessors.h'
+[kotek.engine]: using nuget packages
+KOTEK_CONFIGURATION_TYPE=minimal
+KOTEK_VCPKG_FILENAME=vcpkg_nuget_minimal.cmake using this for installing packages from vcpkg
+-- Downloading vcpkg for downloading big packages because of nuget limitations...
+Downloading https://github.com/microsoft/vcpkg-tool/releases/download/2026-04-08/vcpkg.exe -> D:\a\kotek\kotek\vcpkg\vcpkg.exe... done.
+Validating signature... done.
+
+vcpkg package management program version 2026-04-08-e0612b42ce44e55a0e630f2ee9d3c533a63d8bc1
+
+See LICENSE.txt for license information.
+Telemetry
+---------
+vcpkg collects usage data in order to help us improve your experience.
+The data collected by Microsoft is anonymous.
+You can opt-out of telemetry by re-running the bootstrap-vcpkg script with -disableMetrics,
+passing --disable-metrics to vcpkg on the command line,
+or by setting the VCPKG_DISABLE_METRICS environment variable.
+
+Read more about vcpkg telemetry at docs/about/privacy.md
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    vulkan:x64-windows-static@2023-12-17
+Total install time: 380 us
+All requested installations completed successfully in: 380 us
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    zstd:x64-windows-static@1.5.7
+Total install time: 365 us
+All requested installations completed successfully in: 365 us
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+  * brotli:x64-windows-static@1.2.0
+  * bzip2[core,tool]:x64-windows-static@1.0.8#6
+  * freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3
+  * itlib:x64-windows-static@1.12.2
+  * libpng:x64-windows-static@1.6.58
+    rmlui[core,freetype]:x64-windows-static@6.2
+  * robin-hood-hashing:x64-windows-static@3.11.5#2
+  * zlib:x64-windows-static@1.3.2
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 170 us. Use --debug to see more details.
+Installing 1/8 brotli:x64-windows-static@1.2.0...
+brotli:x64-windows-static@1.2.0 package ABI: 0797ba63bcba380625cf0555cec24da209cd0abe4a126fed96ec5548810e22d3
+Building brotli:x64-windows-static@1.2.0...
+Downloading https://github.com/google/brotli/archive/v1.2.0.tar.gz -> google-brotli-v1.2.0.tar.gz
+Successfully downloaded google-brotli-v1.2.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/google-brotli-v1.2.0.tar.gz
+-- Applying patch install.patch
+-- Applying patch pkgconfig.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/brotli/src/v1.2.0-7af7ca71ad.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/lib/pkgconfig/libbrotlicommon.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/lib/pkgconfig/libbrotlidec.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/lib/pkgconfig/libbrotlienc.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/debug/lib/pkgconfig/libbrotlicommon.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/debug/lib/pkgconfig/libbrotlidec.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/debug/lib/pkgconfig/libbrotlienc.pc
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/share/brotli/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/share/brotli/copyright
+-- Performing post-build validation
+Starting submission of brotli:x64-windows-static@1.2.0 to 1 binary cache(s) in the background
+Elapsed time to handle brotli:x64-windows-static: 13 s
+Installing 2/8 bzip2[core,tool]:x64-windows-static@1.0.8#6...
+bzip2[core,tool]:x64-windows-static@1.0.8#6 package ABI: 2fcce4a065118aa6a7acf84fb7df36221078c64f3a059f6f6ac5551d94c42bc7
+Building bzip2[core,tool]:x64-windows-static@1.0.8#6...
+Downloading bzip2-1.0.8.tar.gz, trying https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
+Successfully downloaded bzip2-1.0.8.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/bzip2-1.0.8.tar.gz
+-- Applying patch fix-import-export-macros.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/bzip2/src/bzip2-1-336d4794a3.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/bzip2_x64-windows-static/lib/pkgconfig/bzip2.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/bzip2_x64-windows-static/debug/lib/pkgconfig/bzip2.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/bzip2_x64-windows-static/share/bzip2/copyright
+-- Performing post-build validation
+Starting submission of bzip2[core,tool]:x64-windows-static@1.0.8#6 to 1 binary cache(s) in the background
+Elapsed time to handle bzip2:x64-windows-static: 6.2 s
+Completed submission of brotli:x64-windows-static@1.2.0 to 1 binary cache(s) in 463 ms
+Installing 3/8 zlib:x64-windows-static@1.3.2...
+zlib:x64-windows-static@1.3.2 package ABI: 3982b08bfc496d4282c250a2d21e6cc669f3e1b8fcad1f5d4be4086730ad72e0
+Building zlib:x64-windows-static@1.3.2...
+Downloading https://github.com/madler/zlib/archive/v1.3.2.tar.gz -> madler-zlib-v1.3.2.tar.gz
+Successfully downloaded madler-zlib-v1.3.2.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/madler-zlib-v1.3.2.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/zlib/src/v1.3.2-fd3dc4f5e7.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/zlib_x64-windows-static/lib/pkgconfig/zlib.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/zlib_x64-windows-static/debug/lib/pkgconfig/zlib.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/zlib_x64-windows-static/share/zlib/vcpkg-cmake-wrapper.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/zlib_x64-windows-static/share/zlib/copyright
+-- Performing post-build validation
+Starting submission of zlib:x64-windows-static@1.3.2 to 1 binary cache(s) in the background
+Elapsed time to handle zlib:x64-windows-static: 6 s
+Completed submission of bzip2[core,tool]:x64-windows-static@1.0.8#6 to 1 binary cache(s) in 84 ms
+Installing 4/8 libpng:x64-windows-static@1.6.58...
+libpng:x64-windows-static@1.6.58 package ABI: 3d9b8b63476b63adb4b515ea37ef0b77f3e4bd6e96fea97f8344d00d070e78cb
+Building libpng:x64-windows-static@1.6.58...
+Downloading https://github.com/pnggroup/libpng/archive/v1.6.58.tar.gz -> pnggroup-libpng-v1.6.58.tar.gz
+Successfully downloaded pnggroup-libpng-v1.6.58.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/pnggroup-libpng-v1.6.58.tar.gz
+-- Applying patch cmake.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/libpng/src/v1.6.58-b91136795d.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/share/png/vcpkg-cmake-wrapper.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/share/libpng/libpng-config.cmake
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/lib/pkgconfig/libpng16.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/debug/lib/pkgconfig/libpng16.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/debug/lib/pkgconfig/libpng.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/lib/pkgconfig/libpng.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/share/libpng/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/share/libpng/copyright
+-- Performing post-build validation
+Starting submission of libpng:x64-windows-static@1.6.58 to 1 binary cache(s) in the background
+Elapsed time to handle libpng:x64-windows-static: 7.1 s
+Completed submission of zlib:x64-windows-static@1.3.2 to 1 binary cache(s) in 111 ms
+Installing 5/8 freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3...
+freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3 package ABI: 3c5a22ec689b98bf324a5ce8db6335653db8f4c64ed09e39954132d5a94823dd
+Building freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3...
+Downloading https://gitlab.freedesktop.org//freetype/freetype/-/archive/VER-2-14-3/freetype-VER-2-14-3.tar.gz -> freetype-freetype-VER-2-14-3.tar.gz
+Successfully downloaded freetype-freetype-VER-2-14-3.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/freetype-freetype-VER-2-14-3.tar.gz
+-- Applying patch 0003-Fix-UWP.patch
+-- Applying patch brotli-static.patch
+-- Applying patch bzip2.patch
+-- Applying patch fix-exports.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/freetype/src/VER-2-14-3-46d5ca34ec.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/freetype_x64-windows-static/lib/pkgconfig/freetype2.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/freetype_x64-windows-static/debug/lib/pkgconfig/freetype2.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/freetype_x64-windows-static/share/freetype/usage
+-- Performing post-build validation
+Starting submission of freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3 to 1 binary cache(s) in the background
+Elapsed time to handle freetype:x64-windows-static: 14 s
+Completed submission of libpng:x64-windows-static@1.6.58 to 1 binary cache(s) in 298 ms
+Installing 6/8 itlib:x64-windows-static@1.12.2...
+itlib:x64-windows-static@1.12.2 package ABI: 57874490c0ed44f875aea2884cae6adbd5cbfd4c10218616c95034034ce0d4e0
+Building itlib:x64-windows-static@1.12.2...
+Downloading https://github.com/iboB/itlib/archive/v1.12.2.tar.gz -> iboB-itlib-v1.12.2.tar.gz
+Successfully downloaded iboB-itlib-v1.12.2.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/iboB-itlib-v1.12.2.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/itlib/src/v1.12.2-7c651724e1.clean
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/any.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/atomic.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/atomic_shared_ptr_storage.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/data_mutex.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/dynamic_bitset.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/expected.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/flat_map.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/flat_set.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/generator.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/make_ptr.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/memory_view.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/mem_streambuf.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/mutex.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/opt_ref_buffer.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/pmr_allocator.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/pod_vector.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/poly_span.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/qalgorithm.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/rand_dist.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/ref_ptr.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/rstream.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/sentry.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/shared_from.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/small_vector.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/span.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/static_vector.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/stride_span.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/strutil.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/tep_vector.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/throw_ex.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/time_t.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/transparent_umap.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/type_traits.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/ufunction.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/utility.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/share/itlib/copyright
+-- Performing post-build validation
+Starting submission of itlib:x64-windows-static@1.12.2 to 1 binary cache(s) in the background
+Elapsed time to handle itlib:x64-windows-static: 1 s
+Completed submission of freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3 to 1 binary cache(s) in 807 ms
+Installing 7/8 robin-hood-hashing:x64-windows-static@3.11.5#2...
+robin-hood-hashing:x64-windows-static@3.11.5#2 package ABI: a876fba96b1cf693e87a91015997139914bfc306ecfd042dc2091e264e428055
+Building robin-hood-hashing:x64-windows-static@3.11.5#2...
+Downloading https://github.com/martinus/robin-hood-hashing/archive/3.11.5.tar.gz -> martinus-robin-hood-hashing-3.11.5.tar.gz
+Successfully downloaded martinus-robin-hood-hashing-3.11.5.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/martinus-robin-hood-hashing-3.11.5.tar.gz
+-- Applying patch fix-missing-stdint.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/robin-hood-hashing/src/3.11.5-1544b7a068.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/robin-hood-hashing_x64-windows-static/share/robin-hood-hashing/copyright
+-- Performing post-build validation
+Starting submission of robin-hood-hashing:x64-windows-static@3.11.5#2 to 1 binary cache(s) in the background
+Elapsed time to handle robin-hood-hashing:x64-windows-static: 2 s
+Completed submission of itlib:x64-windows-static@1.12.2 to 1 binary cache(s) in 60.1 ms
+Installing 8/8 rmlui[core,freetype]:x64-windows-static@6.2...
+rmlui[core,freetype]:x64-windows-static@6.2 package ABI: 9627603ae60e32a61aedc9cbc260c25f39ed23cda8ae1033a31df6a1af49160b
+Building rmlui[core,freetype]:x64-windows-static@6.2...
+Downloading https://github.com/mikke89/RmlUi/archive/6.2.tar.gz -> mikke89-RmlUi-6.2.tar.gz
+Successfully downloaded mikke89-RmlUi-6.2.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/mikke89-RmlUi-6.2.tar.gz
+-- Applying patch add-itlib-and-robin-hood.patch
+-- Applying patch skip-custom-find-modules.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/rmlui/src/6.2-203a9587f9.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Performing post-build validation
+Starting submission of rmlui[core,freetype]:x64-windows-static@6.2 to 1 binary cache(s) in the background
+Elapsed time to handle rmlui:x64-windows-static: 59 s
+Total install time: 1.8 min
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+(FTL OR GPL-2.0-or-later)
+MIT
+Zlib
+bzip2-1.0.6
+libpng-2.0
+rmlui provides CMake targets:
+
+    find_package(RmlUi CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE RmlUi::RmlUi)
+
+Completed submission of robin-hood-hashing:x64-windows-static@3.11.5#2 to 1 binary cache(s) in 65.8 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of rmlui[core,freetype]:x64-windows-static@6.2 to 1 binary cache(s) in 11 s (1/1)
+All requested installations completed successfully in: 1.8 min
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    freetype[core,zlib,png,bzip2,brotli]:x64-windows-static@2.14.3
+Total install time: 557 us
+All requested installations completed successfully in: 557 us
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    gtest:x64-windows-static@1.17.0#2
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 47.5 us. Use --debug to see more details.
+Installing 1/1 gtest:x64-windows-static@1.17.0#2...
+gtest:x64-windows-static@1.17.0#2 package ABI: 7efa81bddb97597220b2843faf73d490e4bd591349d43b6ae22cacb2758aaa82
+Building gtest:x64-windows-static@1.17.0#2...
+Downloading https://github.com/google/googletest/archive/v1.17.0.tar.gz -> google-googletest-v1.17.0.tar.gz
+Successfully downloaded google-googletest-v1.17.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/google-googletest-v1.17.0.tar.gz
+-- Applying patch 001-fix-UWP-death-test.patch
+-- Applying patch clang-tidy-no-lint.patch
+-- Applying patch fix-main-lib-path.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/gtest/src/v1.17.0-0c449efaff.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest_main.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-all.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-assertion-result.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-death-test.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-filepath.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-internal-inl.h
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-matchers.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-port.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-printers.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-test-part.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-typed-test.cc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/lib/pkgconfig/gmock.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/lib/pkgconfig/gmock_main.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/lib/pkgconfig/gtest.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/lib/pkgconfig/gtest_main.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/debug/lib/pkgconfig/gmock.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/debug/lib/pkgconfig/gmock_main.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/debug/lib/pkgconfig/gtest.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/debug/lib/pkgconfig/gtest_main.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/share/gtest/copyright
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/share/gtest/usage
+-- Performing post-build validation
+Starting submission of gtest:x64-windows-static@1.17.0#2 to 1 binary cache(s) in the background
+Elapsed time to handle gtest:x64-windows-static: 27 s
+Total install time: 27 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+BSD-3-Clause
+The package gtest is compatible with built-in CMake targets:
+
+    enable_testing()
+    
+    find_package(GTest CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main)
+    
+    add_test(AllTestsInMain main)
+
+Waiting for 1 remaining binary cache submissions...
+Completed submission of gtest:x64-windows-static@1.17.0#2 to 1 binary cache(s) in 3.8 s (1/1)
+All requested installations completed successfully in: 27 s
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1
+  * libsquish:x64-windows-static@1.15#15
+  * lodepng:x64-windows-static@2021-12-04#1
+  * mgnlibs:x64-windows-static@2019-09-29#2
+  * miniz:x64-windows-static@3.1.1
+  * stb:x64-windows-static@2024-07-29#1
+  * tinyexr:x64-windows-static@1.0.13
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 150 us. Use --debug to see more details.
+Installing 1/7 libsquish:x64-windows-static@1.15#15...
+libsquish:x64-windows-static@1.15#15 package ABI: 26985c66a5cdf1758532ca559b948a170a42a4254d4fe080359f4e4acf45003d
+Building libsquish:x64-windows-static@1.15#15...
+Downloading libsquish-1.15.tgz, trying https://sourceforge.net/projects/libsquish/files/libsquish-1.15.tgz/download
+Successfully downloaded libsquish-1.15.tgz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/libsquish-1.15.tgz
+-- Applying patch fix-export-symbols.patch
+-- Applying patch export-target.patch
+-- Applying patch cmake-version.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/libsquish/src/-7e3d7d83ba.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static-dbg
+-- Configuring x64-windows-static-rel
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libsquish_x64-windows-static/share/libsquish/copyright
+-- Performing post-build validation
+Starting submission of libsquish:x64-windows-static@1.15#15 to 1 binary cache(s) in the background
+Elapsed time to handle libsquish:x64-windows-static: 6.9 s
+Installing 2/7 lodepng:x64-windows-static@2021-12-04#1...
+lodepng:x64-windows-static@2021-12-04#1 package ABI: 364d292182a101be222b16a5a8ed925e2500a4502351eb2b9bd5b5c61ca97d2e
+Building lodepng:x64-windows-static@2021-12-04#1...
+Downloading https://github.com/lvandeve/lodepng/archive/8c6a9e30576f07bf470ad6f09458a2dcd7a6a84a.tar.gz -> lvandeve-lodepng-8c6a9e30576f07bf470ad6f09458a2dcd7a6a84a.tar.gz
+Successfully downloaded lvandeve-lodepng-8c6a9e30576f07bf470ad6f09458a2dcd7a6a84a.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/lvandeve-lodepng-8c6a9e30576f07bf470ad6f09458a2dcd7a6a84a.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/lodepng/src/dcd7a6a84a-1b95b8ca64.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/lodepng_x64-windows-static/share/lodepng/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/lodepng_x64-windows-static/share/lodepng/copyright
+-- Performing post-build validation
+Starting submission of lodepng:x64-windows-static@2021-12-04#1 to 1 binary cache(s) in the background
+Elapsed time to handle lodepng:x64-windows-static: 5 s
+Completed submission of libsquish:x64-windows-static@1.15#15 to 1 binary cache(s) in 114 ms
+Installing 3/7 mgnlibs:x64-windows-static@2019-09-29#2...
+mgnlibs:x64-windows-static@2019-09-29#2 package ABI: ddf8d511d8e0a88de504e0e4c8a4bda26737d20357424fa5f74a8bdf0e391590
+Building mgnlibs:x64-windows-static@2019-09-29#2...
+Downloading https://github.com/mattiasgustavsson/libs/archive/9a6e7205caecbe336e41aebdc9c79a5c47daa5ec.tar.gz -> mattiasgustavsson-libs-9a6e7205caecbe336e41aebdc9c79a5c47daa5ec.tar.gz
+Successfully downloaded mattiasgustavsson-libs-9a6e7205caecbe336e41aebdc9c79a5c47daa5ec.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/mattiasgustavsson-libs-9a6e7205caecbe336e41aebdc9c79a5c47daa5ec.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/mgnlibs/src/5c47daa5ec-8455af54e7.clean
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/mgnlibs_x64-windows-static/share/mgnlibs/copyright
+-- Performing post-build validation
+Starting submission of mgnlibs:x64-windows-static@2019-09-29#2 to 1 binary cache(s) in the background
+Elapsed time to handle mgnlibs:x64-windows-static: 893 ms
+Completed submission of lodepng:x64-windows-static@2021-12-04#1 to 1 binary cache(s) in 186 ms
+Installing 4/7 miniz:x64-windows-static@3.1.1...
+miniz:x64-windows-static@3.1.1 package ABI: dcf567f153c13a839241cf492b4de3845560aecd1857398ae3c9fd130b827bae
+Building miniz:x64-windows-static@3.1.1...
+Downloading https://github.com/richgel999/miniz/archive/3.1.1.tar.gz -> richgel999-miniz-3.1.1.tar.gz
+Successfully downloaded richgel999-miniz-3.1.1.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/richgel999-miniz-3.1.1.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/miniz/src/3.1.1-06ae856c40.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+CMake Warning at installed/x64-windows/share/vcpkg-cmake/vcpkg_cmake_configure.cmake:344 (message):
+  The following variables are not used in CMakeLists.txt:
+
+      CMAKE_POLICY_DEFAULT_CMP0057
+
+  Please recheck them and remove the unnecessary options from the
+  `vcpkg_cmake_configure` call.
+
+  If these options should still be passed for whatever reason, please use the
+  `MAYBE_UNUSED_VARIABLES` argument.
+Call Stack (most recent call first):
+  ports/miniz/portfile.cmake:9 (vcpkg_cmake_configure)
+  scripts/ports.cmake:206 (include)
+
+
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/miniz_x64-windows-static/lib/pkgconfig/miniz.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/miniz_x64-windows-static/debug/lib/pkgconfig/miniz.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/miniz_x64-windows-static/share/miniz/copyright
+-- Performing post-build validation
+Starting submission of miniz:x64-windows-static@3.1.1 to 1 binary cache(s) in the background
+Elapsed time to handle miniz:x64-windows-static: 3.6 s
+Completed submission of mgnlibs:x64-windows-static@2019-09-29#2 to 1 binary cache(s) in 87.7 ms
+Installing 5/7 stb:x64-windows-static@2024-07-29#1...
+stb:x64-windows-static@2024-07-29#1 package ABI: 235f3fefd9059c2909188a991d6570b85e202d271e1d1166e65b1b401529510b
+Building stb:x64-windows-static@2024-07-29#1...
+Downloading https://github.com/nothings/stb/archive/f75e8d1cad7d90d72ef7a4661f1b994ef78b4e31.tar.gz -> nothings-stb-f75e8d1cad7d90d72ef7a4661f1b994ef78b4e31.tar.gz
+Successfully downloaded nothings-stb-f75e8d1cad7d90d72ef7a4661f1b994ef78b4e31.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/nothings-stb-f75e8d1cad7d90d72ef7a4661f1b994ef78b4e31.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/stb/src/4ef78b4e31-bf024d35de.clean
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/stb_x64-windows-static/share/stb/FindStb.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/stb_x64-windows-static/share/stb/vcpkg-cmake-wrapper.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/stb_x64-windows-static/share/stb/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/stb_x64-windows-static/share/stb/copyright
+-- Performing post-build validation
+Starting submission of stb:x64-windows-static@2024-07-29#1 to 1 binary cache(s) in the background
+Elapsed time to handle stb:x64-windows-static: 1.1 s
+Completed submission of miniz:x64-windows-static@3.1.1 to 1 binary cache(s) in 109 ms
+Installing 6/7 tinyexr:x64-windows-static@1.0.13...
+tinyexr:x64-windows-static@1.0.13 package ABI: b5e7743d9c675a2bc30deca1c8d3112784106820cb8f3d9b05831cc8d705939e
+Building tinyexr:x64-windows-static@1.0.13...
+Downloading https://github.com/syoyo/tinyexr/archive/v1.0.13.tar.gz -> syoyo-tinyexr-v1.0.13.tar.gz
+Successfully downloaded syoyo-tinyexr-v1.0.13.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/syoyo-tinyexr-v1.0.13.tar.gz
+-- Applying patch fixtargets.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/tinyexr/src/v1.0.13-b51564eb2f.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/tinyexr_x64-windows-static/share/tinyexr/copyright
+-- Performing post-build validation
+Starting submission of tinyexr:x64-windows-static@1.0.13 to 1 binary cache(s) in the background
+Elapsed time to handle tinyexr:x64-windows-static: 7.3 s
+Completed submission of stb:x64-windows-static@2024-07-29#1 to 1 binary cache(s) in 128 ms
+Installing 7/7 bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1...
+bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1 package ABI: 62840013501c619f3adf097550deaf4450d2e9cc700858d4c5d4b06f73d46c21
+Building bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1...
+Downloading https://github.com/bkaradzic/bgfx.cmake/releases/download/v1.129.8940-496/bgfx.cmake.v1.129.8940-496.tar.gz -> bgfx.cmake.v1.129.8940-496.tar.gz
+Successfully downloaded bgfx.cmake.v1.129.8940-496.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/bgfx.cmake.v1.129.8940-496.tar.gz
+-- Applying patch fix-dependencies.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/bgfx/src/bgfx-739bf2729e.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Performing post-build validation
+Starting submission of bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1 to 1 binary cache(s) in the background
+Elapsed time to handle bgfx:x64-windows-static: 38 s
+Total install time: 1.1 min
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Some packages did not declare an SPDX license. Check the `copyright` file for each package for more information about their licensing.
+Packages installed in this vcpkg installation declare the following licenses:
+(MIT OR CC-PDDC)
+BSD-2-Clause
+BSD-3-Clause
+CC0-1.0
+MIT
+bgfx provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(bgfx CONFIG REQUIRED)
+  # note: 1 additional targets are not displayed.
+  target_link_libraries(main PRIVATE bgfx::bx bgfx::bgfx bgfx::bimg bgfx::bimg_decode)
+
+Completed submission of tinyexr:x64-windows-static@1.0.13 to 1 binary cache(s) in 613 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1 to 1 binary cache(s) in 1.8 s (1/1)
+All requested installations completed successfully in: 1.1 min
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    cgltf:x64-windows-static@1.15
+Total install time: 604 us
+All requested installations completed successfully in: 604 us
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    dav1d:x64-windows-static@1.5.3
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 65.1 us. Use --debug to see more details.
+Installing 1/1 dav1d:x64-windows-static@1.5.3...
+dav1d:x64-windows-static@1.5.3 package ABI: de1e408772d827cae79702ff4288d4b31ac70fbb2ec8b73dcac46beb82cbd360
+Building dav1d:x64-windows-static@1.5.3...
+-- Found Python version '3.14.2 at D:/a/kotek/kotek/vcpkg/downloads/tools/python/python-3.14.2-x64-1/python.exe'
+-- Using meson: D:/a/kotek/kotek/vcpkg/downloads/tools/meson-1.9.0-12a69e/meson.py
+Downloading https://github.com/videolan/dav1d/archive/1.5.3.tar.gz -> videolan-dav1d-1.5.3.tar.gz
+Successfully downloaded videolan-dav1d-1.5.3.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/videolan-dav1d-1.5.3.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/dav1d/src/1.5.3-f15718dea2.clean
+Downloading nasm-3.01-win64.zip, trying https://www.nasm.us/pub/nasm/releasebuilds/3.01/win64/nasm-3.01-win64.zip
+Successfully downloaded nasm-3.01-win64.zip
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Configuring x64-windows-static-dbg
+-- Getting CMake variables for x64-windows-static
+-- Loading CMake variables from D:/a/kotek/kotek/vcpkg/buildtrees/dav1d/cmake-get-vars_C_CXX-x64-windows-static.cmake.log
+-- Configuring x64-windows-static-dbg done
+-- Configuring x64-windows-static-rel
+-- Configuring x64-windows-static-rel done
+-- Package x64-windows-static-dbg
+-- Package x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/dav1d_x64-windows-static/lib/pkgconfig/dav1d.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/dav1d_x64-windows-static/debug/lib/pkgconfig/dav1d.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/dav1d_x64-windows-static/share/dav1d/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/dav1d_x64-windows-static/share/dav1d/copyright
+-- Performing post-build validation
+Starting submission of dav1d:x64-windows-static@1.5.3 to 1 binary cache(s) in the background
+Elapsed time to handle dav1d:x64-windows-static: 3.5 min
+Total install time: 3.5 min
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+BSD-2-Clause
+The package dav1d can be imported via CMake FindPkgConfig module:
+
+    find_package(PkgConfig REQUIRED)
+    pkg_check_modules(dav1d REQUIRED IMPORTED_TARGET dav1d)
+    target_link_libraries(main PkgConfig::dav1d)
+    
+Waiting for 1 remaining binary cache submissions...
+Completed submission of dav1d:x64-windows-static@1.5.3 to 1 binary cache(s) in 776 ms (1/1)
+All requested installations completed successfully in: 3.5 min
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    glfw3:x64-windows-static@3.4#1
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 61.7 us. Use --debug to see more details.
+Installing 1/1 glfw3:x64-windows-static@3.4#1...
+glfw3:x64-windows-static@3.4#1 package ABI: 41ad8bc1369662a68ca91650120bdf79a1ca6e18cae3a2702c14c5bd97abf981
+Building glfw3:x64-windows-static@3.4#1...
+Downloading https://github.com/glfw/glfw/archive/3.4.tar.gz -> glfw-glfw-3.4.tar.gz
+Successfully downloaded glfw-glfw-3.4.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/glfw-glfw-3.4.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/glfw3/src/3.4-2448ff4533.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/glfw3_x64-windows-static/lib/pkgconfig/glfw3.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/glfw3_x64-windows-static/debug/lib/pkgconfig/glfw3.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/glfw3_x64-windows-static/share/glfw3/copyright
+-- Performing post-build validation
+Starting submission of glfw3:x64-windows-static@3.4#1 to 1 binary cache(s) in the background
+Elapsed time to handle glfw3:x64-windows-static: 6.1 s
+Total install time: 6.1 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+Zlib
+glfw3 provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(glfw3 CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE glfw)
+
+glfw3 provides pkg-config modules:
+
+  # A multi-platform library for OpenGL, window and input
+  glfw3
+
+Waiting for 1 remaining binary cache submissions...
+Completed submission of glfw3:x64-windows-static@3.4#1 to 1 binary cache(s) in 342 ms (1/1)
+All requested installations completed successfully in: 6.1 s
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    mimalloc:x64-windows-static@3.3.2
+Total install time: 720 us
+All requested installations completed successfully in: 720 us
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+  * egl-registry:x64-windows-static@2025-05-27
+    ktx:x64-windows-static@4.4.2
+  * opengl-registry:x64-windows-static@2026-01-26
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 99.7 us. Use --debug to see more details.
+Installing 1/3 egl-registry:x64-windows-static@2025-05-27...
+egl-registry:x64-windows-static@2025-05-27 package ABI: b8ebb95e3c47e227dd3d5debd1d6df8829337144f057e1bf208f84d393becd88
+Building egl-registry:x64-windows-static@2025-05-27...
+Downloading https://github.com/KhronosGroup/EGL-Registry/archive/3ae2b7c48690d2ce13cc6db3db02dfc0572be65e.tar.gz -> KhronosGroup-EGL-Registry-3ae2b7c48690d2ce13cc6db3db02dfc0572be65e.tar.gz
+Successfully downloaded KhronosGroup-EGL-Registry-3ae2b7c48690d2ce13cc6db3db02dfc0572be65e.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/KhronosGroup-EGL-Registry-3ae2b7c48690d2ce13cc6db3db02dfc0572be65e.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/egl-registry/src/c0572be65e-4257a9ad9b.clean
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/egl-registry_x64-windows-static/share/egl-registry/copyright
+-- Performing post-build validation
+Starting submission of egl-registry:x64-windows-static@2025-05-27 to 1 binary cache(s) in the background
+Elapsed time to handle egl-registry:x64-windows-static: 1.2 s
+Installing 2/3 opengl-registry:x64-windows-static@2026-01-26...
+opengl-registry:x64-windows-static@2026-01-26 package ABI: 2188b6317781030d0a56f35b04eb45418749bedc716349bbd12e3a4be9fb9085
+Building opengl-registry:x64-windows-static@2026-01-26...
+Downloading https://github.com/KhronosGroup/OpenGL-Registry/archive/0b449b97cdf1043eef5e1f0e235cbbab6ec10c86.tar.gz -> KhronosGroup-OpenGL-Registry-0b449b97cdf1043eef5e1f0e235cbbab6ec10c86.tar.gz
+Successfully downloaded KhronosGroup-OpenGL-Registry-0b449b97cdf1043eef5e1f0e235cbbab6ec10c86.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/KhronosGroup-OpenGL-Registry-0b449b97cdf1043eef5e1f0e235cbbab6ec10c86.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/opengl-registry/src/ab6ec10c86-88344330ab.clean
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/opengl-registry_x64-windows-static/share/opengl-registry/copyright
+-- Performing post-build validation
+Starting submission of opengl-registry:x64-windows-static@2026-01-26 to 1 binary cache(s) in the background
+Elapsed time to handle opengl-registry:x64-windows-static: 3.7 s
+Completed submission of egl-registry:x64-windows-static@2025-05-27 to 1 binary cache(s) in 65.8 ms
+Installing 3/3 ktx:x64-windows-static@4.4.2...
+ktx:x64-windows-static@4.4.2 package ABI: 662ecf8ed6206d0c97428f25c94e1d28a6d708e6e26cfcad6f97242446113b27
+Building ktx:x64-windows-static@4.4.2...
+Downloading https://github.com/KhronosGroup/KTX-Software/archive/v4.4.2.tar.gz -> KhronosGroup-KTX-Software-v4.4.2.tar.gz
+Successfully downloaded KhronosGroup-KTX-Software-v4.4.2.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/KhronosGroup-KTX-Software-v4.4.2.tar.gz
+-- Applying patch 0001-Use-vcpkg-zstd.patch
+-- Applying patch 0003-mkversion.patch
+-- Applying patch 0004-quirks.patch
+-- Applying patch 0005-no-vendored-libs.patch
+-- Applying patch 0006-fix-ios-install.patch
+-- Applying patch ktxread-libtool.diff
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/ktx/src/v4.4.2-16f9ed2e07.clean
+Downloading util-linux-2.40.2-2-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/util-linux-2.40.2-2-x86_64.pkg.tar.zst
+Successfully downloaded util-linux-2.40.2-2-x86_64.pkg.tar.zst
+Downloading dos2unix-7.5.2-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/dos2unix-7.5.2-1-x86_64.pkg.tar.zst
+Successfully downloaded dos2unix-7.5.2-1-x86_64.pkg.tar.zst
+Downloading msys2-bash-5.3.009-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/bash-5.3.009-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-bash-5.3.009-1-x86_64.pkg.tar.zst
+Downloading msys2-coreutils-8.32-5-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/coreutils-8.32-5-x86_64.pkg.tar.zst
+Successfully downloaded msys2-coreutils-8.32-5-x86_64.pkg.tar.zst
+Downloading msys2-file-5.46-2-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/file-5.46-2-x86_64.pkg.tar.zst
+Successfully downloaded msys2-file-5.46-2-x86_64.pkg.tar.zst
+Downloading msys2-gawk-5.3.2-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/gawk-5.3.2-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-gawk-5.3.2-1-x86_64.pkg.tar.zst
+Downloading msys2-grep-1~3.0-7-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/grep-1~3.0-7-x86_64.pkg.tar.zst
+Successfully downloaded msys2-grep-1~3.0-7-x86_64.pkg.tar.zst
+Downloading msys2-gzip-1.14-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/gzip-1.14-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-gzip-1.14-1-x86_64.pkg.tar.zst
+Downloading msys2-diffutils-3.12-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/diffutils-3.12-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-diffutils-3.12-1-x86_64.pkg.tar.zst
+Downloading msys2-make-4.4.1-2-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/make-4.4.1-2-x86_64.pkg.tar.zst
+Successfully downloaded msys2-make-4.4.1-2-x86_64.pkg.tar.zst
+Downloading msys2-pkgconf-2.5.1-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/pkgconf-2.5.1-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-pkgconf-2.5.1-1-x86_64.pkg.tar.zst
+Downloading msys2-sed-4.9-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/sed-4.9-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-sed-4.9-1-x86_64.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+Downloading msys2-libiconv-1.18-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/libiconv-1.18-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-libiconv-1.18-1-x86_64.pkg.tar.zst
+Downloading msys2-libintl-0.22.5-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/libintl-0.22.5-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-libintl-0.22.5-1-x86_64.pkg.tar.zst
+Downloading msys2-gmp-6.3.0-2-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/gmp-6.3.0-2-x86_64.pkg.tar.zst
+Successfully downloaded msys2-gmp-6.3.0-2-x86_64.pkg.tar.zst
+Downloading msys2-gcc-libs-15.2.0-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/gcc-libs-15.2.0-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-gcc-libs-15.2.0-1-x86_64.pkg.tar.zst
+Downloading msys2-libbz2-1.0.8-4-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/libbz2-1.0.8-4-x86_64.pkg.tar.zst
+Successfully downloaded msys2-libbz2-1.0.8-4-x86_64.pkg.tar.zst
+Downloading msys2-liblzma-5.8.2-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/liblzma-5.8.2-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-liblzma-5.8.2-1-x86_64.pkg.tar.zst
+Downloading msys2-libzstd-1.5.7-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/libzstd-1.5.7-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-libzstd-1.5.7-1-x86_64.pkg.tar.zst
+Downloading msys2-zlib-1.3.1-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/zlib-1.3.1-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-zlib-1.3.1-1-x86_64.pkg.tar.zst
+Downloading msys2-libreadline-8.3.003-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/libreadline-8.3.003-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-libreadline-8.3.003-1-x86_64.pkg.tar.zst
+Downloading msys2-mpfr-4.2.2-1-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/mpfr-4.2.2-1-x86_64.pkg.tar.zst
+Successfully downloaded msys2-mpfr-4.2.2-1-x86_64.pkg.tar.zst
+Downloading msys2-libpcre-8.45-5-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/libpcre-8.45-5-x86_64.pkg.tar.zst
+Successfully downloaded msys2-libpcre-8.45-5-x86_64.pkg.tar.zst
+Downloading msys2-ncurses-6.5.20240831-2-x86_64.pkg.tar.zst, trying https://mirror.msys2.org/msys/x86_64/ncurses-6.5.20240831-2-x86_64.pkg.tar.zst
+Successfully downloaded msys2-ncurses-6.5.20240831-2-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/11c4eca3c32a9c33
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static-dbg
+-- Configuring x64-windows-static-rel
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/ktx_x64-windows-static/share/ktx/copyright
+-- Performing post-build validation
+Starting submission of ktx:x64-windows-static@4.4.2 to 1 binary cache(s) in the background
+Elapsed time to handle ktx:x64-windows-static: 1.2 min
+Total install time: 1.2 min
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Some packages did not declare an SPDX license. Check the `copyright` file for each package for more information about their licensing.
+Packages installed in this vcpkg installation declare the following licenses:
+Apache-2.0
+ktx provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(Ktx CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE KTX::ktx KTX::astcenc-avx2-static)
+
+Completed submission of opengl-registry:x64-windows-static@2026-01-26 to 1 binary cache(s) in 308 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of ktx:x64-windows-static@4.4.2 to 1 binary cache(s) in 2.3 s (1/1)
+All requested installations completed successfully in: 1.2 min
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    tbb:x64-windows-static@2022.3.0
+Total install time: 778 us
+All requested installations completed successfully in: 778 us
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    spdlog[core,tz-offset,fmt]:x64-windows-static@1.17.0
+Total install time: 773 us
+All requested installations completed successfully in: 773 us
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    tracy[core,crash-handler]:x64-windows-static@0.13.1
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 62.9 us. Use --debug to see more details.
+Installing 1/1 tracy[core,crash-handler]:x64-windows-static@0.13.1...
+tracy[core,crash-handler]:x64-windows-static@0.13.1 package ABI: 3f49d7cb4f739bea66dded733db09928f24e3243cf31327f279c30094e416223
+Building tracy[core,crash-handler]:x64-windows-static@0.13.1...
+Downloading https://github.com/wolfpld/tracy/archive/v0.13.1.tar.gz -> wolfpld-tracy-v0.13.1.tar.gz
+Successfully downloaded wolfpld-tracy-v0.13.1.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/wolfpld-tracy-v0.13.1.tar.gz
+-- Applying patch build-tools.patch
+-- Applying patch fix-vendor-versions.patch
+-- Applying patch fix-imgui-patch.patch
+-- Applying patch downgrade-capstone-5.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/tracy/src/v0.13.1-f213d4969a.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/tracy_x64-windows-static/share/tracy/copyright
+-- Performing post-build validation
+Starting submission of tracy[core,crash-handler]:x64-windows-static@0.13.1 to 1 binary cache(s) in the background
+Elapsed time to handle tracy:x64-windows-static: 7.3 s
+Total install time: 7.3 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+BSD-3-Clause
+tracy provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(Tracy CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE Tracy::TracyClient)
+
+Waiting for 1 remaining binary cache submissions...
+Completed submission of tracy[core,crash-handler]:x64-windows-static@0.13.1 to 1 binary cache(s) in 316 ms (1/1)
+All requested installations completed successfully in: 7.3 s
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+  * boost-assert:x64-windows-static@1.91.0
+  * boost-cmake:x64-windows-static@1.91.0
+  * boost-compat:x64-windows-static@1.91.0
+  * boost-config:x64-windows-static@1.91.0
+  * boost-container:x64-windows-static@1.91.0
+  * boost-container-hash:x64-windows-static@1.91.0
+  * boost-core:x64-windows-static@1.91.0
+  * boost-describe:x64-windows-static@1.91.0
+  * boost-endian:x64-windows-static@1.91.0
+  * boost-headers:x64-windows-static@1.91.0
+  * boost-intrusive:x64-windows-static@1.91.0
+    boost-json:x64-windows-static@1.91.0
+  * boost-move:x64-windows-static@1.91.0
+  * boost-mp11:x64-windows-static@1.91.0
+  * boost-predef:x64-windows-static@1.91.0
+  * boost-system:x64-windows-static@1.91.0
+  * boost-throw-exception:x64-windows-static@1.91.0
+  * boost-uninstall:x64-windows-static@1.91.0
+  * boost-variant2:x64-windows-static@1.91.0
+  * boost-winapi:x64-windows-static@1.91.0
+  * vcpkg-boost:x64-windows@2025-03-29
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Detecting compiler hash for triplet x64-windows...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 322 us. Use --debug to see more details.
+Installing 1/21 boost-uninstall:x64-windows-static@1.91.0...
+boost-uninstall:x64-windows-static@1.91.0 package ABI: 60acb326bc0b1cf397ba6754b9e8aab1586dcbf365bf4bb6ee8cfa7c331a356a
+Building boost-uninstall:x64-windows-static@1.91.0...
+-- 
+Please use the following command when you need to remove all boost ports/components:
+    "./vcpkg remove boost-uninstall:x64-windows-static --recurse"
+
+-- Skipping post-build validation due to VCPKG_POLICY_EMPTY_PACKAGE
+Starting submission of boost-uninstall:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-uninstall:x64-windows-static: 36 ms
+Installing 2/21 vcpkg-boost:x64-windows@2025-03-29...
+vcpkg-boost:x64-windows@2025-03-29 package ABI: 8facda61e5c4138ab4c616d67dc5af3d554303b1a485b16440b2ff78eb7083be
+Building vcpkg-boost:x64-windows@2025-03-29...
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-boost_x64-windows/share/vcpkg-boost/usage.in
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-boost_x64-windows/share/vcpkg-boost/boost-install.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-boost_x64-windows/share/vcpkg-boost/vcpkg-port-config.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-boost_x64-windows/share/vcpkg-boost/copyright
+-- Performing post-build validation
+Starting submission of vcpkg-boost:x64-windows@2025-03-29 to 1 binary cache(s) in the background
+Elapsed time to handle vcpkg-boost:x64-windows: 46.3 ms
+Installing 3/21 boost-cmake:x64-windows-static@1.91.0...
+boost-cmake:x64-windows-static@1.91.0 package ABI: 460ec51254111bae0592f32de13c9d7eac845215aa1e1561c2fef169ee01fd87
+Building boost-cmake:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/cmake/archive/boost-1.91.0.tar.gz -> boostorg-cmake-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-cmake-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-cmake-boost-1.91.0.tar.gz
+-- Applying patch 0001-vcpkg-build.patch
+-- Applying patch 0002-remove-prefix-and-suffix.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-cmake/src/ost-1.91.0-b98b86c516.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Up-to-date: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostFetch.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostInstall.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostMessage.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostRoot.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostTest.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostTestJamfile.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost-cmake/vcpkg-port-config.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost-cmake/usage
+Downloading https://raw.githubusercontent.com/boostorg/boost/refs/tags/boost-1.91.0/LICENSE_1_0.txt -> boost-1.91.0-LICENSE_1_0.txt
+Successfully downloaded boost-1.91.0-LICENSE_1_0.txt
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost-cmake/copyright
+-- Performing post-build validation
+Starting submission of boost-cmake:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-cmake:x64-windows-static: 1.2 s
+Completed submission of boost-uninstall:x64-windows-static@1.91.0 to 1 binary cache(s) in 49.9 ms
+Completed submission of vcpkg-boost:x64-windows@2025-03-29 to 1 binary cache(s) in 49.5 ms
+Installing 4/21 boost-headers:x64-windows-static@1.91.0...
+boost-headers:x64-windows-static@1.91.0 package ABI: 9480b057a930c2eabb932aed3e3ce911c622a858da222bc3a148d3269e72c115
+Building boost-headers:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/headers/archive/boost-1.91.0.tar.gz -> boostorg-headers-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-headers-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-headers-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-headers/src/ost-1.91.0-deced4dad5.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-headers_x64-windows-static/share/boost-headers/copyright
+-- Performing post-build validation
+Starting submission of boost-headers:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-headers:x64-windows-static: 1.6 s
+Completed submission of boost-cmake:x64-windows-static@1.91.0 to 1 binary cache(s) in 52.6 ms
+Installing 5/21 boost-config:x64-windows-static@1.91.0...
+boost-config:x64-windows-static@1.91.0 package ABI: 4fb19868b6b5d7b50f4d0ef6af46fdad4a4a25ef11896a68bc291f76d880f8e9
+Building boost-config:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/config/archive/boost-1.91.0.tar.gz -> boostorg-config-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-config-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-config-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-config/src/ost-1.91.0-8c93c1936b.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-config_x64-windows-static/share/boost-config/copyright
+-- Performing post-build validation
+Starting submission of boost-config:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-config:x64-windows-static: 2.1 s
+Completed submission of boost-headers:x64-windows-static@1.91.0 to 1 binary cache(s) in 49.8 ms
+Installing 6/21 boost-assert:x64-windows-static@1.91.0...
+boost-assert:x64-windows-static@1.91.0 package ABI: 563a68b786433caa6a15f85e0a5a9aa6ac9f12167792834f9895c9ec5569148b
+Building boost-assert:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/assert/archive/boost-1.91.0.tar.gz -> boostorg-assert-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-assert-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-assert-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-assert/src/ost-1.91.0-cb8d01e109.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-assert_x64-windows-static/share/boost-assert/copyright
+-- Performing post-build validation
+Starting submission of boost-assert:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-assert:x64-windows-static: 1.7 s
+Completed submission of boost-config:x64-windows-static@1.91.0 to 1 binary cache(s) in 80.5 ms
+Installing 7/21 boost-throw-exception:x64-windows-static@1.91.0...
+boost-throw-exception:x64-windows-static@1.91.0 package ABI: ba86d57014cd8f0713bf7283222693e52a312826ef348f075a75e575248ac4dc
+Building boost-throw-exception:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/throw_exception/archive/boost-1.91.0.tar.gz -> boostorg-throw_exception-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-throw_exception-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-throw_exception-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-throw-exception/src/ost-1.91.0-34cc1d0ecf.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-throw-exception_x64-windows-static/share/boost-throw-exception/copyright
+-- Performing post-build validation
+Starting submission of boost-throw-exception:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-throw-exception:x64-windows-static: 1.7 s
+Completed submission of boost-assert:x64-windows-static@1.91.0 to 1 binary cache(s) in 50.9 ms
+Installing 8/21 boost-compat:x64-windows-static@1.91.0...
+boost-compat:x64-windows-static@1.91.0 package ABI: 255ca83e1b45943f89f5699ec0c76daae8740ddf7f6927f4b4d71330c2536300
+Building boost-compat:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/compat/archive/boost-1.91.0.tar.gz -> boostorg-compat-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-compat-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-compat-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-compat/src/ost-1.91.0-7c0d84b250.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-compat_x64-windows-static/share/boost-compat/copyright
+-- Performing post-build validation
+Starting submission of boost-compat:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-compat:x64-windows-static: 1.8 s
+Completed submission of boost-throw-exception:x64-windows-static@1.91.0 to 1 binary cache(s) in 53.6 ms
+Installing 9/21 boost-core:x64-windows-static@1.91.0...
+boost-core:x64-windows-static@1.91.0 package ABI: ba4b77b704cc4b9142b475343e696b882d9f638324434472865399bed52bb0ca
+Building boost-core:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/core/archive/boost-1.91.0.tar.gz -> boostorg-core-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-core-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-core-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-core/src/ost-1.91.0-2ac64990bd.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-core_x64-windows-static/share/boost-core/copyright
+-- Performing post-build validation
+Starting submission of boost-core:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-core:x64-windows-static: 1.9 s
+Completed submission of boost-compat:x64-windows-static@1.91.0 to 1 binary cache(s) in 58 ms
+Installing 10/21 boost-move:x64-windows-static@1.91.0...
+boost-move:x64-windows-static@1.91.0 package ABI: 04854ac7706781106a9e7b941df5920d17bf9d39cd2747264e3eefe2db9f0f0a
+Building boost-move:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/move/archive/boost-1.91.0.tar.gz -> boostorg-move-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-move-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-move-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-move/src/ost-1.91.0-ffda78865d.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-move_x64-windows-static/share/boost-move/copyright
+-- Performing post-build validation
+Starting submission of boost-move:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-move:x64-windows-static: 1.9 s
+Completed submission of boost-core:x64-windows-static@1.91.0 to 1 binary cache(s) in 59.8 ms
+Installing 11/21 boost-intrusive:x64-windows-static@1.91.0...
+boost-intrusive:x64-windows-static@1.91.0 package ABI: bd37d2d35605da1eb96ed22554fe636d0e6561292e1fe51bceb4112d8635b91c
+Building boost-intrusive:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/intrusive/archive/boost-1.91.0.tar.gz -> boostorg-intrusive-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-intrusive-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-intrusive-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-intrusive/src/ost-1.91.0-466e81d1d2.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-intrusive_x64-windows-static/share/boost-intrusive/copyright
+-- Performing post-build validation
+Starting submission of boost-intrusive:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-intrusive:x64-windows-static: 2 s
+Completed submission of boost-move:x64-windows-static@1.91.0 to 1 binary cache(s) in 65.5 ms
+Installing 12/21 boost-container:x64-windows-static@1.91.0...
+boost-container:x64-windows-static@1.91.0 package ABI: 20b06f919eb7249d72d196d106e1e57326b1d337ec8336e3ec104a12cbd051b3
+Building boost-container:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/container/archive/boost-1.91.0.tar.gz -> boostorg-container-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-container-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-container-boost-1.91.0.tar.gz
+-- Applying patch posix-threads.diff
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-container/src/ost-1.91.0-34ef7e044f.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-container_x64-windows-static/share/boost-container/copyright
+-- Performing post-build validation
+Starting submission of boost-container:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-container:x64-windows-static: 4.3 s
+Completed submission of boost-intrusive:x64-windows-static@1.91.0 to 1 binary cache(s) in 100 ms
+Installing 13/21 boost-mp11:x64-windows-static@1.91.0...
+boost-mp11:x64-windows-static@1.91.0 package ABI: 29760f0466990bac6c1ae8e549f572f408a7800a0759dbbee6d0021bf3ab9d05
+Building boost-mp11:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/mp11/archive/boost-1.91.0.tar.gz -> boostorg-mp11-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-mp11-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-mp11-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-mp11/src/ost-1.91.0-18239300bd.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-mp11_x64-windows-static/share/boost-mp11/copyright
+-- Performing post-build validation
+Starting submission of boost-mp11:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-mp11:x64-windows-static: 1.9 s
+Completed submission of boost-container:x64-windows-static@1.91.0 to 1 binary cache(s) in 225 ms
+Installing 14/21 boost-describe:x64-windows-static@1.91.0...
+boost-describe:x64-windows-static@1.91.0 package ABI: e10796246c36e627f3158178acce4de49e1aebdec03dd7abd8b4a2a8a8fac68c
+Building boost-describe:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/describe/archive/boost-1.91.0.tar.gz -> boostorg-describe-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-describe-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-describe-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-describe/src/ost-1.91.0-67fa6d2e8c.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-describe_x64-windows-static/share/boost-describe/copyright
+-- Performing post-build validation
+Starting submission of boost-describe:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-describe:x64-windows-static: 1.8 s
+Completed submission of boost-mp11:x64-windows-static@1.91.0 to 1 binary cache(s) in 59.8 ms
+Installing 15/21 boost-container-hash:x64-windows-static@1.91.0...
+boost-container-hash:x64-windows-static@1.91.0 package ABI: 3e91bd0b2e25388e5524656bc089ccb135acf41c450e510459207a748fa4c31e
+Building boost-container-hash:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/container_hash/archive/boost-1.91.0.tar.gz -> boostorg-container_hash-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-container_hash-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-container_hash-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-container-hash/src/ost-1.91.0-67bb2e91d5.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-container-hash_x64-windows-static/share/boost-container-hash/copyright
+-- Performing post-build validation
+Starting submission of boost-container-hash:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-container-hash:x64-windows-static: 1.8 s
+Completed submission of boost-describe:x64-windows-static@1.91.0 to 1 binary cache(s) in 52.7 ms
+Installing 16/21 boost-endian:x64-windows-static@1.91.0...
+boost-endian:x64-windows-static@1.91.0 package ABI: 1431533fb1aafa22e6375bb4efe7e99b3f17133223d50ce6f229aa993bf1d01d
+Building boost-endian:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/endian/archive/boost-1.91.0.tar.gz -> boostorg-endian-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-endian-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-endian-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-endian/src/ost-1.91.0-267efcfed2.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-endian_x64-windows-static/share/boost-endian/copyright
+-- Performing post-build validation
+Starting submission of boost-endian:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-endian:x64-windows-static: 1.8 s
+Completed submission of boost-container-hash:x64-windows-static@1.91.0 to 1 binary cache(s) in 54.1 ms
+Installing 17/21 boost-variant2:x64-windows-static@1.91.0...
+boost-variant2:x64-windows-static@1.91.0 package ABI: 6ee9ccd29ed5fc85834bed46a5f3eca5dfae6adea9abeb8058b7281b08e882a2
+Building boost-variant2:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/variant2/archive/boost-1.91.0.tar.gz -> boostorg-variant2-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-variant2-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-variant2-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-variant2/src/ost-1.91.0-4c2d2d39ff.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-variant2_x64-windows-static/share/boost-variant2/copyright
+-- Performing post-build validation
+Starting submission of boost-variant2:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-variant2:x64-windows-static: 1.8 s
+Completed submission of boost-endian:x64-windows-static@1.91.0 to 1 binary cache(s) in 53.1 ms
+Installing 18/21 boost-predef:x64-windows-static@1.91.0...
+boost-predef:x64-windows-static@1.91.0 package ABI: 15228b651bb0d3601924630e3dd0478dc3eead4b1296c3d091b33e782364cb6e
+Building boost-predef:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/predef/archive/boost-1.91.0.tar.gz -> boostorg-predef-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-predef-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-predef-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-predef/src/ost-1.91.0-1f362b7212.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-predef_x64-windows-static/share/boost-predef/copyright
+-- Performing post-build validation
+Starting submission of boost-predef:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-predef:x64-windows-static: 1.9 s
+Completed submission of boost-variant2:x64-windows-static@1.91.0 to 1 binary cache(s) in 57.7 ms
+Installing 19/21 boost-winapi:x64-windows-static@1.91.0...
+boost-winapi:x64-windows-static@1.91.0 package ABI: 14a2123fc18217cefe23079cbedf8cc3e12fe82a037aeba85f96d042690f2b1b
+Building boost-winapi:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/winapi/archive/boost-1.91.0.tar.gz -> boostorg-winapi-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-winapi-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-winapi-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-winapi/src/ost-1.91.0-1930f2e233.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-winapi_x64-windows-static/share/boost-winapi/copyright
+-- Performing post-build validation
+Starting submission of boost-winapi:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-winapi:x64-windows-static: 1.9 s
+Completed submission of boost-predef:x64-windows-static@1.91.0 to 1 binary cache(s) in 65.1 ms
+Installing 20/21 boost-system:x64-windows-static@1.91.0...
+boost-system:x64-windows-static@1.91.0 package ABI: f8df8f71b130abeaa03b6ae6fe46ecd4a91808c30b0f221cbec1b4616d43bb25
+Building boost-system:x64-windows-static@1.91.0...
+CMake Warning at scripts/cmake/vcpkg_buildpath_length_warning.cmake:4 (message):
+  boost-system's buildsystem uses very long paths and may fail on your
+  system.
+
+  We recommend moving vcpkg to a short path such as 'C:\src\vcpkg' or using
+  the subst command.
+Call Stack (most recent call first):
+  ports/boost-system/portfile.cmake:3 (vcpkg_buildpath_length_warning)
+  scripts/ports.cmake:206 (include)
+
+
+Downloading https://github.com/boostorg/system/archive/boost-1.91.0.tar.gz -> boostorg-system-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-system-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-system-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-system/src/ost-1.91.0-8ae221950f.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-system_x64-windows-static/share/boost-system/copyright
+-- Performing post-build validation
+Starting submission of boost-system:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-system:x64-windows-static: 1.9 s
+Completed submission of boost-winapi:x64-windows-static@1.91.0 to 1 binary cache(s) in 75.5 ms
+Installing 21/21 boost-json:x64-windows-static@1.91.0...
+boost-json:x64-windows-static@1.91.0 package ABI: 5a6f4b8245aff2650dcb0c936d5aac766cfc5626c7b821b13148730cd2641fea
+Building boost-json:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/json/archive/boost-1.91.0.tar.gz -> boostorg-json-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-json-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-json-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-json/src/ost-1.91.0-07bc5f80eb.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-json_x64-windows-static/share/boost-json/copyright
+-- Performing post-build validation
+Starting submission of boost-json:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-json:x64-windows-static: 12 s
+Total install time: 47 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+BSL-1.0
+MIT
+The package boost-json is compatible with built-in CMake targets of FindBoost.cmake:
+
+    find_package(Boost REQUIRED COMPONENTS json)
+    target_link_libraries(main PRIVATE Boost::json)
+
+or the generated cmake configs via:
+
+    find_package( REQUIRED CONFIG)
+    target_link_libraries(main PRIVATE Boost::json)
+
+Completed submission of boost-system:x64-windows-static@1.91.0 to 1 binary cache(s) in 56.9 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of boost-json:x64-windows-static@1.91.0 to 1 binary cache(s) in 636 ms (1/1)
+All requested installations completed successfully in: 47 s
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    etl:x64-windows-static@20.47.1
+Total install time: 989 us
+All requested installations completed successfully in: 989 us
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    utfcpp:x64-windows-static@4.1.1
+Total install time: 1.01 ms
+All requested installations completed successfully in: 1.01 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    glm:x64-windows-static@1.0.3
+Total install time: 1e+03 us
+All requested installations completed successfully in: 1e+03 us
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    pkgconf:x64-windows-static@2.5.1#4
+Total install time: 993 us
+All requested installations completed successfully in: 993 us
+NuGet found: C:/ProgramData/chocolatey/bin/nuget.exe
+Your OS is: Windows with version 10.0.20348
+Determing your exact Windows version based on build number...
+Your build number: 20348
+Build number says your OS is: Windows Server 2022 (uses Win11 packages)
+Getting packages for Win11 based on compiler Msvc
+Generated package config name: [Win11-Msvc-Packages]
+Searching for file...
+Using packages config file [Win11-Msvc-Packages-minimal.config]
+Making config usable for nuget
+Start to download packages from config...
+Restoring NuGet package Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6.
+Restoring NuGet package Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7.
+Restoring NuGet package Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1.
+Restoring NuGet package Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0.
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64/3.5.0/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64.3.5.0.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64/1.3.1/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64.1.3.1.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64/1.5.7/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64.1.5.7.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64/18.1.6/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64.18.1.6.nupkg
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64/1.3.1/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64.1.3.1.nupkg 37ms
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64/3.5.0/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64.3.5.0.nupkg 69ms
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64/18.1.6/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64.18.1.6.nupkg 71ms
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64/1.5.7/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64.1.5.7.nupkg 72ms
+Installed Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64 1.5.7 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64\1.5.7 with content hash dcQ/QGL/tqAZMgGu7uVwdWiMoSCSraqlxLzr5meUFzJLfdwPNXTWBzPpE8p2q9fgxW417euU2h/ctAIt5PELSA==.
+Installed Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64 1.3.1 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64\1.3.1 with content hash w/dV+XaHt2HIOugMc6pc5kVq+KY7vEPER6Bf3bjg/Y6HiE7mtP+pXzbQsUztPEFhtzxmgez0tsLiMMzDteUXgA==.
+Adding package 'Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7' to folder 'D:\a\kotek\kotek\nuget\packages'
+Adding package 'Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7' to folder 'D:\a\kotek\kotek\nuget\packages'
+Installed Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64 3.5.0 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64\3.5.0 with content hash dk3S4DwVCNJcsjh2FUCpklPsZwIaj9NK51GPF9iUN/gIedvd6Ascu+qhaDxAym4wK6v1OhNdrQL8w2uWUrj2MQ==.
+Adding package 'Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0' to folder 'D:\a\kotek\kotek\nuget\packages'
+Installed Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64 18.1.6 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64\18.1.6 with content hash zu6yb+PF5jKf0lyUfD6KnMvEcoTsLmWIrd4clb3uU9WHpvDeAqYamENzF5K54zNV8mMIRvODKPjq6CkEqTWCPQ==.
+Adding package 'Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6' to folder 'D:\a\kotek\kotek\nuget\packages'
+  GET https://api.nuget.org/v3/vulnerabilities/index.json
+  OK https://api.nuget.org/v3/vulnerabilities/index.json 19ms
+  GET https://api.nuget.org/v3-vulnerabilities/2026.07.24.05.37.22/vulnerability.base.json
+  GET https://api.nuget.org/v3-vulnerabilities/2026.07.24.05.37.22/2026.07.24.05.37.22/vulnerability.update.json
+  OK https://api.nuget.org/v3-vulnerabilities/2026.07.24.05.37.22/2026.07.24.05.37.22/vulnerability.update.json 17ms
+  OK https://api.nuget.org/v3-vulnerabilities/2026.07.24.05.37.22/vulnerability.base.json 249ms
+
+NuGet Config files used:
+    C:\Users\runneradmin\AppData\Roaming\NuGet\NuGet.Config
+    C:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.FallbackLocation.config
+    C:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config
+
+Feeds used:
+    https://api.nuget.org/v3/index.json
+    C:\Program Files (x86)\Microsoft SDKs\NuGetPackages\
+
+Installed:
+    4 package(s) to packages.config projects
+Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6;Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0;Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7;Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1
+D:/a/kotek/kotek/nuget/packages/
+validating package folder: Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6
+validating package folder: Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0
+validating package folder: Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7
+validating package folder: Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1
+Using nuget packages because you didn't provide a folder that has a package manager
+ So we don't need to build solution and using precompiled packages
+[kotek.engine]: static containers are enabled by default!
+[kotek.engine]: hybrid containers are enabled by default!
+[kotek.engine]: dynamic containers are enabled by default!
+[kotek.engine]: using OpenGL ES ver 3.1 as default renderer (BGFX)
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Found ZLIB: optimized;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/lib/zs.lib;debug;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/debug/lib/zsd.lib (found version "1.3.2")
+-- Found Vulkan: D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/lib/vulkan-1.lib (found version "1.4.350")  missing components: glslc glslangValidator
+-- Found BZip2: optimized;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/lib/bz2.lib;debug;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/debug/lib/bz2d.lib (found version "1.0.8")
+-- Looking for BZ2_bzCompressInit
+-- Looking for BZ2_bzCompressInit - found
+-- Found PNG: optimized;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/lib/libpng16.lib;debug;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/debug/lib/libpng16d.lib (found version "1.6.58")
+-- Found Freetype target Freetype::Freetype - Freetype font engine enabled
+-- Found PkgConfig: D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/tools/pkgconf/pkgconf.exe (found version "2.5.1")
+[kotek.core.defines.static.tests]: TESTS is 'ON'
+[kotek.core.defines.static.tests]: TESTS use in runtime is 'ON'
+-- [kotek.core.defines.static.tests]: linkage is 'STATIC'
+[kotek.core.defines.static.cpp]: KOTEK_STD_LIBRARY=STD
+[kotek.core.defines.static.cpp]: enabling memory leak detection (built-in)
+[kotek.core.defines.static.cpp]: standard library is Standard library
+[kotek.core.defines.static.cpp]: string configuration is 'OPTIMIZED'
+[kotek.core.defines.static.cpp]: development is for EMB environment
+[kotek.core.defines.static.cpp]: log backend is 
+-- [kotek.core.defines.static.cpp]: using filesystem feature: KOTEK_FILESYSTEM_FEATURE_VFM=
+-- [kotek.core.defines.static.cpp]: using filesystem type: KOTEK_FILESYSTEM_TYPE_NATIVE=
+-- [kotek.core.defines.static.cpp]: using filesystem type: KOTEK_FILESYSTEM_TYPE_ZLIB=
+-- [kotek.core.defines.static.cpp]: linkage is 'STATIC'
+-- Found Git: C:/Program Files/Git/bin/git.exe (found version "2.55.0.windows.3")
+-- [kotek.core.defines.static.git]: linkage is 'STATIC'
+-- [kotek.core.defines.static.render]: linkage is 'STATIC'
+[kotek.core.defines.static.render.dx]: DirectX is 'ON'
+-- [kotek.core.defines.static.render.dx]: linkage is 'STATIC'
+-- [kotek.core.defines.static.render.gl]: linkage is 'STATIC'
+[kotek.core.defines.static.render.vk]: Vulkan is 'ON'
+-- [kotek.core.defines.static.render.vk]: linkage is 'STATIC'
+[kotek.core.defines.static.render.bgfx]: BGFX is 'ON'
+-- [kotek.core.defines.static.render.bgfx]: linkage is 'STATIC'
+[kotek.core.defines.static.math]: math library is 'GLM'
+-- [kotek.core.defines.static.math]: linkage is 'STATIC'
+-- [kotek.core.defines.static.os]: linkage is 'STATIC'
+[kotek.core.defines.static.os.win32]: window library is [GLFW]
+[kotek.core.defines.static.os.win32]: platform 'Windows NT'
+-- [kotek.core.defines.static.os.win32]: linkage is 'STATIC'
+[kotek.core.defines.static.os.linux]: window library is [GLFW]
+-- [kotek.core.defines.static.os.linux]: linkage is 'STATIC'
+[kotek.core.defines.static.profilers]: CPU Profiler is 'ON'
+[kotek.core.defines.static.profilers]: GPU Profiler is 'ON'
+-- [kotek.core.defines.static.profilers]: linkage is 'STATIC'
+-- [kotek.core.defines.static.sdk]: linkage is 'STATIC'
+[kotek.core.defines.static.string]: UNICODE is 'ON'
+-- [kotek.core.defines.static.string]: linkage is 'STATIC'
+-- [kotek.core.defines.static]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent.text]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent.message]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent.assert]: linkage is 'STATIC'
+[kotek.core.defines_dependent.ecs]: you didn't specify any ecs backend so will be selected PICO
+-- [kotek.core.defines_dependent.ecs]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent]: linkage is 'STATIC'
+-- [kotek.core.defines]: linkage is 'STATIC'
+[kotek.core]: adding tests for runtime in project kotek.core
+[kotek.core]: files to attach (KOTEK_TESTS): tests/kotek_core_test_filesystem.cpp;tests/kotek_core_test_json.cpp;tests/kotek_core_test_string.cpp;tests/kotek_core_test_container_deque.cpp;tests/kotek_core_test_container_vector.cpp;tests/kotek_core_test_container_unordered_set.cpp;tests/kotek_core_test_container_unordered_map.cpp;tests/kotek_core_test_container_set.cpp;tests/kotek_core_test_container_queue.cpp;tests/kotek_core_test_container_map.cpp;tests/kotek_core_test_container_list.cpp;tests/kotek_core_test_plugin_override.cpp;tests/kotek_core_test_math_backends.cpp
+-- [kotek.core]: linkage is 'STATIC'
+-- [kotek.core.api]: linkage is 'STATIC'
+-- [kotek.core.types]: linkage is 'STATIC'
+-- [kotek.core.types.char]: linkage is 'STATIC'
+-- [kotek.core.types.numerics]: linkage is 'STATIC'
+-- [kotek.core.types.string]: linkage is 'STATIC'
+-- [kotek.core.casting]: linkage is 'STATIC'
+-- [kotek.core.casting.lexical]: linkage is 'STATIC'
+-- [kotek.core.casting.string]: linkage is 'STATIC'
+-- [kotek.core.constants]: linkage is 'STATIC'
+-- [kotek.core.constants.math]: linkage is 'STATIC'
+-- [kotek.core.constants.ecs]: linkage is 'STATIC'
+-- [kotek.core.constants.string]: linkage is 'STATIC'
+-- [kotek.core.constants.window]: linkage is 'STATIC'
+-- [kotek.core.constants.render]: linkage is 'STATIC'
+-- [kotek.core.containers]: linkage is 'STATIC'
+-- [kotek.core.containers.any]: linkage is 'STATIC'
+-- [kotek.core.containers.array]: linkage is 'STATIC'
+-- [kotek.core.containers.string]: linkage is 'STATIC'
+-- [kotek.core.containers.hash]: linkage is 'STATIC'
+-- [kotek.core.containers.deque]: linkage is 'STATIC'
+-- [kotek.core.containers.dll]: linkage is 'STATIC'
+-- [kotek.core.containers.filesystem]: linkage is 'STATIC'
+-- [kotek.core.containers.filesystem.path]: linkage is 'STATIC'
+-- [kotek.core.containers.function]: linkage is 'STATIC'
+-- [kotek.core.containers.io]: linkage is 'STATIC'
+-- [kotek.core.containers.json]: linkage is 'STATIC'
+-- [kotek.core.containers.map]: linkage is 'STATIC'
+-- [kotek.core.containers.microsoft]: linkage is 'STATIC'
+-- [kotek.core.containers.microsoft.wrl.comptr]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.tbb]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.atomic]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.mutex]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.shared_mutex]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.thread]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.semaphore]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.queue]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.condition_variable]: linkage is 'STATIC'
+-- [kotek.core.containers.pair]: linkage is 'STATIC'
+-- [kotek.core.containers.queue]: linkage is 'STATIC'
+-- [kotek.core.containers.shared_ptr]: linkage is 'STATIC'
+-- [kotek.core.containers.unique_ptr]: linkage is 'STATIC'
+-- [kotek.core.containers.unordered_map]: linkage is 'STATIC'
+-- [kotek.core.containers.unordered_set]: linkage is 'STATIC'
+-- [kotek.core.containers.variant]: linkage is 'STATIC'
+-- [kotek.core.containers.vector]: linkage is 'STATIC'
+-- [kotek.core.containers.list]: linkage is 'STATIC'
+-- [kotek.core.filesystem]: linkage is 'STATIC'
+-- [kotek.core.filesystem.file_text]: linkage is 'STATIC'
+-- [kotek.core.format]: linkage is 'STATIC'
+-- [kotek.core.memory]: linkage is 'STATIC'
+[kotek.core.memory.cpu]: memory allocator for CPU = MIMALLOC
+-- [kotek.core.memory.cpu]: linkage is 'STATIC'
+-- [kotek.core.memory.gpu]: linkage is 'STATIC'
+-- [kotek.core.memory.gpu.vulkan]: linkage is 'STATIC'
+[kotek.core.math]: math library is 'GLM'
+-- [kotek.core.math]: linkage is 'STATIC'
+-- [kotek.core.profilers]: linkage is 'STATIC'
+-- [kotek.core.profilers.cpu]: linkage is 'STATIC'
+-- [kotek.core.profilers.gpu]: linkage is 'STATIC'
+-- [kotek.core.os]: linkage is 'STATIC'
+-- [kotek.core.os.win32]: linkage is 'STATIC'
+-- [kotek.core.os.linux]: linkage is 'STATIC'
+-- [kotek.core.window]: linkage is 'STATIC'
+-- [kotek.core.window.glfw]: linkage is 'STATIC'
+-- [kotek.core.window_manager]: linkage is 'STATIC'
+-- [kotek.core.log]: linkage is 'STATIC'
+-- [kotek.core.console]: linkage is 'STATIC'
+-- [kotek.core.engine_config]: linkage is 'STATIC'
+-- [kotek.core.main_manager]: linkage is 'STATIC'
+[kotek.core.ecs]: KOTEK_ECS_BACKEND=PICO
+-- [kotek.core.ecs]: linkage is 'STATIC'
+-- [kotek.core.enum]: linkage is 'STATIC'
+-- [kotek.core.enum.core]: linkage is 'STATIC'
+-- [kotek.core.enum.render]: linkage is 'STATIC'
+-- [kotek.core.enum.render.dx]: linkage is 'STATIC'
+-- [kotek.core.enum.render.gl]: linkage is 'STATIC'
+-- [kotek.core.enum.render.vk]: linkage is 'STATIC'
+-- [kotek.core.enum.render.bgfx]: linkage is 'STATIC'
+-- [kotek.core.input]: linkage is 'STATIC'
+-- [kotek.core.utility]: linkage is 'STATIC'
+-- [kotek.game]: linkage is 'STATIC'
+-- [kotek.ui]: linkage is 'STATIC'
+-- [kotek.ui.imgui]: linkage is 'STATIC'
+-- Found Freetype target Freetype::Freetype - Freetype font engine enabled
+-- [kotek.ui.rmlui]: linkage is 'STATIC'
+-- [kotek.ui.videoplayer]: linkage is 'STATIC'
+-- Checking for module 'dav1d'
+--   Found dav1d, version 1.5.3
+-- [kotek.ui.videoplayer.avif]: linkage is 'STATIC'
+-- [kotek.render]: linkage is 'STATIC'
+-- [kotek.render.shared]: linkage is 'STATIC'
+-- [kotek.render.shared.bgfx]: linkage is 'STATIC'
+-- [kotek.render.bgfx]: linkage is 'STATIC'
+-- [kotek]: module entry manifest has 0 plugin dlls -> D:/a/kotek/kotek/build-diag/generated/kotek_plugin_manifest.h
+-- [kotek]: module registry has 112 modules -> D:/a/kotek/kotek/build-diag/generated/kotek_plugin_registry.h
+-- Configuring done (623.9s)
+-- Generating done (1.8s)
+-- Build files have been written to: D:/a/kotek/kotek/build-diag
