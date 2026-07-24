@@ -1,0 +1,48 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    mimalloc:x64-windows-static@3.3.2
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 57.1 us. Use --debug to see more details.
+Installing 1/1 mimalloc:x64-windows-static@3.3.2...
+mimalloc:x64-windows-static@3.3.2 package ABI: 9ab833cd9b25bccd84186a2da008a07fb5084904a2713e5e2b35c8d9c5e58f9a
+Building mimalloc:x64-windows-static@3.3.2...
+Downloading https://github.com/microsoft/mimalloc/archive/v3.3.2.tar.gz -> microsoft-mimalloc-v3.3.2.tar.gz
+Successfully downloaded microsoft-mimalloc-v3.3.2.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/microsoft-mimalloc-v3.3.2.tar.gz
+-- Applying patch pkgconfig-cxx.diff
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/mimalloc/src/v3.3.2-03cc860f46.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/mimalloc_x64-windows-static/tools/mimalloc//minject.exe
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/mimalloc_x64-windows-static/tools/mimalloc//minject32.exe
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/mimalloc_x64-windows-static/tools/mimalloc//minject-arm64.exe
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/mimalloc_x64-windows-static/lib/pkgconfig/mimalloc.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/mimalloc_x64-windows-static/debug/lib/pkgconfig/mimalloc.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/mimalloc_x64-windows-static/share/mimalloc/copyright
+-- Performing post-build validation
+Starting submission of mimalloc:x64-windows-static@3.3.2 to 1 binary cache(s) in the background
+Elapsed time to handle mimalloc:x64-windows-static: 11 s
+Total install time: 11 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+MIT
+mimalloc provides CMake targets:
+
+  find_package(mimalloc CONFIG REQUIRED)
+  target_link_libraries(main PRIVATE $<IF:$<TARGET_EXISTS:mimalloc-static>,mimalloc-static,mimalloc>)
+
+To ensure the mimalloc-override.dll is loaded at runtime on Windows with
+dynamic linkage, it is suggested to insert some call to the mimalloc API
+in the main function, eg. `mi_version()`. Cf.
+https://github.com/microsoft/mimalloc/blob/dev/readme.md#dynamic-override-on-windows
+
+Waiting for 1 remaining binary cache submissions...
+Completed submission of mimalloc:x64-windows-static@3.3.2 to 1 binary cache(s) in 479 ms (1/1)
+All requested installations completed successfully in: 11 s
