@@ -1,0 +1,401 @@
+MSBuild version 17.14.51+25f168cee for .NET Framework
+
+  1>Checking Build System
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.cpp/CMakeLists.txt
+  main_core_defines_static_cpp_dll.cpp
+  kotek.core.defines.static.cpp.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.cpp\Release\kotek.core.defines.static.cpp.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.types.numerics/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core/tests/kotek.core.tests.plugin/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.hash/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.shared_ptr/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.any/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.render.bgfx/CMakeLists.txt
+  plugin_override_double.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.render.dx/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.git/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.os.win32/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.atomic/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.pair/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.render.gl/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.string/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.mutex/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.thread/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants.window/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.render.vk/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.function/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants.render/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.shared_mutex/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.condition_variable/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.unique_ptr/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.semaphore/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.profilers/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.tbb/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.tests/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.variant/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.math/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.sdk/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.os.linux/CMakeLists.txt
+  main_core_defines_static_sdk_dll.cpp
+  main_core_defines_static_math_dll.cpp
+  main_core_defines_static_render_vk_dll.cpp
+  main_core_containers_variant_dll.cpp
+  main_core_defines_static_string_dll.cpp
+  kotek.core.defines.static.math.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.math\Release\kotek.core.defines.static.math.lib
+  main_core_defines_static_os_linux_dll.cpp
+  main_core_defines_static_tests_dll.cpp
+  kotek.core.defines.static.render.vk.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.render.vk\Release\kotek.core.defines.static.render.vk.lib
+  kotek.core.defines.static.sdk.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.sdk\Release\kotek.core.defines.static.sdk.lib
+  main_core_containers_multithreading_tbb_dll.cpp
+  main_core_containers_multithreading_semaphore_dll.cpp
+  kotek.core.defines.static.os.linux.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.os.linux\Release\kotek.core.defines.static.os.linux.lib
+  kotek.core.defines.static.string.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.string\Release\kotek.core.defines.static.string.lib
+  main_core_containers_multithreading_condition_variable_dll.cpp
+  kotek.core.defines.static.tests.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.tests\Release\kotek.core.defines.static.tests.lib
+  main_core_containers_function_dll.cpp
+  kotek.core.containers.multithreading.semaphore.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.semaphore\Release\kotek.core.containers.multithreading.semaphore.lib
+  main_core_constants_window_dll.cpp
+  main_core_defines_static_profilers_dll.cpp
+  kotek.core.constants.window.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants.window\Release\kotek.core.constants.window.lib
+  kotek.core.containers.function.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.function\Release\kotek.core.containers.function.lib
+  kotek.core.defines.static.profilers.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.profilers\Release\kotek.core.defines.static.profilers.lib
+  main_core_defines_static_render_gl_dll.cpp
+  main_core_containers_unique_ptr_dll.cpp
+  kotek.core.defines.static.render.gl.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.render.gl\Release\kotek.core.defines.static.render.gl.lib
+     Creating library D:/a/kotek/kotek/build/src/kotek.core/tests/kotek.core.tests.plugin/Release/kotek.core.tests.plugin.lib and object D:/a/kotek/kotek/build/src/kotek.core/tests/kotek.core.tests.plugin/Release/kotek.core.tests.plugin.exp
+  kotek.core.tests.plugin.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core\tests\kotek.core.tests.plugin\Release\kotek.core.tests.plugin.dll
+  main_core_containers_multithreading_shared_mutex_dll.cpp
+  main_core_defines_static_os_win32_dll.cpp
+  kotek.core.containers.variant.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.variant\Release\kotek.core.containers.variant.lib
+  main_core_containers_multithreading_mutex_dll.cpp
+  kotek.core.containers.multithreading.condition_variable.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.condition_variable\Release\kotek.core.containers.multithreading.condition_variable.lib
+  main_core_defines_static_render_bgfx_dll.cpp
+  kotek.core.containers.unique_ptr.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.unique_ptr\Release\kotek.core.containers.unique_ptr.lib
+  main_core_containers_hash_dll.cpp
+  main_core_containers_multithreading_atomic_dll.cpp
+  kotek.core.containers.hash.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.hash\Release\kotek.core.containers.hash.lib
+  kotek.core.containers.multithreading.shared_mutex.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.shared_mutex\Release\kotek.core.containers.multithreading.shared_mutex.lib
+  kotek.core.defines.static.os.win32.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.os.win32\Release\kotek.core.defines.static.os.win32.lib
+  kotek.core.defines.static.render.bgfx.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.render.bgfx\Release\kotek.core.defines.static.render.bgfx.lib
+  main_core_containers_any_dll.cpp
+  main_core_numerics_dll.cpp
+  kotek.core.containers.multithreading.atomic.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.atomic\Release\kotek.core.containers.multithreading.atomic.lib
+  main_core_constants_render_dll.cpp
+  main_core_containers_multithreading_thread_dll.cpp
+  kotek.core.containers.any.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.any\Release\kotek.core.containers.any.lib
+  kotek.core.containers.multithreading.mutex.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.mutex\Release\kotek.core.containers.multithreading.mutex.lib
+  main_core_containers_pair_dll.cpp
+  main_core_defines_static_render_dx_dll.cpp
+  kotek.core.constants.render.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants.render\Release\kotek.core.constants.render.lib
+  main_core_containers_shared_ptr_dll.cpp
+  kotek.core.containers.pair.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.pair\Release\kotek.core.containers.pair.lib
+  kotek.core.defines.static.render.dx.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.render.dx\Release\kotek.core.defines.static.render.dx.lib
+  main_core_defines_static_git_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.render/CMakeLists.txt
+  kotek.core.containers.multithreading.thread.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.thread\Release\kotek.core.containers.multithreading.thread.lib
+  kotek.core.containers.shared_ptr.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.shared_ptr\Release\kotek.core.containers.shared_ptr.lib
+  kotek.core.types.numerics.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.types.numerics\Release\kotek.core.types.numerics.lib
+  kotek.core.defines.static.git.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.git\Release\kotek.core.defines.static.git.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.render.vk/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants.math/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.array/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.render.dx/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static.os/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants.ecs/CMakeLists.txt
+  main_core_defines_static_os_dll.cpp
+  main_core_constants_ecs_dll.cpp
+  main_core_enum_render_dx_dll.cpp
+  main_core_constants_math_dll.cpp
+  main_core_containers_array_dll.cpp
+  kotek.core.defines.static.os.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.os\Release\kotek.core.defines.static.os.lib
+  kotek.core.containers.multithreading.tbb.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.tbb\Release\kotek.core.containers.multithreading.tbb.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.microsoft.wrl.comptr/CMakeLists.txt
+  kotek.core.enum.render.dx.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.render.dx\Release\kotek.core.enum.render.dx.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.types.char/CMakeLists.txt
+  kotek.core.constants.ecs.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants.ecs\Release\kotek.core.constants.ecs.lib
+  main_core_containers_microsoft_wrl_comptr_dll.cpp
+  main_core_types_char_dll.cpp
+  main_core_enum_render_vk_dll.cpp
+  kotek.core.types.char.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.types.char\Release\kotek.core.types.char.lib
+  kotek.core.containers.array.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.array\Release\kotek.core.containers.array.lib
+  kotek.core.constants.math.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants.math\Release\kotek.core.constants.math.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines_dependent.text/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.io/CMakeLists.txt
+  main_core_defines_dependent_text_dll.cpp
+  main_core_defines_render_dll.cpp
+  main_core_containers_io_dll.cpp
+  kotek.core.defines_dependent.text.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines_dependent.text\Release\kotek.core.defines_dependent.text.lib
+  kotek.core.containers.microsoft.wrl.comptr.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.microsoft.wrl.comptr\Release\kotek.core.containers.microsoft.wrl.comptr.lib
+  kotek.core.defines.static.render.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static.render\Release\kotek.core.defines.static.render.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants.string/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.microsoft/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines.static/CMakeLists.txt
+  main_core_constants_string_dll.cpp
+  main_core_containers_microsoft_dll.cpp
+  kotek.core.constants.string.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants.string\Release\kotek.core.constants.string.lib
+  main_core_defines_static_dll.cpp
+  kotek.core.defines.static.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines.static\Release\kotek.core.defines.static.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.constants/CMakeLists.txt
+  main_core_constants_dll.cpp
+  kotek.core.containers.io.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.io\Release\kotek.core.containers.io.lib
+  kotek.core.enum.render.vk.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.render.vk\Release\kotek.core.enum.render.vk.lib
+  kotek.core.containers.microsoft.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.microsoft\Release\kotek.core.containers.microsoft.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.render.bgfx/CMakeLists.txt
+  main_core_enum_render_bgfx_dll.cpp
+  kotek_translation.cpp
+  kotek.core.constants.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.constants\Release\kotek.core.constants.lib
+  kotek.core.enum.render.bgfx.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.render.bgfx\Release\kotek.core.enum.render.bgfx.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.render.gl/CMakeLists.txt
+  main_core_enum_render_gl_dll.cpp
+  kotek_translation.cpp
+  kotek.core.enum.render.gl.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.render.gl\Release\kotek.core.enum.render.gl.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.render/CMakeLists.txt
+  kotek_translation.cpp
+  main_core_enum_render_dll.cpp
+  kotek.core.enum.render.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.render\Release\kotek.core.enum.render.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum.core/CMakeLists.txt
+  kotek_translation.cpp
+  main_core_enum_core_dll.cpp
+  kotek_core_enum_core_test_translation.cpp
+  kotek.core.enum.core.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum.core\Release\kotek.core.enum.core.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.enum/CMakeLists.txt
+  main_core_enum_dll.cpp
+  kotek.core.enum.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.enum\Release\kotek.core.enum.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.ecs/CMakeLists.txt
+  main_core_ecs_dll.cpp
+  kotek.core.ecs.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.ecs\Release\kotek.core.ecs.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.main_manager/CMakeLists.txt
+  kotek_main_manager.cpp
+  kotek_plugin_invoke.cpp
+  kotek_plugin_override.cpp
+  main_core_main_manager_dll.cpp
+  Generating Code...
+  kotek.core.main_manager.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.main_manager\Release\kotek.core.main_manager.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.engine_config/CMakeLists.txt
+  kotek_std_config.cpp
+  main_core_engine_config_dll.cpp
+  Generating Code...
+  kotek.core.engine_config.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.engine_config\Release\kotek.core.engine_config.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.log/CMakeLists.txt
+  main_core_log_dll.cpp
+  kotek.core.log.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.log\Release\kotek.core.log.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.os.win32/CMakeLists.txt
+  main_core_os_win32_dll.cpp
+  kotek.core.os.win32.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.os.win32\Release\kotek.core.os.win32.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.os/CMakeLists.txt
+  main_core_os_dll.cpp
+  kotek.core.os.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.os\Release\kotek.core.os.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.memory.cpu/CMakeLists.txt
+  main_core_memory_cpu_dll.cpp
+  kotek_std_memory.cpp
+  offsetAllocator.cpp
+  kotek.core.memory.cpu.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.memory.cpu\Release\kotek.core.memory.cpu.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.format/CMakeLists.txt
+  main_core_format_dll.cpp
+  kotek.core.format.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.format\Release\kotek.core.format.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.vector/CMakeLists.txt
+  main_core_containers_vector_dll.cpp
+  kotek.core.containers.vector.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.vector\Release\kotek.core.containers.vector.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.unordered_set/CMakeLists.txt
+  main_core_containers_unordered_set_dll.cpp
+  kotek.core.containers.unordered_set.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.unordered_set\Release\kotek.core.containers.unordered_set.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.unordered_map/CMakeLists.txt
+  main_core_containers_unordered_map_dll.cpp
+  kotek.core.containers.unordered_map.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.unordered_map\Release\kotek.core.containers.unordered_map.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.filesystem.path/CMakeLists.txt
+  main_core_containers_filesystem_path_dll.cpp
+  kotek.core.containers.filesystem.path.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.filesystem.path\Release\kotek.core.containers.filesystem.path.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.dll/CMakeLists.txt
+  main_core_containers_dll_dll.cpp
+  kotek.core.containers.dll.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.dll\Release\kotek.core.containers.dll.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.string/CMakeLists.txt
+  kotek_core_test_string.cpp
+  main_core_containers_string_dll.cpp
+  kotek_std_alias_string.cpp
+  Generating Code...
+  kotek.core.containers.string.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.string\Release\kotek.core.containers.string.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.casting.string/CMakeLists.txt
+  main_core_casting_string_dll.cpp
+  kotek_std_alias_casting.cpp
+  Generating Code...
+  kotek.core.casting.string.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.casting.string\Release\kotek.core.casting.string.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.casting.lexical/CMakeLists.txt
+  main_core_casting_lexical_dll.cpp
+  kotek.core.casting.lexical.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.casting.lexical\Release\kotek.core.casting.lexical.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.types.string/CMakeLists.txt
+  main_core_types_string_dll.cpp
+  kotek.core.types.string.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.types.string\Release\kotek.core.types.string.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.api/CMakeLists.txt
+  main_api_dll.cpp
+  kotek.core.api.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.api\Release\kotek.core.api.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines_dependent.ecs/CMakeLists.txt
+  main_core_defines_dependent_ecs_dll.cpp
+  kotek.core.defines_dependent.ecs.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines_dependent.ecs\Release\kotek.core.defines_dependent.ecs.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines_dependent.assert/CMakeLists.txt
+  main_core_defines_dependent_assert_dll.cpp
+  kotek.core.defines_dependent.assert.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines_dependent.assert\Release\kotek.core.defines_dependent.assert.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines_dependent.message/CMakeLists.txt
+  main_core_defines_dependent_message_dll.cpp
+  kotek.core.defines_dependent.message.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines_dependent.message\Release\kotek.core.defines_dependent.message.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.map/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.window.glfw/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.profilers.gpu/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.list/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.ui.videoplayer.avif/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.input/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.types/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.deque/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines_dependent/CMakeLists.txt
+  main_core_containers_deque_dll.cpp
+  main_ui_videoplayer_avif_dll.cpp
+  kotek_ui_videoplayer.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.memory.gpu.vulkan/CMakeLists.txt
+  main_core_containers_map_dll.cpp
+  kotek_std_window.cpp
+  main_core_defines_dependent_dll.cpp
+  main_core_containers_list_dll.cpp
+  kotek.core.containers.deque.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.deque\Release\kotek.core.containers.deque.lib
+  kotek.core.containers.map.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.map\Release\kotek.core.containers.map.lib
+  kotek_input.cpp
+  main_core_memory_gpu_vulkan_dll.cpp
+  main_core_profilers_gpu_dll.cpp
+  kotek.core.profilers.gpu.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.profilers.gpu\Release\kotek.core.profilers.gpu.lib
+  kotek.core.defines_dependent.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines_dependent\Release\kotek.core.defines_dependent.lib
+  main_core_types_dll.cpp
+  kotek.core.containers.list.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.list\Release\kotek.core.containers.list.lib
+  Generating Code...
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.json/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.casting/CMakeLists.txt
+  kotek.ui.videoplayer.avif.vcxproj -> D:\a\kotek\kotek\build\src\kotek.ui.videoplayer.avif\Release\kotek.ui.videoplayer.avif.lib
+  main_core_window_glfw_dll.cpp
+  kotek_std_json.cpp
+  main_core_casting_dll.cpp
+  kotek.core.types.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.types\Release\kotek.core.types.lib
+  kotek.core.casting.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.casting\Release\kotek.core.casting.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.ui.videoplayer/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.queue/CMakeLists.txt
+  main_ui_videoplayer_dll.cpp
+  main_core_containers_queue_dll.cpp
+  kotek.core.memory.gpu.vulkan.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.memory.gpu.vulkan\Release\kotek.core.memory.gpu.vulkan.lib
+  main_core_input_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.defines/CMakeLists.txt
+  kotek.core.containers.queue.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.queue\Release\kotek.core.containers.queue.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.console/CMakeLists.txt
+  main_core_containers_json_dll.cpp
+  main_core_defines_dll.cpp
+  kotek_console.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.utility/CMakeLists.txt
+  Generating Code...
+  kotek.core.containers.json.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.json\Release\kotek.core.containers.json.lib
+  kotek_std_utility.cpp
+  Generating Code...
+  kotek.core.defines.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.defines\Release\kotek.core.defines.lib
+  kotek.ui.videoplayer.vcxproj -> D:\a\kotek\kotek\build\src\kotek.ui.videoplayer\Release\kotek.ui.videoplayer.lib
+  kotek.core.window.glfw.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.window.glfw\Release\kotek.core.window.glfw.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.filesystem/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.window/CMakeLists.txt
+  kotek_std_alias_filesystem.cpp
+  kotek_window_console.cpp
+  kotek_core_test_input.cpp
+  main_core_console_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.filesystem.file_text/CMakeLists.txt
+  kotek_std_utility_tests.cpp
+  main_core_containers_filesystem_dll.cpp
+  kotek_file_text.cpp
+  main_core_window_dll.cpp
+  Generating Code...
+  main_core_filesystem_file_text_dll.cpp
+  Generating Code...
+  Generating Code...
+  kotek.core.input.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.input\Release\kotek.core.input.lib
+  kotek.core.containers.filesystem.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.filesystem\Release\kotek.core.containers.filesystem.lib
+  kotek.core.console.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.console\Release\kotek.core.console.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.os.linux/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading.queue/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.memory.gpu/CMakeLists.txt
+  main_core_os_linux_dll.cpp
+  main_core_utility_dll.cpp
+  kotek.core.os.linux.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.os.linux\Release\kotek.core.os.linux.lib
+  main_core_containers_multithreading_queue_dll.cpp
+  Generating Code...
+  main_core_memory_gpu_dll.cpp
+  kotek.core.filesystem.file_text.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.filesystem.file_text\Release\kotek.core.filesystem.file_text.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.filesystem/CMakeLists.txt
+  kotek.core.containers.multithreading.queue.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading.queue\Release\kotek.core.containers.multithreading.queue.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers.multithreading/CMakeLists.txt
+  kotek_filesystem.cpp
+  Generating Code...
+  kotek.core.window.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.window\Release\kotek.core.window.lib
+  main_core_containers_multithreading_dll.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.ui.rmlui/CMakeLists.txt
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.window_manager/CMakeLists.txt
+  kotek.core.containers.multithreading.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers.multithreading\Release\kotek.core.containers.multithreading.lib
+  kotek_window_manager.cpp
+  kotek_ui_game_ui_manager.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.containers/CMakeLists.txt
+  Generating Code...
+  kotek.core.memory.gpu.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.memory.gpu\Release\kotek.core.memory.gpu.lib
+  kotek.core.utility.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.utility\Release\kotek.core.utility.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.math/CMakeLists.txt
+  kotek_core_test_math.cpp
+  main_core_containers_dll.cpp
+  kotek_filesystem_native.cpp
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.memory/CMakeLists.txt
+  main_core_window_manager_dll.cpp
+  main_ui_rmlui_dll.cpp
+  kotek_std_math_vector1f.cpp
+  main_core_memory_dll.cpp
+  kotek_filesystem_zlib.cpp
+  kotek_std_math_vector2f.cpp
+  Generating Code...
+  Generating Code...
+  kotek.core.containers.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.containers\Release\kotek.core.containers.lib
+  kotek.core.window_manager.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.window_manager\Release\kotek.core.window_manager.lib
+  kotek.core.memory.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.memory\Release\kotek.core.memory.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.profilers.cpu/CMakeLists.txt
+  main_core_profilers_cpu_dll.cpp
+  kotek.ui.rmlui.vcxproj -> D:\a\kotek\kotek\build\src\kotek.ui.rmlui\Release\kotek.ui.rmlui.lib
+  kotek_std_math_vector3f.cpp
+  kotek.core.profilers.cpu.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.profilers.cpu\Release\kotek.core.profilers.cpu.lib
+  Building Custom Rule D:/a/kotek/kotek/src/kotek.core.profilers/CMakeLists.txt
+  kotek_profiler.cpp
+  kotek_std_math_vector4f.cpp
+  kotek_virtualfilemapper.cpp
+  kotek_std_math_matrix2x2_f.cpp
+  kotek_std_math_matrix3x3_f.cpp
+  main_core_profilers_dll.cpp
+  main_core_filesystem_dll.cpp
+  kotek_std_math_matrix4x4_f.cpp
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(833,33): error C2475: 'Kotek::ktk::math::matrix4x4f::size_of': redefinition; 'constexpr' specifier mismatch [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+  kotek_std_math_vectornf_view.cpp
+      D:\a\kotek\kotek\src\kotek.core.math\include\kotek_std_math_matrix_4x4_f.h(156,12):
+      see declaration of 'Kotek::ktk::math::matrix4x4f::size_of'
+  
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(843,33): error C2475: 'Kotek::ktk::math::matrix4x4f::get_column_count': redefinition; 'constexpr' specifier mismatch [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+      D:\a\kotek\kotek\src\kotek.core.math\include\kotek_std_math_matrix_4x4_f.h(157,12):
+      see declaration of 'Kotek::ktk::math::matrix4x4f::get_column_count'
+  
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(849,33): error C2475: 'Kotek::ktk::math::matrix4x4f::get_row_count': redefinition; 'constexpr' specifier mismatch [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+      D:\a\kotek\kotek\src\kotek.core.math\include\kotek_std_math_matrix_4x4_f.h(158,12):
+      see declaration of 'Kotek::ktk::math::matrix4x4f::get_row_count'
+  
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(921,35): error C3867: 'Kotek::ktk::math::matrix4x4f::get_column_count': non-standard syntax; use '&' to create a pointer to member [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(921,16): error C2446: '>=': no conversion from 'Kotek::ktk::math::math_id_t (__cdecl Kotek::ktk::math::matrix4x4f::* )(void) noexcept const' to 'Kotek::ktk::math::math_id_t' [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+      D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(921,35):
+      There is no context in which this conversion is possible
+  
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(922,31): error C3867: 'Kotek::ktk::math::matrix4x4f::get_column_count': non-standard syntax; use '&' to create a pointer to member [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(922,34): error C2296: '-': not valid as left operand has type 'Kotek::ktk::math::math_id_t (__cdecl Kotek::ktk::math::matrix4x4f::* )(void) noexcept const' [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(944,35): error C3867: 'Kotek::ktk::math::matrix4x4f::get_column_count': non-standard syntax; use '&' to create a pointer to member [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(944,16): error C2446: '>=': no conversion from 'Kotek::ktk::math::math_id_t (__cdecl Kotek::ktk::math::matrix4x4f::* )(void) noexcept const' to 'Kotek::ktk::math::math_id_t' [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+      D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(944,35):
+      There is no context in which this conversion is possible
+  
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(945,31): error C3867: 'Kotek::ktk::math::matrix4x4f::get_column_count': non-standard syntax; use '&' to create a pointer to member [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+D:\a\kotek\kotek\src\kotek.core.math\src\kotek_std_math_matrix4x4_f.cpp(945,34): error C2296: '-': not valid as left operand has type 'Kotek::ktk::math::math_id_t (__cdecl Kotek::ktk::math::matrix4x4f::* )(void) noexcept const' [D:\a\kotek\kotek\build\src\kotek.core.math\kotek.core.math.vcxproj]
+  Generating Code...
+  kotek_std_math_matrixnf_view.cpp
+  kotek.core.profilers.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.profilers\Release\kotek.core.profilers.lib
+  Generating Code...
+  main_core_math_dll.cpp
+  kotek.core.filesystem.vcxproj -> D:\a\kotek\kotek\build\src\kotek.core.filesystem\Release\kotek.core.filesystem.lib
+  Generating Code...
