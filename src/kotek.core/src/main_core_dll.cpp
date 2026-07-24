@@ -34,6 +34,7 @@ void RegisterAllTests(void)
 	RegisterTests_Container_Vector_Core();
 	RegisterTests_Container_Unordered_Set_Core();
 	RegisterTests_PluginOverride_ForModule_Core();
+	RegisterTests_MathBackends_ForModule_Core();
 #endif
 }
 

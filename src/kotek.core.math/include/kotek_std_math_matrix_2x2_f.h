@@ -152,29 +152,27 @@ inline matrix2x2f operator+(
 ) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT2 left_row_0 = {
-		left.Get_00(), left.Get_01()
-	};
-	DirectX::XMFLOAT2 left_row_1 = {
-		left.Get_10(), left.Get_11()
-	};
+	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&left.Get_Base()._11
+		)
+	);
+	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&left.Get_Base()._21
+		)
+	);
 
-	DirectX::XMFLOAT2 right_row_0 = {
-		right.Get_00(), right.Get_01()
-	};
-	DirectX::XMFLOAT2 right_row_1 = {
-		right.Get_10(), right.Get_11()
-	};
-
-	DirectX::XMVECTOR row_original_0 =
-		DirectX::XMLoadFloat2(&left_row_0);
-	DirectX::XMVECTOR row_original_1 =
-		DirectX::XMLoadFloat2(&left_row_1);
-
-	DirectX::XMVECTOR row_argument_0 =
-		DirectX::XMLoadFloat2(&right_row_0);
-	DirectX::XMVECTOR row_argument_1 =
-		DirectX::XMLoadFloat2(&right_row_1);
+	DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&right.Get_Base()._11
+		)
+	);
+	DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&right.Get_Base()._21
+		)
+	);
 
 	row_original_0 =
 		DirectX::XMVectorAdd(row_original_0, row_argument_0);
@@ -251,29 +249,27 @@ inline matrix2x2f operator-(
 ) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT2 left_row_0 = {
-		left.Get_00(), left.Get_01()
-	};
-	DirectX::XMFLOAT2 left_row_1 = {
-		left.Get_10(), left.Get_11()
-	};
+	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&left.Get_Base()._11
+		)
+	);
+	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&left.Get_Base()._21
+		)
+	);
 
-	DirectX::XMFLOAT2 right_row_0 = {
-		right.Get_00(), right.Get_01()
-	};
-	DirectX::XMFLOAT2 right_row_1 = {
-		right.Get_10(), right.Get_11()
-	};
-
-	DirectX::XMVECTOR row_original_0 =
-		DirectX::XMLoadFloat2(&left_row_0);
-	DirectX::XMVECTOR row_original_1 =
-		DirectX::XMLoadFloat2(&left_row_1);
-
-	DirectX::XMVECTOR row_argument_0 =
-		DirectX::XMLoadFloat2(&right_row_0);
-	DirectX::XMVECTOR row_argument_1 =
-		DirectX::XMLoadFloat2(&right_row_1);
+	DirectX::XMVECTOR row_argument_0 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&right.Get_Base()._11
+		)
+	);
+	DirectX::XMVECTOR row_argument_1 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&right.Get_Base()._21
+		)
+	);
 
 	row_original_0 = DirectX::XMVectorSubtract(
 		row_original_0, row_argument_0
@@ -352,8 +348,12 @@ inline matrix2x2f operator*(
 ) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMMATRIX m1 = left;
-	DirectX::XMMATRIX m2 = right;
+	// m_base stores columns contiguously (m_base.m[column][row]),
+	// so a loaded XMMATRIX is the TRANSPOSE of the logical matrix;
+	// (L*R)^T == R^T * L^T, hence the swapped operand order here and
+	// everywhere below
+	DirectX::XMMATRIX m1 = right;
+	DirectX::XMMATRIX m2 = left;
 	auto temp = DirectX::XMMatrixMultiply(m1, m2);
 
 	matrix2x2f result;
@@ -372,17 +372,16 @@ inline matrix2x2f
 operator*(const matrix2x2f& left, float value) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT2 left_row_0 = {
-		left.Get_00(), left.Get_01()
-	};
-	DirectX::XMFLOAT2 left_row_1 = {
-		left.Get_10(), left.Get_11()
-	};
-
-	DirectX::XMVECTOR row_original_0 =
-		DirectX::XMLoadFloat2(&left_row_0);
-	DirectX::XMVECTOR row_original_1 =
-		DirectX::XMLoadFloat2(&left_row_1);
+	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&left.Get_Base()._11
+		)
+	);
+	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&left.Get_Base()._21
+		)
+	);
 
 	row_original_0 =
 		DirectX::XMVectorScale(row_original_0, value);
@@ -422,7 +421,20 @@ operator*(const matrix2x2f& left, const vector2f& vec)
 #ifdef KOTEK_USE_MATH_LIBRARY_GLM
 	return left.Get_Base() * vec.Get_Base();
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
-	#error todo: dxm impl
+	// logical result is M*v; with the loaded XMMATRIX being M^T the
+	// same components come out of v*(M^T)
+	DirectX::XMMATRIX m = left;
+	DirectX::XMVECTOR v =
+		DirectX::XMVectorSet(vec.x(), vec.y(), 0.0f, 0.0f);
+	DirectX::XMVECTOR result = DirectX::XMVector4Transform(v, m);
+
+	vector2f casted;
+	DirectX::XMStoreFloat2(
+		reinterpret_cast<DirectX::XMFLOAT2*>(&casted.Get_Base()),
+		result
+	);
+
+	return casted;
 #endif
 }
 
@@ -432,7 +444,22 @@ operator*(const vector2f& vec, const matrix2x2f& right)
 #ifdef KOTEK_USE_MATH_LIBRARY_GLM
 	return vec.Get_Base() * right.Get_Base();
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
-	#error todo: dxm impl
+	// logical result is v*M == (M^T)*v; transposing the loaded
+	// M^T back to M keeps XMVector4Transform (v*M convention)
+	DirectX::XMMATRIX m = right;
+	DirectX::XMVECTOR v =
+		DirectX::XMVectorSet(vec.x(), vec.y(), 0.0f, 0.0f);
+	DirectX::XMVECTOR result = DirectX::XMVector4Transform(
+		v, DirectX::XMMatrixTranspose(m)
+	);
+
+	vector2f casted;
+	DirectX::XMStoreFloat2(
+		reinterpret_cast<DirectX::XMFLOAT2*>(&casted.Get_Base()),
+		result
+	);
+
+	return casted;
 #endif
 }
 
@@ -442,7 +469,7 @@ operator*(const matrix2x2f& left, const vectornf_view_t& view)
 #ifdef KOTEK_USE_MATH_LIBRARY_GLM
 	return left * vector2f(view);
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
-	#error todo: dxm impl
+	return left * vector2f(view);
 #endif
 }
 
@@ -452,7 +479,7 @@ operator*(const vectornf_view_t& view, const matrix2x2f& right)
 #ifdef KOTEK_USE_MATH_LIBRARY_GLM
 	return right * vector2f(view);
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
-	#error todo: dxm impl
+	return right * vector2f(view);
 #endif
 }
 
@@ -509,17 +536,16 @@ inline matrix2x2f
 operator/(const matrix2x2f& left, float value) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMFLOAT2 left_row_0 = {
-		left.Get_00(), left.Get_01()
-	};
-	DirectX::XMFLOAT2 left_row_1 = {
-		left.Get_10(), left.Get_11()
-	};
-
-	DirectX::XMVECTOR row_original_0 =
-		DirectX::XMLoadFloat2(&left_row_0);
-	DirectX::XMVECTOR row_original_1 =
-		DirectX::XMLoadFloat2(&left_row_1);
+	DirectX::XMVECTOR row_original_0 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&left.Get_Base()._11
+		)
+	);
+	DirectX::XMVECTOR row_original_1 = DirectX::XMLoadFloat2(
+		reinterpret_cast<const DirectX::XMFLOAT2*>(
+			&left.Get_Base()._21
+		)
+	);
 
 	float factor = 1.f / value;
 

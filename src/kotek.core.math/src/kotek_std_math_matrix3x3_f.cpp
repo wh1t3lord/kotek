@@ -56,9 +56,18 @@ matrix3x3f::matrix3x3f(const matrixnf_view_t& view)
 	if (view.get_column_count() >= get_column_count() &&
 	    view.get_row_count() >= get_row_count())
 	{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[0][0]) =
+			vector3f(view.c(0)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[1][0]) =
+			vector3f(view.c(1)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[2][0]) =
+			vector3f(view.c(2)).Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base[0] = vector3f(view.c(0)).Get_Base();
 		this->m_base[1] = vector3f(view.c(1)).Get_Base();
 		this->m_base[2] = vector3f(view.c(2)).Get_Base();
+#endif
 	}
 #else
 	KOTEK_ASSERT(
@@ -74,9 +83,18 @@ matrix3x3f::matrix3x3f(const matrixnf_view_t& view)
 	if (view.get_column_count() == get_column_count() &&
 	    view.get_row_count() == get_row_count())
 	{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[0][0]) =
+			vector3f(view.c(0)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[1][0]) =
+			vector3f(view.c(1)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[2][0]) =
+			vector3f(view.c(2)).Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base[0] = vector3f(view.c(0)).Get_Base();
 		this->m_base[1] = vector3f(view.c(1)).Get_Base();
 		this->m_base[2] = vector3f(view.c(2)).Get_Base();
+#endif
 	}
 #endif
 }
@@ -97,9 +115,18 @@ matrix3x3f::matrix3x3f(const matrixnf_const_view_t& view)
 	if (view.get_column_count() >= get_column_count() &&
 	    view.get_row_count() >= get_row_count())
 	{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[0][0]) =
+			vector3f(view.c(0)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[1][0]) =
+			vector3f(view.c(1)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[2][0]) =
+			vector3f(view.c(2)).Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base[0] = vector3f(view.c(0)).Get_Base();
 		this->m_base[1] = vector3f(view.c(1)).Get_Base();
 		this->m_base[2] = vector3f(view.c(2)).Get_Base();
+#endif
 	}
 #else
 	KOTEK_ASSERT(
@@ -115,15 +142,24 @@ matrix3x3f::matrix3x3f(const matrixnf_const_view_t& view)
 	if (view.get_column_count() == get_column_count() &&
 	    view.get_row_count() == get_row_count())
 	{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[0][0]) =
+			vector3f(view.c(0)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[1][0]) =
+			vector3f(view.c(1)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT3*>(&this->m_base.m[2][0]) =
+			vector3f(view.c(2)).Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base[0] = vector3f(view.c(0)).Get_Base();
 		this->m_base[1] = vector3f(view.c(1)).Get_Base();
 		this->m_base[2] = vector3f(view.c(2)).Get_Base();
+#endif
 	}
 #endif
 }
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-matrix3x3f(const DirectX::XMMATRIX& data)
+matrix3x3f::matrix3x3f(const DirectX::XMMATRIX& data)
 {
 	DirectX::XMStoreFloat3x3(&this->m_base, data);
 }
@@ -321,8 +357,10 @@ matrix3x3f& matrix3x3f::operator*=(const matrix3x3f& data
 ) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMMATRIX m1 = *this;
-	DirectX::XMMATRIX m2 = data;
+	// storage is the transpose of the logical matrix, so the
+	// operands are swapped: (L*R)^T == R^T * L^T
+	DirectX::XMMATRIX m1 = data;
+	DirectX::XMMATRIX m2 = *this;
 
 	auto result = DirectX::XMMatrixMultiply(m1, m2);
 
@@ -626,7 +664,7 @@ bool matrix3x3f::operator!=(const matrix3x3f& data) noexcept
 }
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-operator DirectX::XMMATRIX(void) const noexcept
+matrix3x3f::operator DirectX::XMMATRIX(void) const noexcept
 {
 	return DirectX::XMLoadFloat3x3(&this->m_base);
 }
@@ -652,7 +690,9 @@ vectornf_view_t matrix3x3f::c(math_id_t column_id) noexcept
 		column_id = get_column_count() - 1;
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: impl
+	return vectornf_view_t(
+		&this->m_base.m[column_id][0], get_row_count()
+	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vectornf_view_t(
 		&this->m_base[column_id][0], get_row_count()
@@ -667,7 +707,9 @@ vectornf_const_view_t matrix3x3f::c(math_id_t column_id
 		column_id = get_column_count() - 1;
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: impl
+	return vectornf_const_view_t(
+		&this->m_base.m[column_id][0], get_row_count()
+	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vectornf_const_view_t(
 		&this->m_base[column_id][0], get_row_count()
@@ -687,7 +729,7 @@ vectornf_const_view_t matrix3x3f::operator[](math_id_t column_id
 	return this->c(column_id);
 }
 
-inline float* matrix3x3f::data(void) noexcept
+float* matrix3x3f::data(void) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return &this->m_base.m[0][0];
@@ -698,7 +740,7 @@ inline float* matrix3x3f::data(void) noexcept
 #endif
 }
 
-inline const float* matrix3x3f::data(void) const noexcept
+const float* matrix3x3f::data(void) const noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return &this->m_base.m[0][0];

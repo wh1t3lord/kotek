@@ -38,12 +38,8 @@ vector2f::vector2f(float* p_arr2, math_id_t size)
 
 		if (size == 2)
 		{
-	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		#error todo: impl
-	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 			this->m_base.x = p_arr2[0];
 			this->m_base.y = p_arr2[1];
-	#endif
 		}
 	}
 #endif
@@ -59,12 +55,8 @@ vector2f::vector2f(const float* p_arr2, math_id_t size)
 
 		if (size == 2)
 		{
-	#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-		#error todo: impl
-	#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 			this->m_base.x = p_arr2[0];
 			this->m_base.y = p_arr2[1];
-	#endif
 		}
 		else
 		{

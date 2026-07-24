@@ -36,7 +36,13 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	   	endif()
 	elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-			find_package(directxmath REQUIRED)
+			# DirectXMath ships with the Windows SDK (um/DirectXMath.h), so
+			# the vcpkg port is optional: link it when it is installed,
+			# otherwise the SDK headers are used directly
+			find_package(directxmath CONFIG QUIET)
+			if (NOT TARGET Microsoft::DirectXMath)
+				message("[${PROJECT_NAME}]: directxmath vcpkg package is not installed, using <DirectXMath.h> from the Windows SDK")
+			endif()
 		elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			file(GLOB nuget_directxmath_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.DirectXMath.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
 			if ("${nuget_directxmath_folder}" MATCHES "Kotek.Packages.DirectXMath.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
@@ -66,6 +72,7 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Math SHUTDOWN Shutd
 	"include/kotek_core_math.h"
 	"include/kotek_std_math_functions_vector.h"
 	"include/kotek_std_math_functions_matrix.h"
+	"include/kotek_std_math_functions_quaternion.h"
 	"include/kotek_std_math_functions_numeric.h"
 	"include/kotek_std_math_functions.h"
 	"include/kotek_std_math_matrixnf_view.h"
@@ -101,14 +108,16 @@ else()
 	if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
 		target_include_directories(${PROJECT_NAME} PUBLIC glm::glm)
 	elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-		target_include_directories(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
+		if (TARGET Microsoft::DirectXMath)
+			target_include_directories(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
+		endif()
 	endif()
 endif()
 
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
-			GTest::gtest 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC
+			GTest::gtest
 			GTest::gmock
 		)
 	endif()
@@ -116,7 +125,9 @@ else()
 	if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
 		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC glm::glm)
 	elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
-		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
+		if (TARGET Microsoft::DirectXMath)
+			kotek_target_link_libraries(${PROJECT_NAME} PUBLIC Microsoft::DirectXMath)
+		endif()
 	endif()
 
 	if ("${KOTEK_TESTS}" STREQUAL "ON")

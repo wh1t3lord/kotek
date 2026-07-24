@@ -100,10 +100,21 @@ matrix4x4f::matrix4x4f(const matrixnf_view_t& view)
 	if (view.get_column_count() == get_column_count() &&
 	    view.get_row_count() == get_row_count())
 	{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[0][0]) =
+			vector4f(view.c(0)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[1][0]) =
+			vector4f(view.c(1)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[2][0]) =
+			vector4f(view.c(2)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[3][0]) =
+			vector4f(view.c(3)).Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base[0] = vector4f(view.c(0)).Get_Base();
 		this->m_base[1] = vector4f(view.c(1)).Get_Base();
 		this->m_base[2] = vector4f(view.c(2)).Get_Base();
 		this->m_base[3] = vector4f(view.c(3)).Get_Base();
+#endif
 	}
 #endif
 }
@@ -124,10 +135,21 @@ matrix4x4f::matrix4x4f(const matrixnf_const_view_t& view)
 	if (view.get_column_count() >= get_column_count() &&
 	    view.get_row_count() >= get_row_count())
 	{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[0][0]) =
+			vector4f(view.c(0)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[1][0]) =
+			vector4f(view.c(1)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[2][0]) =
+			vector4f(view.c(2)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[3][0]) =
+			vector4f(view.c(3)).Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base[0] = vector4f(view.c(0)).Get_Base();
 		this->m_base[1] = vector4f(view.c(1)).Get_Base();
 		this->m_base[2] = vector4f(view.c(2)).Get_Base();
 		this->m_base[3] = vector4f(view.c(3)).Get_Base();
+#endif
 	}
 #else
 	KOTEK_ASSERT(
@@ -143,10 +165,21 @@ matrix4x4f::matrix4x4f(const matrixnf_const_view_t& view)
 	if (view.get_column_count() == get_column_count() &&
 	    view.get_row_count() == get_row_count())
 	{
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[0][0]) =
+			vector4f(view.c(0)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[1][0]) =
+			vector4f(view.c(1)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[2][0]) =
+			vector4f(view.c(2)).Get_Base();
+		*reinterpret_cast<DirectX::XMFLOAT4*>(&this->m_base.m[3][0]) =
+			vector4f(view.c(3)).Get_Base();
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 		this->m_base[0] = vector4f(view.c(0)).Get_Base();
 		this->m_base[1] = vector4f(view.c(1)).Get_Base();
 		this->m_base[2] = vector4f(view.c(2)).Get_Base();
 		this->m_base[3] = vector4f(view.c(3)).Get_Base();
+#endif
 	}
 #endif
 }
@@ -355,8 +388,10 @@ matrix4x4f& matrix4x4f::operator*=(const matrix4x4f& data
 ) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMMATRIX m1 = *this;
-	DirectX::XMMATRIX m2 = data;
+	// storage is the transpose of the logical matrix, so the
+	// operands are swapped: (L*R)^T == R^T * L^T
+	DirectX::XMMATRIX m1 = data;
+	DirectX::XMMATRIX m2 = *this;
 
 	auto result = DirectX::XMMatrixMultiply(m1, m2);
 
@@ -717,7 +752,7 @@ matrix4x4f::operator DirectX::XMMATRIX(void) const noexcept
 
 #endif
 
-inline float* matrix4x4f::data(void) noexcept
+float* matrix4x4f::data(void) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return &this->m_base.m[0][0];
@@ -727,7 +762,7 @@ inline float* matrix4x4f::data(void) noexcept
 	#error todo: provide implementation
 #endif
 }
-inline const float* matrix4x4f::data(void) const noexcept
+const float* matrix4x4f::data(void) const noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	return &this->m_base.m[0][0];
@@ -830,7 +865,9 @@ vectornf_view_t matrix4x4f::c(math_id_t column_id) noexcept
 		column_id = get_column_count() - 1;
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: impl
+	return vectornf_view_t(
+		&this->m_base.m[column_id][0], get_row_count()
+	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vectornf_view_t(
 		&this->m_base[column_id][0], get_row_count()
@@ -845,7 +882,9 @@ vectornf_const_view_t matrix4x4f::c(math_id_t column_id
 		column_id = get_column_count() - 1;
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: impl
+	return vectornf_const_view_t(
+		&this->m_base.m[column_id][0], get_row_count()
+	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vectornf_const_view_t(
 		&this->m_base[column_id][0], get_row_count()

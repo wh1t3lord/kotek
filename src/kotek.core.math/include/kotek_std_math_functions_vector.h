@@ -461,7 +461,10 @@ get_math_cross(const vector4f& left, const vector4f& right)
 inline vector1f get_math_normalize(const vector1f& vec)
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	return vector1f(1.0f);
+	// glm::normalize of a 1D vector is x / |x|
+	return vector1f(
+		get_math_component_x(vec) / get_math_length(vec)
+	);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::normalize(vec.Get_Base());
 #endif

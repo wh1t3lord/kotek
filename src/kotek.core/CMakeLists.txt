@@ -73,6 +73,7 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AN
 		"tests/kotek_core_test_container_map.cpp"
 		"tests/kotek_core_test_container_list.cpp"
 		"tests/kotek_core_test_plugin_override.cpp"
+		"tests/kotek_core_test_math_backends.cpp"
 	)
 elseif("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "OFF")
 	# TODO: add support for own projects for unit testing
@@ -105,6 +106,27 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AN
 	target_compile_definitions(${PROJECT_NAME} PRIVATE
 		KOTEK_TEST_PLUGIN_OVERRIDE_DLL_PATH="$<TARGET_FILE:kotek.core.tests.plugin>")
 	add_dependencies(${PROJECT_NAME} kotek.core.tests.plugin)
+endif()
+
+# math backend parity tests (kotek_core_test_math_backends.cpp) compute
+# reference values with raw GLM calls; under the DXM backend glm does not
+# propagate from kotek.core.math, so pull it here explicitly
+if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
+	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+		file(GLOB nuget_glm_folder_tests RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Glm.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
+		if ("${nuget_glm_folder_tests}" MATCHES "Kotek.Packages.Glm.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+			target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/../../nuget/packages/${nuget_glm_folder_tests}/runtimes/${KOTEK_NUGET_PLATFORM_NAME}/${KOTEK_NUGET_COMPILER_NAME}/${KOTEK_NUGET_ARCH_BIT_NUMBER}/include)
+		else()
+			message(FATAL_ERROR "[${PROJECT_NAME}]: glm nuget package is required for the math backend tests")
+		endif()
+	else()
+		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+			find_package(glm CONFIG REQUIRED)
+		else()
+			find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+		endif()
+		kotek_target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
+	endif()
 endif()
 
 

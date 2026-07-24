@@ -1765,9 +1765,6 @@ matrixnf_view_t::operator/=(const matrix4x4f& mat) noexcept
 
 vectornf_view_t matrixnf_view_t::c(math_id_t column_id) noexcept
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: provide impl for column base access
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	vectornf_view_t result;
 
 	KOTEK_ASSERT(this->m_p_values, "valid data");
@@ -1787,15 +1784,11 @@ vectornf_view_t matrixnf_view_t::c(math_id_t column_id) noexcept
 	}
 
 	return result;
-#endif
 }
 
 vectornf_const_view_t matrixnf_view_t::c(math_id_t column_id
 ) const noexcept
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: provide impl for column base access
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	vectornf_const_view_t result;
 
 	KOTEK_ASSERT(this->m_p_values, "valid data");
@@ -1815,7 +1808,6 @@ vectornf_const_view_t matrixnf_view_t::c(math_id_t column_id
 	}
 
 	return result;
-#endif
 }
 
 void matrixnf_view_t::set(

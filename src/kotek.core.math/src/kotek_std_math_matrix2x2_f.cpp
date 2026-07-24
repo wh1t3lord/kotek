@@ -20,7 +20,17 @@ KOTEK_BEGIN_NAMESPACE_KTK
 KOTEK_BEGIN_NAMESPACE_MATH
 
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: impl
+matrix2x2f::matrix2x2f(
+	float c0r0, float c0r1, float c1r0, float c1r1
+) : m_base{}
+{
+	// column-major contract: m_base.m[column][row], the padded
+	// 3rd row/column of the storage stays zero
+	this->m_base.m[0][0] = c0r0;
+	this->m_base.m[0][1] = c0r1;
+	this->m_base.m[1][0] = c1r0;
+	this->m_base.m[1][1] = c1r1;
+}
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 matrix2x2f::matrix2x2f(
 	float c0r0, float c0r1, float c1r0, float c1r1
@@ -55,7 +65,12 @@ matrix2x2f::matrix2x2f(const matrixnf_view_t& view)
 	this->m_base[1].x = view.e(1, 0);
 	this->m_base[1].y = view.e(1, 1);
 #elif defined(KOTEK_USE_MATH_LIBRARY_DXM)
-	#error todo: impl
+	this->m_base = base_mat2x2_t{};
+
+	this->m_base.m[0][0] = view.e(0, 0);
+	this->m_base.m[0][1] = view.e(0, 1);
+	this->m_base.m[1][0] = view.e(1, 0);
+	this->m_base.m[1][1] = view.e(1, 1);
 #else
 	#error unknown library
 #endif
@@ -333,8 +348,10 @@ matrix2x2f& matrix2x2f::operator*=(const matrix2x2f& data
 ) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	DirectX::XMMATRIX m1 = *this;
-	DirectX::XMMATRIX m2 = data;
+	// storage is the transpose of the logical matrix, so the
+	// operands are swapped: (L*R)^T == R^T * L^T
+	DirectX::XMMATRIX m1 = data;
+	DirectX::XMMATRIX m2 = *this;
 
 	auto result = DirectX::XMMatrixMultiply(m1, m2);
 
@@ -700,11 +717,20 @@ bool matrix2x2f::operator!=(const matrix2x2f& data) noexcept
 
 constexpr math_id_t matrix2x2f::size_of(void) const noexcept
 {
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	// DXM stores the 2x2 inside a padded XMFLOAT3X3, the logical
+	// payload stays float[2][2]
+	static_assert(
+		sizeof(float[3][3]) == sizeof(m_base) &&
+		"DXM backend keeps matrix2x2f inside XMFLOAT3X3"
+	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	static_assert(
 		sizeof(float[2][2]) == sizeof(m_base) &&
 		"we gurantee that base type is equal to "
 		"float[2][2] by size"
 	);
+#endif
 	return static_cast<math_id_t>(sizeof(float[2][2]));
 }
 
@@ -752,7 +778,11 @@ float matrix2x2f::e(math_id_t column_id, math_id_t row_id)
 	if (row_id >= this->get_row_count())
 		row_id = this->get_row_count() - 1;
 
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return this->m_base.m[column_id][row_id];
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base[column_id][row_id];
+#endif
 }
 
 float&
@@ -771,14 +801,15 @@ matrix2x2f::e(math_id_t column_id, math_id_t row_id) noexcept
 	if (row_id >= this->get_row_count())
 		row_id = this->get_row_count() - 1;
 
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return this->m_base.m[column_id][row_id];
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return this->m_base[column_id][row_id];
+#endif
 }
 
 vectornf_view_t matrix2x2f::c(math_id_t column_id) noexcept
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: impl
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	KOTEK_ASSERT(
 		column_id < this->get_column_count(), "out-of-range"
 	);
@@ -786,6 +817,11 @@ vectornf_view_t matrix2x2f::c(math_id_t column_id) noexcept
 	if (column_id >= this->get_column_count())
 		column_id = this->get_column_count() - 1;
 
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return vectornf_view_t(
+		&this->m_base.m[column_id][0], this->get_row_count()
+	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vectornf_view_t(
 		&this->m_base[column_id].x, this->get_row_count()
 	);
@@ -795,9 +831,6 @@ vectornf_view_t matrix2x2f::c(math_id_t column_id) noexcept
 vectornf_const_view_t matrix2x2f::c(math_id_t column_id
 ) const noexcept
 {
-#ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: impl
-#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	KOTEK_ASSERT(
 		column_id < this->get_column_count(), "out-of-range"
 	);
@@ -805,6 +838,11 @@ vectornf_const_view_t matrix2x2f::c(math_id_t column_id
 	if (column_id >= this->get_column_count())
 		column_id = this->get_column_count() - 1;
 
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+	return vectornf_const_view_t(
+		&this->m_base.m[column_id][0], this->get_row_count()
+	);
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return vectornf_const_view_t(
 		&this->m_base[column_id].x, this->get_row_count()
 	);
@@ -826,7 +864,7 @@ vectornf_const_view_t matrix2x2f::operator[](math_id_t column_id
 const float* matrix2x2f::data(void) const noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: impl
+	return &this->m_base.m[0][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(this->m_base);
 #endif
@@ -835,7 +873,7 @@ const float* matrix2x2f::data(void) const noexcept
 float* matrix2x2f::data(void) noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
-	#error todo: impl
+	return &this->m_base.m[0][0];
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
 	return glm::value_ptr(this->m_base);
 #endif

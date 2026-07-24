@@ -9,7 +9,16 @@ KOTEK_BEGIN_NAMESPACE_MATH
 	class quaternionf
 	{
 	public:
-		quaternionf(float x, float y, float z, float w) : m_base(x, y, z, w) {}
+		quaternionf(float x, float y, float z, float w) :
+#ifdef KOTEK_USE_MATH_LIBRARY_DXM
+			m_base(x, y, z, w)
+#elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
+		// glm::quat's 4-scalar constructor takes (w, x, y, z) while
+		// kotek's contract is (x, y, z, w)
+			m_base(w, x, y, z)
+#endif
+		{
+		}
 		quaternionf(const base_quat_t& data) : m_base(data) {}
 		quaternionf(const quaternionf& data) : m_base(data.m_base) {}
 		quaternionf(void) : m_base{} {}
@@ -90,8 +99,11 @@ KOTEK_BEGIN_NAMESPACE_MATH
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 			DirectX::XMVECTOR casted_original = *this;
 			DirectX::XMVECTOR casted_argument = data;
+
+			// XMQuaternionMultiply(Q1, Q2) returns Q2*Q1, so the
+			// arguments are swapped to get this*data like glm does
 			auto result =
-				DirectX::XMQuaternionMultiply(casted_original, casted_argument);
+				DirectX::XMQuaternionMultiply(casted_argument, casted_original);
 
 			DirectX::XMStoreFloat4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -106,7 +118,7 @@ KOTEK_BEGIN_NAMESPACE_MATH
 			DirectX::XMVECTOR casted_original = *this;
 			DirectX::XMVECTOR casted_argument = DirectX::XMLoadFloat4(&data);
 			auto result =
-				DirectX::XMQuaternionMultiply(casted_original, casted_argument);
+				DirectX::XMQuaternionMultiply(casted_argument, casted_original);
 
 			DirectX::XMStoreFloat4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -121,8 +133,11 @@ KOTEK_BEGIN_NAMESPACE_MATH
 			DirectX::XMVECTOR casted_original = *this;
 			DirectX::XMVECTOR casted_argument = data;
 			casted_argument = DirectX::XMQuaternionInverse(casted_argument);
+
+			// this * inverse(data): XMQuaternionMultiply(Q1, Q2)
+			// returns Q2*Q1, hence the swapped argument order
 			auto result =
-				DirectX::XMQuaternionMultiply(casted_original, casted_argument);
+				DirectX::XMQuaternionMultiply(casted_argument, casted_original);
 
 			DirectX::XMStoreFloat4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -139,7 +154,7 @@ KOTEK_BEGIN_NAMESPACE_MATH
 			DirectX::XMVECTOR casted_argument = DirectX::XMLoadFloat4(&data);
 			casted_argument = DirectX::XMQuaternionInverse(casted_argument);
 			auto result =
-				DirectX::XMQuaternionMultiply(casted_original, casted_argument);
+				DirectX::XMQuaternionMultiply(casted_argument, casted_original);
 
 			DirectX::XMStoreFloat4(&this->m_base, result);
 #elif defined(KOTEK_USE_MATH_LIBRARY_GLM)
@@ -289,7 +304,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 		DirectX::XMVECTOR v1 = left;
 		DirectX::XMVECTOR v2 = right;
-		auto temp = DirectX::XMQuaternionMultiply(v1, v2);
+
+		// XMQuaternionMultiply(Q1, Q2) returns Q2*Q1, so the
+		// arguments are swapped to get left*right like glm does
+		auto temp = DirectX::XMQuaternionMultiply(v2, v1);
 
 		quaternionf result;
 		base_quat_t data;
@@ -335,7 +353,10 @@ KOTEK_BEGIN_NAMESPACE_MATH
 		DirectX::XMVECTOR v1 = left;
 		DirectX::XMVECTOR v2 = right;
 		v2 = DirectX::XMQuaternionInverse(v2);
-		auto temp = DirectX::XMQuaternionMultiply(v1, v2);
+
+		// left * inverse(right): XMQuaternionMultiply(Q1, Q2)
+		// returns Q2*Q1, hence the swapped argument order
+		auto temp = DirectX::XMQuaternionMultiply(v2, v1);
 
 		quaternionf result;
 		base_quat_t data;
