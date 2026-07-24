@@ -1,12 +1,19 @@
 cmake_minimum_required(VERSION 3.21)
 
+project(kotek.engine)
+
+# compiler globals (CRT, C++ standard, /FS) MUST be included AFTER project():
+# the MSVC check inside compiler_globals.cmake is false before any project()
+# exists, so included early it silently skipped the /MT CRT setting AND
+# poisoned the apply-once guard — kotek standalone then compiled with the
+# MSVC default /MD and mismatched the MT-built vcpkg deps (LNK2038 on CI,
+# where kotek is the root project; the zircon superproject was unaffected
+# because it calls project() before including)
 if (WIN32)
 	include("cmake/windows/compiler_globals.cmake")
 else()
 	message(FATAL_ERROR "todo: impl")
 endif()
-
-project(kotek.engine)
 
 # K6: `cmake -DKOTEK_HELP=ON` prints every kotek option with its meaning and
 # stops before dependencies/modules are processed (fast, no vcpkg fetch)

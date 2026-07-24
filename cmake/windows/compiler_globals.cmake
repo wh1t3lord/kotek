@@ -1,11 +1,14 @@
 message(STATUS "applying ${CMAKE_CURRENT_LIST_FILE}")
 
 # this file is included both by the engine root and by kotek itself; apply once.
+# IMPORTANT: the applied flag is set at the END of the file — setting it up
+# front poisons the MSVC-dependent parts when an includer pulls this file in
+# before its project() call (MSVC is not defined yet, the block is skipped,
+# and a later post-project include then returns early forever)
 get_property(_kotek_compiler_globals_applied GLOBAL PROPERTY KOTEK_COMPILER_GLOBALS_APPLIED)
 if (_kotek_compiler_globals_applied)
 	return()
 endif()
-set_property(GLOBAL PROPERTY KOTEK_COMPILER_GLOBALS_APPLIED ON)
 
 if(MSVC)
     # we force that option because it is important to embed runtime libraries otherwise it will be hard to maintain windows xp and current windows development (or probably other compilers that users might want to use or override manually)
@@ -53,5 +56,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # exposed so code can guard C++20-only features when building for Windows XP
 add_compile_definitions(KOTEK_USE_CPP_STANDARD=${KOTEK_CPP_STANDARD})
+
+# mark applied only after everything ran — never before the MSVC block (see
+# the comment at the top)
+set_property(GLOBAL PROPERTY KOTEK_COMPILER_GLOBALS_APPLIED ON)
 
 message(STATUS "${CMAKE_CURRENT_LIST_FILE} is applied!")
