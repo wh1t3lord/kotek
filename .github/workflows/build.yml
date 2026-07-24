@@ -134,8 +134,14 @@ jobs:
       - name: verify outputs
         shell: pwsh
         run: |
-          if (-not (Test-Path "build/bin/${{ matrix.config }}/kotek.exe")) {
-            throw "kotek.exe was not produced"
+          # standalone kotek outputs land in <build>/src/kotek.exe/<config>/,
+          # the superproject layout in <build>/bin/<config>/ — accept both
+          $candidates = @(
+            "build/bin/${{ matrix.config }}/kotek.exe",
+            "build/src/kotek.exe/${{ matrix.config }}/kotek.exe"
+          )
+          if (-not ($candidates | Where-Object { Test-Path $_ })) {
+            throw "kotek.exe was not produced (checked: $($candidates -join ', '))"
           }
 
       # job logs and artifacts need admin rights to view — push the failure
