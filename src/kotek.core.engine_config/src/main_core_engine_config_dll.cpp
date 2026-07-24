@@ -24,6 +24,22 @@ bool InitializeModule_Core_Engine_Config(
 	p_instance->SetARGC(p_manager->Get_ARGC());
 	p_instance->SetARGV(p_manager->Get_ARGV());
 
+	// --kotek_help (task K23): terminal action — print every supported flag
+	// and exit cleanly before any other engine work happens (same pattern
+	// as the K21 plugin codegen flags; the exit leak dump is unsound in
+	// this multi-CRT process, so it is disabled first)
+	if (p_instance->Is_HelpRequested())
+	{
+#if defined(KOTEK_DEBUG) && defined(KOTEK_PLATFORM_WINDOWS)
+		_CrtSetDbgFlag(
+			_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) &
+			~_CRTDBG_LEAK_CHECK_DF
+		);
+#endif
+		ktkPrintCommandLineHelp();
+		exit(0);
+	}
+
 	auto renderer_type =
 		eEngineFeatureRenderer::KOTEK_USE_STARTUP_RENDERER;
 	auto renderer_vendor = eEngineFeatureRendererVendor::

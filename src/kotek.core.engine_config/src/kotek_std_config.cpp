@@ -7,6 +7,8 @@ ktkFrameworkConfig::ktkFrameworkConfig(void) :
 	m_fs_priority_list{}, m_fs_features_flag{}, m_argc{-1},
 	m_argv{}, m_is_running{true}, m_frames_limit{0},
 	m_plugins_template{false}, m_plugins_modules{false},
+	m_help_requested{false}, m_log_file_specified{false}, m_log_file{},
+	m_exec_commands{}, m_exec_command_count{0},
 	m_engine_feature_flags{eEngineFeature::kEngine_Feature_None
     },
 	m_engine_feature_render_flags{
@@ -807,6 +809,37 @@ bool ktkFrameworkConfig::Is_PluginsModulesRequested(void) const noexcept
 	return this->m_plugins_modules;
 }
 
+bool ktkFrameworkConfig::Is_HelpRequested(void) const noexcept
+{
+	return this->m_help_requested;
+}
+
+bool ktkFrameworkConfig::Is_LogFileSpecified(void) const noexcept
+{
+	return this->m_log_file_specified;
+}
+
+const char* ktkFrameworkConfig::Get_LogFile(void) const noexcept
+{
+	return this->m_log_file.c_str();
+}
+
+kun_ktk uint8_t ktkFrameworkConfig::Get_ExecCommandCount(void) const noexcept
+{
+	return this->m_exec_command_count;
+}
+
+const char* ktkFrameworkConfig::Get_ExecCommand(
+	kun_ktk uint8_t index) const noexcept
+{
+	if (index >= this->m_exec_command_count)
+	{
+		return "";
+	}
+
+	return this->m_exec_commands[index].c_str();
+}
+
 void ktkFrameworkConfig::SetApplicationWorking(bool status
 ) noexcept
 {
@@ -899,6 +932,49 @@ void ktkFrameworkConfig::Parse_CommandLine(void) noexcept
 		this->m_parsed_command_line_arguments.find(
 			kConsoleCommandArg_Kotek_Plugins_Modules
 		) != this->m_parsed_command_line_arguments.end();
+
+	this->m_help_requested =
+		this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_Kotek_Help
+		) != this->m_parsed_command_line_arguments.end();
+
+	// --log_file=<path> and --exec="<cmd>" (repeatable, task K23)
+	for (int i = 0; i < this->m_argc; ++i)
+	{
+		const char* p_argument = this->m_argv[i];
+
+		if (!p_argument)
+			continue;
+
+		constexpr kun_ktk size_t _log_prefix_length = 11; // "--log_file="
+
+		if (strncmp(p_argument, "--log_file=", _log_prefix_length) == 0)
+		{
+			this->m_log_file = p_argument + _log_prefix_length;
+			this->m_log_file_specified = true;
+			continue;
+		}
+
+		constexpr kun_ktk size_t _exec_prefix_length = 7; // "--exec="
+
+		if (strncmp(p_argument, "--exec=", _exec_prefix_length) == 0)
+		{
+			if (this->m_exec_command_count <
+				KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT)
+			{
+				this->m_exec_commands[this->m_exec_command_count] =
+					p_argument + _exec_prefix_length;
+				++this->m_exec_command_count;
+			}
+			else
+			{
+				KOTEK_MESSAGE_WARNING(
+					"too many --exec commands, max is {} — skipped: {}",
+					KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT, p_argument
+				);
+			}
+		}
+	}
 }
 
 eEngineFeatureRendererVendor
@@ -1011,6 +1087,25 @@ void ktkFrameworkConfig::Set_UserLibrary_Name(
 )
 {
 	this->m_user_dll_name = name;
+}
+
+void ktkPrintCommandLineHelp(void) noexcept
+{
+	// curated, living registry — add new flags here in the same commit that
+	// adds their constant to kotek_std_constants.h (docs die when they drift)
+	fprintf(stdout, "kotek command line flags:\n");
+	fprintf(stdout, "  --editor                      start in editor mode (wxWidgets UI)\n");
+	fprintf(stdout, "  --editor_imgui                start in editor mode (Dear ImGui UI)\n");
+	fprintf(stdout, "  --no_splash                   skip the splash window on startup\n");
+	fprintf(stdout, "  --kotek_frames=N              run exactly N frames then exit (smoke tests / CI; 0/absent = unlimited)\n");
+	fprintf(stdout, "  --kotek_plugins_template      write plugins/plugins.template.json (module names with empty dll fields) and exit 0\n");
+	fprintf(stdout, "  --kotek_plugins_modules       write plugins/plugins.modules.json (plain array of module names) and exit 0\n");
+	fprintf(stdout, "  --exec=\"<console command>\"    queue a console command to run after console registration; repeatable, executes in order\n");
+	fprintf(stdout, "  --kotek_help                  print this list and exit 0\n");
+	fprintf(stdout, "  --log_file=<path>             redirect the engine log to the given file (bare name = inside data_user)\n");
+	fprintf(stdout, "  --width <px>                  window width\n");
+	fprintf(stdout, "  --height <px>                 window height\n");
+	fprintf(stdout, "  --render_<api>_<version>      renderer selection (bgfx today, NRI planned): the --render_* family\n");
 }
 
 KOTEK_END_NAMESPACE_CORE

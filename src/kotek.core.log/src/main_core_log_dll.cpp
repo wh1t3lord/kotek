@@ -133,8 +133,29 @@ bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 	p_manager->GetFileSystem()->Make_Path(
 		path_to_folder,
 		kun_core eFolderIndex::kFolderIndex_DataUser);
-	
-	path_to_folder /= KOTEK_USE_LOG_OUTPUT_FILE_NAME;
+
+	const auto* p_engine_config = p_manager->Get_EngineConfig();
+
+	if (p_engine_config && p_engine_config->Is_LogFileSpecified())
+	{
+		// --log_file=<path> (task K23): values that look like paths are used
+		// as-is, bare filenames go into the default data_user folder
+		const char* p_log_file = p_engine_config->Get_LogFile();
+
+		if (strchr(p_log_file, ':') || strchr(p_log_file, '/') ||
+			strchr(p_log_file, '\\'))
+		{
+			path_to_folder = p_log_file;
+		}
+		else
+		{
+			path_to_folder /= p_log_file;
+		}
+	}
+	else
+	{
+		path_to_folder /= KOTEK_USE_LOG_OUTPUT_FILE_NAME;
+	}
 
 	auto logger_main = spdlog::basic_logger_mt(kLoggerMainName,
 		reinterpret_cast<const char*>(path_to_folder.u8string().c_str()), true);

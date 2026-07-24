@@ -142,6 +142,13 @@ public:
 	bool Is_PluginsTemplateRequested(void) const noexcept override;
 	bool Is_PluginsModulesRequested(void) const noexcept override;
 
+	bool Is_HelpRequested(void) const noexcept override;
+	bool Is_LogFileSpecified(void) const noexcept override;
+	const char* Get_LogFile(void) const noexcept override;
+	kun_ktk uint8_t Get_ExecCommandCount(void) const noexcept override;
+	const char* Get_ExecCommand(kun_ktk uint8_t index
+	) const noexcept override;
+
 	void
 	Set_UserLibrary(const ktk_filesystem_path& path_to_library
 	) noexcept override;
@@ -214,6 +221,14 @@ private:
 	kun_ktk uint32_t m_frames_limit;
 	bool m_plugins_template;
 	bool m_plugins_modules;
+	bool m_help_requested;
+	bool m_log_file_specified;
+	kun_ktk cstring m_log_file;
+	// queued --exec="<cmd>" console commands (task K23); bounded by the
+	// command-line argument count — each command is one argument, so there
+	// can never be more of them than that
+	ktk_cstring<256> m_exec_commands[KOTEK_DEF_COMMAND_LINE_ARGUMENTS_COUNT];
+	kun_ktk uint8_t m_exec_command_count;
 	eEngineFeature m_engine_feature_flags;
 	eEngineFeatureRender m_engine_feature_render_flags;
 	eEngineFeatureRenderer m_engine_feature_renderer_flags;
@@ -246,6 +261,11 @@ private:
 		m_parsed_command_line_arguments;
 	kun_ktk dll::shared_library m_user_dll;
 };
+
+/// @brief \~english prints every supported command line flag with its
+/// meaning to stdout (task K23; runs when --kotek_help was passed, then the
+/// engine exits with code 0)
+void ktkPrintCommandLineHelp(void) noexcept;
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

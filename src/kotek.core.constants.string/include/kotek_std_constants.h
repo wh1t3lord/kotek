@@ -141,6 +141,21 @@ constexpr const char* kConsoleCommandArg_Kotek_Plugins_Template =
 constexpr const char* kConsoleCommandArg_Kotek_Plugins_Modules =
 	"--kotek_plugins_modules";
 
+/// @brief \~english executes one console command after the engine and its
+/// console commands are initialized (task K23); REPEATABLE — every
+/// occurrence queues one command in order. Example:
+/// "--exec=create_world test --exec=load_world test"
+constexpr const char* kConsoleCommandArg_Exec = "--exec=";
+
+/// @brief \~english prints every supported command line flag with its
+/// meaning and exits with code 0 (task K23; runtime counterpart of the
+/// cmake-side KOTEK_HELP option registry)
+constexpr const char* kConsoleCommandArg_Kotek_Help = "--kotek_help";
+
+/// @brief \~english redirects the engine log output to the given file
+/// instead of the default (task K23): "--log_file=path/to/file.log"
+constexpr const char* kConsoleCommandArg_Log_File = "--log_file=";
+
 /**
  * Constant expresses that we specify width for our executable.
  *

@@ -909,6 +909,28 @@ public:
 	/// module names) and exits with code 0 (plugin override system, task
 	/// K21)
 	virtual bool Is_PluginsModulesRequested(void) const noexcept = 0;
+
+	/// @brief \~english true when --kotek_help was passed: the engine prints
+	/// every supported command line flag with its meaning and exits with
+	/// code 0 (task K23)
+	virtual bool Is_HelpRequested(void) const noexcept = 0;
+
+	/// @brief \~english true when --log_file=<path> was passed: the engine
+	/// log output goes to the given file instead of the default (task K23)
+	virtual bool Is_LogFileSpecified(void) const noexcept = 0;
+
+	/// @brief \~english value of --log_file=<path> (empty when unspecified)
+	virtual const char* Get_LogFile(void) const noexcept = 0;
+
+	/// @brief \~english number of queued --exec="<cmd>" console commands
+	/// (task K23); commands execute in order after console registration
+	virtual kun_ktk uint8_t Get_ExecCommandCount(void) const noexcept = 0;
+
+	/// @brief \~english the i-th queued --exec command (index <
+	/// Get_ExecCommandCount, otherwise an empty string)
+	virtual const char* Get_ExecCommand(kun_ktk uint8_t index
+	) const noexcept = 0;
+
 	virtual void
 	Set_UserLibrary(const ktk_filesystem_path& path_to_library
 	) noexcept = 0;
