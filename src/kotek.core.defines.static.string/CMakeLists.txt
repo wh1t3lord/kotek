@@ -16,14 +16,14 @@ if("${KOTEK_UNICODE}" STREQUAL "ON")
 endif()
 
 if ("${KOTEK_UNICODE}" STREQUAL "ON")
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
 
 	#ifdef KOTEK_UNICODE
 		#define KOTEK_USE_UNICODE
 	#endif
 	")
 else()
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "")
 endif()
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static_String SHUTDOWN ShutdownModule_Core_Defines_Static_String

@@ -7,7 +7,7 @@ project(kotek.core.defines.static.sdk VERSION 1 LANGUAGES CXX)
 
 # TODO: add wxWidgets, Qt and other SDK for including
 if ("${KOTEK_SDK}" STREQUAL "ON")
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
 
 	#ifdef KOTEK_SDK
 		#define KOTEK_USE_SDK
@@ -28,7 +28,7 @@ if ("${KOTEK_SDK}" STREQUAL "ON")
 	#endif
 	")
 else()
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "")
 endif()
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static_SDK SHUTDOWN ShutdownModule_Core_Defines_Static_SDK

@@ -40,15 +40,21 @@ endif()
 message("[${PROJECT_NAME}]: math library is '${KOTEK_MATH_LIBRARY}'")
 
 if (NOT "${KOTEK_MATH_LIBRARY}" STREQUAL "")
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
+	# the backend choice is a configure-time decision — emit it UNCONDITIONALLY:
+	# a gated #ifdef + #else #error form fires for every TU that does not link
+	# this module's PUBLIC raw flag (e.g. defines.static.cpp links nothing),
+	# which is most of the tree now that the header is shared
+	if ("${KOTEK_MATH_LIBRARY}" STREQUAL "GLM")
+		set(_kotek_math_backend_define "#define KOTEK_USE_MATH_LIBRARY_GLM")
+	elseif ("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
+		set(_kotek_math_backend_define "#define KOTEK_USE_MATH_LIBRARY_DXM")
+	else()
+		message(FATAL_ERROR "[${PROJECT_NAME}]: unknown KOTEK_MATH_LIBRARY '${KOTEK_MATH_LIBRARY}' (supported: GLM, DXM)")
+	endif()
 
-	#ifdef KOTEK_MATH_LIBRARY_GLM
-		#define KOTEK_USE_MATH_LIBRARY_GLM
-	#elif defined(KOTEK_MATH_LIBRARY_DXM)
-		#define KOTEK_USE_MATH_LIBRARY_DXM
-	#else
-		#error undefined math library. So it doesn't support by engine now
-	#endif
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
+
+	${_kotek_math_backend_define}
 
 	// todo: implement this please
 	#ifdef KOTEK_MATH_LIBRARY_IMPLICIT_CASTING
@@ -59,8 +65,8 @@ if (NOT "${KOTEK_MATH_LIBRARY}" STREQUAL "")
 		#define KOTEK_USE_MATH_USER_MATRIX_DIVISION_IMPLEMENTATION_ENABLED
 	#endif
 
-	/// @brief \~english if enabled (defined KOTEK_MATH_LIBRARY_BROADCASTING) means 
-	/// there're operations sum,minus will align matrix/vector dims for example 
+	/// @brief \~english if enabled (defined KOTEK_MATH_LIBRARY_BROADCASTING) means
+	/// there're operations sum,minus will align matrix/vector dims for example
 	/// matrix3x3 + vec2 leads to this = part of matrix3x3 taken as matrix2x2 then summed with vec2
 	/// [0][1][2] + [10]   [10][11][ 2]
 	/// [3][4][5] + [20] = [23][24][ 5]
@@ -72,7 +78,7 @@ if (NOT "${KOTEK_MATH_LIBRARY}" STREQUAL "")
 	#endif
 	")
 else()
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "")
 endif()
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static_Math SHUTDOWN ShutdownModule_Core_Defines_Static_Math

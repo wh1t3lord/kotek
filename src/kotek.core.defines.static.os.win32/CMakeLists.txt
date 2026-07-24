@@ -18,7 +18,7 @@ message("[${PROJECT_NAME}]: window library is [${KOTEK_WINDOW_LIBRARY}]")
 if (WIN32)
 	message("[${PROJECT_NAME}]: platform 'Windows NT'")
 
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
 
 	#if defined(_WIN32) || defined(_WIN64)
                 #define KOTEK_USE_PLATFORM_WINDOWS
@@ -38,7 +38,7 @@ if (WIN32)
 	#endif
 	")
 else()
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "")
 endif()
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static_OS_Windows SHUTDOWN ShutdownModule_Core_Defines_Static_OS_Windows

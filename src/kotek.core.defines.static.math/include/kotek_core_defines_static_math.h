@@ -1,6 +1,6 @@
 #pragma once
 
-#include "kotek_std_preprocessors.h"
+#include <kotek.core.defines.static.math/include/kotek_std_preprocessors.h>
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK

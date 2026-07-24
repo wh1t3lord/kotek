@@ -70,7 +70,10 @@ endif()
 message("[${PROJECT_NAME}]: build type is '${CMAKE_BUILD_TYPE}'")
 
 if ("${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}" STREQUAL "")
-	set(KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS ./include/kotek_std_preprocessors.h)
+	# per-build-tree, NOT the source include dir: the generated content is
+	# configuration-specific (dev type, library type, capacities), so two
+	# build dirs with different configs must never clobber each other
+	set(KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS ${CMAKE_BINARY_DIR}/generated/kotek_std_preprocessors.h)
 endif()
 
 if ("${KOTEK_LIBRARY_TYPE}" STREQUAL "")
@@ -206,31 +209,63 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 	find_package(Freetype CONFIG REQUIRED GLOBAL)
 endif()
 
-add_subdirectory("src/kotek.core.defines.static.tests")
-add_subdirectory("src/kotek.core.defines.static.cpp")
-add_subdirectory("src/kotek.core.defines.static.git")
-add_subdirectory("src/kotek.core.defines.static.render")
-add_subdirectory("src/kotek.core.defines.static.render.dx")
-add_subdirectory("src/kotek.core.defines.static.render.gl")
-add_subdirectory("src/kotek.core.defines.static.render.vk")
-add_subdirectory("src/kotek.core.defines.static.render.bgfx")
-add_subdirectory("src/kotek.core.defines.static.math")
-add_subdirectory("src/kotek.core.defines.static.os")
-add_subdirectory("src/kotek.core.defines.static.os.win32")
-add_subdirectory("src/kotek.core.defines.static.os.linux")
-add_subdirectory("src/kotek.core.defines.static.profilers")
-add_subdirectory("src/kotek.core.defines.static.sdk")
-add_subdirectory("src/kotek.core.defines.static.string")
-add_subdirectory("src/kotek.core.defines.static")
+# per-module, per-config build-tree location for the generated preprocessors
+# header: the file's content is configuration-specific (dev type, library
+# type, capacities) and EVERY defines module generates its own copy, so the
+# old shared relative path made (a) parallel build dirs of different configs
+# clobber each other and (b) an absolute shared path made modules reset one
+# another. Set the var per module right before its add_subdirectory and
+# expose the build-tree dir on the module's public include path (the
+# umbrella includes the header by quoted name; stale source-tree copies
+# must not exist).
+function(kotek_add_defines_subdirectory dir)
+	set(KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS
+		"${CMAKE_CURRENT_BINARY_DIR}/${dir}/include/kotek_std_preprocessors.h")
+	add_subdirectory("${dir}")
+
+	# legacy codegen in many defines modules appends "#pragma once" once per
+	# section instead of writing it once at the top (harmless while each
+	# module's file was unused or overwritten per configure; fatal now that
+	# the file is always included) — normalize to a single leading pragma
+	if (EXISTS "${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}")
+		file(READ "${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}"
+			_kotek_gen_content)
+		string(REGEX REPLACE "#pragma once" "" _kotek_gen_body
+			"${_kotek_gen_content}")
+		file(WRITE "${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}"
+			"#pragma once\n${_kotek_gen_body}")
+	endif()
+
+	get_filename_component(_kotek_mod_name "${dir}" NAME)
+	target_include_directories(${_kotek_mod_name} PUBLIC
+		"${CMAKE_CURRENT_BINARY_DIR}/src")
+endfunction()
+
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.tests")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.cpp")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.git")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.render")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.render.dx")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.render.gl")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.render.vk")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.render.bgfx")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.math")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.os")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.os.win32")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.os.linux")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.profilers")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.sdk")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static.string")
+kotek_add_defines_subdirectory("src/kotek.core.defines.static")
 
 
-add_subdirectory("src/kotek.core.defines_dependent.text")
-add_subdirectory("src/kotek.core.defines_dependent.message")
-add_subdirectory("src/kotek.core.defines_dependent.assert")
-add_subdirectory("src/kotek.core.defines_dependent.ecs")
-add_subdirectory("src/kotek.core.defines_dependent")
+kotek_add_defines_subdirectory("src/kotek.core.defines_dependent.text")
+kotek_add_defines_subdirectory("src/kotek.core.defines_dependent.message")
+kotek_add_defines_subdirectory("src/kotek.core.defines_dependent.assert")
+kotek_add_defines_subdirectory("src/kotek.core.defines_dependent.ecs")
+kotek_add_defines_subdirectory("src/kotek.core.defines_dependent")
 
-add_subdirectory("src/kotek.core.defines")
+kotek_add_defines_subdirectory("src/kotek.core.defines")
 
 add_subdirectory("src/kotek.core")
 add_subdirectory("src/kotek.core.api")

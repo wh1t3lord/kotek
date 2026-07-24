@@ -59,11 +59,17 @@ jobs:
       # visible in public step conclusions (job logs need admin rights)
       - name: deps base (zstd, etl, utfcpp, glm, cgltf, spdlog, tbb, pkgconf)
         run: |
-          if (-not (Test-Path vcpkg/vcpkg.exe)) {
-            if (-not (Test-Path vcpkg/.git)) { git clone https://github.com/microsoft/vcpkg.git vcpkg }
-            git -C vcpkg checkout 1bf999414d7def6fea4c3c310d613ceed039f929
-            vcpkg/bootstrap-vcpkg.bat
+          # the vcpkg cache restores only installed/ + vcpkg.exe (by design,
+          # quota), so the checkout itself is missing on warm runs — repair
+          # it in place (a fresh clone into a non-empty dir would fail)
+          if (-not (Test-Path vcpkg/.git)) {
+            if (-not (Test-Path vcpkg)) { mkdir vcpkg | Out-Null }
+            git -C vcpkg init
+            git -C vcpkg remote add origin https://github.com/microsoft/vcpkg.git
           }
+          git -C vcpkg fetch --depth 1 origin 1bf999414d7def6fea4c3c310d613ceed039f929
+          git -C vcpkg checkout FETCH_HEAD
+          if (-not (Test-Path vcpkg/vcpkg.exe)) { vcpkg/bootstrap-vcpkg.bat }
           foreach ($p in @("zstd","etl","utfcpp","glm","cgltf","spdlog","tbb","pkgconf")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
       - name: deps graphics (vulkan, bgfx, glfw3, ktx)
         run: |

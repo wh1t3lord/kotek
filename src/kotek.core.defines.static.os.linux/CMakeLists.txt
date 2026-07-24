@@ -17,7 +17,7 @@ message("[${PROJECT_NAME}]: window library is [${KOTEK_WINDOW_LIBRARY}]")
 if (UNIX)
 	message("[${PROJECT_NAME}]: platform is 'UNIX'")
 
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
 
 	#if defined(__linux__)
                 #define KOTEK_USE_PLATFORM_LINUX
@@ -49,7 +49,7 @@ if (UNIX)
 	#endif
 	")
 else()
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "")
 endif()
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static_OS_Linux SHUTDOWN ShutdownModule_Core_Defines_Static_OS_Linux

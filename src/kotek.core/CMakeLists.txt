@@ -58,6 +58,7 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AN
 	# from feature modules (ktkFileSystem, ktkFileSystem_VFM,
 	# ktkFrameworkConfig, ...), which is forbidden in PLUGIN mode (no link
 	# edges between plugin dlls)
+	add_subdirectory("tests/kotek.core.tests.plugin")
 	message("[${PROJECT_NAME}]: adding tests for runtime in project ${PROJECT_NAME}")
 	set(to_include_tests 
 		"tests/kotek_core_test_filesystem.cpp"
@@ -71,6 +72,7 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AN
 		"tests/kotek_core_test_container_queue.cpp"
 		"tests/kotek_core_test_container_map.cpp"
 		"tests/kotek_core_test_container_list.cpp"
+		"tests/kotek_core_test_plugin_override.cpp"
 	)
 elseif("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "OFF")
 	# TODO: add support for own projects for unit testing
@@ -95,6 +97,15 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core SHUTDOWN ShutdownMo
 	"include/kotek_hash_aliases.h"
 	${to_include_tests}
 )
+
+if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AND NOT "${KOTEK_LINKAGE}" STREQUAL "PLUGIN")
+	# plugin override tests (task K21): absolute path of the test-double
+	# dll (generator expression) — the tests copy it into their isolated
+	# plugins/ folders; the target is defined by the add_subdirectory above
+	target_compile_definitions(${PROJECT_NAME} PRIVATE
+		KOTEK_TEST_PLUGIN_OVERRIDE_DLL_PATH="$<TARGET_FILE:kotek.core.tests.plugin>")
+	add_dependencies(${PROJECT_NAME} kotek.core.tests.plugin)
+endif()
 
 
 if ("${KOTEK_STD_LIBRARY}" STREQUAL "BOOST")

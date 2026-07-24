@@ -49,7 +49,7 @@ if (GIT_FOUND)
 
 	string(TIMESTAMP KOTEK_WHEN_YOU_GENERATED_SOLUTION "%w %A %B %Y %H:%M:%S")
 
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
 
 	#ifdef KOTEK_GIT_WAS_FOUND
 		#define KOTEK_USE_GIT_CURRENT_COMMIT ${KOTEK_GIT_CURRENT_COMMIT}
@@ -61,7 +61,7 @@ if (GIT_FOUND)
 else()
 	message(WARNING "[${PROJECT_NAME}]: can't find Git for generating preprocessors!")
 
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "")
 endif()
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static_Git SHUTDOWN ShutdownModule_Core_Defines_Static_Git

@@ -10,6 +10,8 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Main_Manager SHUTDO
 	"src/kotek_main_manager.cpp"
 	"include/kotek_plugin_invoke.h"
 	"src/kotek_plugin_invoke.cpp"
+	"include/kotek_plugin_override.h"
+	"src/kotek_plugin_override.cpp"
 	"include/kotek_core_main_manager.h"
 	"src/main_core_main_manager_dll.cpp")
 	

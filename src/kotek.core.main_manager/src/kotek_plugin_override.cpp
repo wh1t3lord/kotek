@@ -17,6 +17,10 @@
 	#include <sys/stat.h>
 #endif
 
+#if defined(KOTEK_DEBUG) && defined(_WIN32)
+	#include <crtdbg.h>
+#endif
+
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
@@ -386,22 +390,34 @@ namespace
 		if (p_file == nullptr)
 			return;
 
-		char content[k_max_json_size];
-		const size_t read_count =
-			fread(content, 1, sizeof(content) - 1, p_file);
-		const bool read_fully = feof(p_file) != 0;
-		fclose(p_file);
-
-		if (read_count == 0)
+		if (fseek(p_file, 0, SEEK_END) != 0)
+		{
+			fclose(p_file);
 			return;
+		}
 
-		if (read_fully == false)
+		const long file_size = ftell(p_file);
+		rewind(p_file);
+
+		if (file_size <= 0)
+		{
+			fclose(p_file);
+			return;
+		}
+
+		if (static_cast<unsigned long>(file_size) >= k_max_json_size)
 		{
 			KOTEK_MESSAGE_WARNING(
 				"[plugin override]: plugins.json exceeds {} bytes, ignored",
 				k_max_json_size);
+			fclose(p_file);
 			return;
 		}
+
+		char content[k_max_json_size];
+		const size_t read_count =
+			fread(content, 1, static_cast<size_t>(file_size), p_file);
+		fclose(p_file);
 
 		content[read_count] = '\0';
 		json::parse_root(content, static_cast<unsigned long>(read_count));
@@ -572,6 +588,16 @@ void ktkPluginOverrideStartup(ktkMainManager* p_manager)
 	}
 
 	// codegen flags are terminal: the file(s) are the whole job
+#if defined(KOTEK_DEBUG) && defined(_WIN32)
+	// kotek.core.memory.cpu force-enables the CRT exit leak dump
+	// (_CRTDBG_LEAK_CHECK_DF); this path exits WITHOUT running the module
+	// shutdowns where the dump is normally disabled again, and in a
+	// multi-CRT process the dump walks cross-poisoned block lists into an
+	// assert flood — disable it here, the same containment the kotek.exe
+	// entry point applies (allocation tracking itself stays on)
+	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) &
+		~_CRTDBG_LEAK_CHECK_DF);
+#endif
 	exit(0);
 }
 

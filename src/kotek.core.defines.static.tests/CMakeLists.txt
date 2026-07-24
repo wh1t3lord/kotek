@@ -29,7 +29,7 @@ if ("${KOTEK_TESTS}" STREQUAL "ON")
 endif()
 
 if ("${KOTEK_TESTS}" STREQUAL "ON")
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
 
 	#ifdef KOTEK_TESTS
 		#define KOTEK_USE_TESTS
@@ -40,7 +40,7 @@ if ("${KOTEK_TESTS}" STREQUAL "ON")
 	#endif
 	")
 else()
-	file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once")
+	file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "")
 endif()
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Defines_Static_Tests SHUTDOWN ShutdownModule_Core_Defines_Static_Tests

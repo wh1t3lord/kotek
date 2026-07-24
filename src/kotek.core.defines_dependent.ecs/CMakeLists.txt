@@ -19,7 +19,7 @@ else()
 	message(FATAL_ERROR "unsupported backend if you want to see in kotek framework report to developers: https://github.com/wh1t3lord/kotek/issues")
 endif()
 
-file(WRITE ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "#pragma once
+file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS} "
 		#ifdef KOTEK_ECS_BACKEND_ENTT
 			#define KOTEK_USE_ECS_BACKEND_ENTT
 		#endif

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
-#include "kotek_std_preprocessors.h"
+#include <kotek.core.defines.static.os.linux/include/kotek_std_preprocessors.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
