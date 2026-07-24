@@ -1,0 +1,413 @@
+-- Building for: Visual Studio 17 2022
+-- applying D:/a/kotek/kotek/cmake/windows/compiler_globals.cmake
+-- [kotek]: C++ standard is C++20 (KOTEK_WINDOWS_XP=OFF)
+-- D:/a/kotek/kotek/cmake/windows/compiler_globals.cmake is applied!
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.20348.
+-- The C compiler identification is MSVC 19.44.35228.0
+-- The CXX compiler identification is MSVC 19.44.35228.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+[kotek.engine]: CMAKE_SOURCE_DIR=D:/a/kotek/kotek
+[kotek.engine]: CMAKE_CURRENT_SOURCE_DIR=D:/a/kotek/kotek
+[kotek.engine]: vcpkg triplet is 'x64-windows-static'
+-- applying D:/a/kotek/kotek/cmake/library.cmake
+-- [kotek]: linkage scenario is 'STATIC' (force static: '', force shared: '')
+-- D:/a/kotek/kotek/cmake/library.cmake is applied!
+[kotek.engine]: Setting default name for kotek.exe folder: kotek
+[kotek.engine]: KOTEK_DEPS_FOLDER is enabled! Now you should specified your dependency folder name (but not its path)
+[kotek.engine]: build type is 'Release'
+[kotek.engine]: library development - EMB (EMB is embedded and DYN is dynamic and HYB is hybrid, check documentation about these definitions)
+[kotek.engine]: filename for generating preprocessors: 'D:/a/kotek/kotek/build-diag/generated/kotek_std_preprocessors.h'
+[kotek.engine]: using nuget packages
+KOTEK_CONFIGURATION_TYPE=minimal
+KOTEK_VCPKG_FILENAME=vcpkg_nuget_minimal.cmake using this for installing packages from vcpkg
+-- Downloading vcpkg for downloading big packages because of nuget limitations...
+Downloading https://github.com/microsoft/vcpkg-tool/releases/download/2026-04-08/vcpkg.exe -> D:\a\kotek\kotek\vcpkg\vcpkg.exe... done.
+Validating signature... done.
+
+vcpkg package management program version 2026-04-08-e0612b42ce44e55a0e630f2ee9d3c533a63d8bc1
+
+See LICENSE.txt for license information.
+Telemetry
+---------
+vcpkg collects usage data in order to help us improve your experience.
+The data collected by Microsoft is anonymous.
+You can opt-out of telemetry by re-running the bootstrap-vcpkg script with -disableMetrics,
+passing --disable-metrics to vcpkg on the command line,
+or by setting the VCPKG_DISABLE_METRICS environment variable.
+
+Read more about vcpkg telemetry at docs/about/privacy.md
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+A suitable version of cmake was not found (required v4.3.2).
+Downloading https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip -> cmake-4.3.2-windows-x86_64.zip
+error: curl operation failed with error code 35 (SSL connect error).
+error: Not a transient network error, won't retry download from https://github.com/Kitware/CMake/releases/download/v4.3.2/cmake-4.3.2-windows-x86_64.zip
+note: If you are using a proxy, please ensure your proxy settings are correct.
+Possible causes are:
+1. You are actually using an HTTP proxy, but setting HTTPS_PROXY variable to `https://address:port`.
+This is not correct, because `https://` prefix claims the proxy is an HTTPS proxy, while your proxy (v2ray, shadowsocksr, etc...) is an HTTP proxy.
+Try setting `http://address:port` to both HTTP_PROXY and HTTPS_PROXY instead.
+2. If you are using Windows, vcpkg will automatically use your Windows IE Proxy Settings set by your proxy software. See: https://github.com/microsoft/vcpkg-tool/pull/77
+The value set by your proxy might be wrong, or have same `https://` prefix issue.
+3. Your proxy's remote server is out of service.
+If you believe this is not a temporary download server failure and vcpkg needs to be changed to download this file from a different location, please submit an issue to https://github.com/Microsoft/vcpkg/issues
+NuGet found: C:/ProgramData/chocolatey/bin/nuget.exe
+Your OS is: Windows with version 10.0.20348
+Determing your exact Windows version based on build number...
+Your build number: 20348
+Build number says your OS is: Windows Server 2022 (uses Win11 packages)
+Getting packages for Win11 based on compiler Msvc
+Generated package config name: [Win11-Msvc-Packages]
+Searching for file...
+Using packages config file [Win11-Msvc-Packages-minimal.config]
+Making config usable for nuget
+Start to download packages from config...
+Restoring NuGet package Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7.
+Restoring NuGet package Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6.
+Restoring NuGet package Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1.
+Restoring NuGet package Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0.
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64/1.5.7/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64.1.5.7.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64/1.3.1/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64.1.3.1.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64/3.5.0/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64.3.5.0.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64/18.1.6/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64.18.1.6.nupkg
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64/1.3.1/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64.1.3.1.nupkg 8ms
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64/3.5.0/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64.3.5.0.nupkg 21ms
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64/1.5.7/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64.1.5.7.nupkg 24ms
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64/18.1.6/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64.18.1.6.nupkg 43ms
+Installed Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64 1.5.7 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64\1.5.7 with content hash dcQ/QGL/tqAZMgGu7uVwdWiMoSCSraqlxLzr5meUFzJLfdwPNXTWBzPpE8p2q9fgxW417euU2h/ctAIt5PELSA==.
+Installed Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64 1.3.1 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64\1.3.1 with content hash w/dV+XaHt2HIOugMc6pc5kVq+KY7vEPER6Bf3bjg/Y6HiE7mtP+pXzbQsUztPEFhtzxmgez0tsLiMMzDteUXgA==.
+Adding package 'Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7' to folder 'D:\a\kotek\kotek\nuget\packages'
+Adding package 'Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7' to folder 'D:\a\kotek\kotek\nuget\packages'
+Installed Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64 3.5.0 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64\3.5.0 with content hash dk3S4DwVCNJcsjh2FUCpklPsZwIaj9NK51GPF9iUN/gIedvd6Ascu+qhaDxAym4wK6v1OhNdrQL8w2uWUrj2MQ==.
+Adding package 'Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0' to folder 'D:\a\kotek\kotek\nuget\packages'
+Installed Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64 18.1.6 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64\18.1.6 with content hash zu6yb+PF5jKf0lyUfD6KnMvEcoTsLmWIrd4clb3uU9WHpvDeAqYamENzF5K54zNV8mMIRvODKPjq6CkEqTWCPQ==.
+Adding package 'Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6' to folder 'D:\a\kotek\kotek\nuget\packages'
+  GET https://api.nuget.org/v3/vulnerabilities/index.json
+  OK https://api.nuget.org/v3/vulnerabilities/index.json 4ms
+  GET https://api.nuget.org/v3-vulnerabilities/2026.07.21.23.34.12/vulnerability.base.json
+  GET https://api.nuget.org/v3-vulnerabilities/2026.07.21.23.34.12/2026.07.23.17.34.20/vulnerability.update.json
+  OK https://api.nuget.org/v3-vulnerabilities/2026.07.21.23.34.12/vulnerability.base.json 5ms
+  OK https://api.nuget.org/v3-vulnerabilities/2026.07.21.23.34.12/2026.07.23.17.34.20/vulnerability.update.json 4ms
+
+NuGet Config files used:
+    C:\Users\runneradmin\AppData\Roaming\NuGet\NuGet.Config
+    C:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.FallbackLocation.config
+    C:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config
+
+Feeds used:
+    https://api.nuget.org/v3/index.json
+    C:\Program Files (x86)\Microsoft SDKs\NuGetPackages\
+
+Installed:
+    4 package(s) to packages.config projects
+Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6;Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0;Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7;Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1
+D:/a/kotek/kotek/nuget/packages/
+validating package folder: Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6
+validating package folder: Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0
+validating package folder: Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7
+validating package folder: Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1
+Using nuget packages because you didn't provide a folder that has a package manager
+ So we don't need to build solution and using precompiled packages
+[kotek.engine]: static containers are enabled by default!
+[kotek.engine]: hybrid containers are enabled by default!
+[kotek.engine]: dynamic containers are enabled by default!
+[kotek.engine]: using OpenGL ES ver 3.1 as default renderer (BGFX)
+CMake Error at vcpkg/scripts/buildsystems/vcpkg.cmake:910 (_find_package):
+  Could not find a package configuration file provided by "zstd" with any of
+  the following names:
+
+    zstdConfig.cmake
+    zstd-config.cmake
+
+  Add the installation prefix of "zstd" to CMAKE_PREFIX_PATH or set
+  "zstd_DIR" to a directory containing one of the above files.  If "zstd"
+  provides a separate development package or SDK, be sure it has been
+  installed.
+Call Stack (most recent call first):
+  CMakeLists.txt:189 (find_package)
+
+
+-- Configuring incomplete, errors occurred!
