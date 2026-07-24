@@ -267,7 +267,7 @@ matrix2x2f& matrix2x2f::operator+=(const vector4f& data
 matrix2x2f& matrix2x2f::operator+=(const base_mat2x2_t& data
 ) noexcept
 {
-	return this->operator+=(data);
+	return this->operator+=(matrix2x2f(data));
 }
 
 matrix2x2f& matrix2x2f::operator-=(const matrix2x2f& data
@@ -362,7 +362,7 @@ matrix2x2f& matrix2x2f::operator-=(const vector4f& data
 matrix2x2f& matrix2x2f::operator-=(const base_mat2x2_t& data
 ) noexcept
 {
-	return this->operator-=(data);
+	return this->operator-=(matrix2x2f(data));
 }
 
 matrix2x2f& matrix2x2f::operator*=(const matrix2x2f& data
@@ -436,7 +436,7 @@ matrix2x2f& matrix2x2f::operator*=(const vector4f& data
 matrix2x2f& matrix2x2f::operator*=(const base_mat2x2_t& data
 ) noexcept
 {
-	return this->operator*=(data);
+	return this->operator*=(matrix2x2f(data));
 }
 
 matrix2x2f& matrix2x2f::operator*=(float value) noexcept
@@ -756,7 +756,7 @@ bool matrix2x2f::operator!=(const matrix2x2f& data) noexcept
 #endif
 }
 
-constexpr math_id_t matrix2x2f::size_of(void) const noexcept
+math_id_t matrix2x2f::size_of(void) const noexcept
 {
 #ifdef KOTEK_USE_MATH_LIBRARY_DXM
 	// DXM stores the 2x2 inside a padded XMFLOAT3X3, the logical
@@ -783,13 +783,13 @@ constexpr math_id_t matrix2x2f::size_of(void) const noexcept
 	return static_cast<math_id_t>(sizeof(float[2][2]));
 }
 
-constexpr math_id_t matrix2x2f::get_column_count(void
+math_id_t matrix2x2f::get_column_count(void
 ) const noexcept
 {
 	return static_cast<math_id_t>(2);
 }
 
-constexpr math_id_t matrix2x2f::get_row_count(void
+math_id_t matrix2x2f::get_row_count(void
 ) const noexcept
 {
 	return static_cast<math_id_t>(2);

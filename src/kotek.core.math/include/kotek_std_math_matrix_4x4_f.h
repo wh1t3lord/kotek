@@ -153,9 +153,9 @@ public:
 	float* data(void) noexcept;
 	const float* data(void) const noexcept;
 
-	constexpr math_id_t size_of(void) const noexcept;
-	constexpr math_id_t get_column_count(void) const noexcept;
-	constexpr math_id_t get_row_count(void) const noexcept;
+	math_id_t size_of(void) const noexcept;
+	math_id_t get_column_count(void) const noexcept;
+	math_id_t get_row_count(void) const noexcept;
 
 	matrix4x4f& Set_Base(const base_mat4x4_t& data) noexcept;
 	base_mat4x4_t& Get_Base(void) noexcept;

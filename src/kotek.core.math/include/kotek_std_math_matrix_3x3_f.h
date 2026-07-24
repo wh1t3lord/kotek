@@ -171,9 +171,9 @@ public:
 
 	float* data(void) noexcept;
 	const float* data(void) const noexcept;
-	constexpr math_id_t size_of(void) const noexcept;
-	constexpr math_id_t get_column_count(void) const noexcept;
-	constexpr math_id_t get_row_count(void) const noexcept;
+	math_id_t size_of(void) const noexcept;
+	math_id_t get_column_count(void) const noexcept;
+	math_id_t get_row_count(void) const noexcept;
 
 	matrix3x3f& Set_Base(const base_mat3x3_t& data) noexcept;
 	base_mat3x3_t& Get_Base(void) noexcept;

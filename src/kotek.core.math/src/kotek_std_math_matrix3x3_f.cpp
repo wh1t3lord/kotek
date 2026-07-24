@@ -282,7 +282,7 @@ matrix3x3f& matrix3x3f::operator+=(const matrix3x3f& data
 matrix3x3f& matrix3x3f::operator+=(const base_mat3x3_t& data
 ) noexcept
 {
-	return this->operator+=(data);
+	return this->operator+=(matrix3x3f(data));
 }
 
 matrix3x3f& matrix3x3f::operator+=(const matrixnf_view_t& view
@@ -369,7 +369,7 @@ matrix3x3f& matrix3x3f::operator-=(const matrix3x3f& data
 matrix3x3f& matrix3x3f::operator-=(const base_mat3x3_t& data
 ) noexcept
 {
-	return this->operator-=(data);
+	return this->operator-=(matrix3x3f(data));
 }
 
 matrix3x3f& matrix3x3f::operator-=(const matrixnf_view_t& view
@@ -411,7 +411,7 @@ matrix3x3f& matrix3x3f::operator*=(const matrix3x3f& data
 matrix3x3f& matrix3x3f::operator*=(const base_mat3x3_t& data
 ) noexcept
 {
-	return this->operator*=(data);
+	return this->operator*=(matrix3x3f(data));
 }
 
 matrix3x3f& matrix3x3f::operator*=(const matrixnf_view_t& view
@@ -823,7 +823,7 @@ const float* matrix3x3f::data(void) const noexcept
 #endif
 }
 
-constexpr math_id_t matrix3x3f::size_of(void) const noexcept
+math_id_t matrix3x3f::size_of(void) const noexcept
 {
 	static_assert(
 		sizeof(float[3][3]) == sizeof(m_base) &&
@@ -833,13 +833,13 @@ constexpr math_id_t matrix3x3f::size_of(void) const noexcept
 	return static_cast<math_id_t>(sizeof(float[3][3]));
 }
 
-constexpr math_id_t matrix3x3f::get_column_count(void
+math_id_t matrix3x3f::get_column_count(void
 ) const noexcept
 {
 	return static_cast<math_id_t>(3);
 }
 
-constexpr math_id_t matrix3x3f::get_row_count(void
+math_id_t matrix3x3f::get_row_count(void
 ) const noexcept
 {
 	return static_cast<math_id_t>(3);

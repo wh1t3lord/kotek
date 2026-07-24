@@ -137,9 +137,9 @@ public:
 	const float* data(void) const noexcept;
 	float* data(void) noexcept;
 
-	constexpr math_id_t size_of(void) const noexcept;
-	constexpr math_id_t get_column_count(void) const noexcept;
-	constexpr math_id_t get_row_count(void) const noexcept;
+	math_id_t size_of(void) const noexcept;
+	math_id_t get_column_count(void) const noexcept;
+	math_id_t get_row_count(void) const noexcept;
 
 	matrix2x2f& Set_Base(const base_mat2x2_t& data) noexcept;
 	base_mat2x2_t& Get_Base(void) noexcept;
