@@ -62,7 +62,7 @@ jobs:
       # step also runs these installs (vcpkg_nuget_minimal.cmake) and is
       # idempotent then, but grouping them here makes the failing port group
       # visible in public step conclusions (job logs need admin rights)
-      - name: deps base (zstd, etl, utfcpp, glm, cgltf, spdlog, tbb, pkgconf)
+      - name: deps base (zstd, etl, utfcpp, glm, cgltf, spdlog, tbb, pkgconf, mimalloc)
         run: |
           # the vcpkg cache restores only installed/ + vcpkg.exe (by design,
           # quota), so the checkout itself is missing on warm runs — repair
@@ -75,7 +75,7 @@ jobs:
           git -C vcpkg fetch --depth 1 origin 1bf999414d7def6fea4c3c310d613ceed039f929
           git -C vcpkg checkout FETCH_HEAD
           if (-not (Test-Path vcpkg/vcpkg.exe)) { vcpkg/bootstrap-vcpkg.bat }
-          foreach ($p in @("zstd","etl","utfcpp","glm","cgltf","spdlog","tbb","pkgconf")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+          foreach ($p in @("zstd","etl","utfcpp","glm","cgltf","spdlog","tbb","pkgconf","mimalloc")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
       - name: deps graphics (vulkan, bgfx, glfw3, ktx)
         run: |
           foreach ($p in @("vulkan","bgfx[multithreaded]","glfw3","ktx")) { vcpkg/vcpkg install "${p}:x64-windows-static"; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
@@ -100,7 +100,8 @@ jobs:
           }
 
       - name: build
-        run: cmake --build build --config ${{ matrix.config }} --parallel
+        shell: pwsh
+        run: cmake --build build --config ${{ matrix.config }} --parallel *> build-output.log; exit $LASTEXITCODE
 
       - name: verify outputs
         shell: pwsh
@@ -119,6 +120,7 @@ jobs:
           $dest = "ci-logs/${{ github.run_id }}/${{ matrix.config }}-${{ matrix.linkage.name }}"
           New-Item -ItemType Directory -Force $dest | Out-Null
           if (Test-Path configure-output.log) { Copy-Item configure-output.log $dest -Force }
+          if (Test-Path build-output.log) { Copy-Item build-output.log $dest -Force }
           cmake -S . -B build-diag -DCMAKE_BUILD_TYPE=${{ matrix.config }} ${{ matrix.linkage.flags }} *> "$dest/diag-configure-output.log"; $null
           if (Test-Path build) { Get-ChildItem -Recurse build -Include *.log -File | Copy-Item -Destination $dest -Force -ErrorAction SilentlyContinue }
 
