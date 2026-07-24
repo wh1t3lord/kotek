@@ -102,8 +102,16 @@ if (WIN32)
             elseif ("${kotek_win_build_number}" STREQUAL "26200")
                 set(KOTEK_NUGET_PLATFORM_NAME "Win11" CACHE INTERNAL "")
                 message("Build number says your OS is: Windows 11, Version 25H2")
+            elseif ("${kotek_win_build_number}" STREQUAL "20348")
+                set(KOTEK_NUGET_PLATFORM_NAME "Win11" CACHE INTERNAL "")
+                message("Build number says your OS is: Windows Server 2022 (uses Win11 packages)")
             else()
-                message(FATAL_ERROR "failed to determine windows based on your build number [${kotek_win_build_number}] report to kotek developers -> https://gitlab.com/wh1t3lord/kotek/-/issues")
+                # forward-compat: a newer-than-known Windows (future Server/Win11
+                # builds) must not hard-fail the configure — take the newest
+                # package line; package compatibility issues surface at restore
+                # time with a clearer error than a bare build-number abort
+                set(KOTEK_NUGET_PLATFORM_NAME "Win11" CACHE INTERNAL "")
+                message(WARNING "unknown windows build number [${kotek_win_build_number}], assuming Win11 packages — if restore fails, report the build number to kotek developers")
             endif()
         elseif ("${CMAKE_SYSTEM_VERSION}" STRGREATER_EQUAL "6.2.")
             string(SUBSTRING "${CMAKE_SYSTEM_VERSION}" 4 -1 kotek_win_build_number)
