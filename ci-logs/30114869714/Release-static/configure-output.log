@@ -1,0 +1,388 @@
+-- Building for: Visual Studio 17 2022
+-- Selecting Windows SDK version 10.0.26100.0 to target Windows 10.0.20348.
+-- The C compiler identification is MSVC 19.44.35228.0
+-- The CXX compiler identification is MSVC 19.44.35228.0
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working C compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- applying D:/a/kotek/kotek/cmake/windows/compiler_globals.cmake
+-- [kotek]: C++ standard is C++20 (KOTEK_WINDOWS_XP=OFF)
+-- D:/a/kotek/kotek/cmake/windows/compiler_globals.cmake is applied!
+[kotek.engine]: CMAKE_SOURCE_DIR=D:/a/kotek/kotek
+[kotek.engine]: CMAKE_CURRENT_SOURCE_DIR=D:/a/kotek/kotek
+[kotek.engine]: vcpkg triplet is 'x64-windows-static'
+-- applying D:/a/kotek/kotek/cmake/library.cmake
+-- [kotek]: linkage scenario is 'STATIC' (force static: '', force shared: '')
+-- D:/a/kotek/kotek/cmake/library.cmake is applied!
+[kotek.engine]: Setting default name for kotek.exe folder: kotek
+[kotek.engine]: KOTEK_DEPS_FOLDER is enabled! Now you should specified your dependency folder name (but not its path)
+[kotek.engine]: build type is 'Release'
+[kotek.engine]: library development - EMB (EMB is embedded and DYN is dynamic and HYB is hybrid, check documentation about these definitions)
+[kotek.engine]: filename for generating preprocessors: 'D:/a/kotek/kotek/build/generated/kotek_std_preprocessors.h'
+[kotek.engine]: using nuget packages
+KOTEK_CONFIGURATION_TYPE=minimal
+KOTEK_VCPKG_FILENAME=vcpkg_nuget_minimal.cmake using this for installing packages from vcpkg
+-- Downloading vcpkg for downloading big packages because of nuget limitations...
+Downloading https://github.com/microsoft/vcpkg-tool/releases/download/2026-04-08/vcpkg.exe -> D:\a\kotek\kotek\vcpkg\vcpkg.exe... done.
+Validating signature... done.
+
+vcpkg package management program version 2026-04-08-e0612b42ce44e55a0e630f2ee9d3c533a63d8bc1
+
+See LICENSE.txt for license information.
+Telemetry
+---------
+vcpkg collects usage data in order to help us improve your experience.
+The data collected by Microsoft is anonymous.
+You can opt-out of telemetry by re-running the bootstrap-vcpkg script with -disableMetrics,
+passing --disable-metrics to vcpkg on the command line,
+or by setting the VCPKG_DISABLE_METRICS environment variable.
+
+Read more about vcpkg telemetry at docs/about/privacy.md
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    vulkan:x64-windows-static@2023-12-17
+Total install time: 1.12 ms
+All requested installations completed successfully in: 1.12 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    zstd:x64-windows-static@1.5.7
+Total install time: 1.12 ms
+All requested installations completed successfully in: 1.12 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    rmlui[core,freetype]:x64-windows-static@6.2
+Total install time: 1.1 ms
+All requested installations completed successfully in: 1.1 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    freetype[core,zlib,png,bzip2,brotli]:x64-windows-static@2.14.3
+Total install time: 1.09 ms
+All requested installations completed successfully in: 1.09 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    gtest:x64-windows-static@1.17.0#2
+Total install time: 1.09 ms
+All requested installations completed successfully in: 1.09 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1
+Total install time: 1.1 ms
+All requested installations completed successfully in: 1.1 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    cgltf:x64-windows-static@1.15
+Total install time: 1.13 ms
+All requested installations completed successfully in: 1.13 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    dav1d:x64-windows-static@1.5.3
+Total install time: 1.12 ms
+All requested installations completed successfully in: 1.12 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    glfw3:x64-windows-static@3.4#1
+Total install time: 1.13 ms
+All requested installations completed successfully in: 1.13 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    mimalloc:x64-windows-static@3.3.2
+Total install time: 1.14 ms
+All requested installations completed successfully in: 1.14 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    ktx:x64-windows-static@4.4.2
+Total install time: 1.13 ms
+All requested installations completed successfully in: 1.13 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    tbb:x64-windows-static@2022.3.0
+Total install time: 1.14 ms
+All requested installations completed successfully in: 1.14 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    spdlog[core,tz-offset,fmt]:x64-windows-static@1.17.0
+Total install time: 1.16 ms
+All requested installations completed successfully in: 1.16 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    tracy[core,crash-handler]:x64-windows-static@0.13.1
+Total install time: 1.15 ms
+All requested installations completed successfully in: 1.15 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    boost-json:x64-windows-static@1.91.0
+Total install time: 1.15 ms
+All requested installations completed successfully in: 1.15 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    etl:x64-windows-static@20.47.1
+Total install time: 1.14 ms
+All requested installations completed successfully in: 1.14 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    utfcpp:x64-windows-static@4.1.1
+Total install time: 1.12 ms
+All requested installations completed successfully in: 1.12 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    glm:x64-windows-static@1.0.3
+Total install time: 1.18 ms
+All requested installations completed successfully in: 1.18 ms
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages are already installed:
+    pkgconf:x64-windows-static@2.5.1#4
+Total install time: 1.15 ms
+All requested installations completed successfully in: 1.15 ms
+NuGet found: C:/ProgramData/chocolatey/bin/nuget.exe
+Your OS is: Windows with version 10.0.20348
+Determing your exact Windows version based on build number...
+Your build number: 20348
+Build number says your OS is: Windows Server 2022 (uses Win11 packages)
+Getting packages for Win11 based on compiler Msvc
+Generated package config name: [Win11-Msvc-Packages]
+Searching for file...
+Using packages config file [Win11-Msvc-Packages-minimal.config]
+Making config usable for nuget
+Start to download packages from config...
+Restoring NuGet package Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0.
+Restoring NuGet package Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6.
+Restoring NuGet package Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1.
+Restoring NuGet package Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7.
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64/1.3.1/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64.1.3.1.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64/18.1.6/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64.18.1.6.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64/1.5.7/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64.1.5.7.nupkg
+  GET https://api.nuget.org/v3-flatcontainer/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64/3.5.0/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64.3.5.0.nupkg
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64/3.5.0/kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64.3.5.0.nupkg 13ms
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64/18.1.6/kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64.18.1.6.nupkg 16ms
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64/1.3.1/kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64.1.3.1.nupkg 19ms
+  OK https://api.nuget.org/v3-flatcontainer/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64/1.5.7/kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64.1.5.7.nupkg 19ms
+Installed Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64 1.5.7 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.zstd.vcpkg.runtimes.win11.msvc.x64\1.5.7 with content hash dcQ/QGL/tqAZMgGu7uVwdWiMoSCSraqlxLzr5meUFzJLfdwPNXTWBzPpE8p2q9fgxW417euU2h/ctAIt5PELSA==.
+Installed Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64 1.3.1 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.zlib.vcpkg.runtimes.win11.msvc.x64\1.3.1 with content hash w/dV+XaHt2HIOugMc6pc5kVq+KY7vEPER6Bf3bjg/Y6HiE7mtP+pXzbQsUztPEFhtzxmgez0tsLiMMzDteUXgA==.
+Adding package 'Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1' to folder 'D:\a\kotek\kotek\nuget\packages'
+Adding package 'Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7' to folder 'D:\a\kotek\kotek\nuget\packages'
+Installed Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64 3.5.0 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.openssl.vcpkg.runtimes.win11.msvc.x64\3.5.0 with content hash dk3S4DwVCNJcsjh2FUCpklPsZwIaj9NK51GPF9iUN/gIedvd6Ascu+qhaDxAym4wK6v1OhNdrQL8w2uWUrj2MQ==.
+Adding package 'Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0' to folder 'D:\a\kotek\kotek\nuget\packages'
+Installed Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64 18.1.6 from https://api.nuget.org/v3/index.json to C:\Users\runneradmin\.nuget\packages\kotek.packages.clang.vcpkg.runtimes.win11.msvc.x64\18.1.6 with content hash zu6yb+PF5jKf0lyUfD6KnMvEcoTsLmWIrd4clb3uU9WHpvDeAqYamENzF5K54zNV8mMIRvODKPjq6CkEqTWCPQ==.
+Adding package 'Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6' to folder 'D:\a\kotek\kotek\nuget\packages'
+Added package 'Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6' to folder 'D:\a\kotek\kotek\nuget\packages'
+  GET https://api.nuget.org/v3/vulnerabilities/index.json
+  OK https://api.nuget.org/v3/vulnerabilities/index.json 502ms
+  GET https://api.nuget.org/v3-vulnerabilities/2026.07.24.05.37.22/vulnerability.base.json
+  GET https://api.nuget.org/v3-vulnerabilities/2026.07.24.05.37.22/2026.07.24.05.37.22/vulnerability.update.json
+  OK https://api.nuget.org/v3-vulnerabilities/2026.07.24.05.37.22/vulnerability.base.json 3ms
+  OK https://api.nuget.org/v3-vulnerabilities/2026.07.24.05.37.22/2026.07.24.05.37.22/vulnerability.update.json 3ms
+
+NuGet Config files used:
+    C:\Users\runneradmin\AppData\Roaming\NuGet\NuGet.Config
+    C:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.FallbackLocation.config
+    C:\Program Files (x86)\NuGet\Config\Microsoft.VisualStudio.Offline.config
+
+Feeds used:
+    https://api.nuget.org/v3/index.json
+    C:\Program Files (x86)\Microsoft SDKs\NuGetPackages\
+
+Installed:
+    4 package(s) to packages.config projects
+Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6;Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0;Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7;Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1
+D:/a/kotek/kotek/nuget/packages/
+validating package folder: Kotek.Packages.Clang.Vcpkg.Runtimes.Win11.Msvc.x64.18.1.6
+validating package folder: Kotek.Packages.OpenSSL.Vcpkg.Runtimes.Win11.Msvc.x64.3.5.0
+validating package folder: Kotek.Packages.Zstd.Vcpkg.Runtimes.Win11.Msvc.x64.1.5.7
+validating package folder: Kotek.Packages.zlib.Vcpkg.Runtimes.Win11.Msvc.x64.1.3.1
+Using nuget packages because you didn't provide a folder that has a package manager
+ So we don't need to build solution and using precompiled packages
+[kotek.engine]: static containers are enabled by default!
+[kotek.engine]: hybrid containers are enabled by default!
+[kotek.engine]: dynamic containers are enabled by default!
+[kotek.engine]: using OpenGL ES ver 3.1 as default renderer (BGFX)
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Failed
+-- Looking for pthread_create in pthreads
+-- Looking for pthread_create in pthreads - not found
+-- Looking for pthread_create in pthread
+-- Looking for pthread_create in pthread - not found
+-- Found Threads: TRUE
+-- Found ZLIB: optimized;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/lib/zs.lib;debug;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/debug/lib/zsd.lib (found version "1.3.2")
+-- Found Vulkan: D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/lib/vulkan-1.lib (found version "1.4.350")  missing components: glslc glslangValidator
+-- Found BZip2: optimized;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/lib/bz2.lib;debug;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/debug/lib/bz2d.lib (found version "1.0.8")
+-- Looking for BZ2_bzCompressInit
+-- Looking for BZ2_bzCompressInit - found
+-- Found PNG: optimized;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/lib/libpng16.lib;debug;D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/debug/lib/libpng16d.lib (found version "1.6.58")
+-- Found Freetype target Freetype::Freetype - Freetype font engine enabled
+-- Found PkgConfig: D:/a/kotek/kotek/vcpkg/installed/x64-windows-static/tools/pkgconf/pkgconf.exe (found version "2.5.1")
+[kotek.core.defines.static.tests]: TESTS is 'ON'
+[kotek.core.defines.static.tests]: TESTS use in runtime is 'ON'
+-- [kotek.core.defines.static.tests]: linkage is 'STATIC'
+[kotek.core.defines.static.cpp]: KOTEK_STD_LIBRARY=STD
+[kotek.core.defines.static.cpp]: enabling memory leak detection (built-in)
+[kotek.core.defines.static.cpp]: standard library is Standard library
+[kotek.core.defines.static.cpp]: string configuration is 'OPTIMIZED'
+[kotek.core.defines.static.cpp]: development is for EMB environment
+[kotek.core.defines.static.cpp]: log backend is 
+-- [kotek.core.defines.static.cpp]: using filesystem feature: KOTEK_FILESYSTEM_FEATURE_VFM=
+-- [kotek.core.defines.static.cpp]: using filesystem type: KOTEK_FILESYSTEM_TYPE_NATIVE=
+-- [kotek.core.defines.static.cpp]: using filesystem type: KOTEK_FILESYSTEM_TYPE_ZLIB=
+-- [kotek.core.defines.static.cpp]: linkage is 'STATIC'
+-- Found Git: C:/Program Files/Git/bin/git.exe (found version "2.55.0.windows.3")
+-- [kotek.core.defines.static.git]: linkage is 'STATIC'
+-- [kotek.core.defines.static.render]: linkage is 'STATIC'
+[kotek.core.defines.static.render.dx]: DirectX is 'ON'
+-- [kotek.core.defines.static.render.dx]: linkage is 'STATIC'
+-- [kotek.core.defines.static.render.gl]: linkage is 'STATIC'
+[kotek.core.defines.static.render.vk]: Vulkan is 'ON'
+-- [kotek.core.defines.static.render.vk]: linkage is 'STATIC'
+[kotek.core.defines.static.render.bgfx]: BGFX is 'ON'
+-- [kotek.core.defines.static.render.bgfx]: linkage is 'STATIC'
+[kotek.core.defines.static.math]: math library is 'GLM'
+-- [kotek.core.defines.static.math]: linkage is 'STATIC'
+-- [kotek.core.defines.static.os]: linkage is 'STATIC'
+[kotek.core.defines.static.os.win32]: window library is [GLFW]
+[kotek.core.defines.static.os.win32]: platform 'Windows NT'
+-- [kotek.core.defines.static.os.win32]: linkage is 'STATIC'
+[kotek.core.defines.static.os.linux]: window library is [GLFW]
+-- [kotek.core.defines.static.os.linux]: linkage is 'STATIC'
+[kotek.core.defines.static.profilers]: CPU Profiler is 'ON'
+[kotek.core.defines.static.profilers]: GPU Profiler is 'ON'
+-- [kotek.core.defines.static.profilers]: linkage is 'STATIC'
+-- [kotek.core.defines.static.sdk]: linkage is 'STATIC'
+[kotek.core.defines.static.string]: UNICODE is 'ON'
+-- [kotek.core.defines.static.string]: linkage is 'STATIC'
+-- [kotek.core.defines.static]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent.text]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent.message]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent.assert]: linkage is 'STATIC'
+[kotek.core.defines_dependent.ecs]: you didn't specify any ecs backend so will be selected PICO
+-- [kotek.core.defines_dependent.ecs]: linkage is 'STATIC'
+-- [kotek.core.defines_dependent]: linkage is 'STATIC'
+-- [kotek.core.defines]: linkage is 'STATIC'
+[kotek.core]: adding tests for runtime in project kotek.core
+[kotek.core]: files to attach (KOTEK_TESTS): tests/kotek_core_test_filesystem.cpp;tests/kotek_core_test_json.cpp;tests/kotek_core_test_string.cpp;tests/kotek_core_test_container_deque.cpp;tests/kotek_core_test_container_vector.cpp;tests/kotek_core_test_container_unordered_set.cpp;tests/kotek_core_test_container_unordered_map.cpp;tests/kotek_core_test_container_set.cpp;tests/kotek_core_test_container_queue.cpp;tests/kotek_core_test_container_map.cpp;tests/kotek_core_test_container_list.cpp;tests/kotek_core_test_plugin_override.cpp;tests/kotek_core_test_math_backends.cpp
+-- [kotek.core]: linkage is 'STATIC'
+-- [kotek.core.api]: linkage is 'STATIC'
+-- [kotek.core.types]: linkage is 'STATIC'
+-- [kotek.core.types.char]: linkage is 'STATIC'
+-- [kotek.core.types.numerics]: linkage is 'STATIC'
+-- [kotek.core.types.string]: linkage is 'STATIC'
+-- [kotek.core.casting]: linkage is 'STATIC'
+-- [kotek.core.casting.lexical]: linkage is 'STATIC'
+-- [kotek.core.casting.string]: linkage is 'STATIC'
+-- [kotek.core.constants]: linkage is 'STATIC'
+-- [kotek.core.constants.math]: linkage is 'STATIC'
+-- [kotek.core.constants.ecs]: linkage is 'STATIC'
+-- [kotek.core.constants.string]: linkage is 'STATIC'
+-- [kotek.core.constants.window]: linkage is 'STATIC'
+-- [kotek.core.constants.render]: linkage is 'STATIC'
+-- [kotek.core.containers]: linkage is 'STATIC'
+-- [kotek.core.containers.any]: linkage is 'STATIC'
+-- [kotek.core.containers.array]: linkage is 'STATIC'
+-- [kotek.core.containers.string]: linkage is 'STATIC'
+-- [kotek.core.containers.hash]: linkage is 'STATIC'
+-- [kotek.core.containers.deque]: linkage is 'STATIC'
+-- [kotek.core.containers.dll]: linkage is 'STATIC'
+-- [kotek.core.containers.filesystem]: linkage is 'STATIC'
+-- [kotek.core.containers.filesystem.path]: linkage is 'STATIC'
+-- [kotek.core.containers.function]: linkage is 'STATIC'
+-- [kotek.core.containers.io]: linkage is 'STATIC'
+-- [kotek.core.containers.json]: linkage is 'STATIC'
+-- [kotek.core.containers.map]: linkage is 'STATIC'
+-- [kotek.core.containers.microsoft]: linkage is 'STATIC'
+-- [kotek.core.containers.microsoft.wrl.comptr]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.tbb]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.atomic]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.mutex]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.shared_mutex]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.thread]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.semaphore]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.queue]: linkage is 'STATIC'
+-- [kotek.core.containers.multithreading.condition_variable]: linkage is 'STATIC'
+-- [kotek.core.containers.pair]: linkage is 'STATIC'
+-- [kotek.core.containers.queue]: linkage is 'STATIC'
+-- [kotek.core.containers.shared_ptr]: linkage is 'STATIC'
+-- [kotek.core.containers.unique_ptr]: linkage is 'STATIC'
+-- [kotek.core.containers.unordered_map]: linkage is 'STATIC'
+-- [kotek.core.containers.unordered_set]: linkage is 'STATIC'
+-- [kotek.core.containers.variant]: linkage is 'STATIC'
+-- [kotek.core.containers.vector]: linkage is 'STATIC'
+-- [kotek.core.containers.list]: linkage is 'STATIC'
+-- [kotek.core.filesystem]: linkage is 'STATIC'
+-- [kotek.core.filesystem.file_text]: linkage is 'STATIC'
+-- [kotek.core.format]: linkage is 'STATIC'
+-- [kotek.core.memory]: linkage is 'STATIC'
+[kotek.core.memory.cpu]: memory allocator for CPU = MIMALLOC
+-- [kotek.core.memory.cpu]: linkage is 'STATIC'
+-- [kotek.core.memory.gpu]: linkage is 'STATIC'
+-- [kotek.core.memory.gpu.vulkan]: linkage is 'STATIC'
+[kotek.core.math]: math library is 'GLM'
+-- [kotek.core.math]: linkage is 'STATIC'
+-- [kotek.core.profilers]: linkage is 'STATIC'
+-- [kotek.core.profilers.cpu]: linkage is 'STATIC'
+-- [kotek.core.profilers.gpu]: linkage is 'STATIC'
+-- [kotek.core.os]: linkage is 'STATIC'
+-- [kotek.core.os.win32]: linkage is 'STATIC'
+-- [kotek.core.os.linux]: linkage is 'STATIC'
+-- [kotek.core.window]: linkage is 'STATIC'
+-- [kotek.core.window.glfw]: linkage is 'STATIC'
+-- [kotek.core.window_manager]: linkage is 'STATIC'
+-- [kotek.core.log]: linkage is 'STATIC'
+-- [kotek.core.console]: linkage is 'STATIC'
+-- [kotek.core.engine_config]: linkage is 'STATIC'
+-- [kotek.core.main_manager]: linkage is 'STATIC'
+[kotek.core.ecs]: KOTEK_ECS_BACKEND=PICO
+-- [kotek.core.ecs]: linkage is 'STATIC'
+-- [kotek.core.enum]: linkage is 'STATIC'
+-- [kotek.core.enum.core]: linkage is 'STATIC'
+-- [kotek.core.enum.render]: linkage is 'STATIC'
+-- [kotek.core.enum.render.dx]: linkage is 'STATIC'
+-- [kotek.core.enum.render.gl]: linkage is 'STATIC'
+-- [kotek.core.enum.render.vk]: linkage is 'STATIC'
+-- [kotek.core.enum.render.bgfx]: linkage is 'STATIC'
+-- [kotek.core.input]: linkage is 'STATIC'
+-- [kotek.core.utility]: linkage is 'STATIC'
+-- [kotek.game]: linkage is 'STATIC'
+-- [kotek.ui]: linkage is 'STATIC'
+-- [kotek.ui.imgui]: linkage is 'STATIC'
+-- Found Freetype target Freetype::Freetype - Freetype font engine enabled
+-- [kotek.ui.rmlui]: linkage is 'STATIC'
+-- [kotek.ui.videoplayer]: linkage is 'STATIC'
+-- Checking for module 'dav1d'
+--   Found dav1d, version 1.5.3
+-- [kotek.ui.videoplayer.avif]: linkage is 'STATIC'
+-- [kotek.render]: linkage is 'STATIC'
+-- [kotek.render.shared]: linkage is 'STATIC'
+-- [kotek.render.shared.bgfx]: linkage is 'STATIC'
+-- [kotek.render.bgfx]: linkage is 'STATIC'
+-- [kotek]: module entry manifest has 0 plugin dlls -> D:/a/kotek/kotek/build/generated/kotek_plugin_manifest.h
+-- [kotek]: module registry has 112 modules -> D:/a/kotek/kotek/build/generated/kotek_plugin_registry.h
+-- Configuring done (53.2s)
+-- Generating done (1.9s)
+-- Build files have been written to: D:/a/kotek/kotek/build
