@@ -9,6 +9,8 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+#if defined(KOTEK_USE_TESTS) && defined(KOTEK_DEBUG)
+
 // Test configurations
 using SmallSet =
 	kun_ktk hybrid_unordered_set<int, std::hash<int>, std::equal_to<int>, 5, true>;
@@ -581,6 +583,8 @@ TEST(Containers,
 	EXPECT_GT(hybrid_set.bucket_count(), 0);
 	EXPECT_GT(hybrid_set.load_factor(), 0.0f);
 }
+
+#endif // KOTEK_USE_TESTS && KOTEK_DEBUG
 
 void RegisterTests_Container_Unordered_Set_Core(void)
 {
