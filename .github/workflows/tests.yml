@@ -43,17 +43,21 @@ jobs:
         # KOTEK_ASSERT_STDERR_ROUTING=ON: any automated run of the produced
         # binaries must never hit the stock modal CRT dialog.
         # retry: vcpkg downloads flake on runners but installs resume cleanly
+        # the output is tee'd so the publish step below can attach the REAL
+        # configure log (the diag re-run in the publish step often succeeds
+        # on the resumed dep state and hides the original failure)
         shell: pwsh
         run: |
           foreach ($attempt in 1..3) {
-            cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON
+            cmake -S . -B build -DCMAKE_BUILD_TYPE=Debug -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON *> configure-attempt$attempt.log
             if ($LASTEXITCODE -eq 0) { break }
             if ($attempt -eq 3) { exit $LASTEXITCODE }
             Write-Host "configure attempt $attempt failed, retrying (vcpkg resumes)..."
           }
 
       - name: build
-        run: cmake --build build --config Debug --parallel
+        shell: pwsh
+        run: cmake --build build --config Debug --parallel *> build-output.log
 
       # NOTE: kotek's gtest suites run inside the engine boot (RUN_ALL_TESTS
       # at engine init), which needs game.ktk — the user game module built
@@ -70,7 +74,11 @@ jobs:
         run: |
           $dest = "ci-logs/${{ github.run_id }}/tests"
           New-Item -ItemType Directory -Force $dest | Out-Null
-          cmake -S . -B build-diag -DCMAKE_BUILD_TYPE=Debug -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON *> "$dest/configure-output.log"; $null
+          # the real logs first (attempt tees + build tee), then the diag
+          # re-run for an at-rest state snapshot
+          if (Test-Path configure-attempt1.log) { Copy-Item configure-attempt*.log $dest -Force -ErrorAction SilentlyContinue }
+          if (Test-Path build-output.log) { Copy-Item build-output.log $dest -Force -ErrorAction SilentlyContinue }
+          cmake -S . -B build-diag -DCMAKE_BUILD_TYPE=Debug -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON *> "$dest/diag-configure-output.log"; $null
           if (Test-Path build) { Get-ChildItem -Recurse build -Include *.log -File | Copy-Item -Destination $dest -Force -ErrorAction SilentlyContinue }
 
           # push from a SEPARATE clone: branch switching inside the job's
