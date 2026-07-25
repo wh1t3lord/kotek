@@ -551,6 +551,15 @@ if ("${KOTEK_RENDER_NRI}" STREQUAL "")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_RENDER_NRI)
 endif()
 
+# video decoder backend (task K14): dav1d is the default decoder backend.
+# Replacement paths per the K14 design: K21 plugin override of
+# kotek.ui.videoplayer[.avif], or a runtime decoder registration once
+# ktkIVideoDecoder lands with the player implementation — an own codec is
+# out of scope by design
+if ("${KOTEK_VIDEO_DECODER_DAV1D}" STREQUAL "")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_VIDEO_DECODER_DAV1D)
+endif()
+
 # TODO: change as OpenGL, because Vulkan is not updated
 if ("${KOTEK_RENDER_VULKAN}" STREQUAL "ON")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_RENDER_VULKAN)
@@ -1194,6 +1203,10 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 
 		#ifdef KOTEK_RENDER_NRI
 			#define KOTEK_USE_RENDER_NRI
+		#endif
+
+		#ifdef KOTEK_VIDEO_DECODER_DAV1D
+			#define KOTEK_USE_VIDEO_DECODER_DAV1D
 		#endif
 
 		#ifdef KOTEK_RENDER_VULKAN
