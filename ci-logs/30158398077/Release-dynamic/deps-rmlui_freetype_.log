@@ -1,0 +1,237 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+  * brotli:x64-windows-static@1.2.0
+  * bzip2[core,tool]:x64-windows-static@1.0.8#6
+  * freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3
+  * itlib:x64-windows-static@1.12.2
+  * libpng:x64-windows-static@1.6.58
+    rmlui[core,freetype]:x64-windows-static@6.2
+  * robin-hood-hashing:x64-windows-static@3.11.5#2
+  * zlib:x64-windows-static@1.3.2
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 166 us. Use --debug to see more details.
+Installing 1/8 brotli:x64-windows-static@1.2.0...
+brotli:x64-windows-static@1.2.0 package ABI: 0797ba63bcba380625cf0555cec24da209cd0abe4a126fed96ec5548810e22d3
+Building brotli:x64-windows-static@1.2.0...
+Downloading https://github.com/google/brotli/archive/v1.2.0.tar.gz -> google-brotli-v1.2.0.tar.gz
+Successfully downloaded google-brotli-v1.2.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/google-brotli-v1.2.0.tar.gz
+-- Applying patch install.patch
+-- Applying patch pkgconfig.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/brotli/src/v1.2.0-7af7ca71ad.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/lib/pkgconfig/libbrotlicommon.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/lib/pkgconfig/libbrotlidec.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/lib/pkgconfig/libbrotlienc.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/debug/lib/pkgconfig/libbrotlicommon.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/debug/lib/pkgconfig/libbrotlidec.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/debug/lib/pkgconfig/libbrotlienc.pc
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/share/brotli/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/brotli_x64-windows-static/share/brotli/copyright
+-- Performing post-build validation
+Starting submission of brotli:x64-windows-static@1.2.0 to 1 binary cache(s) in the background
+Elapsed time to handle brotli:x64-windows-static: 12 s
+Installing 2/8 bzip2[core,tool]:x64-windows-static@1.0.8#6...
+bzip2[core,tool]:x64-windows-static@1.0.8#6 package ABI: 2fcce4a065118aa6a7acf84fb7df36221078c64f3a059f6f6ac5551d94c42bc7
+Building bzip2[core,tool]:x64-windows-static@1.0.8#6...
+Downloading bzip2-1.0.8.tar.gz, trying https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
+Successfully downloaded bzip2-1.0.8.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/bzip2-1.0.8.tar.gz
+-- Applying patch fix-import-export-macros.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/bzip2/src/bzip2-1-336d4794a3.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/bzip2_x64-windows-static/lib/pkgconfig/bzip2.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/bzip2_x64-windows-static/debug/lib/pkgconfig/bzip2.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/bzip2_x64-windows-static/share/bzip2/copyright
+-- Performing post-build validation
+Starting submission of bzip2[core,tool]:x64-windows-static@1.0.8#6 to 1 binary cache(s) in the background
+Elapsed time to handle bzip2:x64-windows-static: 6.1 s
+Completed submission of brotli:x64-windows-static@1.2.0 to 1 binary cache(s) in 455 ms
+Installing 3/8 zlib:x64-windows-static@1.3.2...
+zlib:x64-windows-static@1.3.2 package ABI: 3982b08bfc496d4282c250a2d21e6cc669f3e1b8fcad1f5d4be4086730ad72e0
+Building zlib:x64-windows-static@1.3.2...
+Downloading https://github.com/madler/zlib/archive/v1.3.2.tar.gz -> madler-zlib-v1.3.2.tar.gz
+Successfully downloaded madler-zlib-v1.3.2.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/madler-zlib-v1.3.2.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/zlib/src/v1.3.2-fd3dc4f5e7.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/zlib_x64-windows-static/lib/pkgconfig/zlib.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/zlib_x64-windows-static/debug/lib/pkgconfig/zlib.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/zlib_x64-windows-static/share/zlib/vcpkg-cmake-wrapper.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/zlib_x64-windows-static/share/zlib/copyright
+-- Performing post-build validation
+Starting submission of zlib:x64-windows-static@1.3.2 to 1 binary cache(s) in the background
+Elapsed time to handle zlib:x64-windows-static: 5.3 s
+Completed submission of bzip2[core,tool]:x64-windows-static@1.0.8#6 to 1 binary cache(s) in 83.7 ms
+Installing 4/8 libpng:x64-windows-static@1.6.58...
+libpng:x64-windows-static@1.6.58 package ABI: 3d9b8b63476b63adb4b515ea37ef0b77f3e4bd6e96fea97f8344d00d070e78cb
+Building libpng:x64-windows-static@1.6.58...
+Downloading https://github.com/pnggroup/libpng/archive/v1.6.58.tar.gz -> pnggroup-libpng-v1.6.58.tar.gz
+Successfully downloaded pnggroup-libpng-v1.6.58.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/pnggroup-libpng-v1.6.58.tar.gz
+-- Applying patch cmake.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/libpng/src/v1.6.58-b91136795d.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/share/png/vcpkg-cmake-wrapper.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/share/libpng/libpng-config.cmake
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/lib/pkgconfig/libpng16.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/debug/lib/pkgconfig/libpng16.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/debug/lib/pkgconfig/libpng.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/lib/pkgconfig/libpng.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/share/libpng/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libpng_x64-windows-static/share/libpng/copyright
+-- Performing post-build validation
+Starting submission of libpng:x64-windows-static@1.6.58 to 1 binary cache(s) in the background
+Elapsed time to handle libpng:x64-windows-static: 6.6 s
+Completed submission of zlib:x64-windows-static@1.3.2 to 1 binary cache(s) in 110 ms
+Installing 5/8 freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3...
+freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3 package ABI: 3c5a22ec689b98bf324a5ce8db6335653db8f4c64ed09e39954132d5a94823dd
+Building freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3...
+Downloading https://gitlab.freedesktop.org//freetype/freetype/-/archive/VER-2-14-3/freetype-VER-2-14-3.tar.gz -> freetype-freetype-VER-2-14-3.tar.gz
+Successfully downloaded freetype-freetype-VER-2-14-3.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/freetype-freetype-VER-2-14-3.tar.gz
+-- Applying patch 0003-Fix-UWP.patch
+-- Applying patch brotli-static.patch
+-- Applying patch bzip2.patch
+-- Applying patch fix-exports.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/freetype/src/VER-2-14-3-46d5ca34ec.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/freetype_x64-windows-static/lib/pkgconfig/freetype2.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/freetype_x64-windows-static/debug/lib/pkgconfig/freetype2.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/freetype_x64-windows-static/share/freetype/usage
+-- Performing post-build validation
+Starting submission of freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3 to 1 binary cache(s) in the background
+Elapsed time to handle freetype:x64-windows-static: 13 s
+Completed submission of libpng:x64-windows-static@1.6.58 to 1 binary cache(s) in 276 ms
+Installing 6/8 itlib:x64-windows-static@1.12.2...
+itlib:x64-windows-static@1.12.2 package ABI: 57874490c0ed44f875aea2884cae6adbd5cbfd4c10218616c95034034ce0d4e0
+Building itlib:x64-windows-static@1.12.2...
+Downloading https://github.com/iboB/itlib/archive/v1.12.2.tar.gz -> iboB-itlib-v1.12.2.tar.gz
+Successfully downloaded iboB-itlib-v1.12.2.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/iboB-itlib-v1.12.2.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/itlib/src/v1.12.2-7c651724e1.clean
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/any.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/atomic.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/atomic_shared_ptr_storage.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/data_mutex.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/dynamic_bitset.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/expected.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/flat_map.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/flat_set.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/generator.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/make_ptr.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/memory_view.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/mem_streambuf.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/mutex.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/opt_ref_buffer.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/pmr_allocator.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/pod_vector.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/poly_span.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/qalgorithm.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/rand_dist.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/ref_ptr.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/rstream.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/sentry.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/shared_from.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/small_vector.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/span.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/static_vector.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/stride_span.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/strutil.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/tep_vector.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/throw_ex.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/time_t.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/transparent_umap.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/type_traits.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/ufunction.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/include/itlib/utility.hpp
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/itlib_x64-windows-static/share/itlib/copyright
+-- Performing post-build validation
+Starting submission of itlib:x64-windows-static@1.12.2 to 1 binary cache(s) in the background
+Elapsed time to handle itlib:x64-windows-static: 731 ms
+Installing 7/8 robin-hood-hashing:x64-windows-static@3.11.5#2...
+robin-hood-hashing:x64-windows-static@3.11.5#2 package ABI: a876fba96b1cf693e87a91015997139914bfc306ecfd042dc2091e264e428055
+Building robin-hood-hashing:x64-windows-static@3.11.5#2...
+Downloading https://github.com/martinus/robin-hood-hashing/archive/3.11.5.tar.gz -> martinus-robin-hood-hashing-3.11.5.tar.gz
+Successfully downloaded martinus-robin-hood-hashing-3.11.5.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/martinus-robin-hood-hashing-3.11.5.tar.gz
+-- Applying patch fix-missing-stdint.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/robin-hood-hashing/src/3.11.5-1544b7a068.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/robin-hood-hashing_x64-windows-static/share/robin-hood-hashing/copyright
+-- Performing post-build validation
+Starting submission of robin-hood-hashing:x64-windows-static@3.11.5#2 to 1 binary cache(s) in the background
+Elapsed time to handle robin-hood-hashing:x64-windows-static: 1.7 s
+Completed submission of freetype[brotli,bzip2,core,png,zlib]:x64-windows-static@2.14.3 to 1 binary cache(s) in 795 ms
+Completed submission of itlib:x64-windows-static@1.12.2 to 1 binary cache(s) in 53.4 ms
+Installing 8/8 rmlui[core,freetype]:x64-windows-static@6.2...
+rmlui[core,freetype]:x64-windows-static@6.2 package ABI: 9627603ae60e32a61aedc9cbc260c25f39ed23cda8ae1033a31df6a1af49160b
+Building rmlui[core,freetype]:x64-windows-static@6.2...
+Downloading https://github.com/mikke89/RmlUi/archive/6.2.tar.gz -> mikke89-RmlUi-6.2.tar.gz
+Successfully downloaded mikke89-RmlUi-6.2.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/mikke89-RmlUi-6.2.tar.gz
+-- Applying patch add-itlib-and-robin-hood.patch
+-- Applying patch skip-custom-find-modules.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/rmlui/src/6.2-203a9587f9.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Performing post-build validation
+Starting submission of rmlui[core,freetype]:x64-windows-static@6.2 to 1 binary cache(s) in the background
+Elapsed time to handle rmlui:x64-windows-static: 1 min
+Total install time: 1.8 min
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+(FTL OR GPL-2.0-or-later)
+MIT
+Zlib
+bzip2-1.0.6
+libpng-2.0
+rmlui provides CMake targets:
+
+    find_package(RmlUi CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE RmlUi::RmlUi)
+
+Completed submission of robin-hood-hashing:x64-windows-static@3.11.5#2 to 1 binary cache(s) in 58.4 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of rmlui[core,freetype]:x64-windows-static@6.2 to 1 binary cache(s) in 10 s (1/1)
+All requested installations completed successfully in: 1.8 min
