@@ -230,9 +230,9 @@ public:
 
 	void set(float x) noexcept;
 
-	constexpr math_id_t size_of(void) noexcept;
-	constexpr math_id_t get_column_count(void) const noexcept;
-	constexpr math_id_t get_row_count(void) const noexcept;
+	math_id_t size_of(void) noexcept;
+	math_id_t get_column_count(void) const noexcept;
+	math_id_t get_row_count(void) const noexcept;
 
 	vector1f& Set_Base(const base_vec1_t& data) noexcept;
 

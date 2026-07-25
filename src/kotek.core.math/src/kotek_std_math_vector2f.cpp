@@ -471,7 +471,7 @@ vectornf_const_view_t vector2f::c(math_id_t column_id
 	return vectornf_const_view_t(this->data(), 2);
 }
 
-constexpr math_id_t vector2f::size_of(void) noexcept
+math_id_t vector2f::size_of(void) noexcept
 {
 	static_assert(
 		sizeof(float[2]) == sizeof(m_base),
@@ -481,13 +481,13 @@ constexpr math_id_t vector2f::size_of(void) noexcept
 	return static_cast<math_id_t>(sizeof(float[2]));
 }
 
-constexpr math_id_t vector2f::get_column_count(void
+math_id_t vector2f::get_column_count(void
 ) const noexcept
 {
 	return 1;
 }
 
-constexpr math_id_t vector2f::get_row_count(void) const noexcept
+math_id_t vector2f::get_row_count(void) const noexcept
 {
 	return 2;
 }

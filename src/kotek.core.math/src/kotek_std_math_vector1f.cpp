@@ -909,7 +909,7 @@ void vector1f::set(float x) noexcept
 #endif
 }
 
-constexpr math_id_t vector1f::size_of(void) noexcept
+math_id_t vector1f::size_of(void) noexcept
 {
 	static_assert(
 		sizeof(float[1]) == sizeof(m_base) &&
@@ -918,13 +918,13 @@ constexpr math_id_t vector1f::size_of(void) noexcept
 	return sizeof(float[1]);
 }
 
-constexpr math_id_t vector1f::get_column_count(void
+math_id_t vector1f::get_column_count(void
 ) const noexcept
 {
 	return 1;
 }
 
-constexpr math_id_t vector1f::get_row_count(void) const noexcept
+math_id_t vector1f::get_row_count(void) const noexcept
 {
 	return 1;
 }

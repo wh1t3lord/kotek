@@ -150,9 +150,9 @@ public:
 
 	void set(float x, float y, float z, float w);
 
-	constexpr math_id_t size_of(void) noexcept;
-	constexpr math_id_t get_column_count(void) const noexcept;
-	constexpr math_id_t get_row_count(void) const noexcept;
+	math_id_t size_of(void) noexcept;
+	math_id_t get_column_count(void) const noexcept;
+	math_id_t get_row_count(void) const noexcept;
 
 	vector4f& Set_Base(const base_vec4_t& data) noexcept;
 	base_vec4_t& Get_Base(void) noexcept;

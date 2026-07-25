@@ -146,9 +146,9 @@ public:
 
 	void set(float x, float y, float z) noexcept;
 
-	constexpr math_id_t size_of(void) noexcept;
-	constexpr math_id_t get_column_count(void) const noexcept;
-	constexpr math_id_t get_row_count(void) const noexcept;
+	math_id_t size_of(void) noexcept;
+	math_id_t get_column_count(void) const noexcept;
+	math_id_t get_row_count(void) const noexcept;
 
 	vector3f& Set_Base(const base_vec3_t& data) noexcept;
 
