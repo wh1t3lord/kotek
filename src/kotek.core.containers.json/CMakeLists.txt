@@ -16,7 +16,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 			message(FATAL_ERROR "failed to find boost package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
 		endif()
 	else()
-		find_package(Boost COMPONENTS json CONFIG REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+		kotek_find_package(Boost COMPONENTS json CONFIG REQUIRED)
 	endif()
 endif()
 

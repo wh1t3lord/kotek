@@ -17,7 +17,7 @@ elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	endif()
 else()
 	if ("${KOTEK_TESTS}" STREQUAL "ON")
-		find_package(GTest REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+		kotek_find_package(GTest REQUIRED)
 	endif()
 endif()
 

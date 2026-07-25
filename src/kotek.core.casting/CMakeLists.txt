@@ -12,7 +12,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 		elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			# Nothing here probably
 		else()
-			find_package(Boost REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+			kotek_find_package(Boost REQUIRED)
 		endif()
 	endif()
 endif()

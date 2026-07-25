@@ -5,7 +5,7 @@ project(kotek.ui.cef VERSION 1 LANGUAGES CXX)
 
 
 
-find_package(CEF REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+kotek_find_package(CEF REQUIRED)
 
 if ("${KOTEK_UI_GAME_LIBRARY}" STREQUAL "CEF")
 	set(IMPLEMENTATION_FILES_CEF 

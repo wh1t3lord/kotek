@@ -50,7 +50,7 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 			endif()
 
 		else()
-			find_package(glfw3 REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+			kotek_find_package(glfw3 REQUIRED)
 		endif()
 	endif()
 endif()
