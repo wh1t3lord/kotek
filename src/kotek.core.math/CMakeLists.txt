@@ -32,7 +32,9 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 				message(FATAL_ERROR "failed to find glm package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
 			endif()
 		else()
-	    	find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+	    	# manual deps mode (K10): deps.json override, the
+	    	# <folder>/glm/ convention, then the system fallback
+	    	kotek_find_package(glm CONFIG REQUIRED)
 	   	endif()
 	elseif("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM")
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")

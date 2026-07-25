@@ -8,12 +8,10 @@ project(kotek.core.profilers VERSION 1 LANGUAGES CXX)
 if ("${KOTEK_CPU_PROFILER}" STREQUAL "ON")
 	# profiler-enabled builds must always resolve TracyClient (both CI legs
 	# failed LNK2019 on tracy::StartupProfiler/ShutdownProfiler when the find
-	# stayed gated behind KOTEK_DEPS_FOLDER_ENABLE)
-	if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON" AND NOT "${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-		find_package(Tracy REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/Tracy")
-	else()
-		find_package(Tracy CONFIG REQUIRED)
-	endif()
+	# stayed gated behind KOTEK_DEPS_FOLDER_ENABLE). One entry point for all
+	# dep modes (K10): vcpkg passes through, the manual folder resolves via
+	# deps.json or the convention layout
+	kotek_find_package(Tracy CONFIG REQUIRED)
 endif()
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Profilers SHUTDOWN ShutdownModule_Core_Profilers

@@ -41,6 +41,7 @@ message("[${PROJECT_NAME}]: vcpkg triplet is '${KOTEK_VCPKG_TRIPLET}'")
 
 #### LIBRARY LINKAGE MODEL (global + per-module overrides) ####
 include("cmake/library.cmake")
+include("cmake/kotek_find_package.cmake")
 
 # the generated kotek_entry_config.h / kotek_plugin_manifest.h /
 # kotek_plugin_registry.h must be includable from every module
@@ -154,6 +155,11 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 	else()
 		if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${KOTEK_DEPS_FOLDER}" AND NOT "${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			message("[${PROJECT_NAME}]: your dependency folder is '${KOTEK_DEPS_FOLDER}'")
+			# manual deps mode (K10): the single anchor kotek_find_package
+			# resolves against — module CMakeLists run in their own
+			# directories, so nothing may recompute this per call site
+			get_filename_component(_kotek_deps_folder_abs "${CMAKE_CURRENT_SOURCE_DIR}/${KOTEK_DEPS_FOLDER}" ABSOLUTE)
+			set(KOTEK_DEPS_FOLDER_PATH "${_kotek_deps_folder_abs}" CACHE INTERNAL "absolute path of the manual deps folder (K10)")
 		elseif (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${KOTEK_DEPS_FOLDER}" AND "${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			message("[${PROJECT_NAME}]: you use precompiled packages with nuget")
 		else()

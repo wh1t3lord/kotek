@@ -131,7 +131,9 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND ("${KOTEK_MATH_LIBRARY}" STREQUAL "DXM" O
 		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 			find_package(glm CONFIG REQUIRED)
 		else()
-			find_package(glm REQUIRED PATHS "../../${KOTEK_DEPS_FOLDER}/")
+			# manual deps mode (K10): deps.json override, the
+			# <folder>/glm/ convention, then the system fallback
+			kotek_find_package(glm CONFIG REQUIRED)
 		endif()
 		kotek_target_link_libraries(${PROJECT_NAME} PRIVATE glm::glm)
 	endif()
