@@ -1,0 +1,165 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1
+  * libsquish:x64-windows-static@1.15#15
+  * lodepng:x64-windows-static@2021-12-04#1
+  * mgnlibs:x64-windows-static@2019-09-29#2
+  * miniz:x64-windows-static@3.1.1
+  * stb:x64-windows-static@2024-07-29#1
+  * tinyexr:x64-windows-static@1.0.13
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 140 us. Use --debug to see more details.
+Installing 1/7 libsquish:x64-windows-static@1.15#15...
+libsquish:x64-windows-static@1.15#15 package ABI: 26985c66a5cdf1758532ca559b948a170a42a4254d4fe080359f4e4acf45003d
+Building libsquish:x64-windows-static@1.15#15...
+Downloading libsquish-1.15.tgz, trying https://sourceforge.net/projects/libsquish/files/libsquish-1.15.tgz/download
+Successfully downloaded libsquish-1.15.tgz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/libsquish-1.15.tgz
+-- Applying patch fix-export-symbols.patch
+-- Applying patch export-target.patch
+-- Applying patch cmake-version.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/libsquish/src/-7e3d7d83ba.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static-dbg
+-- Configuring x64-windows-static-rel
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/libsquish_x64-windows-static/share/libsquish/copyright
+-- Performing post-build validation
+Starting submission of libsquish:x64-windows-static@1.15#15 to 1 binary cache(s) in the background
+Elapsed time to handle libsquish:x64-windows-static: 6 s
+Installing 2/7 lodepng:x64-windows-static@2021-12-04#1...
+lodepng:x64-windows-static@2021-12-04#1 package ABI: 364d292182a101be222b16a5a8ed925e2500a4502351eb2b9bd5b5c61ca97d2e
+Building lodepng:x64-windows-static@2021-12-04#1...
+Downloading https://github.com/lvandeve/lodepng/archive/8c6a9e30576f07bf470ad6f09458a2dcd7a6a84a.tar.gz -> lvandeve-lodepng-8c6a9e30576f07bf470ad6f09458a2dcd7a6a84a.tar.gz
+Successfully downloaded lvandeve-lodepng-8c6a9e30576f07bf470ad6f09458a2dcd7a6a84a.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/lvandeve-lodepng-8c6a9e30576f07bf470ad6f09458a2dcd7a6a84a.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/lodepng/src/dcd7a6a84a-1b95b8ca64.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/lodepng_x64-windows-static/share/lodepng/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/lodepng_x64-windows-static/share/lodepng/copyright
+-- Performing post-build validation
+Starting submission of lodepng:x64-windows-static@2021-12-04#1 to 1 binary cache(s) in the background
+Elapsed time to handle lodepng:x64-windows-static: 4.5 s
+Completed submission of libsquish:x64-windows-static@1.15#15 to 1 binary cache(s) in 99.3 ms
+Installing 3/7 mgnlibs:x64-windows-static@2019-09-29#2...
+mgnlibs:x64-windows-static@2019-09-29#2 package ABI: ddf8d511d8e0a88de504e0e4c8a4bda26737d20357424fa5f74a8bdf0e391590
+Building mgnlibs:x64-windows-static@2019-09-29#2...
+Downloading https://github.com/mattiasgustavsson/libs/archive/9a6e7205caecbe336e41aebdc9c79a5c47daa5ec.tar.gz -> mattiasgustavsson-libs-9a6e7205caecbe336e41aebdc9c79a5c47daa5ec.tar.gz
+Successfully downloaded mattiasgustavsson-libs-9a6e7205caecbe336e41aebdc9c79a5c47daa5ec.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/mattiasgustavsson-libs-9a6e7205caecbe336e41aebdc9c79a5c47daa5ec.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/mgnlibs/src/5c47daa5ec-8455af54e7.clean
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/mgnlibs_x64-windows-static/share/mgnlibs/copyright
+-- Performing post-build validation
+Starting submission of mgnlibs:x64-windows-static@2019-09-29#2 to 1 binary cache(s) in the background
+Elapsed time to handle mgnlibs:x64-windows-static: 1.3 s
+Completed submission of lodepng:x64-windows-static@2021-12-04#1 to 1 binary cache(s) in 141 ms
+Installing 4/7 miniz:x64-windows-static@3.1.1...
+miniz:x64-windows-static@3.1.1 package ABI: dcf567f153c13a839241cf492b4de3845560aecd1857398ae3c9fd130b827bae
+Building miniz:x64-windows-static@3.1.1...
+Downloading https://github.com/richgel999/miniz/archive/3.1.1.tar.gz -> richgel999-miniz-3.1.1.tar.gz
+Successfully downloaded richgel999-miniz-3.1.1.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/richgel999-miniz-3.1.1.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/miniz/src/3.1.1-06ae856c40.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+CMake Warning at installed/x64-windows/share/vcpkg-cmake/vcpkg_cmake_configure.cmake:344 (message):
+  The following variables are not used in CMakeLists.txt:
+
+      CMAKE_POLICY_DEFAULT_CMP0057
+
+  Please recheck them and remove the unnecessary options from the
+  `vcpkg_cmake_configure` call.
+
+  If these options should still be passed for whatever reason, please use the
+  `MAYBE_UNUSED_VARIABLES` argument.
+Call Stack (most recent call first):
+  ports/miniz/portfile.cmake:9 (vcpkg_cmake_configure)
+  scripts/ports.cmake:206 (include)
+
+
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/miniz_x64-windows-static/lib/pkgconfig/miniz.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/miniz_x64-windows-static/debug/lib/pkgconfig/miniz.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/miniz_x64-windows-static/share/miniz/copyright
+-- Performing post-build validation
+Starting submission of miniz:x64-windows-static@3.1.1 to 1 binary cache(s) in the background
+Elapsed time to handle miniz:x64-windows-static: 3.5 s
+Completed submission of mgnlibs:x64-windows-static@2019-09-29#2 to 1 binary cache(s) in 75.3 ms
+Installing 5/7 stb:x64-windows-static@2024-07-29#1...
+stb:x64-windows-static@2024-07-29#1 package ABI: 235f3fefd9059c2909188a991d6570b85e202d271e1d1166e65b1b401529510b
+Building stb:x64-windows-static@2024-07-29#1...
+Downloading https://github.com/nothings/stb/archive/f75e8d1cad7d90d72ef7a4661f1b994ef78b4e31.tar.gz -> nothings-stb-f75e8d1cad7d90d72ef7a4661f1b994ef78b4e31.tar.gz
+Successfully downloaded nothings-stb-f75e8d1cad7d90d72ef7a4661f1b994ef78b4e31.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/nothings-stb-f75e8d1cad7d90d72ef7a4661f1b994ef78b4e31.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/stb/src/4ef78b4e31-bf024d35de.clean
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/stb_x64-windows-static/share/stb/FindStb.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/stb_x64-windows-static/share/stb/vcpkg-cmake-wrapper.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/stb_x64-windows-static/share/stb/usage
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/stb_x64-windows-static/share/stb/copyright
+-- Performing post-build validation
+Starting submission of stb:x64-windows-static@2024-07-29#1 to 1 binary cache(s) in the background
+Elapsed time to handle stb:x64-windows-static: 1.3 s
+Completed submission of miniz:x64-windows-static@3.1.1 to 1 binary cache(s) in 91.5 ms
+Installing 6/7 tinyexr:x64-windows-static@1.0.13...
+tinyexr:x64-windows-static@1.0.13 package ABI: b5e7743d9c675a2bc30deca1c8d3112784106820cb8f3d9b05831cc8d705939e
+Building tinyexr:x64-windows-static@1.0.13...
+Downloading https://github.com/syoyo/tinyexr/archive/v1.0.13.tar.gz -> syoyo-tinyexr-v1.0.13.tar.gz
+Successfully downloaded syoyo-tinyexr-v1.0.13.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/syoyo-tinyexr-v1.0.13.tar.gz
+-- Applying patch fixtargets.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/tinyexr/src/v1.0.13-b51564eb2f.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/tinyexr_x64-windows-static/share/tinyexr/copyright
+-- Performing post-build validation
+Starting submission of tinyexr:x64-windows-static@1.0.13 to 1 binary cache(s) in the background
+Elapsed time to handle tinyexr:x64-windows-static: 6.7 s
+Completed submission of stb:x64-windows-static@2024-07-29#1 to 1 binary cache(s) in 103 ms
+Installing 7/7 bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1...
+bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1 package ABI: 62840013501c619f3adf097550deaf4450d2e9cc700858d4c5d4b06f73d46c21
+Building bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1...
+Downloading https://github.com/bkaradzic/bgfx.cmake/releases/download/v1.129.8940-496/bgfx.cmake.v1.129.8940-496.tar.gz -> bgfx.cmake.v1.129.8940-496.tar.gz
+Successfully downloaded bgfx.cmake.v1.129.8940-496.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/bgfx.cmake.v1.129.8940-496.tar.gz
+-- Applying patch fix-dependencies.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/bgfx/src/bgfx-739bf2729e.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Performing post-build validation
+Starting submission of bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1 to 1 binary cache(s) in the background
+Elapsed time to handle bgfx:x64-windows-static: 32 s
+Total install time: 55 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Some packages did not declare an SPDX license. Check the `copyright` file for each package for more information about their licensing.
+Packages installed in this vcpkg installation declare the following licenses:
+(MIT OR CC-PDDC)
+BSD-2-Clause
+BSD-3-Clause
+CC0-1.0
+MIT
+bgfx provides CMake targets:
+
+  # this is heuristically generated, and may not be correct
+  find_package(bgfx CONFIG REQUIRED)
+  # note: 1 additional targets are not displayed.
+  target_link_libraries(main PRIVATE bgfx::bx bgfx::bgfx bgfx::bimg bgfx::bimg_decode)
+
+Completed submission of tinyexr:x64-windows-static@1.0.13 to 1 binary cache(s) in 461 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of bgfx[core,multithreaded]:x64-windows-static@1.129.8940-496#1 to 1 binary cache(s) in 1.3 s (1/1)
+All requested installations completed successfully in: 55 s
