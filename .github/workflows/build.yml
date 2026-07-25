@@ -54,6 +54,13 @@ jobs:
             vcpkg/installed
             vcpkg/vcpkg.exe
           key: vcpkg-${{ runner.os }}-x64-windows-static-v2-${{ hashFiles('cmake/windows/vcpkg_nuget_minimal.cmake') }}
+          # a key bump (dep-list change) must NOT mean a cold tree: fall back
+          # to the previous generation's tree so only the changed ports
+          # rebuild — without this, a dep-list commit makes every workflow
+          # chew a full from-source dep set inside its configure step
+          # (tests.yml failed exactly that way on 8670cd7)
+          restore-keys: |
+            vcpkg-${{ runner.os }}-x64-windows-static-v2-
 
       - name: setup msvc
         uses: ilammy/msvc-dev-cmd@v1.13.0
