@@ -13,15 +13,17 @@ jobs:
   config:
     name: ${{ matrix.name }}
     runs-on: windows-2022
-    timeout-minutes: 120
+    timeout-minutes: 180
     strategy:
       fail-fast: false
       matrix:
         include:
-          - { name: minimal-debug, cmake: "-DCMAKE_BUILD_TYPE=Debug" }
-          - { name: minimal-release, cmake: "-DCMAKE_BUILD_TYPE=Release" }
-          - { name: plugin-linkage, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_LINKAGE=PLUGIN -DKOTEK_LINKAGE_FORCE_STATIC=\"zircon.core;zircon.ecs;zircon.editor;zircon.editor.commands;zircon.editor.session;zircon.editor.ui;zircon.game;zircon.game.session;zircon.render;zircon.world\"" }
-          - { name: math-glm, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM" }
+          - { name: minimal-debug, cmake: "-DCMAKE_BUILD_TYPE=Debug", cfg: Debug }
+          - { name: minimal-release, cmake: "-DCMAKE_BUILD_TYPE=Release", cfg: Release }
+          - { name: plugin-linkage, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_LINKAGE=PLUGIN -DKOTEK_LINKAGE_FORCE_STATIC=\"zircon.core;zircon.ecs;zircon.editor;zircon.editor.commands;zircon.editor.session;zircon.editor.ui;zircon.game;zircon.game.session;zircon.render;zircon.world\"", cfg: Debug }
+          - { name: math-glm, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM", cfg: Debug }
+          - { name: math-dxm, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=DXM", cfg: Debug }
+          - { name: math-own, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=KOTEK_OWN", cfg: Debug }
 
     steps:
       - uses: actions/checkout@v4
@@ -34,7 +36,7 @@ jobs:
             vcpkg/packages
             vcpkg/buildtrees
             vcpkg/vcpkg.exe
-          key: vcpkg-${{ runner.os }}-x64-windows-static-v1
+          key: vcpkg-${{ runner.os }}-x64-windows-static-v2-${{ hashFiles('cmake/windows/vcpkg_nuget_minimal.cmake') }}
 
       - name: setup msvc
         uses: ilammy/msvc-dev-cmd@v1.13.0
@@ -42,8 +44,11 @@ jobs:
       - name: configure
         run: cmake -S . -B build ${{ matrix.cmake }}
 
+      # matrix.cfg drives the build: the VS generator ignores CMAKE_BUILD_TYPE
+      # at build time, so --config must come from the leg (minimal-release
+      # silently built Debug before this)
       - name: build
-        run: cmake --build build --config Debug --parallel 4
+        run: cmake --build build --config ${{ matrix.cfg }} --parallel 4
 
       - name: upload logs on failure
         if: failure()
