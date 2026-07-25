@@ -42,3 +42,6 @@ user_data/
 cmake/**/packages.config
 src/**/kotek_std_preprocessors.h
 kotek_formatter_static_cstring.h
+
+# third-party sources cloned at configure time (NRI, task K11)
+external/

@@ -830,7 +830,7 @@ const float* matrix4x4f::data(void) const noexcept
 #endif
 }
 
-constexpr math_id_t matrix4x4f::size_of(void) const noexcept
+math_id_t matrix4x4f::size_of(void) const noexcept
 {
 	static_assert(
 		sizeof(float[4][4]) == sizeof(m_base) &&
@@ -840,13 +840,13 @@ constexpr math_id_t matrix4x4f::size_of(void) const noexcept
 	return static_cast<math_id_t>(sizeof(float[4][4]));
 }
 
-constexpr math_id_t matrix4x4f::get_column_count(void
+math_id_t matrix4x4f::get_column_count(void
 ) const noexcept
 {
 	return static_cast<math_id_t>(4);
 }
 
-constexpr math_id_t matrix4x4f::get_row_count(void
+math_id_t matrix4x4f::get_row_count(void
 ) const noexcept
 {
 	return static_cast<math_id_t>(4);

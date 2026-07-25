@@ -65,6 +65,7 @@ void RegisterTests_Container_Vector_Core(void);
 void RegisterTests_Container_Unordered_Set_Core(void);
 void RegisterTests_PluginOverride_ForModule_Core(void);
 void RegisterTests_MathBackends_ForModule_Core(void);
+void RegisterTests_RenderNRI_ForModule_Core(void);
 void RegisterAllTests(void);
 
 KOTEK_END_NAMESPACE_CORE

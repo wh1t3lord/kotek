@@ -974,6 +974,26 @@ void ktkFrameworkConfig::Parse_CommandLine(void) noexcept
 			kConsoleCommandArg_Headless
 		) != this->m_parsed_command_line_arguments.end();
 
+	// --render_nri_dx12 (task K11, NRI phase 1): maps onto the DirectX
+	// feature slot so the render dispatcher routes to kotek.render.nri.
+	// Parse_CommandLine runs (via SetARGV) BEFORE
+	// InitializeModule_Core_Engine_Config applies the CMake-time startup
+	// default, which then sees the slot taken and does not overwrite it —
+	// without the flag the default (bgfx) is applied exactly as before
+	if (this->m_parsed_command_line_arguments.find(
+			kConsoleCommandArg_Render_NRI_DX12
+		) != this->m_parsed_command_line_arguments.end())
+	{
+		this->SetFeatureStatus(
+			eEngineFeatureRenderer::
+				kEngine_Feature_Renderer_DirectX_SpecifiedByUser,
+			true
+		);
+		this->SetFeatureStatus(
+			eEngineSupportedRenderer::kDirectX_Latest, true
+		);
+	}
+
 	// --log_file=<path> and --exec="<cmd>" (repeatable, task K23)
 	for (int i = 0; i < this->m_argc; ++i)
 	{
@@ -1147,6 +1167,7 @@ void ktkPrintCommandLineHelp(void) noexcept
 	fprintf(stdout, "  --width <px>                  window width\n");
 	fprintf(stdout, "  --height <px>                 window height\n");
 	fprintf(stdout, "  --render_<api>_<version>      renderer selection (bgfx today, NRI planned): the --render_* family\n");
+	fprintf(stdout, "  --render_nri_dx12             use the NRI backend with D3D12 (task K11); without it bgfx stays the default\n");
 }
 
 KOTEK_END_NAMESPACE_CORE

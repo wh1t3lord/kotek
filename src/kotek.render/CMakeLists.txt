@@ -32,6 +32,12 @@ endif()
 
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.bgfx)
 
+# NRI backend (task K11): the module exists when KOTEK_NRI=ON (cloned into
+# kotek/external/nri by cmake/windows/nri.cmake)
+if ("${KOTEK_NRI}" STREQUAL "ON")
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.render.nri)
+endif()
+
 
 # angle modules are only added when KOTEK_CONFIGURATION_TYPE is
 # not "minimal" (see kotek/CMakeLists.txt)

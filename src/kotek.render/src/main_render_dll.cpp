@@ -7,6 +7,10 @@
 	#include <kotek.render.bgfx/include/kotek_render_bgfx.h>
 #endif
 
+#ifdef KOTEK_USE_RENDER_NRI
+	#include <kotek.render.nri/include/kotek_render_nri.h>
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 
@@ -34,15 +38,15 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		KOTEK_MESSAGE("you pass command for initializing {}",
 			Kotek::Core::helper::Translate_EngineSupportedRenderer(version_dx));
 
-		switch (version_dx)
-		{
-		default:
-		{
-			KOTEK_MESSAGE("Uknown version of DirectX you pass trying to "
-						  "initialize OpenGL");
-		}
-		}
-		// TODO: add directx
+		// the DirectX slot is where the NRI backend lives (D3D12 today,
+		// task K11; version sanity stays on the user — any dx version maps
+		// to the one NRI-D3D12 backend in phase 1)
+#ifdef KOTEK_USE_RENDER_NRI
+		status = KOTEK_INVOKE_MODULE(INIT, RENDER,
+			InitializeModule_Render_NRI, main_manager);
+#else
+		KOTEK_ASSERT(false, "the NRI backend is disabled (KOTEK_NRI)");
+#endif
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine() ||
 		p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
@@ -86,7 +90,15 @@ bool InitializeModule_Render(Core::ktkMainManager* main_manager)
 		}
 		else if (is_dx)
 		{
-			KOTEK_ASSERT(false, "not implemented: waits for the NRI backend");
+			// the DirectX slot is where the NRI backend lives (D3D12
+			// today, task K11; a later NRI-Vulkan slot is added the same
+			// way — phase 1 keeps the structure, not the VK build)
+#ifdef KOTEK_USE_RENDER_NRI
+			status = KOTEK_INVOKE_MODULE(INIT, RENDER,
+				InitializeModule_Render_NRI, main_manager);
+#else
+			KOTEK_ASSERT(false, "the NRI backend is disabled (KOTEK_NRI)");
+#endif
 		}
 		else if (is_gles)
 		{
@@ -176,7 +188,13 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 
 	if (p_engine_config->IsUserSpecifiedRendererDirectXInCommandLine())
 	{
-		// TODO: add DirectX here
+		// the DirectX slot is where the NRI backend lives (task K11)
+#ifdef KOTEK_USE_RENDER_NRI
+		status = KOTEK_INVOKE_MODULE(SHUTDOWN, RENDER,
+			ShutdownModule_Render_NRI, main_manager);
+#else
+		KOTEK_ASSERT(false, "the NRI backend is disabled (KOTEK_NRI)");
+#endif
 	}
 	else if (p_engine_config->IsUserSpecifiedRendererOpenGLInCommandLine() ||
 		p_engine_config->IsUserSpecifiedRendererVulkanInCommandLine())
@@ -220,7 +238,13 @@ bool ShutdownModule_Render(Core::ktkMainManager* main_manager)
 		}
 		else if (is_dx)
 		{
-			KOTEK_ASSERT(false, "not implemented: waits for the NRI backend");
+			// the DirectX slot is where the NRI backend lives (task K11)
+#ifdef KOTEK_USE_RENDER_NRI
+			status = KOTEK_INVOKE_MODULE(SHUTDOWN, RENDER,
+				ShutdownModule_Render_NRI, main_manager);
+#else
+			KOTEK_ASSERT(false, "the NRI backend is disabled (KOTEK_NRI)");
+#endif
 		}
 		else if (is_gles)
 		{

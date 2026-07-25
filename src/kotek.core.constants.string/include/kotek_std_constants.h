@@ -374,4 +374,21 @@ constexpr const char* kConsoleCommandArg_Render_DirectX12 = "--render_dx_12";
 constexpr const char* kConsoleCommandArg_Render_DirectX_Latest =
 	"--render_dx_latest";
 
+/**
+ * Constant expresses that we specify the NRI backend with its D3D12
+ * renderer (task K11). It maps onto the DirectX feature slot
+ * (kEngine_Feature_Renderer_DirectX_SpecifiedByUser + version
+ * kDirectX_Latest), so the render dispatcher routes it to
+ * kotek.render.nri. When this flag is absent the CMake-time startup
+ * renderer stays in power (bgfx today).
+ *
+ * Syntax: --render_nri_dx12
+ *
+ * @code
+ * "--render_nri_dx12"
+ * @endcode
+ */
+constexpr const char* kConsoleCommandArg_Render_NRI_DX12 =
+	"--render_nri_dx12";
+
 KOTEK_END_NAMESPACE_KOTEK

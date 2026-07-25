@@ -71,6 +71,15 @@ void ktkGameUI_RMLUI::Initialize(Core::ktkIFrameworkConfig* p_config,
 		{
 			break;
 		}
+		case Core::eEngineFeatureRenderer::
+			kEngine_Feature_Renderer_DirectX_Latest:
+		case Core::eEngineFeatureRenderer::
+			kEngine_Feature_Renderer_DirectX_SpecifiedByUser:
+		{
+			// the NRI backend lives in the DirectX slot (task K11): the
+			// game UI has no renderer-specific work to validate for it
+			break;
+		}
 		default:
 		{
 			KOTEK_ASSERT(false, "not implemented");

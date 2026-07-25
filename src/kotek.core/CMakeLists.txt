@@ -74,6 +74,7 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AN
 		"tests/kotek_core_test_container_list.cpp"
 		"tests/kotek_core_test_plugin_override.cpp"
 		"tests/kotek_core_test_math_backends.cpp"
+		"tests/kotek_core_test_render_nri.cpp"
 	)
 elseif("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "OFF")
 	# TODO: add support for own projects for unit testing
@@ -106,6 +107,13 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AN
 	target_compile_definitions(${PROJECT_NAME} PRIVATE
 		KOTEK_TEST_PLUGIN_OVERRIDE_DLL_PATH="$<TARGET_FILE:kotek.core.tests.plugin>")
 	add_dependencies(${PROJECT_NAME} kotek.core.tests.plugin)
+
+	# the NRI render-backend suite (task K11) calls the real NRI API, so it
+	# needs the tests-only link edge to the pinned NRI target; tests are off
+	# in PLUGIN mode so this edge can never create a plugin cycle
+	if ("${KOTEK_NRI}" STREQUAL "ON")
+		kotek_target_link_libraries(${PROJECT_NAME} PRIVATE NRI)
+	endif()
 endif()
 
 # math backend parity tests (kotek_core_test_math_backends.cpp) compute

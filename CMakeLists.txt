@@ -184,6 +184,14 @@ if ("${KOTEK_STARTUP_RENDERER}" STREQUAL "")
 	message("[${PROJECT_NAME}]: using OpenGL ES ver 3.1 as default renderer (${KOTEK_STARTUP_RENDERER_VENDOR})")
 endif()
 
+# NRI backend switch (task K11): the default must exist BEFORE any module
+# reads it (kotek.core's tests link the NRI target); the clone + NRI
+# targets themselves are created later by cmake/windows/nri.cmake in the
+# render backends section below
+if ("${KOTEK_NRI}" STREQUAL "")
+	set(KOTEK_NRI "ON" CACHE INTERNAL "clone & build NVIDIA NRI for the kotek.render.nri backend")
+endif()
+
 include_directories("src")
 
 # Imported targets created by find_package are directory-scoped by default,
@@ -376,10 +384,27 @@ endif()
 
 add_subdirectory("src/kotek.render")
 
-# render backends: bgfx (raster) is the only built-in one; NRI (dx12/vk + ray
-# tracing) is planned. gl/vk/software/angle/glad and their shared modules were
-# removed (2026-07-22, owner decision); the per-backend defines/enum config
-# modules stay for enum stability and future NRI reuse.
+# render backends: bgfx (raster, the default) and NRI (dx12 for now, vk +
+# ray tracing later — task K11). gl/vk/software/angle/glad and their shared
+# modules were removed (2026-07-22, owner decision); the per-backend
+# defines/enum config modules stay for enum stability and future NRI reuse.
+# NRI is cloned at configure time into external/nri (see
+# cmake/windows/nri.cmake — pinned tag, idempotent, offline-safe)
+if ("${KOTEK_NRI}" STREQUAL "")
+	# NRI backend enabled by default in phase 1; pass -DKOTEK_NRI=OFF to
+	# skip the clone, the module and the dispatch (DirectX slot asserts)
+	set(KOTEK_NRI "ON" CACHE INTERNAL "build the NRI (dx12/vk) render backend")
+endif()
+
+if ("${KOTEK_NRI}" STREQUAL "ON")
+	include("cmake/windows/nri.cmake")
+
+	# the DirectX slot in kotek.render dispatches to NRI when this is set
+	add_compile_definitions(KOTEK_USE_RENDER_NRI)
+
+	add_subdirectory("src/kotek.render.nri")
+endif()
+
 add_subdirectory("src/kotek.render.shared")
 add_subdirectory("src/kotek.render.shared.bgfx")
 add_subdirectory("src/kotek.render.bgfx")
