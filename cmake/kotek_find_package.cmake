@@ -15,6 +15,23 @@
 # NO_DEFAULT_PATH is used for 1+2: what the user pointed at is authoritative.
 
 function(kotek_find_package dep)
+	# static-CRT builds need the static zlib names (zs/zsd); the vcpkg
+	# toolchain sets ZLIB_USE_STATIC_LIBS itself, manual mode does not
+	if (dep STREQUAL "ZLIB")
+		if ("${KOTEK_VCPKG_TRIPLET}" MATCHES "static")
+			set(ZLIB_USE_STATIC_LIBS ON)
+		endif()
+		find_package(${dep} ${ARGN})
+		# without the vcpkg toolchain the find lands on ZLIBConfig.cmake,
+		# which exports ZLIB::ZLIBSTATIC only — vcpkg's own cmake wrapper is
+		# what normally aliases ZLIB::ZLIB for consumers (freetype/png's
+		# exports reference it), so manual mode must bridge it itself
+		if (NOT TARGET ZLIB::ZLIB AND TARGET ZLIB::ZLIBSTATIC)
+			add_library(ZLIB::ZLIB ALIAS ZLIB::ZLIBSTATIC)
+		endif()
+		return()
+	endif()
+
 	set(_kotek_manual OFF)
 	if (NOT "${KOTEK_DEPS_FOLDER}" STREQUAL "" AND
 		NOT "${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg" AND

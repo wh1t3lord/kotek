@@ -107,12 +107,16 @@ endif()
 
 message("[${PROJECT_NAME}]: filename for generating preprocessors: '${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}'")
 
+# the configuration type defaults in EVERY mode (was only inside the nuget
+# branch): without it, manual deps mode (KOTEK_DEPS_FOLDER=<folder>) fell to
+# the BOOST std-library default while the minimal vcpkg set has no
+# boost_filesystem — manual configures died on a dep they never asked for
+if ("${KOTEK_CONFIGURATION_TYPE}" STREQUAL "")
+	set(KOTEK_CONFIGURATION_TYPE "minimal" CACHE INTERNAL "")
+endif()
+
 if ("${KOTEK_DEPS_FOLDER}" STREQUAL "")
 	message("[${PROJECT_NAME}]: using nuget packages")
-
-	if ("${KOTEK_CONFIGURATION_TYPE}" STREQUAL "")
-		set(KOTEK_CONFIGURATION_TYPE "minimal" CACHE INTERNAL "")
-	endif()
 
 	message("KOTEK_CONFIGURATION_TYPE=${KOTEK_CONFIGURATION_TYPE}")
 
@@ -160,6 +164,11 @@ if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
 			# directories, so nothing may recompute this per call site
 			get_filename_component(_kotek_deps_folder_abs "${CMAKE_CURRENT_SOURCE_DIR}/${KOTEK_DEPS_FOLDER}" ABSOLUTE)
 			set(KOTEK_DEPS_FOLDER_PATH "${_kotek_deps_folder_abs}" CACHE INTERNAL "absolute path of the manual deps folder (K10)")
+			# mirror the vcpkg toolchain's behavior: prefer CONFIG packages —
+			# a module-mode find (e.g. find_dependency(Freetype) inside
+			# RmlUi's config) creates only a subset of the export set and the
+			# later CONFIG find then dies on the partial collision
+			set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 		elseif (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/${KOTEK_DEPS_FOLDER}" AND "${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			message("[${PROJECT_NAME}]: you use precompiled packages with nuget")
 		else()
@@ -212,29 +221,31 @@ include_directories("src")
 # KOTEK_LINKAGE=PLUGIN where erased plugin edges are re-applied to consumers
 # by kotek_finalize_plugin_links). Re-find the shared packages with GLOBAL
 # before any module is processed; the per-module find_package calls then
-# no-op on the already-existing targets.
-if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-	find_package(zstd CONFIG REQUIRED GLOBAL)
-	find_package(etl CONFIG REQUIRED GLOBAL)
-	find_package(GTest CONFIG REQUIRED GLOBAL)
-	find_package(Boost COMPONENTS json CONFIG REQUIRED GLOBAL)
-	find_package(Boost COMPONENTS container CONFIG REQUIRED GLOBAL)
-	find_package(Ktx CONFIG REQUIRED GLOBAL)
-	find_package(ZLIB REQUIRED GLOBAL)
-	find_package(Vulkan REQUIRED GLOBAL)
-	find_package(glfw3 CONFIG REQUIRED GLOBAL)
-	find_package(bgfx CONFIG REQUIRED GLOBAL)
-	find_package(utf8cpp CONFIG REQUIRED GLOBAL)
-	find_package(spdlog CONFIG REQUIRED GLOBAL)
-	find_package(glm CONFIG REQUIRED GLOBAL)
-	find_package(fmt CONFIG REQUIRED GLOBAL)
-	find_package(Tracy REQUIRED GLOBAL)
-	find_package(TBB REQUIRED GLOBAL)
-	find_package(RmlUi CONFIG REQUIRED GLOBAL)
-	find_package(PkgConfig REQUIRED GLOBAL)
-	find_package(PNG REQUIRED GLOBAL)
-	find_package(BZip2 REQUIRED GLOBAL)
-	find_package(Freetype CONFIG REQUIRED GLOBAL)
+# no-op on the already-existing targets. Runs for vcpkg AND manual modes
+# (K10): vcpkg resolves via its toolchain, manual via CMAKE_PREFIX_PATH and
+# the wrapper's deps.json/convention tiers
+if (NOT "${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+	kotek_find_package(zstd CONFIG REQUIRED GLOBAL)
+	kotek_find_package(etl CONFIG REQUIRED GLOBAL)
+	kotek_find_package(GTest CONFIG REQUIRED GLOBAL)
+	kotek_find_package(Boost COMPONENTS json CONFIG REQUIRED GLOBAL)
+	kotek_find_package(Boost COMPONENTS container CONFIG REQUIRED GLOBAL)
+	kotek_find_package(Ktx CONFIG REQUIRED GLOBAL)
+	kotek_find_package(ZLIB REQUIRED GLOBAL)
+	kotek_find_package(Vulkan REQUIRED GLOBAL)
+	kotek_find_package(glfw3 CONFIG REQUIRED GLOBAL)
+	kotek_find_package(bgfx CONFIG REQUIRED GLOBAL)
+	kotek_find_package(utf8cpp CONFIG REQUIRED GLOBAL)
+	kotek_find_package(spdlog CONFIG REQUIRED GLOBAL)
+	kotek_find_package(glm CONFIG REQUIRED GLOBAL)
+	kotek_find_package(fmt CONFIG REQUIRED GLOBAL)
+	kotek_find_package(Tracy REQUIRED GLOBAL)
+	kotek_find_package(TBB REQUIRED GLOBAL)
+	kotek_find_package(RmlUi CONFIG REQUIRED GLOBAL)
+	kotek_find_package(PkgConfig REQUIRED GLOBAL)
+	kotek_find_package(PNG REQUIRED GLOBAL)
+	kotek_find_package(BZip2 REQUIRED GLOBAL)
+	kotek_find_package(Freetype CONFIG REQUIRED GLOBAL)
 endif()
 
 # per-module, per-config build-tree location for the generated preprocessors

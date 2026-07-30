@@ -120,12 +120,17 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 			bgfx::bimg_decode
 		)
 	endif()
-elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+elseif(NOT "${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+	# vcpkg AND manual (custom folder) modes share this branch (K10): both
+	# resolve the deps through find_package — vcpkg via its toolchain,
+	# manual via the user's CMAKE_PREFIX_PATH / kotek_find_package wrapper
 	if ("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "STATIC" OR UNIX)
 		find_package(zstd CONFIG REQUIRED)
 		find_package(Threads REQUIRED)
 	elseif("${KOTEK_DEVELOPMENT_TYPE_PACKAGES}" STREQUAL "SHARED")
-		find_package(ZLIB REQUIRED)
+		# through the wrapper (K10): manual mode needs ZLIB_USE_STATIC_LIBS
+		# for the static triplet's zs/zsd names
+		kotek_find_package(ZLIB REQUIRED)
 	endif()
 
 	if (NOT "${KOTEK_CONFIGURATION_TYPE}" STREQUAL "minimal")
@@ -137,15 +142,13 @@ elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
 	endif()
 
 	if ("${KOTEK_BGFX}" STREQUAL "ON")
-		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC 
-			bgfx::bx 
-			bgfx::bgfx 
-			bgfx::bimg 
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC
+			bgfx::bx
+			bgfx::bgfx
+			bgfx::bimg
 			bgfx::bimg_decode
 		)
 	endif()
-else()
-	message(FATAL_ERROR "provide implementation for custom folder and compiled by user")
 endif()
 
 

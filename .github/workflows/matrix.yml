@@ -24,6 +24,7 @@ jobs:
           - { name: math-glm, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM", cfg: Debug }
           - { name: math-dxm, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=DXM", cfg: Debug }
           - { name: math-own, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=KOTEK_OWN", cfg: Debug }
+          - { name: deps-manual, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_DEPS_FOLDER=ci-manual", cfg: Debug }
 
     steps:
       - uses: actions/checkout@v4
@@ -45,6 +46,25 @@ jobs:
 
       - name: setup msvc
         uses: ilammy/msvc-dev-cmd@v1.13.0
+
+      # deps-manual leg (K10): manual deps mode end-to-end. Deps are
+      # installed once by a vcpkg-mode warmup configure (the manual mode
+      # itself never touches vcpkg), then ci-manual/deps.json overrides two
+      # deps to the same prefix (exercises the wrapper's json tier) and
+      # CMAKE_PREFIX_PATH covers the rest (exercises the fallback tier) —
+      # the convention tier is proven by the wrapper's cmake -P fixtures
+      - name: warmup deps for the manual leg
+        if: matrix.name == 'deps-manual'
+        run: cmake -S . -B build-warmup -DCMAKE_BUILD_TYPE=Debug
+
+      - name: prepare the manual deps folder
+        if: matrix.name == 'deps-manual'
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force ci-manual | Out-Null
+          $prefix = (Resolve-Path "vcpkg/installed/x64-windows-static").Path
+          @{ Tracy = $prefix; glm = $prefix } | ConvertTo-Json | Set-Content ci-manual/deps.json
+          "CMAKE_PREFIX_PATH=$prefix" >> $env:GITHUB_ENV
 
       - name: configure
         run: cmake -S . -B build ${{ matrix.cmake }}

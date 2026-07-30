@@ -71,6 +71,7 @@ jobs:
           }
 
       - name: build module targets
+        id: build
         shell: pwsh
         run: |
           foreach ($t in "${{ matrix.targets }}".Split(' ')) {
@@ -114,13 +115,14 @@ jobs:
         if: always()
         shell: pwsh
         run: |
-          $color = if ($LASTEXITCODE -eq 0) { "brightgreen" } else { "red" }
-          $msg = if ($LASTEXITCODE -eq 0) { "passing" } else { "failing" }
+          # the build step's real outcome — $LASTEXITCODE does NOT survive
+          # across steps (a fresh pwsh reports 0, i.e. always "passing")
+          $ok = "${{ steps.build.outcome }}" -eq "success"
           @{
             schemaVersion = 1
             label = "${{ matrix.name }}"
-            message = $msg
-            color = $color
+            message = ($ok ? "passing" : "failing")
+            color = ($ok ? "brightgreen" : "red")
           } | ConvertTo-Json -Compress | Out-File -FilePath "${{ matrix.name }}.json" -Encoding utf8
 
       - name: upload badge

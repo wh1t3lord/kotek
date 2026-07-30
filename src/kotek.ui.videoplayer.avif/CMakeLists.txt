@@ -14,13 +14,18 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	else()
 		message(FATAL_ERROR "failed to find dav1d package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
 	endif()
-elseif("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+else()
+	# vcpkg AND manual modes (K10): pkg-config resolves dav1d via
+	# PKG_CONFIG_PATH — the vcpkg toolchain sets it; in manual mode the
+	# user sets it to <prefix>/lib/pkgconfig, and the convention folder
+	# <folder>/dav1d/lib/pkgconfig is picked up automatically when present
+	if (NOT "${KOTEK_DEPS_FOLDER_PATH}" STREQUAL "" AND EXISTS "${KOTEK_DEPS_FOLDER_PATH}/dav1d/lib/pkgconfig")
+		set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH};${KOTEK_DEPS_FOLDER_PATH}/dav1d/lib/pkgconfig")
+	endif()
 	find_package(PkgConfig REQUIRED)
 	# GLOBAL: the imported target must be visible outside this directory —
 	# PLUGIN mode re-applies it to consumers via kotek_finalize_plugin_links
 	pkg_check_modules(dav1d REQUIRED IMPORTED_TARGET GLOBAL dav1d)
-else()
-	message(FATAL_ERROR "provide implementation")
 endif()
 
 
@@ -69,8 +74,7 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 		COMMENT "copying dlls after compilation of ${PROJECT_NAME}"
    )
 
-elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC PkgConfig::dav1d)
 else()
-	message(FATAL_ERROR "provide implementation")
+	# vcpkg + manual (K10): the pkg-config imported target in both cases
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC PkgConfig::dav1d)
 endif()
