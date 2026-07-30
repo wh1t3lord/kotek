@@ -144,6 +144,9 @@ jobs:
         with:
           pattern: badge-*
           path: .
+          # without this each artifact lands in its own subdir and the
+          # flat *.json copy below stages nothing (silent no-op)
+          merge-multiple: true
 
       # the badges branch may not exist yet (first push) — clone it if it
       # exists, create it as an orphan otherwise, then push the badges
@@ -164,6 +167,11 @@ jobs:
           git -C $tmp config user.email "ci@kotek.local"
           git -C $tmp add *.json
           git -C $tmp diff --cached --quiet
-          if ($LASTEXITCODE -eq 0) { Write-Host "badges unchanged"; exit 0 }
+          if ($LASTEXITCODE -eq 0) {
+            if (-not (Get-ChildItem *.json -ErrorAction SilentlyContinue)) {
+              throw "no badge jsons collected (artifact download mismatch) — a silent no-op would hide badge state"
+            }
+            Write-Host "badges unchanged"; exit 0
+          }
           git -C $tmp commit -m "badges: ${{ github.sha }}"
           git -C $tmp push origin badges
