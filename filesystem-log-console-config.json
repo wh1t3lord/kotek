@@ -1,1 +1,1 @@
-{"message":"passing","color":"brightgreen","label":"filesystem-log-console-config","schemaVersion":1}
+{"color":"red","label":"filesystem-log-console-config","schemaVersion":1,"message":"failing"}
