@@ -30,6 +30,7 @@ void RegisterAllTests(void)
 	RegisterTests_Json_ForModule_Core();
 	RegisterTests_String_ForModule_Core();
 	RegisterTests_Input_ForModule_Core();
+	RegisterTests_InputWinApi_ForModule_Core();
 	RegisterTests_Utility_ForModule_Core();
 	RegisterTests_Container_Vector_Core();
 	RegisterTests_Container_Unordered_Set_Core();

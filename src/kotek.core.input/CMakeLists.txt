@@ -28,6 +28,7 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Input SHUTDOWN Shut
 	"include/kotek_core_input.h"
 	"src/main_core_input_dll.cpp"
 	"tests/kotek_core_test_input.cpp"
+	"tests/kotek_core_test_input_winapi.cpp"
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core")
@@ -49,6 +50,10 @@ else()
 endif()
 
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+# the test preprocessors (-DKOTEK_TESTS/-DKOTEK_TESTS_RUNTIME) — without
+# this the module's gtest TUs compile the guards out and every test in
+# them is silently dead (the pre-existing 3 tests were dead too)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines.static.tests)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.constants.window)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
