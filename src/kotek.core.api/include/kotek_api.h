@@ -1209,46 +1209,36 @@ public:
 	virtual ktkIImguiContextManager* Get_ContextManager(void) = 0;
 
 
-	virtual bool ImGui_ImplGlfw_InitForOpenGL(
-		GLFWwindow* window, bool install_callbacks
-	) = 0;
-	virtual bool ImGui_ImplGlfw_InitForVulkan(
-		GLFWwindow* window, bool install_callbacks
-	) = 0;
-	virtual bool ImGui_ImplGlfw_InitForOther(
-		GLFWwindow* window, bool install_callbacks
-	) = 0;
-	virtual void ImGui_ImplGlfw_Shutdown() = 0;
-	virtual void ImGui_ImplGlfw_NewFrame() = 0;
+	// the windowing backend is hidden behind void* native handles (task
+	// K17 phase 2/e): the active backend (GLFW by default, kotek's own
+	// Win32 backend under KOTEK_WINDOW_LIBRARY=WIN32) interprets the
+	// handle — consumers pass GetWindowHandle() either way
+	virtual bool ImGui_InitForOpenGL(
+		void* p_native_window, bool install_callbacks) = 0;
+	virtual bool ImGui_InitForVulkan(
+		void* p_native_window, bool install_callbacks) = 0;
+	virtual bool ImGui_InitForOther(
+		void* p_native_window, bool install_callbacks) = 0;
+	virtual void ImGui_ShutdownPlatform() = 0;
+	virtual void ImGui_NewFramePlatform() = 0;
 
-	virtual void ImGui_ImplGlfw_WindowFocusCallback(
-		GLFWwindow* window, int focused
-	) = 0;
-	virtual void ImGui_ImplGlfw_CursorEnterCallback(
-		GLFWwindow* window, int entered
-	) = 0;
-	virtual void ImGui_ImplGlfw_MouseButtonCallback(
-		GLFWwindow* window, int button, int action, int mods
-	) = 0;
-	virtual void ImGui_ImplGlfw_ScrollCallback(
-		GLFWwindow* window, double xoffset, double yoffset
-	) = 0;
-	virtual void ImGui_ImplGlfw_KeyCallback(
-		GLFWwindow* window,
-		int key,
-		int scancode,
-		int action,
-		int mods
-	) = 0;
-	virtual void ImGui_ImplGlfw_CharCallback(
-		GLFWwindow* window, unsigned int c
-	) = 0;
-	virtual void ImGui_ImplGlfw_MonitorCallback(
-		GLFWmonitor* monitor, int event
-	) = 0;
-	virtual void ImGui_ImplGlfw_CursorPosCallback(
-		GLFWwindow* window, double x, double y
-	) = 0;
+	virtual void ImGui_WindowFocusCallback(
+		void* p_native_window, int focused) = 0;
+	virtual void ImGui_CursorEnterCallback(
+		void* p_native_window, int entered) = 0;
+	virtual void ImGui_MouseButtonCallback(
+		void* p_native_window, int button, int action, int mods) = 0;
+	virtual void ImGui_ScrollCallback(
+		void* p_native_window, double xoffset, double yoffset) = 0;
+	virtual void ImGui_KeyCallback(
+		void* p_native_window, int key, int scancode, int action,
+		int mods) = 0;
+	virtual void ImGui_CharCallback(
+		void* p_native_window, unsigned int c) = 0;
+	virtual void ImGui_MonitorCallback(
+		void* p_native_monitor, int event) = 0;
+	virtual void ImGui_CursorPosCallback(
+		void* p_native_window, double x, double y) = 0;
 
 	virtual bool
 	ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL) = 0;

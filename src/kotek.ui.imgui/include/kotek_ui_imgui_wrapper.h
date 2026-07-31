@@ -83,46 +83,32 @@ public:
 	/// ktkIImguiContextManager for the two supported models)
 	kun_core ktkIImguiContextManager* Get_ContextManager(void) override;
 
-	bool ImGui_ImplGlfw_InitForOpenGL(
-		GLFWwindow* window, bool install_callbacks
-	) override;
-	bool ImGui_ImplGlfw_InitForVulkan(
-		GLFWwindow* window, bool install_callbacks
-	) override;
-	bool ImGui_ImplGlfw_InitForOther(
-		GLFWwindow* window, bool install_callbacks
-	) override;
-	void ImGui_ImplGlfw_Shutdown() override;
-	void ImGui_ImplGlfw_NewFrame() override;
+	bool ImGui_InitForOpenGL(
+		void* p_native_window, bool install_callbacks) override;
+	bool ImGui_InitForVulkan(
+		void* p_native_window, bool install_callbacks) override;
+	bool ImGui_InitForOther(
+		void* p_native_window, bool install_callbacks) override;
+	void ImGui_ShutdownPlatform() override;
+	void ImGui_NewFramePlatform() override;
 
-	void ImGui_ImplGlfw_WindowFocusCallback(
-		GLFWwindow* window, int focused
-	) override;
-	void ImGui_ImplGlfw_CursorEnterCallback(
-		GLFWwindow* window, int entered
-	) override;
-	void ImGui_ImplGlfw_MouseButtonCallback(
-		GLFWwindow* window, int button, int action, int mods
-	) override;
-	void ImGui_ImplGlfw_ScrollCallback(
-		GLFWwindow* window, double xoffset, double yoffset
-	) override;
-	void ImGui_ImplGlfw_KeyCallback(
-		GLFWwindow* window,
-		int key,
-		int scancode,
-		int action,
-		int mods
-	) override;
-	void ImGui_ImplGlfw_CharCallback(
-		GLFWwindow* window, unsigned int c
-	) override;
-	void ImGui_ImplGlfw_MonitorCallback(
-		GLFWmonitor* monitor, int event
-	) override;
-	void ImGui_ImplGlfw_CursorPosCallback(
-		GLFWwindow* window, double x, double y
-	) override;
+	void ImGui_WindowFocusCallback(
+		void* p_native_window, int focused) override;
+	void ImGui_CursorEnterCallback(
+		void* p_native_window, int entered) override;
+	void ImGui_MouseButtonCallback(
+		void* p_native_window, int button, int action, int mods) override;
+	void ImGui_ScrollCallback(
+		void* p_native_window, double xoffset, double yoffset) override;
+	void ImGui_KeyCallback(
+		void* p_native_window, int key, int scancode, int action,
+		int mods) override;
+	void ImGui_CharCallback(
+		void* p_native_window, unsigned int c) override;
+	void ImGui_MonitorCallback(
+		void* p_native_monitor, int event) override;
+	void ImGui_CursorPosCallback(
+		void* p_native_window, double x, double y) override;
 
 	bool ImGui_ImplOpenGL3_Init(const char* glsl_version = NULL)
 		override;

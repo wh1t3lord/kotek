@@ -15,8 +15,8 @@ kun_core ktkIImguiContextManager* ktkImguiWrapper::Get_ContextManager(void)
 	return &m_context_manager;
 }
 
-bool ktkImguiWrapper::ImGui_ImplGlfw_InitForOpenGL(
-	GLFWwindow* window, bool install_callbacks
+bool ktkImguiWrapper::ImGui_InitForOpenGL(
+	void* p_native_window, bool install_callbacks
 )
 {
 #ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
@@ -24,43 +24,43 @@ bool ktkImguiWrapper::ImGui_ImplGlfw_InitForOpenGL(
 	// the raw HWND once — renderer choice lives in the renderer binding,
 	// not in the platform init
 	(void)install_callbacks;
-	return ::ImGui_ImplWin32_Init(window);
+	return ::ImGui_ImplWin32_Init(p_native_window);
 #else
 	return ::ImGui_ImplGlfw_InitForOpenGL(
-		window, install_callbacks
+		static_cast<GLFWwindow*>(p_native_window), install_callbacks
 	);
 #endif
 }
 
-bool ktkImguiWrapper::ImGui_ImplGlfw_InitForVulkan(
-	GLFWwindow* window, bool install_callbacks
+bool ktkImguiWrapper::ImGui_InitForVulkan(
+	void* p_native_window, bool install_callbacks
 )
 {
 #ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	(void)install_callbacks;
-	return ::ImGui_ImplWin32_Init(window);
+	return ::ImGui_ImplWin32_Init(p_native_window);
 #else
 	return ::ImGui_ImplGlfw_InitForVulkan(
-		window, install_callbacks
+		static_cast<GLFWwindow*>(p_native_window), install_callbacks
 	);
 #endif
 }
 
-bool ktkImguiWrapper::ImGui_ImplGlfw_InitForOther(
-	GLFWwindow* window, bool install_callbacks
+bool ktkImguiWrapper::ImGui_InitForOther(
+	void* p_native_window, bool install_callbacks
 )
 {
 #ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	(void)install_callbacks;
-	return ::ImGui_ImplWin32_Init(window);
+	return ::ImGui_ImplWin32_Init(p_native_window);
 #else
 	return ::ImGui_ImplGlfw_InitForOther(
-		window, install_callbacks
+		static_cast<GLFWwindow*>(p_native_window), install_callbacks
 	);
 #endif
 }
 
-void ktkImguiWrapper::ImGui_ImplGlfw_Shutdown()
+void ktkImguiWrapper::ImGui_ShutdownPlatform()
 {
 #ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplWin32_Shutdown();
@@ -69,7 +69,7 @@ void ktkImguiWrapper::ImGui_ImplGlfw_Shutdown()
 #endif
 }
 
-void ktkImguiWrapper::ImGui_ImplGlfw_NewFrame()
+void ktkImguiWrapper::ImGui_NewFramePlatform()
 {
 #ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplWin32_NewFrame();
@@ -78,58 +78,61 @@ void ktkImguiWrapper::ImGui_ImplGlfw_NewFrame()
 #endif
 }
 
-void ktkImguiWrapper::ImGui_ImplGlfw_WindowFocusCallback(
-	GLFWwindow* window, int focused
+void ktkImguiWrapper::ImGui_WindowFocusCallback(
+	void* p_native_window, int focused
 )
 {
 #ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
-	::ImGui_ImplGlfw_WindowFocusCallback(window, focused);
+	::ImGui_ImplGlfw_WindowFocusCallback(
+		static_cast<GLFWwindow*>(p_native_window), focused);
 #else
 	// phase-1 no-op: the win32 backend feeds events through
 	// ImGui_ImplWin32_WndProcHandler wired into the window's proc, not
 	// through glfw-shaped callbacks (task K17 phase 2, with the win32
 	// input backend)
-	(void)window; (void)focused;
+	(void)p_native_window; (void)focused;
 #endif
 }
 
-void ktkImguiWrapper::ImGui_ImplGlfw_CursorEnterCallback(
-	GLFWwindow* window, int entered
+void ktkImguiWrapper::ImGui_CursorEnterCallback(
+	void* p_native_window, int entered
 )
 {
 #ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
-	::ImGui_ImplGlfw_CursorEnterCallback(window, entered);
+	::ImGui_ImplGlfw_CursorEnterCallback(
+		static_cast<GLFWwindow*>(p_native_window), entered);
 #else
-	(void)window; (void)entered;
+	(void)p_native_window; (void)entered;
 #endif
 }
 
-void ktkImguiWrapper::ImGui_ImplGlfw_MouseButtonCallback(
-	GLFWwindow* window, int button, int action, int mods
+void ktkImguiWrapper::ImGui_MouseButtonCallback(
+	void* p_native_window, int button, int action, int mods
 )
 {
 #ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplGlfw_MouseButtonCallback(
-		window, button, action, mods
+		static_cast<GLFWwindow*>(p_native_window), button, action, mods
 	);
 #else
-	(void)window; (void)button; (void)action; (void)mods;
+	(void)p_native_window; (void)button; (void)action; (void)mods;
 #endif
 }
 
-void ktkImguiWrapper::ImGui_ImplGlfw_ScrollCallback(
-	GLFWwindow* window, double xoffset, double yoffset
+void ktkImguiWrapper::ImGui_ScrollCallback(
+	void* p_native_window, double xoffset, double yoffset
 )
 {
 #ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
-	::ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
+	::ImGui_ImplGlfw_ScrollCallback(
+		static_cast<GLFWwindow*>(p_native_window), xoffset, yoffset);
 #else
-	(void)window; (void)xoffset; (void)yoffset;
+	(void)p_native_window; (void)xoffset; (void)yoffset;
 #endif
 }
 
-void ktkImguiWrapper::ImGui_ImplGlfw_KeyCallback(
-	GLFWwindow* window,
+void ktkImguiWrapper::ImGui_KeyCallback(
+	void* p_native_window,
 	int key,
 	int scancode,
 	int action,
@@ -138,43 +141,48 @@ void ktkImguiWrapper::ImGui_ImplGlfw_KeyCallback(
 {
 #ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplGlfw_KeyCallback(
-		window, key, scancode, action, mods
+		static_cast<GLFWwindow*>(p_native_window), key, scancode, action,
+		mods
 	);
 #else
-	(void)window; (void)key; (void)scancode; (void)action; (void)mods;
+	(void)p_native_window; (void)key; (void)scancode; (void)action;
+	(void)mods;
 #endif
 }
 
-void ktkImguiWrapper::ImGui_ImplGlfw_CharCallback(
-	GLFWwindow* window, unsigned int c
+void ktkImguiWrapper::ImGui_CharCallback(
+	void* p_native_window, unsigned int c
 )
 {
 #ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
-	::ImGui_ImplGlfw_CharCallback(window, c);
+	::ImGui_ImplGlfw_CharCallback(
+		static_cast<GLFWwindow*>(p_native_window), c);
 #else
-	(void)window; (void)c;
+	(void)p_native_window; (void)c;
 #endif
 }
 
-void ktkImguiWrapper::ImGui_ImplGlfw_MonitorCallback(
-	GLFWmonitor* monitor, int event
+void ktkImguiWrapper::ImGui_MonitorCallback(
+	void* p_native_monitor, int event
 )
 {
 #ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
-	::ImGui_ImplGlfw_MonitorCallback(monitor, event);
+	::ImGui_ImplGlfw_MonitorCallback(
+		static_cast<GLFWmonitor*>(p_native_monitor), event);
 #else
-	(void)monitor; (void)event;
+	(void)p_native_monitor; (void)event;
 #endif
 }
 
-void ktkImguiWrapper::ImGui_ImplGlfw_CursorPosCallback(
-	GLFWwindow* window, double x, double y
+void ktkImguiWrapper::ImGui_CursorPosCallback(
+	void* p_native_window, double x, double y
 )
 {
 #ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
-	::ImGui_ImplGlfw_CursorPosCallback(window, x, y);
+	::ImGui_ImplGlfw_CursorPosCallback(
+		static_cast<GLFWwindow*>(p_native_window), x, y);
 #else
-	(void)window; (void)x; (void)y;
+	(void)p_native_window; (void)x; (void)y;
 #endif
 }
 
