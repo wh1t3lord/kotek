@@ -52,10 +52,15 @@ KOTEK_CPP_DISABLE_ALL_WARNINGS_PUSH
 // TODO: add for SDL
 #ifdef KOTEK_USE_WINDOW_LIBRARY_GLFW
 	#include "imgui_impl_glfw.h"
+#elif defined(KOTEK_USE_WINDOW_LIBRARY_WIN32)
+	// the own Win32 window backend (task K17) pairs with imgui's official
+	// win32 platform binding (already included above for the DX paths;
+	// its include guard makes this a no-op then)
+	#include "imgui_impl_win32.h"
 #else
-	#error Native inputs didn't implement so possibly only through users with pull requests
-// TODO: imgui doesn't have any native support for linux and other system, be
-// careful here
+	#error "unsupported window library for the imgui platform backend (GLFW and WIN32 are implemented)"
+	// TODO: imgui does not have any native support for linux and other
+	// systems, be careful here
 #endif
 
 KOTEK_CPP_DISABLE_ALL_WARNINGS_POP

@@ -369,8 +369,20 @@ add_subdirectory("src/kotek.core.profilers.gpu")
 add_subdirectory("src/kotek.core.os")
 add_subdirectory("src/kotek.core.os.win32")
 add_subdirectory("src/kotek.core.os.linux")
+# the window backend is a compile-time switch (task K17): exactly one
+# backend module builds per configuration — kotek_os.h gates the glfw
+# headers on the active flag, so the inactive backend can not compile
+# (and the WIN32 config needs no third-party windowing dependency at all)
+if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "")
+	set(KOTEK_WINDOW_LIBRARY "GLFW" CACHE INTERNAL "windowing backend: GLFW (cross-platform default) / WIN32 (kotek's own no-dep backend)")
+endif()
+
 add_subdirectory("src/kotek.core.window")
-add_subdirectory("src/kotek.core.window.glfw")
+if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "WIN32")
+	add_subdirectory("src/kotek.core.window.win32")
+else()
+	add_subdirectory("src/kotek.core.window.glfw")
+endif()
 add_subdirectory("src/kotek.core.window_manager")
 add_subdirectory("src/kotek.core.log")
 add_subdirectory("src/kotek.core.console")

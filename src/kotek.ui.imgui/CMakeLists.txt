@@ -35,7 +35,6 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_UI_IMGUI SHUTDOWN Shutdo
 	"src/imgui_impl_dx10.cpp"
 	"src/imgui_impl_dx11.cpp"
 	"src/imgui_impl_dx12.cpp"
-	"src/imgui_impl_glfw.cpp"
 	"src/imgui_impl_opengl2.cpp"
 	"src/imgui_impl_opengl3.cpp"
 	"src/imgui_impl_vulkan.cpp"
@@ -49,6 +48,13 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_UI_IMGUI SHUTDOWN Shutdo
 	"src/main_ui_imgui_dll.cpp")
 	
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/ui/vendor")
+
+# the glfw platform binding only exists in GLFW configurations — with the
+# own Win32 window backend (task K17) imgui uses imgui_impl_win32.cpp
+# (always in the list above) and GLFW is not required at all
+if (NOT "${KOTEK_WINDOW_LIBRARY}" STREQUAL "WIN32")
+	target_sources(${PROJECT_NAME} PRIVATE "src/imgui_impl_glfw.cpp")
+endif()
 
 if (WIN32)
 	# imgui_impl_opengl2/3 backends call OpenGL directly

@@ -19,67 +19,113 @@ bool ktkImguiWrapper::ImGui_ImplGlfw_InitForOpenGL(
 	GLFWwindow* window, bool install_callbacks
 )
 {
+#ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
+	// the own Win32 backend (task K17): the win32 platform binding takes
+	// the raw HWND once — renderer choice lives in the renderer binding,
+	// not in the platform init
+	(void)install_callbacks;
+	return ::ImGui_ImplWin32_Init(window);
+#else
 	return ::ImGui_ImplGlfw_InitForOpenGL(
 		window, install_callbacks
 	);
+#endif
 }
 
 bool ktkImguiWrapper::ImGui_ImplGlfw_InitForVulkan(
 	GLFWwindow* window, bool install_callbacks
 )
 {
+#ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
+	(void)install_callbacks;
+	return ::ImGui_ImplWin32_Init(window);
+#else
 	return ::ImGui_ImplGlfw_InitForVulkan(
 		window, install_callbacks
 	);
+#endif
 }
 
 bool ktkImguiWrapper::ImGui_ImplGlfw_InitForOther(
 	GLFWwindow* window, bool install_callbacks
 )
 {
+#ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
+	(void)install_callbacks;
+	return ::ImGui_ImplWin32_Init(window);
+#else
 	return ::ImGui_ImplGlfw_InitForOther(
 		window, install_callbacks
 	);
+#endif
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_Shutdown()
 {
+#ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
+	::ImGui_ImplWin32_Shutdown();
+#else
 	::ImGui_ImplGlfw_Shutdown();
+#endif
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_NewFrame()
 {
+#ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
+	::ImGui_ImplWin32_NewFrame();
+#else
 	::ImGui_ImplGlfw_NewFrame();
+#endif
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_WindowFocusCallback(
 	GLFWwindow* window, int focused
 )
 {
+#ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplGlfw_WindowFocusCallback(window, focused);
+#else
+	// phase-1 no-op: the win32 backend feeds events through
+	// ImGui_ImplWin32_WndProcHandler wired into the window's proc, not
+	// through glfw-shaped callbacks (task K17 phase 2, with the win32
+	// input backend)
+	(void)window; (void)focused;
+#endif
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_CursorEnterCallback(
 	GLFWwindow* window, int entered
 )
 {
+#ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplGlfw_CursorEnterCallback(window, entered);
+#else
+	(void)window; (void)entered;
+#endif
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_MouseButtonCallback(
 	GLFWwindow* window, int button, int action, int mods
 )
 {
+#ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplGlfw_MouseButtonCallback(
 		window, button, action, mods
 	);
+#else
+	(void)window; (void)button; (void)action; (void)mods;
+#endif
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_ScrollCallback(
 	GLFWwindow* window, double xoffset, double yoffset
 )
 {
+#ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplGlfw_ScrollCallback(window, xoffset, yoffset);
+#else
+	(void)window; (void)xoffset; (void)yoffset;
+#endif
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_KeyCallback(
@@ -90,30 +136,46 @@ void ktkImguiWrapper::ImGui_ImplGlfw_KeyCallback(
 	int mods
 )
 {
+#ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplGlfw_KeyCallback(
 		window, key, scancode, action, mods
 	);
+#else
+	(void)window; (void)key; (void)scancode; (void)action; (void)mods;
+#endif
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_CharCallback(
 	GLFWwindow* window, unsigned int c
 )
 {
+#ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplGlfw_CharCallback(window, c);
+#else
+	(void)window; (void)c;
+#endif
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_MonitorCallback(
 	GLFWmonitor* monitor, int event
 )
 {
+#ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplGlfw_MonitorCallback(monitor, event);
+#else
+	(void)monitor; (void)event;
+#endif
 }
 
 void ktkImguiWrapper::ImGui_ImplGlfw_CursorPosCallback(
 	GLFWwindow* window, double x, double y
 )
 {
+#ifndef KOTEK_USE_WINDOW_LIBRARY_WIN32
 	::ImGui_ImplGlfw_CursorPosCallback(window, x, y);
+#else
+	(void)window; (void)x; (void)y;
+#endif
 }
 
 bool ktkImguiWrapper::ImGui_ImplOpenGL3_Init(

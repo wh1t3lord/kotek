@@ -13,4 +13,10 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Window SHUTDOWN Shu
 )
 
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/window management")
-kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window.glfw)
+# exactly one backend module exists per configuration (see the root's
+# KOTEK_WINDOW_LIBRARY switch)
+if ("${KOTEK_WINDOW_LIBRARY}" STREQUAL "WIN32")
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window.win32)
+else()
+	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.window.glfw)
+endif()

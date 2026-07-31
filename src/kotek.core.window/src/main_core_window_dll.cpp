@@ -23,28 +23,51 @@ bool InitializeModule_Core_Window(ktkMainManager* p_manager)
 	ktkWindowConsole* p_console_instance = new ktkWindowConsole();
 	p_manager->Set_WindowConsole(p_console_instance);
 
+	// the window backend is a compile-time switch (KOTEK_WINDOW_LIBRARY):
+	// WIN32 = kotek's own no-dependency backend (task K17), GLFW = the
+	// cross-platform default. K21's invoke keeps every path
+	// plugin-overrideable either way
+#if defined(KOTEK_USE_WINDOW_LIBRARY_WIN32)
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Window_WIN32, p_manager);
+#elif defined(KOTEK_USE_WINDOW_LIBRARY_GLFW)
 	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_Window_GLFW, p_manager);
+#else
+	KOTEK_ASSERT(false,
+		"no window backend is enabled — check KOTEK_WINDOW_LIBRARY");
+#endif
 
 	return true;
 }
 
 bool SerializeModule_Core_Window(ktkMainManager* p_manager)
 {
+#if defined(KOTEK_USE_WINDOW_LIBRARY_WIN32)
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_Window_WIN32, p_manager);
+#elif defined(KOTEK_USE_WINDOW_LIBRARY_GLFW)
 	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_Window_GLFW, p_manager);
+#endif
 
 	return true;
 }
 
 bool DeserializeModule_Core_Window(ktkMainManager* p_manager)
 {
+#if defined(KOTEK_USE_WINDOW_LIBRARY_WIN32)
+	KOTEK_INVOKE_MODULE(DESERIALIZE, CORE, DeserializeModule_Core_Window_WIN32, p_manager);
+#elif defined(KOTEK_USE_WINDOW_LIBRARY_GLFW)
 	KOTEK_INVOKE_MODULE(DESERIALIZE, CORE, DeserializeModule_Core_Window_GLFW, p_manager);
+#endif
 
 	return true;
 }
 
 bool ShutdownModule_Core_Window(ktkMainManager* p_manager)
 {
+#if defined(KOTEK_USE_WINDOW_LIBRARY_WIN32)
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Window_WIN32, p_manager);
+#elif defined(KOTEK_USE_WINDOW_LIBRARY_GLFW)
 	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_Window_GLFW, p_manager);
+#endif
 
 	ktkIWindowConsole* p_console_interface =
 		p_manager->Get_WindowConsole();

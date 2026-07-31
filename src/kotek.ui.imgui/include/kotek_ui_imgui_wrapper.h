@@ -4,7 +4,16 @@
 
 #include "imgui.h"
 #include "imgui_impl_opengl3.h"
-#include "imgui_impl_glfw.h"
+#ifdef KOTEK_USE_WINDOW_LIBRARY_WIN32
+	#include "imgui_impl_win32.h"
+	// the interface signatures still carry the glfw-shaped types (backend
+	// generalization is the registered follow-up, task K17 phase 2) — in
+	// this config they are opaque aliases of the native window handle
+	struct GLFWwindow;
+	struct GLFWmonitor;
+#else
+	#include "imgui_impl_glfw.h"
+#endif
 #include "kotek_ui_imgui_context_manager.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK

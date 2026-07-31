@@ -28,6 +28,12 @@ if (WIN32)
 			#define KOTEK_USE_WINDOW_LIBRARY_GLFW
 		#endif
 
+		// own no-dependency Win32 window backend (task K17), selected with
+		// -DKOTEK_WINDOW_LIBRARY=WIN32
+		#ifdef KOTEK_WINDOW_LIBRARY_WIN32
+			#define KOTEK_USE_WINDOW_LIBRARY_WIN32
+		#endif
+
 		#ifdef KOTEK_WINDOW_LIBRARY_SDL
 			#define KOTEK_USE_WINDOW_LIBRARY_SDL
 			#error TODO connect sdl to project and add switching between libraries
