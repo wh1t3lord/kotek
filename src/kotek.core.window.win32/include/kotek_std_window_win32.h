@@ -84,6 +84,29 @@ private:
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
 	static LRESULT CALLBACK WindowProc_Win32(
 		HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param);
+
+	/// \~english task K17 phase 2: forwards a keyboard/mouse event into the
+	/// input system (WPARAM/LPARAM come from the proc; controller_type
+	/// picks the translation path inside kotek.core.input)
+	void Forward_EventToInput(UINT msg, WPARAM w_param, LPARAM l_param,
+		bool is_mouse) noexcept;
+
+	/// \~english current glfw-shaped modifier bits from the live key state
+	/// (SHIFT=1, CONTROL=2, ALT=4, SUPER=8)
+	int Get_CurrentMods(void) const noexcept;
+#endif
+
+public:
+	/// \~english task K17 phase 2: a second handler invoked from the proc
+	/// AFTER the window's own handling — kotek.ui.imgui installs
+	/// ImGui_ImplWin32_WndProcHandler here at init (a concrete-class hook,
+	/// NOT part of the ktkIWindow interface: the interface stays frozen)
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	using wndproc_chain_t = LRESULT(CALLBACK*)(HWND, UINT, WPARAM, LPARAM);
+	void Set_WndProcChain(wndproc_chain_t p_chain) noexcept
+	{
+		this->m_p_wndproc_chain = p_chain;
+	}
 #endif
 
 private:
@@ -99,6 +122,9 @@ private:
 	kun_core ktkMainManager* m_p_main_manager;
 	bool m_is_need_to_close;
 	bool m_is_fullscreen;
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	wndproc_chain_t m_p_wndproc_chain{};
+#endif
 	ktk::unordered_map<ktk::enum_base_t, ktk::cstring> m_titles;
 };
 

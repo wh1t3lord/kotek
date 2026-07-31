@@ -21,3 +21,5 @@ kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.main_manager)
+# the phase-2 WndProc->input bridge consumes ktkInputPlatformBackendArgs_WINAPI
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.input)

@@ -23,6 +23,14 @@ struct ktkInputPlatformBackendArgs_WINAPI
 	const eInputPlatformBackend backend =
 		eInputPlatformBackend::kPlatformBackend_WINAPI;
 	eInputControllerType controller = eInputControllerType::kControllerUnknown;
+	// the win32 window's WndProc fills these from WM_* messages: key = VK
+	// code (translated to the glfw shape inside kotek.core.input via the
+	// VK→GLFW table), action reuses the glfw action constants (press=1,
+	// release=0, repeat=2), mods the glfw modifier bits
+	int scancode;
+	int key;
+	int action;
+	int mods;
 };
 
 struct ktkInputPlatformBackendArgs_X11

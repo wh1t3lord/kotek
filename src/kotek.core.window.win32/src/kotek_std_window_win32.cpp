@@ -1,5 +1,7 @@
 #include "../include/kotek_std_window_win32.h"
 #include <kotek.core.api/include/kotek_api.h>
+#include <kotek.core.input/include/kotek_input.h>
+#include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -408,6 +410,86 @@ void ktkWindowWin32::Create_OsWindow(const char* p_title) noexcept
 		"CreateWindowExA failed, error {}", GetLastError());
 }
 
+int ktkWindowWin32::Get_CurrentMods(void) const noexcept
+{
+	// glfw modifier bits: SHIFT=1, CONTROL=2, ALT=4, SUPER=8 — the win32
+	// window backend keeps the input system's contracts unchanged
+	int mods = 0;
+
+	if (GetAsyncKeyState(VK_SHIFT) & 0x8000)
+		mods |= 1;
+	if (GetAsyncKeyState(VK_CONTROL) & 0x8000)
+		mods |= 2;
+	if (GetAsyncKeyState(VK_MENU) & 0x8000)
+		mods |= 4;
+	if ((GetAsyncKeyState(VK_LWIN) & 0x8000) ||
+		(GetAsyncKeyState(VK_RWIN) & 0x8000))
+		mods |= 8;
+
+	return mods;
+}
+
+void ktkWindowWin32::Forward_EventToInput(
+	UINT msg, WPARAM w_param, LPARAM l_param, bool is_mouse) noexcept
+{
+	if (this->m_p_main_manager == nullptr)
+		return;
+
+	kun_core ktkIInput* p_input = this->m_p_main_manager->Get_Input();
+
+	if (p_input == nullptr)
+		return;
+
+	ktkInputPlatformBackendArgs_WINAPI args{};
+
+	if (is_mouse)
+	{
+		args.controller = eInputControllerType::kControllerMouse;
+
+		switch (msg)
+		{
+		case WM_LBUTTONDOWN: args.key = 0; args.action = 1; break;
+		case WM_LBUTTONUP: args.key = 0; args.action = 0; break;
+		case WM_RBUTTONDOWN: args.key = 1; args.action = 1; break;
+		case WM_RBUTTONUP: args.key = 1; args.action = 0; break;
+		case WM_MBUTTONDOWN: args.key = 2; args.action = 1; break;
+		case WM_MBUTTONUP: args.key = 2; args.action = 0; break;
+		case WM_XBUTTONDOWN:
+			args.key = (GET_XBUTTON_WPARAM(w_param) == XBUTTON1) ? 3 : 4;
+			args.action = 1;
+			break;
+		case WM_XBUTTONUP:
+			args.key = (GET_XBUTTON_WPARAM(w_param) == XBUTTON1) ? 3 : 4;
+			args.action = 0;
+			break;
+		default:
+			return;
+		}
+
+		args.scancode = -1;
+	}
+	else
+	{
+		args.controller = eInputControllerType::kControllerKeyboard;
+		args.key = static_cast<int>(w_param);
+		args.scancode = static_cast<int>((l_param >> 16) & 0xFF);
+
+		if (msg == WM_KEYUP || msg == WM_SYSKEYUP)
+		{
+			args.action = 0; // release
+		}
+		else
+		{
+			// bit 30 of lParam: the previous key state — 1 = auto-repeat
+			args.action = ((l_param >> 30) & 1) ? 2 : 1;
+		}
+	}
+
+	args.mods = this->Get_CurrentMods();
+
+	p_input->Update_Controller(&args);
+}
+
 LRESULT CALLBACK ktkWindowWin32::WindowProc_Win32(
 	HWND hwnd, UINT msg, WPARAM w_param, LPARAM l_param)
 {
@@ -438,18 +520,48 @@ LRESULT CALLBACK ktkWindowWin32::WindowProc_Win32(
 	{
 		p_window->m_is_need_to_close = true;
 		DestroyWindow(hwnd);
-		return 0;
+		break;
 	}
 	case WM_DESTROY:
 	{
 		p_window->m_is_need_to_close = true;
-		return 0;
+		break;
+	}
+	case WM_KEYDOWN:
+	case WM_KEYUP:
+	case WM_SYSKEYDOWN:
+	case WM_SYSKEYUP:
+	{
+		p_window->Forward_EventToInput(msg, w_param, l_param, false);
+		break;
+	}
+	case WM_LBUTTONDOWN:
+	case WM_LBUTTONUP:
+	case WM_RBUTTONDOWN:
+	case WM_RBUTTONUP:
+	case WM_MBUTTONDOWN:
+	case WM_MBUTTONUP:
+	case WM_XBUTTONDOWN:
+	case WM_XBUTTONUP:
+	{
+		p_window->Forward_EventToInput(msg, w_param, l_param, true);
+		break;
 	}
 	default:
 	{
-		return DefWindowProcA(hwnd, msg, w_param, l_param);
+		break;
 	}
 	}
+
+	// the imgui chain (task K17 phase 2): kotek.ui.imgui installs
+	// ImGui_ImplWin32_WndProcHandler here — it must see EVERY message,
+	// including the ones we handled above
+	if (p_window->m_p_wndproc_chain)
+	{
+		return p_window->m_p_wndproc_chain(hwnd, msg, w_param, l_param);
+	}
+
+	return DefWindowProcA(hwnd, msg, w_param, l_param);
 }
 
 #endif // KOTEK_USE_PLATFORM_WINDOWS

@@ -823,6 +823,82 @@ void ktkInput::Update(void)
  *
  *
  */
+
+/// \~english VK (win32) -> GLFW key-code translation for the WINAPI input
+/// backend (task K17 phase 2): printable keys are ASCII in BOTH layouts
+/// (0x20-0x7E pass through unchanged — digits, letters, space, and the
+/// main punctuation row), only the control/special range maps by hand.
+/// Returns -1 for unmappable keys; the caller ignores them. win32 mouse
+/// buttons need no table at all — their codes already match GLFW's
+/// (left=0, right=1, middle=2, x1=3, x2=4).
+constexpr int winapi_key_to_glfw(int vk) noexcept
+{
+	// space..Z: identical values in both layouts (ASCII range incl.
+	// 0x30-0x39 digits and 0x41-0x5A letters)
+	if (vk >= 0x20 && vk <= 0x5A)
+		return vk;
+
+	// numpad digits: VK_NUMPAD0-9 (0x60-0x69) -> GLFW_KEY_KP_0-9 (320-329)
+	if (vk >= 0x60 && vk <= 0x69)
+		return 320 + (vk - 0x60);
+
+	// function keys: VK_F1-F24 (0x70-0x87) -> GLFW_KEY_F1-F24 (290-313)
+	if (vk >= 0x70 && vk <= 0x87)
+		return 290 + (vk - 0x70);
+
+	switch (vk)
+	{
+	case 0x08: return 259; // VK_BACK -> GLFW_KEY_BACKSPACE
+	case 0x09: return 258; // VK_TAB
+	case 0x0D: return 257; // VK_RETURN -> GLFW_KEY_ENTER
+	case 0x10: return 340; // VK_SHIFT -> GLFW_KEY_LEFT_SHIFT
+	case 0x11: return 341; // VK_CONTROL -> GLFW_KEY_LEFT_CONTROL
+	case 0x12: return 342; // VK_MENU -> GLFW_KEY_LEFT_ALT
+	case 0x13: return 284; // VK_PAUSE
+	case 0x14: return 280; // VK_CAPITAL -> GLFW_KEY_CAPS_LOCK
+	case 0x1B: return 256; // VK_ESCAPE
+	case 0x21: return 266; // VK_PRIOR -> GLFW_KEY_PAGE_UP
+	case 0x22: return 267; // VK_NEXT -> GLFW_KEY_PAGE_DOWN
+	case 0x23: return 269; // VK_END
+	case 0x24: return 268; // VK_HOME
+	case 0x25: return 263; // VK_LEFT
+	case 0x26: return 265; // VK_UP
+	case 0x27: return 262; // VK_RIGHT
+	case 0x28: return 264; // VK_DOWN
+	case 0x2C: return 283; // VK_SNAPSHOT -> GLFW_KEY_PRINT_SCREEN
+	case 0x2D: return 260; // VK_INSERT
+	case 0x2E: return 261; // VK_DELETE
+	case 0x5B: return 343; // VK_LWIN -> GLFW_KEY_LEFT_SUPER
+	case 0x5C: return 344; // VK_RWIN -> GLFW_KEY_RIGHT_SUPER
+	case 0x5D: return 348; // VK_APPS -> GLFW_KEY_MENU
+	case 0x6A: return 332; // VK_MULTIPLY -> GLFW_KEY_KP_MULTIPLY
+	case 0x6B: return 334; // VK_ADD -> GLFW_KEY_KP_ADD
+	case 0x6D: return 333; // VK_SUBTRACT -> GLFW_KEY_KP_SUBTRACT
+	case 0x6E: return 330; // VK_DECIMAL -> GLFW_KEY_KP_DECIMAL
+	case 0x6F: return 331; // VK_DIVIDE -> GLFW_KEY_KP_DIVIDE
+	case 0x90: return 282; // VK_NUMLOCK -> GLFW_KEY_NUM_LOCK
+	case 0x91: return 281; // VK_SCROLL -> GLFW_KEY_SCROLL_LOCK
+	case 0xA0: return 340; // VK_LSHIFT -> GLFW_KEY_LEFT_SHIFT
+	case 0xA1: return 345; // VK_RSHIFT -> GLFW_KEY_RIGHT_SHIFT
+	case 0xA2: return 341; // VK_LCONTROL -> GLFW_KEY_LEFT_CONTROL
+	case 0xA3: return 346; // VK_RCONTROL -> GLFW_KEY_RIGHT_CONTROL
+	case 0xA4: return 342; // VK_LMENU -> GLFW_KEY_LEFT_ALT
+	case 0xA5: return 347; // VK_RMENU -> GLFW_KEY_RIGHT_ALT
+	case 0xBA: return 59; // VK_OEM_1 ';'
+	case 0xBB: return 61; // VK_OEM_PLUS '='
+	case 0xBC: return 44; // VK_OEM_COMMA ','
+	case 0xBD: return 45; // VK_OEM_MINUS '-'
+	case 0xBE: return 46; // VK_OEM_PERIOD '.'
+	case 0xBF: return 47; // VK_OEM_2 '/'
+	case 0xC0: return 96; // VK_OEM_3 '`'
+	case 0xDB: return 91; // VK_OEM_4 '['
+	case 0xDC: return 92; // VK_OEM_5 '\'
+	case 0xDD: return 93; // VK_OEM_6 ']'
+	case 0xDE: return 39; // VK_OEM_7 '\''
+	default: return -1;
+	}
+}
+
 int p_glfw3_keyboard_keys_to_input[] = {-1, // 0
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
 	-1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
@@ -1554,7 +1630,15 @@ void ktkInput::Update_Controller(void* args)
 	}
 	case eInputPlatformBackend::kPlatformBackend_WINAPI:
 	{
-		KOTEK_ASSERT(false, "not implemented");
+		ktkInputPlatformBackendArgs_WINAPI* p_args =
+			static_cast<ktkInputPlatformBackendArgs_WINAPI*>(args);
+
+		KOTEK_ASSERT(
+			p_args->controller != eInputControllerType::kControllerUnknown,
+			"you must initialize args where you call this method!");
+
+		this->Update_Controller(p_args, p_args->backend, p_args->controller);
+
 		break;
 	}
 	case eInputPlatformBackend::kPlatformBackend_X11:
@@ -2648,7 +2732,31 @@ void ktkInput::Update_Keyboard(void* p_raw_args, eInputPlatformBackend backend)
 	}
 	case eInputPlatformBackend::kPlatformBackend_WINAPI:
 	{
-		KOTEK_ASSERT(false, "not implemented");
+		ktkInputPlatformBackendArgs_WINAPI* p_args =
+			static_cast<ktkInputPlatformBackendArgs_WINAPI*>(p_raw_args);
+
+		KOTEK_ASSERT(
+			p_args->controller != eInputControllerType::kControllerUnknown,
+			"you must initialize args where you call this method!");
+
+		// VK -> GLFW translation (task K17 phase 2), then the shared
+		// glfw-shaped logic handles state exactly as for the GLFW backend
+		ktkInputPlatformBackendArgs_GLFW3 glfw_args{};
+		glfw_args.controller = p_args->controller;
+		glfw_args.key = winapi_key_to_glfw(p_args->key);
+		glfw_args.scancode = p_args->scancode;
+		glfw_args.action = p_args->action;
+		glfw_args.mods = p_args->mods;
+
+		if (glfw_args.key == -1)
+		{
+			// an unmappable VK (OEM/special key with no glfw counterpart)
+			break;
+		}
+
+		this->Update_Keyboard(&glfw_args,
+			eInputPlatformBackend::kPlatformBackend_GLFW3);
+
 		break;
 	}
 	case eInputPlatformBackend::kPlatformBackend_X11:
@@ -2808,7 +2916,26 @@ void ktkInput::Update_Mouse(void* p_raw_args, eInputPlatformBackend backend)
 	}
 	case eInputPlatformBackend::kPlatformBackend_WINAPI:
 	{
-		KOTEK_ASSERT(false, "not implemented");
+		ktkInputPlatformBackendArgs_WINAPI* p_args =
+			static_cast<ktkInputPlatformBackendArgs_WINAPI*>(p_raw_args);
+
+		KOTEK_ASSERT(
+			p_args->controller != eInputControllerType::kControllerUnknown,
+			"you must initialize args where you call this method!");
+
+		// win32 mouse buttons already use GLFW's codes (left=0, right=1,
+		// middle=2, x1=3, x2=4) — no translation, straight into the
+		// shared glfw-shaped logic (task K17 phase 2)
+		ktkInputPlatformBackendArgs_GLFW3 glfw_args{};
+		glfw_args.controller = p_args->controller;
+		glfw_args.key = p_args->key;
+		glfw_args.scancode = p_args->scancode;
+		glfw_args.action = p_args->action;
+		glfw_args.mods = p_args->mods;
+
+		this->Update_Mouse(&glfw_args,
+			eInputPlatformBackend::kPlatformBackend_GLFW3);
+
 		break;
 	}
 	case eInputPlatformBackend::kPlatformBackend_X11:
