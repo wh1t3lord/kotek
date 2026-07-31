@@ -56,7 +56,13 @@
 			}
 
 	#endif
-#elif defined(KOTEK_USE_LOG_LIBRARY_SPDLOG)
+// the SPDLOG and CUSTOM branches share one macro set: both logger types
+// expose the same narrow surface — info/warn/error/trace of a
+// pre-formatted c-string — so KUN_KOTEK Get_LoggerMain() /
+// Get_LoggerMsvcOutput() return an equivalent object in either backend
+// (no macro duplication, task K17/K4 logging-CUSTOM)
+#elif defined(KOTEK_USE_LOG_LIBRARY_SPDLOG) || \
+	defined(KOTEK_USE_LOG_LIBRARY_CUSTOM)
 	#define KOTEK_MESSAGE_STRING(text, ...)                                   \
 		{                                                                     \
 			auto p_logger = KUN_KOTEK Get_LoggerMain();                       \

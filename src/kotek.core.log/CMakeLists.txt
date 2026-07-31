@@ -6,22 +6,28 @@ project(kotek.core.log VERSION 1 LANGUAGES CXX)
 
 
 if ("${KOTEK_DEPS_FOLDER_ENABLE}" STREQUAL "ON")
-	if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
-		find_package(spdlog CONFIG REQUIRED)
-	elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
-		file(GLOB nuget_spdlog_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Spdlog.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
-		if ("${nuget_spdlog_folder}" MATCHES "Kotek.Packages.Spdlog.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
-			message("[${PROJECT_NAME}][nuget]: package spdlog exists!")
+	# spdlog is only required when it is the selected backend — the CUSTOM
+	# backend (KOTEK_LOG_LIBRARY=CUSTOM) is kotek's own no-dependency
+	# logger (task K17/K4) and needs nothing
+	if (NOT "${KOTEK_LOG_LIBRARY}" STREQUAL "CUSTOM")
+		if ("${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+			find_package(spdlog CONFIG REQUIRED)
+		elseif ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
+			file(GLOB nuget_spdlog_folder RELATIVE ${PROJECT_SOURCE_DIR}/../../nuget/packages ${PROJECT_SOURCE_DIR}/../../nuget/packages/Kotek.Packages.Spdlog.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}*)
+			if ("${nuget_spdlog_folder}" MATCHES "Kotek.Packages.Spdlog.Vcpkg.Runtimes.${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER}")
+				message("[${PROJECT_NAME}][nuget]: package spdlog exists!")
+			else()
+				message(FATAL_ERROR "failed to find spdlog package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
+			endif()
 		else()
-			message(FATAL_ERROR "failed to find spdlog package! (${KOTEK_NUGET_PLATFORM_NAME}.${KOTEK_NUGET_COMPILER_NAME}.${KOTEK_NUGET_ARCH_BIT_NUMBER})")
-		endif()	
-	else()
-		kotek_find_package(spdlog REQUIRED)
+			kotek_find_package(spdlog REQUIRED)
+		endif()
 	endif()
 endif()
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Log SHUTDOWN ShutdownModule_Core_Log
 	"include/kotek_log.h"
+	"include/kotek_custom_log.h"
 	"include/kotek_core_log.h"
 	"src/main_core_log_dll.cpp")
 
@@ -72,5 +78,7 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 
    target_compile_definitions(${PROJECT_NAME} PUBLIC SPDLOG_USE_STD_FORMAT)
 else()
-	kotek_target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog_header_only)
+	if (NOT "${KOTEK_LOG_LIBRARY}" STREQUAL "CUSTOM")
+		kotek_target_link_libraries(${PROJECT_NAME} PUBLIC spdlog::spdlog_header_only)
+	endif()
 endif()

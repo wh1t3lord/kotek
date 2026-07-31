@@ -1,5 +1,12 @@
 #include "../include/kotek_virtualfilemapper.h"
 
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
+	// _get_osfhandle / _fileno: this TU always relied on a transitive
+	// include (it rode in on spdlog's headers; kotek's own CUSTOM logging
+	// backend removed that accident — own the include)
+	#include <io.h>
+#endif
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 

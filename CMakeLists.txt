@@ -260,6 +260,11 @@ endif()
 function(kotek_add_defines_subdirectory dir)
 	set(KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS
 		"${CMAKE_CURRENT_BINARY_DIR}/${dir}/include/kotek_std_preprocessors.h")
+	# the file is append-only WITHIN one configure, so it must start empty
+	# at every configure: stale flags from previous configures otherwise
+	# coexist with the new selection and the first #elif branch wins
+	# (observed: an old SPDLOG define shadowing CUSTOM after a backend flip)
+	file(WRITE "${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}" "")
 	add_subdirectory("${dir}")
 
 	# legacy codegen in many defines modules appends "#pragma once" once per

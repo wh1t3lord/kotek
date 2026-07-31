@@ -87,6 +87,83 @@ void Set_LoggerMsvcOutput(void* p_logger)
 
 KOTEK_END_NAMESPACE_KOTEK
 
+#elif defined(KOTEK_USE_LOG_LIBRARY_CUSTOM)
+
+KOTEK_BEGIN_NAMESPACE_KOTEK
+KOTEK_BEGIN_NAMESPACE_CORE
+ktkLogger::ktkLogger(void) {}
+
+ktkLogger::~ktkLogger(void) {}
+
+void ktkLogger::Initialize(void) {}
+
+void ktkLogger::Shutdown(void) {}
+
+void* ktkLogger::Get(const char* p_logger_name)
+{
+	if (!strcmp(p_logger_name, kLoggerMainName))
+	{
+		return static_cast<void*>(m_pLoggerMain);
+	}
+	else if (!strcmp(p_logger_name, kLoggerMsvcOutputWindowName))
+	{
+		return static_cast<void*>(m_pLoggerMsvc);
+	}
+
+	return static_cast<void*>(nullptr);
+}
+
+void ktkLogger::Set(ktkCustomLogger* p_logger, const char* p_logger_name)
+{
+	if (!strcmp(p_logger_name, kLoggerMainName))
+	{
+		if (!m_pLoggerMain)
+		{
+			m_pLoggerMain = p_logger;
+		}
+	}
+	else if (!strcmp(p_logger_name, kLoggerMsvcOutputWindowName))
+	{
+		if (!m_pLoggerMsvc)
+		{
+			m_pLoggerMsvc = p_logger;
+		}
+	}
+}
+void ktkLogger::Flush_All(void)
+{
+	if (m_pLoggerMain)
+	{
+		m_pLoggerMain->flush();
+	}
+}
+KOTEK_END_NAMESPACE_CORE
+
+Core::ktkCustomLogger* _pLoggerMain{};
+Core::ktkCustomLogger* _pLoggerMsvcOutput{};
+
+Core::ktkCustomLogger* Get_LoggerMain()
+{
+	return _pLoggerMain;
+}
+
+Core::ktkCustomLogger* Get_LoggerMsvcOutput()
+{
+	return _pLoggerMsvcOutput;
+}
+
+void Set_LoggerMain(void* p_logger)
+{
+	_pLoggerMain = static_cast<Core::ktkCustomLogger*>(p_logger);
+}
+
+void Set_LoggerMsvcOutput(void* p_logger)
+{
+	_pLoggerMsvcOutput = static_cast<Core::ktkCustomLogger*>(p_logger);
+}
+
+KOTEK_END_NAMESPACE_KOTEK
+
 #else
 // provide your some additional headers for log library
 #endif
@@ -180,6 +257,57 @@ bool InitializeModule_Core_Log(ktkMainManager* p_manager)
 
 	Set_LoggerMain(logger_main.get());
 	Set_LoggerMsvcOutput(logger_msvc.get());
+#elif defined(KOTEK_USE_LOG_LIBRARY_CUSTOM)
+	// kotek's own no-dependency backend (task K17/K4): the same path
+	// resolution as the spdlog branch (incl. --log_file from K23), one
+	// logger for the "all" file+console sink and one "tracer" for the
+	// debug output window + console
+	KOTEK_ASSERT(p_manager, "you pass an invalid main manager");
+	KOTEK_ASSERT(p_manager->GetFileSystem(),
+		"you must initialize filesystem before initializing this module!");
+
+	ktk_filesystem_path path_to_folder;
+	p_manager->GetFileSystem()->Make_Path(
+		path_to_folder,
+		kun_core eFolderIndex::kFolderIndex_DataUser);
+
+	const auto* p_engine_config = p_manager->Get_EngineConfig();
+
+	if (p_engine_config && p_engine_config->Is_LogFileSpecified())
+	{
+		const char* p_log_file = p_engine_config->Get_LogFile();
+
+		if (strchr(p_log_file, ':') || strchr(p_log_file, '/') ||
+			strchr(p_log_file, '\\'))
+		{
+			path_to_folder = p_log_file;
+		}
+		else
+		{
+			path_to_folder /= p_log_file;
+		}
+	}
+	else
+	{
+		path_to_folder /= KOTEK_USE_LOG_OUTPUT_FILE_NAME;
+	}
+
+	ktkCustomLogger* p_logger_main = new ktkCustomLogger(
+		reinterpret_cast<const char*>(path_to_folder.u8string().c_str()),
+		false);
+	ktkCustomLogger* p_logger_msvc = new ktkCustomLogger(nullptr, true);
+
+	ktkLogger* p_logger_manager = new ktkLogger();
+	p_manager->Set_Logger(p_logger_manager);
+
+	if (p_manager->Get_Logger())
+	{
+		p_logger_manager->Set(p_logger_main, kLoggerMainName);
+		p_logger_manager->Set(p_logger_msvc, kLoggerMsvcOutputWindowName);
+	}
+
+	Set_LoggerMain(p_logger_main);
+	Set_LoggerMsvcOutput(p_logger_msvc);
 #else
 #endif
 
