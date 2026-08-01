@@ -1,109 +1,104 @@
-# 🐈 kotek
+# kotek
 
 [![build](https://github.com/wh1t3lord/kotek/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/wh1t3lord/kotek/actions/workflows/build.yml)
 [![modules](https://github.com/wh1t3lord/kotek/actions/workflows/modules.yml/badge.svg?branch=main)](https://github.com/wh1t3lord/kotek/actions/workflows/modules.yml)
 [![tests](https://github.com/wh1t3lord/kotek/actions/workflows/tests.yml/badge.svg?branch=main)](https://github.com/wh1t3lord/kotek/actions/workflows/tests.yml)
 [![matrix](https://github.com/wh1t3lord/kotek/actions/workflows/matrix.yml/badge.svg)](https://github.com/wh1t3lord/kotek/actions/workflows/matrix.yml)
 
-Kotek Engine is a modern, extensible C++ framework designed to facilitate the creation of games and interactive applications. It emphasizes modularity, cross-platform compatibility, and ease of use, making it suitable for both rapid prototyping and production-ready projects.
+kotek is a modular C++ framework for building game engines and real-time
+applications. It is the foundation of a layered stack — **kotek** (core
+framework) → **zircon** (game engine) → game content — and is equally suited to
+tools, simulations, and other real-time software.
 
-## 🎯 Who Is This For?
+For non-specialists: kotek is the carefully engineered groundwork that lets a
+team build an engine of their own — and replace any part of it later without
+breaking what already works.
 
-- **Students & Researchers**\
-  Run experiments in graphics or AI without wrestling with engine plumbing.
+## What kotek standardizes
 
-- **Indie & Professional Teams**\
-  Prototype fast, maintain long‑term stability, and avoid platform lock‑in.
+- **Interface-first modularity.** Every subsystem — math, logging, JSON,
+  containers, windowing, rendering, video, memory — sits behind a small, stable
+  interface. Implementations can be re-registered at initialization or replaced
+  at runtime by dropping a DLL into `plugins/`, with no changes to dependent
+  code. The interface surface is designed to remain unchanged for decades: code
+  written against kotek is not meant to become legacy.
+- **Switchable backends, with a no-dependency floor.** Modules ship with
+  backends built on widely adopted, community-proven libraries (GLM, DirectXMath,
+  bgfx, spdlog, Boost, dav1d) **and** with kotek's own zero-dependency
+  implementations — its own streaming JSON parser, its own logger, its own Win32
+  window backend, its own math. Users may also register their own libraries
+  without forking the framework.
+- **Three explicit memory models for containers.** Static (fixed capacity, never
+  reallocates), hybrid (bounded buffer, grows only when permitted), and dynamic —
+  selected at configure time. Moving between a PC budget and a console/embedded
+  budget becomes a build flag, not a rewrite.
+- **A complete output matrix.** The same source builds as one static
+  executable, as per-module static/shared mixtures, or as runtime-loadable
+  plugins — including the classic layout of a launcher executable plus a single
+  game module. (Full dynamic linking is a documented limitation: the module
+  graph is intentionally being decoupled toward it.)
+- **A C++/CMake-only toolchain.** No Python, no scripting languages, no
+  external generators: every tool in the pipeline is written in C/C++ and built
+  by CMake.
+- **No exceptions, explicit diagnostics, bounded memory.** Error handling is
+  assert/status-based; capacities are named compile-time constants; streaming is
+  preferred over materializing data in RAM.
 
-- **Anyone Tired of “Hello, World” Engines**\
-  Start with production‑grade quality out of the box.
+## Why it is interesting
 
-## 🚀 Getting Started
+- **For experienced engineers:** the discipline is the point — interface
+  stability treated as a design constraint, cross-module memory rules written
+  down and enforced, and a backend matrix that is compile-tested on CI rather
+  than promised.
+- **For students and self-taught developers:** the repository is a readable
+  reference architecture of how an engine framework is structured — every
+  abstraction exists because a concrete problem demanded it, and the reasoning
+  is documented in the repository (`AGENTS.md`, module by module).
+- **For teams and managers:** replaceability removes both vendor lock-in and
+  abandonment risk. If upstream development of any module — or of kotek itself —
+  stops, a community or a team can maintain that part as a plugin without
+  waiting for anyone's permission or roadmap.
 
-### CMake
+## How it differs from popular game engines
 
-> :warning: CMake 3.19.1 version is required :warning:
+Unity, Unreal, and Godot are complete production engines with editors, content
+pipelines, and marketplaces. kotek is not a competitor to them in features; it
+is the layer such products are built *on*. It is closer in spirit to a standard
+library for engine construction: smaller, stricter, dependency-lean, designed
+for constrained hardware, and committed to never breaking its consumers. If the
+goal is to ship a game next quarter, a full engine is the right choice. If the
+goal is to *build* an engine, port a classic game, teach engine architecture, or
+own the entire stack down to the allocator — that is the problem kotek exists
+to solve.
 
-- git clone https://github.com/wh1t3lord/kotek.git
-- mkdir build
-- cd build
-- cmake ..
+## Status and verification
 
-## ✨ Features
+Windows-first (MSVC, Debug and Release), with the architecture accounting for
+other desktop platforms and console-class targets. Every module is
+compile-tested in isolation on CI, the backend matrix builds nightly (math /
+json / containers / linkage variants), and the functional test suite runs as
+part of a real engine boot in the zircon repository.
 
-1.	**Modular Design and Project Separation**
->	Each component (core, API, casting, filesystem, resource manager, input, rendering, UI, etc.) is organized into its own project. This promotes independent development, testing, and maintenance.
+## Building
 
-2.	**Abstraction via Interfaces**
->	Many subsystems are defined by abstract interfaces. These interfaces encapsulate the implementation details, allowing for multiple implementations (such as different renderer backends for OpenGL, Vulkan, DirectX, or even software solutions).
+Requirements: a C++20 compiler and CMake 3.19.3+.
 
-3.	**Dependency Injection and Central Coordination**
->	The ktkMainManager serves as the central hub that manages various components. It aggregates pointers to components (like filesystem, input, resource, rendering, UI, etc.) and injects these dependencies into modules that need them. This setup makes it easy to swap, extend, or override parts of the engine as needed.
+```
+git clone https://github.com/wh1t3lord/kotek.git
+cd kotek
+mkdir build && cd build
+cmake ..
+cmake --build .
+```
 
-4.	**Extensibility and Multi-Renderer Support**
->	The rendering subsystem (described in kotek_render.h) provides functions to initialize and shut down the render module.	It supports multiple graphics APIs. The engine can be configured (at startup or via configuration files/command-line arguments) to use OpenGL, Vulkan, DirectX, or even fallback to less modern renderers. The design even anticipates fallback mechanisms, selecting renderer versions if the user-specified one fails to initialize.
+`cmake -DKOTEK_HELP=ON` prints every configuration option with its meaning.
 
-5.	**Cross-Platform and Modern C++ Practices**
-> The engine is implemented using C++20, taking advantage of modern language features for safety, performance, and clarity.	Preprocessor macros and namespaces help abstract platform-specific behavior (e.g., filesystem handling, window management).
+## About the author
 
-6. **Plugin System**
-> Easily extend or override engine features via plugins. Due to interfaces user can provide own outside of framework libraries in order to override current implementations of framework.
-
-The architecture is designed for robustness, flexibility, and ease of extension. It keeps the system decoupled, making it easier to maintain, swap out components, and add new features—qualities that are valuable for both production-level game engines and evolving projects.
-
-
-## 📑 Documentation
-
-- [User Guide](docs/user_guide.md)
-- [FAQ](docs/faq.md)
-
-## 🛠  Development
-
-### Roadmap
-
-#### 🌐 Status
-
-| Platform         | Status            |
-| ---------------- | ----------------- |
-| Windows 10/11    | ✅                |
-| Ubuntu 22.04     | ⚠️ WIP            |
-| macOS            | ⚠️ WIP            |
-| Android / iOS    | ⚠️ WIP           |
-| Consoles (PS/XB) | ⚠️ WIP            |
-
-| Graphics API  | Status  |
-| ------------- | ------- |
-| OpenGL ES 3.1 (ANGLE) | ✅      |
-| Vulkan        | ⚠️ WIP  |
-| DirectX 12    | ⚠️ WIP |
-| DirectX 11    | ⚠️ WIP |
-| DirectX 10    | ⚠️ WIP |
-| DirectX 9     | ⚠️ WIP |
-
-
-| Animation Backends | Status  |
-| ------------- | ------- |
-| OzzAnimation | ⚠️ WIP     |
-
-| Physics Backends | Status  |
-| ------------- | ------- |
-| Jolt | ⚠️ WIP     |
-| NVIDIA PhysX  | ⚠️ WIP  |
-
-| Sound Backends | Status  |
-| ------------- | ------- |
-| Miniaudio | ⚠️ WIP     |
-
-| UI Backends | Status  |
-| ------------- | ------- |
-| ImGui | ✅     |
-| RmlUi | ⚠️ WIP  |
-
-## 📄 License
-
-I choose Apache 2.0 license to provide people the full freedom as much as possible. If a some person can patent the fork, the project or any other part of my work I would be really happy :=)  
-
-## 🗣 Contact
-
-- **Discord:** [@wh1t3lord](https://discord.gg/h89dyGQFnN)
-- **Twitter:** [@wh1t3lord](https://twitter.com/wh1t3lord)
+kotek — and the zircon engine built on it — is designed and implemented by a
+single engineer ([wh1t3lord](https://github.com/wh1t3lord)): the architecture,
+the module and plugin systems, the container library, the build and CI
+infrastructure, and the test suites. The project represents sustained,
+deliberate systems work: interfaces designed to outlive their implementations,
+embedded-grade memory discipline, and a consistent refusal of convenience
+dependencies. The name means "cat"; the engineering is entirely serious.
