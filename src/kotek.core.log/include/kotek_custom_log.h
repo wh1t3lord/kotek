@@ -35,6 +35,12 @@
 	#include <windows.h>
 #endif
 
+// the log file is BOUNDED: at this size it rotates to <name>.prev (single
+// generation, overwritten) instead of growing without end — an append-only
+// engine log reached 1.4 GB from repeated boots before this rule existed
+#define KOTEK_DEF_CUSTOM_LOG_MAX_FILE_SIZE (64U * 1024U * 1024U)
+#define KOTEK_DEF_CUSTOM_LOG_PATH_MAX 260
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
@@ -60,6 +66,19 @@ public:
 			if (this->m_file_handle == INVALID_HANDLE_VALUE)
 			{
 				this->m_file_handle = nullptr;
+			}
+
+			// the path is kept for rotation (the log is bounded — see
+			// KOTEK_DEF_CUSTOM_LOG_MAX_FILE_SIZE); a pre-existing file's
+			// size counts against the budget
+			strncpy_s(this->m_file_path, p_file_path, _TRUNCATE);
+
+			LARGE_INTEGER existing{};
+			if (this->m_file_handle &&
+			    GetFileSizeEx(this->m_file_handle, &existing))
+			{
+				this->m_bytes_written =
+					static_cast<size_t>(existing.QuadPart);
 			}
 #else
 			this->m_p_file = fopen(p_file_path, "a");
@@ -275,6 +294,14 @@ private:
 			{
 				FlushFileBuffers(this->m_file_handle);
 			}
+
+			this->m_bytes_written += written;
+
+			// bounded by design: rotate instead of growing without end
+			if (this->m_bytes_written >= KOTEK_DEF_CUSTOM_LOG_MAX_FILE_SIZE)
+			{
+				this->Rotate();
+			}
 		}
 #else
 		if (this->m_p_file)
@@ -302,7 +329,45 @@ private:
 
 private:
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
+	// single-generation rotation: <path> -> <path>.prev (overwritten), then
+	// a fresh file — the log never exceeds ~2x the cap on disk
+	void Rotate(void) noexcept
+	{
+		if (this->m_file_handle)
+		{
+			CloseHandle(this->m_file_handle);
+			this->m_file_handle = nullptr;
+		}
+
+		if (this->m_file_path[0] != '\0')
+		{
+			char previous_path[KOTEK_DEF_CUSTOM_LOG_PATH_MAX + 8]{};
+			strncpy_s(previous_path, this->m_file_path, _TRUNCATE);
+			strncat_s(previous_path, ".prev", _TRUNCATE);
+			// MoveFileExA, not MoveFileA-with-flags: the 3-arg MoveFileA only
+			// exists for _WIN32_WINNT >= 0x0600 and parts of this tree
+			// target XP-level headers
+			MoveFileExA(this->m_file_path, previous_path,
+				MOVEFILE_REPLACE_EXISTING);
+
+			this->m_file_handle = CreateFileA(this->m_file_path,
+				FILE_APPEND_DATA, FILE_SHARE_READ, nullptr, OPEN_ALWAYS,
+				FILE_ATTRIBUTE_NORMAL, nullptr);
+
+			if (this->m_file_handle == INVALID_HANDLE_VALUE)
+			{
+				this->m_file_handle = nullptr;
+			}
+		}
+
+		this->m_bytes_written = 0;
+	}
+#endif
+
+#ifdef KOTEK_USE_PLATFORM_WINDOWS
 	HANDLE m_file_handle = nullptr;
+	char m_file_path[KOTEK_DEF_CUSTOM_LOG_PATH_MAX]{};
+	size_t m_bytes_written = 0;
 #else
 	std::FILE* m_p_file = nullptr;
 #endif
