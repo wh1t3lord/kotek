@@ -109,6 +109,8 @@ cmake --build .
 ```
 
 `cmake -DKOTEK_HELP=ON` prints every configuration option with its meaning.
+The full reference — CMake options and runtime arguments — lives in
+[doc/git/en/configuration.md](doc/git/en/configuration.md).
 
 ## About the author
 

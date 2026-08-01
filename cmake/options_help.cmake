@@ -6,9 +6,9 @@
 # Format per entry: name|default|description (pipe is the field separator).
 
 set(KOTEK_OPTIONS_REGISTRY
-	"KOTEK_LIBRARY_TYPE|EMB|container implementation the ktk_* aliases resolve to: EMB=static etl (no reallocation), DYN=regular std/boost, HYB=pmr inline-buffer (broken today)"
+	"KOTEK_LIBRARY_TYPE|EMB|container implementation the ktk_* aliases resolve to: EMB=static etl (no reallocation), DYN=regular std/boost, HYB=pmr inline-buffer (bounded, grows only when allowed)"
 	"KOTEK_STD_LIBRARY_STATIC_CONTAINERS|ON|etl-based static containers available"
-	"KOTEK_STD_LIBRARY_HYBRID_CONTAINERS|ON|hybrid (pmr inline-buffer) containers available (HYB library type is broken today)"
+	"KOTEK_STD_LIBRARY_HYBRID_CONTAINERS|ON|hybrid (pmr inline-buffer) containers available"
 	"KOTEK_STD_LIBRARY_DYNAMIC_CONTAINERS|ON|regular std/boost containers available. OFF+EMB = strict embedded configuration (only static containers exist in code)"
 	"KOTEK_CONFIGURATION_TYPE|minimal|dependency preset name -> cmake/windows/vcpkg_nuget_<name>.cmake package list"
 	"KOTEK_DEPS_FOLDER|(empty)|dependency source: empty=nuget+vcpkg presets, vcpkg=vcpkg only, <folder>=manual deps folder (K10)"
@@ -23,7 +23,8 @@ set(KOTEK_OPTIONS_REGISTRY
 	"KOTEK_USER_GAME_MODULE_FOR_LINK_NAME|(layer root sets it)|STATIC dev type only: CMake target of the user game module for kotek.game to link (zircon: zircon)"
 	"KOTEK_MATH_LIBRARY|GLM|math backend: GLM (vcpkg) / DXM (DirectXMath, Windows SDK) / KOTEK_OWN (kotek's own no-deps scalar impl)"
 	"KOTEK_JSON_LIBRARY|BOOST|json backend: BOOST (boost.json, default) / KOTEK_OWN (kotek's own no-deps backend: streaming SAX reader/writer + small DOM, task K4)"
-	"KOTEK_WINDOW_LIBRARY|GLFW|windowing backend"
+	"KOTEK_WINDOW_LIBRARY|GLFW|windowing backend: GLFW (vcpkg) / WIN32 (kotek's own no-deps Win32 backend)"
+	"KOTEK_LOG_LIBRARY|SPDLOG|logging backend: SPDLOG (default) / BOOST / CUSTOM (kotek's own no-deps logger: OS-handle file sink, console, debug output window)"
 	"KOTEK_ECS_BACKEND|PICO|ECS backend: PICO (pico_ecs, default) / ENTT (branches exist behind KOTEK_USE_ECS_BACKEND_ENTT but are disabled with #error todo)"
 	"KOTEK_NRI|ON|NRI render backend (D3D12 phase 1): clones the pinned NRI into external/nri, builds kotek.render.nri, enables the DirectX-slot dispatch. OFF skips all three and suppresses KOTEK_USE_RENDER_NRI (select at runtime with --render_nri_dx12)"
 	"KOTEK_STARTUP_RENDERER|OpenGLES_SpecifiedByUser|startup renderer enum name (routes to bgfx by default. The DirectX slot goes to NRI phase 1)"
