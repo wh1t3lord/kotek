@@ -17,11 +17,36 @@ if ("${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 else()
 	# vcpkg AND manual modes (K10): pkg-config resolves dav1d via
 	# PKG_CONFIG_PATH — the vcpkg toolchain sets it; in manual mode the
-	# user sets it to <prefix>/lib/pkgconfig, and the convention folder
-	# <folder>/dav1d/lib/pkgconfig is picked up automatically when present
+	# convention folder <folder>/dav1d/lib/pkgconfig and every candidate
+	# prefix's lib/pkgconfig are picked up automatically
 	if (NOT "${KOTEK_DEPS_FOLDER_PATH}" STREQUAL "" AND EXISTS "${KOTEK_DEPS_FOLDER_PATH}/dav1d/lib/pkgconfig")
 		set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH};${KOTEK_DEPS_FOLDER_PATH}/dav1d/lib/pkgconfig")
 	endif()
+
+	# manual mode (2026-08-01, deps-manual CI leg): pkgconf is a TOOL, so
+	# do not make a Windows user install it — resolve it from the
+	# dependency prefixes themselves (vcpkg-built trees ship
+	# tools/pkgconf/pkgconf.exe next to lib/pkgconfig/dav1d.pc).
+	# Candidates: CMAKE_PREFIX_PATH (the wrapper's fallback tier, set as
+	# an env var by CI/users) plus the convention folder.
+	if (NOT "${KOTEK_DEPS_FOLDER}" STREQUAL "vcpkg")
+		set(_kotek_dav1d_prefixes ${CMAKE_PREFIX_PATH} $ENV{CMAKE_PREFIX_PATH})
+		if (NOT "${KOTEK_DEPS_FOLDER_PATH}" STREQUAL "")
+			list(APPEND _kotek_dav1d_prefixes "${KOTEK_DEPS_FOLDER_PATH}/dav1d")
+		endif()
+		foreach(_kotek_dav1d_prefix IN LISTS _kotek_dav1d_prefixes)
+			if (EXISTS "${_kotek_dav1d_prefix}/lib/pkgconfig")
+				set(ENV{PKG_CONFIG_PATH} "$ENV{PKG_CONFIG_PATH};${_kotek_dav1d_prefix}/lib/pkgconfig")
+			endif()
+		endforeach()
+		if (NOT PKG_CONFIG_EXECUTABLE)
+			find_program(PKG_CONFIG_EXECUTABLE
+				NAMES pkgconf.exe pkg-config.exe pkgconf pkg-config
+				PATHS ${_kotek_dav1d_prefixes}
+				PATH_SUFFIXES tools/pkgconf)
+		endif()
+	endif()
+
 	find_package(PkgConfig REQUIRED)
 	# GLOBAL: the imported target must be visible outside this directory —
 	# PLUGIN mode re-applies it to consumers via kotek_finalize_plugin_links

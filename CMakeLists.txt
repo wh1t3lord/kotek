@@ -242,7 +242,11 @@ if (NOT "${KOTEK_DEPS_FOLDER}" STREQUAL "nuget")
 	kotek_find_package(Tracy REQUIRED GLOBAL)
 	kotek_find_package(TBB REQUIRED GLOBAL)
 	kotek_find_package(RmlUi CONFIG REQUIRED GLOBAL)
-	kotek_find_package(PkgConfig REQUIRED GLOBAL)
+	# QUIET (2026-08-01, deps-manual CI leg): pkgconf is a TOOL, not a
+	# library — manual mode must not make a Windows user install it.
+	# vcpkg mode still finds it here via the toolchain; manual mode
+	# resolves it from the dependency prefixes inside the avif module.
+	kotek_find_package(PkgConfig QUIET GLOBAL)
 	kotek_find_package(PNG REQUIRED GLOBAL)
 	kotek_find_package(BZip2 REQUIRED GLOBAL)
 	kotek_find_package(Freetype CONFIG REQUIRED GLOBAL)
