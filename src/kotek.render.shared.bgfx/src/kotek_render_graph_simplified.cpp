@@ -154,6 +154,17 @@ void ktkRenderGraphSimplified::Shutdown(void)
 	this->m_is_initialized = false;
 }
 
+void ktkRenderGraphSimplified::Detach_Passes(
+	ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
+		KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>&
+		out_passes) noexcept
+{
+	out_passes = this->m_passes;
+	this->m_passes.clear();
+
+	this->m_is_initialized = false;
+}
+
 void ktkRenderGraphSimplified::Update_All(void)
 {
 	ktkRenderGraphSimplifiedRenderPass* p_previous_pass{};

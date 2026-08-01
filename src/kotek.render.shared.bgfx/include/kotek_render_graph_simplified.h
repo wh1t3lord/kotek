@@ -54,6 +54,15 @@ public:
 	bool Is_Initialized(void) const noexcept override;
 	void Shutdown(void) override;
 
+	/// moves the pass pointer list out WITHOUT deleting the passes (the
+	/// caller takes ownership of destruction — a hot-swappable pass
+	/// library must destroy its own objects, zircon task Z3 P3);
+	/// Shutdown() keeps its delete semantics for the statically-linked
+	/// path. The graph is left empty and not initialized.
+	void Detach_Passes(ktk_vector<ktkRenderGraphSimplifiedRenderPass*,
+		KOTEK_DEF_RENDER_GL_RENDER_GRAPH_SIMPLIFIED_MAX_PASS_COUNT>&
+			out_passes) noexcept;
+
 	void Update_All(void);
 	void Render_All(void);
 

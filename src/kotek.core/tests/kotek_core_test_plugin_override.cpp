@@ -15,6 +15,8 @@
 	#include <sstream>
 	#include <string>
 
+	#include <process.h> // _getpid (temp-dir uniqueness across processes)
+
 #endif
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -88,11 +90,23 @@ namespace
 		void SetUp() override
 		{
 			std::error_code error;
+
+			// unique subdirectory per process AND invocation: the override
+			// registry intentionally never unloads dll handles, so a second
+			// run of this suite in one process (merged multi-host boots)
+			// would otherwise try to overwrite its own still-loaded dll from
+			// the first run; and a hung engine process can hold its copy
+			// locked across boots — a pid in the path makes a collision
+			// impossible in both cases
+			static unsigned s_invocation = 0;
+
 			m_temp_dir = std::filesystem::temp_directory_path(error) /
 				"kotek_plugin_override_tests" /
 				::testing::UnitTest::GetInstance()
 					->current_test_info()
-					->name();
+					->name() /
+				(std::to_string(static_cast<unsigned>(::_getpid())) + "_" +
+					std::to_string(++s_invocation));
 
 			std::filesystem::remove_all(m_temp_dir, error);
 			std::filesystem::create_directories(m_temp_dir, error);
