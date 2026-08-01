@@ -16,6 +16,10 @@ breaking what already works.
 
 ## What kotek standardizes
 
+<p align="center">
+  <img src="doc/git/architecture-layers.svg" alt="kotek layered architecture — game content on zircon on kotek on platform" width="780"/>
+</p>
+
 - **Interface-first modularity.** Every subsystem — math, logging, JSON,
   containers, windowing, rendering, video, memory — sits behind a small, stable
   interface. Implementations can be re-registered at initialization or replaced
@@ -28,15 +32,28 @@ breaking what already works.
   implementations — its own streaming JSON parser, its own logger, its own Win32
   window backend, its own math. Users may also register their own libraries
   without forking the framework.
+
+<p align="center">
+  <img src="doc/git/module-backends.svg" alt="the backend matrix — every module offers proven open-source backends, kotek's own zero-dependency implementation, and user implementations" width="860"/>
+</p>
+
 - **Three explicit memory models for containers.** Static (fixed capacity, never
   reallocates), hybrid (bounded buffer, grows only when permitted), and dynamic —
   selected at configure time. Moving between a PC budget and a console/embedded
   budget becomes a build flag, not a rewrite.
+
+<p align="center">
+  <img src="doc/git/containers.svg" alt="the three container memory models — static, hybrid, dynamic" width="860"/>
+</p>
 - **A complete output matrix.** The same source builds as one static
   executable, as per-module static/shared mixtures, or as runtime-loadable
   plugins — including the classic layout of a launcher executable plus a single
   game module. (Full dynamic linking is a documented limitation: the module
   graph is intentionally being decoupled toward it.)
+
+<p align="center">
+  <img src="doc/git/output-matrix.svg" alt="the linkage matrix — all-static, default launcher+engine, mixed per-module, plugin override" width="860"/>
+</p>
 - **A C++/CMake-only toolchain.** No Python, no scripting languages, no
   external generators: every tool in the pipeline is written in C/C++ and built
   by CMake.

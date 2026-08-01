@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 520" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arr2" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="520" fill="#ffffff"/>
+  <text x="500" y="40" text-anchor="middle" font-size="24" font-weight="600" fill="#0f172a">one source tree, every output shape</text>
+  <text x="500" y="64" text-anchor="middle" font-size="13" fill="#64748b">the linkage matrix — chosen by CMake flags, mixed per module when needed</text>
+
+  <!-- config 1: all static -->
+  <rect x="50" y="96" width="200" height="150" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="150" y="124" text-anchor="middle" font-size="14" font-weight="600" fill="#334155">all static</text>
+  <rect x="80" y="140" width="140" height="66" rx="8" fill="#1e3a8a"/>
+  <text x="150" y="168" text-anchor="middle" font-size="13" font-weight="600" fill="#ffffff">kotek.exe</text>
+  <text x="150" y="188" text-anchor="middle" font-size="11" fill="#bfdbfe">every module .lib</text>
+  <text x="150" y="228" text-anchor="middle" font-size="11.5" fill="#64748b">one binary, nothing else</text>
+
+  <!-- config 2: default -->
+  <rect x="285" y="96" width="200" height="150" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="385" y="124" text-anchor="middle" font-size="14" font-weight="600" fill="#1d4ed8">default</text>
+  <rect x="303" y="140" width="78" height="66" rx="8" fill="#1e3a8a"/>
+  <text x="342" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff">kotek.exe</text>
+  <text x="342" y="188" text-anchor="middle" font-size="10.5" fill="#bfdbfe">modules .lib</text>
+  <rect x="389" y="140" width="78" height="66" rx="8" fill="#7c3aed"/>
+  <text x="428" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff">game.ktk</text>
+  <text x="428" y="188" text-anchor="middle" font-size="10.5" fill="#e9d5ff">the engine</text>
+  <text x="385" y="228" text-anchor="middle" font-size="11.5" fill="#64748b">the classic game layout</text>
+
+  <!-- config 3: mixed dlls -->
+  <rect x="520" y="96" width="200" height="150" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="620" y="124" text-anchor="middle" font-size="14" font-weight="600" fill="#334155">mixed / per-module</text>
+  <rect x="536" y="140" width="66" height="66" rx="8" fill="#1e3a8a"/>
+  <text x="569" y="174" text-anchor="middle" font-size="11" font-weight="600" fill="#ffffff">exe</text>
+  <rect x="608" y="140" width="48" height="30" rx="6" fill="#0ea5e9"/>
+  <text x="632" y="159" text-anchor="middle" font-size="10" fill="#ffffff">.lib</text>
+  <rect x="662" y="140" width="48" height="30" rx="6" fill="#f59e0b"/>
+  <text x="686" y="159" text-anchor="middle" font-size="10" fill="#ffffff">.dll</text>
+  <rect x="608" y="176" width="48" height="30" rx="6" fill="#f59e0b"/>
+  <text x="632" y="195" text-anchor="middle" font-size="10" fill="#ffffff">.dll</text>
+  <rect x="662" y="176" width="48" height="30" rx="6" fill="#0ea5e9"/>
+  <text x="686" y="195" text-anchor="middle" font-size="10" fill="#ffffff">.lib</text>
+  <text x="620" y="228" text-anchor="middle" font-size="11.5" fill="#64748b">each module picks its shape</text>
+
+  <!-- config 4: plugins -->
+  <rect x="755" y="96" width="200" height="150" rx="12" fill="#fefce8" stroke="#ca8a04" stroke-width="2"/>
+  <text x="855" y="124" text-anchor="middle" font-size="14" font-weight="600" fill="#854d0e">plugin override</text>
+  <rect x="773" y="140" width="78" height="66" rx="8" fill="#1e3a8a"/>
+  <text x="812" y="168" text-anchor="middle" font-size="12" font-weight="600" fill="#ffffff">kotek.exe</text>
+  <text x="812" y="188" text-anchor="middle" font-size="10.5" fill="#bfdbfe">any linkage</text>
+  <rect x="859" y="140" width="84" height="66" rx="8" fill="#ca8a04"/>
+  <text x="901" y="162" text-anchor="middle" font-size="11" font-weight="600" fill="#ffffff">plugins/</text>
+  <text x="901" y="178" text-anchor="middle" font-size="10" fill="#fef9c3">module.dll</text>
+  <text x="901" y="194" text-anchor="middle" font-size="10" fill="#fef9c3">plugins.json</text>
+  <text x="855" y="228" text-anchor="middle" font-size="11.5" fill="#64748b">your dll replaces a module at runtime</text>
+
+  <!-- note strip -->
+  <rect x="50" y="290" width="905" height="60" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="72" y="316" font-size="12.5" fill="#475569">explicit (LoadLibrary) and implicit (import lib) dynamic loading are both supported; the same module-entry contract</text>
+  <text x="72" y="336" font-size="12.5" fill="#475569">(init / shutdown / serialize / deserialize) serves all modes — and is deliberately small enough to stay stable for decades</text>
+
+  <text x="500" y="392" text-anchor="middle" font-size="13" font-weight="600" fill="#334155">CI coverage</text>
+  <text x="500" y="414" text-anchor="middle" font-size="12.5" fill="#64748b">push: Debug × {default, static}   •   nightly: Debug/Release × {default, static, plugin/mixed}</text>
+  <text x="500" y="434" text-anchor="middle" font-size="12.5" fill="#64748b">full-dynamic remains a documented goal — the module graph is being decoupled toward it</text>
+
+  <text x="500" y="486" text-anchor="middle" font-size="12.5" fill="#94a3b8">shrink down (embedded, consoles) or scale up (PC) by changing preprocessor capacities and flags — not code</text>
+</svg>

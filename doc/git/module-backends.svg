@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 600" font-family="Segoe UI, Arial, sans-serif">
+  <rect width="1000" height="600" fill="#ffffff"/>
+  <text x="500" y="40" text-anchor="middle" font-size="24" font-weight="600" fill="#0f172a">every module is a choice, never a lock-in</text>
+  <text x="500" y="64" text-anchor="middle" font-size="13" fill="#64748b">the backend matrix — selected at configure time, without touching dependent code</text>
+
+  <!-- header row -->
+  <rect x="60" y="90" width="180" height="52" fill="#1e3a8a" rx="8"/>
+  <text x="150" y="122" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff">module</text>
+  <rect x="252" y="90" width="260" height="52" fill="#2563eb" rx="8"/>
+  <text x="382" y="112" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff">proven open-source</text>
+  <text x="382" y="130" text-anchor="middle" font-size="11" fill="#dbeafe">deeply validated by the community</text>
+  <rect x="524" y="90" width="220" height="52" fill="#059669" rx="8"/>
+  <text x="634" y="112" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff">kotek's own</text>
+  <text x="634" y="130" text-anchor="middle" font-size="11" fill="#d1fae5">zero-dependency floor</text>
+  <rect x="756" y="90" width="184" height="52" fill="#ca8a04" rx="8"/>
+  <text x="848" y="112" text-anchor="middle" font-size="14" font-weight="600" fill="#ffffff">yours</text>
+  <text x="848" y="130" text-anchor="middle" font-size="11" fill="#fef9c3">registered / plugged in</text>
+
+  <!-- rows -->
+  <!-- row template: y = 154 + i*52 -->
+  <g font-size="13.5">
+    <rect x="60" y="154" width="180" height="46" rx="8" fill="#f1f5f9"/><text x="76" y="183" fill="#0f172a" font-weight="600">math</text>
+    <rect x="252" y="154" width="260" height="46" rx="8" fill="#eff6ff"/><text x="268" y="183" fill="#1e40af">GLM  •  DirectXMath</text>
+    <rect x="524" y="154" width="220" height="46" rx="8" fill="#ecfdf5"/><text x="540" y="183" fill="#065f46">own math (KOTEK_OWN)</text>
+    <rect x="756" y="154" width="184" height="46" rx="8" fill="#fefce8"/><text x="772" y="183" fill="#713f12">your library</text>
+
+    <rect x="60" y="206" width="180" height="46" rx="8" fill="#f1f5f9"/><text x="76" y="235" fill="#0f172a" font-weight="600">logging</text>
+    <rect x="252" y="206" width="260" height="46" rx="8" fill="#eff6ff"/><text x="268" y="235" fill="#1e40af">spdlog  •  Boost.Log</text>
+    <rect x="524" y="206" width="220" height="46" rx="8" fill="#ecfdf5"/><text x="540" y="235" fill="#065f46">own logger (CUSTOM)</text>
+    <rect x="756" y="206" width="184" height="46" rx="8" fill="#fefce8"/><text x="772" y="235" fill="#713f12">your library</text>
+
+    <rect x="60" y="258" width="180" height="46" rx="8" fill="#f1f5f9"/><text x="76" y="287" fill="#0f172a" font-weight="600">JSON</text>
+    <rect x="252" y="258" width="260" height="46" rx="8" fill="#eff6ff"/><text x="268" y="287" fill="#1e40af">Boost.JSON</text>
+    <rect x="524" y="258" width="220" height="46" rx="8" fill="#ecfdf5"/><text x="540" y="287" fill="#065f46">own streaming parser + DOM</text>
+    <rect x="756" y="258" width="184" height="46" rx="8" fill="#fefce8"/><text x="772" y="287" fill="#713f12">your library</text>
+
+    <rect x="60" y="310" width="180" height="46" rx="8" fill="#f1f5f9"/><text x="76" y="339" fill="#0f172a" font-weight="600">windowing</text>
+    <rect x="252" y="310" width="260" height="46" rx="8" fill="#eff6ff"/><text x="268" y="339" fill="#1e40af">GLFW</text>
+    <rect x="524" y="310" width="220" height="46" rx="8" fill="#ecfdf5"/><text x="540" y="339" fill="#065f46">own Win32 backend</text>
+    <rect x="756" y="310" width="184" height="46" rx="8" fill="#fefce8"/><text x="772" y="339" fill="#713f12">your library</text>
+
+    <rect x="60" y="362" width="180" height="46" rx="8" fill="#f1f5f9"/><text x="76" y="391" fill="#0f172a" font-weight="600">rendering</text>
+    <rect x="252" y="362" width="260" height="46" rx="8" fill="#eff6ff"/><text x="268" y="391" fill="#1e40af">bgfx (raster)  •  NRI (DX12/VK, RT)</text>
+    <rect x="524" y="362" width="220" height="46" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-dasharray="5 4"/><text x="540" y="391" fill="#94a3b8">— backends are the point</text>
+    <rect x="756" y="362" width="184" height="46" rx="8" fill="#fefce8"/><text x="772" y="391" fill="#713f12">your renderer</text>
+
+    <rect x="60" y="414" width="180" height="46" rx="8" fill="#f1f5f9"/><text x="76" y="443" fill="#0f172a" font-weight="600">video</text>
+    <rect x="252" y="414" width="260" height="46" rx="8" fill="#eff6ff"/><text x="268" y="443" fill="#1e40af">dav1d (AV1)</text>
+    <rect x="524" y="414" width="220" height="46" rx="8" fill="#f8fafc" stroke="#cbd5e1" stroke-dasharray="5 4"/><text x="540" y="443" fill="#94a3b8">own codec: out of scope by design</text>
+    <rect x="756" y="414" width="184" height="46" rx="8" fill="#fefce8"/><text x="772" y="443" fill="#713f12">your decoder</text>
+
+    <rect x="60" y="466" width="180" height="46" rx="8" fill="#f1f5f9"/><text x="76" y="495" fill="#0f172a" font-weight="600">containers</text>
+    <rect x="252" y="466" width="260" height="46" rx="8" fill="#eff6ff"/><text x="268" y="495" fill="#1e40af">STL  •  Boost  •  ETL (static)</text>
+    <rect x="524" y="466" width="220" height="46" rx="8" fill="#ecfdf5"/><text x="540" y="487" font-size="12" fill="#065f46">3 memory models:</text><text x="540" y="503" font-size="12" fill="#065f46">static / hybrid / dynamic</text>
+    <rect x="756" y="466" width="184" height="46" rx="8" fill="#fefce8"/><text x="772" y="495" fill="#713f12">your containers</text>
+  </g>
+
+  <text x="500" y="556" text-anchor="middle" font-size="12.5" fill="#64748b">user implementations join without forking: re-register an interface implementation at init, or drop a plugin DLL at runtime</text>
+  <text x="500" y="578" text-anchor="middle" font-size="12.5" fill="#94a3b8">the whole matrix is compile-tested on CI — a configuration that does not build does not ship</text>
+</svg>

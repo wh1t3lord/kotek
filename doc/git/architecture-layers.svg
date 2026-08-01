@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 660" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="660" fill="#ffffff"/>
+  <text x="500" y="40" text-anchor="middle" font-size="24" font-weight="600" fill="#0f172a">kotek — layered architecture</text>
+  <text x="500" y="66" text-anchor="middle" font-size="13" fill="#64748b">every layer consumes the interfaces of the layer below and keeps its own private code</text>
+
+  <!-- layer 3 -->
+  <rect x="120" y="96" width="560" height="96" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="6 4"/>
+  <text x="140" y="128" font-size="17" font-weight="600" fill="#334155">Layer 3 — game content</text>
+  <text x="140" y="150" font-size="12.5" fill="#64748b">your game: gameplay code, levels, assets</text>
+  <text x="140" y="170" font-size="12.5" fill="#64748b">not built here — zircon is the foundation it will stand on</text>
+
+  <!-- layer 2 -->
+  <rect x="120" y="216" width="560" height="110" rx="12" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+  <text x="140" y="248" font-size="17" font-weight="600" fill="#3730a3">Layer 2 — zircon (engine)</text>
+  <text x="140" y="270" font-size="12.5" fill="#4f46e5">sessions, ECS, editor, undo/redo journal, render passes</text>
+  <text x="140" y="290" font-size="12.5" fill="#4f46e5">built ONLY on kotek interfaces — the practical proof of the framework</text>
+  <text x="140" y="310" font-size="12.5" fill="#4f46e5">ships as one replaceable module: game.ktk</text>
+
+  <!-- layer 1 -->
+  <rect x="120" y="350" width="560" height="130" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2.5"/>
+  <text x="140" y="382" font-size="17" font-weight="600" fill="#1d4ed8">Layer 1 — kotek (this repository)</text>
+  <text x="140" y="404" font-size="12.5" fill="#1e40af">core framework: containers, math, log, json, window, render, video, memory</text>
+  <text x="140" y="424" font-size="12.5" fill="#1e40af">every subsystem behind a small stable interface, replaceable by design</text>
+  <text x="140" y="444" font-size="12.5" fill="#1e40af">backends: proven OSS libraries  •  kotek's own zero-dependency floor  •  yours</text>
+  <text x="140" y="464" font-size="12.5" fill="#1e40af">no exceptions — capacities are compile-time constants — streaming over materializing</text>
+
+  <!-- platform -->
+  <rect x="120" y="504" width="560" height="64" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="140" y="532" font-size="15" font-weight="600" fill="#334155">Platform</text>
+  <text x="140" y="552" font-size="12.5" fill="#64748b">Windows today — consoles and other desktops accounted for in the architecture</text>
+
+  <!-- arrows between layers -->
+  <line x1="400" y1="192" x2="400" y2="212" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="400" y1="326" x2="400" y2="346" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="400" y1="480" x2="400" y2="500" stroke="#475569" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- plugin override side box -->
+  <rect x="716" y="350" width="244" height="130" rx="12" fill="#fefce8" stroke="#ca8a04" stroke-width="2"/>
+  <text x="732" y="380" font-size="14.5" font-weight="600" fill="#854d0e">plugins/ override</text>
+  <text x="732" y="402" font-size="12" fill="#713f12">drop a DLL in plugins/ and it</text>
+  <text x="732" y="420" font-size="12" fill="#713f12">replaces that module's init/</text>
+  <text x="732" y="438" font-size="12" fill="#713f12">shutdown/serialize — the user's</text>
+  <text x="732" y="456" font-size="12" fill="#713f12">implementation wins, at runtime</text>
+  <line x1="716" y1="415" x2="684" y2="415" stroke="#ca8a04" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- isolation note -->
+  <rect x="716" y="216" width="244" height="110" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="732" y="244" font-size="14.5" font-weight="600" fill="#334155">isolation rule</text>
+  <text x="732" y="266" font-size="12" fill="#64748b">upper layers never reach inside</text>
+  <text x="732" y="284" font-size="12" fill="#64748b">kotek — they code against</text>
+  <text x="732" y="302" font-size="12" fill="#64748b">interfaces that stay stable for decades</text>
+
+  <text x="500" y="620" text-anchor="middle" font-size="12.5" fill="#94a3b8">any layer can be replaced: a module, the engine, or the framework's own implementations</text>
+</svg>

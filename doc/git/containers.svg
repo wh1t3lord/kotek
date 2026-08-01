@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 500" font-family="Segoe UI, Arial, sans-serif">
+  <defs>
+    <marker id="arr3" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <path d="M0,0 L10,4 L0,8 Z" fill="#475569"/>
+    </marker>
+  </defs>
+  <rect width="1000" height="500" fill="#ffffff"/>
+  <text x="500" y="40" text-anchor="middle" font-size="24" font-weight="600" fill="#0f172a">containers: three explicit memory models</text>
+  <text x="500" y="64" text-anchor="middle" font-size="13" fill="#64748b">the same ktk_* alias resolves to the model you configured — call sites never change</text>
+
+  <!-- static -->
+  <rect x="60" y="96" width="880" height="110" rx="12" fill="#ecfdf5" stroke="#059669" stroke-width="2"/>
+  <text x="86" y="126" font-size="15.5" font-weight="600" fill="#065f46">static (embedded) — owns its memory, never reallocates</text>
+  <g>
+    <rect x="86" y="142" width="52" height="34" fill="#a7f3d0" stroke="#059669"/>
+    <rect x="138" y="142" width="52" height="34" fill="#a7f3d0" stroke="#059669"/>
+    <rect x="190" y="142" width="52" height="34" fill="#a7f3d0" stroke="#059669"/>
+    <rect x="242" y="142" width="52" height="34" fill="#d1fae5" stroke="#059669" stroke-dasharray="4 3"/>
+    <rect x="294" y="142" width="52" height="34" fill="#d1fae5" stroke="#059669" stroke-dasharray="4 3"/>
+    <rect x="346" y="142" width="52" height="34" fill="#d1fae5" stroke="#059669" stroke-dasharray="4 3"/>
+    <text x="420" y="164" font-size="12.5" fill="#065f46">one fixed inline buffer — capacity is a compile-time constant</text>
+  </g>
+  <text x="86" y="196" font-size="12" fill="#047857">cache-friendly, zero allocator involvement — the zircon engine layer hard-requires this model</text>
+
+  <!-- hybrid -->
+  <rect x="60" y="222" width="880" height="110" rx="12" fill="#eff6ff" stroke="#2563eb" stroke-width="2"/>
+  <text x="86" y="252" font-size="15.5" font-weight="600" fill="#1d4ed8">hybrid — preoccupied bounded buffer, grows only with permission</text>
+  <g>
+    <rect x="86" y="268" width="52" height="34" fill="#bfdbfe" stroke="#2563eb"/>
+    <rect x="138" y="268" width="52" height="34" fill="#bfdbfe" stroke="#2563eb"/>
+    <rect x="190" y="268" width="52" height="34" fill="#dbeafe" stroke="#2563eb" stroke-dasharray="4 3"/>
+    <rect x="242" y="268" width="52" height="34" fill="#dbeafe" stroke="#2563eb" stroke-dasharray="4 3"/>
+    <line x1="310" y1="285" x2="380" y2="285" stroke="#475569" stroke-width="2" marker-end="url(#arr3)"/>
+    <rect x="388" y="268" width="70" height="34" fill="#fef3c7" stroke="#d97706"/>
+    <text x="423" y="289" text-anchor="middle" font-size="11" fill="#92400e">growth</text>
+    <text x="480" y="289" font-size="12.5" fill="#1e40af">a pmr buffer answers small fits; reallocation happens only if the type allows it</text>
+  </g>
+  <text x="86" y="322" font-size="12" fill="#1e40af">can stand in for a static container — memory_resource with no reallocation when configured strict</text>
+
+  <!-- dynamic -->
+  <rect x="60" y="348" width="880" height="110" rx="12" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="86" y="378" font-size="15.5" font-weight="600" fill="#334155">dynamic — regular STL behavior for unbounded data</text>
+  <g>
+    <rect x="86" y="394" width="40" height="34" fill="#e2e8f0" stroke="#64748b"/>
+    <line x1="132" y1="411" x2="180" y2="411" stroke="#475569" stroke-width="2" marker-end="url(#arr3)"/>
+    <rect x="186" y="394" width="76" height="34" fill="#e2e8f0" stroke="#64748b"/>
+    <line x1="268" y1="411" x2="316" y2="411" stroke="#475569" stroke-width="2" marker-end="url(#arr3)"/>
+    <rect x="322" y="394" width="150" height="34" fill="#e2e8f0" stroke="#64748b"/>
+    <text x="496" y="415" font-size="12.5" fill="#475569">the allocator grows the storage as needed</text>
+  </g>
+  <text x="86" y="448" font-size="12" fill="#64748b">available where it belongs — host tools and unbounded data — never in the embedded engine layer</text>
+
+  <text x="500" y="486" text-anchor="middle" font-size="12.5" fill="#94a3b8">one flag (KOTEK_LIBRARY_TYPE = EMB | HYB | DYN) switches the model for the whole stack</text>
+</svg>
