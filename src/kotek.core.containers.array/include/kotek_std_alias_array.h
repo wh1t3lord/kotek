@@ -33,6 +33,11 @@ using static_array = etl::array<Type, Size>;
 #else
 #endif
 
+// a fixed-size array never allocates, so the hybrid flavor degenerates to
+// the plain array of the active std/boost library
+template <typename Type, size_t Size>
+using hybrid_array = array<Type, Size>;
+
 KOTEK_END_NAMESPACE_KTK
 
 template <class Type, KUN_KOTEK KUN_KTK size_t Size>
@@ -42,6 +47,9 @@ using array_t = KUN_KOTEK KUN_KTK array<Type, Size>;
 template <typename Type, size_t Size>
 using static_array_t = KUN_KOTEK KUN_KTK static_array<Type, Size>;
 #endif
+
+template <typename Type, KUN_KOTEK KUN_KTK size_t Size>
+using hybrid_array_t = KUN_KOTEK KUN_KTK hybrid_array<Type, Size>;
 
 KOTEK_END_NAMESPACE_KOTEK
 
@@ -53,6 +61,13 @@ KOTEK_END_NAMESPACE_KOTEK
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_array
 	#define KTK_ARRAY \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_array
+#elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
+	#define ktk_array \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_array
+	#define ktkArray \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_array
+	#define KTK_ARRAY \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_array
 #else
 	#define ktk_array KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK array
 	#define ktkArray KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK array

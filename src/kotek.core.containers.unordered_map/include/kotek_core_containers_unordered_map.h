@@ -12,6 +12,13 @@
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_unordered_map
 	#define ktkUnorderedMap \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_unordered_map
+#elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
+	#define ktk_unordered_map \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_unordered_map
+	#define KTK_UNORDERED_MAP \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_unordered_map
+	#define ktkUnorderedMap \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_unordered_map
 #else
 	#define ktk_unordered_map \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK unordered_map

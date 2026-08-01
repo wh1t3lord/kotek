@@ -13,6 +13,13 @@
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_unordered_set
 	#define ktkUnorderedSet \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_unordered_set
+#elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
+	#define ktk_unordered_set \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_unordered_set
+	#define KTK_UNORDERED_SET \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_unordered_set
+	#define ktkUnorderedSet \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_unordered_set
 #else
 	#define ktk_unordered_set \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK unordered_set

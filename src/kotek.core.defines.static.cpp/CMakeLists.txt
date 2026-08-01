@@ -598,7 +598,10 @@ else()
 	message(FATAL_ERROR "you must specify KOTEK_DEVELOPMENT_TYPE as SHARED or STATIC...")
 endif()
 
-if ("${KOTEK_LIBRARY_TYPE}" STREQUAL "EMB")
+if ("${KOTEK_LIBRARY_TYPE}" STREQUAL "EMB" OR "${KOTEK_LIBRARY_TYPE}" STREQUAL "HYB")
+	# HYB takes the same bounded-capacity defaults as EMB: the preprocessor
+	# emit block below (KOTEK_DEF_*) covers both EMB and HYB, so every default
+	# must exist for HYB too
 	if ("${KOTEK_DEF_FALLBACK_RENDERERS_COUNT}" STREQUAL "")
 		set(KOTEK_DEF_FALLBACK_RENDERERS_COUNT "4")
 	endif()
@@ -694,7 +697,7 @@ elseif("${KOTEK_LIBRARY_TYPE}" STREQUAL "DYN")
 	endif()
 
 else()
-	message(FATAL_ERROR "you must specify KOTEK_LIBRARY_TYPE as DYN or EMB...")
+	message(FATAL_ERROR "you must specify KOTEK_LIBRARY_TYPE as DYN, EMB or HYB...")
 endif()
 
 if ("${KOTEK_DEF_CONSOLE_TYPE_FOR_ARGUMENT_COUNT}" STREQUAL "")
@@ -711,10 +714,25 @@ else()
 	message(FATAL_ERROR "unsupported log type backend (supported values: BOOST - specifies that user uses boost.log library as log's backend; '' or SPDLOG - empty string means that user uses default backend based on spdlog library; CUSTOM - means user specifies own implementation for logging and overloads existing preprocessors/stuff;): ${KOTEK_LOG_LIBRARY}")
 endif()
 
+# task K4: json backend selector. BOOST (the default, also when the
+# option is empty) keeps today's behavior exactly (boost.json via
+# vcpkg/nuget); KOTEK_OWN selects kotek's own dependency-free backend
+# (streaming parser + small DOM, kotek.core.containers.json/include/
+# kotek_own_json*.h) and the json module then skips the boost
+# find/link entirely
+if ("${KOTEK_JSON_LIBRARY}" STREQUAL "" OR "${KOTEK_JSON_LIBRARY}" STREQUAL "BOOST")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_JSON_LIBRARY_BOOST)
+elseif("${KOTEK_JSON_LIBRARY}" STREQUAL "KOTEK_OWN")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_JSON_LIBRARY_KOTEK_OWN)
+else()
+	message(FATAL_ERROR "unsupported json backend (supported values: '' or BOOST - default, boost.json library; KOTEK_OWN - kotek's own no-dependency json backend): ${KOTEK_JSON_LIBRARY}")
+endif()
+
 message("[${PROJECT_NAME}]: standard library is ${KOTEK_STD_LIBRARY_NAME}")
 message("[${PROJECT_NAME}]: string configuration is '${KOTEK_STRING_CONFIGURATION}'")
 message("[${PROJECT_NAME}]: development is for ${KOTEK_LIBRARY_TYPE} environment")
 message("[${PROJECT_NAME}]: log backend is ${KOTEK_LOG_LIBRARY}")
+message("[${PROJECT_NAME}]: json backend is ${KOTEK_JSON_LIBRARY}")
 
 if ("${KOTEK_FILESYSTEM_FEATURE_VFM}" STREQUAL "" OR "${KOTEK_FILESYSTEM_FEATURE_VFM}" STREQUAL "ON")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_FILESYSTEM_FEATURE_VFM)
@@ -1366,6 +1384,18 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 		file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
 		"
 				#define KOTEK_USE_LOG_LIBRARY_CUSTOM
+		")
+	endif()
+
+	if ("${KOTEK_JSON_LIBRARY}" STREQUAL "" OR "${KOTEK_JSON_LIBRARY}" STREQUAL "BOOST")
+		file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+		"
+				#define KOTEK_USE_JSON_LIBRARY_BOOST
+		")
+	elseif ("${KOTEK_JSON_LIBRARY}" STREQUAL "KOTEK_OWN")
+		file(APPEND ${KOTEK_FILENAME_FOR_GENERATING_PREPROCESSORS}
+		"
+				#define KOTEK_USE_JSON_LIBRARY_KOTEK_OWN
 		")
 	endif()
 

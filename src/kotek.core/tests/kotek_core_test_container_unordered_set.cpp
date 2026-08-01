@@ -11,18 +11,17 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 #if defined(KOTEK_USE_TESTS) && defined(KOTEK_DEBUG)
 
-// Test configurations
-using SmallSet =
-	kun_ktk hybrid_unordered_set<int, std::hash<int>, std::equal_to<int>, 5, true>;
+// Test configurations (alias shapes follow the HYB-fix refactor
+// 2026-08-01: hybrid_unordered_set<Type, N> reallocates,
+// static_hybrid_unordered_set<Type, N> never does,
+// hybrid_std_unordered_set<Type> is the dynamic flavor)
+using SmallSet = kun_ktk hybrid_unordered_set<int, 5>;
 
 using SmallSetStd = std::pmr::unordered_set<int>;
 
-using SmallSetNoRealloc = kun_ktk hybrid_unordered_set<int, std::hash<int>,
-	std::equal_to<int>, 5, false>;
-using DynamicSet =
-	kun_ktk hybrid_unordered_set<int, std::hash<int>, std::equal_to<int>, 0, true>;
-using StringSet = kun_ktk hybrid_unordered_set<std::string, std::hash<std::string>,
-	std::equal_to<std::string>, 3, true>;
+using SmallSetNoRealloc = kun_ktk static_hybrid_unordered_set<int, 5>;
+using DynamicSet = kun_ktk hybrid_std_unordered_set<int>;
+using StringSet = kun_ktk hybrid_unordered_set<std::string, 3>;
 
 // Constructor Tests
 TEST(Containers, test_container_hybrid_unordered_set_default_constructor)

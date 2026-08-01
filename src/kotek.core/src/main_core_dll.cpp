@@ -28,6 +28,7 @@ void RegisterAllTests(void)
 	RegisterTests_Math_ForModule_Core();
 	RegisterTests_Translation_ForModule_Enum_Core();
 	RegisterTests_Json_ForModule_Core();
+	RegisterTests_JsonOwn_ForModule_Core();
 	RegisterTests_String_ForModule_Core();
 	RegisterTests_Input_ForModule_Core();
 	RegisterTests_InputWinApi_ForModule_Core();
@@ -36,6 +37,7 @@ void RegisterAllTests(void)
 	RegisterTests_Container_Unordered_Set_Core();
 	RegisterTests_PluginOverride_ForModule_Core();
 	RegisterTests_MathBackends_ForModule_Core();
+	RegisterTests_Containers_Hybrid_ForModule_Core();
 	RegisterTests_RenderNRI_ForModule_Core();
 #endif
 }

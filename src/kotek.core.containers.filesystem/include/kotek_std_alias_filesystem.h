@@ -10,7 +10,8 @@ KOTEK_BEGIN_NAMESPACE_KTK
 
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 
-	#if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \
+	#if (defined(KOTEK_USE_LIBRARY_TYPE_EMB) || \
+		defined(KOTEK_USE_LIBRARY_TYPE_HYB)) && \
 		defined(KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS)
 // todo: rename to filesystem when you finish static_path and all replacement to
 // ktk_filesystem_path

@@ -148,7 +148,7 @@ inline constexpr size_t __calculate_unordered_set_size(
 template <typename Type, typename H, typename P, std::size_t ElementCount,
 	bool Realloc,
 	std::size_t _kotek_hus_Size = __calculate_unordered_set_size(ElementCount)>
-class hybrid_unordered_set
+class hybrid_unordered_set_impl
 {
 	static_assert(ElementCount == 0 ? Realloc : true,
 		"if you specified ElementCount as 0 it means that it doesn't use stack "
@@ -180,9 +180,9 @@ public:
 	using insert_return_type = typename container_type::insert_return_type;
 
 public:
-	hybrid_unordered_set() : mem() {}
+	hybrid_unordered_set_impl() : mem() {}
 
-	explicit hybrid_unordered_set(size_type bucket_count, const H& hash = H()) :
+	explicit hybrid_unordered_set_impl(size_type bucket_count, const H& hash = H()) :
 		mem(bucket_count, hash)
 	{
 	}
@@ -190,7 +190,7 @@ public:
 	// explicit unordered_set(const allocator_type& alloc);
 
 	template <class InputIt>
-	hybrid_unordered_set(InputIt first, InputIt last,
+	hybrid_unordered_set_impl(InputIt first, InputIt last,
 		size_type bucket_count = _kotek_hus_default_bucket_count,
 		const H& hash = H(), const key_equal& equal = key_equal()) :
 		mem(first, last, bucket_count, hash, equal)
@@ -200,12 +200,12 @@ public:
 	/*
 	template<typename Type2, typename H2, typename P2, std::size_t Count, bool
 	Realloc, typename = std::enable_if_t<(ElementCount < Count) && (Realloc ==
-	false)>> hybrid_unordered_set(const hybrid_unordered_set<Type2, H2, P2,
+	false)>> hybrid_unordered_set_impl(const hybrid_unordered_set_impl<Type2, H2, P2,
 	Count, Realloc>&) = delete;
 
 	template<typename Type2, typename H2, typename P2, std::size_t Count, bool
 	Realloc, typename = std::enable_if_t<(ElementCount < Count) && (Realloc ==
-	false)>> hybrid_unordered_set(hybrid_unordered_set<Type2, H2, P2, Count,
+	false)>> hybrid_unordered_set_impl(hybrid_unordered_set_impl<Type2, H2, P2, Count,
 	Realloc>&&) = delete;*/
 
 	template <typename Type2, typename H2, typename P2,
@@ -213,15 +213,15 @@ public:
 		typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
 										Realloc == true) &&
 			std::is_same_v<Type, Type2>>>
-	hybrid_unordered_set(
-		const hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&
+	hybrid_unordered_set_impl(
+		const hybrid_unordered_set_impl<Type2, H2, P2, ElementCount2, Realloc2>&
 			other) : mem(other)
 	{
 	}
 
-	hybrid_unordered_set(const hybrid_unordered_set& other) : mem(other) {}
+	hybrid_unordered_set_impl(const hybrid_unordered_set_impl& other) : mem(other) {}
 
-	hybrid_unordered_set(hybrid_unordered_set&& other) : mem(std::move(other))
+	hybrid_unordered_set_impl(hybrid_unordered_set_impl&& other) : mem(std::move(other))
 	{
 	}
 
@@ -230,47 +230,47 @@ public:
 		typename = std::enable_if_t<(ElementCount >= ElementCount2 ||
 										Realloc == true) &&
 			std::is_same_v<Type, Type2>>>
-	hybrid_unordered_set(
-		hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&& other) :
+	hybrid_unordered_set_impl(
+		hybrid_unordered_set_impl<Type2, H2, P2, ElementCount2, Realloc2>&& other) :
 		mem(other)
 	{
 	}
 
-	hybrid_unordered_set(_kotek_hus_il_t<value_type> init,
+	hybrid_unordered_set_impl(_kotek_hus_il_t<value_type> init,
 		size_type bucket_count = _kotek_hus_default_bucket_count,
 		const H& hash = H(), const key_equal& equal = key_equal()) :
 		mem(init, bucket_count, hash, equal)
 	{
 	}
 
-	~hybrid_unordered_set() {}
+	~hybrid_unordered_set_impl() {}
 
 public:
-	hybrid_unordered_set& operator=(const hybrid_unordered_set& other)
+	hybrid_unordered_set_impl& operator=(const hybrid_unordered_set_impl& other)
 	{
 		mem.con.operator=(other.mem.con);
 		return *this;
 	}
 
-	hybrid_unordered_set& operator=(const container_type& other)
+	hybrid_unordered_set_impl& operator=(const container_type& other)
 	{
 		mem.con.operator=(other);
 		return *this;
 	}
 
-	hybrid_unordered_set& operator=(hybrid_unordered_set&& other) noexcept
+	hybrid_unordered_set_impl& operator=(hybrid_unordered_set_impl&& other) noexcept
 	{
 		mem.con.operator=(std::move(other.mem.con));
 		return *this;
 	}
 
-	hybrid_unordered_set& operator=(container_type&& other)
+	hybrid_unordered_set_impl& operator=(container_type&& other)
 	{
 		mem.con.operator=(std::move(other));
 		return *this;
 	}
 
-	hybrid_unordered_set& operator=(_kotek_hus_il_t<value_type> ilist)
+	hybrid_unordered_set_impl& operator=(_kotek_hus_il_t<value_type> ilist)
 	{
 		mem.con.operator=(ilist);
 		return *this;
@@ -364,9 +364,9 @@ public:
 
 	size_type erase(const Type& key) { return mem.con.erase(key); }
 
-	void swap(hybrid_unordered_set& other) 
+	void swap(hybrid_unordered_set_impl& other) 
 	{
-		KOTEK_ASSERT(false, "hybrid_unordered_set::swap is not supported with polymorphic allocators");
+		KOTEK_ASSERT(false, "hybrid_unordered_set_impl::swap is not supported with polymorphic allocators");
 	}
 
 	void swap(container_type& other) noexcept { mem.con.swap(other); }
@@ -377,45 +377,45 @@ public:
 
 	template <class H2, class P2>
 	void merge(
-		hybrid_unordered_set<Type, H2, P2, ElementCount, Realloc>& source)
+		hybrid_unordered_set_impl<Type, H2, P2, ElementCount, Realloc>& source)
 	{
-		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
+		KOTEK_ASSERT(false, "hybrid_unordered_set_impl::merge is not supported with polymorphic allocators");
 		//		mem.con.merge(source.mem.con);
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_set<Type, H2, P2>& source)
 	{
-		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
+		KOTEK_ASSERT(false, "hybrid_unordered_set_impl::merge is not supported with polymorphic allocators");
 	//	mem.con.merge(source);
 	}
 
 	template <class H2, class P2>
 	void merge(
-		hybrid_unordered_set<Type, H2, P2, ElementCount, Realloc>&& source)
+		hybrid_unordered_set_impl<Type, H2, P2, ElementCount, Realloc>&& source)
 	{
-		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
+		KOTEK_ASSERT(false, "hybrid_unordered_set_impl::merge is not supported with polymorphic allocators");
 	//	mem.con.merge(std::move(source.mem.con));
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_set<Type, H2, P2>&& source)
 	{
-		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
+		KOTEK_ASSERT(false, "hybrid_unordered_set_impl::merge is not supported with polymorphic allocators");
 	//	mem.con.merge(std::move(source));
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_multiset<Type, H2, P2>& source)
 	{
-		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
+		KOTEK_ASSERT(false, "hybrid_unordered_set_impl::merge is not supported with polymorphic allocators");
 	//	mem.con.merge(source);
 	}
 
 	template <class H2, class P2>
 	void merge(std::pmr::unordered_multiset<Type, H2, P2>&& source)
 	{
-		KOTEK_ASSERT(false, "hybrid_unordered_set::merge is not supported with polymorphic allocators");
+		KOTEK_ASSERT(false, "hybrid_unordered_set_impl::merge is not supported with polymorphic allocators");
 	//	mem.con.merge(std::move(source));
 	}
 
@@ -542,7 +542,7 @@ private:
 				std::is_same_v<Type, Type2>>>
 
 		layout_prealloc_t(
-			const hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&
+			const hybrid_unordered_set_impl<Type2, H2, P2, ElementCount2, Realloc2>&
 				other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hus_Size,
@@ -556,7 +556,7 @@ private:
 			}
 		}
 
-		layout_prealloc_t(const hybrid_unordered_set& other) :
+		layout_prealloc_t(const hybrid_unordered_set_impl& other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
@@ -569,7 +569,7 @@ private:
 			}
 		}
 
-		layout_prealloc_t(hybrid_unordered_set&& other) :
+		layout_prealloc_t(hybrid_unordered_set_impl&& other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hus_Size,
 				Realloc ? std::pmr::get_default_resource()
@@ -613,7 +613,7 @@ private:
 											Realloc == true) &&
 				std::is_same_v<Type, Type2>>>
 		layout_prealloc_t(
-			hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&&
+			hybrid_unordered_set_impl<Type2, H2, P2, ElementCount2, Realloc2>&&
 				other) :
 			pool{(ElementCount == 0) ? nullptr : buf,
 				(ElementCount == 0) ? 0 : _kotek_hus_Size,
@@ -671,17 +671,17 @@ private:
 				std::is_same_v<Type, Type2>>>
 
 		layout_no_prealloc_t(
-			const hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&
+			const hybrid_unordered_set_impl<Type2, H2, P2, ElementCount2, Realloc2>&
 				other) : con{other.container()}
 		{
 		}
 
-		layout_no_prealloc_t(const hybrid_unordered_set& other) :
+		layout_no_prealloc_t(const hybrid_unordered_set_impl& other) :
 			con{other.mem.con}
 		{
 		}
 
-		layout_no_prealloc_t(hybrid_unordered_set&& other) :
+		layout_no_prealloc_t(hybrid_unordered_set_impl&& other) :
 			con{std::move(other.mem.con)}
 		{
 		}
@@ -692,7 +692,7 @@ private:
 											Realloc == true) &&
 				std::is_same_v<Type, Type2>>>
 		layout_no_prealloc_t(
-			hybrid_unordered_set<Type2, H2, P2, ElementCount2, Realloc2>&&
+			hybrid_unordered_set_impl<Type2, H2, P2, ElementCount2, Realloc2>&&
 				other) : con{std::move(other.container_move_out())}
 		{
 		}
@@ -713,5 +713,43 @@ private:
 	layout_t mem;
 };
 
+template <typename Type, kun_ktk size_t NotInUsed = 0>
+using hybrid_std_unordered_set = hybrid_unordered_set_impl<Type,
+	::std::hash<Type>, ::std::equal_to<Type>, 0, true>;
+
+template <typename Type, kun_ktk size_t ElementCount>
+using hybrid_unordered_set = hybrid_unordered_set_impl<Type, ::std::hash<Type>,
+	::std::equal_to<Type>, ElementCount, true>;
+
+template <typename Type, kun_ktk size_t ElementCount>
+using static_hybrid_unordered_set = hybrid_unordered_set_impl<Type,
+	::std::hash<Type>, ::std::equal_to<Type>, ElementCount, false>;
+
 KOTEK_END_NAMESPACE_KTK
+
+template <typename Type, kun_ktk size_t NotInUsed = 0>
+using hybrid_std_unordered_set_t =
+	kun_ktk hybrid_std_unordered_set<Type, NotInUsed>;
+
+template <typename Type, kun_ktk size_t ElementCount>
+using hybrid_unordered_set_t = kun_ktk hybrid_unordered_set<Type, ElementCount>;
+
+template <typename Type, kun_ktk size_t ElementCount>
+using static_hybrid_unordered_set_t =
+	kun_ktk static_hybrid_unordered_set<Type, ElementCount>;
+
 KOTEK_END_NAMESPACE_KOTEK
+
+// a hybrid container owns its bounded buffer and its memory resource, so an
+// outer (pmr) container must not try to propagate its allocator into it:
+// the wrapper has no allocator-extended constructors and the uses_allocator
+// construction protocol is therefore disabled for it
+namespace std
+{
+template <typename Type, typename H, typename P, size_t ElementCount, bool Realloc, size_t Size, typename Alloc>
+struct uses_allocator<KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK
+						  hybrid_unordered_set_impl<Type, H, P, ElementCount, Realloc, Size>,
+	Alloc> : false_type
+{
+};
+} // namespace std

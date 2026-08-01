@@ -152,7 +152,8 @@ struct is_safe_for_buffer
 template <typename T>
 inline constexpr bool is_safe_for_buffer_v = is_safe_for_buffer<T>::value;
 
-template <typename Key, typename Value, std::size_t ElementCount, bool Realloc,
+template <typename Key, typename Value, std::size_t ElementCount,
+	bool Realloc = true,
 	std::size_t _kotek_hm_Size =
 		_kotek_pmr_hybrid_map_map_buffer_size(ElementCount)>
 class hybrid_map
@@ -411,7 +412,7 @@ public:
 
 	size_type erase(const Key& key) { return mem.con.erase(key); }
 
-	void swap(hybrid_map& other) noexcept { mem.con.swap(other); }
+	void swap(hybrid_map& other) noexcept { mem.con.swap(other.container()); }
 
 	node_type extract(const_iterator pos) { return mem.con.extract(pos); }
 
@@ -684,3 +685,17 @@ private:
 
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
+
+// a hybrid container owns its bounded buffer and its memory resource, so an
+// outer (pmr) container must not try to propagate its allocator into it:
+// the wrapper has no allocator-extended constructors and the uses_allocator
+// construction protocol is therefore disabled for it
+namespace std
+{
+template <typename Key, typename Value, size_t ElementCount, bool Realloc, size_t Size, typename Alloc>
+struct uses_allocator<KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK
+						  hybrid_map<Key, Value, ElementCount, Realloc, Size>,
+	Alloc> : false_type
+{
+};
+} // namespace std

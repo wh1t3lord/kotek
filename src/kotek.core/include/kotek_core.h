@@ -58,6 +58,7 @@ void RegisterTests_Filesystem_ForModule_Core(void);
 void RegisterTests_Math_ForModule_Core(void);
 void RegisterTests_Translation_ForModule_Enum_Core(void);
 void RegisterTests_Json_ForModule_Core(void);
+void RegisterTests_JsonOwn_ForModule_Core(void);
 void RegisterTests_String_ForModule_Core(void);
 void RegisterTests_Input_ForModule_Core(void);
 void RegisterTests_InputWinApi_ForModule_Core(void);
@@ -66,6 +67,7 @@ void RegisterTests_Container_Vector_Core(void);
 void RegisterTests_Container_Unordered_Set_Core(void);
 void RegisterTests_PluginOverride_ForModule_Core(void);
 void RegisterTests_MathBackends_ForModule_Core(void);
+void RegisterTests_Containers_Hybrid_ForModule_Core(void);
 void RegisterTests_RenderNRI_ForModule_Core(void);
 void RegisterAllTests(void);
 

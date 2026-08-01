@@ -15,8 +15,12 @@ ktkFileSystem_VFM::ktkFileSystem_VFM(void)
 	// todo: for dyn and hyb KOTEK_USE_LIBRARY_TYPE you need to call resize
 	// because we need to use lookup approach for accessing data from m_mappings
 
-#if defined(KOTEK_USE_LIBRARY_TYPE_DYN) || defined(KOTEK_USE_LIBRARY_TYPE_HYB)
-	#error provide implementation for dynamic and hybrid containers, see todo above
+	// HYB takes the EMB path: the erase-based logic below is written against
+	// the container API (emplace_back/operator[]/erase/push/pop) that the
+	// hybrid vector/queue provide unchanged; the lookup redesign in the todo
+	// above stays open for the owner, DYN remains unimplemented
+#if defined(KOTEK_USE_LIBRARY_TYPE_DYN)
+	#error provide implementation for dynamic containers, see todo above
 #endif
 }
 
@@ -112,7 +116,7 @@ ktkFileSystem_VFM::id_type ktkFileSystem_VFM::MapFile(FILE* p_file)
 	#ifdef KOTEK_DEBUG
 	ktk_cstring<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH> szPathToFile;
 
-	DWORD dwRet = GetFinalPathNameByHandleA(hFile, szPathToFile.begin(),
+	DWORD dwRet = GetFinalPathNameByHandleA(hFile, szPathToFile.data(),
 		KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH, FILE_NAME_NORMALIZED);
 
 	KOTEK_ASSERT(dwRet > 0 && dwRet < KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH,
@@ -204,7 +208,8 @@ void ktkFileSystem_VFM::UnMapFile(id_type file_id)
 				"CloseHandle = last error: {}", GetLastError());
 		}
 
-	#if defined(KOTEK_USE_LIBRARY_TYPE_EMB)
+	#if defined(KOTEK_USE_LIBRARY_TYPE_EMB) || \
+		defined(KOTEK_USE_LIBRARY_TYPE_HYB)
 		this->m_mappings.erase(this->m_mappings.begin() + file_id);
 	#else
 			// todo: we don't need to call erase, but technically we can handle

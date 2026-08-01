@@ -9,8 +9,10 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KTK
 
-// todo: add preprocessors for hybrid containers
-#if defined(KOTEK_USE_LIBRARY_TYPE_EMB) && \
+// hybrid maps to the same bounded ktk_filesystem_path as emb, so both
+// configurations share this implementation
+#if (defined(KOTEK_USE_LIBRARY_TYPE_EMB) || \
+	defined(KOTEK_USE_LIBRARY_TYPE_HYB)) && \
 	defined(KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS)
 KOTEK_BEGIN_NAMESPACE_FILESYSTEM
 ktk_filesystem_path current_path()

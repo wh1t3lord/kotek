@@ -190,7 +190,7 @@ template <
 	typename Key,
 	typename Value,
 	std::size_t ElementCount,
-	bool Realloc,
+	bool Realloc = true,
 	std::size_t _kotek_hum_Size =
 		_kotek_pmr_hybrid_unordered_map_buffer_size(ElementCount
         )>
@@ -261,15 +261,7 @@ class hybrid_unordered_map
 
 public:
 	using key_type = typename container_type::key_type;
-	using key_compare = typename container_type::key_compare;
-	using value_compare =
-		typename container_type::value_compare;
 	using mapped_type = typename container_type::mapped_type;
-
-	using reverse_iterator =
-		typename container_type::reverse_iterator;
-	using const_reverse_iterator =
-		typename container_type::const_reverse_iterator;
 
 	using value_type = typename container_type::value_type;
 	using size_type = typename container_type::size_type;
@@ -612,7 +604,7 @@ public:
 
 	void swap(hybrid_unordered_map& other) noexcept
 	{
-		mem.con.swap(other);
+		mem.con.swap(other.container());
 	}
 
 	node_type extract(const_iterator pos)
@@ -710,57 +702,12 @@ public:
 		return mem.con.equal_range(x);
 	}
 
-	iterator lower_bound(const Key& key)
-	{
-		return mem.con.lower_bound(key);
-	}
-
-	const_iterator lower_bound(const Key& key) const
-	{
-		return mem.con.lower_bound(key);
-	}
-
-	template <class K>
-	iterator lower_bound(const K& x)
-	{
-		return mem.con.lower_bound<K>(x);
-	}
-
-	template <class K>
-	const_iterator lower_bound(const K& x) const
-	{
-		return mem.con.lower_bound<K>(x);
-	}
-
-	iterator upper_bound(const Key& key)
-	{
-		return mem.con.upper_bound(key);
-	}
-
-	const_iterator upper_bound(const Key& key) const
-	{
-		return mem.con.upper_bound(key);
-	}
-
-	template <class K>
-	iterator upper_bound(const K& x)
-	{
-		return mem.con.upper_bound<K>(x);
-	}
-
-	template <class K>
-	const_iterator upper_bound(const K& x) const
-	{
-		return mem.con.upper_bound<K>(x);
-	}
-
 public:
-	key_compare key_comp() const { return mem.con.key_comp(); }
+	// unordered_map exposes its hasher and key equality predicate instead of
+	// the ordered containers' key_comp/value_comp
+	hasher hash_function() const { return mem.con.hash_function(); }
 
-	value_compare value_comp() const
-	{
-		return mem.con.value_comp();
-	}
+	key_equal key_eq() const { return mem.con.key_eq(); }
 
 public:
 	constexpr std::size_t
@@ -1154,3 +1101,17 @@ private:
 
 KOTEK_END_NAMESPACE_KTK
 KOTEK_END_NAMESPACE_KOTEK
+
+// a hybrid container owns its bounded buffer and its memory resource, so an
+// outer (pmr) container must not try to propagate its allocator into it:
+// the wrapper has no allocator-extended constructors and the uses_allocator
+// construction protocol is therefore disabled for it
+namespace std
+{
+template <typename Key, typename Value, size_t ElementCount, bool Realloc, size_t Size, typename Alloc>
+struct uses_allocator<KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK
+						  hybrid_unordered_map<Key, Value, ElementCount, Realloc, Size>,
+	Alloc> : false_type
+{
+};
+} // namespace std

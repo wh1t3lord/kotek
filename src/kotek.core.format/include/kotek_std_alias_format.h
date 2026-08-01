@@ -70,6 +70,25 @@ struct std::formatter<kun_kotek kun_ktk static_cstring<N>, char>
 	}
 };
 
+// the hybrid string is the ktk string type of the HYB library configuration,
+// so it needs the same formatter coverage as static_cstring (EMB)
+template <size_t N, bool R, size_t S>
+struct std::formatter<kun_kotek kun_ktk hybrid_string<char, N, R, S>, char>
+{
+	template <typename ParseContext>
+	constexpr auto parse(ParseContext& ctx)
+	{
+		return ctx.begin();
+	}
+
+	auto format(
+		kun_kotek kun_ktk hybrid_string<char, N, R, S> const& str,
+		auto& ctx) const
+	{
+		return std::format_to(ctx.out(), "{}", str.c_str());
+	}
+};
+
 	#endif
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 template <>

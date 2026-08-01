@@ -584,7 +584,10 @@ public:
 		return *this;
 	}
 
-	template <class StringViewLike>
+	template <class StringViewLike,
+		typename = std::enable_if_t<
+			!_kotek_hstr_is_hybrid_string_v<std::decay_t<StringViewLike>> &&
+			std::is_convertible_v<const StringViewLike&, container_view_type>>>
 	hybrid_string& operator=(const StringViewLike& t)
 	{
 		mem.con.operator= <StringViewLike>(t);
@@ -736,7 +739,7 @@ private:
 				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
-			con{std::move(other.str), &pool}
+			con{std::move(other.container_move_out()), &pool}
 		{
 			if constexpr (ElementCount > 0)
 			{
@@ -767,7 +770,7 @@ private:
 				(ElementCount == 0) ? 0 : _kotek_hstr_Size,
 				Realloc ? std::pmr::get_default_resource()
 						: std::pmr::null_memory_resource()},
-			con{other.str, &pool}
+			con{other.container(), &pool}
 		{
 			if constexpr (ElementCount > 0)
 			{
@@ -847,7 +850,7 @@ private:
 		}
 
 		layout_no_prealloc_t(hybrid_string&& other) noexcept :
-			con{std::move(other.str)}
+			con{std::move(other.container_move_out())}
 		{
 		}
 
@@ -861,7 +864,9 @@ private:
 		{
 		}
 
-		layout_no_prealloc_t(const hybrid_string& other) : con{other.str} {}
+		layout_no_prealloc_t(const hybrid_string& other) : con{other.container()}
+		{
+		}
 
 		layout_no_prealloc_t(std::initializer_list<Type> ilist) : con{ilist} {}
 
@@ -876,6 +881,131 @@ private:
 	layout_t mem;
 };
 
+
+// comparison operators forward to the wrapped std string (the wrapper
+// exposes no conversions, so unordered/ordered containers and user code
+// compare through these; C++20 rewrites != and the relational operators
+// from == and <=>)
+template <typename Type, std::size_t ElementCount1, bool Realloc1,
+	std::size_t Size1, std::size_t ElementCount2, bool Realloc2,
+	std::size_t Size2>
+bool operator==(const hybrid_string<Type, ElementCount1, Realloc1, Size1>& lhs,
+	const hybrid_string<Type, ElementCount2, Realloc2, Size2>& rhs)
+{
+	return lhs.container() == rhs.container();
+}
+
+template <typename Type, std::size_t ElementCount1, bool Realloc1,
+	std::size_t Size1, std::size_t ElementCount2, bool Realloc2,
+	std::size_t Size2>
+auto operator<=>(
+	const hybrid_string<Type, ElementCount1, Realloc1, Size1>& lhs,
+	const hybrid_string<Type, ElementCount2, Realloc2, Size2>& rhs)
+{
+	return lhs.container() <=> rhs.container();
+}
+
+template <typename Type, std::size_t ElementCount, bool Realloc,
+	std::size_t Size>
+bool operator==(
+	const hybrid_string<Type, ElementCount, Realloc, Size>& lhs,
+	const Type* rhs)
+{
+	return lhs.container() == rhs;
+}
+
+template <typename Type, std::size_t ElementCount, bool Realloc,
+	std::size_t Size>
+bool operator==(const Type* lhs,
+	const hybrid_string<Type, ElementCount, Realloc, Size>& rhs)
+{
+	return lhs == rhs.container();
+}
+
+template <typename Type, std::size_t ElementCount, bool Realloc,
+	std::size_t Size>
+auto operator<=>(
+	const hybrid_string<Type, ElementCount, Realloc, Size>& lhs,
+	const Type* rhs)
+{
+	return lhs.container() <=> rhs;
+}
+
+template <typename Type, std::size_t ElementCount, bool Realloc,
+	std::size_t Size>
+auto operator<=>(const Type* lhs,
+	const hybrid_string<Type, ElementCount, Realloc, Size>& rhs)
+{
+	return lhs <=> rhs.container();
+}
+template <kun_ktk size_t ElementCount>
+using hybrid_cstring = hybrid_string<char, ElementCount, true>;
+using hybrid_cstring_view = ::std::basic_string_view<char>;
+
+template <kun_ktk size_t ElementCount>
+using hybrid_wstring = hybrid_string<wchar_t, ElementCount, true>;
+using hybrid_wstring_view = ::std::basic_string_view<wchar_t>;
+
+template <kun_ktk size_t ElementCount>
+using hybrid_u8string = hybrid_string<char8_t, ElementCount, true>;
+using hybrid_u8string_view = ::std::basic_string_view<char8_t>;
+
+template <kun_ktk size_t ElementCount>
+using hybrid_u16string = hybrid_string<char16_t, ElementCount, true>;
+using hybrid_u16string_view = ::std::basic_string_view<char16_t>;
+
+template <kun_ktk size_t ElementCount>
+using hybrid_u32string = hybrid_string<char32_t, ElementCount, true>;
+using hybrid_u32string_view = ::std::basic_string_view<char32_t>;
+
+// mirrors kotek_std_alias_string.h (types.string): the 'u' string is the
+// compact char string under the optimized configuration and the unicode
+// (u8) string otherwise
+#ifdef KOTEK_USE_STRING_CONFIGURATION_OPTIMIZED
+template <kun_ktk size_t ElementCount>
+using hybrid_ustring = hybrid_cstring<ElementCount>;
+using hybrid_ustring_view = hybrid_cstring_view;
+#else
+template <kun_ktk size_t ElementCount>
+using hybrid_ustring = hybrid_u8string<ElementCount>;
+using hybrid_ustring_view = hybrid_u8string_view;
+#endif
+
 KOTEK_END_NAMESPACE_KTK
 
 KOTEK_END_NAMESPACE_KOTEK
+
+// a hybrid container owns its bounded buffer and its memory resource, so an
+// outer (pmr) container must not try to propagate its allocator into it:
+// the wrapper has no allocator-extended constructors and the uses_allocator
+// construction protocol is therefore disabled for it
+namespace std
+{
+template <typename Type, size_t ElementCount, bool Realloc, size_t Size, typename Alloc>
+struct uses_allocator<KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK
+						  hybrid_string<Type, ElementCount, Realloc, Size>,
+	Alloc> : false_type
+{
+};
+} // namespace std
+
+
+// the hybrid string is the ktk string type of the HYB library configuration
+// and the default hasher of the std unordered containers is std::hash, so the
+// wrapper needs the same hash coverage as etl strings have under EMB; it
+// lives in this header so every consumer of the type sees it (mirrors the
+// placement of the etl hash specializations for static_cstring)
+namespace std
+{
+template <size_t StrSize, bool Realloc, size_t BufferSize>
+struct hash<KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK
+				hybrid_string<char, StrSize, Realloc, BufferSize>>
+{
+	size_t operator()(
+		const KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK
+			hybrid_string<char, StrSize, Realloc, BufferSize>& str) const
+	{
+		return hash<basic_string_view<char>>()(str.c_str());
+	}
+};
+} // namespace std

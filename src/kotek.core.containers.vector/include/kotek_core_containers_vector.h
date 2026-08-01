@@ -17,7 +17,12 @@
 	#define KTK_VECTOR KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK vector
 	#define ktkVector KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK vector
 #elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
-// todo: provide implementation for hybrid vector container
+	#define ktk_vector \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_vector
+	#define KTK_VECTOR \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_vector
+	#define ktkVector \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_vector
 #else
 	#error unknown configuration, kotek supports static (EMB), dynamic (DYN) and hybrid (HYB) configurations
 #endif

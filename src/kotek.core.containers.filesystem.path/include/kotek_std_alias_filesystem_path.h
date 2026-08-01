@@ -2327,6 +2327,10 @@ inline directory_iterator end(const directory_iterator& iter
 
 using path = std::filesystem::path;
 
+// a path is a bounded value type (KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH), so the
+// hybrid flavor is the preallocated static_path — it never allocates
+using hybrid_path = static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>;
+
 KOTEK_END_NAMESPACE_FILESYSTEM
 KOTEK_END_NAMESPACE_KTK
 
@@ -2349,6 +2353,16 @@ KOTEK_END_NAMESPACE_KOTEK
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK \
 			KOTEK_USE_NAMESPACE_FILESYSTEM                \
 				static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>
+#elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
+	#define ktk_filesystem_path                           \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK \
+			KOTEK_USE_NAMESPACE_FILESYSTEM hybrid_path
+	#define ktkFileSystemPath                             \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK \
+			KOTEK_USE_NAMESPACE_FILESYSTEM hybrid_path
+	#define KTK_FILESYSTEM_PATH                           \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK \
+			KOTEK_USE_NAMESPACE_FILESYSTEM hybrid_path
 #else
 	#define ktk_array                                     \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK \

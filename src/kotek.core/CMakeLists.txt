@@ -63,6 +63,7 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AN
 	set(to_include_tests 
 		"tests/kotek_core_test_filesystem.cpp"
 		"tests/kotek_core_test_json.cpp"
+		"tests/kotek_core_test_json_own.cpp"
 		"tests/kotek_core_test_string.cpp"
 		"tests/kotek_core_test_container_deque.cpp"
 		"tests/kotek_core_test_container_vector.cpp"
@@ -74,6 +75,7 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AN
 		"tests/kotek_core_test_container_list.cpp"
 		"tests/kotek_core_test_plugin_override.cpp"
 		"tests/kotek_core_test_math_backends.cpp"
+		"tests/kotek_core_test_containers_hybrid.cpp"
 		"tests/kotek_core_test_render_nri.cpp"
 	)
 elseif("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "OFF")

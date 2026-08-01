@@ -2,6 +2,8 @@
 
 #include <kotek.core.containers.deque/include/kotek_core_containers_deque.h>
 
+#include "kotek_std_alias_hybrid_queue.h"
+
 #ifdef KOTEK_USE_NOT_CUSTOM_LIBRARY
 	#include <queue>
 #else
@@ -45,6 +47,13 @@ KOTEK_END_NAMESPACE_KOTEK
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_queue
 	#define ktkQueue \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK static_queue
+#elif defined(KOTEK_USE_LIBRARY_TYPE_HYB)
+	#define ktk_queue \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_queue
+	#define KTK_QUEUE \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_queue
+	#define ktkQueue \
+		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK hybrid_queue
 #else
 	#define ktk_queue KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK queue
 	#define KTK_QUEUE KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK queue

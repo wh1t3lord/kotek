@@ -1754,7 +1754,7 @@ void ktkFileSystem::Make_Path(
 {
 	if (is_relative == false)
 	{
-		path = this->m_root_path;
+		path = this->m_root_path.c_str();
 		path += "/";
 	}
 

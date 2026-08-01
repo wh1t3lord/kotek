@@ -24,6 +24,18 @@ jobs:
           - { name: math-glm, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=GLM", cfg: Debug }
           - { name: math-dxm, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=DXM", cfg: Debug }
           - { name: math-own, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_MATH_LIBRARY=KOTEK_OWN", cfg: Debug }
+          # json-own (task K4): kotek's own no-deps json backend. Unlike
+          # the math legs this also enables the test TUs so
+          # kotek_core_test_json_own.cpp compiles against the own backend
+          # in CI (execution itself needs the zircon superproject's engine
+          # boot, same as every kotek gtest suite)
+          - { name: json-own, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_JSON_LIBRARY=KOTEK_OWN -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON", cfg: Debug }
+          # containers-hyb (task K4): the hybrid container library type
+          # (bounded pmr buffers + optional realloc) must compile across all
+          # kotek modules; test flags on so the hybrid test TU builds.
+          # kotek-repo-scoped BY DESIGN: zircon targets refuse non-EMB
+          # library types via zircon_config_guard.h (task Z12)
+          - { name: containers-hyb, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_LIBRARY_TYPE=HYB -DKOTEK_TESTS=ON -DKOTEK_TESTS_RUNTIME=ON -DKOTEK_ASSERT_STDERR_ROUTING=ON", cfg: Debug }
           - { name: deps-manual, cmake: "-DCMAKE_BUILD_TYPE=Debug -DKOTEK_DEPS_FOLDER=ci-manual", cfg: Debug }
 
     steps:

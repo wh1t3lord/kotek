@@ -271,7 +271,7 @@ public:
 
 	hybrid_vector_impl& operator=(const hybrid_vector_impl& other)
 	{
-		mem.con.operator=(other.con);
+		mem.con.operator=(other.container());
 		return *this;
 	}
 	hybrid_vector_impl& operator=(const container_type& other)
@@ -282,7 +282,8 @@ public:
 
 	hybrid_vector_impl& operator=(hybrid_vector_impl&& other)
 	{
-		mem.con.operator=(_kotek_hv_container_namespace::move(other.con));
+		mem.con.operator=(
+			_kotek_hv_container_namespace::move(other.container_move()));
 		return *this;
 	}
 
@@ -317,7 +318,7 @@ public:
 		return _kotek_hv_Size;
 	}
 
-	constexpr bool is_static(void) const noexcept { return Realloc; }
+	constexpr bool is_static(void) const noexcept { return !Realloc; }
 
 private:
 	struct layout_prealloc_t
@@ -550,3 +551,17 @@ template <typename Type, kun_ktk size_t ElementCount>
 using static_hybrid_vector_t = kun_ktk static_hybrid_vector<Type, ElementCount>;
 
 KOTEK_END_NAMESPACE_KOTEK
+
+// a hybrid container owns its bounded buffer and its memory resource, so an
+// outer (pmr) container must not try to propagate its allocator into it:
+// the wrapper has no allocator-extended constructors and the uses_allocator
+// construction protocol is therefore disabled for it
+namespace std
+{
+template <typename Type, size_t ElementCount, bool Realloc, size_t Size, typename Alloc>
+struct uses_allocator<KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK
+						  hybrid_vector_impl<Type, ElementCount, Realloc, Size>,
+	Alloc> : false_type
+{
+};
+} // namespace std
