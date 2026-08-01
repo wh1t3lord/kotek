@@ -75,6 +75,12 @@ constexpr const char* kRenderer_Vulkan_Name = "Vulkan";
  */
 constexpr const char* kRenderer_Software_Name = "Software";
 
+/**
+ * Constant expresses in string that it is the bgfx renderer (the
+ * backend-switchable raster library; zircon's only built-in raster backend)
+ */
+constexpr const char* kRenderer_BGFX_Name = "bgfx";
+
 constexpr const char* kRenderer_Unknown_Name = "RENDERER_UNKNOWN";
 
 /**
