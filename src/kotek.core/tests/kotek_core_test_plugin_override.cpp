@@ -16,6 +16,7 @@
 	#include <string>
 
 	#include <process.h> // _getpid (temp-dir uniqueness across processes)
+	#include <chrono>   // steady_clock (per-invocation uniqueness, no statics)
 
 #endif
 
@@ -91,24 +92,33 @@ namespace
 		{
 			std::error_code error;
 
-			// unique subdirectory per process AND invocation: the override
-			// registry intentionally never unloads dll handles, so a second
-			// run of this suite in one process (merged multi-host boots)
-			// would otherwise try to overwrite its own still-loaded dll from
-			// the first run; and a hung engine process can hold its copy
-			// locked across boots — a pid in the path makes a collision
-			// impossible in both cases
-			static unsigned s_invocation = 0;
+			// unique subdirectory per process AND invocation, WITHOUT any
+			// static storage (rule: no static storage duration — the
+			// timestamp replaces the old function-local static counter):
+			// the override registry intentionally never unloads dll handles,
+			// so a second run of this suite in one process (merged
+			// multi-host boots) would otherwise try to overwrite its own
+			// still-loaded dll from the first run; and a hung engine
+			// process can hold its copy locked across boots — a pid +
+			// timestamp in the path makes a collision impossible
+			const std::string unique_dir =
+				std::to_string(static_cast<unsigned>(::_getpid())) + "_" +
+				std::to_string(
+					std::chrono::steady_clock::now()
+						.time_since_epoch()
+						.count());
 
-			m_temp_dir = std::filesystem::temp_directory_path(error) /
+			const std::filesystem::path suite_dir =
+				std::filesystem::temp_directory_path(error) /
 				"kotek_plugin_override_tests" /
 				::testing::UnitTest::GetInstance()
 					->current_test_info()
-					->name() /
-				(std::to_string(static_cast<unsigned>(::_getpid())) + "_" +
-					std::to_string(++s_invocation));
+					->name();
 
-			std::filesystem::remove_all(m_temp_dir, error);
+			std::filesystem::remove_all(suite_dir, error);
+
+			m_temp_dir = suite_dir / unique_dir;
+
 			std::filesystem::create_directories(m_temp_dir, error);
 
 			std::filesystem::remove(k_marker_file_name, error);

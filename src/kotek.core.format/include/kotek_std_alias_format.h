@@ -160,7 +160,10 @@ template <typename... Args>
 cstring format(const cstring_view& text, Args&&... args) noexcept
 {
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
-	const cstring& data =
+	// std::vformat returns std::string — there is no implicit conversion to
+	// cstring, and binding a const ref to it never worked; it compiled only
+	// where this overload was never instantiated (CI's Release legs proved it)
+	const std::string data =
 		std::vformat(text.data(), std::make_format_args(args...));
 #elif defined(KOTEK_USE_PLATFORM_LINUX)
 	const auto& data =
