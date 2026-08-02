@@ -11,10 +11,11 @@ KOTEK_BEGIN_NAMESPACE_CORE
 namespace
 {
 	/// \~english the window class is a process-lifetime registration — it is
-	/// created once and never unregistered (the OS reclaims it at exit, like
-	/// every other module-lifetime static in this codebase)
-	const char* g_window_class_name = "kotek_win32_window_class";
-	bool g_window_class_registered = false;
+	/// created once and never unregistered (the OS reclaims it at exit).
+	/// constexpr POD (owner-exempt from the no-static-storage rule, task
+	/// Z18/K24); the "already registered" state is a per-instance member of
+	/// ktkWindowWin32 (m_is_window_class_registered)
+	constexpr const char* k_window_class_name = "kotek_win32_window_class";
 } // namespace
 
 ktkWindowWin32::ktkWindowWin32(void) :
@@ -81,14 +82,12 @@ void ktkWindowWin32::Set_Fullscreen(bool status) noexcept
 	if (status == this->m_is_fullscreen)
 		return;
 
-	static WINDOWPLACEMENT saved_placement{};
-
 	if (status)
 	{
 		// borderless popup over the primary monitor (the win32 equivalent
 		// of glfwSetWindowMonitor on the primary monitor)
-		saved_placement.length = sizeof(saved_placement);
-		GetWindowPlacement(this->m_hwnd, &saved_placement);
+		this->m_saved_placement.length = sizeof(this->m_saved_placement);
+		GetWindowPlacement(this->m_hwnd, &this->m_saved_placement);
 
 		const int width = GetSystemMetrics(SM_CXSCREEN);
 		const int height = GetSystemMetrics(SM_CYSCREEN);
@@ -105,9 +104,9 @@ void ktkWindowWin32::Set_Fullscreen(bool status) noexcept
 		SetWindowLongPtrA(this->m_hwnd, GWL_STYLE,
 			WS_OVERLAPPEDWINDOW | WS_VISIBLE);
 
-		if (saved_placement.length == sizeof(saved_placement))
+		if (this->m_saved_placement.length == sizeof(this->m_saved_placement))
 		{
-			SetWindowPlacement(this->m_hwnd, &saved_placement);
+			SetWindowPlacement(this->m_hwnd, &this->m_saved_placement);
 		}
 		else
 		{
@@ -378,7 +377,7 @@ void ktkWindowWin32::ObtainInformationAboutDisplay(void)
 
 void ktkWindowWin32::Create_OsWindow(const char* p_title) noexcept
 {
-	if (g_window_class_registered == false)
+	if (this->m_is_window_class_registered == false)
 	{
 		WNDCLASSEXA window_class{};
 		window_class.cbSize = sizeof(window_class);
@@ -388,20 +387,25 @@ void ktkWindowWin32::Create_OsWindow(const char* p_title) noexcept
 		window_class.hCursor = LoadCursorW(NULL, IDC_ARROW);
 		window_class.hbrBackground =
 			reinterpret_cast<HBRUSH>(COLOR_WINDOW + 1);
-		window_class.lpszClassName = g_window_class_name;
+		window_class.lpszClassName = k_window_class_name;
 
 		if (RegisterClassExA(&window_class) == 0)
 		{
-			KOTEK_ASSERT(false,
+			// the class is process-global: a second ktkWindowWin32 instance
+			// (multi-window) finds it already registered — that is success
+			// for this instance, not a failure
+			const DWORD register_error = GetLastError();
+			KOTEK_ASSERT(register_error == ERROR_CLASS_ALREADY_EXISTS,
 				"failed to register the Win32 window class, error {}",
-				GetLastError());
-			return;
+				register_error);
+			if (register_error != ERROR_CLASS_ALREADY_EXISTS)
+				return;
 		}
 
-		g_window_class_registered = true;
+		this->m_is_window_class_registered = true;
 	}
 
-	this->m_hwnd = CreateWindowExA(0, g_window_class_name, p_title,
+	this->m_hwnd = CreateWindowExA(0, k_window_class_name, p_title,
 		WS_OVERLAPPEDWINDOW | WS_VISIBLE, CW_USEDEFAULT, CW_USEDEFAULT,
 		this->m_screen_size_width, this->m_screen_size_height, nullptr,
 		nullptr, GetModuleHandleA(NULL), this);

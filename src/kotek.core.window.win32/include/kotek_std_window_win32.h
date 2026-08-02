@@ -123,6 +123,18 @@ private:
 	bool m_is_need_to_close;
 	bool m_is_fullscreen;
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
+	/// \~english task Z18/K24 batch 1: was a function-local static in
+	/// Set_Fullscreen, silently shared by ALL window instances (a latent
+	/// multi-window bug) — the windowed-mode placement is per-window state
+	WINDOWPLACEMENT m_saved_placement{};
+	/// \~english task Z18/K24 batch 1: was the file-scope
+	/// g_window_class_registered. RegisterClassEx is process-global, so this
+	/// member only records that THIS instance already attempted registration;
+	/// another instance's attempt fails with ERROR_CLASS_ALREADY_EXISTS,
+	/// which Create_OsWindow treats as success. Single-window behavior is
+	/// unchanged: the class is registered once and never unregistered (the
+	/// OS reclaims it at process exit)
+	bool m_is_window_class_registered{false};
 	wndproc_chain_t m_p_wndproc_chain{};
 #endif
 	ktk::unordered_map<ktk::enum_base_t, ktk::cstring> m_titles;

@@ -54,8 +54,13 @@ namespace
 	constexpr const char* k_marker_file_name =
 		"kotek_plugin_override_tests.marker";
 
-	bool g_builtin_init_called = false;
-	bool g_builtin_shutdown_called = false;
+	// the built-in entries signal through their OWN marker file — the same
+	// channel the override dll uses (k_marker_file_name). The previous bool
+	// flags were file-scope statics (forbidden, task Z18/K24), and the
+	// KOTEK_INVOKE_MODULE macro hands the built-ins nothing but the
+	// ktkMainManager*, so no context pointer can carry fixture state to them
+	constexpr const char* k_builtin_marker_file_name =
+		"kotek_plugin_override_tests.builtin_marker";
 
 	std::string read_text_file(const std::filesystem::path& path)
 	{
@@ -72,14 +77,18 @@ namespace
 bool InitializeModule_Core_Tests_Plugin(
 	ktkMainManager*)
 {
-	g_builtin_init_called = true;
+	std::ofstream marker(
+		k_builtin_marker_file_name, std::ios::binary | std::ios::app);
+	marker << "builtin init\n";
 	return true;
 }
 
 bool ShutdownModule_Core_Tests_Plugin(
 	ktkMainManager*)
 {
-	g_builtin_shutdown_called = true;
+	std::ofstream marker(
+		k_builtin_marker_file_name, std::ios::binary | std::ios::app);
+	marker << "builtin shutdown\n";
 	return true;
 }
 
@@ -122,9 +131,7 @@ namespace
 			std::filesystem::create_directories(m_temp_dir, error);
 
 			std::filesystem::remove(k_marker_file_name, error);
-
-			g_builtin_init_called = false;
-			g_builtin_shutdown_called = false;
+			std::filesystem::remove(k_builtin_marker_file_name, error);
 		}
 
 		void TearDown() override
@@ -137,6 +144,7 @@ namespace
 			std::error_code error;
 			std::filesystem::remove_all(m_temp_dir, error);
 			std::filesystem::remove(k_marker_file_name, error);
+			std::filesystem::remove(k_builtin_marker_file_name, error);
 		}
 
 		// copies the real test-double dll into the temp plugins folder
@@ -270,8 +278,8 @@ TEST_F(KotekPluginOverride, OverrideIsCalledInsteadOfBuiltin)
 
 	ASSERT_TRUE(status);
 
-	// the override ran, the built-in fallback did not
-	ASSERT_FALSE(g_builtin_init_called);
+	// the override ran, the built-in fallback did not (no built-in marker)
+	ASSERT_FALSE(std::filesystem::exists(k_builtin_marker_file_name));
 	ASSERT_TRUE(std::filesystem::exists(k_marker_file_name));
 	ASSERT_NE(read_text_file(k_marker_file_name).find("init"),
 		std::string::npos);
@@ -280,7 +288,7 @@ TEST_F(KotekPluginOverride, OverrideIsCalledInsteadOfBuiltin)
 		ShutdownModule_Core_Tests_Plugin, &manager);
 
 	ASSERT_TRUE(status);
-	ASSERT_FALSE(g_builtin_shutdown_called);
+	ASSERT_FALSE(std::filesystem::exists(k_builtin_marker_file_name));
 	ASSERT_NE(read_text_file(k_marker_file_name).find("shutdown"),
 		std::string::npos);
 }
@@ -302,7 +310,9 @@ TEST_F(KotekPluginOverride, BuiltinFallbackWhenNoOverrideExists)
 		InitializeModule_Core_Tests_Plugin, &manager);
 
 	ASSERT_TRUE(status);
-	ASSERT_TRUE(g_builtin_init_called);
+	ASSERT_TRUE(std::filesystem::exists(k_builtin_marker_file_name));
+	ASSERT_NE(read_text_file(k_builtin_marker_file_name).find("builtin init"),
+		std::string::npos);
 	ASSERT_FALSE(std::filesystem::exists(k_marker_file_name));
 }
 

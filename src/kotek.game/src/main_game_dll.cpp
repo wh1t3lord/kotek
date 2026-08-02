@@ -9,8 +9,6 @@
 	#include <gtest/gtest.h>
 #endif
 
-bool isUserCallbackUpdateFunctionContainsLoop = false;
-
 #ifdef KOTEK_USE_DEVELOPMENT_TYPE_SHARED
 using ktkUserCallbackInitialize =
 	bool(kun_kotek kun_core ktkMainManager*);
