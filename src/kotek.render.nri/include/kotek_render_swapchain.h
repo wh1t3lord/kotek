@@ -32,9 +32,46 @@ public:
 	/// barrier PRESENT -> COLOR_ATTACHMENT -> CmdBeginRendering with
 	/// LoadOp::CLEAR (the milestone color) -> CmdEndRendering -> barrier
 	/// back -> QueueSubmit -> QueuePresent, paced by the device's frame
-	/// fence (KOTEK_DEF_RENDER_NRI_QUEUED_FRAMES)
+	/// fence (KOTEK_DEF_RENDER_NRI_QUEUED_FRAMES). Equivalent to
+	/// Present_With_Passes with a single built-in clear pass (both record
+	/// through the same ktkRenderFramePassContext).
 	void Present(Core::ktkMainManager* p_main_manager,
 		Core::ktkIRenderDevice* p_render_device) override;
+
+	/// \~english pass-driven present (task K11 phase 2 / zircon Z5 P4):
+	/// the same frame discipline as Present (Begin_Frame -> record ->
+	/// End_Frame), but the rendering section between the back-buffer
+	/// barriers is recorded by the given passes in order through a
+	/// stack-lived ktkRenderFramePassContext — the hook point where the
+	/// registered frame passes run. nullptr/0 passes falls back to the
+	/// built-in clear frame (== Present, the interface contract).
+	void Present_With_Passes(Core::ktkMainManager* p_main_manager,
+		Core::ktkIRenderDevice* p_render_device,
+		Core::ktkIRenderFramePass* const* pp_passes,
+		kun_ktk uint32_t pass_count) override;
+
+private:
+	/// \~english the per-frame acquire state the record section and the
+	/// submit/present leg need (module-internal POD, stack-lived for one
+	/// frame)
+	struct frame_acquire_t
+	{
+		kun_ktk uint32_t texture_index{};
+		::nri::Fence* p_acquire_fence{};
+		::nri::Fence* p_release_fence{};
+	};
+
+	/// \~english fence pacing + command-allocator reset + acquire + begin
+	/// command buffer + the PRESENT->COLOR_ATTACHMENT barrier; false =
+	/// the frame is skipped (already logged — never aborts)
+	bool Begin_Frame(ktkRenderDevice* p_device,
+		frame_acquire_t& out_acquire) noexcept;
+
+	/// \~english the COLOR_ATTACHMENT->PRESENT barrier + end command
+	/// buffer + submit (acquire wait, release + frame-fence signal) +
+	/// present; failures log + skip like Begin_Frame's
+	void End_Frame(ktkRenderDevice* p_device,
+		const frame_acquire_t& acquire) noexcept;
 
 private:
 	/// \~english (re)creates the swap chain and everything derived from
@@ -59,6 +96,9 @@ private:
 		[KOTEK_DEF_RENDER_NRI_SWAPCHAIN_MAX_BACK_BUFFERS]{};
 	kun_ktk uint8_t m_texture_count{};
 	kun_ktk uint64_t m_frame_index{};
+	/// \~english one-time latch for the first pass-driven frame's evidence
+	/// log line (task K11 phase 2) — a member, never a static (rule 1a)
+	bool m_pass_drive_logged{};
 };
 
 KOTEK_END_NAMESPACE_RENDER_NRI

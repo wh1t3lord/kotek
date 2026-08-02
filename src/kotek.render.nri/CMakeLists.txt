@@ -5,13 +5,18 @@ project(kotek.render.nri VERSION 1 LANGUAGES CXX)
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 # NVIDIA NRI backend (task K11, phase 1): D3D12 device + swapchain + a clear
-# color present. The NRI target itself is provided by the pinned clone in
-# kotek/external/nri (see kotek/cmake/windows/nri.cmake)
+# color present; phase 2 (zircon Z5 P4): the swapchain's frame splits into
+# Begin_Frame/End_Frame with the pass hook between them, recorded through
+# the narrow ktkRenderFramePassContext surface. The NRI target itself is
+# provided by the pinned clone in kotek/external/nri (see
+# kotek/cmake/windows/nri.cmake)
 set(to_include_core_files
 	"include/kotek_render_device.h"
 	"src/kotek_render_device.cpp"
 	"include/kotek_render_swapchain.h"
 	"src/kotek_render_swapchain.cpp"
+	"include/kotek_render_frame_pass_context.h"
+	"src/kotek_render_frame_pass_context.cpp"
 	"include/kotek_render_resource_manager.h"
 	"src/kotek_render_resource_manager.cpp")
 

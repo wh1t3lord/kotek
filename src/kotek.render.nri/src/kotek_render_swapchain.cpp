@@ -1,9 +1,15 @@
 #include "../include/kotek_render_swapchain.h"
+#include "../include/kotek_render_frame_pass_context.h"
 
 /// \~english the milestone clear color (task K11 phase 1): RGB(0.2, 0.3, 0.6)
 #define KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_R 0.2f
 #define KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_G 0.3f
 #define KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_B 0.6f
+
+/// \~english the joined pass-name list of the one-time pass-drive evidence
+/// log line: 8 passes of ~60-char registered names + separators fit in 512
+/// with headroom — raise when the NRI registry legitimately grows past it
+#define KOTEK_DEF_RENDER_NRI_PASS_LOG_NAMES_MAX_LENGTH 512
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
@@ -76,6 +82,102 @@ void ktkRenderSwapchain::Present(Core::ktkMainManager* p_main_manager,
 		"swapchain of the NRI backend must present with "
 		"nri::ktkRenderDevice");
 
+	// the built-in frame: the milestone clear recorded through the same
+	// pass context the pass-driven path uses — one recording path for
+	// both entry points
+	frame_acquire_t acquire;
+
+	if (!this->Begin_Frame(p_device, acquire))
+		return;
+
+	ktkRenderFramePassContext context(
+		p_device, this->m_p_color_views[acquire.texture_index]);
+
+	context.ClearColor(KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_R,
+		KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_G, KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_B,
+		1.0f);
+
+	this->End_Frame(p_device, acquire);
+}
+
+void ktkRenderSwapchain::Present_With_Passes(
+	Core::ktkMainManager* p_main_manager,
+	Core::ktkIRenderDevice* p_render_device,
+	Core::ktkIRenderFramePass* const* pp_passes,
+	kun_ktk uint32_t pass_count)
+{
+	// no passes installed = the built-in frame (the interface contract)
+	if ((pp_passes == nullptr) || (pass_count == 0))
+	{
+		this->Present(p_main_manager, p_render_device);
+		return;
+	}
+
+	if (this->m_p_swapchain == nullptr)
+		return;
+
+	ktkRenderDevice* p_device =
+		dynamic_cast<ktkRenderDevice*>(p_render_device);
+
+	KOTEK_ASSERT(p_device,
+		"swapchain of the NRI backend must present with "
+		"nri::ktkRenderDevice");
+
+	frame_acquire_t acquire;
+
+	if (!this->Begin_Frame(p_device, acquire))
+		return;
+
+	if (this->m_pass_drive_logged == false)
+	{
+		// the boot evidence line (zircon Z5 P4 verification): the frame
+		// went through the pass path, not the built-in clear
+		kun_kotek kun_ktk static_cstring<
+			KOTEK_DEF_RENDER_NRI_PASS_LOG_NAMES_MAX_LENGTH>
+			names;
+
+		for (kun_ktk uint32_t pass_index = 0; pass_index < pass_count;
+			 ++pass_index)
+		{
+			const Core::ktkIRenderFramePass* p_pass = pp_passes[pass_index];
+			const char* p_name =
+				p_pass ? p_pass->Get_Name() : nullptr;
+
+			if (pass_index > 0)
+				names += ", ";
+
+			names += p_name ? p_name : "<null>";
+		}
+
+		KOTEK_MESSAGE("[nri]: frame passes driven: {} ({})", pass_count,
+			names.c_str());
+
+		this->m_pass_drive_logged = true;
+	}
+
+	ktkRenderFramePassContext context(
+		p_device, this->m_p_color_views[acquire.texture_index]);
+
+	for (kun_ktk uint32_t pass_index = 0; pass_index < pass_count;
+		 ++pass_index)
+	{
+		Core::ktkIRenderFramePass* p_pass = pp_passes[pass_index];
+
+		KOTEK_ASSERT(p_pass, "[nri] frame pass {} is null — skipped",
+			pass_index);
+
+		if (p_pass)
+		{
+			p_pass->Record(&context);
+		}
+	}
+
+	this->End_Frame(p_device, acquire);
+}
+
+bool ktkRenderSwapchain::Begin_Frame(ktkRenderDevice* p_device,
+	frame_acquire_t& out_acquire) noexcept
+{
 	const ::nri::CoreInterface& core = p_device->Get_CoreInterface();
 	const ::nri::SwapChainInterface& swapchain_interface =
 		p_device->Get_SwapChainInterface();
@@ -95,37 +197,54 @@ void ktkRenderSwapchain::Present(Core::ktkMainManager* p_main_manager,
 
 	// acquire (on D3D12 the semaphore fences are dummies — the acquire
 	// resolves to the runtime's current back buffer index)
-	::nri::Fence* p_acquire_fence =
+	out_acquire.p_acquire_fence =
 		this->m_p_acquire_fences[this->m_frame_index %
 		KOTEK_DEF_RENDER_NRI_SWAPCHAIN_BACK_BUFFERS];
 
-	kun_ktk uint32_t texture_index{};
 	::nri::Result result = swapchain_interface.AcquireNextTexture(
-		*this->m_p_swapchain, *p_acquire_fence, texture_index);
+		*this->m_p_swapchain, *out_acquire.p_acquire_fence,
+		out_acquire.texture_index);
 
 	if (result != ::nri::Result::SUCCESS)
 	{
 		KOTEK_MESSAGE_ERROR(
 			"[nri] AcquireNextTexture failed, result={} — frame skipped",
 			static_cast<int>(result));
-		return;
+		return false;
 	}
 
-	KOTEK_ASSERT(texture_index < this->m_texture_count,
+	KOTEK_ASSERT(out_acquire.texture_index < this->m_texture_count,
 		"[nri] acquired back buffer index {} is out of range (count {})",
-		texture_index, this->m_texture_count);
+		out_acquire.texture_index, this->m_texture_count);
 
-	::nri::Fence* p_release_fence = this->m_p_release_fences[texture_index];
-	::nri::Texture* p_back_buffer = this->m_p_textures[texture_index];
+	if (out_acquire.texture_index >= this->m_texture_count)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] acquired back buffer index {} is out of range (count "
+			"{}) — frame skipped",
+			out_acquire.texture_index, this->m_texture_count);
+		return false;
+	}
+
+	out_acquire.p_release_fence =
+		this->m_p_release_fences[out_acquire.texture_index];
 
 	result = core.BeginCommandBuffer(*p_command_buffer, nullptr);
 	KOTEK_ASSERT(result == ::nri::Result::SUCCESS,
 		"[nri] BeginCommandBuffer failed, result={}",
 		static_cast<int>(result));
 
+	if (result != ::nri::Result::SUCCESS)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] BeginCommandBuffer failed, result={} — frame skipped",
+			static_cast<int>(result));
+		return false;
+	}
+
 	// PRESENT -> COLOR_ATTACHMENT
 	::nri::TextureBarrierDesc texture_barrier{};
-	texture_barrier.texture = p_back_buffer;
+	texture_barrier.texture = this->m_p_textures[out_acquire.texture_index];
 	texture_barrier.before.access = ::nri::AccessBits::NONE;
 	texture_barrier.before.layout = ::nri::Layout::PRESENT;
 	texture_barrier.before.stages = ::nri::StageBits::NONE;
@@ -142,48 +261,57 @@ void ktkRenderSwapchain::Present(Core::ktkMainManager* p_main_manager,
 
 	core.CmdBarrier(*p_command_buffer, barrier);
 
-	// the milestone clear: one color attachment with LoadOp::CLEAR
-	::nri::AttachmentDesc color_attachment{};
-	color_attachment.descriptor = this->m_p_color_views[texture_index];
-	color_attachment.loadOp = ::nri::LoadOp::CLEAR;
-	color_attachment.storeOp = ::nri::StoreOp::STORE;
-	color_attachment.clearValue.color.f.x =
-		KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_R;
-	color_attachment.clearValue.color.f.y =
-		KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_G;
-	color_attachment.clearValue.color.f.z =
-		KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_B;
-	color_attachment.clearValue.color.f.w = 1.0f;
+	return true;
+}
 
-	::nri::RenderingDesc rendering{};
-	rendering.colors = &color_attachment;
-	rendering.colorNum = 1;
+void ktkRenderSwapchain::End_Frame(ktkRenderDevice* p_device,
+	const frame_acquire_t& acquire) noexcept
+{
+	const ::nri::CoreInterface& core = p_device->Get_CoreInterface();
+	const ::nri::SwapChainInterface& swapchain_interface =
+		p_device->Get_SwapChainInterface();
 
-	core.CmdBeginRendering(*p_command_buffer, rendering);
-	core.CmdEndRendering(*p_command_buffer);
+	::nri::CommandBuffer* p_command_buffer = p_device->Get_CommandBuffer();
 
 	// COLOR_ATTACHMENT -> PRESENT
+	::nri::TextureBarrierDesc texture_barrier{};
+	texture_barrier.texture = this->m_p_textures[acquire.texture_index];
 	texture_barrier.before.access = ::nri::AccessBits::COLOR_ATTACHMENT;
 	texture_barrier.before.layout = ::nri::Layout::COLOR_ATTACHMENT;
 	texture_barrier.before.stages = ::nri::StageBits::COLOR_ATTACHMENT;
 	texture_barrier.after.access = ::nri::AccessBits::NONE;
 	texture_barrier.after.layout = ::nri::Layout::PRESENT;
 	texture_barrier.after.stages = ::nri::StageBits::NONE;
+	texture_barrier.mipNum = 1;
+	texture_barrier.layerNum = 1;
+	texture_barrier.planes = ::nri::PlaneBits::ALL;
+
+	::nri::BarrierDesc barrier{};
+	barrier.textures = &texture_barrier;
+	barrier.textureNum = 1;
 
 	core.CmdBarrier(*p_command_buffer, barrier);
 
-	result = core.EndCommandBuffer(*p_command_buffer);
+	::nri::Result result = core.EndCommandBuffer(*p_command_buffer);
 	KOTEK_ASSERT(result == ::nri::Result::SUCCESS,
 		"[nri] EndCommandBuffer failed, result={}",
 		static_cast<int>(result));
 
+	if (result != ::nri::Result::SUCCESS)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] EndCommandBuffer failed, result={} — frame skipped",
+			static_cast<int>(result));
+		return;
+	}
+
 	::nri::FenceSubmitDesc wait_fence{};
-	wait_fence.fence = p_acquire_fence;
+	wait_fence.fence = acquire.p_acquire_fence;
 	wait_fence.stages = ::nri::StageBits::COLOR_ATTACHMENT;
 
 	::nri::FenceSubmitDesc signal_fences[2]{};
-	signal_fences[0].fence = p_release_fence;
-	signal_fences[1].fence = p_frame_fence;
+	signal_fences[0].fence = acquire.p_release_fence;
+	signal_fences[1].fence = p_device->Get_FrameFence();
 	signal_fences[1].value = 1 + this->m_frame_index;
 
 	::nri::QueueSubmitDesc submit{};
@@ -205,7 +333,7 @@ void ktkRenderSwapchain::Present(Core::ktkMainManager* p_main_manager,
 	}
 
 	result = swapchain_interface.QueuePresent(
-		*this->m_p_swapchain, *p_release_fence);
+		*this->m_p_swapchain, *acquire.p_release_fence);
 
 	if (result != ::nri::Result::SUCCESS)
 	{

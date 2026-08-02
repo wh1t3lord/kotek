@@ -32,6 +32,8 @@ KOTEK_BEGIN_NAMESPACE_CORE
 class ktkMainManager;
 class ktkIRenderDevice;
 class ktkIRenderSwapchain;
+class ktkIRenderFramePass;
+class ktkIRenderFramePassContext;
 class ktkIRenderGraph;
 class ktkIRenderImgui;
 class ktkIRenderResourceManager;
@@ -101,6 +103,50 @@ public:
 	virtual void GPUFlush(void) = 0;
 };
 
+/// \~english the narrow frame surface of a pass-driven present (task K11
+/// phase 2 / zircon Z5 P4): a host assembles a list of frame passes and
+/// hands it to ktkIRenderSwapchain::Present_With_Passes; the backend runs
+/// its whole frame discipline itself (fence pacing, acquire, barriers,
+/// submit, present) and lets every pass record through this context while
+/// the back buffer is in a renderable state. The context is the ONLY
+/// object a pass may touch — it exposes explicit operations instead of
+/// backend types, so no NRI/D3D12/vk type ever crosses the module
+/// boundary (the kotek.render.nri module-boundary rule).
+///
+/// Design note: a pure C++ interface like every ktkI* in this header,
+/// not a C-ABI function table — kotek's module discipline is
+/// interface-based, and the context instance lives on the backend's stack
+/// for one frame only, so no heap object and no ownership ever crosses
+/// the boundary. Grows additively with the operations future passes need
+/// (draws, pipeline binds).
+class ktkIRenderFramePassContext
+{
+public:
+	virtual ~ktkIRenderFramePassContext(void) {}
+
+	/// \~english records a full-back-buffer clear to the given color (the
+	/// backend opens one rendering section with a clear load-op and closes
+	/// it). Only callable from inside ktkIRenderFramePass::Record.
+	virtual void ClearColor(float r, float g, float b, float a) = 0;
+};
+
+/// \~english one recordable frame pass — the pass-driven counterpart of
+/// the built-in frame inside ktkIRenderSwapchain::Present. The swapchain
+/// calls Record once per frame, in list order, while its command list is
+/// open for rendering. Implementations hold POD/handles only (the
+/// reload-safety laws of the zircon passes libraries).
+class ktkIRenderFramePass
+{
+public:
+	virtual ~ktkIRenderFramePass(void) {}
+
+	virtual void Record(ktkIRenderFramePassContext* p_context) = 0;
+
+	/// \~english the name the pass registered under (logs, the pass-set
+	/// resolution chain)
+	virtual const char* Get_Name(void) const noexcept = 0;
+};
+
 class ktkIRenderSwapchain
 {
 public:
@@ -121,6 +167,24 @@ public:
 		ktkMainManager* p_main_manager,
 		ktkIRenderDevice* p_render_device
 	) = 0;
+
+	/// \~english pass-driven present (task K11 phase 2 / zircon Z5 P4,
+	/// additive): the same frame discipline as Present, but the rendering
+	/// section between the back-buffer transitions is recorded by the
+	/// given passes in order through a backend-owned
+	/// ktkIRenderFramePassContext. The default keeps Present's built-in
+	/// frame so backends without pass support and every existing caller
+	/// are unaffected; an override must treat nullptr/0 passes exactly
+	/// like Present.
+	virtual void Present_With_Passes(
+		ktkMainManager* p_main_manager,
+		ktkIRenderDevice* p_render_device,
+		ktkIRenderFramePass* const* /*pp_passes*/,
+		kun_ktk uint32_t /*pass_count*/
+	)
+	{
+		this->Present(p_main_manager, p_render_device);
+	}
 };
 
 class ktkIRenderResourceManager
