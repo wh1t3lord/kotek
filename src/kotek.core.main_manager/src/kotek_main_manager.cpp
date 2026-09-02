@@ -1,5 +1,8 @@
 #include "../include/kotek_main_manager.h"
 #include <kotek.core.api/include/kotek_api.h>
+#include <kotek.core.defines_dependent.assert/include/kotek_std_dependent_preprocessors.h>
+
+#include <new>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -10,8 +13,14 @@ ktkMainManager::ktkMainManager(int argc, char** argv) :
 	m_p_manager_render_resource{}, m_p_manager_render_graph{},
 	m_p_manager_swapchain{}, m_p_manager_profiler{}, m_p_manager_window{},
 	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{},
-	m_p_splash{}, m_p_console{}, m_p_window_console{}
+	m_p_splash{}, m_p_console{}, m_p_window_console{}, m_p_plugin_state{}
 {
+	// heap, not the frame: the table is ~144 KB and this manager sits on
+	// main()'s 1 MB stack (see Get_PluginState's comment in the header)
+	this->m_p_plugin_state = new (std::nothrow) ktkPluginState();
+
+	KOTEK_ASSERT(this->m_p_plugin_state,
+		"failed to allocate the plugin state (out of memory)");
 }
 
 ktkMainManager::ktkMainManager() :
@@ -21,11 +30,21 @@ ktkMainManager::ktkMainManager() :
 	m_p_manager_render_resource{}, m_p_manager_render_graph{},
 	m_p_manager_swapchain{}, m_p_manager_profiler{}, m_p_manager_window{},
 	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{},
-	m_p_splash{}, m_p_console{}, m_p_window_console{}
+	m_p_splash{}, m_p_console{}, m_p_window_console{}, m_p_plugin_state{}
 {
+	this->m_p_plugin_state = new (std::nothrow) ktkPluginState();
+
+	KOTEK_ASSERT(this->m_p_plugin_state,
+		"failed to allocate the plugin state (out of memory)");
 }
 
-ktkMainManager::~ktkMainManager(void) {}
+ktkMainManager::~ktkMainManager(void)
+{
+	// loaded override/plugin dll handles inside the state are
+	// intentionally never unloaded (see ktkPluginTryOverride's contract);
+	// this frees only the registry table itself
+	delete this->m_p_plugin_state;
+}
 
 void ktkMainManager::Set_Profiler(ktkIProfiler* p_instance) noexcept
 {
@@ -190,6 +209,11 @@ int ktkMainManager::Get_ARGC(void) const noexcept
 char** ktkMainManager::Get_ARGV(void) const noexcept
 {
 	return this->m_argv;
+}
+
+ktkPluginState& ktkMainManager::Get_PluginState(void) noexcept
+{
+	return *this->m_p_plugin_state;
 }
 
 void ktkMainManager::Initialize(void)

@@ -1,5 +1,8 @@
 #include "../include/kotek_plugin_invoke.h"
 
+#include <kotek.core.main_manager/include/kotek_main_manager.h>
+#include <kotek.core.main_manager/include/kotek_plugin_state.h>
+
 #ifdef KOTEK_USE_LINKAGE_PLUGIN
 
 	#include <kotek_plugin_manifest.h>
@@ -15,27 +18,20 @@ KOTEK_BEGIN_NAMESPACE_CORE
 
 namespace
 {
-	struct plugin_handle_t
-	{
-		const char* p_dll_name;
 	#ifdef _WIN32
-		HMODULE handle;
-	#else
-		void* handle;
-	#endif
-	};
-
-	// handles live for the whole process; modules are never that many
-	plugin_handle_t g_plugin_handles[256];
-	unsigned long g_plugin_handles_count = 0;
-
-	#ifdef _WIN32
-	HMODULE plugin_load(const char* p_dll_name) { return LoadLibraryA(p_dll_name); }
-	void* plugin_sym(HMODULE handle, const char* p_symbol)
+	void* plugin_load(const char* p_dll_name)
 	{
-		return reinterpret_cast<void*>(GetProcAddress(handle, p_symbol));
+		return reinterpret_cast<void*>(LoadLibraryA(p_dll_name));
 	}
-	void plugin_unload(HMODULE handle) { FreeLibrary(handle); }
+	void* plugin_sym(void* handle, const char* p_symbol)
+	{
+		return reinterpret_cast<void*>(
+			GetProcAddress(reinterpret_cast<HMODULE>(handle), p_symbol));
+	}
+	void plugin_unload(void* handle)
+	{
+		FreeLibrary(reinterpret_cast<HMODULE>(handle));
+	}
 	#else
 	void* plugin_load(const char* p_dll_name)
 	{
@@ -64,24 +60,25 @@ namespace
 		return nullptr;
 	}
 
-	void* plugin_resolve_in_dll(const ktkPluginModuleDesc* p_desc,
-		const char* p_symbol_name)
+	void* plugin_resolve_in_dll(ktkPluginState* p_state,
+		const ktkPluginModuleDesc* p_desc, const char* p_symbol_name)
 	{
-		decltype(plugin_load(nullptr)) handle = nullptr;
+		void* handle = nullptr;
 
-		for (unsigned long i = 0; i < g_plugin_handles_count; ++i)
+		for (unsigned long i = 0; i < p_state->m_invoke_handles_count; ++i)
 		{
-			if (strcmp(g_plugin_handles[i].p_dll_name, p_desc->p_dll_name) == 0)
+			if (strcmp(p_state->m_invoke_handles[i].m_p_dll_name,
+					p_desc->p_dll_name) == 0)
 			{
-				handle = g_plugin_handles[i].handle;
+				handle = p_state->m_invoke_handles[i].m_p_handle;
 				break;
 			}
 		}
 
 		if (handle == nullptr)
 		{
-			if (g_plugin_handles_count >=
-				sizeof(g_plugin_handles) / sizeof(g_plugin_handles[0]))
+			if (p_state->m_invoke_handles_count >=
+				KOTEK_DEF_PLUGIN_INVOKE_MAX_HANDLES)
 			{
 				return nullptr;
 			}
@@ -91,17 +88,18 @@ namespace
 			if (handle == nullptr)
 				return nullptr;
 
-			g_plugin_handles[g_plugin_handles_count].p_dll_name =
-				p_desc->p_dll_name;
-			g_plugin_handles[g_plugin_handles_count].handle = handle;
-			++g_plugin_handles_count;
+			p_state->m_invoke_handles[p_state->m_invoke_handles_count]
+				.m_p_dll_name = p_desc->p_dll_name;
+			p_state->m_invoke_handles[p_state->m_invoke_handles_count]
+				.m_p_handle = handle;
+			++p_state->m_invoke_handles_count;
 		}
 
 		return plugin_sym(handle, p_symbol_name);
 	}
 
-	bool plugin_invoke(ktkMainManager* p_manager, const char* p_symbol_name,
-		bool is_init)
+	bool plugin_invoke(ktkPluginState* p_state, ktkMainManager* p_manager,
+		const char* p_symbol_name, bool is_init)
 	{
 		const ktkPluginModuleDesc* p_desc =
 			plugin_find(p_symbol_name, is_init);
@@ -109,12 +107,14 @@ namespace
 		if (p_desc == nullptr)
 			return false;
 
-		void* p_function = plugin_resolve_in_dll(p_desc, p_symbol_name);
+		void* p_function =
+			plugin_resolve_in_dll(p_state, p_desc, p_symbol_name);
 
 		if (p_function == nullptr)
 			return false;
 
-		return reinterpret_cast<ktkPluginModuleEntry_t>(p_function)(p_manager);
+		return reinterpret_cast<ktkPluginModuleEntry_t>(p_function)(
+			p_manager);
 	}
 
 	// resolves a symbol like SerializeModule_<X>/DeserializeModule_<X> by
@@ -122,8 +122,9 @@ namespace
 	// (InitializeModule_<X>, the strict module convention: only the
 	// leading verb changes) and then looking up the requested symbol in
 	// the same dll
-	bool plugin_invoke_derived(ktkMainManager* p_manager,
-		const char* p_symbol_name, const char* p_symbol_verb)
+	bool plugin_invoke_derived(ktkPluginState* p_state,
+		ktkMainManager* p_manager, const char* p_symbol_name,
+		const char* p_symbol_verb)
 	{
 		const size_t verb_length = strlen(p_symbol_verb);
 
@@ -148,50 +149,71 @@ namespace
 		if (p_desc == nullptr)
 			return false;
 
-		void* p_function = plugin_resolve_in_dll(p_desc, p_symbol_name);
+		void* p_function =
+			plugin_resolve_in_dll(p_state, p_desc, p_symbol_name);
 
 		if (p_function == nullptr)
 			return false;
 
-		return reinterpret_cast<ktkPluginModuleEntry_t>(p_function)(p_manager);
+		return reinterpret_cast<ktkPluginModuleEntry_t>(p_function)(
+			p_manager);
 	}
 } // namespace
 
 bool ktkPluginInvokeInit(ktkMainManager* p_manager, const char* p_init_symbol_name)
 {
-	return plugin_invoke(p_manager, p_init_symbol_name, true);
+	if (p_manager == nullptr)
+		return false;
+
+	return plugin_invoke(
+		&p_manager->Get_PluginState(), p_manager, p_init_symbol_name, true);
 }
 
 
 bool ktkPluginInvokeShutdown(
 	ktkMainManager* p_manager, const char* p_shutdown_symbol_name)
 {
-	return plugin_invoke(p_manager, p_shutdown_symbol_name, false);
+	if (p_manager == nullptr)
+		return false;
+
+	return plugin_invoke(&p_manager->Get_PluginState(), p_manager,
+		p_shutdown_symbol_name, false);
 }
 
 bool ktkPluginInvokeSerialize(
 	ktkMainManager* p_manager, const char* p_serialize_symbol_name)
 {
-	return plugin_invoke_derived(
-		p_manager, p_serialize_symbol_name, "Serialize");
+	if (p_manager == nullptr)
+		return false;
+
+	return plugin_invoke_derived(&p_manager->Get_PluginState(), p_manager,
+		p_serialize_symbol_name, "Serialize");
 }
 
 bool ktkPluginInvokeDeserialize(
 	ktkMainManager* p_manager, const char* p_deserialize_symbol_name)
 {
-	return plugin_invoke_derived(
-		p_manager, p_deserialize_symbol_name, "Deserialize");
+	if (p_manager == nullptr)
+		return false;
+
+	return plugin_invoke_derived(&p_manager->Get_PluginState(), p_manager,
+		p_deserialize_symbol_name, "Deserialize");
 }
 
-void ktkPluginUnloadAll(void)
+void ktkPluginUnloadAll(ktkMainManager* p_manager)
 {
-	for (unsigned long i = 0; i < g_plugin_handles_count; ++i)
+	if (p_manager == nullptr)
+		return;
+
+	ktkPluginState* p_state = &p_manager->Get_PluginState();
+
+	for (unsigned long i = 0; i < p_state->m_invoke_handles_count; ++i)
 	{
-		plugin_unload(g_plugin_handles[i].handle);
-		g_plugin_handles[i].handle = nullptr;
+		plugin_unload(p_state->m_invoke_handles[i].m_p_handle);
+		p_state->m_invoke_handles[i].m_p_handle = nullptr;
 	}
 
-	g_plugin_handles_count = 0;
+	p_state->m_invoke_handles_count = 0;
 }
 
 KOTEK_END_NAMESPACE_CORE
@@ -209,7 +231,7 @@ bool ktkPluginInvokeInit(ktkMainManager*, const char*) { return false; }
 bool ktkPluginInvokeShutdown(ktkMainManager*, const char*) { return false; }
 bool ktkPluginInvokeSerialize(ktkMainManager*, const char*) { return false; }
 bool ktkPluginInvokeDeserialize(ktkMainManager*, const char*) { return false; }
-void ktkPluginUnloadAll(void) {}
+void ktkPluginUnloadAll(ktkMainManager*) {}
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK

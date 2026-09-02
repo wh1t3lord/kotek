@@ -8,6 +8,15 @@
 
 #include "imgui.h"
 
+#include <thread>
+
+/// @brief \~english upper bound of the per-thread binding table of
+/// ktkImguiContextManager (task K24 batch 2a — replaces the two thread_local
+/// file-scope variables, which are forbidden static storage): one entry per
+/// thread that calls BindThreadContext; model 2 (context-per-thread) is
+/// expected to have a handful of UI-emitting threads
+#define KOTEK_DEF_IMGUI_CONTEXT_MANAGER_MAX_BINDINGS 16
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
@@ -39,7 +48,29 @@ private:
 		ImGuiContext* p_context;
 	};
 
+	/// @brief \~english one per-thread binding (model 2); a thread without
+	/// an entry resolves to the default context (model 1, single UI
+	/// thread). Replaces the thread_local pair: the manager's job IS
+	/// per-thread binding, so the state lives in the manager
+	struct thread_binding_t
+	{
+		std::thread::id m_thread_id;
+		ImGuiContext* m_p_context;
+		const char* m_p_name;
+	};
+
+	/// @brief \~english lookup helpers that REQUIRE m_mutex to be held
+	/// already (Lock() drives them after taking the mutex; the public
+	/// Bind/Unbind/Get_ThreadContext take the mutex themselves — never
+	/// call the public ones while holding the lock)
+	thread_binding_t* find_thread_binding_locked(void) noexcept;
+	ImGuiContext* get_thread_context_locked(void) noexcept;
+
 	kun_kotek static_vector_t<context_entry_t, _kMaxContexts> m_contexts;
+	kun_kotek static_vector_t<
+		thread_binding_t,
+		KOTEK_DEF_IMGUI_CONTEXT_MANAGER_MAX_BINDINGS>
+		m_thread_bindings;
 	ImGuiContext* m_p_default_context;
 	kun_ktk kun_mt mutex m_mutex;
 };

@@ -189,6 +189,9 @@ namespace json
 		/// so a block allocated in one module is freed by the same
 		/// module's code even when the value travels across module
 		/// boundaries — the ktkI* discipline applied to storage.
+		/// EXEMPT from the no-statics rule (owner decision
+		/// 2026-08-02, task K24): the per-TU Meyers instance is
+		/// intentional — each module must get its own heap resource.
 		inline memory_resource* default_resource(void)
 		{
 			static heap_memory_resource instance;
@@ -812,8 +815,19 @@ namespace json
 		storage_ptr storage(void) const { return this->m_sp; }
 
 	private:
+		/// @brief \~english lazily-allocated scratch value returned by
+		/// the fallible value& accessors on their error paths (task K24
+		/// batch 2a — replaces the detail::fallback_value Meyers
+		/// static; a by-value member is impossible: object is stored
+		/// inside value's union, so value's size depends on object's).
+		/// Allocated on the FIRST error only, from the module-default
+		/// resource; never copied (scratch semantics — each instance
+		/// grows its own on demand), freed by ~object.
+		value& get_scratch_value(void) const;
+
 		detail::object_body* m_p_body;
 		storage_ptr m_sp;
+		mutable value* m_p_scratch;
 	};
 
 	class array
@@ -859,8 +873,13 @@ namespace json
 		storage_ptr storage(void) const { return this->m_sp; }
 
 	private:
+		/// @brief \~english lazily-allocated scratch value, same design
+		/// as object::get_scratch_value (task K24 batch 2a)
+		value& get_scratch_value(void) const;
+
 		detail::array_body* m_p_body;
 		storage_ptr m_sp;
+		mutable value* m_p_scratch;
 	};
 
 	// ------------------------------------------------------------------
@@ -981,7 +1000,11 @@ namespace json
 			this->pilfer(other);
 		}
 
-		~value(void) { this->destroy_payload(); }
+		~value(void)
+		{
+			this->destroy_payload();
+			this->destroy_fallback();
+		}
 
 		/// sticky: the copy lands in this value's storage
 		value& operator=(const value& other)
@@ -1217,6 +1240,88 @@ namespace json
 		storage_ptr storage(void) const { return this->current_sp(); }
 
 	private:
+		/// @brief \~english scratch storage for the fallible const-ref
+		/// accessors as_string/as_object/as_array (task K24 batch 2a —
+		/// replaces the six detail::fallback_* Meyers statics): one
+		/// slot per value instance, (re)built on demand on an error
+		/// path only. It is scratch, not state: copy/move/assignment
+		/// never propagate it (a fresh value starts with an empty
+		/// slot) and it never aliases another value's slot — the old
+		/// process-wide statics aliased EVERY value.
+		enum class fallback_kind_t : unsigned char
+		{
+			none = 0,
+			string_,
+			object_,
+			array_
+		};
+
+		union fallback_union_t
+		{
+			fallback_union_t(void) {}
+			~fallback_union_t(void) {}
+
+			string s;
+			object o;
+			array a;
+		};
+
+		void destroy_fallback(void) const
+		{
+			switch (this->m_fallback_kind)
+			{
+			case fallback_kind_t::string_:
+				this->m_fallback.s.~string();
+				break;
+			case fallback_kind_t::object_:
+				this->m_fallback.o.~object();
+				break;
+			case fallback_kind_t::array_:
+				this->m_fallback.a.~array();
+				break;
+			default:
+				break;
+			}
+
+			this->m_fallback_kind = fallback_kind_t::none;
+		}
+
+		string& fallback_string(void) const
+		{
+			if (this->m_fallback_kind != fallback_kind_t::string_)
+			{
+				this->destroy_fallback();
+				new (&this->m_fallback.s) string();
+				this->m_fallback_kind = fallback_kind_t::string_;
+			}
+
+			return this->m_fallback.s;
+		}
+
+		object& fallback_object(void) const
+		{
+			if (this->m_fallback_kind != fallback_kind_t::object_)
+			{
+				this->destroy_fallback();
+				new (&this->m_fallback.o) object();
+				this->m_fallback_kind = fallback_kind_t::object_;
+			}
+
+			return this->m_fallback.o;
+		}
+
+		array& fallback_array(void) const
+		{
+			if (this->m_fallback_kind != fallback_kind_t::array_)
+			{
+				this->destroy_fallback();
+				new (&this->m_fallback.a) array();
+				this->m_fallback_kind = fallback_kind_t::array_;
+			}
+
+			return this->m_fallback.a;
+		}
+
 		/// every payload member keeps its storage pointer in the same
 		/// leading position — scalars through the scalar storage,
 		/// containers through their wrapper class
@@ -1353,57 +1458,19 @@ namespace json
 
 		kind m_kind;
 		payload_union m_payload;
+
+		/// @brief \~english fallback scratch slot (see fallback_kind_t
+		/// above); mutable because the fallible accessors are const
+		mutable fallback_union_t m_fallback;
+		mutable fallback_kind_t m_fallback_kind{fallback_kind_t::none};
 	};
-
-	namespace detail
-	{
-		/// returned by fallible accessors when the resource is
-		/// exhausted or the key is missing; the KOTEK_ASSERT on the
-		/// path catches the logic error in debug, release degrades to
-		/// writes into a scratch null value (boost throws here)
-		inline value& fallback_value(void)
-		{
-			static value instance;
-			return instance;
-		}
-
-		inline const object& fallback_object(void)
-		{
-			static const object instance{};
-			return instance;
-		}
-
-		inline const array& fallback_array(void)
-		{
-			static const array instance{};
-			return instance;
-		}
-
-		inline const string& fallback_string(void)
-		{
-			static const string instance{};
-			return instance;
-		}
-
-		inline object& fallback_object_mutable(void)
-		{
-			static object instance{};
-			return instance;
-		}
-
-		inline array& fallback_array_mutable(void)
-		{
-			static array instance{};
-			return instance;
-		}
-	} // namespace detail
 
 	inline const string& value::as_string(void) const
 	{
 		if (this->m_kind != kind::string)
 		{
 			KOTEK_ASSERT(false, "as_string on a non-string json value");
-			return detail::fallback_string();
+			return this->fallback_string();
 		}
 
 		return this->m_payload.s;
@@ -1414,7 +1481,7 @@ namespace json
 		if (this->m_kind != kind::object)
 		{
 			KOTEK_ASSERT(false, "as_object on a non-object json value");
-			return detail::fallback_object();
+			return this->fallback_object();
 		}
 
 		return this->m_payload.o;
@@ -1425,7 +1492,7 @@ namespace json
 		if (this->m_kind != kind::array)
 		{
 			KOTEK_ASSERT(false, "as_array on a non-array json value");
-			return detail::fallback_array();
+			return this->fallback_array();
 		}
 
 		return this->m_payload.a;
@@ -1436,7 +1503,7 @@ namespace json
 		if (this->m_kind != kind::object)
 		{
 			KOTEK_ASSERT(false, "as_object on a non-object json value");
-			return detail::fallback_object_mutable();
+			return this->fallback_object();
 		}
 
 		return this->m_payload.o;
@@ -1447,7 +1514,7 @@ namespace json
 		if (this->m_kind != kind::array)
 		{
 			KOTEK_ASSERT(false, "as_array on a non-array json value");
-			return detail::fallback_array_mutable();
+			return this->fallback_array();
 		}
 
 		return this->m_payload.a;
@@ -1953,13 +2020,20 @@ namespace json
 		}
 	} // namespace detail
 
-	inline object::object(void) : m_p_body(nullptr), m_sp() {}
+	inline object::object(void) :
+		m_p_body(nullptr), m_sp(), m_p_scratch(nullptr)
+	{
+	}
 
-	inline object::object(storage_ptr sp) : m_p_body(nullptr), m_sp(sp) {}
+	inline object::object(storage_ptr sp) :
+		m_p_body(nullptr), m_sp(sp), m_p_scratch(nullptr)
+	{
+	}
 
 	inline object::object(const object& other) :
 		m_p_body(nullptr),
-		m_sp(other.m_sp)
+		m_sp(other.m_sp),
+		m_p_scratch(nullptr)
 	{
 		detail::object_copy_into(
 			this->m_p_body, this->m_sp, other.m_p_body);
@@ -1967,7 +2041,8 @@ namespace json
 
 	inline object::object(const object& other, storage_ptr sp) :
 		m_p_body(nullptr),
-		m_sp(sp)
+		m_sp(sp),
+		m_p_scratch(nullptr)
 	{
 		detail::object_copy_into(
 			this->m_p_body, this->m_sp, other.m_p_body);
@@ -1975,14 +2050,50 @@ namespace json
 
 	inline object::object(object&& other) noexcept :
 		m_p_body(other.m_p_body),
-		m_sp(other.m_sp)
+		m_sp(other.m_sp),
+		m_p_scratch(nullptr)
 	{
+		// the scratch is not pilfered: the moved-from object frees its
+		// own, the new one grows one on its first error path
 		other.m_p_body = nullptr;
 	}
 
 	inline object::~object(void)
 	{
 		detail::object_body_destroy(this->m_sp, this->m_p_body);
+
+		if (this->m_p_scratch)
+		{
+			this->m_p_scratch->~value();
+			detail::default_resource()->deallocate(this->m_p_scratch,
+				sizeof(value), alignof(value));
+		}
+	}
+
+	inline value& object::get_scratch_value(void) const
+	{
+		if (this->m_p_scratch == nullptr)
+		{
+			void* p_memory = detail::default_resource()->allocate(
+				sizeof(value), alignof(value));
+
+			KOTEK_ASSERT(p_memory,
+				"json object scratch value allocation failed (process "
+				"out of memory)");
+
+			if (p_memory == nullptr)
+			{
+				// boost throws std::bad_alloc on this path; with no
+				// exceptions there is no degraded value left to hand
+				// out — dereferencing the null slot is the deliberate
+				// last-resort termination
+				return *static_cast<value*>(nullptr);
+			}
+
+			this->m_p_scratch = new (p_memory) value();
+		}
+
+		return *this->m_p_scratch;
 	}
 
 	inline object& object::operator=(const object& other)
@@ -2025,8 +2136,8 @@ namespace json
 		    detail::object_grow(this->m_sp, this->m_p_body) == false)
 		{
 			// resource exhausted — the failed flag on the
-			// resource reports it; degrade to a scratch value
-			return detail::fallback_value();
+			// resource reports it; degrade to the scratch value
+			return this->get_scratch_value();
 		}
 
 		detail::object_slot* p_slot =
@@ -2038,7 +2149,7 @@ namespace json
 		if (p_key == nullptr)
 		{
 			// resource exhausted, same degradation
-			return detail::fallback_value();
+			return this->get_scratch_value();
 		}
 
 		if (key.empty() == false)
@@ -2061,7 +2172,7 @@ namespace json
 		if (index == static_cast<size_t>(-1))
 		{
 			KOTEK_ASSERT(false, "json object::at with a missing key");
-			return detail::fallback_value();
+			return this->get_scratch_value();
 		}
 
 		return detail::object_slots(this->m_p_body)[index].entry;
@@ -2075,7 +2186,7 @@ namespace json
 		if (index == static_cast<size_t>(-1))
 		{
 			KOTEK_ASSERT(false, "json object::at with a missing key");
-			return detail::fallback_value();
+			return this->get_scratch_value();
 		}
 
 		return detail::object_slots(this->m_p_body)[index].entry;
@@ -2149,13 +2260,20 @@ namespace json
 	// array implementation
 	// ------------------------------------------------------------------
 
-	inline array::array(void) : m_p_body(nullptr), m_sp() {}
+	inline array::array(void) :
+		m_p_body(nullptr), m_sp(), m_p_scratch(nullptr)
+	{
+	}
 
-	inline array::array(storage_ptr sp) : m_p_body(nullptr), m_sp(sp) {}
+	inline array::array(storage_ptr sp) :
+		m_p_body(nullptr), m_sp(sp), m_p_scratch(nullptr)
+	{
+	}
 
 	inline array::array(const array& other) :
 		m_p_body(nullptr),
-		m_sp(other.m_sp)
+		m_sp(other.m_sp),
+		m_p_scratch(nullptr)
 	{
 		detail::array_copy_into(
 			this->m_p_body, this->m_sp, other.m_p_body);
@@ -2163,7 +2281,8 @@ namespace json
 
 	inline array::array(const array& other, storage_ptr sp) :
 		m_p_body(nullptr),
-		m_sp(sp)
+		m_sp(sp),
+		m_p_scratch(nullptr)
 	{
 		detail::array_copy_into(
 			this->m_p_body, this->m_sp, other.m_p_body);
@@ -2171,15 +2290,18 @@ namespace json
 
 	inline array::array(array&& other) noexcept :
 		m_p_body(other.m_p_body),
-		m_sp(other.m_sp)
+		m_sp(other.m_sp),
+		m_p_scratch(nullptr)
 	{
+		// the scratch is not pilfered (see object::object(object&&))
 		other.m_p_body = nullptr;
 	}
 
 	inline array::array(
 		std::initializer_list<value> elements, storage_ptr sp) :
 		m_p_body(nullptr),
-		m_sp(sp)
+		m_sp(sp),
+		m_p_scratch(nullptr)
 	{
 		for (const value& element : elements)
 			this->push_back(element);
@@ -2188,7 +2310,8 @@ namespace json
 	template <typename Iterator, typename>
 	inline array::array(Iterator first, Iterator last, storage_ptr sp) :
 		m_p_body(nullptr),
-		m_sp(sp)
+		m_sp(sp),
+		m_p_scratch(nullptr)
 	{
 		for (Iterator it = first; it != last; ++it)
 			this->push_back(value(*it, this->m_sp));
@@ -2197,6 +2320,39 @@ namespace json
 	inline array::~array(void)
 	{
 		detail::array_body_destroy(this->m_sp, this->m_p_body);
+
+		if (this->m_p_scratch)
+		{
+			this->m_p_scratch->~value();
+			detail::default_resource()->deallocate(this->m_p_scratch,
+				sizeof(value), alignof(value));
+		}
+	}
+
+	inline value& array::get_scratch_value(void) const
+	{
+		if (this->m_p_scratch == nullptr)
+		{
+			void* p_memory = detail::default_resource()->allocate(
+				sizeof(value), alignof(value));
+
+			KOTEK_ASSERT(p_memory,
+				"json array scratch value allocation failed (process "
+				"out of memory)");
+
+			if (p_memory == nullptr)
+			{
+				// boost throws std::bad_alloc on this path; with no
+				// exceptions there is no degraded value left to hand
+				// out — dereferencing the null slot is the deliberate
+				// last-resort termination
+				return *static_cast<value*>(nullptr);
+			}
+
+			this->m_p_scratch = new (p_memory) value();
+		}
+
+		return *this->m_p_scratch;
 	}
 
 	inline array& array::operator=(const array& other)
@@ -2277,7 +2433,7 @@ namespace json
 		    detail::array_grow(this->m_sp, this->m_p_body) == false)
 		{
 			// resource exhausted — the failed flag reports it
-			return detail::fallback_value();
+			return this->get_scratch_value();
 		}
 
 		value* p_slot =
@@ -2296,7 +2452,7 @@ namespace json
 		if (this->m_p_body == nullptr || index >= this->m_p_body->size)
 		{
 			KOTEK_ASSERT(false, "json array index out of bounds");
-			return detail::fallback_value();
+			return this->get_scratch_value();
 		}
 
 		return detail::array_items(this->m_p_body)[index];
@@ -2307,7 +2463,7 @@ namespace json
 		if (this->m_p_body == nullptr || index >= this->m_p_body->size)
 		{
 			KOTEK_ASSERT(false, "json array index out of bounds");
-			return detail::fallback_value();
+			return this->get_scratch_value();
 		}
 
 		return detail::array_items(this->m_p_body)[index];

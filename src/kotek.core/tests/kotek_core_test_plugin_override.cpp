@@ -37,6 +37,10 @@ KOTEK_BEGIN_NAMESPACE_CORE
 // ktkPluginOverrideResetForTests) against isolated temp plugins/ folders and
 // a real override dll (kotek.core.tests.plugin, built as a
 // SHARED library and located via KOTEK_TEST_PLUGIN_OVERRIDE_DLL_PATH).
+// The registry state is owned by the fixture's own ktkMainManager
+// (task K24 batch 2a — the five file-scope statics became the manager
+// member ktkPluginState), so the tests never touch the boot manager's
+// plugin state.
 
 namespace
 {
@@ -136,10 +140,11 @@ namespace
 
 		void TearDown() override
 		{
-			// restore production defaults: the engine shutdown chain keeps
-			// invoking module entries after the tests ran
-			ktkPluginOverrideSetDirectory("plugins");
-			ktkPluginOverrideResetForTests();
+			// no restore step needed: the registry state lives in the
+			// fixture's own manager and dies with it — the boot manager's
+			// plugin state was never touched (pre-K24 the globals had to
+			// be restored to "plugins" + reset for the engine shutdown
+			// chain)
 
 			std::error_code error;
 			std::filesystem::remove_all(m_temp_dir, error);
@@ -169,11 +174,12 @@ namespace
 		void use_temp_dir_as_plugins_folder(void)
 		{
 			ktkPluginOverrideSetDirectory(
-				m_temp_dir.generic_string().c_str());
-			ktkPluginOverrideResetForTests();
+				&this->m_manager, m_temp_dir.generic_string().c_str());
+			ktkPluginOverrideResetForTests(&this->m_manager);
 		}
 
 		std::filesystem::path m_temp_dir;
+		ktkMainManager m_manager;
 	};
 } // namespace
 
@@ -185,7 +191,7 @@ TEST_F(KotekPluginOverride, RegistryFindsNameConventionDll)
 
 	char found_path[260]{};
 
-	ASSERT_EQ(ktkPluginOverrideFind(
+	ASSERT_EQ(ktkPluginOverrideFind(&this->m_manager,
 				  k_test_module_name, found_path, sizeof(found_path)),
 		1);
 
@@ -195,12 +201,13 @@ TEST_F(KotekPluginOverride, RegistryFindsNameConventionDll)
 	ASSERT_NE(registered_path.find(".dll"), std::string::npos);
 
 	// a known module without a dll on disk is not registered
-	ASSERT_EQ(ktkPluginOverrideFind(
+	ASSERT_EQ(ktkPluginOverrideFind(&this->m_manager,
 				  k_known_module_name, found_path, sizeof(found_path)),
 		0);
 
 	// an unknown module name is not registered
-	ASSERT_EQ(ktkPluginOverrideFind("kotek.does.not.exist", found_path,
+	ASSERT_EQ(ktkPluginOverrideFind(&this->m_manager,
+				  "kotek.does.not.exist", found_path,
 				  sizeof(found_path)),
 		0);
 }
@@ -227,7 +234,7 @@ TEST_F(KotekPluginOverride, RegistryFindsJsonMappingAndJsonWins)
 
 	char found_path[260]{};
 
-	ASSERT_EQ(ktkPluginOverrideFind(
+	ASSERT_EQ(ktkPluginOverrideFind(&this->m_manager,
 				  k_test_module_name, found_path, sizeof(found_path)),
 		1);
 
@@ -236,7 +243,7 @@ TEST_F(KotekPluginOverride, RegistryFindsJsonMappingAndJsonWins)
 		std::string::npos);
 
 	// the unknown module in json was ignored without disturbing the scan
-	ASSERT_EQ(ktkPluginOverrideFind(
+	ASSERT_EQ(ktkPluginOverrideFind(&this->m_manager,
 				  k_known_module_name, found_path, sizeof(found_path)),
 		0);
 }
@@ -258,7 +265,7 @@ TEST_F(KotekPluginOverride, RegistrySurvivesMalformedJson)
 
 	char found_path[260]{};
 
-	ASSERT_EQ(ktkPluginOverrideFind(
+	ASSERT_EQ(ktkPluginOverrideFind(&this->m_manager,
 				  k_test_module_name, found_path, sizeof(found_path)),
 		1);
 	ASSERT_NE(std::string(found_path).find(k_test_module_name),
@@ -271,10 +278,8 @@ TEST_F(KotekPluginOverride, OverrideIsCalledInsteadOfBuiltin)
 		std::string(k_test_module_name) + ".dll");
 	use_temp_dir_as_plugins_folder();
 
-	ktkMainManager manager;
-
 	bool status = KOTEK_INVOKE_MODULE(INIT, CORE,
-		InitializeModule_Core_Tests_Plugin, &manager);
+		InitializeModule_Core_Tests_Plugin, &this->m_manager);
 
 	ASSERT_TRUE(status);
 
@@ -285,7 +290,7 @@ TEST_F(KotekPluginOverride, OverrideIsCalledInsteadOfBuiltin)
 		std::string::npos);
 
 	status = KOTEK_INVOKE_MODULE(SHUTDOWN, CORE,
-		ShutdownModule_Core_Tests_Plugin, &manager);
+		ShutdownModule_Core_Tests_Plugin, &this->m_manager);
 
 	ASSERT_TRUE(status);
 	ASSERT_FALSE(std::filesystem::exists(k_builtin_marker_file_name));
@@ -298,16 +303,14 @@ TEST_F(KotekPluginOverride, BuiltinFallbackWhenNoOverrideExists)
 	// empty plugins folder: nothing registered
 	use_temp_dir_as_plugins_folder();
 
-	ktkMainManager manager;
-
 	// the tri-state contract the macro falls back on
 	ASSERT_EQ(ktkPluginTryOverride(ePluginOverrideVerb::kINIT,
 				  "InitializeModule_Core_Tests_Plugin",
-				  &manager),
+				  &this->m_manager),
 		-1);
 
 	bool status = KOTEK_INVOKE_MODULE(INIT, CORE,
-		InitializeModule_Core_Tests_Plugin, &manager);
+		InitializeModule_Core_Tests_Plugin, &this->m_manager);
 
 	ASSERT_TRUE(status);
 	ASSERT_TRUE(std::filesystem::exists(k_builtin_marker_file_name));

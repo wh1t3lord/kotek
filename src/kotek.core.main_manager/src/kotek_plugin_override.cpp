@@ -2,6 +2,7 @@
 
 #include <kotek.core.main_manager/include/kotek_main_manager.h>
 #include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
+#include <kotek.core.main_manager/include/kotek_plugin_state.h>
 #include <kotek.core.api/include/kotek_api.h>
 #include <kotek.core.defines_dependent.assert/include/kotek_std_dependent_preprocessors.h>
 
@@ -28,52 +29,33 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
+ktkPluginState::ktkPluginState(void) :
+	m_override_slots{},
+	m_plugins_dir{},
+	m_override_initialized{false},
+	m_invoke_handles{},
+	m_invoke_handles_count{0}
+{
+	const char default_directory[] = "plugins";
+	memcpy(this->m_plugins_dir, default_directory,
+		sizeof(default_directory));
+}
+
 namespace
 {
-	/// @brief \~english upper bound of the generated module registry; the
-	/// whole system is static-table based (embedded discipline), a violated
-	/// bound is a build-configuration bug and asserts at startup
-	constexpr unsigned long k_max_modules = 512;
-
-	/// @brief \~english bounded path buffer (MAX_PATH on Windows)
-	constexpr unsigned long k_max_path = 260;
-
 	/// @brief \~english plugins.json is a small flat map; 64 KiB is orders of
 	/// magnitude more than ~150 modules need, anything bigger is rejected
 	constexpr unsigned long k_max_json_size = 64 * 1024;
 
-	enum slot_state_t : unsigned char
-	{
-		k_slot_none = 0,    ///< no override registered for this module
-		k_slot_registered,  ///< override dll path known, not loaded yet
-		k_slot_loaded,      ///< override dll loaded, handle is valid
-		k_slot_failed       ///< load was attempted and failed (fall back)
-	};
-
-	struct override_slot_t
-	{
-		char dll_path[k_max_path];
 #ifdef _WIN32
-		HMODULE handle;
-#else
-		void* handle;
-#endif
-		unsigned char state;
-	};
-
-	// parallel to g_kotek_plugin_registry (same index space)
-	override_slot_t g_override_slots[k_max_modules];
-	char g_plugins_dir[k_max_path] = "plugins";
-	bool g_override_initialized = false;
-
-#ifdef _WIN32
-	HMODULE override_load(const char* p_dll_path)
+	void* override_load(const char* p_dll_path)
 	{
-		return LoadLibraryA(p_dll_path);
+		return reinterpret_cast<void*>(LoadLibraryA(p_dll_path));
 	}
-	void* override_sym(HMODULE handle, const char* p_symbol)
+	void* override_sym(void* handle, const char* p_symbol)
 	{
-		return reinterpret_cast<void*>(GetProcAddress(handle, p_symbol));
+		return reinterpret_cast<void*>(
+			GetProcAddress(reinterpret_cast<HMODULE>(handle), p_symbol));
 	}
 	bool override_file_exists(const char* p_path)
 	{
@@ -138,22 +120,27 @@ namespace
 		return -1;
 	}
 
-	void override_register(unsigned long module_index, const char* p_dll_file)
+	void override_register(ktkPluginState* p_state,
+		unsigned long module_index, const char* p_dll_file)
 	{
-		if (g_override_slots[module_index].state != k_slot_none)
+		if (p_state->m_override_slots[module_index].m_state !=
+			ePluginOverrideSlotState::kNone)
 			return;
 
-		if (override_join_path(g_override_slots[module_index].dll_path,
-				k_max_path, g_plugins_dir, p_dll_file) == false)
+		if (override_join_path(
+				p_state->m_override_slots[module_index].m_dll_path,
+				KOTEK_DEF_PLUGIN_OVERRIDE_MAX_PATH,
+				p_state->m_plugins_dir, p_dll_file) == false)
 		{
 			KOTEK_MESSAGE_WARNING(
 				"[plugin override]: path too long, skipped: {}/{}",
-				g_plugins_dir, p_dll_file);
+				p_state->m_plugins_dir, p_dll_file);
 			return;
 		}
 
-		g_override_slots[module_index].handle = nullptr;
-		g_override_slots[module_index].state = k_slot_registered;
+		p_state->m_override_slots[module_index].m_p_handle = nullptr;
+		p_state->m_override_slots[module_index].m_state =
+			ePluginOverrideSlotState::kRegistered;
 	}
 
 	/// @brief \~english minimal robust parser for the exact plugins.json
@@ -299,7 +286,7 @@ namespace
 			}
 		}
 
-		void parse_modules_object(cursor_t& cursor)
+		void parse_modules_object(cursor_t& cursor, ktkPluginState* p_state)
 		{
 			if (expect(cursor, '{') == false)
 				return;
@@ -330,7 +317,7 @@ namespace
 				}
 				else
 				{
-					override_register(
+					override_register(p_state,
 						static_cast<unsigned long>(module_index), dll_file);
 				}
 
@@ -343,7 +330,8 @@ namespace
 			}
 		}
 
-		void parse_root(char* p_content, unsigned long content_size)
+		void parse_root(char* p_content, unsigned long content_size,
+			ktkPluginState* p_state)
 		{
 			cursor_t cursor{p_content, p_content + content_size};
 
@@ -363,7 +351,7 @@ namespace
 					return;
 
 				if (strcmp(key, "modules") == 0)
-					parse_modules_object(cursor);
+					parse_modules_object(cursor, p_state);
 				else
 					skip_value(cursor);
 
@@ -379,11 +367,11 @@ namespace
 
 	// variant B registration: plugins/plugins.json (wins over the name
 	// convention because it runs first and marks the slots it fills)
-	void override_scan_json(void)
+	void override_scan_json(ktkPluginState* p_state)
 	{
-		char json_path[k_max_path];
-		if (override_join_path(json_path, sizeof(json_path), g_plugins_dir,
-				"plugins.json") == false)
+		char json_path[KOTEK_DEF_PLUGIN_OVERRIDE_MAX_PATH];
+		if (override_join_path(json_path, sizeof(json_path),
+				p_state->m_plugins_dir, "plugins.json") == false)
 			return;
 
 		FILE* p_file = fopen(json_path, "rb");
@@ -420,19 +408,21 @@ namespace
 		fclose(p_file);
 
 		content[read_count] = '\0';
-		json::parse_root(content, static_cast<unsigned long>(read_count));
+		json::parse_root(
+			content, static_cast<unsigned long>(read_count), p_state);
 	}
 
 	// variant A registration: plugins/<module-folder-name>.dll present on
 	// disk overrides that module's entries
-	void override_scan_name_convention(void)
+	void override_scan_name_convention(ktkPluginState* p_state)
 	{
 		for (unsigned long i = 0; i < g_kotek_plugin_registry_count; ++i)
 		{
-			if (g_override_slots[i].state != k_slot_none)
+			if (p_state->m_override_slots[i].m_state !=
+				ePluginOverrideSlotState::kNone)
 				continue;
 
-			char file_name[k_max_path];
+			char file_name[KOTEK_DEF_PLUGIN_OVERRIDE_MAX_PATH];
 			const char* p_module_name =
 				g_kotek_plugin_registry[i].p_module_name;
 			const unsigned long name_length =
@@ -446,44 +436,49 @@ namespace
 			memcpy(file_name + name_length, ".dll", 4);
 			file_name[name_length + 4] = '\0';
 
-			char full_path[k_max_path];
+			char full_path[KOTEK_DEF_PLUGIN_OVERRIDE_MAX_PATH];
 			if (override_join_path(full_path, sizeof(full_path),
-					g_plugins_dir, file_name) == false)
+					p_state->m_plugins_dir, file_name) == false)
 				continue;
 
 			if (override_file_exists(full_path))
-				override_register(i, file_name);
+				override_register(p_state, i, file_name);
 		}
 	}
 
-	void override_ensure_initialized(void)
+	void override_ensure_initialized(ktkPluginState* p_state)
 	{
-		if (g_override_initialized)
+		if (p_state->m_override_initialized)
 			return;
 
-		g_override_initialized = true;
+		p_state->m_override_initialized = true;
 
-		KOTEK_ASSERT(g_kotek_plugin_registry_count <= k_max_modules,
+		KOTEK_ASSERT(g_kotek_plugin_registry_count <=
+				KOTEK_DEF_PLUGIN_OVERRIDE_MAX_MODULES,
 			"[plugin override]: the generated module registry has {} modules "
-			"but the override table is bounded at {} — raise k_max_modules "
-			"in kotek_plugin_override.cpp",
-			g_kotek_plugin_registry_count, k_max_modules);
+			"but the override table is bounded at {} — raise "
+			"KOTEK_DEF_PLUGIN_OVERRIDE_MAX_MODULES in kotek_plugin_state.h",
+			g_kotek_plugin_registry_count,
+			KOTEK_DEF_PLUGIN_OVERRIDE_MAX_MODULES);
 
-		if (g_kotek_plugin_registry_count > k_max_modules)
+		if (g_kotek_plugin_registry_count >
+			KOTEK_DEF_PLUGIN_OVERRIDE_MAX_MODULES)
 			return;
 
-		override_scan_json();
-		override_scan_name_convention();
+		override_scan_json(p_state);
+		override_scan_name_convention(p_state);
 	}
 } // namespace
 
 int ktkPluginTryOverride(ePluginOverrideVerb verb, const char* p_symbol_name,
 	ktkMainManager* p_manager)
 {
-	override_ensure_initialized();
-
 	if (p_symbol_name == nullptr || p_manager == nullptr)
 		return -1;
+
+	ktkPluginState* p_state = &p_manager->Get_PluginState();
+
+	override_ensure_initialized(p_state);
 
 	for (unsigned long i = 0; i < g_kotek_plugin_registry_count; ++i)
 	{
@@ -509,37 +504,38 @@ int ktkPluginTryOverride(ePluginOverrideVerb verb, const char* p_symbol_name,
 			strcmp(p_entry_symbol, p_symbol_name) != 0)
 			continue;
 
-		override_slot_t& slot = g_override_slots[i];
+		ktkPluginOverrideSlot& slot = p_state->m_override_slots[i];
 
-		if (slot.state == k_slot_none || slot.state == k_slot_failed)
+		if (slot.m_state == ePluginOverrideSlotState::kNone ||
+			slot.m_state == ePluginOverrideSlotState::kFailed)
 			return -1;
 
-		if (slot.state == k_slot_registered)
+		if (slot.m_state == ePluginOverrideSlotState::kRegistered)
 		{
-			slot.handle = override_load(slot.dll_path);
+			slot.m_p_handle = override_load(slot.m_dll_path);
 
-			if (slot.handle == nullptr)
+			if (slot.m_p_handle == nullptr)
 			{
-				slot.state = k_slot_failed;
+				slot.m_state = ePluginOverrideSlotState::kFailed;
 				KOTEK_MESSAGE_WARNING(
 					"[plugin override]: failed to load override dll '{}' "
 					"for module '{}', falling back to the built-in "
 					"implementation",
-					slot.dll_path, g_kotek_plugin_registry[i].p_module_name);
+					slot.m_dll_path, g_kotek_plugin_registry[i].p_module_name);
 				return -1;
 			}
 
-			slot.state = k_slot_loaded;
+			slot.m_state = ePluginOverrideSlotState::kLoaded;
 		}
 
-		void* p_function = override_sym(slot.handle, p_symbol_name);
+		void* p_function = override_sym(slot.m_p_handle, p_symbol_name);
 
 		if (p_function == nullptr)
 		{
 			KOTEK_MESSAGE_WARNING(
 				"[plugin override]: override dll '{}' does not export "
 				"'{}', falling back to the built-in implementation",
-				slot.dll_path, p_symbol_name);
+				slot.m_dll_path, p_symbol_name);
 			return -1;
 		}
 
@@ -553,10 +549,12 @@ int ktkPluginTryOverride(ePluginOverrideVerb verb, const char* p_symbol_name,
 
 void ktkPluginOverrideStartup(ktkMainManager* p_manager)
 {
-	override_ensure_initialized();
-
 	if (p_manager == nullptr)
 		return;
+
+	ktkPluginState* p_state = &p_manager->Get_PluginState();
+
+	override_ensure_initialized(p_state);
 
 	ktkIFrameworkConfig* p_config = p_manager->Get_EngineConfig();
 
@@ -571,20 +569,22 @@ void ktkPluginOverrideStartup(ktkMainManager* p_manager)
 
 	if (want_template)
 	{
-		const bool status = ktkPluginOverrideWriteTemplate(g_plugins_dir);
+		const bool status =
+			ktkPluginOverrideWriteTemplate(p_state->m_plugins_dir);
 		printf("[plugin override]: %s %s/plugins.template.json\n",
-			status ? "wrote" : "FAILED to write", g_plugins_dir);
+			status ? "wrote" : "FAILED to write", p_state->m_plugins_dir);
 		KOTEK_MESSAGE("[plugin override]: {} {}/plugins.template.json",
-			status ? "wrote" : "FAILED to write", g_plugins_dir);
+			status ? "wrote" : "FAILED to write", p_state->m_plugins_dir);
 	}
 
 	if (want_modules)
 	{
-		const bool status = ktkPluginOverrideWriteModulesList(g_plugins_dir);
+		const bool status =
+			ktkPluginOverrideWriteModulesList(p_state->m_plugins_dir);
 		printf("[plugin override]: %s %s/plugins.modules.json\n",
-			status ? "wrote" : "FAILED to write", g_plugins_dir);
+			status ? "wrote" : "FAILED to write", p_state->m_plugins_dir);
 		KOTEK_MESSAGE("[plugin override]: {} {}/plugins.modules.json",
-			status ? "wrote" : "FAILED to write", g_plugins_dir);
+			status ? "wrote" : "FAILED to write", p_state->m_plugins_dir);
 	}
 
 	// codegen flags are terminal: the file(s) are the whole job
@@ -608,7 +608,7 @@ bool ktkPluginOverrideWriteTemplate(const char* p_plugins_dir)
 
 	override_make_dir(p_plugins_dir);
 
-	char path[k_max_path];
+	char path[KOTEK_DEF_PLUGIN_OVERRIDE_MAX_PATH];
 	if (override_join_path(
 			path, sizeof(path), p_plugins_dir, "plugins.template.json") ==
 		false)
@@ -641,7 +641,7 @@ bool ktkPluginOverrideWriteModulesList(const char* p_plugins_dir)
 
 	override_make_dir(p_plugins_dir);
 
-	char path[k_max_path];
+	char path[KOTEK_DEF_PLUGIN_OVERRIDE_MAX_PATH];
 	if (override_join_path(
 			path, sizeof(path), p_plugins_dir, "plugins.modules.json") ==
 		false)
@@ -667,54 +667,65 @@ bool ktkPluginOverrideWriteModulesList(const char* p_plugins_dir)
 	return status;
 }
 
-void ktkPluginOverrideSetDirectory(const char* p_plugins_dir)
+void ktkPluginOverrideSetDirectory(
+	ktkMainManager* p_manager, const char* p_plugins_dir)
 {
-	if (p_plugins_dir == nullptr)
+	if (p_manager == nullptr || p_plugins_dir == nullptr)
 		return;
 
 	const unsigned long length =
 		static_cast<unsigned long>(strlen(p_plugins_dir));
 
-	if (length + 1 > k_max_path)
+	if (length + 1 > KOTEK_DEF_PLUGIN_OVERRIDE_MAX_PATH)
 		return;
 
-	memcpy(g_plugins_dir, p_plugins_dir, length);
-	g_plugins_dir[length] = '\0';
+	char* p_directory = p_manager->Get_PluginState().m_plugins_dir;
+	memcpy(p_directory, p_plugins_dir, length);
+	p_directory[length] = '\0';
 }
 
-void ktkPluginOverrideResetForTests(void)
+void ktkPluginOverrideResetForTests(ktkMainManager* p_manager)
 {
-	memset(g_override_slots, 0, sizeof(g_override_slots));
-	g_override_initialized = false;
+	if (p_manager == nullptr)
+		return;
+
+	ktkPluginState* p_state = &p_manager->Get_PluginState();
+
+	memset(p_state->m_override_slots, 0,
+		sizeof(p_state->m_override_slots));
+	p_state->m_override_initialized = false;
 }
 
-int ktkPluginOverrideFind(const char* p_module_name, char* p_out_dll_path,
+int ktkPluginOverrideFind(ktkMainManager* p_manager,
+	const char* p_module_name, char* p_out_dll_path,
 	unsigned long out_dll_path_capacity)
 {
-	override_ensure_initialized();
-
-	if (p_module_name == nullptr)
+	if (p_manager == nullptr || p_module_name == nullptr)
 		return 0;
+
+	ktkPluginState* p_state = &p_manager->Get_PluginState();
+
+	override_ensure_initialized(p_state);
 
 	const long module_index = override_find_module(p_module_name);
 
 	if (module_index < 0)
 		return 0;
 
-	const override_slot_t& slot =
-		g_override_slots[static_cast<unsigned long>(module_index)];
+	const ktkPluginOverrideSlot& slot =
+		p_state->m_override_slots[static_cast<unsigned long>(module_index)];
 
-	if (slot.state == k_slot_none)
+	if (slot.m_state == ePluginOverrideSlotState::kNone)
 		return 0;
 
 	if (p_out_dll_path && out_dll_path_capacity)
 	{
 		const unsigned long length =
-			static_cast<unsigned long>(strlen(slot.dll_path));
+			static_cast<unsigned long>(strlen(slot.m_dll_path));
 
 		if (length + 1 <= out_dll_path_capacity)
 		{
-			memcpy(p_out_dll_path, slot.dll_path, length);
+			memcpy(p_out_dll_path, slot.m_dll_path, length);
 			p_out_dll_path[length] = '\0';
 		}
 		else

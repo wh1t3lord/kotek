@@ -1,6 +1,7 @@
 #pragma once
 
 #include <kotek.core.defines.static.cpp/include/kotek_core_defines_static_cpp.h>
+#include <kotek.core.main_manager/include/kotek_plugin_state.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -92,6 +93,16 @@ public:
 	int Get_ARGC(void) const noexcept;
 	char** Get_ARGV(void) const noexcept;
 
+	/// @brief \~english plugin override + invoke registry state (tasks
+	/// K21/K24), owned by this manager; driven by
+	/// ktkPluginTryOverride / ktkPluginInvoke* — additive accessor, the
+	/// state initializes with the manager constructor (no lazy init).
+	/// Heap-owned: the table is ~144 KB and kotek.exe hosts the manager
+	/// on main()'s 1 MB stack — engine tests that construct
+	/// ktkFileSystem (~600 KB map) in the same chain measured an
+	/// overflow when the state was a by-value member
+	ktkPluginState& Get_PluginState(void) noexcept;
+
 	void Initialize(void);
 	void Shutdown(void);
 
@@ -115,6 +126,7 @@ private:
 	ktkIWindowSplash* m_p_splash;
 	ktkIConsole* m_p_console;
 	ktkIWindowConsole* m_p_window_console;
+	ktkPluginState* m_p_plugin_state;
 };
 
 KOTEK_END_NAMESPACE_CORE

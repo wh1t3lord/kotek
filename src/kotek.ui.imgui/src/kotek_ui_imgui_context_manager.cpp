@@ -3,16 +3,9 @@
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_UI
 
-namespace
-{
-	// per-thread binding of a named context (model 2); nullptr = unbound,
-	// meaning "use the default context" (model 1, single UI thread)
-	thread_local ImGuiContext* _tls_bound_context = nullptr;
-	thread_local const char* _tls_bound_name = nullptr;
-}
-
 ktkImguiContextManager::ktkImguiContextManager(void) noexcept :
-	m_contexts{}, m_p_default_context{nullptr}, m_mutex{}
+	m_contexts{}, m_thread_bindings{}, m_p_default_context{nullptr},
+	m_mutex{}
 {
 }
 
@@ -56,12 +49,36 @@ bool ktkImguiContextManager::CreateContextForThread(const char* p_name)
 
 bool ktkImguiContextManager::BindThreadContext(const char* p_name)
 {
+	kun_ktk kun_mt lock_guard<kun_ktk kun_mt mutex> lock(m_mutex);
+
 	for (const auto& entry : m_contexts)
 	{
 		if (entry.name == p_name)
 		{
-			_tls_bound_context = entry.p_context;
-			_tls_bound_name = entry.name.c_str();
+			thread_binding_t* p_binding =
+				this->find_thread_binding_locked();
+
+			if (p_binding)
+			{
+				// re-bind: this thread switches to another named context
+				p_binding->m_p_context = entry.p_context;
+				p_binding->m_p_name = entry.name.c_str();
+				return true;
+			}
+
+			if (m_thread_bindings.full())
+			{
+				KOTEK_ASSERT(false,
+					"ktkImguiContextManager: thread binding limit "
+					"reached, raise "
+					"KOTEK_DEF_IMGUI_CONTEXT_MANAGER_MAX_BINDINGS");
+				return false;
+			}
+
+			m_thread_bindings.push_back(thread_binding_t{
+				std::this_thread::get_id(), entry.p_context,
+				entry.name.c_str()});
+
 			return true;
 		}
 	}
@@ -75,23 +92,33 @@ bool ktkImguiContextManager::BindThreadContext(const char* p_name)
 
 void ktkImguiContextManager::UnbindThreadContext(void)
 {
-	_tls_bound_context = nullptr;
-	_tls_bound_name = nullptr;
+	kun_ktk kun_mt lock_guard<kun_ktk kun_mt mutex> lock(m_mutex);
+
+	for (kun_ktk size_t i = 0; i < m_thread_bindings.size(); ++i)
+	{
+		if (m_thread_bindings[i].m_thread_id ==
+			std::this_thread::get_id())
+		{
+			// order of the table is irrelevant: swap-with-back + pop
+			m_thread_bindings[i] = m_thread_bindings.back();
+			m_thread_bindings.pop_back();
+			return;
+		}
+	}
 }
 
 ImGuiContext* ktkImguiContextManager::Get_ThreadContext(void)
 {
-	if (_tls_bound_context)
-		return _tls_bound_context;
+	kun_ktk kun_mt lock_guard<kun_ktk kun_mt mutex> lock(m_mutex);
 
-	return m_p_default_context;
+	return this->get_thread_context_locked();
 }
 
 void ktkImguiContextManager::Lock(void)
 {
 	m_mutex.lock();
 
-	ImGuiContext* p_context = Get_ThreadContext();
+	ImGuiContext* p_context = this->get_thread_context_locked();
 
 	KOTEK_ASSERT(p_context != nullptr,
 		"ktkImguiContextManager::Lock with no context available: bind one or "
@@ -114,7 +141,36 @@ void ktkImguiContextManager::Shutdown(void)
 	}
 
 	m_contexts.clear();
+	m_thread_bindings.clear();
 	m_p_default_context = nullptr;
+}
+
+ktkImguiContextManager::thread_binding_t*
+ktkImguiContextManager::find_thread_binding_locked(void) noexcept
+{
+	thread_binding_t* p_result = nullptr;
+
+	for (auto& binding : m_thread_bindings)
+	{
+		if (binding.m_thread_id == std::this_thread::get_id())
+		{
+			p_result = &binding;
+			break;
+		}
+	}
+
+	return p_result;
+}
+
+ImGuiContext*
+ktkImguiContextManager::get_thread_context_locked(void) noexcept
+{
+	thread_binding_t* p_binding = this->find_thread_binding_locked();
+
+	if (p_binding)
+		return p_binding->m_p_context;
+
+	return m_p_default_context;
 }
 
 KOTEK_END_NAMESPACE_UI

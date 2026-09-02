@@ -18,8 +18,9 @@ enum class ePluginOverrideVerb : unsigned char
 };
 
 /// @brief \~english override-first lookup for every module-entry invocation
-/// (task K21). Consults the plugin override registry (plugins/ folder next
-/// to the data folders, see ktkPluginOverrideStartup): if an override dll is
+/// (task K21). Consults the plugin override registry owned by
+/// \a p_manager (plugins/ folder next to the data folders, see
+/// ktkPluginOverrideStartup): if an override dll is
 /// registered for the module that owns \a p_symbol_name, the dll's exported
 /// entry is called instead of the built-in one. Compiled in EVERY linkage
 /// mode — overrides work for static .lib, shared .dll and PLUGIN builds.
@@ -42,8 +43,9 @@ int ktkPluginTryOverride(ePluginOverrideVerb verb, const char* p_symbol_name,
 	ktkMainManager* p_manager);
 
 /// @brief \~english performs the startup work of the plugin override system:
-/// initializes the registry (idempotent — the first ktkPluginTryOverride
-/// also initializes it lazily) and handles the engine flags
+/// initializes the manager-owned registry (idempotent — the first
+/// ktkPluginTryOverride on the same manager also initializes it lazily) and
+/// handles the engine flags
 /// --kotek_plugins_template / --kotek_plugins_modules: when either is
 /// present the corresponding file is written into plugins/, a message is
 /// printed and the process exits with code 0. Called from
@@ -61,23 +63,26 @@ bool ktkPluginOverrideWriteTemplate(const char* p_plugins_dir);
 /// Returns false when the file could not be written.
 bool ktkPluginOverrideWriteModulesList(const char* p_plugins_dir);
 
-/// @brief \~english overrides the scanned plugins directory (default
-/// "plugins", relative to the working directory of the exe). Tooling/tests
-/// only — call before the first module invocation or pair with
-/// ktkPluginOverrideResetForTests.
-void ktkPluginOverrideSetDirectory(const char* p_plugins_dir);
+/// @brief \~english overrides the scanned plugins directory in the given
+/// manager's plugin state (default "plugins", relative to the working
+/// directory of the exe). Tooling/tests only — call before the first module
+/// invocation on that manager or pair with ktkPluginOverrideResetForTests.
+void ktkPluginOverrideSetDirectory(
+	ktkMainManager* p_manager, const char* p_plugins_dir);
 
-/// @brief \~english drops all registration state (tests only): the next
-/// ktkPluginTryOverride re-scans the plugins directory. Already-loaded dll
-/// handles are intentionally kept (the OS reclaims them at exit; reloading
-/// the same dll is ref-counted by the OS loader).
-void ktkPluginOverrideResetForTests(void);
+/// @brief \~english drops the registration state of the given manager
+/// (tests only): the next ktkPluginTryOverride on that manager re-scans the
+/// plugins directory. Already-loaded dll handles are intentionally kept
+/// (the OS reclaims them at exit; reloading the same dll is ref-counted by
+/// the OS loader).
+void ktkPluginOverrideResetForTests(ktkMainManager* p_manager);
 
 /// @brief \~english query API (tests/tooling): 1 when an override is
-/// registered for \a p_module_name (the dll path is copied into \a
-/// p_out_dll_path when the buffer is non-null), 0 otherwise. Does not load
-/// anything.
-int ktkPluginOverrideFind(const char* p_module_name, char* p_out_dll_path,
+/// registered for \a p_module_name in the given manager's plugin state (the
+/// dll path is copied into \a p_out_dll_path when the buffer is non-null),
+/// 0 otherwise. Does not load anything.
+int ktkPluginOverrideFind(ktkMainManager* p_manager,
+	const char* p_module_name, char* p_out_dll_path,
 	unsigned long out_dll_path_capacity);
 
 KOTEK_END_NAMESPACE_CORE

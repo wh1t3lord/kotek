@@ -40,9 +40,10 @@ bool ktkPluginInvokeSerialize(
 bool ktkPluginInvokeDeserialize(
 	ktkMainManager* p_manager, const char* p_deserialize_symbol_name);
 
-/// @brief \~english releases all cached dll handles (call at the very end
-/// of engine shutdown, after every module was shut down)
-void ktkPluginUnloadAll(void);
+/// @brief \~english releases all cached dll handles of the given manager's
+/// plugin state (call at the very end of engine shutdown, after every module
+/// was shut down)
+void ktkPluginUnloadAll(ktkMainManager* p_manager);
 
 KOTEK_END_NAMESPACE_CORE
 KOTEK_END_NAMESPACE_KOTEK
