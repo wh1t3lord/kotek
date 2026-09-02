@@ -1,0 +1,65 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+    gtest:x64-windows-static@1.17.0#2
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 73.6 us. Use --debug to see more details.
+Installing 1/1 gtest:x64-windows-static@1.17.0#2...
+gtest:x64-windows-static@1.17.0#2 package ABI: 26af1c56ddbaedf9fc73af7a14dc70ac69d99ef50ea33b0a0fb6052c0b0d76b1
+Building gtest:x64-windows-static@1.17.0#2...
+Downloading https://github.com/google/googletest/archive/v1.17.0.tar.gz -> google-googletest-v1.17.0.tar.gz
+Successfully downloaded google-googletest-v1.17.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/google-googletest-v1.17.0.tar.gz
+-- Applying patch 001-fix-UWP-death-test.patch
+-- Applying patch clang-tidy-no-lint.patch
+-- Applying patch fix-main-lib-path.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/gtest/src/v1.17.0-0c449efaff.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest_main.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-all.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-assertion-result.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-death-test.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-filepath.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-internal-inl.h
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-matchers.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-port.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-printers.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-test-part.cc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/src/gtest-typed-test.cc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/lib/pkgconfig/gmock.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/lib/pkgconfig/gmock_main.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/lib/pkgconfig/gtest.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/lib/pkgconfig/gtest_main.pc
+-- Using cached msys2-mingw-w64-x86_64-pkgconf-1~2.5.1-1-any.pkg.tar.zst
+-- Using cached msys2-msys2-runtime-3.6.5-1-x86_64.pkg.tar.zst
+-- Using msys root at D:/a/kotek/kotek/vcpkg/downloads/tools/msys2/3e71d1f8e22ab23f
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/debug/lib/pkgconfig/gmock.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/debug/lib/pkgconfig/gmock_main.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/debug/lib/pkgconfig/gtest.pc
+-- Fixing pkgconfig file: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/debug/lib/pkgconfig/gtest_main.pc
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/share/gtest/copyright
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/gtest_x64-windows-static/share/gtest/usage
+-- Performing post-build validation
+Starting submission of gtest:x64-windows-static@1.17.0#2 to 1 binary cache(s) in the background
+Elapsed time to handle gtest:x64-windows-static: 21 s
+Total install time: 21 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+BSD-3-Clause
+The package gtest is compatible with built-in CMake targets:
+
+    enable_testing()
+    
+    find_package(GTest CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE GTest::gtest GTest::gtest_main GTest::gmock GTest::gmock_main)
+    
+    add_test(AllTestsInMain main)
+
+Waiting for 1 remaining binary cache submissions...
+Completed submission of gtest:x64-windows-static@1.17.0#2 to 1 binary cache(s) in 2.9 s (1/1)
+All requested installations completed successfully in: 21 s

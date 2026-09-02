@@ -1,0 +1,382 @@
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+Computing installation plan...
+The following packages will be built and installed:
+  * boost-assert:x64-windows-static@1.91.0
+  * boost-cmake:x64-windows-static@1.91.0
+  * boost-compat:x64-windows-static@1.91.0
+  * boost-config:x64-windows-static@1.91.0
+  * boost-container:x64-windows-static@1.91.0
+  * boost-container-hash:x64-windows-static@1.91.0
+  * boost-core:x64-windows-static@1.91.0
+  * boost-describe:x64-windows-static@1.91.0
+  * boost-endian:x64-windows-static@1.91.0
+  * boost-headers:x64-windows-static@1.91.0
+  * boost-intrusive:x64-windows-static@1.91.0
+    boost-json:x64-windows-static@1.91.0
+  * boost-move:x64-windows-static@1.91.0
+  * boost-mp11:x64-windows-static@1.91.0
+  * boost-predef:x64-windows-static@1.91.0
+  * boost-system:x64-windows-static@1.91.0
+  * boost-throw-exception:x64-windows-static@1.91.0
+  * boost-uninstall:x64-windows-static@1.91.0
+  * boost-variant2:x64-windows-static@1.91.0
+  * boost-winapi:x64-windows-static@1.91.0
+  * vcpkg-boost:x64-windows@2025-03-29
+Additional packages (*) will be modified to complete this operation.
+Detecting compiler hash for triplet x64-windows-static...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Detecting compiler hash for triplet x64-windows...
+Compiler found: C:/Program Files/Microsoft Visual Studio/2022/Enterprise/VC/Tools/MSVC/14.44.35207/bin/Hostx64/x64/cl.exe
+Restored 0 package(s) from C:\Users\runneradmin\AppData\Local\vcpkg\archives in 294 us. Use --debug to see more details.
+Installing 1/21 boost-uninstall:x64-windows-static@1.91.0...
+boost-uninstall:x64-windows-static@1.91.0 package ABI: 983819629a9cef58851fc8178911b4f57f602ab6864a4442c80c2d6b0adb2c83
+Building boost-uninstall:x64-windows-static@1.91.0...
+-- 
+Please use the following command when you need to remove all boost ports/components:
+    "./vcpkg remove boost-uninstall:x64-windows-static --recurse"
+
+-- Skipping post-build validation due to VCPKG_POLICY_EMPTY_PACKAGE
+Starting submission of boost-uninstall:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-uninstall:x64-windows-static: 29.8 ms
+Installing 2/21 vcpkg-boost:x64-windows@2025-03-29...
+vcpkg-boost:x64-windows@2025-03-29 package ABI: 0a30efcf1789a96a67379486564eaab840f2e275419dcee58fb3589fd44b8bb0
+Building vcpkg-boost:x64-windows@2025-03-29...
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-boost_x64-windows/share/vcpkg-boost/usage.in
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-boost_x64-windows/share/vcpkg-boost/boost-install.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-boost_x64-windows/share/vcpkg-boost/vcpkg-port-config.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/vcpkg-boost_x64-windows/share/vcpkg-boost/copyright
+-- Performing post-build validation
+Starting submission of vcpkg-boost:x64-windows@2025-03-29 to 1 binary cache(s) in the background
+Elapsed time to handle vcpkg-boost:x64-windows: 37.2 ms
+Installing 3/21 boost-cmake:x64-windows-static@1.91.0...
+boost-cmake:x64-windows-static@1.91.0 package ABI: 5bcfefc72106208b0ce57c08db770318e4b2ffd63be23d7f1f53a6e4179360e4
+Building boost-cmake:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/cmake/archive/boost-1.91.0.tar.gz -> boostorg-cmake-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-cmake-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-cmake-boost-1.91.0.tar.gz
+-- Applying patch 0001-vcpkg-build.patch
+-- Applying patch 0002-remove-prefix-and-suffix.patch
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-cmake/src/ost-1.91.0-b98b86c516.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Up-to-date: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostFetch.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostInstall.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostMessage.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostRoot.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostTest.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost/cmake-build/BoostTestJamfile.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost-cmake/vcpkg-port-config.cmake
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost-cmake/usage
+Downloading https://raw.githubusercontent.com/boostorg/boost/refs/tags/boost-1.91.0/LICENSE_1_0.txt -> boost-1.91.0-LICENSE_1_0.txt
+Successfully downloaded boost-1.91.0-LICENSE_1_0.txt
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-cmake_x64-windows-static/share/boost-cmake/copyright
+-- Performing post-build validation
+Starting submission of boost-cmake:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-cmake:x64-windows-static: 656 ms
+Completed submission of boost-uninstall:x64-windows-static@1.91.0 to 1 binary cache(s) in 41.1 ms
+Completed submission of vcpkg-boost:x64-windows@2025-03-29 to 1 binary cache(s) in 40.7 ms
+Installing 4/21 boost-headers:x64-windows-static@1.91.0...
+boost-headers:x64-windows-static@1.91.0 package ABI: 2be0ac68dac95615090d76991401d3fa97dbda06e32334959e26352f67950798
+Building boost-headers:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/headers/archive/boost-1.91.0.tar.gz -> boostorg-headers-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-headers-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-headers-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-headers/src/ost-1.91.0-deced4dad5.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-headers_x64-windows-static/share/boost-headers/copyright
+-- Performing post-build validation
+Starting submission of boost-headers:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-headers:x64-windows-static: 1.1 s
+Completed submission of boost-cmake:x64-windows-static@1.91.0 to 1 binary cache(s) in 45.2 ms
+Installing 5/21 boost-config:x64-windows-static@1.91.0...
+boost-config:x64-windows-static@1.91.0 package ABI: 4f951f70ec16ca6938e9e6b7647fde417edecbb48c651b8ffc0dd659b4643b76
+Building boost-config:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/config/archive/boost-1.91.0.tar.gz -> boostorg-config-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-config-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-config-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-config/src/ost-1.91.0-8c93c1936b.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-config_x64-windows-static/share/boost-config/copyright
+-- Performing post-build validation
+Starting submission of boost-config:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-config:x64-windows-static: 1.2 s
+Completed submission of boost-headers:x64-windows-static@1.91.0 to 1 binary cache(s) in 42.1 ms
+Installing 6/21 boost-assert:x64-windows-static@1.91.0...
+boost-assert:x64-windows-static@1.91.0 package ABI: d7d6470164d25f141c277ad70ab4e38d96bd8ed92f463094f54726119e042639
+Building boost-assert:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/assert/archive/boost-1.91.0.tar.gz -> boostorg-assert-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-assert-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-assert-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-assert/src/ost-1.91.0-cb8d01e109.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-assert_x64-windows-static/share/boost-assert/copyright
+-- Performing post-build validation
+Starting submission of boost-assert:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-assert:x64-windows-static: 1.1 s
+Completed submission of boost-config:x64-windows-static@1.91.0 to 1 binary cache(s) in 67.7 ms
+Installing 7/21 boost-throw-exception:x64-windows-static@1.91.0...
+boost-throw-exception:x64-windows-static@1.91.0 package ABI: b993b77a914ddc7ad438d57f7af3c851666debf90b11aee8fb465826595bb8ed
+Building boost-throw-exception:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/throw_exception/archive/boost-1.91.0.tar.gz -> boostorg-throw_exception-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-throw_exception-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-throw_exception-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-throw-exception/src/ost-1.91.0-34cc1d0ecf.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-throw-exception_x64-windows-static/share/boost-throw-exception/copyright
+-- Performing post-build validation
+Starting submission of boost-throw-exception:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-throw-exception:x64-windows-static: 1.2 s
+Completed submission of boost-assert:x64-windows-static@1.91.0 to 1 binary cache(s) in 44.9 ms
+Installing 8/21 boost-compat:x64-windows-static@1.91.0...
+boost-compat:x64-windows-static@1.91.0 package ABI: e73c4edd81731fedfc87dd9f5e89890f5406f76eb0ea5bb95eca39bbcfe4cc2e
+Building boost-compat:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/compat/archive/boost-1.91.0.tar.gz -> boostorg-compat-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-compat-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-compat-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-compat/src/ost-1.91.0-7c0d84b250.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-compat_x64-windows-static/share/boost-compat/copyright
+-- Performing post-build validation
+Starting submission of boost-compat:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-compat:x64-windows-static: 1.2 s
+Completed submission of boost-throw-exception:x64-windows-static@1.91.0 to 1 binary cache(s) in 45.8 ms
+Installing 9/21 boost-core:x64-windows-static@1.91.0...
+boost-core:x64-windows-static@1.91.0 package ABI: b2727f5a04dbacf89e234cbb92846d641cac95a7526184289960c4314d49765d
+Building boost-core:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/core/archive/boost-1.91.0.tar.gz -> boostorg-core-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-core-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-core-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-core/src/ost-1.91.0-2ac64990bd.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-core_x64-windows-static/share/boost-core/copyright
+-- Performing post-build validation
+Starting submission of boost-core:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-core:x64-windows-static: 1.2 s
+Completed submission of boost-compat:x64-windows-static@1.91.0 to 1 binary cache(s) in 46.8 ms
+Installing 10/21 boost-move:x64-windows-static@1.91.0...
+boost-move:x64-windows-static@1.91.0 package ABI: 30463eba767037e0047073f7b36ca7bbf98baf728eae6a6d63df15d870410fb6
+Building boost-move:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/move/archive/boost-1.91.0.tar.gz -> boostorg-move-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-move-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-move-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-move/src/ost-1.91.0-ffda78865d.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-move_x64-windows-static/share/boost-move/copyright
+-- Performing post-build validation
+Starting submission of boost-move:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-move:x64-windows-static: 1.2 s
+Completed submission of boost-core:x64-windows-static@1.91.0 to 1 binary cache(s) in 52 ms
+Installing 11/21 boost-intrusive:x64-windows-static@1.91.0...
+boost-intrusive:x64-windows-static@1.91.0 package ABI: 17045861cd2a5eff14b416a867942af0bcb85e84e2c5e9bf5c71b8b7e4126d5e
+Building boost-intrusive:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/intrusive/archive/boost-1.91.0.tar.gz -> boostorg-intrusive-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-intrusive-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-intrusive-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-intrusive/src/ost-1.91.0-466e81d1d2.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-intrusive_x64-windows-static/share/boost-intrusive/copyright
+-- Performing post-build validation
+Starting submission of boost-intrusive:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-intrusive:x64-windows-static: 1.2 s
+Completed submission of boost-move:x64-windows-static@1.91.0 to 1 binary cache(s) in 59.8 ms
+Installing 12/21 boost-container:x64-windows-static@1.91.0...
+boost-container:x64-windows-static@1.91.0 package ABI: b6b3733996c886b42cc7fe1e9bf7433c98e9e8e1a011ee6e8394ad1adbd07042
+Building boost-container:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/container/archive/boost-1.91.0.tar.gz -> boostorg-container-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-container-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-container-boost-1.91.0.tar.gz
+-- Applying patch posix-threads.diff
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-container/src/ost-1.91.0-34ef7e044f.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-container_x64-windows-static/share/boost-container/copyright
+-- Performing post-build validation
+Starting submission of boost-container:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-container:x64-windows-static: 3.2 s
+Completed submission of boost-intrusive:x64-windows-static@1.91.0 to 1 binary cache(s) in 103 ms
+Installing 13/21 boost-mp11:x64-windows-static@1.91.0...
+boost-mp11:x64-windows-static@1.91.0 package ABI: 81b58fda5b659e222880b59b736e39fc319dcee1ab35ee312a7facefbd3800b1
+Building boost-mp11:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/mp11/archive/boost-1.91.0.tar.gz -> boostorg-mp11-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-mp11-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-mp11-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-mp11/src/ost-1.91.0-18239300bd.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-mp11_x64-windows-static/share/boost-mp11/copyright
+-- Performing post-build validation
+Starting submission of boost-mp11:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-mp11:x64-windows-static: 1.2 s
+Completed submission of boost-container:x64-windows-static@1.91.0 to 1 binary cache(s) in 181 ms
+Installing 14/21 boost-describe:x64-windows-static@1.91.0...
+boost-describe:x64-windows-static@1.91.0 package ABI: 632c39055c94807af82139d641e6e7c159546b0743e39609bad0deeb9273ac37
+Building boost-describe:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/describe/archive/boost-1.91.0.tar.gz -> boostorg-describe-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-describe-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-describe-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-describe/src/ost-1.91.0-67fa6d2e8c.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-describe_x64-windows-static/share/boost-describe/copyright
+-- Performing post-build validation
+Starting submission of boost-describe:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-describe:x64-windows-static: 1.2 s
+Completed submission of boost-mp11:x64-windows-static@1.91.0 to 1 binary cache(s) in 50.4 ms
+Installing 15/21 boost-container-hash:x64-windows-static@1.91.0...
+boost-container-hash:x64-windows-static@1.91.0 package ABI: 98e96a074b6869ea4c735eeeafe0113836912c71f41f26a939dd17cede7d56dd
+Building boost-container-hash:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/container_hash/archive/boost-1.91.0.tar.gz -> boostorg-container_hash-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-container_hash-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-container_hash-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-container-hash/src/ost-1.91.0-67bb2e91d5.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-container-hash_x64-windows-static/share/boost-container-hash/copyright
+-- Performing post-build validation
+Starting submission of boost-container-hash:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-container-hash:x64-windows-static: 1.1 s
+Completed submission of boost-describe:x64-windows-static@1.91.0 to 1 binary cache(s) in 49.9 ms
+Installing 16/21 boost-endian:x64-windows-static@1.91.0...
+boost-endian:x64-windows-static@1.91.0 package ABI: 6eeb32956759537cb7d29b74666bf419dee453ec057bf557c0fbb745a054e65f
+Building boost-endian:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/endian/archive/boost-1.91.0.tar.gz -> boostorg-endian-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-endian-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-endian-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-endian/src/ost-1.91.0-267efcfed2.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-endian_x64-windows-static/share/boost-endian/copyright
+-- Performing post-build validation
+Starting submission of boost-endian:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-endian:x64-windows-static: 1.5 s
+Completed submission of boost-container-hash:x64-windows-static@1.91.0 to 1 binary cache(s) in 45.6 ms
+Installing 17/21 boost-variant2:x64-windows-static@1.91.0...
+boost-variant2:x64-windows-static@1.91.0 package ABI: 91315b030da388ef7f4ba69d0e807650d4f86fcd5f8d2783a5d718a9032e1769
+Building boost-variant2:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/variant2/archive/boost-1.91.0.tar.gz -> boostorg-variant2-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-variant2-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-variant2-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-variant2/src/ost-1.91.0-4c2d2d39ff.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-variant2_x64-windows-static/share/boost-variant2/copyright
+-- Performing post-build validation
+Starting submission of boost-variant2:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-variant2:x64-windows-static: 1.1 s
+Completed submission of boost-endian:x64-windows-static@1.91.0 to 1 binary cache(s) in 44.3 ms
+Installing 18/21 boost-predef:x64-windows-static@1.91.0...
+boost-predef:x64-windows-static@1.91.0 package ABI: 0dbc8ea14f051c11b4ad685a29f77e9bc5701acae60ecea3044295ce20ae6f4f
+Building boost-predef:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/predef/archive/boost-1.91.0.tar.gz -> boostorg-predef-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-predef-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-predef-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-predef/src/ost-1.91.0-1f362b7212.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-predef_x64-windows-static/share/boost-predef/copyright
+-- Performing post-build validation
+Starting submission of boost-predef:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-predef:x64-windows-static: 1.1 s
+Completed submission of boost-variant2:x64-windows-static@1.91.0 to 1 binary cache(s) in 46.3 ms
+Installing 19/21 boost-winapi:x64-windows-static@1.91.0...
+boost-winapi:x64-windows-static@1.91.0 package ABI: a775bf3f46272708e86f07a0d4d1b370a56796c195e2c7b9053c5f0370b5682c
+Building boost-winapi:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/winapi/archive/boost-1.91.0.tar.gz -> boostorg-winapi-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-winapi-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-winapi-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-winapi/src/ost-1.91.0-1930f2e233.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-winapi_x64-windows-static/share/boost-winapi/copyright
+-- Performing post-build validation
+Starting submission of boost-winapi:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-winapi:x64-windows-static: 1.2 s
+Completed submission of boost-predef:x64-windows-static@1.91.0 to 1 binary cache(s) in 52.8 ms
+Installing 20/21 boost-system:x64-windows-static@1.91.0...
+boost-system:x64-windows-static@1.91.0 package ABI: 283cae6d95fa14c025bc1dddd880bdb2f6f84e65c761eece1a39cbdfb39f1e61
+Building boost-system:x64-windows-static@1.91.0...
+CMake Warning at scripts/cmake/vcpkg_buildpath_length_warning.cmake:4 (message):
+  boost-system's buildsystem uses very long paths and may fail on your
+  system.
+
+  We recommend moving vcpkg to a short path such as 'C:\src\vcpkg' or using
+  the subst command.
+Call Stack (most recent call first):
+  ports/boost-system/portfile.cmake:3 (vcpkg_buildpath_length_warning)
+  scripts/ports.cmake:206 (include)
+
+
+Downloading https://github.com/boostorg/system/archive/boost-1.91.0.tar.gz -> boostorg-system-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-system-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-system-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-system/src/ost-1.91.0-8ae221950f.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-system_x64-windows-static/share/boost-system/copyright
+-- Performing post-build validation
+Starting submission of boost-system:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-system:x64-windows-static: 1.1 s
+Completed submission of boost-winapi:x64-windows-static@1.91.0 to 1 binary cache(s) in 66.4 ms
+Installing 21/21 boost-json:x64-windows-static@1.91.0...
+boost-json:x64-windows-static@1.91.0 package ABI: 16a7f996bd663d0dbc369cd9579bc1ba23e47689320b048d62b12cb71571fd12
+Building boost-json:x64-windows-static@1.91.0...
+Downloading https://github.com/boostorg/json/archive/boost-1.91.0.tar.gz -> boostorg-json-boost-1.91.0.tar.gz
+Successfully downloaded boostorg-json-boost-1.91.0.tar.gz
+-- Extracting source D:/a/kotek/kotek/vcpkg/downloads/boostorg-json-boost-1.91.0.tar.gz
+-- Using source at D:/a/kotek/kotek/vcpkg/buildtrees/boost-json/src/ost-1.91.0-07bc5f80eb.clean
+warning: The vcpkg D:\a\kotek\kotek\vcpkg\vcpkg.exe is using detected vcpkg root D:\a\kotek\kotek\vcpkg and ignoring mismatched VCPKG_ROOT environment value C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\vcpkg. To suppress this message, unset the environment variable or use the --vcpkg-root command line switch.
+-- Configuring x64-windows-static
+-- Building x64-windows-static-dbg
+-- Building x64-windows-static-rel
+-- Installing: D:/a/kotek/kotek/vcpkg/packages/boost-json_x64-windows-static/share/boost-json/copyright
+-- Performing post-build validation
+Starting submission of boost-json:x64-windows-static@1.91.0 to 1 binary cache(s) in the background
+Elapsed time to handle boost-json:x64-windows-static: 9.5 s
+Total install time: 32 s
+Installed contents are licensed to you by owners. Microsoft is not responsible for, nor does it grant any licenses to, third-party packages.
+Packages installed in this vcpkg installation declare the following licenses:
+BSL-1.0
+MIT
+The package boost-json is compatible with built-in CMake targets of FindBoost.cmake:
+
+    find_package(Boost REQUIRED COMPONENTS json)
+    target_link_libraries(main PRIVATE Boost::json)
+
+or the generated cmake configs via:
+
+    find_package( REQUIRED CONFIG)
+    target_link_libraries(main PRIVATE Boost::json)
+
+Completed submission of boost-system:x64-windows-static@1.91.0 to 1 binary cache(s) in 51.4 ms
+Waiting for 1 remaining binary cache submissions...
+Completed submission of boost-json:x64-windows-static@1.91.0 to 1 binary cache(s) in 525 ms (1/1)
+All requested installations completed successfully in: 32 s
