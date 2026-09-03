@@ -1,5 +1,6 @@
 #include "../include/kotek_std_window.h"
 #include <kotek.core.api/include/kotek_api.h>
+#include <kotek.core.main_manager/include/kotek_main_manager.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
@@ -448,6 +449,12 @@ void ktkWindow::Initialize(kun_core eEngineSupportedRenderer version, kun_core e
 		}
 	}
 
+	// exe-side input bridge (see ktkGlfwEventChain): install our
+	// trampolines on the LIVE GLFW copy of this module so that consumers
+	// hosted in other modules (whose own static GLFW copy is dead) can
+	// receive the window's events through Set_EventChain
+	this->Install_EventChainCallbacks();
+
 #ifdef KOTEK_USE_PLATFORM_WINDOWS
 	this->m_p_os_data = new ktkWin32OSData();
 	ktkWin32OSData* p_casted_impl =
@@ -609,6 +616,150 @@ void ktkWindow::ObtainInformationAboutDisplay(void)
 
 	this->m_screen_size_height = mode->height;
 	this->m_screen_size_width = mode->width;
+}
+
+void ktkWindow::Set_EventChain(const ktkGlfwEventChain* p_chain) noexcept
+{
+	if (p_chain)
+	{
+		this->m_event_chain = *p_chain;
+	}
+	else
+	{
+		this->m_event_chain = ktkGlfwEventChain{};
+	}
+}
+
+void ktkWindow::Install_EventChainCallbacks(void) noexcept
+{
+	if (this->m_p_window == nullptr)
+	{
+		return;
+	}
+
+	glfwSetCursorPosCallback(
+		this->m_p_window, &ktkWindow::Callback_CursorPos);
+	glfwSetMouseButtonCallback(
+		this->m_p_window, &ktkWindow::Callback_MouseButton);
+	glfwSetScrollCallback(this->m_p_window, &ktkWindow::Callback_Scroll);
+	glfwSetKeyCallback(this->m_p_window, &ktkWindow::Callback_Key);
+	glfwSetCharCallback(this->m_p_window, &ktkWindow::Callback_Char);
+	glfwSetCursorEnterCallback(
+		this->m_p_window, &ktkWindow::Callback_CursorEnter);
+	glfwSetWindowFocusCallback(
+		this->m_p_window, &ktkWindow::Callback_WindowFocus);
+}
+
+ktkWindow* ktkWindow::Get_InstanceFromWindow(GLFWwindow* p_window) noexcept
+{
+	if (p_window == nullptr)
+	{
+		return nullptr;
+	}
+
+	// RegisterUserMainManager parks the main manager in the window user
+	// pointer; the chain lives on the concrete window instance
+	auto* p_manager =
+		static_cast<ktkMainManager*>(glfwGetWindowUserPointer(p_window));
+
+	if (p_manager == nullptr)
+	{
+		return nullptr;
+	}
+
+	ktkIWindowManager* p_window_manager = p_manager->Get_WindowManager();
+
+	if (p_window_manager == nullptr)
+	{
+		return nullptr;
+	}
+
+	ktkIWindow* p_active_window = p_window_manager->Get_ActiveWindow();
+
+	if (p_active_window == nullptr ||
+		p_active_window->GetHandle() != static_cast<void*>(p_window))
+	{
+		return nullptr;
+	}
+
+	return dynamic_cast<ktkWindow*>(p_active_window);
+}
+
+void ktkWindow::Callback_CursorPos(
+	GLFWwindow* p_window, double x, double y) noexcept
+{
+	ktkWindow* p_self = ktkWindow::Get_InstanceFromWindow(p_window);
+
+	if (p_self && p_self->m_event_chain.p_cursor_pos)
+	{
+		p_self->m_event_chain.p_cursor_pos(p_window, x, y);
+	}
+}
+
+void ktkWindow::Callback_MouseButton(
+	GLFWwindow* p_window, int button, int action, int mods) noexcept
+{
+	ktkWindow* p_self = ktkWindow::Get_InstanceFromWindow(p_window);
+
+	if (p_self && p_self->m_event_chain.p_mouse_button)
+	{
+		p_self->m_event_chain.p_mouse_button(p_window, button, action, mods);
+	}
+}
+
+void ktkWindow::Callback_Scroll(
+	GLFWwindow* p_window, double x_offset, double y_offset) noexcept
+{
+	ktkWindow* p_self = ktkWindow::Get_InstanceFromWindow(p_window);
+
+	if (p_self && p_self->m_event_chain.p_scroll)
+	{
+		p_self->m_event_chain.p_scroll(p_window, x_offset, y_offset);
+	}
+}
+
+void ktkWindow::Callback_Key(GLFWwindow* p_window, int key, int scancode,
+	int action, int mods) noexcept
+{
+	ktkWindow* p_self = ktkWindow::Get_InstanceFromWindow(p_window);
+
+	if (p_self && p_self->m_event_chain.p_key)
+	{
+		p_self->m_event_chain.p_key(p_window, key, scancode, action, mods);
+	}
+}
+
+void ktkWindow::Callback_Char(
+	GLFWwindow* p_window, unsigned int codepoint) noexcept
+{
+	ktkWindow* p_self = ktkWindow::Get_InstanceFromWindow(p_window);
+
+	if (p_self && p_self->m_event_chain.p_char)
+	{
+		p_self->m_event_chain.p_char(p_window, codepoint);
+	}
+}
+
+void ktkWindow::Callback_CursorEnter(
+	GLFWwindow* p_window, int entered) noexcept
+{
+	ktkWindow* p_self = ktkWindow::Get_InstanceFromWindow(p_window);
+
+	if (p_self && p_self->m_event_chain.p_cursor_enter)
+	{
+		p_self->m_event_chain.p_cursor_enter(p_window, entered);
+	}
+}
+
+void ktkWindow::Callback_WindowFocus(
+	GLFWwindow* p_window, int focused) noexcept
+{
+	ktkWindow* p_self = ktkWindow::Get_InstanceFromWindow(p_window);
+
+	if (p_self && p_self->m_event_chain.p_window_focus)
+	{
+		p_self->m_event_chain.p_window_focus(p_window, focused);
+	}
 }
 
 KOTEK_END_NAMESPACE_CORE

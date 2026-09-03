@@ -301,6 +301,18 @@ module. Mechanism:
   (the ktkI* locator). Existing statics are being swept (task K24 —
   `_pLoggerMain`/`_pLoggerMsvcOutput` and friends); new static storage in a
   PR is a defect on sight.
+- **Wrappers are the contract (owner directive 2026-09-02).** Framework
+  consumers (zircon and every upper layer) never call standard-library or
+  third-party functions directly — they call kotek wrappers. New
+  functionality enters the ecosystem as a wrapper FIRST, with the backend
+  matrix (STD / BOOST / kotek-own / user re-registration); direct
+  std/third-party calls live only inside wrapper implementations (and in
+  `src/tools` host tools).
+- **Test tiers (owner directive 2026-09-02).** Heavy stress suites are gated
+  behind `KOTEK_USE_TESTS_HEAVY` (CMake `-DKOTEK_TESTS_HEAVY=ON`, OFF by
+  default); every heavy suite keeps a lightweight default tier of the same
+  functional proof. Debug boot time is a budget — no test may make the
+  default boot meaningfully slower without the flag.
 
 ## 7. Build
 
