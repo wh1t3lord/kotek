@@ -1576,6 +1576,28 @@ inline quat slerp(const quat& left, const quat& right, float factor) noexcept
 	}
 }
 
+/// \~english axis-angle -> quaternion (glm::angleAxis): the axis must be
+/// normalized; the half-angle form stores (axis * sin(a/2), cos(a/2))
+inline quat angle_axis(float angle_radians, const vec3& axis) noexcept
+{
+	float half_angle = angle_radians * 0.5f;
+	float s = std::sin(half_angle);
+
+	return quat(axis.x * s, axis.y * s, axis.z * s, std::cos(half_angle));
+}
+
+/// \~english rotate a vector by a quaternion (glm::rotate(q, v)): the
+/// two-cross-product expansion of q * (v, 0) * conjugate(q); the
+/// quaternion must be normalized for a pure rotation
+constexpr vec3 rotate(const quat& rotation, const vec3& vec) noexcept
+{
+	vec3 qv(rotation.x, rotation.y, rotation.z);
+	vec3 uv = cross(qv, vec);
+	vec3 uuv = cross(qv, uv);
+
+	return vec + ((uv * rotation.w) + uuv) * 2.0f;
+}
+
 #pragma endregion
 
 KOTEK_END_NAMESPACE_MATH

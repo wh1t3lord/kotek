@@ -36,6 +36,17 @@ inline kun_ktk float_t convert_to_degrees(
 #endif
 }
 
+/// \~english scalar arcsine — no backend differentiates scalar trig
+/// (DXM/GLM wrap the vector/matrix ops), so every configuration shares
+/// the CRT implementation; the wrapper exists so consumers never call
+/// the CRT directly (zircon's wrappers-only rule)
+inline kun_ktk float_t get_math_asin(
+	kun_ktk float_t value
+) KOTEK_CPP_KEYWORD_NOEXCEPT
+{
+	return std::asin(value);
+}
+
 inline kun_ktk double_t convert_to_radians(
 	kun_ktk double_t degrees
 ) KOTEK_CPP_KEYWORD_NOEXCEPT
