@@ -322,35 +322,20 @@ kun_ktk uint16_t simultaneously_opened_files_count
 
 	/* SINGLE SHOT READ&WRITE */
 
-	// TODO: check todo in
-	// implementation class
-	// ktkFileSystem and it is a
-	// temporary virtual
-	// function delete it
-	virtual bool Read_File(
-		const ktk_filesystem_path& path_to_file,
-		kun_ktk ustring& output_result,
-		eFileSystemPriorityType priority =
-			eFileSystemPriorityType::kAuto,
-		eFileSystemFeatureType feature =
-			eFileSystemFeatureType::kNone
-	) const noexcept = 0;
-
-	/// @brief be careful! this method's purpose is only on
-	/// stack and for stack purposes! You should copy the
-	/// content of p_buffer and (if updated) length_of_buffer
-	/// because if you suppose that you use 128 char buffer for
-	/// reading file but the real size is bigger than 128 than
-	/// it used predefined buffer as a defense but it is only
-	/// for operations that don't store pointers for session or
-	/// longer time otherwise just copy the content and don't
-	/// store as string_view or native raw pointer string in
-	/// your data, it is for fast reading without using dynamic
-	/// version based on ustring alias (std::string class). So
-	/// pointer of p_buffer and value of length_of_buffer can be
-	/// changed and that means they use data from predefined
-	/// string in filesystem, but it depends on user
-	/// implementation tbh
+	/// @brief \~english single-shot read into the caller's
+	/// buffer. Contract (B0): a missing or unreadable file is NOT
+	/// an assert — the call returns false, logs one warning line
+	/// and sets length_of_buffer to 0, so callers' Is_Exists
+	/// pre-checks are optional (keep one only when even the
+	/// warning is unwanted). If the file is bigger than the
+	/// provided buffer the call returns false and
+	/// length_of_buffer receives the REQUIRED size — the buffer
+	/// pointer is never redirected to any internal scratch
+	/// storage (probe with Get_FileSize(path) or retry with a
+	/// bigger buffer; use the streaming API for big data). On
+	/// success p_buffer holds the content, length_of_buffer the
+	/// real read size, and a '\0' terminator is written when the
+	/// buffer has room for it.
 	/// @param path_to_file
 	/// @param p_buffer
 	/// @param length_of_buffer
@@ -376,15 +361,6 @@ kun_ktk uint16_t simultaneously_opened_files_count
 		eFileSystemFeatureType features =
 			eFileSystemFeatureType::kNone
 	) = 0;
-
-	virtual bool Write_File(
-		const ktk_filesystem_path& path_to_file,
-		kun_ktk ustring& input,
-		eFileSystemPriorityType priority =
-			eFileSystemPriorityType::kAuto,
-		eFileSystemFeatureType feature =
-			eFileSystemFeatureType::kNone
-	) noexcept = 0;
 
 	virtual bool Write_File(
 		const ktk_filesystem_path& path_to_file,

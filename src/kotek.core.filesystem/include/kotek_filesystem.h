@@ -16,24 +16,6 @@ KOTEK_BEGIN_NAMESPACE_CORE
 constexpr const char* kConfigFileNameSystemInfo =
 	"sys_info.json";
 
-/* todo: legacy delete
-constexpr const char* kSysInfoFieldName_InitializeCallback =
-    "UserCallbackForGameLibrary_Initialize";
-constexpr const char* kSysInfoFieldName_ShutdownCallback =
-    "UserCallbackForGameLibrary_Shutdown";
-constexpr const char* kSysInfoFieldName_UpdateCallback =
-    "UserCallbackForGameLibrary_Update";
-constexpr const char* kSysInfoFieldName_UserLibraryName =
-    "UserGameLibraryName";
-
-constexpr const char*
-    kSysInfoFieldName_UpdateCallbackContainsLoop =
-        "UserCallbackForGameLibrary_Update_Contains_Loop";
-constexpr const char*
-    kSysInfoFieldName_InitializeCallback_Render =
-        "UserCallbackForGameLibrary_Initialize_Render";
-*/
-
 constexpr const char* kSysInfoFieldName_UserNamespace = "User";
 constexpr const char*
 	kSysInfoFieldName_UserNamespace_EngineNamespace_Callbacks =
@@ -154,15 +136,6 @@ public:
 
 	bool Read_File(
 		const ktk_filesystem_path& path_to_file,
-		kun_ktk ustring& output_result,
-		eFileSystemPriorityType priority =
-			eFileSystemPriorityType::kAuto,
-		eFileSystemFeatureType feature =
-			eFileSystemFeatureType::kNone
-	) const noexcept override;
-
-	bool Read_File(
-		const ktk_filesystem_path& path_to_file,
 		kun_ktk uint8_t*& p_buffer,
 		kun_ktk size_t& length_of_buffer,
 		eFileSystemPriorityType priority =
@@ -180,15 +153,6 @@ public:
 		eFileSystemFeatureType features =
 			eFileSystemFeatureType::kNone
 	) override;
-
-	bool Write_File(
-		const ktk_filesystem_path& path_to_file,
-		kun_ktk ustring& input,
-		eFileSystemPriorityType priority =
-			eFileSystemPriorityType::kAuto,
-		eFileSystemFeatureType feature =
-			eFileSystemFeatureType::kNone
-	) noexcept override;
 
 	bool Write_File(
 		const ktk_filesystem_path& path_to_file,

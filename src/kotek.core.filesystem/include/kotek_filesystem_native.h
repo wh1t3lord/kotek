@@ -58,11 +58,6 @@ public:
 	ktkFileSystem_Native();
 	~ktkFileSystem_Native();
 
-	void Initialize(
-		ktkFileSystem_VFM* p_vfm,
-		kun_ktk uint32_t stream_size_buffer,
-		bool use_vfm_caching
-	);
 	void Shutdown();
 
 	bool Read_File(
@@ -139,10 +134,6 @@ private:
 	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
 	ktkFileSystem_VFM* m_p_vfm;
 	#endif
-
-	// trivial cache for stack based reading, but generally
-	// saying it is better to provide virtual mapping cache
-	unsigned char m_reserved_cache[2048];
 
 	ktk_vector<
 		file_handle_t,

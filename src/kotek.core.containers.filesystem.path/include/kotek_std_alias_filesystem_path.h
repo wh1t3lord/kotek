@@ -2364,7 +2364,7 @@ KOTEK_END_NAMESPACE_KOTEK
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK \
 			KOTEK_USE_NAMESPACE_FILESYSTEM hybrid_path
 #else
-	#define ktk_array                                     \
+	#define ktk_filesystem_path                       \
 		KOTEK_USE_NAMESPACE_KOTEK KOTEK_USE_NAMESPACE_KTK \
 			std::filesystem::path
 	#define ktkFileSystemPath                             \

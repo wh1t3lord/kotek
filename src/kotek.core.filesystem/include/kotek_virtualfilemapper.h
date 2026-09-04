@@ -5,9 +5,6 @@
 #include <kotek.core.containers.multithreading.atomic/include/kotek_core_containers_multithreading_atomic.h>
 #include <kotek.core.containers.queue/include/kotek_core_containers_queue.h>
 
-#define VFM_FILE_MAX_COUNT \
-	KOTEK_DEF_FILESYSTEM_NATIVE_MAX_FILES + KOTEK_DEF_FILESYSTEM_ZLIB_MAX_FILES
-
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 

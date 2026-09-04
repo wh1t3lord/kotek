@@ -2393,6 +2393,352 @@ TEST(FileSystem, test_virtualfilemapper_manager_shutdown)
 	vfm.Shutdown();
 }
 
+// --- B0 filesystem foundation-repair proofs --------------------------
+// every fixture lives under data_user/tests (the folder discipline of
+// this file), is a few bytes, and is removed by the test itself
+
+TEST(Filesystem, test_b0_missing_file_read_is_graceful)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b0_missing_read.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	kun_ktk uint8_t buffer[64];
+	kun_ktk uint8_t* p_buffer = buffer;
+	kun_ktk size_t buffer_size = sizeof(buffer);
+
+	// a missing file is user data, not a programmer error:
+	// false + size 0 + untouched buffer pointer, never an assert
+	bool status = instance.Read_File(path, p_buffer, buffer_size);
+
+	EXPECT_FALSE(status);
+	EXPECT_TRUE(buffer_size == 0);
+	EXPECT_TRUE(p_buffer == buffer);
+
+	// the explicit-priority dispatch shape must degrade identically
+	p_buffer = buffer;
+	buffer_size = sizeof(buffer);
+
+	status = instance.Read_File(
+		path, p_buffer, buffer_size, eFileSystemPriorityType::kNative
+	);
+
+	EXPECT_FALSE(status);
+	EXPECT_TRUE(buffer_size == 0);
+	EXPECT_TRUE(p_buffer == buffer);
+
+	// the open path: invalid handle + warning, never an abort
+	ktkFileHandleType handle = instance.Open_File(
+		path,
+		eFileSystemPriorityType::kNative,
+		eFileSystemStreamingType::kReadOnly
+	);
+
+	EXPECT_TRUE(handle == kInvalidFileHandleType);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b0_get_file_size_by_path)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b0_file_size.dat";
+
+	ktk_filesystem_path missing_path;
+	instance.Make_Path(
+		missing_path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	missing_path /= "b0_file_size_absent.dat";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(missing_path.c_str()), ec
+	);
+
+	const char payload[] = "size me please";
+
+	ASSERT_TRUE(
+		instance.Write_File(path, payload, sizeof(payload))
+	);
+
+	kun_ktk size_t result = 0;
+
+	EXPECT_TRUE(instance.Get_FileSize(path, result));
+	EXPECT_TRUE(result == sizeof(payload));
+
+	// explicit priority exercises the fallback-list dispatch shape
+	result = 0;
+	EXPECT_TRUE(
+		instance.Get_FileSize(
+			path, result, eFileSystemPriorityType::kNative
+		)
+	);
+	EXPECT_TRUE(result == sizeof(payload));
+
+	// absent file: false + size 0, no assert
+	result = 123;
+	EXPECT_FALSE(instance.Get_FileSize(missing_path, result));
+	EXPECT_TRUE(result == 0);
+
+	result = 123;
+	EXPECT_FALSE(
+		instance.Get_FileSize(
+			missing_path, result, eFileSystemPriorityType::kNative
+		)
+	);
+	EXPECT_TRUE(result == 0);
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b0_write_file_bytes_roundtrip)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b0_bytes_roundtrip.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	kun_ktk uint8_t payload[256];
+
+	for (kun_ktk size_t i = 0; i < sizeof(payload); ++i)
+		payload[i] = static_cast<kun_ktk uint8_t>(i);
+
+	// the uint8_t single-shot write (implemented in B0) must be
+	// byte-exact — 0x0A inside the payload proves binary mode (no
+	// CRLF translation on Windows)
+	ASSERT_TRUE(
+		instance.Write_File(path, payload, sizeof(payload))
+	);
+
+	kun_ktk uint8_t readback[300];
+	kun_ktk uint8_t* p_readback = readback;
+	kun_ktk size_t readback_size = sizeof(readback);
+
+	ASSERT_TRUE(instance.Read_File(path, p_readback, readback_size));
+	EXPECT_TRUE(readback_size == sizeof(payload));
+	EXPECT_TRUE(p_readback == readback);
+
+	bool equal = true;
+
+	for (kun_ktk size_t i = 0; i < sizeof(payload); ++i)
+	{
+		if (readback[i] != payload[i])
+		{
+			equal = false;
+			break;
+		}
+	}
+
+	EXPECT_TRUE(equal);
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b0_handle_api_roundtrip)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b0_handle_api.dat";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	// seed the file (kReadAndWrite opens an existing file)
+	const char seed[] = "0123456789ABCDEF";
+
+	ASSERT_TRUE(instance.Write_File(path, seed, sizeof(seed)));
+
+	ktkFileHandleType handle = instance.Open_File(
+		path,
+		eFileSystemPriorityType::kNative,
+		eFileSystemStreamingType::kReadAndWrite
+	);
+
+	ASSERT_TRUE(handle != kInvalidFileHandleType);
+
+	kun_ktk size_t file_size = 0;
+	EXPECT_TRUE(instance.Get_FileSize(handle, file_size));
+	EXPECT_TRUE(file_size == sizeof(seed));
+
+	// Get_FileSize must not disturb the stream position
+	kun_ktk size_t position = static_cast<kun_ktk size_t>(-1);
+	EXPECT_TRUE(instance.Tell(handle, position));
+	EXPECT_TRUE(position == 0);
+
+	EXPECT_TRUE(
+		instance.Seek(handle, 4, eFileSystemSeekType::kBegin)
+	);
+	EXPECT_TRUE(instance.Tell(handle, position));
+	EXPECT_TRUE(position == 4);
+
+	// patch 4 bytes at offset 4
+	const char patch[] = "wxyz";
+	EXPECT_TRUE(instance.Write_File(handle, patch, 4));
+
+	EXPECT_TRUE(instance.Seek(handle, 0, eFileSystemSeekType::kEnd));
+	EXPECT_TRUE(instance.Tell(handle, position));
+	EXPECT_TRUE(position == sizeof(seed));
+
+	EXPECT_TRUE(instance.Close_File(handle));
+
+	// verify the patched content through the single-shot read
+	kun_ktk uint8_t readback[32];
+	kun_ktk uint8_t* p_readback = readback;
+	kun_ktk size_t readback_size = sizeof(readback);
+
+	ASSERT_TRUE(instance.Read_File(path, p_readback, readback_size));
+	ASSERT_TRUE(readback_size == sizeof(seed));
+
+	const char expected[] = "0123wxyz89ABCDEF";
+
+	bool equal = true;
+
+	for (kun_ktk size_t i = 0; i < sizeof(seed); ++i)
+	{
+		if (readback[i] !=
+		    static_cast<kun_ktk uint8_t>(expected[i]))
+		{
+			equal = false;
+			break;
+		}
+	}
+
+	EXPECT_TRUE(equal);
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(
+	Filesystem,
+	test_b0_read_file_buffer_too_small_reports_required_size
+)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b0_too_small.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	char payload[64];
+
+	for (kun_ktk size_t i = 0; i < sizeof(payload); ++i)
+		payload[i] = static_cast<char>('a' + (i % 26));
+
+	ASSERT_TRUE(
+		instance.Write_File(path, payload, sizeof(payload))
+	);
+
+	// B0 contract: a too-small buffer fails the call, reports the
+	// REQUIRED size through the size out-param and never redirects
+	// the pointer to internal scratch storage
+	kun_ktk uint8_t tiny[8];
+	kun_ktk uint8_t* p_tiny = tiny;
+	kun_ktk size_t tiny_size = sizeof(tiny);
+
+	bool status = instance.Read_File(path, p_tiny, tiny_size);
+
+	EXPECT_FALSE(status);
+	EXPECT_TRUE(tiny_size == sizeof(payload));
+	EXPECT_TRUE(p_tiny == tiny);
+
+	// retry with the reported size succeeds
+	kun_ktk uint8_t full[sizeof(payload)];
+	kun_ktk uint8_t* p_full = full;
+	kun_ktk size_t full_size = sizeof(full);
+
+	ASSERT_TRUE(instance.Read_File(path, p_full, full_size));
+	EXPECT_TRUE(full_size == sizeof(payload));
+
+	bool equal = true;
+
+	for (kun_ktk size_t i = 0; i < sizeof(payload); ++i)
+	{
+		if (full[i] != static_cast<kun_ktk uint8_t>(payload[i]))
+		{
+			equal = false;
+			break;
+		}
+	}
+
+	EXPECT_TRUE(equal);
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
 	#endif
 #endif
 

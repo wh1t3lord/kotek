@@ -7,62 +7,6 @@ ktkFileSystem::ktkFileSystem(void) : m_p_config{} {}
 
 ktkFileSystem::~ktkFileSystem(void) {}
 
-/*
-ktkFileHandleType ktkFileSystem::Begin_Stream(
-    const ktk_filesystem_path& path_to_file,
-    size_t
-        stream_step / *= KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE*
-/
-)
-{
-    return ktkFileHandleType();
-}
-*/
-
-/*
-void ktkFileSystem::Stream(
-    const ktkFileHandleType file_handle,
-    kun_ktk uint8_t*& p_buffer,
-    kun_ktk size_t buffer_size
-)
-{
-}
-
-void ktkFileSystem::End_Stream(
-    const ktkFileHandleType file_handle
-)
-{
-}*/
-
-/*
-bool ktkFileSystem::Is_AnyAvailableFiles(void) const noexcept
-{
-    return this->m_current_in_use_files.load() <
-        this->m_files.size();
-}*/
-
-/*
-ktkFileHandleType ktkFileSystem::Get_AvailableFile(void) const
-{
-    ktkFileHandleType result = kFileSystemInvalidFileHandleType;
-
-    if (!this->Is_AnyAvailableFiles())
-    {
-        // trying linearly search but honestly we could optimize
-        // it at some point (maybe)
-        for (const ktkFileHandleImpl& file : this->m_files)
-        {
-            if (!file.is_in_use.load())
-            {
-                result =
-                    reinterpret_cast<ktkFileHandleType>(&file);
-            }
-        }
-    }
-
-    return result;
-}*/
-
 void ktkFileSystem::Validate_Folder(
 	const ktk_filesystem_path& path
 )
@@ -598,9 +542,16 @@ bool ktkFileSystem::Read_File(
 		if (is_priority_list_enabled &&
 		    priority != eFileSystemPriorityType::kAuto)
 		{
+			// the repeat storage must fit the whole priority list (the
+			// pre-B0 check was inverted and asserted the opposite); a
+			// violation is a logic error, but library code never exits
+			// the process — fail the call
+			const bool is_repeat_storage_big_enough =
+				list_size <=
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0]));
+
 			KOTEK_ASSERT(
-				(sizeof(repeat_fs) / sizeof(repeat_fs[0])) <=
-					list_size,
+				is_repeat_storage_big_enough,
 				"something is wrong your list is much bigger "
 				"than system can handle, see "
 				"eFileSystemPriorityType::kEndOfEnum={}",
@@ -608,7 +559,11 @@ bool ktkFileSystem::Read_File(
 					eFileSystemPriorityType::kEndOfEnum
 				)
 			);
-			std::exit(-1);
+
+			if (is_repeat_storage_big_enough == false)
+			{
+				return false;
+			}
 		}
 
 		kun_ktk uint8_t repeat_fs_iter = 0;
@@ -627,13 +582,10 @@ bool ktkFileSystem::Read_File(
 			{
 			case eFileSystemPriorityType::kAuto:
 			{
+				// a corrupt priority list is a logic error, but
+				// library code never exits the process — fail the call
 				KOTEK_ASSERT(false, "can't be!");
-
-				// todo: make own exit function for break the
-				// application
-				std::exit(-1);
-
-				break;
+				return false;
 			}
 			case eFileSystemPriorityType::kNative:
 			{
@@ -696,8 +648,13 @@ bool ktkFileSystem::Read_File(
 					}
 					else
 					{
-						// todo: implement please
-						KOTEK_ASSERT(false, "todo: implement");
+						// todo: implement the zlib backend (phase
+						// B2) — a missing file must degrade to a
+						// warning, not an abort
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 					}
 				}
 #endif
@@ -709,8 +666,7 @@ bool ktkFileSystem::Read_File(
 				KOTEK_ASSERT(
 					false, "something is broken, can't be!"
 				);
-				std::exit(-1);
-				break;
+				return false;
 			}
 			}
 		}
@@ -735,8 +691,7 @@ bool ktkFileSystem::Read_File(
 					case eFileSystemPriorityType::kAuto:
 					{
 						KOTEK_ASSERT(false, "can't be!");
-						std::exit(-1);
-						break;
+						return false;
 					}
 					case eFileSystemPriorityType::kNative:
 					{
@@ -751,8 +706,12 @@ bool ktkFileSystem::Read_File(
 					}
 					case eFileSystemPriorityType::kZlib:
 					{
-						KOTEK_ASSERT(false, "not implemented");
-						// todo: implement this please
+						// todo: implement the zlib backend (phase
+						// B2)
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 						break;
 					}
 					default:
@@ -761,19 +720,10 @@ bool ktkFileSystem::Read_File(
 							false,
 							"something is broken can't be!"
 						);
-						std::exit(-1);
-
-						break;
+						return false;
 					}
 					}
 				}
-
-				KOTEK_ASSERT(
-					status,
-					"failed to obtain file {} using all file "
-					"systems!",
-					path_to_file
-				);
 
 				if (!status)
 				{
@@ -798,33 +748,6 @@ bool ktkFileSystem::Read_File(
 	return status;
 }
 
-bool ktkFileSystem::Read_File(
-	const ktk_filesystem_path& path_to_file,
-	kun_ktk ustring& output_result,
-	eFileSystemPriorityType
-		priority /*= eFileSystemPriorityType::kAuto*/,
-	eFileSystemFeatureType
-		feature /*= eFileSystemFeatureType::kNone */
-) const noexcept
-{
-	KOTEK_ASSERT(false, "implement");
-	return false;
-}
-
-bool ktkFileSystem::Write_File(
-	const ktk_filesystem_path& path_to_file,
-	kun_ktk ustring& input,
-	eFileSystemPriorityType
-		priority /*= eFileSystemPriorityType::kAuto*/,
-	eFileSystemFeatureType
-		feature /*= eFileSystemFeatureType::kNone */
-) noexcept
-{
-	KOTEK_ASSERT(false, "implement");
-
-	return false;
-}
-
 bool ktkFileSystem::Write_File(
 	const ktk_filesystem_path& path_to_file,
 	const kun_ktk uint8_t* p_buffer,
@@ -835,7 +758,13 @@ bool ktkFileSystem::Write_File(
 		featurs /*= eFileSystemFeatureType::kNone */
 ) noexcept
 {
-	return false;
+	return this->Write_File(
+		path_to_file,
+		reinterpret_cast<const char*>(p_buffer),
+		length_of_buffer,
+		priority,
+		featurs
+	);
 }
 
 bool ktkFileSystem::Write_File(
@@ -933,9 +862,16 @@ bool ktkFileSystem::Write_File(
 		if (is_priority_list_enabled &&
 		    priority != eFileSystemPriorityType::kAuto)
 		{
+			// the repeat storage must fit the whole priority list (the
+			// pre-B0 check was inverted and asserted the opposite); a
+			// violation is a logic error, but library code never exits
+			// the process — fail the call
+			const bool is_repeat_storage_big_enough =
+				list_size <=
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0]));
+
 			KOTEK_ASSERT(
-				(sizeof(repeat_fs) / sizeof(repeat_fs[0])) <=
-					list_size,
+				is_repeat_storage_big_enough,
 				"something is wrong your list is much bigger "
 				"than system can handle, see "
 				"eFileSystemPriorityType::kEndOfEnum={}",
@@ -943,7 +879,11 @@ bool ktkFileSystem::Write_File(
 					eFileSystemPriorityType::kEndOfEnum
 				)
 			);
-			std::exit(-1);
+
+			if (is_repeat_storage_big_enough == false)
+			{
+				return false;
+			}
 		}
 
 		kun_ktk uint8_t repeat_fs_iter = 0;
@@ -962,13 +902,10 @@ bool ktkFileSystem::Write_File(
 			{
 			case eFileSystemPriorityType::kAuto:
 			{
+				// a corrupt priority list is a logic error, but
+				// library code never exits the process — fail the call
 				KOTEK_ASSERT(false, "can't be!");
-
-				// todo: make own exit function for break the
-				// application
-				std::exit(-1);
-
-				break;
+				return false;
 			}
 			case eFileSystemPriorityType::kNative:
 			{
@@ -1014,8 +951,11 @@ bool ktkFileSystem::Write_File(
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
 				if (priority == fs_type)
 				{
-					// todo: implement please
-					KOTEK_ASSERT(false, "todo: implement");
+					// todo: implement the zlib backend (phase B2) —
+					// degrade gracefully instead of aborting
+					KOTEK_MESSAGE_WARNING(
+						"zlib filesystem is not implemented, skipping"
+					);
 
 					was_used_specified_fs = true;
 				}
@@ -1032,8 +972,13 @@ bool ktkFileSystem::Write_File(
 					}
 					else
 					{
-						// todo: implement please
-						KOTEK_ASSERT(false, "todo: implement");
+						// todo: implement the zlib backend (phase
+						// B2) — a missing file must degrade to a
+						// warning, not an abort
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 					}
 				}
 #endif
@@ -1045,8 +990,7 @@ bool ktkFileSystem::Write_File(
 				KOTEK_ASSERT(
 					false, "something is broken, can't be!"
 				);
-				std::exit(-1);
-				break;
+				return false;
 			}
 			}
 		}
@@ -1071,25 +1015,24 @@ bool ktkFileSystem::Write_File(
 					case eFileSystemPriorityType::kAuto:
 					{
 						KOTEK_ASSERT(false, "can't be!");
-						std::exit(-1);
-						break;
+						return false;
 					}
 					case eFileSystemPriorityType::kNative:
 					{
-						KOTEK_ASSERT(false, "todo: implement");
-						/*status = this->m_fs_native.Read_File(
-						    this->m_root_path / path_to_file,
-						    p_buffer,
-						    length_of_buffer,
-						    features
-						);*/
-
+						// todo: the repeat-fs retry is unreachable
+						// today (was_overloaded_fs_order is mutually
+						// exclusive with this loop's guard) — kept
+						// for the phase-B2 priority-list rework
 						break;
 					}
 					case eFileSystemPriorityType::kZlib:
 					{
-						KOTEK_ASSERT(false, "not implemented");
-						// todo: implement this please
+						// todo: implement the zlib backend (phase
+						// B2)
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 						break;
 					}
 					default:
@@ -1098,19 +1041,10 @@ bool ktkFileSystem::Write_File(
 							false,
 							"something is broken can't be!"
 						);
-						std::exit(-1);
-
-						break;
+						return false;
 					}
 					}
 				}
-
-				KOTEK_ASSERT(
-					status,
-					"failed to obtain file {} using all file "
-					"systems!",
-					path_to_file
-				);
 
 				if (!status)
 				{
@@ -1225,9 +1159,16 @@ bool ktkFileSystem::Write_File(
 		if (is_priority_list_enabled &&
 		    priority != eFileSystemPriorityType::kAuto)
 		{
+			// the repeat storage must fit the whole priority list (the
+			// pre-B0 check was inverted and asserted the opposite); a
+			// violation is a logic error, but library code never exits
+			// the process — fail the call
+			const bool is_repeat_storage_big_enough =
+				list_size <=
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0]));
+
 			KOTEK_ASSERT(
-				(sizeof(repeat_fs) / sizeof(repeat_fs[0])) <=
-					list_size,
+				is_repeat_storage_big_enough,
 				"something is wrong your list is much bigger "
 				"than system can handle, see "
 				"eFileSystemPriorityType::kEndOfEnum={}",
@@ -1235,7 +1176,11 @@ bool ktkFileSystem::Write_File(
 					eFileSystemPriorityType::kEndOfEnum
 				)
 			);
-			std::exit(-1);
+
+			if (is_repeat_storage_big_enough == false)
+			{
+				return false;
+			}
 		}
 
 		kun_ktk uint8_t repeat_fs_iter = 0;
@@ -1254,13 +1199,10 @@ bool ktkFileSystem::Write_File(
 			{
 			case eFileSystemPriorityType::kAuto:
 			{
+				// a corrupt priority list is a logic error, but
+				// library code never exits the process — fail the call
 				KOTEK_ASSERT(false, "can't be!");
-
-				// todo: make own exit function for break the
-				// application
-				std::exit(-1);
-
-				break;
+				return false;
 			}
 			case eFileSystemPriorityType::kNative:
 			{
@@ -1300,8 +1242,11 @@ bool ktkFileSystem::Write_File(
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
 				if (priority == fs_type)
 				{
-					// todo: implement please
-					KOTEK_ASSERT(false, "todo: implement");
+					// todo: implement the zlib backend (phase B2) —
+					// degrade gracefully instead of aborting
+					KOTEK_MESSAGE_WARNING(
+						"zlib filesystem is not implemented, skipping"
+					);
 
 					was_used_specified_fs = true;
 				}
@@ -1318,8 +1263,13 @@ bool ktkFileSystem::Write_File(
 					}
 					else
 					{
-						// todo: implement please
-						KOTEK_ASSERT(false, "todo: implement");
+						// todo: implement the zlib backend (phase
+						// B2) — a missing file must degrade to a
+						// warning, not an abort
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 					}
 				}
 #endif
@@ -1331,8 +1281,7 @@ bool ktkFileSystem::Write_File(
 				KOTEK_ASSERT(
 					false, "something is broken, can't be!"
 				);
-				std::exit(-1);
-				break;
+				return false;
 			}
 			}
 		}
@@ -1357,25 +1306,24 @@ bool ktkFileSystem::Write_File(
 					case eFileSystemPriorityType::kAuto:
 					{
 						KOTEK_ASSERT(false, "can't be!");
-						std::exit(-1);
-						break;
+						return false;
 					}
 					case eFileSystemPriorityType::kNative:
 					{
-						KOTEK_ASSERT(false, "todo: implement");
-						/*status = this->m_fs_native.Read_File(
-						    this->m_root_path / path_to_file,
-						    p_buffer,
-						    length_of_buffer,
-						    features
-						);*/
-
+						// todo: the repeat-fs retry is unreachable
+						// today (was_overloaded_fs_order is mutually
+						// exclusive with this loop's guard) — kept
+						// for the phase-B2 priority-list rework
 						break;
 					}
 					case eFileSystemPriorityType::kZlib:
 					{
-						KOTEK_ASSERT(false, "not implemented");
-						// todo: implement this please
+						// todo: implement the zlib backend (phase
+						// B2)
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 						break;
 					}
 					default:
@@ -1384,18 +1332,10 @@ bool ktkFileSystem::Write_File(
 							false,
 							"something is broken can't be!"
 						);
-						std::exit(-1);
-
-						break;
+						return false;
 					}
 					}
 				}
-
-				KOTEK_ASSERT(
-					status,
-					"failed to obtain file using all file "
-					"systems!"
-				);
 
 				if (!status)
 				{
@@ -2141,8 +2081,6 @@ void ktkFileSystem::Fill_FrameworkConfigDefaults()
 
 	if (this->m_p_config)
 	{
-		//	this->m_p_config->Set_FS_FeaturesFlag()
-
 		kun_ktk uint16_t fs_features =
 			static_cast<kun_ktk uint16_t>(
 				eFileSystemFeatureType::kVFMRead
@@ -2210,14 +2148,12 @@ ktkFileHandleType ktkFileSystem::Open_File(
 		"you must initialize config before using filesystem!"
 	);
 
-	bool status = false;
-
 	if (path_to_file.empty())
 	{
 		KOTEK_MESSAGE_WARNING(
 			"you passed empty path to file can't processed"
 		);
-		return status;
+		return result;
 	}
 
 	const kun_ktk uint8_t* p_fs_list =
@@ -2283,9 +2219,16 @@ ktkFileHandleType ktkFileSystem::Open_File(
 		if (is_priority_list_enabled &&
 		    priority != eFileSystemPriorityType::kAuto)
 		{
+			// the repeat storage must fit the whole priority list (the
+			// pre-B0 check was inverted and asserted the opposite); a
+			// violation is a logic error, but library code never exits
+			// the process — fail the call
+			const bool is_repeat_storage_big_enough =
+				list_size <=
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0]));
+
 			KOTEK_ASSERT(
-				(sizeof(repeat_fs) / sizeof(repeat_fs[0])) <=
-					list_size,
+				is_repeat_storage_big_enough,
 				"something is wrong your list is much bigger "
 				"than system can handle, see "
 				"eFileSystemPriorityType::kEndOfEnum={}",
@@ -2293,14 +2236,18 @@ ktkFileHandleType ktkFileSystem::Open_File(
 					eFileSystemPriorityType::kEndOfEnum
 				)
 			);
-			std::exit(-1);
+
+			if (is_repeat_storage_big_enough == false)
+			{
+				return result;
+			}
 		}
 
 		kun_ktk uint8_t repeat_fs_iter = 0;
 
 		for (kun_ktk uint8_t i = 0; i < list_size; ++i)
 		{
-			if (status)
+			if (result != kInvalidFileHandleType)
 				break;
 
 			eFileSystemPriorityType fs_type =
@@ -2313,19 +2260,14 @@ ktkFileHandleType ktkFileSystem::Open_File(
 			case eFileSystemPriorityType::kAuto:
 			{
 				KOTEK_ASSERT(false, "can't be!");
-
-				// todo: make own exit function for break the
-				// application
-				std::exit(-1);
-
-				break;
+				return result;
 			}
 			case eFileSystemPriorityType::kNative:
 			{
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
 				if (priority == fs_type)
 				{
-					status = this->m_fs_native.Open_File(
+					result = this->m_fs_native.Open_File(
 						path_to_file, type, features
 					);
 
@@ -2344,7 +2286,7 @@ ktkFileHandleType ktkFileSystem::Open_File(
 					}
 					else
 					{
-						status = this->m_fs_native.Open_File(
+						result = this->m_fs_native.Open_File(
 							path_to_file, type, features
 						);
 					}
@@ -2358,8 +2300,11 @@ ktkFileHandleType ktkFileSystem::Open_File(
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
 				if (priority == fs_type)
 				{
-					// todo: implement please
-					KOTEK_ASSERT(false, "todo: implement");
+					// todo: implement the zlib backend (phase B2) —
+					// degrade gracefully instead of aborting
+					KOTEK_MESSAGE_WARNING(
+						"zlib filesystem is not implemented, skipping"
+					);
 
 					was_used_specified_fs = true;
 				}
@@ -2376,8 +2321,13 @@ ktkFileHandleType ktkFileSystem::Open_File(
 					}
 					else
 					{
-						// todo: implement please
-						KOTEK_ASSERT(false, "todo: implement");
+						// todo: implement the zlib backend (phase
+						// B2) — a missing file must degrade to a
+						// warning, not an abort
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 					}
 				}
 #endif
@@ -2389,20 +2339,20 @@ ktkFileHandleType ktkFileSystem::Open_File(
 				KOTEK_ASSERT(
 					false, "something is broken, can't be!"
 				);
-				std::exit(-1);
-				break;
+				return result;
 			}
 			}
 		}
 
-		if (!status && is_priority_list_enabled)
+		if (result == kInvalidFileHandleType &&
+		    is_priority_list_enabled)
 		{
 			if (priority != eFileSystemPriorityType::kAuto)
 			{
 				for (kun_ktk uint8_t i = 0; i < repeat_fs_iter;
 				     ++i)
 				{
-					if (status)
+					if (result != kInvalidFileHandleType)
 					{
 						break;
 					}
@@ -2415,25 +2365,24 @@ ktkFileHandleType ktkFileSystem::Open_File(
 					case eFileSystemPriorityType::kAuto:
 					{
 						KOTEK_ASSERT(false, "can't be!");
-						std::exit(-1);
-						break;
+						return result;
 					}
 					case eFileSystemPriorityType::kNative:
 					{
-						KOTEK_ASSERT(false, "todo: implement");
-						/*status = this->m_fs_native.Read_File(
-						    this->m_root_path / path_to_file,
-						    p_buffer,
-						    length_of_buffer,
-						    features
-						);*/
+						result = this->m_fs_native.Open_File(
+							path_to_file, type, features
+						);
 
 						break;
 					}
 					case eFileSystemPriorityType::kZlib:
 					{
-						KOTEK_ASSERT(false, "not implemented");
-						// todo: implement this please
+						// todo: implement the zlib backend (phase
+						// B2)
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 						break;
 					}
 					default:
@@ -2442,24 +2391,15 @@ ktkFileHandleType ktkFileSystem::Open_File(
 							false,
 							"something is broken can't be!"
 						);
-						std::exit(-1);
-
-						break;
+						return result;
 					}
 					}
 				}
 
-				KOTEK_ASSERT(
-					result != kInvalidFileHandleType,
-					"failed to obtain file {} using all file "
-					"systems!",
-					path_to_file
-				);
-
 				if (result == kInvalidFileHandleType)
 				{
 					KOTEK_MESSAGE_WARNING(
-						"can't read file: {} because all file "
+						"can't open file: {} because all file "
 						"systems couldn't obtain it",
 						path_to_file
 					);
@@ -2468,7 +2408,7 @@ ktkFileHandleType ktkFileSystem::Open_File(
 			else
 			{
 				KOTEK_MESSAGE_WARNING(
-					"can't read file: {} because all file "
+					"can't open file: {} because all file "
 					"systems couldn't obtain it",
 					path_to_file
 				);
@@ -2565,9 +2505,16 @@ bool ktkFileSystem::Close_File(
 		if (is_priority_list_enabled &&
 		    priority != eFileSystemPriorityType::kAuto)
 		{
+			// the repeat storage must fit the whole priority list (the
+			// pre-B0 check was inverted and asserted the opposite); a
+			// violation is a logic error, but library code never exits
+			// the process — fail the call
+			const bool is_repeat_storage_big_enough =
+				list_size <=
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0]));
+
 			KOTEK_ASSERT(
-				(sizeof(repeat_fs) / sizeof(repeat_fs[0])) <=
-					list_size,
+				is_repeat_storage_big_enough,
 				"something is wrong your list is much bigger "
 				"than system can handle, see "
 				"eFileSystemPriorityType::kEndOfEnum={}",
@@ -2575,7 +2522,11 @@ bool ktkFileSystem::Close_File(
 					eFileSystemPriorityType::kEndOfEnum
 				)
 			);
-			std::exit(-1);
+
+			if (is_repeat_storage_big_enough == false)
+			{
+				return false;
+			}
 		}
 
 		kun_ktk uint8_t repeat_fs_iter = 0;
@@ -2594,13 +2545,10 @@ bool ktkFileSystem::Close_File(
 			{
 			case eFileSystemPriorityType::kAuto:
 			{
+				// a corrupt priority list is a logic error, but
+				// library code never exits the process — fail the call
 				KOTEK_ASSERT(false, "can't be!");
-
-				// todo: make own exit function for break the
-				// application
-				std::exit(-1);
-
-				break;
+				return false;
 			}
 			case eFileSystemPriorityType::kNative:
 			{
@@ -2639,8 +2587,11 @@ bool ktkFileSystem::Close_File(
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
 				if (priority == fs_type)
 				{
-					// todo: implement please
-					KOTEK_ASSERT(false, "todo: implement");
+					// todo: implement the zlib backend (phase B2) —
+					// degrade gracefully instead of aborting
+					KOTEK_MESSAGE_WARNING(
+						"zlib filesystem is not implemented, skipping"
+					);
 
 					was_used_specified_fs = true;
 				}
@@ -2657,8 +2608,13 @@ bool ktkFileSystem::Close_File(
 					}
 					else
 					{
-						// todo: implement please
-						KOTEK_ASSERT(false, "todo: implement");
+						// todo: implement the zlib backend (phase
+						// B2) — a missing file must degrade to a
+						// warning, not an abort
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 					}
 				}
 #endif
@@ -2670,8 +2626,7 @@ bool ktkFileSystem::Close_File(
 				KOTEK_ASSERT(
 					false, "something is broken, can't be!"
 				);
-				std::exit(-1);
-				break;
+				return false;
 			}
 			}
 		}
@@ -2696,25 +2651,24 @@ bool ktkFileSystem::Close_File(
 					case eFileSystemPriorityType::kAuto:
 					{
 						KOTEK_ASSERT(false, "can't be!");
-						std::exit(-1);
-						break;
+						return false;
 					}
 					case eFileSystemPriorityType::kNative:
 					{
-						KOTEK_ASSERT(false, "todo: implement");
-						/*status = this->m_fs_native.Read_File(
-						    this->m_root_path / path_to_file,
-						    p_buffer,
-						    length_of_buffer,
-						    features
-						);*/
-
+						// todo: the repeat-fs retry is unreachable
+						// today (was_overloaded_fs_order is mutually
+						// exclusive with this loop's guard) — kept
+						// for the phase-B2 priority-list rework
 						break;
 					}
 					case eFileSystemPriorityType::kZlib:
 					{
-						KOTEK_ASSERT(false, "not implemented");
-						// todo: implement this please
+						// todo: implement the zlib backend (phase
+						// B2)
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 						break;
 					}
 					default:
@@ -2723,18 +2677,10 @@ bool ktkFileSystem::Close_File(
 							false,
 							"something is broken can't be!"
 						);
-						std::exit(-1);
-
-						break;
+						return false;
 					}
 					}
 				}
-
-				KOTEK_ASSERT(
-					status,
-					"failed to obtain file using all file "
-					"systems!"
-				);
 
 				if (!status)
 				{
@@ -2846,9 +2792,16 @@ bool ktkFileSystem::Get_FileSize(
 		if (is_priority_list_enabled &&
 		    priority != eFileSystemPriorityType::kAuto)
 		{
+			// the repeat storage must fit the whole priority list (the
+			// pre-B0 check was inverted and asserted the opposite); a
+			// violation is a logic error, but library code never exits
+			// the process — fail the call
+			const bool is_repeat_storage_big_enough =
+				list_size <=
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0]));
+
 			KOTEK_ASSERT(
-				(sizeof(repeat_fs) / sizeof(repeat_fs[0])) <=
-					list_size,
+				is_repeat_storage_big_enough,
 				"something is wrong your list is much bigger "
 				"than system can handle, see "
 				"eFileSystemPriorityType::kEndOfEnum={}",
@@ -2856,7 +2809,11 @@ bool ktkFileSystem::Get_FileSize(
 					eFileSystemPriorityType::kEndOfEnum
 				)
 			);
-			std::exit(-1);
+
+			if (is_repeat_storage_big_enough == false)
+			{
+				return false;
+			}
 		}
 
 		kun_ktk uint8_t repeat_fs_iter = 0;
@@ -2875,13 +2832,10 @@ bool ktkFileSystem::Get_FileSize(
 			{
 			case eFileSystemPriorityType::kAuto:
 			{
+				// a corrupt priority list is a logic error, but
+				// library code never exits the process — fail the call
 				KOTEK_ASSERT(false, "can't be!");
-
-				// todo: make own exit function for break the
-				// application
-				std::exit(-1);
-
-				break;
+				return false;
 			}
 			case eFileSystemPriorityType::kNative:
 			{
@@ -2921,8 +2875,11 @@ bool ktkFileSystem::Get_FileSize(
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
 				if (priority == fs_type)
 				{
-					// todo: implement please
-					KOTEK_ASSERT(false, "todo: implement");
+					// todo: implement the zlib backend (phase B2) —
+					// degrade gracefully instead of aborting
+					KOTEK_MESSAGE_WARNING(
+						"zlib filesystem is not implemented, skipping"
+					);
 
 					was_used_specified_fs = true;
 				}
@@ -2939,8 +2896,13 @@ bool ktkFileSystem::Get_FileSize(
 					}
 					else
 					{
-						// todo: implement please
-						KOTEK_ASSERT(false, "todo: implement");
+						// todo: implement the zlib backend (phase
+						// B2) — a missing file must degrade to a
+						// warning, not an abort
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 					}
 				}
 #endif
@@ -2952,8 +2914,7 @@ bool ktkFileSystem::Get_FileSize(
 				KOTEK_ASSERT(
 					false, "something is broken, can't be!"
 				);
-				std::exit(-1);
-				break;
+				return false;
 			}
 			}
 		}
@@ -2978,25 +2939,24 @@ bool ktkFileSystem::Get_FileSize(
 					case eFileSystemPriorityType::kAuto:
 					{
 						KOTEK_ASSERT(false, "can't be!");
-						std::exit(-1);
-						break;
+						return false;
 					}
 					case eFileSystemPriorityType::kNative:
 					{
-						KOTEK_ASSERT(false, "todo: implement");
-						/*status = this->m_fs_native.Read_File(
-						    this->m_root_path / path_to_file,
-						    p_buffer,
-						    length_of_buffer,
-						    features
-						);*/
-
+						// todo: the repeat-fs retry is unreachable
+						// today (was_overloaded_fs_order is mutually
+						// exclusive with this loop's guard) — kept
+						// for the phase-B2 priority-list rework
 						break;
 					}
 					case eFileSystemPriorityType::kZlib:
 					{
-						KOTEK_ASSERT(false, "not implemented");
-						// todo: implement this please
+						// todo: implement the zlib backend (phase
+						// B2)
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 						break;
 					}
 					default:
@@ -3005,16 +2965,10 @@ bool ktkFileSystem::Get_FileSize(
 							false,
 							"something is broken can't be!"
 						);
-						std::exit(-1);
-
-						break;
+						return false;
 					}
 					}
 				}
-
-				KOTEK_ASSERT(
-					status, "failed to obtain file size "
-				);
 
 				if (!status)
 				{
@@ -3042,10 +2996,287 @@ bool ktkFileSystem::Get_FileSize(
 		priority /*= eFileSystemPriorityType::kAuto */
 ) noexcept
 {
+	KOTEK_ASSERT(
+		path_to_file.empty() == false,
+		"you can't pass an empty path"
+	);
+
+	KOTEK_ASSERT(
+		this->m_p_config,
+		"you must initialize config before using filesystem!"
+	);
+
 	bool status = false;
+	result = 0;
 
+	if (path_to_file.empty())
+	{
+		KOTEK_MESSAGE_WARNING(
+			"you passed empty path to file can't processed"
+		);
+		return status;
+	}
 
+	const kun_ktk uint8_t* p_fs_list =
+		this->m_p_config->Get_FS_PriorityList();
 
+	eFileSystemFeatureType features =
+		static_cast<eFileSystemFeatureType>(
+			this->m_p_config->Get_FS_FeaturesFlag()
+		);
+
+	bool is_priority_list_enabled =
+		(features &
+	     eFileSystemFeatureType::
+	         kEnablePriorityWhenFailedToOpenFile) ==
+		eFileSystemFeatureType::
+			kEnablePriorityWhenFailedToOpenFile;
+
+	kun_ktk uint8_t specified_fs =
+		static_cast<kun_ktk uint8_t>(priority);
+
+	bool was_overloaded_fs_order = false;
+
+	if (is_priority_list_enabled == false)
+	{
+		if (priority != eFileSystemPriorityType::kAuto)
+		{
+			p_fs_list = &specified_fs;
+			was_overloaded_fs_order = true;
+		}
+		else
+		{
+			KOTEK_ASSERT(p_fs_list, "must be initialized");
+			KOTEK_ASSERT(
+				p_fs_list[0] !=
+					static_cast<kun_ktk uint8_t>(
+						eFileSystemPriorityType::kAuto
+					),
+				"can't be, it means that your config is not "
+				"initialized or data was corrupted because of "
+				"let's "
+				"say memory leaks or something"
+			);
+		}
+	}
+
+	if (p_fs_list)
+	{
+		kun_ktk uint8_t list_size = is_priority_list_enabled
+			? this->m_p_config->Get_FS_PriorityListSize()
+			: 1;
+		KOTEK_ASSERT(
+			list_size > 0,
+			"you must specify at least 1 file system"
+		);
+
+		bool was_used_specified_fs = false;
+
+		eFileSystemPriorityType
+			repeat_fs[static_cast<kun_ktk uint8_t>(
+				eFileSystemPriorityType::kEndOfEnum
+			)];
+
+		if (is_priority_list_enabled &&
+		    priority != eFileSystemPriorityType::kAuto)
+		{
+			// the repeat storage must fit the whole priority list (the
+			// pre-B0 check was inverted and asserted the opposite); a
+			// violation is a logic error, but library code never exits
+			// the process — fail the call
+			const bool is_repeat_storage_big_enough =
+				list_size <=
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0]));
+
+			KOTEK_ASSERT(
+				is_repeat_storage_big_enough,
+				"something is wrong your list is much bigger "
+				"than system can handle, see "
+				"eFileSystemPriorityType::kEndOfEnum={}",
+				static_cast<kun_ktk uint8_t>(
+					eFileSystemPriorityType::kEndOfEnum
+				)
+			);
+
+			if (is_repeat_storage_big_enough == false)
+			{
+				return status;
+			}
+		}
+
+		kun_ktk uint8_t repeat_fs_iter = 0;
+
+		for (kun_ktk uint8_t i = 0; i < list_size; ++i)
+		{
+			if (status)
+				break;
+
+			eFileSystemPriorityType fs_type =
+				static_cast<eFileSystemPriorityType>(
+					p_fs_list[i]
+				);
+
+			switch (fs_type)
+			{
+			case eFileSystemPriorityType::kAuto:
+			{
+				KOTEK_ASSERT(false, "can't be!");
+				return status;
+			}
+			case eFileSystemPriorityType::kNative:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
+				if (priority == fs_type)
+				{
+					status = this->m_fs_native.Get_FileSize(
+						this->m_root_path / path_to_file, result
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					else
+					{
+						status = this->m_fs_native.Get_FileSize(
+							this->m_root_path / path_to_file,
+							result
+						);
+					}
+				}
+#endif
+
+				break;
+			}
+			case eFileSystemPriorityType::kZlib:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
+				if (priority == fs_type)
+				{
+					// todo: implement the zlib backend (phase B2) —
+					// degrade gracefully instead of aborting
+					KOTEK_MESSAGE_WARNING(
+						"zlib filesystem is not implemented, skipping"
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					else
+					{
+						// todo: implement the zlib backend (phase
+						// B2) — a missing file must degrade to a
+						// warning, not an abort
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
+					}
+				}
+#endif
+
+				break;
+			}
+			default:
+			{
+				KOTEK_ASSERT(
+					false, "something is broken, can't be!"
+				);
+				return status;
+			}
+			}
+		}
+
+		if (!status && is_priority_list_enabled)
+		{
+			if (priority != eFileSystemPriorityType::kAuto)
+			{
+				for (kun_ktk uint8_t i = 0; i < repeat_fs_iter;
+				     ++i)
+				{
+					if (status)
+					{
+						break;
+					}
+
+					eFileSystemPriorityType fs_type =
+						repeat_fs[i];
+
+					switch (fs_type)
+					{
+					case eFileSystemPriorityType::kAuto:
+					{
+						KOTEK_ASSERT(false, "can't be!");
+						return status;
+					}
+					case eFileSystemPriorityType::kNative:
+					{
+						status = this->m_fs_native.Get_FileSize(
+							this->m_root_path / path_to_file,
+							result
+						);
+
+						break;
+					}
+					case eFileSystemPriorityType::kZlib:
+					{
+						// todo: implement the zlib backend (phase
+						// B2)
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
+						break;
+					}
+					default:
+					{
+						KOTEK_ASSERT(
+							false,
+							"something is broken can't be!"
+						);
+						return status;
+					}
+					}
+				}
+
+				if (!status)
+				{
+					KOTEK_MESSAGE_WARNING(
+						"can't get file size: {} because all file "
+						"systems couldn't obtain it",
+						path_to_file
+					);
+				}
+			}
+			else
+			{
+				KOTEK_MESSAGE_WARNING(
+					"can't get file size: {} because all file "
+					"systems couldn't obtain it",
+					path_to_file
+				);
+			}
+		}
+	}
 
 	return status;
 }
@@ -3140,9 +3371,16 @@ bool ktkFileSystem::Seek(
 		if (is_priority_list_enabled &&
 		    priority != eFileSystemPriorityType::kAuto)
 		{
+			// the repeat storage must fit the whole priority list (the
+			// pre-B0 check was inverted and asserted the opposite); a
+			// violation is a logic error, but library code never exits
+			// the process — fail the call
+			const bool is_repeat_storage_big_enough =
+				list_size <=
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0]));
+
 			KOTEK_ASSERT(
-				(sizeof(repeat_fs) / sizeof(repeat_fs[0])) <=
-					list_size,
+				is_repeat_storage_big_enough,
 				"something is wrong your list is much bigger "
 				"than system can handle, see "
 				"eFileSystemPriorityType::kEndOfEnum={}",
@@ -3150,7 +3388,11 @@ bool ktkFileSystem::Seek(
 					eFileSystemPriorityType::kEndOfEnum
 				)
 			);
-			std::exit(-1);
+
+			if (is_repeat_storage_big_enough == false)
+			{
+				return false;
+			}
 		}
 
 		kun_ktk uint8_t repeat_fs_iter = 0;
@@ -3169,13 +3411,10 @@ bool ktkFileSystem::Seek(
 			{
 			case eFileSystemPriorityType::kAuto:
 			{
+				// a corrupt priority list is a logic error, but
+				// library code never exits the process — fail the call
 				KOTEK_ASSERT(false, "can't be!");
-
-				// todo: make own exit function for break the
-				// application
-				std::exit(-1);
-
-				break;
+				return false;
 			}
 			case eFileSystemPriorityType::kNative:
 			{
@@ -3215,8 +3454,11 @@ bool ktkFileSystem::Seek(
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
 				if (priority == fs_type)
 				{
-					// todo: implement please
-					KOTEK_ASSERT(false, "todo: implement");
+					// todo: implement the zlib backend (phase B2) —
+					// degrade gracefully instead of aborting
+					KOTEK_MESSAGE_WARNING(
+						"zlib filesystem is not implemented, skipping"
+					);
 
 					was_used_specified_fs = true;
 				}
@@ -3233,8 +3475,13 @@ bool ktkFileSystem::Seek(
 					}
 					else
 					{
-						// todo: implement please
-						KOTEK_ASSERT(false, "todo: implement");
+						// todo: implement the zlib backend (phase
+						// B2) — a missing file must degrade to a
+						// warning, not an abort
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 					}
 				}
 #endif
@@ -3246,8 +3493,7 @@ bool ktkFileSystem::Seek(
 				KOTEK_ASSERT(
 					false, "something is broken, can't be!"
 				);
-				std::exit(-1);
-				break;
+				return false;
 			}
 			}
 		}
@@ -3272,25 +3518,24 @@ bool ktkFileSystem::Seek(
 					case eFileSystemPriorityType::kAuto:
 					{
 						KOTEK_ASSERT(false, "can't be!");
-						std::exit(-1);
-						break;
+						return false;
 					}
 					case eFileSystemPriorityType::kNative:
 					{
-						KOTEK_ASSERT(false, "todo: implement");
-						/*status = this->m_fs_native.Read_File(
-						    this->m_root_path / path_to_file,
-						    p_buffer,
-						    length_of_buffer,
-						    features
-						);*/
-
+						// todo: the repeat-fs retry is unreachable
+						// today (was_overloaded_fs_order is mutually
+						// exclusive with this loop's guard) — kept
+						// for the phase-B2 priority-list rework
 						break;
 					}
 					case eFileSystemPriorityType::kZlib:
 					{
-						KOTEK_ASSERT(false, "not implemented");
-						// todo: implement this please
+						// todo: implement the zlib backend (phase
+						// B2)
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 						break;
 					}
 					default:
@@ -3299,16 +3544,10 @@ bool ktkFileSystem::Seek(
 							false,
 							"something is broken can't be!"
 						);
-						std::exit(-1);
-
-						break;
+						return false;
 					}
 					}
 				}
-
-				KOTEK_ASSERT(
-					status, "failed to obtain file seek "
-				);
 
 				if (!status)
 				{
@@ -3418,9 +3657,16 @@ bool ktkFileSystem::Tell(
 		if (is_priority_list_enabled &&
 		    priority != eFileSystemPriorityType::kAuto)
 		{
+			// the repeat storage must fit the whole priority list (the
+			// pre-B0 check was inverted and asserted the opposite); a
+			// violation is a logic error, but library code never exits
+			// the process — fail the call
+			const bool is_repeat_storage_big_enough =
+				list_size <=
+				(sizeof(repeat_fs) / sizeof(repeat_fs[0]));
+
 			KOTEK_ASSERT(
-				(sizeof(repeat_fs) / sizeof(repeat_fs[0])) <=
-					list_size,
+				is_repeat_storage_big_enough,
 				"something is wrong your list is much bigger "
 				"than system can handle, see "
 				"eFileSystemPriorityType::kEndOfEnum={}",
@@ -3428,7 +3674,11 @@ bool ktkFileSystem::Tell(
 					eFileSystemPriorityType::kEndOfEnum
 				)
 			);
-			std::exit(-1);
+
+			if (is_repeat_storage_big_enough == false)
+			{
+				return false;
+			}
 		}
 
 		kun_ktk uint8_t repeat_fs_iter = 0;
@@ -3447,13 +3697,10 @@ bool ktkFileSystem::Tell(
 			{
 			case eFileSystemPriorityType::kAuto:
 			{
+				// a corrupt priority list is a logic error, but
+				// library code never exits the process — fail the call
 				KOTEK_ASSERT(false, "can't be!");
-
-				// todo: make own exit function for break the
-				// application
-				std::exit(-1);
-
-				break;
+				return false;
 			}
 			case eFileSystemPriorityType::kNative:
 			{
@@ -3492,8 +3739,11 @@ bool ktkFileSystem::Tell(
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
 				if (priority == fs_type)
 				{
-					// todo: implement please
-					KOTEK_ASSERT(false, "todo: implement");
+					// todo: implement the zlib backend (phase B2) —
+					// degrade gracefully instead of aborting
+					KOTEK_MESSAGE_WARNING(
+						"zlib filesystem is not implemented, skipping"
+					);
 
 					was_used_specified_fs = true;
 				}
@@ -3510,8 +3760,13 @@ bool ktkFileSystem::Tell(
 					}
 					else
 					{
-						// todo: implement please
-						KOTEK_ASSERT(false, "todo: implement");
+						// todo: implement the zlib backend (phase
+						// B2) — a missing file must degrade to a
+						// warning, not an abort
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 					}
 				}
 #endif
@@ -3523,8 +3778,7 @@ bool ktkFileSystem::Tell(
 				KOTEK_ASSERT(
 					false, "something is broken, can't be!"
 				);
-				std::exit(-1);
-				break;
+				return false;
 			}
 			}
 		}
@@ -3549,25 +3803,24 @@ bool ktkFileSystem::Tell(
 					case eFileSystemPriorityType::kAuto:
 					{
 						KOTEK_ASSERT(false, "can't be!");
-						std::exit(-1);
-						break;
+						return false;
 					}
 					case eFileSystemPriorityType::kNative:
 					{
-						KOTEK_ASSERT(false, "todo: implement");
-						/*status = this->m_fs_native.Read_File(
-						    this->m_root_path / path_to_file,
-						    p_buffer,
-						    length_of_buffer,
-						    features
-						);*/
-
+						// todo: the repeat-fs retry is unreachable
+						// today (was_overloaded_fs_order is mutually
+						// exclusive with this loop's guard) — kept
+						// for the phase-B2 priority-list rework
 						break;
 					}
 					case eFileSystemPriorityType::kZlib:
 					{
-						KOTEK_ASSERT(false, "not implemented");
-						// todo: implement this please
+						// todo: implement the zlib backend (phase
+						// B2)
+						KOTEK_MESSAGE_WARNING(
+							"zlib filesystem is not implemented, "
+							"skipping"
+						);
 						break;
 					}
 					default:
@@ -3576,16 +3829,10 @@ bool ktkFileSystem::Tell(
 							false,
 							"something is broken can't be!"
 						);
-						std::exit(-1);
-
-						break;
+						return false;
 					}
 					}
 				}
-
-				KOTEK_ASSERT(
-					status, "failed to obtain file tell "
-				);
 
 				if (!status)
 				{
@@ -3605,237 +3852,6 @@ bool ktkFileSystem::Tell(
 
 	return status;
 }
-
-/*
-bool ktkFileSystem::Read_File(
-    const ktk_filesystem_path& path_to_file,
-    char*& p_buffer,
-    kun_ktk size_t& length_of_buffer
-)
-{
-    KOTEK_ASSERT(p_buffer, "must be valid!");
-    KOTEK_ASSERT(length_of_buffer > 0, "must be non zero!");
-    KOTEK_ASSERT(
-        path_to_file.empty() == false,
-        "must be a non empty string"
-    );
-
-    bool result{};
-
-    if (this->IsValidPath(path_to_file) == false)
-    {
-        KOTEK_MESSAGE_WARNING(
-            "can't load file by following path: [{}]",
-            reinterpret_cast<const char*>(
-                path_to_file.u8string().c_str()
-            )
-        );
-        return result;
-    }
-
-    kun_ktk ifstream file(path_to_file.c_str());
-
-    if (file.good())
-    {
-        //	return_static_string_buffer.assign(
-        //	kun_ktk istreambuf_iterator(file), kun_ktk
-        // istreambuf_iterator());
-
-        file.seekg(0, kun_ktk ios::end);
-
-#ifdef KOTEK_DEBUG
-        if (file.fail())
-        {
-            KOTEK_MESSAGE_WARNING(
-                "failed .seekg(0, kun_ktk ios::end); for "
-                "path: [{}] = reason {}",
-                path_to_file,
-                strerror(errno)
-            );
-        }
-        else if (file.bad())
-        {
-            KOTEK_MESSAGE_ERROR(
-                "fatal failed .seekg(0, kun_ktk ios::end); for "
-                "path: [{}] = reason {}",
-                path_to_file,
-                strerror(errno)
-            );
-        }
-#endif
-
-        auto size_of_text = file.tellg();
-#ifdef KOTEK_DEBUG
-        if (file.fail())
-        {
-            KOTEK_MESSAGE_WARNING(
-                "failed .tellg for path: [{}] = reason {}",
-                path_to_file,
-                strerror(errno)
-            );
-        }
-        else if (file.bad())
-        {
-            KOTEK_MESSAGE_ERROR(
-                "fatal failed .tellg for path: [{}] = reason "
-                "{}",
-                path_to_file,
-                strerror(errno)
-            );
-        }
-#endif
-
-        file.seekg(0, kun_ktk ios::beg);
-
-#ifdef KOTEK_DEBUG
-        if (file.fail())
-        {
-            KOTEK_MESSAGE_WARNING(
-                "failed .seekg(0, kun_ktk ios::beg); for "
-                "path: [{}] = reason {}",
-                path_to_file,
-                strerror(errno)
-            );
-        }
-        else if (file.bad())
-        {
-            KOTEK_MESSAGE_ERROR(
-                "fatal fail .seekg(0, kun_ktk ios::beg); for "
-                "path: [{}] = reason {}",
-                path_to_file,
-                strerror(errno)
-            );
-        }
-#endif
-
-        if (size_of_text <= length_of_buffer)
-        {
-            file.read(
-                reinterpret_cast<char*>(p_buffer), size_of_text
-            );
-
-#ifdef KOTEK_DEBUG
-            if (file.fail())
-            {
-                KOTEK_MESSAGE_WARNING(
-                    "failed "
-                    ".read(this->m_reserved_buffer.begin(), "
-                    "size_of_text); for path: [{}] = reason {}",
-                    path_to_file,
-                    strerror(errno)
-                );
-            }
-            else if (file.bad())
-            {
-                KOTEK_MESSAGE_ERROR(
-                    "fatal fail "
-                    ".read(this->m_reserved_buffer.begin(), "
-                    "size_of_text); path: [{}] = reason {}",
-                    path_to_file,
-                    strerror(errno)
-                );
-            }
-#endif
-
-            if (!file.eof())
-            {
-                KOTEK_MESSAGE_ERROR(
-                    "fatal fail because we read whole file but "
-                    "state is not EOF! path: [{}]",
-                    path_to_file
-                );
-            }
-
-            length_of_buffer = size_of_text;
-            if (file || file.eof())
-            {
-                result = true;
-            }
-            else
-            {
-                KOTEK_MESSAGE_WARNING(
-                    "failed to read content of file {}",
-                    path_to_file
-                );
-                return result;
-            }
-        }
-        else
-        {
-            KOTEK_ASSERT(
-                size_of_text <=
-                    this->m_reserved_buffer.max_size(),
-                "overflow the system can't handle a such huge "
-                "file!"
-            );
-            this->m_reserved_buffer.clear();
-
-            this->m_reserved_buffer.resize(size_of_text);
-            file.read(
-                this->m_reserved_buffer.begin(), size_of_text
-            );
-            length_of_buffer = size_of_text;
-            p_buffer = this->m_reserved_buffer.begin();
-
-#ifdef KOTEK_DEBUG
-            if (file.fail())
-            {
-                KOTEK_MESSAGE_WARNING(
-                    "failed "
-                    ".read(this->m_reserved_buffer.begin(), "
-                    "size_of_text); for path: [{}] = reason {}",
-                    path_to_file,
-                    strerror(errno)
-                );
-            }
-            else if (file.bad())
-            {
-                KOTEK_MESSAGE_ERROR(
-                    "fatal fail "
-                    ".read(this->m_reserved_buffer.begin(), "
-                    "size_of_text); path: [{}] = reason {}",
-                    path_to_file,
-                    strerror(errno)
-                );
-            }
-#endif
-
-            if (!file.eof())
-            {
-                KOTEK_MESSAGE_ERROR(
-                    "fatal fail because we read whole file but "
-                    "state is not EOF! path: [{}]",
-                    path_to_file
-                );
-            }
-
-            if (file || file.eof())
-            {
-                result = true;
-            }
-            else
-            {
-                KOTEK_MESSAGE_WARNING(
-                    "failed to read content of file {}!",
-                    path_to_file
-                );
-                return result;
-            }
-        }
-    }
-    else
-    {
-        KOTEK_MESSAGE(
-            "something is wrong while reading file: [{}]",
-            reinterpret_cast<const char*>(
-                path_to_file.u8string().c_str()
-            )
-        );
-        return result;
-    }
-
-    return result;
-}*/
 
 void ktkFileSystem::Initialize(ktkIFrameworkConfig* p_config)
 {
@@ -3862,21 +3878,6 @@ void ktkFileSystem::Initialize(ktkIFrameworkConfig* p_config)
 	#error unknown configuration, kotek supports only static, dynamic or hybrid containers and their implementations
 #endif
 
-	/*
-	    KOTEK_MESSAGE("root path: [{}]",
-	        this->m_storage_paths.at(eFolderIndex::kFolderIndex_Root).c_str());
-
-	    bool is_valid_path =
-	this->IsValidPath(this->m_storage_paths
-	            .at(eFolderIndex::kFolderIndex_Root)
-	#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-	            .c_str()
-	#endif
-	    );
-	    KOTEK_ASSERT(is_valid_path, "your path must be valid!");
-
-	    this->ValidateFolders();*/
-
 	this->m_root_path =
 		kun_ktk kun_filesystem current_path().u8string().c_str(
 		);
@@ -3902,32 +3903,6 @@ void ktkFileSystem::Shutdown(void)
 	this->m_vfm.Shutdown();
 #endif
 }
-
-/*
-ktk_filesystem_path
-ktkFileSystem::GetFolderByEnum(eFolderIndex id) const noexcept
-{
-    KOTEK_ASSERT(
-        this->m_storage_paths.empty() == false,
-        "can't be empty you must initialize filesystem!"
-    );
-
-    if (this->m_storage_paths.find(id) ==
-        this->m_storage_paths.end())
-    {
-        KOTEK_MESSAGE(
-            "can't find path by id[{}]",
-            static_cast<kun_ktk enum_base_t>(id)
-        );
-    }
-
-    return this->m_storage_paths
-        .at(id)
-#ifdef KOTEK_USE_STD_LIBRARY_STATIC_CONTAINERS
-        .c_str()
-#endif
-        ;
-}*/
 
 bool ktkFileSystem::Is_Exists(
 	const ktk_filesystem_path& path, bool is_relative_path
@@ -3973,154 +3948,6 @@ bool ktkFileSystem::Create_Directory(
 
 	return kun_ktk filesystem::create_directory(path);
 }
-/*
-
-bool ktkFileSystem::Read_File(
-    const ktk_filesystem_path& path_to_file,
-    kun_ktk ustring& result
-) const noexcept
-{
-    bool status{};
-    if (this->IsValidPath(path_to_file) == false)
-    {
-        KOTEK_MESSAGE_WARNING(
-            "can't load file by following path: [{}]",
-            reinterpret_cast<const char*>(
-                path_to_file.u8string().c_str()
-            )
-        );
-        return status;
-    }
-
-    kun_ktk ifstream file(path_to_file.c_str());
-
-    if (file.good())
-    {
-        result.assign(
-            kun_ktk istreambuf_iterator(file),
-            kun_ktk istreambuf_iterator()
-        );
-
-        status = true;
-    }
-    else
-    {
-        KOTEK_MESSAGE(
-            "something is wrong while reading file: [{}]",
-            reinterpret_cast<const char*>(
-                path_to_file.u8string().c_str()
-            )
-        );
-        return status;
-    }
-
-    return status;
-}
-
-bool ktkFileSystem::Read_File(
-    kun_ktk uint8_t*& p_buffer,
-    size_t& length_of_buffer,
-    const kun_ktk kun_filesystem
-        static_path<KOTEK_DEF_MAXIMUM_OS_PATH_LENGTH>&
-            absolute_path_to_file
-) noexcept
-{
-    KOTEK_ASSERT(p_buffer, "must be valid!");
-    KOTEK_ASSERT(length_of_buffer > 0, "must be non zero!");
-    KOTEK_ASSERT(
-        absolute_path_to_file.empty() == false,
-        "must be a non empty string"
-    );
-
-    bool result{};
-
-    if (this->IsValidPath(absolute_path_to_file) == false)
-    {
-        KOTEK_MESSAGE_WARNING(
-            "can't load file by following path: [{}]",
-            reinterpret_cast<const char*>(
-                absolute_path_to_file.u8string().c_str()
-            )
-        );
-        return result;
-    }
-
-    kun_ktk ifstream file(absolute_path_to_file.c_str());
-
-    if (file.good())
-    {
-        //	return_static_string_buffer.assign(
-        //	kun_ktk istreambuf_iterator(file), kun_ktk
-        // istreambuf_iterator());
-
-        file.seekg(0, kun_ktk ios::end);
-        auto size_of_text = file.tellg();
-        file.seekg(0, kun_ktk ios::beg);
-
-        if (size_of_text <= length_of_buffer)
-        {
-            file.read(
-                reinterpret_cast<char*>(p_buffer), size_of_text
-            );
-            length_of_buffer = size_of_text;
-            if (file)
-            {
-                result = true;
-            }
-            else
-            {
-                KOTEK_MESSAGE_WARNING(
-                    "failed to read content of file {}",
-                    absolute_path_to_file
-                );
-                return result;
-            }
-        }
-        else
-        {
-            KOTEK_ASSERT(
-                size_of_text <=
-                    this->m_reserved_buffer.max_size(),
-                "overflow the system can't handle a such huge "
-                "file!"
-            );
-            this->m_reserved_buffer.clear();
-
-            this->m_reserved_buffer.resize(size_of_text);
-            file.read(
-                this->m_reserved_buffer.begin(), size_of_text
-            );
-            length_of_buffer = size_of_text;
-            p_buffer = reinterpret_cast<kun_ktk uint8_t*>(
-                this->m_reserved_buffer.begin()
-            );
-            if (file)
-            {
-                result = true;
-            }
-            else
-            {
-                KOTEK_MESSAGE_WARNING(
-                    "failed to read content of file {}!",
-                    absolute_path_to_file
-                );
-                return result;
-            }
-        }
-    }
-    else
-    {
-        KOTEK_MESSAGE(
-            "something is wrong while reading file: [{}]",
-            reinterpret_cast<const char*>(
-                absolute_path_to_file.u8string().c_str()
-            )
-        );
-        return result;
-    }
-
-    return result;
-}*/
 
 void ktkFileSystem::Create_Directory(
 	const ktk_filesystem_path& path,

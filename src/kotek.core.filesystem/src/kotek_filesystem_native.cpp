@@ -95,71 +95,59 @@ bool ktkFileSystem_Native::Read_File(
 
 		FILE* p_file = fopen(path.c_str(), "rb");
 
-		KOTEK_ASSERT(
-			p_file, "failed to fopen={}", GetLastError()
-		);
-
-		if (p_file)
+		if (p_file == nullptr)
 		{
-			auto status_fseek = fseek(p_file, 0, SEEK_END);
-			KOTEK_ASSERT(status_fseek == 0, "fseek failed");
+			// a missing/unreadable file is user data, not a
+			// programmer error — degrade to false + size 0 with one
+			// warning line instead of asserting (callers'
+			// Is_Exists pre-checks are optional now)
+			KOTEK_MESSAGE_WARNING(
+				"failed to open file for reading: {} "
+				"(GetLastError={})",
+				path, GetLastError()
+			);
+			length_of_buffer = 0;
+			return status;
+		}
 
-			auto file_size = ftell(p_file);
-			status_fseek = fseek(p_file, 0, SEEK_SET);
-			KOTEK_ASSERT(status_fseek == 0, "fseek failed");
+		auto status_fseek = fseek(p_file, 0, SEEK_END);
+		KOTEK_ASSERT(status_fseek == 0, "fseek failed");
 
-			if (file_size <= length_of_buffer)
+		auto file_size = ftell(p_file);
+		status_fseek = fseek(p_file, 0, SEEK_SET);
+		KOTEK_ASSERT(status_fseek == 0, "fseek failed");
+
+		if (file_size <= length_of_buffer)
+		{
+			fread(p_buffer, file_size, 1, p_file);
+
+			// no room for the terminator when the file fills the
+			// caller's buffer exactly — don't write past the end
+			if (file_size < length_of_buffer)
 			{
-				fread(p_buffer, file_size, 1, p_file);
-
-				// no room for the terminator when the file fills the
-				// caller's buffer exactly — don't write past the end
-				if (file_size < length_of_buffer)
-				{
-					p_buffer[file_size] = '\0';
-				}
-				KOTEK_ASSERT(
-					ferror(p_file) == 0, "fread failed!"
-				);
-				length_of_buffer = file_size;
-
-				status = true;
+				p_buffer[file_size] = '\0';
 			}
-			else
-			{
-				KOTEK_ASSERT(
-					file_size <
-						sizeof(this->m_reserved_cache) /
-							sizeof(this->m_reserved_cache[0]),
-					"overflow, resize your cache or use "
-					"another dynamic/streaming methods for "
-					"loading this data"
-				);
+			KOTEK_ASSERT(
+				ferror(p_file) == 0, "fread failed!"
+			);
+			length_of_buffer = file_size;
 
-				if (file_size <
-				    sizeof(this->m_reserved_cache) /
-				        sizeof(this->m_reserved_cache[0]))
-				{
-					fread(
-						this->m_reserved_cache,
-						file_size,
-						1,
-						p_file
-					);
+			status = true;
+		}
+		else
+		{
+			// B0 contract: a too-small caller buffer fails the call
+			// and reports the REQUIRED size through the out-param —
+			// the pointer is never redirected to any internal
+			// scratch storage (size from Get_FileSize(path) or use
+			// the streaming API for bigger data)
+			length_of_buffer = file_size;
 
-					KOTEK_ASSERT(
-						ferror(p_file) == 0, "fread failed!"
-					);
-
-					this->m_reserved_cache[file_size] = '\0';
-					length_of_buffer = file_size;
-					p_buffer = this->m_reserved_cache;
-				}
-				else
-				{
-					p_buffer[0] = '\0';
-				}
-			}
+			KOTEK_MESSAGE_WARNING(
+				"buffer is too small for reading file {}: "
+				"required {} bytes",
+				path, file_size
+			);
 		}
 
 		fclose(p_file);
@@ -244,27 +232,36 @@ bool ktkFileSystem_Native::Write_File(
 		return status;
 	}
 
-	FILE* p_file = fopen(path_to_file.c_str(), "w");
+	// binary mode: the byte-oriented entry points forward here and a
+	// text-mode write would translate 0x0A on Windows — json text
+	// writers are unaffected (json escapes raw newlines in strings)
+	FILE* p_file = fopen(path_to_file.c_str(), "wb");
 
-	KOTEK_ASSERT(p_file, "failed to fopen={}", GetLastError());
-
-	if (p_file)
+	if (p_file == nullptr)
 	{
-		auto _status_written =
-			fwrite(p_buffer, length_of_buffer, 1, p_file);
+		// a missing directory / unwritable target is user data, not
+		// a programmer error — degrade to false with one warning
+		KOTEK_MESSAGE_WARNING(
+			"failed to open file for writing: {} (GetLastError={})",
+			path_to_file, GetLastError()
+		);
+		return status;
+	}
 
-		if (_status_written == 1)
-		{
-			status = true;
+	auto _status_written =
+		fwrite(p_buffer, length_of_buffer, 1, p_file);
 
-	#ifdef KOTEK_DEBUG
-			KOTEK_ASSERT(
-				kun_ktk kun_filesystem exists(path_to_file),
-				"file wasn't created! Check your previliges or "
-				"are you able to write to file on disk?"
-			);
-	#endif
-		}
+	if (_status_written == 1)
+	{
+		status = true;
+
+#ifdef KOTEK_DEBUG
+		KOTEK_ASSERT(
+			kun_ktk kun_filesystem exists(path_to_file),
+			"file wasn't created! Check your previliges or "
+			"are you able to write to file on disk?"
+		);
+#endif
 	}
 
 	fclose(p_file);
@@ -388,34 +385,62 @@ ktkFileHandleType ktkFileSystem_Native::Open_File(
 
 	p_handle->stream_type = stream_type;
 
+	const char* p_open_type =
+		this->Get_FOpenTypeByStreamingType(stream_type);
+
+	// programmer error: kAuto/unknown streaming types have no fopen
+	// mode
 	KOTEK_ASSERT(
-		kun_ktk kun_filesystem exists(path_to_file),
-		"requested path is not valid and doesn't present on "
-		"system! {}",
-		path_to_file
+		p_open_type,
+		"invalid streaming type: {}",
+		static_cast<std::underlying_type_t<
+			eFileSystemStreamingType>>(stream_type)
 	);
 
-	if (kun_ktk kun_filesystem exists(path_to_file))
+	bool is_opened = false;
+
+	if (p_open_type)
 	{
-		const char* p_open_type =
-			this->Get_FOpenTypeByStreamingType(stream_type);
+		// a missing file is user data, not a programmer error:
+		// read modes require an existing file, write modes create
+		// it — both degrade to kInvalidFileHandleType + one warning
+		bool needs_existing_file =
+			stream_type ==
+				eFileSystemStreamingType::kReadOnly ||
+			stream_type ==
+				eFileSystemStreamingType::kReadAndWrite;
 
-		KOTEK_ASSERT(
-			p_open_type,
-			"invalid streaming type: {}",
-			static_cast<std::underlying_type_t<
-				eFileSystemStreamingType>>(stream_type)
-		);
+		if (needs_existing_file &&
+		    kun_ktk kun_filesystem exists(path_to_file) == false)
+		{
+			KOTEK_MESSAGE_WARNING(
+				"can't open file for reading, it doesn't exist: {}",
+				path_to_file
+			);
+		}
+		else
+		{
+			FILE* p_f = fopen(path_to_file.c_str(), p_open_type);
 
-		FILE* p_f = fopen(path_to_file.c_str(), p_open_type);
+			if (p_f)
+			{
+				file_handle_no_vfm_t desc;
+				desc.p_file = p_f;
+				p_handle->desc = desc;
 
-		KOTEK_ASSERT(p_f, "failed to fopen={}", GetLastError());
-
-		file_handle_no_vfm_t desc;
-		desc.p_file = p_f;
-		p_handle->desc = desc;
+				is_opened = true;
+			}
+			else
+			{
+				KOTEK_MESSAGE_WARNING(
+					"failed to open file: {} (GetLastError={})",
+					path_to_file, GetLastError()
+				);
+			}
+		}
 	}
-	else
+
+	if (is_opened == false)
 	{
 		p_handle->is_free = true;
 		p_handle->stream_type = eFileSystemStreamingType::kAuto;
@@ -520,6 +545,12 @@ bool ktkFileSystem_Native::Close_File(ktkFileHandleType handle)
 			std::get<file_handle_no_vfm_t>(p_handle->desc);
 
 		fclose(data.p_file);
+
+		// return the handle to the pool — close without freeing
+		// leaks a slot per call
+		p_handle->is_free = true;
+		p_handle->stream_type = eFileSystemStreamingType::kAuto;
+
 		result = true;
 	}
 	else
@@ -612,13 +643,45 @@ bool ktkFileSystem_Native::Get_FileSize(
 		path.empty() == false, "you can't pass empty path!"
 	);
 
+	result = 0;
+
 	if (path.empty())
 	{
 		KOTEK_MESSAGE_WARNING("you pass empty path!");
 		return status;
 	}
 
+	FILE* p_file = fopen(path.c_str(), "rb");
 
+	if (p_file == nullptr)
+	{
+		// a missing file is user data, not a programmer error —
+		// false + size 0 with one warning line
+		KOTEK_MESSAGE_WARNING(
+			"failed to open file for size query: {} "
+			"(GetLastError={})",
+			path, GetLastError()
+		);
+		return status;
+	}
+
+	auto status_fseek = fseek(p_file, 0, SEEK_END);
+	long file_size = ftell(p_file);
+
+	fclose(p_file);
+
+	if (status_fseek == 0 && file_size >= 0)
+	{
+		result = static_cast<kun_ktk size_t>(file_size);
+		status = true;
+	}
+	else
+	{
+		KOTEK_MESSAGE_WARNING(
+			"failed to query size of file: {} (GetLastError={})",
+			path, GetLastError()
+		);
+	}
 
 	return status;
 }

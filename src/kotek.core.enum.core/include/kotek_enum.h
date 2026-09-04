@@ -65,7 +65,9 @@ enum class eFileSystemFeatureType : kun_ktk uint16_t{
     /// and be used by system otherwise it will use only from
     /// specified filesystem (or filesystem that supported like
     /// native or zlib) and if a requested file wasn't found it
-    /// will raise error & assert
+    /// will fall back through the priority list and finally
+    /// return false with a warning (missing files are user
+    /// data, never an assert — B0 contract)
 	kEnablePriorityWhenFailedToOpenFile = 1 << 3,
 	/// @brief \~english this won't work if kVFM wasn't passed
     /// (keep this in mind)
