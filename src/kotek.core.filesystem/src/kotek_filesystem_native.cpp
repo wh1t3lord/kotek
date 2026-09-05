@@ -13,7 +13,8 @@ ktkFileSystem_Native::ktkFileSystem_Native() :
 	m_default_stream_buffer_size{}
 	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
 	,
-	m_p_vfm{}
+	m_p_vfm{},
+	m_vfm_cache_retired_warning_issued{}
 	#endif
 {
 	this->m_files.resize(
@@ -30,6 +31,15 @@ ktkFileSystem_Native::~ktkFileSystem_Native(void)
 	);
 	#endif
 }
+
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+void ktkFileSystem_Native::Initialize(ktkFileSystem_VFM* p_vfm)
+{
+	KOTEK_ASSERT(p_vfm, "must be valid");
+
+	this->m_p_vfm = p_vfm;
+}
+#endif
 
 bool ktkFileSystem_Native::Read_File(
 	const ktk_filesystem_path& path,
@@ -50,6 +60,7 @@ bool ktkFileSystem_Native::Read_File(
 		return status;
 	}
 
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
 	bool is_vfm_cache_enabled =
 		(features & eFileSystemFeatureType::kVFMCacheEnabled) ==
 		eFileSystemFeatureType::kVFMCacheEnabled;
@@ -57,38 +68,133 @@ bool ktkFileSystem_Native::Read_File(
 	bool is_vfm_read_enabled =
 		(features & eFileSystemFeatureType::kVFMRead) ==
 		eFileSystemFeatureType::kVFMRead;
-	bool is_vfm_write_enabled =
-		(features & eFileSystemFeatureType::kVFMWrite) ==
-		eFileSystemFeatureType::kVFMWrite;
 
-	bool is_vfm_enabled =
-		is_vfm_read_enabled || is_vfm_write_enabled;
-
-	KOTEK_ASSERT(
-		is_vfm_cache_enabled ? is_vfm_enabled : true,
-		"logic is broken, vfm must be enabled by passing "
-		"kVFMRead or kVFMWrite (or both) otherwise you didn't "
-		"enable vfm but enabled vfm cache it doesn't work like "
-		"this!"
-	);
-
-	if (is_vfm_enabled)
+	// kVFMCacheEnabled is RETIRED (owner directive 2026-09-05): no
+	// user-space mapping cache — the OS page cache is the file-content
+	// cache and B3's streaming API is the repeated-access answer. Warn
+	// once per instance, then the bit is inert. kVFMWrite stays a
+	// no-op on the read path — writes remain on CRT IO this phase.
+	if (is_vfm_cache_enabled &&
+	    this->m_vfm_cache_retired_warning_issued == false)
 	{
-		if (is_vfm_cache_enabled)
-		{
-			// todo: implement vfm cache — degrade gracefully instead of
-			// asserting so configs that enable it still boot
-			KOTEK_MESSAGE_WARNING(
-				"vfm cache is not implemented, continuing without it");
-		}
+		this->m_vfm_cache_retired_warning_issued = true;
 
-		// todo: think about read and write operations... like
-		// what if i enable write but not read or something ????
-		// what are other variants of vfm usage?
-
-		// todo: implement vfm read — until packed-file support lands
-		// fall through to the native path so files on disk still load
+		KOTEK_MESSAGE_WARNING(
+			"VFM_CACHE is retired (no user-space mapping cache — "
+			"the OS page cache already is the file-content cache; "
+			"use VFM_READ for mapped reads and the streaming API "
+			"for repeated access); the flag is ignored"
+		);
 	}
+
+	if (is_vfm_read_enabled && this->m_p_vfm)
+	{
+		kun_ktk uint32_t mapping_id =
+			static_cast<kun_ktk uint32_t>(-1);
+		kun_ktk size_t mapped_size = 0;
+
+		eVFMMapFileResult map_result =
+			this->m_p_vfm->MapFileForRead(
+				path, mapping_id, mapped_size
+			);
+
+		switch (map_result)
+		{
+		case eVFMMapFileResult::kSuccess:
+		{
+			if (mapped_size <= length_of_buffer)
+			{
+				const kun_ktk uint8_t* p_mapped =
+					static_cast<const kun_ktk uint8_t*>(
+						this->m_p_vfm->Get_MappedData(mapping_id)
+					);
+
+				// stream the copy through the mapping in fixed
+				// chunks — the consumer never holds more than one
+				// chunk over its own buffer (the rule-9 posture;
+				// B3 owns true streaming)
+				kun_ktk size_t copied = 0;
+
+				while (copied < mapped_size)
+				{
+					kun_ktk size_t chunk_size =
+						mapped_size - copied;
+
+					if (chunk_size >
+					    KOTEK_DEF_FILESYSTEM_VFM_STREAM_CHUNK_SIZE)
+					{
+						chunk_size =
+							KOTEK_DEF_FILESYSTEM_VFM_STREAM_CHUNK_SIZE;
+					}
+
+					std::memcpy(
+						p_buffer + copied, p_mapped + copied,
+						chunk_size
+					);
+
+					copied += chunk_size;
+				}
+
+				// same terminator rule as the CRT path below: only
+				// when room remains after the payload
+				if (mapped_size < length_of_buffer)
+				{
+					p_buffer[mapped_size] = '\0';
+				}
+
+				length_of_buffer = mapped_size;
+				status = true;
+			}
+			else
+			{
+				// the B0 contract holds on the mapped path too:
+				// false + the REQUIRED size in the out-param, the
+				// caller's pointer is never redirected
+				length_of_buffer = mapped_size;
+
+				KOTEK_MESSAGE_WARNING(
+					"buffer is too small for reading file {}: "
+					"required {} bytes",
+					path, mapped_size
+				);
+			}
+
+			// the map→copy→unmap contract: every read releases its
+			// mapping immediately, nothing persists
+			this->m_p_vfm->UnMapFile(mapping_id);
+
+			return status;
+		}
+		case eVFMMapFileResult::kEmptyFile:
+		{
+			// a 0-byte file can't be mapped on Win32 — explicit
+			// success with nothing read, matching the CRT path
+			// byte-for-byte (it also lands the terminator at [0]
+			// because file_size 0 < caller capacity)
+			p_buffer[0] = '\0';
+			length_of_buffer = 0;
+			status = true;
+			return status;
+		}
+		case eVFMMapFileResult::kMissingFile:
+		{
+			// user data, not a programmer error: the VFM layer
+			// already emitted the single warning — the CRT fallback
+			// must NOT engage (it would double the noise)
+			length_of_buffer = 0;
+			return status;
+		}
+		case eVFMMapFileResult::kMappingFailed:
+		default:
+		{
+			// an existing file that failed to map degrades to the
+			// CRT read below (the VFM layer already warned) — never
+			// a hard error on user data
+			break;
+		}
+		}
+	}
+#endif
 
 	{
 		// use traditional fopen/fwrite

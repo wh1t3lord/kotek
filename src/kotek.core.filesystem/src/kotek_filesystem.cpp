@@ -3882,6 +3882,15 @@ void ktkFileSystem::Initialize(ktkIFrameworkConfig* p_config)
 		kun_ktk kun_filesystem current_path().u8string().c_str(
 		);
 
+#if defined(KOTEK_USE_FILESYSTEM_TYPE_NATIVE) && \
+	defined(KOTEK_USE_FILESYSTEM_FEATURE_VFM)
+	// B1: the native single-shot read consults the VFM layer when the
+	// runtime feature flags (kVFMRead / kVFMCacheEnabled) ask for
+	// mapped IO — wire it before any config-driven read happens
+	this->m_vfm.Initialize();
+	this->m_fs_native.Initialize(&this->m_vfm);
+#endif
+
 	this->Validate_Folders();
 
 	this->Initialize_FrameworkConfig();

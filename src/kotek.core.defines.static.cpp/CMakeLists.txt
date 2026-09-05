@@ -1354,6 +1354,15 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 			// 32/2048 jump (B0)
 			#define KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT 512
 
+			// B1: mapped reads copy out of the mapping in fixed chunks
+			// of this size (map -> chunked copy -> unmap), so the
+			// consumer never holds more than one chunk over its own
+			// buffer; 64 KB matches the house streaming-step granularity
+			// (KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE is 4 KB for the
+			// streaming API — the mapped copy chunk is coarser because
+			// the data is already resident in the address space)
+			#define KOTEK_DEF_FILESYSTEM_VFM_STREAM_CHUNK_SIZE 65536
+
 			#define KOTEK_DEF_USER_ENGINE_LIBRARY_CALLBACK_NAME_LENGTH ${KOTEK_DEF_USER_ENGINE_LIBRARY_CALLBACK_NAME_LENGTH}
 			#define KOTEK_DEF_RESOURCE_TEXT_FILENAME_LENGTH ${KOTEK_DEF_RESOURCE_TEXT_FILENAME_LENGTH}
 			#define KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH ${KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH}

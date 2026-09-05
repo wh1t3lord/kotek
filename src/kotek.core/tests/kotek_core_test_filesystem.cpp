@@ -1,4 +1,4 @@
-﻿#include "../include/kotek_core.h"
+#include "../include/kotek_core.h"
 
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
@@ -2738,6 +2738,462 @@ TEST(
 
 	instance.Shutdown();
 }
+
+// --- B1 VFM-mapped reads (behind the runtime feature flag) -----------
+// same fixture discipline as B0 (data_user/tests, self-cleaning); the
+// flags are driven through the test's own ktkFrameworkConfig and are
+// set AFTER Initialize because Initialize parses the shipped
+// sys_info.json (which carries VFM_READ) into the config
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+
+TEST(Filesystem, test_b1_vfm_read_matches_native_bytes)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b1_vfm_parity.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	// a few KB of binary content with 0x00/0xFF coverage — i*31+7 mod
+	// 256 hits every byte value (gcd(31,256)=1)
+	constexpr kun_ktk size_t kPayloadSize = 4107;
+	kun_ktk uint8_t payload[kPayloadSize];
+
+	for (kun_ktk size_t i = 0; i < kPayloadSize; ++i)
+		payload[i] = static_cast<kun_ktk uint8_t>(i * 31 + 7);
+
+	ASSERT_TRUE(instance.Write_File(path, payload, kPayloadSize));
+
+	auto p_read_and_verify =
+		[&](kun_ktk uint8_t* p_out, kun_ktk size_t out_capacity
+	    ) -> void
+	{
+		kun_ktk uint8_t* p_buffer = p_out;
+		kun_ktk size_t buffer_size = out_capacity;
+
+		bool status = instance.Read_File(path, p_buffer, buffer_size);
+
+		EXPECT_TRUE(status);
+		EXPECT_TRUE(buffer_size == kPayloadSize);
+		EXPECT_TRUE(p_buffer == p_out);
+		// both paths append the terminator when room remains
+		EXPECT_TRUE(p_out[kPayloadSize] == 0);
+
+		bool equal = true;
+
+		for (kun_ktk size_t i = 0; i < kPayloadSize; ++i)
+		{
+			if (p_out[i] != payload[i])
+			{
+				equal = false;
+				break;
+			}
+		}
+
+		EXPECT_TRUE(equal);
+	};
+
+	// 1) the native CRT path (flags off)
+	cfg.Set_FS_FeaturesFlag(0);
+
+	kun_ktk uint8_t native_read[kPayloadSize + 64];
+	p_read_and_verify(native_read, sizeof(native_read));
+
+	// 2) the mapped read, no cache
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kVFMRead
+	));
+
+	kun_ktk uint8_t vfm_read[kPayloadSize + 64];
+	p_read_and_verify(vfm_read, sizeof(vfm_read));
+
+	// 3) the RETIRED cache flag alongside: it is inert (one explanatory
+	// warning, no behavior change) — the read is still the mapped path
+	// and still byte-identical
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kVFMRead |
+		eFileSystemFeatureType::kVFMCacheEnabled
+	));
+
+	kun_ktk uint8_t retired_flag_read[kPayloadSize + 64];
+	p_read_and_verify(retired_flag_read, sizeof(retired_flag_read));
+
+	// the three paths are byte-identical (terminator included)
+	bool equal = true;
+
+	for (kun_ktk size_t i = 0; i <= kPayloadSize; ++i)
+	{
+		if (native_read[i] != vfm_read[i] ||
+		    native_read[i] != retired_flag_read[i])
+		{
+			equal = false;
+			break;
+		}
+	}
+
+	EXPECT_TRUE(equal);
+
+	// the B0 buffer contract holds on the mapped path too: a
+	// too-small buffer fails the call, reports the REQUIRED size and
+	// never redirects the pointer
+	kun_ktk uint8_t tiny[16];
+	kun_ktk uint8_t* p_tiny = tiny;
+	kun_ktk size_t tiny_size = sizeof(tiny);
+
+	bool status = instance.Read_File(path, p_tiny, tiny_size);
+
+	EXPECT_FALSE(status);
+	EXPECT_TRUE(tiny_size == kPayloadSize);
+	EXPECT_TRUE(p_tiny == tiny);
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b1_vfm_read_large_file_chunked)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b1_vfm_large.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	// bigger than KOTEK_DEF_FILESYSTEM_VFM_STREAM_CHUNK_SIZE so the
+	// mapped copy runs several full chunks plus a partial tail (heap
+	// buffers — several hundred KB of stack arrays in a TestBody
+	// prologue is the known overflow trap)
+	constexpr kun_ktk size_t kPayloadSize =
+		KOTEK_DEF_FILESYSTEM_VFM_STREAM_CHUNK_SIZE * 3 + 3403;
+
+	static_assert(
+		kPayloadSize > KOTEK_DEF_FILESYSTEM_VFM_STREAM_CHUNK_SIZE
+	);
+
+	kun_ktk uint8_t* payload = new kun_ktk uint8_t[kPayloadSize];
+	kun_ktk uint8_t* native_read =
+		new kun_ktk uint8_t[kPayloadSize + 64];
+	kun_ktk uint8_t* vfm_read = new kun_ktk uint8_t[kPayloadSize + 64];
+
+	// i*131+17 mod 256 hits every byte value (131 is odd) — 0x00/0xFF
+	// included
+	for (kun_ktk size_t i = 0; i < kPayloadSize; ++i)
+		payload[i] = static_cast<kun_ktk uint8_t>(i * 131 + 17);
+
+	ASSERT_TRUE(instance.Write_File(path, payload, kPayloadSize));
+
+	ktkFileSystem_VFM* p_vfm = instance.Get_VFM();
+
+	ASSERT_TRUE(p_vfm != nullptr);
+
+	kun_ktk uint32_t maps_before = p_vfm->Get_StatMapCount();
+	kun_ktk uint32_t unmaps_before = p_vfm->Get_StatUnmapCount();
+
+	// 1) the native CRT read (flags off)
+	cfg.Set_FS_FeaturesFlag(0);
+
+	{
+		kun_ktk uint8_t* p_buffer = native_read;
+		kun_ktk size_t buffer_size = kPayloadSize + 64;
+
+		ASSERT_TRUE(instance.Read_File(path, p_buffer, buffer_size));
+		ASSERT_TRUE(buffer_size == kPayloadSize);
+		EXPECT_TRUE(native_read[kPayloadSize] == 0);
+	}
+
+	// 2) the mapped read — several chunks through the mapping
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kVFMRead
+	));
+
+	{
+		kun_ktk uint8_t* p_buffer = vfm_read;
+		kun_ktk size_t buffer_size = kPayloadSize + 64;
+
+		ASSERT_TRUE(instance.Read_File(path, p_buffer, buffer_size));
+		ASSERT_TRUE(buffer_size == kPayloadSize);
+		EXPECT_TRUE(vfm_read[kPayloadSize] == 0);
+	}
+
+	// byte-identical over the whole multi-chunk payload
+	bool equal = true;
+
+	for (kun_ktk size_t i = 0; i < kPayloadSize; ++i)
+	{
+		if (native_read[i] != vfm_read[i] || native_read[i] != payload[i])
+		{
+			equal = false;
+			break;
+		}
+	}
+
+	EXPECT_TRUE(equal);
+
+	// the map→copy→unmap contract: the mapped read balanced its
+	// mapping immediately — exactly one map and one unmap, zero
+	// outstanding at rest
+	EXPECT_TRUE(p_vfm->Get_StatMapCount() - maps_before == 1);
+	EXPECT_TRUE(p_vfm->Get_StatUnmapCount() - unmaps_before == 1);
+	EXPECT_TRUE(
+		(p_vfm->Get_StatMapCount() - p_vfm->Get_StatUnmapCount()) ==
+		(maps_before - unmaps_before)
+	);
+
+	delete[] payload;
+	delete[] native_read;
+	delete[] vfm_read;
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b1_vfm_read_missing_file_is_graceful)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b1_vfm_missing.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	ktkFileSystem_VFM* p_vfm = instance.Get_VFM();
+
+	ASSERT_TRUE(p_vfm != nullptr);
+
+	kun_ktk uint8_t buffer[64];
+
+	auto p_try_read = [&]() -> void
+	{
+		kun_ktk uint8_t* p_buffer = buffer;
+		kun_ktk size_t buffer_size = sizeof(buffer);
+
+		bool status = instance.Read_File(path, p_buffer, buffer_size);
+
+		EXPECT_FALSE(status);
+		EXPECT_TRUE(buffer_size == 0);
+		EXPECT_TRUE(p_buffer == buffer);
+	};
+
+	kun_ktk uint32_t maps_before = p_vfm->Get_StatMapCount();
+	kun_ktk uint32_t unmaps_before = p_vfm->Get_StatUnmapCount();
+
+	// both VFM shapes degrade identically: false + size 0 + one
+	// warning, no assert, and the CRT fallback is NOT engaged (it
+	// would double the warning noise) — the counters prove nothing
+	// was ever mapped
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kVFMRead
+	));
+	p_try_read();
+
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kVFMRead |
+		eFileSystemFeatureType::kVFMCacheEnabled
+	));
+	p_try_read();
+
+	EXPECT_TRUE(p_vfm->Get_StatMapCount() == maps_before);
+	EXPECT_TRUE(p_vfm->Get_StatUnmapCount() == unmaps_before);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b1_vfm_read_empty_file)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b1_vfm_empty.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	// seed a genuine 0-byte fixture (Write_File's 0-length fwrite
+	// reports failure, so create it directly)
+	FILE* p_file = fopen(path.c_str(), "wb");
+	ASSERT_TRUE(p_file != nullptr);
+	fclose(p_file);
+
+	ktkFileSystem_VFM* p_vfm = instance.Get_VFM();
+
+	ASSERT_TRUE(p_vfm != nullptr);
+
+	kun_ktk uint32_t maps_before = p_vfm->Get_StatMapCount();
+	kun_ktk uint32_t unmaps_before = p_vfm->Get_StatUnmapCount();
+
+	auto p_try_read = [&]() -> void
+	{
+		kun_ktk uint8_t storage[8];
+
+		for (kun_ktk size_t i = 0; i < sizeof(storage); ++i)
+			storage[i] = 0xAB;
+
+		kun_ktk uint8_t* p_buffer = storage;
+		kun_ktk size_t buffer_size = sizeof(storage);
+
+		bool status = instance.Read_File(path, p_buffer, buffer_size);
+
+		EXPECT_TRUE(status);
+		EXPECT_TRUE(buffer_size == 0);
+		EXPECT_TRUE(p_buffer == storage);
+		// both paths land the terminator at [0]
+		EXPECT_TRUE(storage[0] == 0);
+	};
+
+	// the mapped path reports a successful 0-byte read (a 0-byte map
+	// is invalid on Win32 — detected explicitly, nothing ever maps)...
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kVFMRead |
+		eFileSystemFeatureType::kVFMCacheEnabled
+	));
+	p_try_read();
+
+	// ...and the CRT path agrees byte-for-byte
+	cfg.Set_FS_FeaturesFlag(0);
+	p_try_read();
+
+	EXPECT_TRUE(p_vfm->Get_StatMapCount() == maps_before);
+	EXPECT_TRUE(p_vfm->Get_StatUnmapCount() == unmaps_before);
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b1_vfm_shutdown_leaves_no_outstanding_mappings)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kVFMRead
+	));
+
+	ktkFileSystem_VFM* p_vfm = instance.Get_VFM();
+
+	ASSERT_TRUE(p_vfm != nullptr);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	kun_ktk uint32_t maps_before = p_vfm->Get_StatMapCount();
+	kun_ktk uint32_t unmaps_before = p_vfm->Get_StatUnmapCount();
+
+	// three fixtures through the mapped read path
+	for (kun_ktk size_t i = 0; i < 3; ++i)
+	{
+		char name[64];
+		std::snprintf(
+			name, sizeof(name), "b1_vfm_shutdown_%u.bin",
+			static_cast<unsigned>(i)
+		);
+
+		ktk_filesystem_path path = folder;
+		path /= name;
+
+		std::error_code ec;
+		std::filesystem::remove(
+			std::filesystem::path(path.c_str()), ec
+		);
+
+		const char payload[] = "balance me at shutdown";
+
+		ASSERT_TRUE(instance.Write_File(path, payload, sizeof(payload)));
+
+		kun_ktk uint8_t readback[32];
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		ASSERT_TRUE(
+			instance.Read_File(path, p_readback, readback_size)
+		);
+	}
+
+	// the map→copy→unmap contract: every read already balanced its
+	// mapping — zero outstanding at rest
+	EXPECT_TRUE(p_vfm->Get_StatMapCount() - maps_before == 3);
+	EXPECT_TRUE(p_vfm->Get_StatUnmapCount() - unmaps_before == 3);
+
+	// shutdown with nothing outstanding: clean, no assert, and the
+	// balance counters end equal (anything else would be a leaked
+	// UnMapFile somewhere on the path)
+	instance.Shutdown();
+
+	EXPECT_TRUE(
+		p_vfm->Get_StatUnmapCount() == p_vfm->Get_StatMapCount()
+	);
+
+	// self-cleaning
+	for (kun_ktk size_t i = 0; i < 3; ++i)
+	{
+		char name[64];
+		std::snprintf(
+			name, sizeof(name), "b1_vfm_shutdown_%u.bin",
+			static_cast<unsigned>(i)
+		);
+
+		ktk_filesystem_path path = folder;
+		path /= name;
+
+		std::error_code ec;
+		std::filesystem::remove(
+			std::filesystem::path(path.c_str()), ec
+		);
+	}
+}
+
+#endif
 
 	#endif
 #endif

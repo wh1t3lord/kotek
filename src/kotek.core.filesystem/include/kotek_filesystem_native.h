@@ -58,6 +58,13 @@ public:
 	ktkFileSystem_Native();
 	~ktkFileSystem_Native();
 
+	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+	/// @brief \~english B1: wires the owning ktkFileSystem's VFM layer
+	/// in — the single-shot read consults it when the runtime feature
+	/// flags (kVFMRead / kVFMCacheEnabled) ask for mapped IO
+	void Initialize(ktkFileSystem_VFM* p_vfm);
+	#endif
+
 	void Shutdown();
 
 	bool Read_File(
@@ -133,6 +140,12 @@ private:
 
 	#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
 	ktkFileSystem_VFM* m_p_vfm;
+
+	// B1: kVFMCacheEnabled is RETIRED (owner directive 2026-09-05 —
+	// the OS page cache is the file-content cache; B3's streaming is
+	// the repeated-access answer) — the read path warns once per
+	// instance when a caller still sets it
+	bool m_vfm_cache_retired_warning_issued;
 	#endif
 
 	ktk_vector<

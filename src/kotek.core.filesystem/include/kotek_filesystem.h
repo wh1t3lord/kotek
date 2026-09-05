@@ -292,6 +292,16 @@ public:
 			eFileSystemPriorityType::kAuto
 	) override;
 
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+	/// @brief \~english B1 diagnostic seam: the VFM layer (with its
+	/// test-pinned map/unmap/cache counters) — concrete-class only,
+	/// deliberately not on ktkIFileSystem
+	ktkFileSystem_VFM* Get_VFM(void) noexcept
+	{
+		return &this->m_vfm;
+	}
+#endif
+
 private:
 	void Validate_Folders(void) noexcept;
 

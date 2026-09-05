@@ -69,8 +69,12 @@ enum class eFileSystemFeatureType : kun_ktk uint16_t{
     /// return false with a warning (missing files are user
     /// data, never an assert — B0 contract)
 	kEnablePriorityWhenFailedToOpenFile = 1 << 3,
-	/// @brief \~english this won't work if kVFM wasn't passed
-    /// (keep this in mind)
+	/// @brief \~english RETIRED (owner directive 2026-09-05): no
+    /// user-space mapping cache — the OS page cache already is the
+    /// file-content cache and the streaming API (B3) is the
+    /// repeated-access answer. Setting it warns once per filesystem
+    /// instance and is otherwise inert; kVFMRead alone drives mapped
+    /// reads. Kept as a value so old configs still parse.
 	kVFMCacheEnabled = 1 << 4,
 	// todo: implement
 	kJSONPrettyFormatting = 1 << 5
