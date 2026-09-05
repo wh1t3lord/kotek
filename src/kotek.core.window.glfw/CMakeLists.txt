@@ -29,6 +29,8 @@ else()
 endif()
 
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
+# task K26: the exe-side input bridge consumes ktkInputPlatformBackendArgs_GLFW3
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.input)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.memory.cpu)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.os)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.defines_dependent.assert)

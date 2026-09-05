@@ -19,7 +19,7 @@ bool InitializeModule_Core_Window_GLFW(ktkMainManager* p_manager)
 		ktkIWindowManager* p_manager_window = p_manager->Get_WindowManager();
 		if (p_manager_window)
 		{
-			p_manager_window->Set_ActiveWindow(new ktkWindow());
+			p_manager_window->Set_ActiveWindow(new ktkWindow(p_manager));
 		}
 	}
 #endif

@@ -83,6 +83,8 @@ public:
 
 	const char* Get_PlatformBackendName(void) const override;
 
+	eInputPlatformBackend Get_PlatformBackend(void) const override;
+
 	void Update(void) override;
 	void Update_Controller(void* p_args) override;
 

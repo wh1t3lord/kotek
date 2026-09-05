@@ -20,12 +20,24 @@ KOTEK_END_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-/// \~english exe-side input bridge for consumers that live in another
-/// module (zircon's editor imgui pass in game.ktk): GLFW from vcpkg is a
+/// \~english exe-side input bridge (task K26): GLFW from vcpkg is a STATIC
+/// library, so every module in the process owns a private copy of GLFW's
+/// global state and only THIS module's copy (kotek.exe side) is initialized
+/// and owns the real window — any glfwSet*Callback issued from another
+/// module (game.ktk) writes into that module's never-initialized copy and
+/// is silently dead (the same disease as the imgui backend had). The
+/// window therefore installs its own input callbacks at Initialize and
+/// forwards events into the main manager's input manager
+/// (Get_Input()->Update_Controller / Set_ControllerData); the manager
+/// pointer arrives at construction from the module entry and reaches the
+/// C callbacks through glfwSetWindowUserPointer. ImGui chaining is
+/// untouched: the imgui backend installs ITS callbacks later
+/// (ImGui_InitForOther with install_callbacks=true) and chains into these
+/// as PrevUserCallback*.
 class ktkWindow : public ktkIWindow
 {
 public:
-	ktkWindow(void);
+	ktkWindow(ktkMainManager* p_manager);
 	ktkWindow(const ktk::ustring& title_name);
 	~ktkWindow(void);
 
@@ -76,6 +88,7 @@ private:
 	int m_screen_size_height;
 	GLFWwindow* m_p_window;
 	void* m_p_os_data;
+	ktkMainManager* m_p_main_manager;
 	ktk::unordered_map<ktk::enum_base_t, ktk::cstring> m_titles;
 };
 

@@ -624,6 +624,18 @@ public:
 
 	virtual const char* Get_PlatformBackendName(void) const = 0;
 
+	/// @brief additive (task K26): the exe-side window backend
+	/// (kotek.core.window.glfw) gates its input forwarding on the manager
+	/// being initialized for the SAME backend — a GLFW callback must never
+	/// feed an Unknown/WINAPI-initialized instance (Update_Controller
+	/// asserts on a backend mismatch); the string name variant can't
+	/// express that check. Default Unknown keeps user implementations
+	/// source-compatible.
+	virtual eInputPlatformBackend Get_PlatformBackend(void) const
+	{
+		return eInputPlatformBackend::kPlatformBackend_Unknown;
+	}
+
 	virtual bool WriteKeyAsStringToBuffer_IfPressed(
 		eInputControllerType controller,
 		char* p_buffer,

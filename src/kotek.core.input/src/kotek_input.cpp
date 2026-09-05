@@ -766,6 +766,11 @@ const char* ktkInput::Get_PlatformBackendName(void) const
 	return helper::Translate_InputPlatformBackend(this->m_current_platform);
 }
 
+eInputPlatformBackend ktkInput::Get_PlatformBackend(void) const
+{
+	return this->m_current_platform;
+}
+
 void ktkInput::Update(void)
 {
 	// in order to provide for user the checking of pressed method like it means

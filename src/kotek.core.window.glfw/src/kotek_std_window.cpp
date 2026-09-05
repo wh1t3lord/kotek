@@ -1,12 +1,14 @@
 #include "../include/kotek_std_window.h"
 #include <kotek.core.api/include/kotek_api.h>
+#include <kotek.core.input/include/kotek_input.h>
+#include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
 
-ktkWindow::ktkWindow(void) :
+ktkWindow::ktkWindow(ktkMainManager* p_manager) :
 	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr},
-	m_p_os_data{nullptr}
+	m_p_os_data{nullptr}, m_p_main_manager{p_manager}
 {
 	this->SetStringToTitle(
 		static_cast<ktk::enum_base_t>(eWindowTitleType::kTitle_ApplicationName),
@@ -14,7 +16,8 @@ ktkWindow::ktkWindow(void) :
 }
 
 ktkWindow::ktkWindow(const ktk::ustring& title_name) :
-	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr}
+	m_screen_size_width{}, m_screen_size_height{}, m_p_window{nullptr},
+	m_p_os_data{nullptr}, m_p_main_manager{nullptr}
 {
 	this->SetStringToTitle(
 		static_cast<ktk::enum_base_t>(eWindowTitleType::kTitle_ApplicationName),
@@ -139,6 +142,133 @@ void* ktkWindow::GetHandle(void) const noexcept
 void* ktkWindow::Get_OSData(void) noexcept
 {
 	return this->m_p_os_data;
+}
+
+// exe-side input feeding (task K26): these callbacks run against THIS
+// module's GLFW copy — the only initialized one in the process (see the
+// class comment in kotek_std_window.h). They feed the main manager's
+// input manager unconditionally (editor and game boots alike); the guard
+// is "the input manager exists AND was initialized for GLFW3", otherwise
+// Update_Controller would assert on the backend mismatch (zircon's
+// initialize_input runs after the window exists, so early events can
+// arrive before it). Scroll is not forwarded: eInputControllerMouseData
+// has no scroll fields today.
+
+ktkMainManager* window_callback_get_manager(GLFWwindow* p_window)
+{
+	ktkMainManager* p_manager = static_cast<ktkMainManager*>(
+		glfwGetWindowUserPointer(p_window));
+
+	if (!p_manager)
+		return nullptr;
+
+	ktkIInput* p_input = p_manager->Get_Input();
+
+	if (!p_input)
+		return nullptr;
+
+	if (p_input->Get_PlatformBackend() !=
+		eInputPlatformBackend::kPlatformBackend_GLFW3)
+		return nullptr;
+
+	return p_manager;
+}
+
+void window_callback_key(
+	GLFWwindow* p_window, int glfw_key, int scancode, int glfw_action,
+	int glfw_mods)
+{
+	ktkMainManager* p_manager = window_callback_get_manager(p_window);
+
+	if (!p_manager)
+		return;
+
+	// GLFW_KEY_UNKNOWN (-1) is sent for keys without a token — the input
+	// translation tables are indexed by the raw key, a negative index is
+	// out of bounds (user input is not a programmer error, so no assert)
+	if (glfw_key < 0)
+		return;
+
+	ktkInputPlatformBackendArgs_GLFW3 args;
+	args.key = glfw_key;
+	args.action = glfw_action;
+	args.scancode = scancode;
+	args.mods = glfw_mods;
+	args.controller = eInputControllerType::kControllerKeyboard;
+
+	p_manager->Get_Input()->Update_Controller(&args);
+}
+
+void window_callback_mouse_button(
+	GLFWwindow* p_window, int button, int action, int mods)
+{
+	ktkMainManager* p_manager = window_callback_get_manager(p_window);
+
+	if (!p_manager)
+		return;
+
+	ktkInputPlatformBackendArgs_GLFW3 args;
+	args.key = button;
+	args.action = action;
+	args.scancode = -1;
+	args.mods = mods;
+	args.controller = eInputControllerType::kControllerMouse;
+
+	p_manager->Get_Input()->Update_Controller(&args);
+}
+
+void window_callback_cursor_pos(GLFWwindow* p_window, double xpos, double ypos)
+{
+	ktkMainManager* p_manager = window_callback_get_manager(p_window);
+
+	if (!p_manager)
+		return;
+
+	ktkIInput* p_input = p_manager->Get_Input();
+
+	p_input->Set_ControllerData(eInputControllerType::kControllerMouse,
+		eInputControllerMouseData::kMousePreviousCoordinateXInPixels,
+		p_input->Get_ControllerData(eInputControllerType::kControllerMouse,
+			eInputControllerMouseData::kMouseCoordinateXInPixels));
+	p_input->Set_ControllerData(eInputControllerType::kControllerMouse,
+		eInputControllerMouseData::kMousePreviousCoordinateYInPixels,
+		p_input->Get_ControllerData(eInputControllerType::kControllerMouse,
+			eInputControllerMouseData::kMouseCoordinateYInPixels));
+
+	p_input->Set_ControllerData(eInputControllerType::kControllerMouse,
+		eInputControllerMouseData::kMouseCoordinateXInPixels, xpos);
+	p_input->Set_ControllerData(eInputControllerType::kControllerMouse,
+		eInputControllerMouseData::kMouseCoordinateYInPixels, ypos);
+
+	float width = static_cast<float>(
+		p_manager->Get_WindowManager()->ActiveWindow_GetWidth());
+	float height = static_cast<float>(
+		p_manager->Get_WindowManager()->ActiveWindow_GetHeight());
+
+	// a minimized window reports 0x0 — skip the normalized pair then
+	// (window state is not a programmer error, so no assert)
+	bool is_valid = true;
+	if (width == 0.0f)
+	{
+		is_valid = false;
+	}
+
+	if (height == 0.0f)
+	{
+		is_valid = false;
+	}
+
+	if (is_valid)
+	{
+		p_input->Set_ControllerData(eInputControllerType::kControllerMouse,
+			eInputControllerMouseData::kMouseCoordinateXNormalized,
+			xpos / width);
+		p_input->Set_ControllerData(eInputControllerType::kControllerMouse,
+			eInputControllerMouseData::kMouseCoordinateYNormalized,
+			ypos / height);
+	}
+
+	p_input->Set_ControllerUpdate(eInputControllerType::kControllerMouse);
 }
 
 void ktkWindow::Initialize(kun_core eEngineSupportedRenderer version, kun_core eEngineFeatureRendererVendor vendor)
@@ -464,6 +594,23 @@ void ktkWindow::Initialize(kun_core eEngineSupportedRenderer version, kun_core e
 #else
 	#error unknown platform
 #endif
+
+	if (this->m_p_window && this->m_p_main_manager)
+	{
+		// task K26: install the input callbacks on THIS module's GLFW
+		// copy — the only initialized one in the process — and hand the
+		// main manager to them through the window user pointer.
+		// Unconditional: editor and game boots both need input. The
+		// imgui backend installs its own callbacks later
+		// (ImGui_InitForOther with install_callbacks=true) and chains
+		// into these as PrevUserCallback*, so the ordering is safe.
+		glfwSetWindowUserPointer(this->m_p_window, this->m_p_main_manager);
+		glfwSetKeyCallback(this->m_p_window, &window_callback_key);
+		glfwSetMouseButtonCallback(
+			this->m_p_window, &window_callback_mouse_button);
+		glfwSetCursorPosCallback(
+			this->m_p_window, &window_callback_cursor_pos);
+	}
 }
 
 void ktkWindow::Shutdown(void)
