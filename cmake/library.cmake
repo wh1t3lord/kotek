@@ -85,6 +85,10 @@ set(KOTEK_PLUGIN_STATIC_MODULES
 	# it is an allocator implementation selected at build time, not a
 	# runtime-replaceable service reached through ktkMainManager
 	"kotek.core.memory.gpu.vulkan"
+	# the .kpack backend (B2a) is embedded BY VALUE in ktkFileSystem —
+	# a build-time-selected filesystem backend implementation, never a
+	# runtime plugin (same rationale as memory.cpu)
+	"kotek.core.filesystem.pack"
 	CACHE INTERNAL "modules that remain .lib when KOTEK_LINKAGE=PLUGIN")
 
 # modules that are implicitly-linked DLLs even in PLUGIN mode (import lib is

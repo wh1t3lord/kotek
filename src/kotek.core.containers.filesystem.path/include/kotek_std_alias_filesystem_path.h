@@ -2098,8 +2098,10 @@ private:
 				{
 					if (FindNextFileA(_dirHandle, &_findData))
 					{
-						_dir_entry._path = _base;
-						//	_dir_entry._path.append_name(_findData.cFileName);
+						// B2a fix: the entry path must include the file name (the
+						// pre-fix code assigned the bare base directory, so every entry
+						// past the first reported the directory itself)
+						_dir_entry._path = _base / _findData.cFileName;
 
 						copyToDirEntry(ec);
 					}

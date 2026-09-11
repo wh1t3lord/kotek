@@ -22,6 +22,8 @@ set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/filesyst
 
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.api)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.filesystem.file_text)
+# the .kpack backend class is embedded by value in ktkFileSystem (B2a)
+kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.filesystem.pack)
 kotek_target_link_libraries(${PROJECT_NAME} PUBLIC kotek.core.containers.unordered_map)
 # provides ktk::filesystem::create_directory/exists/current_path used by
 # kotek_filesystem.cpp; in PLUGIN mode undeclared static-leaf deps are

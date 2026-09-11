@@ -237,16 +237,26 @@ void ktkFileSystem::Initialize_FrameworkConfig()
 								return eFileSystemPriorityType::
 									kZlib;
 							}
+							else if (name.size() >= 1 &&
+							         tolower(name[0]) == 'p')
+							{
+								return eFileSystemPriorityType::
+									kPack;
+							}
 
 							return eFileSystemPriorityType::
 								kAuto;
 						};
 
+						// B2a: zero-initialized — the list contract is
+						// dense + kAuto-terminated (the pre-fix
+						// uninitialized tail could be counted as real
+						// entries by the old Set_FS_PriorityList)
 						kun_ktk uint8_t priority_list
 							[static_cast<kun_ktk uint8_t>(
 								eFileSystemPriorityType::
 									kEndOfEnum
-							)];
+							)] = {};
 
 						for (int i = 0; i < arr.size(); ++i)
 						{
@@ -568,10 +578,18 @@ bool ktkFileSystem::Read_File(
 
 		kun_ktk uint8_t repeat_fs_iter = 0;
 
+		// B2a: every backend in the override chain is handed the CALLER's
+		// capacity — a middle backend's failure residue (a miss writes
+		// size 0, a too-small writes the required size) must not poison
+		// the next backend's attempt
+		const kun_ktk size_t caller_buffer_capacity = length_of_buffer;
+
 		for (kun_ktk uint8_t i = 0; i < list_size; ++i)
 		{
 			if (status)
 				break;
+
+			length_of_buffer = caller_buffer_capacity;
 
 			eFileSystemPriorityType fs_type =
 				static_cast<eFileSystemPriorityType>(
@@ -661,6 +679,63 @@ bool ktkFileSystem::Read_File(
 
 				break;
 			}
+			case eFileSystemPriorityType::kPack:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+				if (priority == fs_type)
+				{
+					// the caller explicitly asked for the packs
+					eKpackReadResult pack_result =
+						this->m_fs_pack.Read_File(
+							path_to_file, p_buffer, length_of_buffer
+						);
+
+					if (pack_result == eKpackReadResult::kSuccess)
+						status = true;
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					else
+					{
+						eKpackReadResult pack_result =
+							this->m_fs_pack.Read_File(
+								path_to_file, p_buffer,
+								length_of_buffer
+							);
+
+						if (pack_result == eKpackReadResult::kSuccess)
+						{
+							status = true;
+						}
+						else if (
+							pack_result != eKpackReadResult::kNotFound)
+						{
+							// found but failed (too-small / corrupt):
+							// the override chain falls through on
+							// ABSENCE only — stop here so the failure
+							// (the required size / the loud error) is
+							// the answer
+							return status;
+						}
+						// kNotFound: silent fallthrough to the next
+						// backend
+					}
+				}
+#endif
+
+				break;
+			}
 			default:
 			{
 				KOTEK_ASSERT(
@@ -682,6 +757,9 @@ bool ktkFileSystem::Read_File(
 					{
 						break;
 					}
+
+					// same capacity hand-off rule as the main loop
+					length_of_buffer = caller_buffer_capacity;
 
 					eFileSystemPriorityType fs_type =
 						repeat_fs[i];
@@ -712,6 +790,30 @@ bool ktkFileSystem::Read_File(
 							"zlib filesystem is not implemented, "
 							"skipping"
 						);
+						break;
+					}
+					case eFileSystemPriorityType::kPack:
+					{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+						eKpackReadResult pack_result =
+							this->m_fs_pack.Read_File(
+								path_to_file, p_buffer,
+								length_of_buffer
+							);
+
+						if (pack_result == eKpackReadResult::kSuccess)
+						{
+							status = true;
+						}
+						else if (
+							pack_result != eKpackReadResult::kNotFound)
+						{
+							// same absence-only fallthrough rule as the
+							// main loop
+							return status;
+						}
+#endif
+
 						break;
 					}
 					default:
@@ -985,6 +1087,41 @@ bool ktkFileSystem::Write_File(
 
 				break;
 			}
+			case eFileSystemPriorityType::kPack:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+				if (priority == fs_type)
+				{
+					// the caller explicitly asked the packs for an
+					// operation they don't have in B2a (writes, the
+					// handle API — packs are read-only and handle-less
+					// until B3)
+					KOTEK_MESSAGE_WARNING(
+						"the pack filesystem does not support this "
+						"operation, skipping"
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					// chain case: SILENT skip — an override-chain
+					// backend not answering an operation is the normal
+					// flow, not an event
+				}
+#endif
+
+				break;
+			}
 			default:
 			{
 				KOTEK_ASSERT(
@@ -1033,6 +1170,12 @@ bool ktkFileSystem::Write_File(
 							"zlib filesystem is not implemented, "
 							"skipping"
 						);
+						break;
+					}
+					case eFileSystemPriorityType::kPack:
+					{
+						// packs don't offer this operation in B2a —
+						// silent skip, the chain continues
 						break;
 					}
 					default:
@@ -1276,6 +1419,41 @@ bool ktkFileSystem::Write_File(
 
 				break;
 			}
+			case eFileSystemPriorityType::kPack:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+				if (priority == fs_type)
+				{
+					// the caller explicitly asked the packs for an
+					// operation they don't have in B2a (writes, the
+					// handle API — packs are read-only and handle-less
+					// until B3)
+					KOTEK_MESSAGE_WARNING(
+						"the pack filesystem does not support this "
+						"operation, skipping"
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					// chain case: SILENT skip — an override-chain
+					// backend not answering an operation is the normal
+					// flow, not an event
+				}
+#endif
+
+				break;
+			}
 			default:
 			{
 				KOTEK_ASSERT(
@@ -1324,6 +1502,12 @@ bool ktkFileSystem::Write_File(
 							"zlib filesystem is not implemented, "
 							"skipping"
 						);
+						break;
+					}
+					case eFileSystemPriorityType::kPack:
+					{
+						// packs don't offer this operation in B2a —
+						// silent skip, the chain continues
 						break;
 					}
 					default:
@@ -2005,12 +2189,11 @@ void ktkFileSystem::Create_DefaultFrameworkConfig()
 
 				ktk::json::array fs_priority_list(&pl);
 
+				// B2a: native-only default (the zlib archive backend was
+				// never implemented; packs join at runtime when
+				// data_game/packs exists)
 				fs_priority_list.emplace_back(
 					kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_Native
-				);
-
-				fs_priority_list.emplace_back(
-					kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_ZLIB
 				);
 
 				core_content.Write(
@@ -2094,14 +2277,18 @@ void ktkFileSystem::Fill_FrameworkConfigDefaults()
 
 		this->m_p_config->Set_FS_FeaturesFlag(fs_features);
 
+		// B2a: the built-in default (only used when sys_info.json is
+		// absent) is native-only — the zlib archive backend was never
+		// implemented, and with the fixed Set_FS_PriorityList sentinel a
+		// listed kZlib would now ACTUALLY be consulted (skip-warnings on
+		// every miss); packs join the effective list at runtime when
+		// data_game/packs exists (Mount_Packs_From_Conventional_Folder).
+		// Zero-initialized: the list contract is dense + kAuto-terminated.
 		kun_ktk uint8_t
 			fs_priority_list[static_cast<kun_ktk uint8_t>(
 				eFileSystemPriorityType::kEndOfEnum
-			)];
+			)] = {};
 		fs_priority_list[0] = static_cast<kun_ktk uint8_t>(
-			eFileSystemPriorityType::kZlib
-		);
-		fs_priority_list[1] = static_cast<kun_ktk uint8_t>(
 			eFileSystemPriorityType::kNative
 		);
 		this->m_p_config->Set_FS_PriorityList(fs_priority_list);
@@ -2334,6 +2521,41 @@ ktkFileHandleType ktkFileSystem::Open_File(
 
 				break;
 			}
+			case eFileSystemPriorityType::kPack:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+				if (priority == fs_type)
+				{
+					// the caller explicitly asked the packs for an
+					// operation they don't have in B2a (writes, the
+					// handle API — packs are read-only and handle-less
+					// until B3)
+					KOTEK_MESSAGE_WARNING(
+						"the pack filesystem does not support this "
+						"operation, skipping"
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					// chain case: SILENT skip — an override-chain
+					// backend not answering an operation is the normal
+					// flow, not an event
+				}
+#endif
+
+				break;
+			}
 			default:
 			{
 				KOTEK_ASSERT(
@@ -2383,6 +2605,12 @@ ktkFileHandleType ktkFileSystem::Open_File(
 							"zlib filesystem is not implemented, "
 							"skipping"
 						);
+						break;
+					}
+					case eFileSystemPriorityType::kPack:
+					{
+						// packs don't offer this operation in B2a —
+						// silent skip, the chain continues
 						break;
 					}
 					default:
@@ -2621,6 +2849,41 @@ bool ktkFileSystem::Close_File(
 
 				break;
 			}
+			case eFileSystemPriorityType::kPack:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+				if (priority == fs_type)
+				{
+					// the caller explicitly asked the packs for an
+					// operation they don't have in B2a (writes, the
+					// handle API — packs are read-only and handle-less
+					// until B3)
+					KOTEK_MESSAGE_WARNING(
+						"the pack filesystem does not support this "
+						"operation, skipping"
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					// chain case: SILENT skip — an override-chain
+					// backend not answering an operation is the normal
+					// flow, not an event
+				}
+#endif
+
+				break;
+			}
 			default:
 			{
 				KOTEK_ASSERT(
@@ -2669,6 +2932,12 @@ bool ktkFileSystem::Close_File(
 							"zlib filesystem is not implemented, "
 							"skipping"
 						);
+						break;
+					}
+					case eFileSystemPriorityType::kPack:
+					{
+						// packs don't offer this operation in B2a —
+						// silent skip, the chain continues
 						break;
 					}
 					default:
@@ -2909,6 +3178,41 @@ bool ktkFileSystem::Get_FileSize(
 
 				break;
 			}
+			case eFileSystemPriorityType::kPack:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+				if (priority == fs_type)
+				{
+					// the caller explicitly asked the packs for an
+					// operation they don't have in B2a (writes, the
+					// handle API — packs are read-only and handle-less
+					// until B3)
+					KOTEK_MESSAGE_WARNING(
+						"the pack filesystem does not support this "
+						"operation, skipping"
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					// chain case: SILENT skip — an override-chain
+					// backend not answering an operation is the normal
+					// flow, not an event
+				}
+#endif
+
+				break;
+			}
 			default:
 			{
 				KOTEK_ASSERT(
@@ -2957,6 +3261,12 @@ bool ktkFileSystem::Get_FileSize(
 							"zlib filesystem is not implemented, "
 							"skipping"
 						);
+						break;
+					}
+					case eFileSystemPriorityType::kPack:
+					{
+						// packs don't offer this operation in B2a —
+						// silent skip, the chain continues
 						break;
 					}
 					default:
@@ -3196,12 +3506,58 @@ bool ktkFileSystem::Get_FileSize(
 
 				break;
 			}
-			default:
+			case eFileSystemPriorityType::kPack:
 			{
-				KOTEK_ASSERT(
-					false, "something is broken, can't be!"
-				);
-				return status;
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+				if (priority == fs_type)
+				{
+					// the caller explicitly asked for the packs
+					kun_ktk size_t pack_size = 0;
+
+					eKpackReadResult pack_result =
+						this->m_fs_pack.Get_FileSize(
+							path_to_file, pack_size
+						);
+
+					if (pack_result == eKpackReadResult::kSuccess)
+					{
+						result = pack_size;
+						status = true;
+					}
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					else
+					{
+						kun_ktk size_t pack_size = 0;
+
+						eKpackReadResult pack_result =
+							this->m_fs_pack.Get_FileSize(
+								path_to_file, pack_size
+							);
+
+						if (pack_result == eKpackReadResult::kSuccess)
+						{
+							result = pack_size;
+							status = true;
+						}
+						// kNotFound: silent fallthrough
+					}
+				}
+#endif
+
+				break;
 			}
 			}
 		}
@@ -3245,6 +3601,26 @@ bool ktkFileSystem::Get_FileSize(
 							"zlib filesystem is not implemented, "
 							"skipping"
 						);
+						break;
+					}
+					case eFileSystemPriorityType::kPack:
+					{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+						kun_ktk size_t pack_size = 0;
+
+						eKpackReadResult pack_result =
+							this->m_fs_pack.Get_FileSize(
+								path_to_file, pack_size
+							);
+
+						if (pack_result == eKpackReadResult::kSuccess)
+						{
+							result = pack_size;
+							status = true;
+						}
+						// kNotFound: silent fallthrough
+#endif
+
 						break;
 					}
 					default:
@@ -3488,6 +3864,41 @@ bool ktkFileSystem::Seek(
 
 				break;
 			}
+			case eFileSystemPriorityType::kPack:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+				if (priority == fs_type)
+				{
+					// the caller explicitly asked the packs for an
+					// operation they don't have in B2a (writes, the
+					// handle API — packs are read-only and handle-less
+					// until B3)
+					KOTEK_MESSAGE_WARNING(
+						"the pack filesystem does not support this "
+						"operation, skipping"
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					// chain case: SILENT skip — an override-chain
+					// backend not answering an operation is the normal
+					// flow, not an event
+				}
+#endif
+
+				break;
+			}
 			default:
 			{
 				KOTEK_ASSERT(
@@ -3536,6 +3947,12 @@ bool ktkFileSystem::Seek(
 							"zlib filesystem is not implemented, "
 							"skipping"
 						);
+						break;
+					}
+					case eFileSystemPriorityType::kPack:
+					{
+						// packs don't offer this operation in B2a —
+						// silent skip, the chain continues
 						break;
 					}
 					default:
@@ -3773,6 +4190,41 @@ bool ktkFileSystem::Tell(
 
 				break;
 			}
+			case eFileSystemPriorityType::kPack:
+			{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+				if (priority == fs_type)
+				{
+					// the caller explicitly asked the packs for an
+					// operation they don't have in B2a (writes, the
+					// handle API — packs are read-only and handle-less
+					// until B3)
+					KOTEK_MESSAGE_WARNING(
+						"the pack filesystem does not support this "
+						"operation, skipping"
+					);
+
+					was_used_specified_fs = true;
+				}
+				else
+				{
+					if (was_overloaded_fs_order)
+					{
+						if (was_used_specified_fs == false)
+						{
+							repeat_fs[repeat_fs_iter] = fs_type;
+							++repeat_fs_iter;
+							continue;
+						}
+					}
+					// chain case: SILENT skip — an override-chain
+					// backend not answering an operation is the normal
+					// flow, not an event
+				}
+#endif
+
+				break;
+			}
 			default:
 			{
 				KOTEK_ASSERT(
@@ -3821,6 +4273,12 @@ bool ktkFileSystem::Tell(
 							"zlib filesystem is not implemented, "
 							"skipping"
 						);
+						break;
+					}
+					case eFileSystemPriorityType::kPack:
+					{
+						// packs don't offer this operation in B2a —
+						// silent skip, the chain continues
 						break;
 					}
 					default:
@@ -3895,6 +4353,15 @@ void ktkFileSystem::Initialize(ktkIFrameworkConfig* p_config)
 
 	this->Initialize_FrameworkConfig();
 
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+	// B2a: wire the pack backend's root (absolute read paths are
+	// relativized against it), then mount the conventional folder
+	// (data_game/packs/*.kpack, newest-first) — the ONE directory walk
+	// of the filesystem; a missing/empty folder is a silent no-op
+	this->m_fs_pack.Initialize(this->m_root_path);
+	this->Mount_Packs_From_Conventional_Folder();
+#endif
+
 	KOTEK_MESSAGE("filesystem is initialized!");
 }
 
@@ -3908,10 +4375,232 @@ void ktkFileSystem::Shutdown(void)
 	this->m_fs_zlib.Shutdown();
 #endif
 
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+	this->m_fs_pack.Shutdown();
+#endif
+
 #ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
 	this->m_vfm.Shutdown();
 #endif
 }
+
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+bool ktkFileSystem::Mount_Pack(const ktk_filesystem_path& pack_file_path)
+{
+	const bool status = this->m_fs_pack.Mount(pack_file_path);
+
+	if (status)
+		this->Ensure_Pack_In_PriorityList();
+
+	return status;
+}
+
+void ktkFileSystem::Ensure_Pack_In_PriorityList()
+{
+	const kun_ktk uint8_t* p_fs_list =
+		this->m_p_config->Get_FS_PriorityList();
+	const kun_ktk uint8_t list_size =
+		this->m_p_config->Get_FS_PriorityListSize();
+
+	for (kun_ktk uint8_t i = 0; i < list_size; ++i)
+	{
+		if (p_fs_list[i] ==
+		    static_cast<kun_ktk uint8_t>(eFileSystemPriorityType::kPack))
+		{
+			// the user configured the pack's place explicitly — their
+			// order wins (["Native","Pack"] = loose files override)
+			return;
+		}
+	}
+
+	// B2a mount-order choice (documented in the K25 row): when packs are
+	// present and the config says nothing, kPack is PREPENDED — packs
+	// override the native dirs ("always native-last"): a not-found-in-
+	// pack miss is a silent fallthrough while a native miss warns, so
+	// this order serves packed content without per-read miss noise; the
+	// classic mod/patch story rides the packs' newest-first mount order
+	kun_ktk uint8_t updated_list[static_cast<kun_ktk uint8_t>(
+		eFileSystemPriorityType::kEndOfEnum
+	)] = {};
+
+	updated_list[0] =
+		static_cast<kun_ktk uint8_t>(eFileSystemPriorityType::kPack);
+
+	const kun_ktk uint8_t tail_room = static_cast<kun_ktk uint8_t>(
+		eFileSystemPriorityType::kEndOfEnum
+	) - 1;
+
+	kun_ktk uint8_t written = 1;
+
+	for (kun_ktk uint8_t i = 0; i < list_size && written <= tail_room;
+	     ++i)
+	{
+		updated_list[written] = p_fs_list[i];
+		++written;
+	}
+
+	if (list_size > tail_room)
+	{
+		const unsigned dropped =
+			static_cast<unsigned>(list_size - tail_room);
+
+		KOTEK_MESSAGE_WARNING(
+			"the FS priority list is full; kPack is prepended and "
+			"the last {} configured entr{} {} dropped",
+			dropped, dropped == 1 ? "y" : "ies",
+			dropped == 1 ? "is" : "are"
+		);
+	}
+
+	this->m_p_config->Set_FS_PriorityList(updated_list);
+
+	KOTEK_MESSAGE(
+		"packs mounted: the effective FS priority order is pack-first "
+		"(native dirs are the fallback)"
+	);
+}
+
+void ktkFileSystem::Mount_Packs_From_Conventional_Folder()
+{
+	ktk_filesystem_path packs_folder =
+		this->m_root_path /
+		kun_ktk kun_filesystem get_frameworks_folder_name_by_enum(
+			eFolderIndex::kFolderIndex_DataGame
+		);
+	packs_folder /= kKpackPacksFolderName;
+
+	if (this->Is_Exists(packs_folder) == false)
+	{
+		// mount-when-folder-exists: no folder, no packs, no noise
+		return;
+	}
+
+	// the ONE allowed directory walk: collect the .kpack candidates with
+	// their write times, sort newest-first, mount in that order (the
+	// mount order IS the override order)
+	struct pack_candidate_t
+	{
+		ktk_filesystem_path path;
+		kun_ktk int64_t write_time;
+	};
+
+	pack_candidate_t candidates
+		[KOTEK_DEF_FILESYSTEM_PACK_ENUMERATION_MAX_CANDIDATES];
+	kun_ktk size_t candidate_count = 0;
+
+	{
+		std::error_code ec;
+
+		for (kun_ktk kun_filesystem directory_iterator it(
+				 packs_folder, ec
+			 );
+		     ec.value() == 0 &&
+		     it != kun_ktk kun_filesystem directory_iterator();
+		     it.increment(ec))
+		{
+			const auto& entry = *it;
+
+			if (entry.is_regular_file() == false)
+				continue;
+
+			const ktk_filesystem_path& entry_path = entry.path();
+
+			const kun_ktk size_t path_length =
+				strlen(entry_path.c_str());
+			const kun_ktk size_t extension_length =
+				strlen(kKpackFileExtension);
+
+			if (path_length <= extension_length)
+				continue;
+
+			bool is_kpack = true;
+
+			for (kun_ktk size_t c = 0; c < extension_length; ++c)
+			{
+				if (kpack_fold_ascii(
+						entry_path.c_str()
+							[path_length - extension_length + c]
+					) != kpack_fold_ascii(kKpackFileExtension[c]))
+				{
+					is_kpack = false;
+					break;
+				}
+			}
+
+			if (is_kpack == false)
+				continue;
+
+			if (candidate_count >=
+			    KOTEK_DEF_FILESYSTEM_PACK_ENUMERATION_MAX_CANDIDATES)
+			{
+				KOTEK_MESSAGE_WARNING(
+					"more than {} packs in {}; the rest are ignored",
+					KOTEK_DEF_FILESYSTEM_PACK_ENUMERATION_MAX_CANDIDATES,
+					packs_folder
+				);
+				break;
+			}
+
+			candidates[candidate_count].path = entry_path;
+			candidates[candidate_count].write_time =
+				static_cast<kun_ktk int64_t>(
+					entry.last_write_time().time_since_epoch().count()
+				);
+			++candidate_count;
+		}
+
+		if (ec.value() != 0 &&
+		    candidate_count == 0)
+		{
+			// the folder exists but can't be enumerated (the empty-
+			// folder ERROR_FILE_NOT_FOUND shape also lands here — that
+			// one is a legit no-op, not an error)
+			if (ec.value() != 2 /*ERROR_FILE_NOT_FOUND*/)
+			{
+				KOTEK_MESSAGE_WARNING(
+					"failed to enumerate the packs folder {} "
+					"(error {})",
+					packs_folder, ec.value()
+				);
+			}
+			return;
+		}
+	}
+
+	// insertion sort, newest first (ties broken by the path for
+	// determinism)
+	for (kun_ktk size_t i = 1; i < candidate_count; ++i)
+	{
+		const pack_candidate_t value = candidates[i];
+
+		kun_ktk size_t hole = i;
+
+		while (hole > 0)
+		{
+			const pack_candidate_t& prev = candidates[hole - 1];
+
+			const bool is_older = prev.write_time < value.write_time;
+			const bool is_same_time_earlier_name =
+				prev.write_time == value.write_time &&
+				strcmp(prev.path.c_str(), value.path.c_str()) > 0;
+
+			if (is_older == false && is_same_time_earlier_name == false)
+				break;
+
+			candidates[hole] = prev;
+			--hole;
+		}
+
+		candidates[hole] = value;
+	}
+
+	for (kun_ktk size_t i = 0; i < candidate_count; ++i)
+	{
+		this->Mount_Pack(candidates[i].path);
+	}
+}
+#endif
+
 
 bool ktkFileSystem::Is_Exists(
 	const ktk_filesystem_path& path, bool is_relative_path

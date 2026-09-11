@@ -1098,25 +1098,42 @@ void ktkFrameworkConfig::Set_FS_PriorityList(
 		kun_ktk uint8_t>(eFileSystemPriorityType::kEndOfEnum)]
 )
 {
-	kun_ktk uint8_t real_size = 0;
+	// the list is DENSE from index 0 and kAuto-terminated; the pre-B2a
+	// code counted entries != kAuto && != kEndOfEnum across the whole
+	// array, and because kEndOfEnum aliased kZlib every kZlib entry was
+	// silently dropped (the K25-documented sentinel collision) — with the
+	// real sentinel the count is simply the prefix up to the first kAuto.
+	// The WHOLE array is copied (not just the prefix) so a shorter new
+	// list can never leave stale entries from a previous longer one —
+	// Get_FS_PriorityListSize stops at the first kAuto.
+#ifdef KOTEK_DEBUG
+	bool was_terminated = false;
 
-	for (int i = 0; i <
-	     static_cast<int>(eFileSystemPriorityType::kEndOfEnum);
+	for (kun_ktk uint8_t i = 0;
+	     i < static_cast<kun_ktk uint8_t>(
+				 eFileSystemPriorityType::kEndOfEnum
+			 );
 	     ++i)
 	{
-		if (static_cast<eFileSystemPriorityType>(arr[i]) !=
-		        eFileSystemPriorityType::kAuto &&
-		    static_cast<eFileSystemPriorityType>(arr[i]) !=
-		        eFileSystemPriorityType::kEndOfEnum)
+		if (arr[i] ==
+		    static_cast<kun_ktk uint8_t>(eFileSystemPriorityType::kAuto))
 		{
-			++real_size;
+			was_terminated = true;
+		}
+		else
+		{
+			KOTEK_ASSERT(
+				was_terminated == false,
+				"the FS priority list must be dense and kAuto-terminated "
+				"(zero-initialize the array and write entries from "
+				"index 0)"
+			);
 		}
 	}
+#endif
 
 	std::memcpy(
-		this->m_fs_priority_list,
-		arr,
-		static_cast<kun_ktk size_t>(real_size) * sizeof(arr[0])
+		this->m_fs_priority_list, arr, sizeof(this->m_fs_priority_list)
 	);
 }
 

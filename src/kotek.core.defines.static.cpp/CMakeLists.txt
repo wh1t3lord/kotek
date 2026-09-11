@@ -752,6 +752,12 @@ endif()
 
 message(STATUS "[${PROJECT_NAME}]: using filesystem type: KOTEK_FILESYSTEM_TYPE_ZLIB=${KOTEK_FILESYSTEM_TYPE_ZLIB}")
 
+if ("${KOTEK_FILESYSTEM_TYPE_PACK}" STREQUAL "" OR "${KOTEK_FILESYSTEM_TYPE_PACK}" STREQUAL "ON")
+	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_FILESYSTEM_TYPE_PACK)
+endif()
+
+message(STATUS "[${PROJECT_NAME}]: using filesystem type: KOTEK_FILESYSTEM_TYPE_PACK=${KOTEK_FILESYSTEM_TYPE_PACK}")
+
 ### Generating code
 if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 	list(APPEND KOTEK_OUTPUT_FLAGS -DKOTEK_BUILD_TYPE)
@@ -1363,6 +1369,34 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 			// the data is already resident in the address space)
 			#define KOTEK_DEF_FILESYSTEM_VFM_STREAM_CHUNK_SIZE 65536
 
+			// B2a (.kpack reader/writer, kotek.core.filesystem.pack):
+			// raw bytes per compression block — the format's unit of
+			// independent decompression and B3's stream step; 64 KB is
+			// the zstd sweet spot (ratio vs random-access granularity)
+			#define KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE 65536
+			// HDD-sector alignment of every entry's data span
+			#define KOTEK_DEF_FILESYSTEM_PACK_DATA_ALIGNMENT 4096
+			// an upper bound of a packed 64 KB block: the worst codec is
+			// zstd on incompressible data — ZSTD_COMPRESSBOUND(65536) is
+			// 65824; rounded up to 65920
+			#define KOTEK_DEF_FILESYSTEM_PACK_MAX_PACKED_BLOCK_SIZE 65920
+			// mount-time table caps (the tables are read ONCE into
+			// memory): 4096 entries * 48 B of in-memory record = 192 KB
+			// per mounted pack
+			#define KOTEK_DEF_FILESYSTEM_PACK_MAX_ENTRIES 4096
+			// 4096 blocks = 256 MB of raw data per entry — past that the
+			// entry belongs in its own pack anyway
+			#define KOTEK_DEF_FILESYSTEM_PACK_MAX_BLOCKS_PER_ENTRY 4096
+			// 65536 blocks * 4 B = 256 KB of block table per pack, i.e.
+			// 4 GB of raw content per pack at uniform 64 KB blocks
+			#define KOTEK_DEF_FILESYSTEM_PACK_MAX_BLOCKS_TOTAL 65536
+			// base + a few patch/DLC packs; the mount order is the
+			// override order (newest first)
+			#define KOTEK_DEF_FILESYSTEM_PACK_MAX_MOUNTED_PACKS 8
+			// .kpack candidates collected per mount-time folder walk
+			// before the newest-first sort trims to the mount cap
+			#define KOTEK_DEF_FILESYSTEM_PACK_ENUMERATION_MAX_CANDIDATES 64
+
 			#define KOTEK_DEF_USER_ENGINE_LIBRARY_CALLBACK_NAME_LENGTH ${KOTEK_DEF_USER_ENGINE_LIBRARY_CALLBACK_NAME_LENGTH}
 			#define KOTEK_DEF_RESOURCE_TEXT_FILENAME_LENGTH ${KOTEK_DEF_RESOURCE_TEXT_FILENAME_LENGTH}
 			#define KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH ${KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH}
@@ -1430,6 +1464,10 @@ if (NOT "${CMAKE_BUILD_TYPE}" STREQUAL "")
 
 		#ifdef KOTEK_FILESYSTEM_TYPE_ZLIB
 			#define KOTEK_USE_FILESYSTEM_TYPE_ZLIB
+		#endif
+
+		#ifdef KOTEK_FILESYSTEM_TYPE_PACK
+			#define KOTEK_USE_FILESYSTEM_TYPE_PACK
 		#endif
 	
 	")

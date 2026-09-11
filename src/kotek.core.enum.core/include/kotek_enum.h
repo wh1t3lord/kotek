@@ -34,7 +34,8 @@ enum class eFileSystemType : kun_ktk uint16_t{
 	kUnknown = 0,
 	kNative = 1 << 1,
 	kZlib = 1 << 2,
-	kEndOfEnum = kZlib
+	kPack = 1 << 3,
+	kEndOfEnum = kPack
 };
 
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(
@@ -47,7 +48,14 @@ enum class eFileSystemPriorityType : kun_ktk uint8_t{
 	kAuto,
 	kNative,
 	kZlib,
-	kEndOfEnum = kZlib
+	/// @brief \~english the .kpack archive backend
+	/// (kotek.core.filesystem.pack, B2a)
+	kPack,
+	/// @brief \~english a REAL sentinel past the last backend (B2a fix:
+	/// this used to be "= kZlib", so kZlib == kEndOfEnum collided and
+	/// ktkFrameworkConfig::Set_FS_PriorityList silently dropped every
+	/// kZlib entry it was handed — see the K25 row)
+	kEndOfEnum
 };
 
 enum class eFileSystemSeekType : kun_ktk uint8_t{

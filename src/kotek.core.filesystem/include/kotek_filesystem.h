@@ -6,6 +6,10 @@
 #include <kotek.core.containers.filesystem/include/kotek_core_containers_filesystem.h>
 #include <kotek.core.containers.multithreading.atomic/include/kotek_core_containers_multithreading_atomic.h>
 
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+	#include <kotek.core.filesystem.pack/include/kotek_filesystem_pack.h>
+#endif
+
 #include "kotek_filesystem_native.h"
 #include "kotek_filesystem_zlib.h"
 #include "kotek_virtualfilemapper.h"
@@ -62,6 +66,11 @@ constexpr const char*
 constexpr const char*
 	kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_ZLIB =
 		"ZLIB";
+/// @brief \~english the .kpack backend's sys_info.json priority-list
+/// name (B2a) — an explicit ["Pack","Native"] list puts packs FIRST
+constexpr const char*
+	kSysInfoFieldName_CoreNamespace_FileSystemPriorityList_Pack =
+		"Pack";
 constexpr const char*
 	kSysInfoFieldName_CoreNamespace_FileSystemFeatures =
 		"FS_Features";
@@ -302,6 +311,26 @@ public:
 	}
 #endif
 
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+	/// @brief \~english B2a: mounts one .kpack file into the read path and
+	/// makes the priority list real for it — when the configured list
+	/// lacks kPack, kPack is PREPENDED (packs override the native dirs —
+	/// the "always native-last" choice, documented in the K25 row; an
+	/// explicit ["Native","Pack"] list in sys_info.json restores
+	/// loose-file-wins). A corrupt pack = loud error + false, other
+	/// mounts stay. Test seam AND the conventional-folder mounter share
+	/// this entry point.
+	bool Mount_Pack(const ktk_filesystem_path& pack_file_path);
+
+	/// @brief \~english B2a diagnostic seam (the Get_VFM precedent —
+	/// concrete class, deliberately not on ktkIFileSystem): block-level
+	/// reads for B3 ride ktkFileSystem_Pack::Read_File_Block
+	ktkFileSystem_Pack* Get_Pack(void) noexcept
+	{
+		return &this->m_fs_pack;
+	}
+#endif
+
 private:
 	void Validate_Folders(void) noexcept;
 
@@ -317,6 +346,18 @@ private:
 	void Create_DefaultFrameworkConfig();
 	void Fill_FrameworkConfigDefaults();
 
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+	/// @brief \~english B2a: the ONE allowed directory walk — enumerates
+	/// data_game/packs/*.kpack once at Initialize, mounts newest-first.
+	/// A missing/empty folder is a silent no-op; a corrupt pack is a loud
+	/// skip.
+	void Mount_Packs_From_Conventional_Folder();
+
+	/// @brief \~english prepends kPack to the configured priority list
+	/// when it is absent (idempotent)
+	void Ensure_Pack_In_PriorityList();
+#endif
+
 private:
 	ktkIFrameworkConfig* m_p_config;
 
@@ -331,6 +372,10 @@ private:
 
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_ZLIB
 	ktkFileSystem_Zlib m_fs_zlib;
+#endif
+
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+	ktkFileSystem_Pack m_fs_pack;
 #endif
 
 #ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM

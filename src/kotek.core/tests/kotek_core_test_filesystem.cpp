@@ -3195,6 +3195,1043 @@ TEST(Filesystem, test_b1_vfm_shutdown_leaves_no_outstanding_mappings)
 
 #endif
 
+// --- B2a .kpack reader + writer (kotek.core.filesystem.pack) ------------
+// same fixture discipline as B0/B1 (data_user/tests, self-cleaning); the
+// packs are built IN-TEST through kpack_write_file — the same encoder the
+// B2b packer tool will reuse
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+
+namespace
+{
+	constexpr const char* kB2A_Name_Stored =
+		"data_user/tests/b2a_entry_stored.bin";
+	constexpr const char* kB2A_Name_Zstd =
+		"data_user/tests/b2a_entry_zstd.bin";
+	constexpr const char* kB2A_Name_Zlib =
+		"data_user/tests/b2a_entry_zlib.bin";
+
+	constexpr kun_ktk size_t kB2A_StoredSize = 100;
+	// 64 KB exact: exactly one full block, the boundary case
+	constexpr kun_ktk size_t kB2A_ZstdSize =
+		KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE;
+	// 3 full blocks + a 3,405-byte tail — crosses block boundaries
+	constexpr kun_ktk size_t kB2A_ZlibSize =
+		KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE * 3 + 3405;
+
+	void b2a_fill_payload(kun_ktk uint8_t* p_buffer, kun_ktk size_t size)
+	{
+		// i*31+7 mod 256 hits every byte value (gcd(31,256)=1)
+		for (kun_ktk size_t i = 0; i < size; ++i)
+			p_buffer[i] = static_cast<kun_ktk uint8_t>(i * 31 + 7);
+	}
+
+	bool b2a_bytes_equal(
+		const kun_ktk uint8_t* p_left,
+		const kun_ktk uint8_t* p_right,
+		kun_ktk size_t size
+	)
+	{
+		for (kun_ktk size_t i = 0; i < size; ++i)
+		{
+			if (p_left[i] != p_right[i])
+				return false;
+		}
+		return true;
+	}
+
+	/// builds the mixed 3-entry pack (stored 100 B / zstd 64 KB exact /
+	/// zlib 200 KB+tail) at pack_path; the payloads are heap-allocated
+	/// and returned for byte comparison (delete[] by the caller)
+	bool b2a_write_mixed_pack(
+		const ktk_filesystem_path& pack_path,
+		kun_ktk uint8_t*& p_out_stored,
+		kun_ktk uint8_t*& p_out_zstd,
+		kun_ktk uint8_t*& p_out_zlib
+	)
+	{
+		p_out_stored = new kun_ktk uint8_t[kB2A_StoredSize];
+		p_out_zstd = new kun_ktk uint8_t[kB2A_ZstdSize];
+		p_out_zlib = new kun_ktk uint8_t[kB2A_ZlibSize];
+
+		b2a_fill_payload(p_out_stored, kB2A_StoredSize);
+		b2a_fill_payload(p_out_zstd, kB2A_ZstdSize);
+		b2a_fill_payload(p_out_zlib, kB2A_ZlibSize);
+
+		const kpack_writer_entry_t entries[] = {
+			{kB2A_Name_Stored, p_out_stored, kB2A_StoredSize,
+			 eKpackCompression::kStored},
+			{kB2A_Name_Zstd, p_out_zstd, kB2A_ZstdSize,
+			 eKpackCompression::kZstd},
+			{kB2A_Name_Zlib, p_out_zlib, kB2A_ZlibSize,
+			 eKpackCompression::kZlib},
+		};
+
+		return kpack_write_file(pack_path.c_str(), entries, 3);
+	}
+} // namespace
+
+TEST(Filesystem, test_b2a_pack_write_read_roundtrip)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path pack_path;
+	instance.Make_Path(
+		pack_path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	pack_path /= "b2a_mixed.kpack";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+
+	kun_ktk uint8_t* payload_stored = nullptr;
+	kun_ktk uint8_t* payload_zstd = nullptr;
+	kun_ktk uint8_t* payload_zlib = nullptr;
+
+	ASSERT_TRUE(
+		b2a_write_mixed_pack(
+			pack_path, payload_stored, payload_zstd, payload_zlib
+		)
+	);
+
+	// mounting through the real filesystem instance also drives the
+	// priority-list prepend (pack-first, the documented default)
+	ASSERT_TRUE(instance.Mount_Pack(pack_path));
+	EXPECT_TRUE(instance.Get_Pack()->Get_MountedPackCount() == 1);
+
+	struct read_case_t
+	{
+		const char* p_name;
+		const kun_ktk uint8_t* p_payload;
+		kun_ktk size_t size;
+	};
+
+	const read_case_t cases[] = {
+		{kB2A_Name_Stored, payload_stored, kB2A_StoredSize},
+		{kB2A_Name_Zstd, payload_zstd, kB2A_ZstdSize},
+		{kB2A_Name_Zlib, payload_zlib, kB2A_ZlibSize},
+	};
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	for (const auto& read_case : cases)
+	{
+		ktk_filesystem_path path = folder;
+		path /= (read_case.p_name + strlen("data_user/tests/"));
+
+		// Get_FileSize through the dispatcher (pack-first effective
+		// order after the prepend)
+		kun_ktk size_t queried_size = 0;
+		EXPECT_TRUE(instance.Get_FileSize(path, queried_size));
+		EXPECT_TRUE(queried_size == read_case.size);
+
+		kun_ktk uint8_t* readback =
+			new kun_ktk uint8_t[read_case.size + 64];
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = read_case.size + 64;
+
+		// the mounted-backend roundtrip: byte-identical per entry
+		ASSERT_TRUE(
+			instance.Read_File(path, p_readback, readback_size)
+		);
+		EXPECT_TRUE(readback_size == read_case.size);
+		EXPECT_TRUE(p_readback == readback);
+		// the native-parity terminator (room permitting)
+		EXPECT_TRUE(readback[read_case.size] == 0);
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				readback, read_case.p_payload, read_case.size
+			)
+		);
+
+		delete[] readback;
+	}
+
+	// the backend's own API reports the tri-state success too
+	{
+		ktk_filesystem_path path = folder;
+		path /= (kB2A_Name_Zstd + strlen("data_user/tests/"));
+
+		kun_ktk uint8_t readback[kB2A_ZstdSize];
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File(
+				path, readback, readback_size
+			) == eKpackReadResult::kSuccess
+		);
+		EXPECT_TRUE(readback_size == kB2A_ZstdSize);
+	}
+
+	// the B0 too-small contract holds on the pack path, INCLUDING the
+	// required size surviving the chain (a found-but-too-small entry
+	// stops the override chain — absence is the only fallthrough)
+	{
+		ktk_filesystem_path path = folder;
+		path /= (kB2A_Name_Zlib + strlen("data_user/tests/"));
+
+		kun_ktk uint8_t tiny[16];
+		kun_ktk uint8_t* p_tiny = tiny;
+		kun_ktk size_t tiny_size = sizeof(tiny);
+
+		EXPECT_FALSE(instance.Read_File(path, p_tiny, tiny_size));
+		EXPECT_TRUE(tiny_size == kB2A_ZlibSize);
+		EXPECT_TRUE(p_tiny == tiny);
+	}
+
+	delete[] payload_stored;
+	delete[] payload_zstd;
+	delete[] payload_zlib;
+
+	// Shutdown BEFORE removing the fixture: the mount holds the pack
+	// file open until UnmountAll, and Windows refuses to delete an open
+	// file
+	instance.Shutdown();
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+}
+
+TEST(Filesystem, test_b2a_pack_block_reads_match_full_read)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path pack_path;
+	instance.Make_Path(
+		pack_path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	pack_path /= "b2a_blocks.kpack";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+
+	kun_ktk uint8_t* payload_stored = nullptr;
+	kun_ktk uint8_t* payload_zstd = nullptr;
+	kun_ktk uint8_t* payload_zlib = nullptr;
+
+	ASSERT_TRUE(
+		b2a_write_mixed_pack(
+			pack_path, payload_stored, payload_zstd, payload_zlib
+		)
+	);
+	ASSERT_TRUE(instance.Mount_Pack(pack_path));
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	// the zlib entry: 3 full 64 KB blocks + a 3,405-byte tail = 4 blocks
+	constexpr kun_ktk size_t kExpectedBlocks = 4;
+	static_assert(
+		kB2A_ZlibSize / KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE + 1 ==
+		kExpectedBlocks
+	);
+
+	ktk_filesystem_path zlib_path = folder;
+	zlib_path /= (kB2A_Name_Zlib + strlen("data_user/tests/"));
+
+	kun_ktk uint8_t block_buffer[KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE];
+
+	for (kun_ktk uint32_t block = 0; block < kExpectedBlocks; ++block)
+	{
+		kun_ktk size_t block_size = sizeof(block_buffer);
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File_Block(
+				zlib_path, block, block_buffer, block_size
+			) == eKpackReadResult::kSuccess
+		);
+
+		const kun_ktk size_t expected_size =
+			(block == kExpectedBlocks - 1)
+			? (kB2A_ZlibSize -
+		       block * KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE)
+			: KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE;
+
+		EXPECT_TRUE(block_size == expected_size);
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				block_buffer,
+				payload_zlib +
+					block * KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE,
+				expected_size
+			)
+		);
+	}
+
+	// a stored entry's single block is the raw span itself
+	{
+		ktk_filesystem_path stored_path = folder;
+		stored_path /= (kB2A_Name_Stored + strlen("data_user/tests/"));
+
+		kun_ktk size_t block_size = sizeof(block_buffer);
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File_Block(
+				stored_path, 0, block_buffer, block_size
+			) == eKpackReadResult::kSuccess
+		);
+		EXPECT_TRUE(block_size == kB2A_StoredSize);
+		EXPECT_TRUE(
+			b2a_bytes_equal(block_buffer, payload_stored, kB2A_StoredSize)
+		);
+	}
+
+	// the 64 KB-exact zstd entry is exactly one full block
+	{
+		ktk_filesystem_path zstd_path = folder;
+		zstd_path /= (kB2A_Name_Zstd + strlen("data_user/tests/"));
+
+		kun_ktk size_t block_size = sizeof(block_buffer);
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File_Block(
+				zstd_path, 0, block_buffer, block_size
+			) == eKpackReadResult::kSuccess
+		);
+		EXPECT_TRUE(block_size == kB2A_ZstdSize);
+		EXPECT_TRUE(
+			b2a_bytes_equal(block_buffer, payload_zstd, kB2A_ZstdSize)
+		);
+
+		// a block index past the entry's block count is a loud caller
+		// error, not a read
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File_Block(
+				zstd_path, 1, block_buffer, block_size
+			) == eKpackReadResult::kCorrupt
+		);
+	}
+
+	// a too-small block buffer reports the REQUIRED block size
+	{
+		kun_ktk uint8_t tiny[8];
+		kun_ktk size_t tiny_size = sizeof(tiny);
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File_Block(
+				zlib_path, 0, tiny, tiny_size
+			) == eKpackReadResult::kTooSmall
+		);
+		EXPECT_TRUE(
+			tiny_size ==
+			static_cast<kun_ktk size_t>(
+				KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE
+			)
+		);
+	}
+
+	delete[] payload_stored;
+	delete[] payload_zstd;
+	delete[] payload_zlib;
+
+	// Shutdown BEFORE removing the fixture (the mount holds the pack
+	// file open)
+	instance.Shutdown();
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+}
+
+TEST(Filesystem, test_b2a_pack_fallthrough_and_priority_order)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path shared_path = folder;
+	shared_path /= "b2a_shared.bin";
+
+	ktk_filesystem_path pack_path = folder;
+	pack_path /= "b2a_priority.kpack";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(shared_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+
+	// the SAME root-relative name exists in the pack AND on native disk
+	const char pack_payload[] = "PACK-BYTES-WIN-OR-LOSE";
+	const char native_payload[] = "NATIVE-BYTES-WIN-OR-LOSE";
+	const char only_payload[] = "ONLY-IN-THE-PACK";
+
+	const kpack_writer_entry_t entries[] = {
+		{"data_user/tests/b2a_shared.bin",
+		 reinterpret_cast<const kun_ktk uint8_t*>(pack_payload),
+		 sizeof(pack_payload), eKpackCompression::kStored},
+		{"data_user/tests/b2a_pack_only.bin",
+		 reinterpret_cast<const kun_ktk uint8_t*>(only_payload),
+		 sizeof(only_payload), eKpackCompression::kZstd},
+	};
+
+	ASSERT_TRUE(
+		kpack_write_file(pack_path.c_str(), entries, 2)
+	);
+
+	ASSERT_TRUE(
+		instance.Write_File(
+			shared_path, native_payload, sizeof(native_payload)
+		)
+	);
+
+	// the mount prepends kPack: the documented default is pack-first
+	ASSERT_TRUE(instance.Mount_Pack(pack_path));
+
+	kun_ktk uint8_t readback[128];
+
+	{
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		ASSERT_TRUE(
+			instance.Read_File(shared_path, p_readback, readback_size)
+		);
+		EXPECT_TRUE(readback_size == sizeof(pack_payload));
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				readback,
+				reinterpret_cast<const kun_ktk uint8_t*>(pack_payload),
+				sizeof(pack_payload)
+			)
+		);
+	}
+
+	// a pack-only name reads through the dispatcher silently (no native
+	// consult once the pack answers)
+	{
+		ktk_filesystem_path only_path = folder;
+		only_path /= "b2a_pack_only.bin";
+
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		ASSERT_TRUE(
+			instance.Read_File(only_path, p_readback, readback_size)
+		);
+		EXPECT_TRUE(readback_size == sizeof(only_payload));
+	}
+
+	// a name that is only on native disk: the pack miss is a SILENT
+	// fallthrough and native answers
+	{
+		ktk_filesystem_path native_only_path = folder;
+		native_only_path /= "b2a_native_only.bin";
+
+		const char native_only_payload[] = "ONLY-ON-NATIVE";
+
+		ASSERT_TRUE(
+			instance.Write_File(
+				native_only_path, native_only_payload,
+				sizeof(native_only_payload)
+			)
+		);
+
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		ASSERT_TRUE(
+			instance.Read_File(
+				native_only_path, p_readback, readback_size
+			)
+		);
+		EXPECT_TRUE(readback_size == sizeof(native_only_payload));
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				readback,
+				reinterpret_cast<const kun_ktk uint8_t*>(
+					native_only_payload
+				),
+				sizeof(native_only_payload)
+			)
+		);
+
+		ec.clear();
+		std::filesystem::remove(
+			std::filesystem::path(native_only_path.c_str()), ec
+		);
+	}
+
+	// the explicit ["Native","Pack"] order flips the override: the loose
+	// file now shadows the pack entry
+	{
+		kun_ktk uint8_t native_first[static_cast<kun_ktk uint8_t>(
+			eFileSystemPriorityType::kEndOfEnum
+		)] = {};
+		native_first[0] = static_cast<kun_ktk uint8_t>(
+			eFileSystemPriorityType::kNative
+		);
+		native_first[1] = static_cast<kun_ktk uint8_t>(
+			eFileSystemPriorityType::kPack
+		);
+		cfg.Set_FS_PriorityList(native_first);
+
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		ASSERT_TRUE(
+			instance.Read_File(shared_path, p_readback, readback_size)
+		);
+		EXPECT_TRUE(readback_size == sizeof(native_payload));
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				readback,
+				reinterpret_cast<const kun_ktk uint8_t*>(native_payload),
+				sizeof(native_payload)
+			)
+		);
+
+		// and the pack entry still answers when native has nothing
+		ktk_filesystem_path only_path = folder;
+		only_path /= "b2a_pack_only.bin";
+
+		p_readback = readback;
+		readback_size = sizeof(readback);
+
+		ASSERT_TRUE(
+			instance.Read_File(only_path, p_readback, readback_size)
+		);
+		EXPECT_TRUE(readback_size == sizeof(only_payload));
+	}
+
+	// an unknown name falls through EVERY backend: false + size 0, the
+	// B0 shape (one native warning, never an assert)
+	{
+		ktk_filesystem_path missing_path = folder;
+		missing_path /= "b2a_absent_everywhere.bin";
+
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		EXPECT_FALSE(
+			instance.Read_File(missing_path, p_readback, readback_size)
+		);
+		EXPECT_TRUE(readback_size == 0);
+
+		kun_ktk size_t queried = 123;
+		EXPECT_FALSE(instance.Get_FileSize(missing_path, queried));
+		EXPECT_TRUE(queried == 0);
+	}
+
+	// Shutdown BEFORE removing the fixtures (the mount holds the pack
+	// file open)
+	instance.Shutdown();
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(shared_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+}
+
+TEST(Filesystem, test_b2a_pack_corrupt_packs_are_skipped)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path good_pack = folder;
+	good_pack /= "b2a_corrupt_good.kpack";
+	ktk_filesystem_path bad_magic = folder;
+	bad_magic /= "b2a_corrupt_magic.kpack";
+	ktk_filesystem_path truncated = folder;
+	truncated /= "b2a_corrupt_truncated.kpack";
+	ktk_filesystem_path bogus_codec = folder;
+	bogus_codec /= "b2a_corrupt_codec.kpack";
+
+	std::error_code ec;
+	for (const auto& path :
+	     {good_pack, bad_magic, truncated, bogus_codec})
+	{
+		ec.clear();
+		std::filesystem::remove(
+			std::filesystem::path(path.c_str()), ec
+		);
+	}
+
+	const char payload[] = "i survive every corrupt neighbour";
+
+	const kpack_writer_entry_t entries[] = {
+		{"data_user/tests/b2a_survivor.bin",
+		 reinterpret_cast<const kun_ktk uint8_t*>(payload),
+		 sizeof(payload), eKpackCompression::kZstd},
+	};
+
+	ASSERT_TRUE(kpack_write_file(good_pack.c_str(), entries, 1));
+
+	// bad magic
+	{
+		kun_ktk uint8_t garbage[20] = {};
+		garbage[0] = 'N';
+		garbage[1] = 'O';
+		garbage[2] = 'P';
+		garbage[3] = 'E';
+
+		FILE* p_file = fopen(bad_magic.c_str(), "wb");
+		ASSERT_TRUE(p_file != nullptr);
+		ASSERT_TRUE(fwrite(garbage, 1, sizeof(garbage), p_file) ==
+		            sizeof(garbage));
+		fclose(p_file);
+
+		EXPECT_FALSE(instance.Mount_Pack(bad_magic));
+	}
+
+	// a truncated entry table (a valid header claiming 2 entries, only
+	// 10 bytes of table behind it)
+	{
+		kun_ktk uint8_t header_and_stub[30] = {};
+		memcpy(header_and_stub, kKpackMagic, sizeof(kKpackMagic));
+		header_and_stub[8] = 2; // entry_count u32 = 2
+
+		FILE* p_file = fopen(truncated.c_str(), "wb");
+		ASSERT_TRUE(p_file != nullptr);
+		ASSERT_TRUE(
+			fwrite(
+				header_and_stub, 1, sizeof(header_and_stub), p_file
+			) == sizeof(header_and_stub)
+		);
+		fclose(p_file);
+
+		EXPECT_FALSE(instance.Mount_Pack(truncated));
+	}
+
+	// a bogus compression enum in the only entry's record
+	{
+		ASSERT_TRUE(
+			kpack_write_file(bogus_codec.c_str(), entries, 1)
+		);
+
+		FILE* p_file = fopen(bogus_codec.c_str(), "r+b");
+		ASSERT_TRUE(p_file != nullptr);
+		// entry 0's compression byte: 20-byte header + 32
+		ASSERT_TRUE(fseek(p_file, 20 + 32, SEEK_SET) == 0);
+		const kun_ktk uint8_t bogus = 7;
+		ASSERT_TRUE(fwrite(&bogus, 1, 1, p_file) == 1);
+		fclose(p_file);
+
+		EXPECT_FALSE(instance.Mount_Pack(bogus_codec));
+	}
+
+	// the corrupt neighbours never mounted, and the good pack still
+	// mounts + reads
+	EXPECT_TRUE(instance.Get_Pack()->Get_MountedPackCount() == 0);
+
+	ASSERT_TRUE(instance.Mount_Pack(good_pack));
+	EXPECT_TRUE(instance.Get_Pack()->Get_MountedPackCount() == 1);
+
+	{
+		ktk_filesystem_path survivor_path = folder;
+		survivor_path /= "b2a_survivor.bin";
+
+		kun_ktk uint8_t readback[64];
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		ASSERT_TRUE(
+			instance.Read_File(
+				survivor_path, p_readback, readback_size
+			)
+		);
+		EXPECT_TRUE(readback_size == sizeof(payload));
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				readback,
+				reinterpret_cast<const kun_ktk uint8_t*>(payload),
+				sizeof(payload)
+			)
+		);
+	}
+
+	// Shutdown BEFORE removing the fixtures (the mount holds the pack
+	// file open)
+	instance.Shutdown();
+
+	for (const auto& path :
+	     {good_pack, bad_magic, truncated, bogus_codec})
+	{
+		ec.clear();
+		std::filesystem::remove(
+			std::filesystem::path(path.c_str()), ec
+		);
+	}
+}
+
+TEST(Filesystem, test_b2a_pack_entry_count_overflow_is_clamped)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path pack_path = folder;
+	pack_path /= "b2a_overflow.kpack";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+
+	// one entry past the reader cap — the writer is permissive (the
+	// reader owns the mount caps), the mount must clamp loudly and keep
+	// the first cap entries readable
+	constexpr kun_ktk size_t kEntryCount =
+		KOTEK_DEF_FILESYSTEM_PACK_MAX_ENTRIES + 1;
+
+	std::vector<std::string> names(kEntryCount);
+	std::vector<kpack_writer_entry_t> entries(kEntryCount);
+
+	kun_ktk uint8_t payload_byte = 0x5A;
+
+	for (kun_ktk size_t i = 0; i < kEntryCount; ++i)
+	{
+		char name[96];
+		std::snprintf(
+			name, sizeof(name), "data_user/tests/b2a_cap_%u.bin",
+			static_cast<unsigned>(i)
+		);
+		names[i] = name;
+
+		entries[i].p_name = names[i].c_str();
+		entries[i].p_data = &payload_byte;
+		entries[i].data_size = 1;
+		entries[i].compression = eKpackCompression::kStored;
+	}
+
+	ASSERT_TRUE(
+		kpack_write_file(
+			pack_path.c_str(), entries.data(), entries.size()
+		)
+	);
+
+	// the clamp: mount SUCCEEDS (one loud error), the excess is dropped
+	ASSERT_TRUE(instance.Mount_Pack(pack_path));
+
+	auto p_try_read_entry = [&](kun_ktk size_t index) -> bool
+	{
+		char name[96];
+		std::snprintf(
+			name, sizeof(name), "b2a_cap_%u.bin",
+			static_cast<unsigned>(index)
+		);
+
+		ktk_filesystem_path path = folder;
+		path /= name;
+
+		kun_ktk uint8_t readback[8];
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		return instance.Get_Pack()->Read_File(
+				   path, readback, readback_size
+			   ) == eKpackReadResult::kSuccess &&
+			readback_size == 1 && readback[0] == payload_byte;
+	};
+
+	// the first cap entries all read
+	EXPECT_TRUE(p_try_read_entry(0));
+	EXPECT_TRUE(
+		p_try_read_entry(KOTEK_DEF_FILESYSTEM_PACK_MAX_ENTRIES / 2)
+	);
+	EXPECT_TRUE(
+		p_try_read_entry(KOTEK_DEF_FILESYSTEM_PACK_MAX_ENTRIES - 1)
+	);
+
+	// the excess entry answers not-found (silent fallthrough)
+	EXPECT_FALSE(
+		p_try_read_entry(KOTEK_DEF_FILESYSTEM_PACK_MAX_ENTRIES)
+	);
+
+	// Shutdown BEFORE removing the fixture (the mount holds the pack
+	// file open)
+	instance.Shutdown();
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+}
+
+TEST(Filesystem, test_b2a_pack_empty_pack_mounts_and_answers_nothing)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path pack_path = folder;
+	pack_path /= "b2a_empty.kpack";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+
+	// a 0-entry pack is legal: header only
+	ASSERT_TRUE(kpack_write_file(pack_path.c_str(), nullptr, 0));
+
+	ASSERT_TRUE(instance.Mount_Pack(pack_path));
+	EXPECT_TRUE(instance.Get_Pack()->Get_MountedPackCount() == 1);
+
+	// every name is a silent not-found for this backend (size-0 miss
+	// residue, mirroring the native miss)
+	{
+		ktk_filesystem_path path = folder;
+		path /= "b2a_anything.bin";
+
+		kun_ktk uint8_t readback[16];
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File(
+				path, readback, readback_size
+			) == eKpackReadResult::kNotFound
+		);
+		EXPECT_TRUE(readback_size == 0);
+
+		kun_ktk size_t queried = 0;
+		EXPECT_TRUE(
+			instance.Get_Pack()->Get_FileSize(path, queried) ==
+			eKpackReadResult::kNotFound
+		);
+	}
+
+	// and through the dispatcher the fallthrough still serves native
+	// files (the empty pack simply has no opinion)
+	ktk_filesystem_path native_path = folder;
+	native_path /= "b2a_empty_native.bin";
+
+	{
+		const char payload[] = "native keeps working";
+
+		ASSERT_TRUE(
+			instance.Write_File(native_path, payload, sizeof(payload))
+		);
+
+		kun_ktk uint8_t readback[64];
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = sizeof(readback);
+
+		ASSERT_TRUE(
+			instance.Read_File(native_path, p_readback, readback_size)
+		);
+		EXPECT_TRUE(readback_size == sizeof(payload));
+	}
+
+	// Shutdown BEFORE removing the fixtures (the mount holds the pack
+	// file open)
+	instance.Shutdown();
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(native_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+}
+
+TEST(Filesystem, test_b2a_pack_conventional_folder_mounts_newest_first)
+{
+	// the conventional data_game/packs folder is the ONE directory walk:
+	// packs found there mount at Initialize, NEWEST first (the mount
+	// order is the override order). The folder lives outside
+	// data_user/tests by necessity (the conventional location is the
+	// thing under test) — everything below is removed at the end, and
+	// only EXPECTs run after creation so cleanup always executes
+	ktkFrameworkConfig probe_cfg;
+	ktkFileSystem probe_instance;
+
+	// initialized only for Make_Path (the conventional mount is a no-op
+	// while the folder doesn't exist)
+	probe_instance.Initialize(&probe_cfg);
+
+	ktk_filesystem_path data_game;
+	probe_instance.Make_Path(
+		data_game, eFolderIndex::kFolderIndex_DataGame
+	);
+
+	ktk_filesystem_path packs_folder = data_game;
+	packs_folder /= kKpackPacksFolderName;
+
+	ktk_filesystem_path older_pack = packs_folder;
+	older_pack /= "b2a_conv_older.kpack";
+	ktk_filesystem_path newer_pack = packs_folder;
+	newer_pack /= "b2a_conv_newer.kpack";
+
+	std::error_code ec;
+
+	// pre-clean (a previous crashed run must not pollute this one)
+	std::filesystem::remove(
+		std::filesystem::path(older_pack.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(newer_pack.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(packs_folder.c_str()), ec
+	);
+	ec.clear();
+
+	ASSERT_TRUE(
+		std::filesystem::create_directories(
+			std::filesystem::path(packs_folder.c_str()), ec
+		) || std::filesystem::exists(
+			std::filesystem::path(packs_folder.c_str())
+		)
+	);
+
+	// the same entry name in both packs with different payloads
+	const char older_payload[] = "OLDER-PACK-BYTES";
+	const char newer_payload[] = "NEWER-PACK-BYTES!!";
+
+	const kpack_writer_entry_t older_entries[] = {
+		{"data_user/tests/b2a_conv_shared.bin",
+		 reinterpret_cast<const kun_ktk uint8_t*>(older_payload),
+		 sizeof(older_payload), eKpackCompression::kStored},
+	};
+	const kpack_writer_entry_t newer_entries[] = {
+		{"data_user/tests/b2a_conv_shared.bin",
+		 reinterpret_cast<const kun_ktk uint8_t*>(newer_payload),
+		 sizeof(newer_payload), eKpackCompression::kStored},
+	};
+
+	ASSERT_TRUE(
+		kpack_write_file(older_pack.c_str(), older_entries, 1)
+	);
+	ASSERT_TRUE(
+		kpack_write_file(newer_pack.c_str(), newer_entries, 1)
+	);
+
+	// mark the timestamps explicitly: the older pack is set to the epoch,
+	// the newer keeps its natural just-written mtime
+	std::filesystem::last_write_time(
+		std::filesystem::path(older_pack.c_str()),
+		std::filesystem::file_time_type(
+			std::filesystem::file_time_type::duration::zero()
+		),
+		ec
+	);
+	ec.clear();
+
+	probe_instance.Shutdown();
+
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	// Initialize drives the conventional mount (newest-first)
+	instance.Initialize(&cfg);
+
+	EXPECT_TRUE(instance.Get_Pack()->Get_MountedPackCount() == 2);
+
+	// the priority prepend happened: pack-first is the effective order
+	EXPECT_TRUE(
+		cfg.Get_FS_PriorityList()[0] ==
+		static_cast<kun_ktk uint8_t>(eFileSystemPriorityType::kPack)
+	);
+
+	// the shared name resolves to the NEWEST pack's bytes
+	ktk_filesystem_path shared_path;
+	instance.Make_Path(
+		shared_path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	shared_path /= "b2a_conv_shared.bin";
+
+	kun_ktk uint8_t readback[64];
+	kun_ktk uint8_t* p_readback = readback;
+	kun_ktk size_t readback_size = sizeof(readback);
+
+	EXPECT_TRUE(instance.Read_File(shared_path, p_readback, readback_size));
+	EXPECT_TRUE(readback_size == sizeof(newer_payload));
+	EXPECT_TRUE(
+		b2a_bytes_equal(
+			readback,
+			reinterpret_cast<const kun_ktk uint8_t*>(newer_payload),
+			sizeof(newer_payload)
+		)
+	);
+
+	instance.Shutdown();
+
+	// self-clean: the conventional folder returns to its shipped (no
+	// packs) state — a second instance must mount NOTHING
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(older_pack.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(newer_pack.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(packs_folder.c_str()), ec
+	);
+
+	ktkFrameworkConfig cfg_after;
+	ktkFileSystem instance_after;
+
+	instance_after.Initialize(&cfg_after);
+
+	EXPECT_TRUE(
+		instance_after.Get_Pack()->Get_MountedPackCount() == 0
+	);
+	EXPECT_TRUE(
+		cfg_after.Get_FS_PriorityList()[0] ==
+		static_cast<kun_ktk uint8_t>(eFileSystemPriorityType::kNative)
+	);
+
+	instance_after.Shutdown();
+}
+
+#endif
+
 	#endif
 #endif
 

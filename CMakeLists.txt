@@ -363,6 +363,9 @@ add_subdirectory("src/kotek.core.containers.unordered_set")
 add_subdirectory("src/kotek.core.containers.variant")
 add_subdirectory("src/kotek.core.containers.vector")
 add_subdirectory("src/kotek.core.containers.list")
+# the .kpack reader/writer backend (B2a) — ktkFileSystem embeds it by
+# value, so it must precede kotek.core.filesystem
+add_subdirectory("src/kotek.core.filesystem.pack")
 add_subdirectory("src/kotek.core.filesystem")
 add_subdirectory("src/kotek.core.filesystem.file_text")
 add_subdirectory("src/kotek.core.format")

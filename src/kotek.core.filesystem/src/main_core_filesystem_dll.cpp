@@ -1,4 +1,5 @@
 #include "../include/kotek_core_filesystem.h"
+#include <kotek.core.filesystem.pack/include/kotek_core_filesystem_pack.h>
 #include <kotek.core.main_manager/include/kotek_plugin_invoke.h>
 #include <kotek.core.main_manager/include/kotek_core_main_manager.h>
 #include <kotek.core.api/include/kotek_api_no_std.h>
@@ -16,6 +17,7 @@ bool InitializeModule_Core_FileSystem(ktkMainManager* p_manager)
 	}
 
 	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_FileSystem_File_Text, p_manager);
+	KOTEK_INVOKE_MODULE(INIT, CORE, InitializeModule_Core_FileSystem_Pack, p_manager);
 
 	ktkFileSystem* p_instance = new ktkFileSystem();
 	p_instance->Initialize(p_manager->Get_EngineConfig());
@@ -28,6 +30,7 @@ bool InitializeModule_Core_FileSystem(ktkMainManager* p_manager)
 bool SerializeModule_Core_FileSystem(ktkMainManager* p_manager)
 {
 	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_FileSystem_File_Text, p_manager);
+	KOTEK_INVOKE_MODULE(SERIALIZE, CORE, SerializeModule_Core_FileSystem_Pack, p_manager);
 
 	return true;
 }
@@ -35,6 +38,7 @@ bool SerializeModule_Core_FileSystem(ktkMainManager* p_manager)
 bool DeserializeModule_Core_FileSystem(ktkMainManager* p_manager)
 {
 	KOTEK_INVOKE_MODULE(DESERIALIZE, CORE, DeserializeModule_Core_FileSystem_File_Text, p_manager);
+	KOTEK_INVOKE_MODULE(DESERIALIZE, CORE, DeserializeModule_Core_FileSystem_Pack, p_manager);
 
 	return true;
 }
@@ -42,6 +46,7 @@ bool DeserializeModule_Core_FileSystem(ktkMainManager* p_manager)
 bool ShutdownModule_Core_FileSystem(ktkMainManager* p_manager)
 {
 	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_FileSystem_File_Text, p_manager);
+	KOTEK_INVOKE_MODULE(SHUTDOWN, CORE, ShutdownModule_Core_FileSystem_Pack, p_manager);
 
 	ktkFileSystem* p_instance =
 		dynamic_cast<ktkFileSystem*>(p_manager->GetFileSystem());
