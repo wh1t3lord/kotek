@@ -6,6 +6,7 @@
 		#include <fstream>
 		#include <vector>
 		#include <iostream>
+		#include <chrono>
 		#include <gtest/gtest.h>
 	#endif
 #endif
@@ -6455,6 +6456,656 @@ TEST(Filesystem, test_helpers_read_json_streaming_matches_one_shot)
 	ec.clear();
 	std::filesystem::remove(
 		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+namespace
+{
+	/// [hdd-bench] one evidence row: pattern | ms | MB/s | reads. Every
+	/// row stays far under the logger's 256-byte static_format bound —
+	/// the boot log carries the table verbatim
+	void hdd_log_row(
+		const char* p_pattern,
+		double ms,
+		kun_ktk size_t bytes,
+		kun_ktk size_t reads
+	)
+	{
+		const double mib = static_cast<double>(bytes) / 1048576.0;
+		const double mb_s = ms > 0.000001 ? mib / (ms / 1000.0) : 0.0;
+
+		KOTEK_MESSAGE(
+			"[hdd-bench] {:<28} {:>10.2f} ms {:>10.2f} MB/s {:>10} "
+			"reads",
+			p_pattern, ms, mb_s, reads
+		);
+	}
+
+	double hdd_elapsed_ms(
+		std::chrono::steady_clock::time_point begin,
+		std::chrono::steady_clock::time_point end
+	)
+	{
+		return std::chrono::duration<double, std::milli>(end - begin)
+			.count();
+	}
+} // namespace
+
+// [hdd-bench] the HDD evidence suite (filesystem plan K25 follow-up):
+// MEASURED numbers are LOGGED ONLY (KOTEK_MESSAGE) — machines vary, and a
+// Debug CRT + a page-cache-warm file (the fixture was just written) makes
+// absolute times meaningless as gates; they are the owner's local evidence
+// table. The SUBSTANCE is the asserted part: byte-equality across the
+// access patterns and the DESIGN INVARIANT that makes sequential fast
+// regardless of the machine — the stream's cursor only moves forward and
+// the native stream performs exactly ceil(size/step) reads, both pinned
+// through the interface counters.
+TEST(Filesystem, test_hdd_stream_sequential_vs_scattered)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	// the native CRT backend, deterministic
+	cfg.Set_FS_FeaturesFlag(0);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "hdd_stream_seq_vs_scat.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	constexpr kun_ktk size_t kSize = 64 * 1024 * 1024; // 64 MB
+
+	kun_ktk uint8_t* payload = new kun_ktk uint8_t[kSize];
+	kun_ktk uint8_t* readback = new kun_ktk uint8_t[kSize + 64];
+
+	b3_fill_payload(payload, kSize);
+
+	ASSERT_TRUE(instance.Write_File(path, payload, kSize));
+
+	// (a) the one-shot 64 MB read
+	double oneshot_ms = 0.0;
+	{
+		const auto begin = std::chrono::steady_clock::now();
+
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = kSize + 64;
+
+		ASSERT_TRUE(instance.Read_File(path, p_readback, readback_size));
+
+		oneshot_ms = hdd_elapsed_ms(
+			begin, std::chrono::steady_clock::now()
+		);
+
+		ASSERT_TRUE(readback_size == kSize);
+		ASSERT_TRUE(b3_bytes_equal(readback, payload, kSize));
+	}
+
+	// (b)+(c): forward streams at two step sizes — byte-equality is the
+	// contract; the counters pin the sequential invariant: remaining
+	// decreases by EXACTLY 1 per read, every read delivers exactly one
+	// step (the file is an exact multiple), and the counted reads equal
+	// ceil(size/step)
+	auto measure_stream =
+		[&](kun_ktk uint32_t step_override,
+			kun_ktk size_t expected_step,
+			double& out_ms, kun_ktk size_t& out_reads) -> void
+	{
+		ktkFileHandleType handle = instance.Begin_Stream(
+			path, step_override, false,
+			eFileSystemStreamingType::kReadOnly,
+			eFileSystemPriorityType::kNative
+		);
+
+		ASSERT_TRUE(handle != kInvalidFileHandleType);
+		ASSERT_TRUE(
+			instance.Get_StreamingBufferLength(handle) == expected_step
+		);
+
+		const kun_ktk size_t expected_reads = kSize / expected_step;
+
+		ASSERT_TRUE(
+			instance.Get_TotalStreamsCount(handle) == expected_reads
+		);
+
+		kun_ktk size_t total = 0;
+		out_reads = 0;
+
+		const auto begin = std::chrono::steady_clock::now();
+
+		while (instance.Get_RemainingStreamsCount(handle) > 0)
+		{
+			const kun_ktk size_t remaining_before =
+				instance.Get_RemainingStreamsCount(handle);
+
+			kun_ktk size_t chunk = expected_step;
+
+			ASSERT_TRUE(
+				instance.Read_Stream(handle, readback + total, chunk)
+			);
+
+			// the position only moves FORWARD: exactly one step
+			// consumed per read, remaining strictly decreasing by 1
+			EXPECT_TRUE(chunk == expected_step);
+			EXPECT_TRUE(
+				instance.Get_RemainingStreamsCount(handle) ==
+				remaining_before - 1
+			);
+
+			total += chunk;
+			++out_reads;
+		}
+
+		out_ms = hdd_elapsed_ms(
+			begin, std::chrono::steady_clock::now()
+		);
+
+		EXPECT_TRUE(out_reads == expected_reads);
+		EXPECT_TRUE(total == kSize);
+		EXPECT_TRUE(instance.End_Stream(handle));
+
+		// streaming == one-shot, byte-identical (the design contract)
+		ASSERT_TRUE(b3_bytes_equal(readback, payload, kSize));
+	};
+
+	double stream_4k_ms = 0.0;
+	kun_ktk size_t stream_4k_reads = 0;
+
+	measure_stream(
+		0, KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE, stream_4k_ms,
+		stream_4k_reads
+	);
+
+	double stream_64k_ms = 0.0;
+	kun_ktk size_t stream_64k_reads = 0;
+
+	measure_stream(
+		65536, 65536, stream_64k_ms, stream_64k_reads
+	);
+
+	// (d) the scattered anti-pattern: 256 pseudo-random 4 KB reads across
+	// the file through a seeking std::ifstream — the per-file-seek
+	// behavior the stream discipline exists to avoid. The chunks must
+	// still match the payload (the pattern reads the same file, just
+	// badly)
+	double scattered_ms = 0.0;
+	constexpr kun_ktk size_t kScatterReads = 256;
+	constexpr kun_ktk size_t kScatterChunk = 4096;
+	{
+		std::ifstream file(
+			std::filesystem::path(path.c_str()), std::ios::binary
+		);
+		ASSERT_TRUE(file.is_open());
+
+		kun_ktk uint8_t chunk_buf[kScatterChunk];
+		kun_ktk uint64_t lcg = 0x9E3779B97F4A7C15ull;
+		const kun_ktk size_t max_chunk_index = kSize / kScatterChunk;
+
+		const auto begin = std::chrono::steady_clock::now();
+
+		for (kun_ktk size_t i = 0; i < kScatterReads; ++i)
+		{
+			lcg = lcg * 6364136223846793005ull + 1442695040888963407ull;
+
+			const kun_ktk size_t chunk_index =
+				static_cast<kun_ktk size_t>(
+					(lcg >> 33) % max_chunk_index
+				);
+
+			file.seekg(
+				static_cast<std::streamoff>(
+					chunk_index * kScatterChunk
+				),
+				std::ios::beg
+			);
+			file.read(
+				reinterpret_cast<char*>(chunk_buf), kScatterChunk
+			);
+
+			ASSERT_TRUE(file.good());
+			ASSERT_TRUE(
+				b3_bytes_equal(
+					chunk_buf, payload + chunk_index * kScatterChunk,
+					kScatterChunk
+				)
+			);
+		}
+
+		scattered_ms = hdd_elapsed_ms(
+			begin, std::chrono::steady_clock::now()
+		);
+	}
+
+	KOTEK_MESSAGE(
+		"[hdd-bench] sequential-vs-scattered: 64 MB fixture, Debug CRT, "
+		"page-cache warm — numbers are evidence, not gates"
+	);
+	hdd_log_row("one-shot 64MB", oneshot_ms, kSize, 1);
+	hdd_log_row(
+		"stream 4KB steps", stream_4k_ms, kSize, stream_4k_reads
+	);
+	hdd_log_row(
+		"stream 64KB steps", stream_64k_ms, kSize, stream_64k_reads
+	);
+	hdd_log_row(
+		"scattered 256x4KB", scattered_ms,
+		kScatterReads * kScatterChunk, kScatterReads
+	);
+
+	delete[] readback;
+	delete[] payload;
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+// [hdd-bench] pack streaming is block-disciplined: a 4 MB zstd entry
+// streams in EXACTLY ceil(4 MB / 64 KB) = 64 steps, every step delivering
+// exactly ONE decompressed 64 KB block into the SAME single scratch (the
+// memory-shape proof — the consumer never holds more than one block; the
+// pack read path's own decompression scratch is likewise one fixed block
+// per in-flight read, see kotek_filesystem_pack.cpp's Read_Block). The
+// bytes are byte-identical to the same content on native disk (the
+// owner's hard requirement). Throughput (pack-zstd vs native at the same
+// 64 KB step) is LOGGED ONLY — the local evidence for the
+// decompression-is-faster-than-disk claim; Debug CRT caveats as above.
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+TEST(Filesystem, test_hdd_pack_stream_block_discipline)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path pack_path = folder;
+	pack_path /= "hdd_pack_discipline.kpack";
+
+	ktk_filesystem_path native_path = folder;
+	native_path /= "hdd_pack_ref.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(native_path.c_str()), ec
+	);
+
+	// exactly 64 full blocks — no short tail, so every step must deliver
+	// precisely one block
+	constexpr kun_ktk size_t kSize = 4 * 1024 * 1024; // 4 MB
+	constexpr kun_ktk size_t kExpectedBlocks =
+		kSize / KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE;
+
+	static_assert(kExpectedBlocks == 64, "4 MB is 64 blocks of 64 KB");
+
+	kun_ktk uint8_t* payload = new kun_ktk uint8_t[kSize];
+	b3_fill_payload(payload, kSize);
+
+	// the native reference on disk
+	ASSERT_TRUE(instance.Write_File(native_path, payload, kSize));
+
+	// the same payload packed with zstd
+	const kpack_writer_entry_t entries[] = {
+		{"data_user/tests/hdd_pack_entry.bin", payload, kSize,
+		 eKpackCompression::kZstd},
+	};
+
+	ASSERT_TRUE(kpack_write_file(pack_path.c_str(), entries, 1));
+	ASSERT_TRUE(instance.Mount_Pack(pack_path));
+
+	// the priority machinery (explicit kPack / kNative per stream)
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kEnablePriorityWhenFailedToOpenFile
+	));
+
+	// ONE scratch for the whole drain — 64 KB against a 4 MB file; the
+	// consumer-side bounded-memory proof
+	kun_ktk uint8_t block[KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE];
+
+	// the pack stream: block-disciplined, byte-identical
+	double pack_ms = 0.0;
+	kun_ktk size_t pack_reads = 0;
+	{
+		ktk_filesystem_path entry_path = folder;
+		entry_path /= "hdd_pack_entry.bin";
+
+		ktkFileHandleType handle = instance.Begin_Stream(
+			entry_path, 0, false, eFileSystemStreamingType::kReadOnly,
+			eFileSystemPriorityType::kPack
+		);
+
+		ASSERT_TRUE(handle != kInvalidFileHandleType);
+
+		// the pack step IS the 64 KB compression block, whatever the
+		// override says
+		ASSERT_TRUE(
+			instance.Get_StreamingBufferLength(handle) ==
+			KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE
+		);
+		ASSERT_TRUE(
+			instance.Get_TotalStreamsCount(handle) == kExpectedBlocks
+		);
+
+		kun_ktk size_t total = 0;
+
+		const auto begin = std::chrono::steady_clock::now();
+
+		while (instance.Get_RemainingStreamsCount(handle) > 0)
+		{
+			const kun_ktk size_t remaining_before =
+				instance.Get_RemainingStreamsCount(handle);
+
+			kun_ktk size_t got = sizeof(block);
+
+			ASSERT_TRUE(instance.Read_Stream(handle, block, got));
+
+			// each read pulled EXACTLY ONE 64 KB block (no whole-file
+			// inflation), the cursor moved forward by one block
+			EXPECT_TRUE(got == KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE);
+			EXPECT_TRUE(
+				instance.Get_RemainingStreamsCount(handle) ==
+				remaining_before - 1
+			);
+
+			// byte-equality against the native payload, per block
+			EXPECT_TRUE(
+				b3_bytes_equal(
+					block,
+					payload +
+						pack_reads * KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE,
+					got
+				)
+			);
+
+			total += got;
+			++pack_reads;
+		}
+
+		pack_ms = hdd_elapsed_ms(
+			begin, std::chrono::steady_clock::now()
+		);
+
+		EXPECT_TRUE(pack_reads == kExpectedBlocks);
+		EXPECT_TRUE(total == kSize);
+		EXPECT_TRUE(instance.End_Stream(handle));
+	}
+
+	// the native stream at the same 64 KB step (the control)
+	double native_ms = 0.0;
+	kun_ktk size_t native_reads = 0;
+	{
+		ktkFileHandleType handle = instance.Begin_Stream(
+			native_path, KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE, false,
+			eFileSystemStreamingType::kReadOnly,
+			eFileSystemPriorityType::kNative
+		);
+
+		ASSERT_TRUE(handle != kInvalidFileHandleType);
+		ASSERT_TRUE(
+			instance.Get_StreamingBufferLength(handle) ==
+			KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE
+		);
+
+		kun_ktk size_t total = 0;
+
+		const auto begin = std::chrono::steady_clock::now();
+
+		while (instance.Get_RemainingStreamsCount(handle) > 0)
+		{
+			kun_ktk size_t got = sizeof(block);
+
+			ASSERT_TRUE(instance.Read_Stream(handle, block, got));
+
+			EXPECT_TRUE(got <= sizeof(block));
+
+			EXPECT_TRUE(
+				b3_bytes_equal(
+					block, payload + native_reads * sizeof(block), got
+				)
+			);
+
+			total += got;
+			++native_reads;
+		}
+
+		native_ms = hdd_elapsed_ms(
+			begin, std::chrono::steady_clock::now()
+		);
+
+		EXPECT_TRUE(native_reads == kExpectedBlocks);
+		EXPECT_TRUE(total == kSize);
+		EXPECT_TRUE(instance.End_Stream(handle));
+	}
+
+	KOTEK_MESSAGE(
+		"[hdd-bench] pack-block-discipline: 4 MB zstd entry, 64 x 64 KB "
+		"blocks, one 64 KB scratch total — numbers are evidence, not gates"
+	);
+	hdd_log_row("pack-zstd stream", pack_ms, kSize, pack_reads);
+	hdd_log_row("native stream 64KB", native_ms, kSize, native_reads);
+
+	delete[] payload;
+
+	// Shutdown BEFORE the fixture cleanup (the mount holds the file)
+	instance.Shutdown();
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(native_path.c_str()), ec
+	);
+}
+#endif
+
+// [hdd-bench] the cached-vs-streamed shape proof (the guide's §6c/§6d in
+// code): a small hot file is re-read freely (the OS page cache covers
+// rereads — 200 one-shot reads, total time LOGGED); a big cold region is
+// streamed once and NEVER materialized — the pinned assertion is the
+// memory shape: the stream path's peak extra memory is the STEP SIZE
+// (one 64 KB scratch against a 64 MB file, 1024x smaller), read back
+// through Get_StreamingBufferLength and asserted per read. Times are
+// evidence rows only (Debug CRT, page-cache warm).
+TEST(Filesystem, test_hdd_cached_vs_streamed_shape)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	// the native CRT backend, deterministic
+	cfg.Set_FS_FeaturesFlag(0);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path config_path = folder;
+	config_path /= "hdd_cached_config.json";
+
+	ktk_filesystem_path region_path = folder;
+	region_path /= "hdd_streamed_region.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(config_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(region_path.c_str()), ec
+	);
+
+	// PART A — the cached shape: a small hot config (~2 KB), 200 rereads
+	char config_text[2048];
+	kun_ktk size_t config_size = 0;
+	{
+		const char prefix[] = "{\"settings\":{\"quality\":8,\"padding\":\"";
+
+		for (; prefix[config_size] != '\0'; ++config_size)
+			config_text[config_size] = prefix[config_size];
+
+		while (config_size < sizeof(config_text) - 48)
+		{
+			config_text[config_size] =
+				static_cast<char>('a' + (config_size % 26));
+			++config_size;
+		}
+
+		const char suffix[] = "\"}}";
+
+		for (kun_ktk size_t i = 0; suffix[i] != '\0'; ++i)
+			config_text[config_size++] = suffix[i];
+	}
+
+	ASSERT_TRUE(
+		instance.Write_File(config_path, config_text, config_size)
+	);
+
+	constexpr kun_ktk size_t kRereads = 200;
+	kun_ktk size_t reread_bytes = 0;
+
+	const auto reread_begin = std::chrono::steady_clock::now();
+
+	for (kun_ktk size_t i = 0; i < kRereads; ++i)
+	{
+		kun_ktk uint8_t small_buf[4096];
+		kun_ktk uint8_t* p_small = small_buf;
+		kun_ktk size_t small_size = sizeof(small_buf);
+
+		ASSERT_TRUE(
+			instance.Read_File(config_path, p_small, small_size)
+		);
+		ASSERT_TRUE(small_size == config_size);
+		ASSERT_TRUE(
+			b3_bytes_equal(
+				small_buf,
+				reinterpret_cast<const kun_ktk uint8_t*>(config_text),
+				config_size
+			)
+		);
+
+		reread_bytes += small_size;
+	}
+
+	const double reread_ms = hdd_elapsed_ms(
+		reread_begin, std::chrono::steady_clock::now()
+	);
+
+	// PART B — the streamed shape: a 64 MB region, ONE forward pass
+	// through ONE 64 KB scratch
+	constexpr kun_ktk size_t kSize = 64 * 1024 * 1024; // 64 MB
+	constexpr kun_ktk size_t kStep = 65536;
+
+	kun_ktk uint8_t* payload = new kun_ktk uint8_t[kSize];
+	b3_fill_payload(payload, kSize);
+
+	ASSERT_TRUE(instance.Write_File(region_path, payload, kSize));
+
+	// the whole consumer-side memory budget of the streamed pass — the
+	// shape claim: peak extra memory is the step, not the file
+	kun_ktk uint8_t scratch[kStep];
+
+	static_assert(
+		kSize == 1024 * sizeof(scratch),
+		"the scratch is 1024x smaller than the file it drains"
+	);
+
+	ktkFileHandleType handle = instance.Begin_Stream(
+		region_path, static_cast<kun_ktk uint32_t>(kStep), false,
+		eFileSystemStreamingType::kReadOnly,
+		eFileSystemPriorityType::kNative
+	);
+
+	ASSERT_TRUE(handle != kInvalidFileHandleType);
+
+	// the stream's buffer-length API reports the step — the scratch never
+	// exceeds it, pinned per read below
+	ASSERT_TRUE(instance.Get_StreamingBufferLength(handle) == kStep);
+	ASSERT_TRUE(instance.Get_TotalStreamsCount(handle) == kSize / kStep);
+
+	kun_ktk size_t total = 0;
+	kun_ktk size_t reads = 0;
+	kun_ktk size_t peak_read = 0;
+
+	const auto stream_begin = std::chrono::steady_clock::now();
+
+	while (instance.Get_RemainingStreamsCount(handle) > 0)
+	{
+		kun_ktk size_t got = sizeof(scratch);
+
+		ASSERT_TRUE(instance.Read_Stream(handle, scratch, got));
+
+		// the memory shape: no read ever exceeds the step-sized scratch
+		EXPECT_TRUE(got <= sizeof(scratch));
+
+		if (got > peak_read)
+			peak_read = got;
+
+		EXPECT_TRUE(
+			b3_bytes_equal(scratch, payload + reads * kStep, got)
+		);
+
+		total += got;
+		++reads;
+	}
+
+	const double stream_ms = hdd_elapsed_ms(
+		stream_begin, std::chrono::steady_clock::now()
+	);
+
+	EXPECT_TRUE(reads == kSize / kStep);
+	EXPECT_TRUE(total == kSize);
+	EXPECT_TRUE(peak_read <= kStep);
+	EXPECT_TRUE(instance.End_Stream(handle));
+
+	delete[] payload;
+
+	KOTEK_MESSAGE(
+		"[hdd-bench] cached-vs-streamed: small+hot rereads ride the OS "
+		"page cache; big+cold streams with a step-sized peak — numbers "
+		"are evidence, not gates"
+	);
+	hdd_log_row(
+		"config 200 rereads (2KB)", reread_ms, reread_bytes, kRereads
+	);
+	hdd_log_row("region streamed once", stream_ms, kSize, reads);
+
+	KOTEK_MESSAGE(
+		"[hdd-bench] streamed pass peak extra memory: {} bytes (one "
+		"step) against a {}-byte file — {}x smaller",
+		sizeof(scratch), kSize, kSize / sizeof(scratch)
+	);
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(config_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(region_path.c_str()), ec
 	);
 
 	instance.Shutdown();
