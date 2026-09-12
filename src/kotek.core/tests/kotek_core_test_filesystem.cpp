@@ -3196,6 +3196,717 @@ TEST(Filesystem, test_b1_vfm_shutdown_leaves_no_outstanding_mappings)
 
 #endif
 
+// --- B3 streaming (Begin_Stream/Read_Stream/Write_Stream/End_Stream) ----
+// same fixture discipline as B0/B1 (data_user/tests, self-cleaning); flags
+// are driven through the test's own config AFTER Initialize because
+// Initialize parses the shipped sys_info.json into it
+
+namespace
+{
+	void b3_fill_payload(kun_ktk uint8_t* p_buffer, kun_ktk size_t size)
+	{
+		// i*31+7 mod 256 hits every byte value (gcd(31,256)=1)
+		for (kun_ktk size_t i = 0; i < size; ++i)
+			p_buffer[i] = static_cast<kun_ktk uint8_t>(i * 31 + 7);
+	}
+
+	bool b3_bytes_equal(
+		const kun_ktk uint8_t* p_left,
+		const kun_ktk uint8_t* p_right,
+		kun_ktk size_t size
+	)
+	{
+		for (kun_ktk size_t i = 0; i < size; ++i)
+		{
+			if (p_left[i] != p_right[i])
+				return false;
+		}
+		return true;
+	}
+
+	/// drains a stream into p_out (capacity must fit the whole file) —
+	/// returns false when any stage fails; out_size is the drained byte
+	/// count. The loop shape is the interface's documented one.
+	bool b3_stream_read_all(
+		ktkFileSystem& instance,
+		const ktk_filesystem_path& path,
+		kun_ktk uint32_t step_override,
+		kun_ktk uint8_t* p_out,
+		kun_ktk size_t out_capacity,
+		kun_ktk size_t& out_size,
+		eFileSystemPriorityType priority =
+			eFileSystemPriorityType::kAuto
+	)
+	{
+		out_size = 0;
+
+		ktkFileHandleType handle = instance.Begin_Stream(
+			path, step_override, false,
+			eFileSystemStreamingType::kReadOnly, priority
+		);
+
+		if (handle == kInvalidFileHandleType)
+			return false;
+
+		bool status = true;
+
+		while (instance.Get_RemainingStreamsCount(handle) > 0)
+		{
+			kun_ktk size_t chunk = out_capacity - out_size;
+
+			if (instance.Read_Stream(
+					handle, p_out + out_size, chunk
+				) == false)
+			{
+				status = false;
+				break;
+			}
+
+			out_size += chunk;
+		}
+
+		if (status)
+		{
+			// the drained-stream probe: EOF is true + 0 bytes, not an
+			// error
+			kun_ktk size_t eof_probe = out_capacity - out_size;
+
+			if (instance.Read_Stream(
+					handle, p_out + out_size, eof_probe
+				) == false ||
+			    eof_probe != 0)
+			{
+				status = false;
+			}
+		}
+
+		if (instance.End_Stream(handle) == false)
+			status = false;
+
+		return status;
+	}
+} // namespace
+
+TEST(Filesystem, test_b3_stream_read_matches_one_shot_native)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path small_path = folder;
+	small_path /= "b3_stream_small.bin";
+
+	ktk_filesystem_path big_path = folder;
+	big_path /= "b3_stream_big.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(small_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(big_path.c_str()), ec
+	);
+
+	constexpr kun_ktk size_t kSmallSize = 4107;
+	// 200,011 = 48 full 4 KB steps + a 3,403-byte tail (multi-chunk)
+	constexpr kun_ktk size_t kBigSize =
+		KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE * 48 + 3403;
+
+	kun_ktk uint8_t small_payload[kSmallSize];
+	kun_ktk uint8_t* big_payload = new kun_ktk uint8_t[kBigSize];
+
+	b3_fill_payload(small_payload, kSmallSize);
+	b3_fill_payload(big_payload, kBigSize);
+
+	ASSERT_TRUE(
+		instance.Write_File(small_path, small_payload, kSmallSize)
+	);
+	ASSERT_TRUE(
+		instance.Write_File(big_path, big_payload, kBigSize)
+	);
+
+	auto p_verify_stream =
+		[&](const ktk_filesystem_path& path,
+	        const kun_ktk uint8_t* p_expected, kun_ktk size_t size,
+	        kun_ktk uint32_t step_override) -> void
+	{
+		kun_ktk uint8_t* readback = new kun_ktk uint8_t[size + 64];
+		kun_ktk size_t readback_size = 0;
+
+		ASSERT_TRUE(
+			b3_stream_read_all(
+				instance, path, step_override, readback, size + 64,
+				readback_size
+			)
+		);
+		EXPECT_TRUE(readback_size == size);
+		EXPECT_TRUE(b3_bytes_equal(readback, p_expected, size));
+
+		// the same bytes through the one-shot contract (B0): streaming
+		// == single-shot, byte-identical
+		kun_ktk uint8_t* oneshot = new kun_ktk uint8_t[size + 64];
+		kun_ktk uint8_t* p_oneshot = oneshot;
+		kun_ktk size_t oneshot_size = size + 64;
+
+		ASSERT_TRUE(instance.Read_File(path, p_oneshot, oneshot_size));
+		EXPECT_TRUE(oneshot_size == size);
+		EXPECT_TRUE(b3_bytes_equal(oneshot, readback, size));
+
+		delete[] oneshot;
+		delete[] readback;
+	};
+
+	// 1) the native CRT backend (all flags off)
+	cfg.Set_FS_FeaturesFlag(0);
+
+	p_verify_stream(small_path, small_payload, kSmallSize, 0);
+	p_verify_stream(big_path, big_payload, kBigSize, 0);
+
+	// the counters pin the step math on the CRT backend: 200,011 bytes
+	// at a 4 KB step = 48 full steps + the tail = 49
+	{
+		ktkFileHandleType handle = instance.Begin_Stream(big_path);
+
+		ASSERT_TRUE(handle != kInvalidFileHandleType);
+		EXPECT_TRUE(
+			instance.Get_StreamingBufferLength(handle) ==
+			KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE
+		);
+		EXPECT_TRUE(
+			instance.Get_DefaultStreamingBufferLength() ==
+			KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE
+		);
+		EXPECT_TRUE(instance.Get_TotalStreamsCount(handle) == 49);
+		EXPECT_TRUE(instance.Get_RemainingStreamsCount(handle) == 49);
+
+		kun_ktk uint8_t step_buf
+			[KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE];
+
+		for (kun_ktk size_t i = 0; i < 48; ++i)
+		{
+			kun_ktk size_t step_size = sizeof(step_buf);
+
+			ASSERT_TRUE(
+				instance.Read_Stream(handle, step_buf, step_size)
+			);
+			EXPECT_TRUE(
+				step_size == KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE
+			);
+			EXPECT_TRUE(
+				instance.Get_RemainingStreamsCount(handle) == 48 - i
+			);
+		}
+
+		// the tail step is short
+		kun_ktk size_t tail_size = sizeof(step_buf);
+		ASSERT_TRUE(instance.Read_Stream(handle, step_buf, tail_size));
+		EXPECT_TRUE(tail_size == 3403);
+		EXPECT_TRUE(instance.Get_RemainingStreamsCount(handle) == 0);
+
+		EXPECT_TRUE(instance.End_Stream(handle));
+	}
+
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+	// 2) the VFM-mapped backend: byte-identical to the CRT stream, and
+	// the mapping balances exactly (Begin's map pairs End's unmap)
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kVFMRead
+	));
+
+	{
+		ktkFileSystem_VFM* p_vfm = instance.Get_VFM();
+		ASSERT_TRUE(p_vfm != nullptr);
+
+		const kun_ktk uint32_t maps_before =
+			p_vfm->Get_StatMapCount();
+		const kun_ktk uint32_t unmaps_before =
+			p_vfm->Get_StatUnmapCount();
+
+		p_verify_stream(small_path, small_payload, kSmallSize, 0);
+		p_verify_stream(big_path, big_payload, kBigSize, 0);
+
+		EXPECT_TRUE(
+			p_vfm->Get_StatMapCount() - p_vfm->Get_StatUnmapCount() ==
+			maps_before - unmaps_before
+		);
+	}
+#endif
+
+	delete[] big_payload;
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(small_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(big_path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b3_stream_chunk_boundary_matrix)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	// the native CRT backend, deterministic
+	cfg.Set_FS_FeaturesFlag(0);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b3_stream_matrix.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	constexpr kun_ktk size_t kPayloadSize =
+		KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE * 48 + 3403;
+
+	kun_ktk uint8_t* payload = new kun_ktk uint8_t[kPayloadSize];
+	b3_fill_payload(payload, kPayloadSize);
+
+	ASSERT_TRUE(instance.Write_File(path, payload, kPayloadSize));
+
+	// the same file drained at every step granularity must give the same
+	// bytes — 1 B / 4 KB / 64 KB / 1 MB
+	const kun_ktk uint32_t steps[] = {
+		1, KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE, 65536, 1024 * 1024};
+
+	for (kun_ktk uint32_t step : steps)
+	{
+		kun_ktk uint8_t* readback =
+			new kun_ktk uint8_t[kPayloadSize + 64];
+		kun_ktk size_t readback_size = 0;
+
+		ASSERT_TRUE(
+			b3_stream_read_all(
+				instance, path, step, readback, kPayloadSize + 64,
+				readback_size
+			)
+		) << "step=" << step;
+
+		EXPECT_TRUE(readback_size == kPayloadSize) << "step=" << step;
+		EXPECT_TRUE(b3_bytes_equal(readback, payload, kPayloadSize))
+			<< "step=" << step;
+
+		// the counter math at this granularity
+		ktkFileHandleType handle =
+			instance.Begin_Stream(path, step);
+
+		ASSERT_TRUE(handle != kInvalidFileHandleType);
+
+		const kun_ktk size_t expected_total =
+			(kPayloadSize + step - 1) / step;
+
+		EXPECT_TRUE(
+			instance.Get_StreamingBufferLength(handle) == step
+		);
+		EXPECT_TRUE(
+			instance.Get_TotalStreamsCount(handle) == expected_total
+		);
+		EXPECT_TRUE(
+			instance.Get_RemainingStreamsCount(handle) ==
+			expected_total
+		);
+
+		EXPECT_TRUE(instance.End_Stream(handle));
+
+		delete[] readback;
+	}
+
+	delete[] payload;
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b3_stream_read_empty_file)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b3_stream_empty.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	// a 0-byte file (Write_File's 0-length fwrite reports failure, so
+	// create it directly — the b1 empty-file fixture pattern)
+	FILE* p_file = fopen(path.c_str(), "wb");
+	ASSERT_TRUE(p_file != nullptr);
+	fclose(p_file);
+
+	for (int shape = 0; shape < 2; ++shape)
+	{
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+		if (shape == 1)
+		{
+			cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+				eFileSystemFeatureType::kVFMRead
+			));
+		}
+		else
+#endif
+		{
+			cfg.Set_FS_FeaturesFlag(0);
+		}
+
+		ktkFileHandleType handle = instance.Begin_Stream(path);
+
+		// a 0-byte file is a legal empty stream: valid handle, 0 steps
+		ASSERT_TRUE(handle != kInvalidFileHandleType) << "shape="
+			<< shape;
+		EXPECT_TRUE(instance.Get_TotalStreamsCount(handle) == 0);
+		EXPECT_TRUE(instance.Get_RemainingStreamsCount(handle) == 0);
+
+		kun_ktk uint8_t buf[16];
+		kun_ktk size_t read_size = sizeof(buf);
+
+		EXPECT_TRUE(instance.Read_Stream(handle, buf, read_size));
+		EXPECT_TRUE(read_size == 0);
+
+		EXPECT_TRUE(instance.End_Stream(handle));
+	}
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b3_stream_write_then_read_roundtrip_native)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	cfg.Set_FS_FeaturesFlag(0);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b3_stream_write.bin";
+
+	ktk_filesystem_path string_path;
+	instance.Make_Path(
+		string_path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	string_path /= "b3_stream_write_string.txt";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(string_path.c_str()), ec
+	);
+
+	constexpr kun_ktk size_t kPayloadSize =
+		KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE * 48 + 3403;
+
+	kun_ktk uint8_t* payload = new kun_ktk uint8_t[kPayloadSize];
+	b3_fill_payload(payload, kPayloadSize);
+
+	// append-only write stream: 48 full-step writes (override 0 = the
+	// stream's step) + the explicit tail
+	ktkFileHandleType write_handle = instance.Begin_Stream(
+		path, 0, false, eFileSystemStreamingType::kWriteOnly
+	);
+
+	ASSERT_TRUE(write_handle != kInvalidFileHandleType);
+
+	// the counters are a read-stream concept: 0/0 on a write stream
+	EXPECT_TRUE(instance.Get_TotalStreamsCount(write_handle) == 0);
+	EXPECT_TRUE(instance.Get_RemainingStreamsCount(write_handle) == 0);
+
+	for (kun_ktk size_t i = 0; i < 48; ++i)
+	{
+		ASSERT_TRUE(
+			instance.Write_Stream(
+				write_handle,
+				payload + i * KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE
+			)
+		);
+	}
+
+	ASSERT_TRUE(
+		instance.Write_Stream(
+			write_handle,
+			payload + 48 * KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE, 3403
+		)
+	);
+
+	EXPECT_TRUE(instance.End_Stream(write_handle));
+
+	// one-shot readback == the written payload, byte-identical
+	kun_ktk uint8_t* readback = new kun_ktk uint8_t[kPayloadSize + 64];
+	kun_ktk uint8_t* p_readback = readback;
+	kun_ktk size_t readback_size = kPayloadSize + 64;
+
+	ASSERT_TRUE(instance.Read_File(path, p_readback, readback_size));
+	EXPECT_TRUE(readback_size == kPayloadSize);
+	EXPECT_TRUE(b3_bytes_equal(readback, payload, kPayloadSize));
+
+	// and the streamed readback matches too (write→stream-read chain)
+	kun_ktk size_t streamed_size = 0;
+
+	ASSERT_TRUE(
+		b3_stream_read_all(
+			instance, path, 0, readback, kPayloadSize + 64,
+			streamed_size
+		)
+	);
+	EXPECT_TRUE(streamed_size == kPayloadSize);
+	EXPECT_TRUE(b3_bytes_equal(readback, payload, kPayloadSize));
+
+	// the ustring overload appends the string's bytes
+	{
+		ktkFileHandleType string_handle = instance.Begin_Stream(
+			string_path, 0, false, eFileSystemStreamingType::kWriteOnly
+		);
+
+		ASSERT_TRUE(string_handle != kInvalidFileHandleType);
+
+		kun_ktk ustring text = "stream-written string payload";
+
+		ASSERT_TRUE(instance.Write_Stream(string_handle, text));
+		EXPECT_TRUE(instance.End_Stream(string_handle));
+
+		kun_ktk uint8_t readback_text[64] = {};
+		kun_ktk uint8_t* p_readback_text = readback_text;
+		kun_ktk size_t text_size = sizeof(readback_text) - 1;
+
+		ASSERT_TRUE(
+			instance.Read_File(
+				string_path, p_readback_text, text_size
+			)
+		);
+		EXPECT_TRUE(text_size == text.size());
+		EXPECT_TRUE(
+			b3_bytes_equal(
+				readback_text,
+				reinterpret_cast<const kun_ktk uint8_t*>(
+					text.data()
+				),
+				text.size()
+			)
+		);
+	}
+
+	// writing to a READ stream is an error (false, no state advance)
+	{
+		ktkFileHandleType read_handle = instance.Begin_Stream(path);
+
+		ASSERT_TRUE(read_handle != kInvalidFileHandleType);
+
+		kun_ktk uint8_t dummy[8] = {};
+		EXPECT_FALSE(instance.Write_Stream(read_handle, dummy, 1));
+
+		EXPECT_TRUE(instance.End_Stream(read_handle));
+	}
+
+	delete[] readback;
+	delete[] payload;
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(string_path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b3_stream_missing_file_and_invalid_handles)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	cfg.Set_FS_FeaturesFlag(0);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b3_stream_missing.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	// Begin on a missing file: invalid handle + one warning, no assert
+	ktkFileHandleType handle = instance.Begin_Stream(path);
+
+	EXPECT_TRUE(handle == kInvalidFileHandleType);
+
+	// the query surface degrades gracefully on the invalid handle (the
+	// mutating calls keep the house assert discipline on garbage
+	// handles, same as the native handle API — not exercised here)
+	EXPECT_TRUE(instance.Get_StreamingBufferLength(handle) == 0);
+	EXPECT_TRUE(instance.Get_TotalStreamsCount(handle) == 0);
+	EXPECT_TRUE(instance.Get_RemainingStreamsCount(handle) == 0);
+
+	// End_Stream is always safe: a quiet no-op false, never an assert
+	EXPECT_FALSE(instance.End_Stream(handle));
+
+	// idempotency on a real stream: the second End is a quiet no-op
+	ktk_filesystem_path real_path;
+	instance.Make_Path(
+		real_path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	real_path /= "b3_stream_double_end.bin";
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(real_path.c_str()), ec
+	);
+
+	const char payload[] = "end me twice";
+
+	ASSERT_TRUE(instance.Write_File(real_path, payload, sizeof(payload)));
+
+	handle = instance.Begin_Stream(real_path);
+
+	ASSERT_TRUE(handle != kInvalidFileHandleType);
+	EXPECT_TRUE(instance.End_Stream(handle));
+	EXPECT_FALSE(instance.End_Stream(handle));
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(real_path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_b3_stream_pool_capacity_and_reuse)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	cfg.Set_FS_FeaturesFlag(0);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "b3_stream_pool.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	const char payload[] = "pool me";
+
+	ASSERT_TRUE(instance.Write_File(path, payload, sizeof(payload)));
+
+	// fill the pool to the cap
+	ktkFileHandleType
+		handles[KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE];
+
+	for (kun_ktk size_t i = 0;
+	     i < KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE; ++i)
+	{
+		handles[i] = instance.Begin_Stream(path);
+
+		ASSERT_TRUE(handles[i] != kInvalidFileHandleType) << "i=" << i;
+
+		// every stream owns its own independent cursor
+		EXPECT_TRUE(instance.Get_TotalStreamsCount(handles[i]) == 1)
+			<< "i=" << i;
+	}
+
+	// the 9th concurrent stream is rejected LOUDLY (the budget error),
+	// never an assert
+	const ktkFileHandleType overflow_handle =
+		instance.Begin_Stream(path);
+
+	EXPECT_TRUE(overflow_handle == kInvalidFileHandleType);
+
+	// freeing one slot makes it reusable
+	EXPECT_TRUE(instance.End_Stream(handles[0]));
+
+	handles[0] = instance.Begin_Stream(path);
+
+	ASSERT_TRUE(handles[0] != kInvalidFileHandleType);
+
+	// the independent cursors really are independent: drain stream 1
+	// fully, stream 2 is still at its start
+	{
+		kun_ktk uint8_t buf[16];
+		kun_ktk size_t size = sizeof(buf);
+
+		ASSERT_TRUE(instance.Read_Stream(handles[1], buf, size));
+		EXPECT_TRUE(size == sizeof(payload));
+		EXPECT_TRUE(instance.Get_RemainingStreamsCount(handles[1]) == 0);
+		EXPECT_TRUE(instance.Get_RemainingStreamsCount(handles[2]) == 1);
+	}
+
+	for (kun_ktk size_t i = 0;
+	     i < KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE; ++i)
+	{
+		EXPECT_TRUE(instance.End_Stream(handles[i])) << "i=" << i;
+	}
+
+	// full reuse proof: a whole second generation of streams
+	for (kun_ktk size_t i = 0;
+	     i < KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE; ++i)
+	{
+		handles[i] = instance.Begin_Stream(path);
+
+		ASSERT_TRUE(handles[i] != kInvalidFileHandleType) << "i=" << i;
+		EXPECT_TRUE(instance.End_Stream(handles[i])) << "i=" << i;
+	}
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
 // --- B2a .kpack reader + writer (kotek.core.filesystem.pack) ------------
 // same fixture discipline as B0/B1 (data_user/tests, self-cleaning); the
 // packs are built IN-TEST through kpack_write_file — the same encoder the
@@ -4815,6 +5526,495 @@ TEST(Filesystem, test_b2b_tool_end_to_end)
 	ec.clear();
 	std::filesystem::remove(
 		std::filesystem::path(folder.c_str()) / "b2b_late.txt", ec
+	);
+}
+
+// --- B3 pack streaming: the stream step IS the entry's 64 KB compression
+// block (Read_File_Block, sequential blocks only); streaming a pack entry
+// must be BYTE-IDENTICAL to the same content on native disk (the owner's
+// hard requirement)
+
+namespace
+{
+	kun_ktk uint64_t b3_decode_u64le(const kun_ktk uint8_t* p)
+	{
+		kun_ktk uint64_t result = 0;
+
+		for (int i = 7; i >= 0; --i)
+			result = (result << 8) | p[i];
+
+		return result;
+	}
+} // namespace
+
+TEST(Filesystem, test_b3_stream_pack_matches_native_bytes)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path pack_path = folder;
+	pack_path /= "b3_stream_pack.kpack";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+
+	// one entry per codec, all crossing block boundaries differently:
+	// stored 100 B (sub-block), zstd 64 KB EXACT (one full block), zlib
+	// 3 full blocks + a 3,405-byte tail, plus a 0-byte stored entry
+	constexpr kun_ktk size_t kStoredSize = 100;
+	constexpr kun_ktk size_t kZstdSize =
+		KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE;
+	constexpr kun_ktk size_t kZlibSize =
+		KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE * 3 + 3405;
+
+	kun_ktk uint8_t* payload_stored = new kun_ktk uint8_t[kStoredSize];
+	kun_ktk uint8_t* payload_zstd = new kun_ktk uint8_t[kZstdSize];
+	kun_ktk uint8_t* payload_zlib = new kun_ktk uint8_t[kZlibSize];
+
+	b2a_fill_payload(payload_stored, kStoredSize);
+	b2a_fill_payload(payload_zstd, kZstdSize);
+	b2a_fill_payload(payload_zlib, kZlibSize);
+
+	const kpack_writer_entry_t entries[] = {
+		{"data_user/tests/b3sp_stored.bin", payload_stored, kStoredSize,
+		 eKpackCompression::kStored},
+		{"data_user/tests/b3sp_zstd.bin", payload_zstd, kZstdSize,
+		 eKpackCompression::kZstd},
+		{"data_user/tests/b3sp_zlib.bin", payload_zlib, kZlibSize,
+		 eKpackCompression::kZlib},
+		{"data_user/tests/b3sp_empty.bin", nullptr, 0,
+		 eKpackCompression::kStored},
+	};
+
+	ASSERT_TRUE(kpack_write_file(pack_path.c_str(), entries, 4));
+
+	ASSERT_TRUE(instance.Mount_Pack(pack_path));
+
+	// the priority-list feature only (no VFM): the native attempts below
+	// ride the CRT backend, the pack attempts ride Read_File_Block
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kEnablePriorityWhenFailedToOpenFile
+	));
+
+	struct stream_case_t
+	{
+		const char* p_name;
+		const kun_ktk uint8_t* p_payload;
+		kun_ktk size_t size;
+		kun_ktk size_t expected_steps;
+	};
+
+	const stream_case_t cases[] = {
+		{"b3sp_stored.bin", payload_stored, kStoredSize, 1},
+		{"b3sp_zstd.bin", payload_zstd, kZstdSize, 1},
+		{"b3sp_zlib.bin", payload_zlib, kZlibSize, 4},
+		{"b3sp_empty.bin", nullptr, 0, 0},
+	};
+
+	for (const auto& stream_case : cases)
+	{
+		ktk_filesystem_path path = folder;
+		path /= stream_case.p_name;
+
+		ktkFileHandleType handle = instance.Begin_Stream(path);
+
+		ASSERT_TRUE(handle != kInvalidFileHandleType)
+			<< stream_case.p_name;
+
+		// the pack step IS the 64 KB compression block, whatever the
+		// override says
+		EXPECT_TRUE(
+			instance.Get_StreamingBufferLength(handle) ==
+			KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE
+		) << stream_case.p_name;
+		EXPECT_TRUE(
+			instance.Get_TotalStreamsCount(handle) ==
+			stream_case.expected_steps
+		) << stream_case.p_name;
+
+		kun_ktk uint8_t* readback =
+			new kun_ktk uint8_t[stream_case.size + 64];
+		kun_ktk size_t readback_size = 0;
+
+		while (instance.Get_RemainingStreamsCount(handle) > 0)
+		{
+			kun_ktk size_t chunk =
+				stream_case.size + 64 - readback_size;
+
+			ASSERT_TRUE(
+				instance.Read_Stream(
+					handle, readback + readback_size, chunk
+				)
+			) << stream_case.p_name;
+
+			readback_size += chunk;
+		}
+
+		EXPECT_TRUE(readback_size == stream_case.size)
+			<< stream_case.p_name;
+
+		if (stream_case.size)
+		{
+			EXPECT_TRUE(
+				b2a_bytes_equal(
+					readback, stream_case.p_payload,
+					stream_case.size
+				)
+			) << stream_case.p_name;
+		}
+
+		EXPECT_TRUE(instance.End_Stream(handle));
+
+		// the one-shot contract on the same entry: identical bytes
+		if (stream_case.size)
+		{
+			kun_ktk uint8_t* oneshot =
+				new kun_ktk uint8_t[stream_case.size + 64];
+			kun_ktk uint8_t* p_oneshot = oneshot;
+			kun_ktk size_t oneshot_size = stream_case.size + 64;
+
+			ASSERT_TRUE(
+				instance.Read_File(path, p_oneshot, oneshot_size)
+			);
+			EXPECT_TRUE(oneshot_size == stream_case.size);
+			EXPECT_TRUE(
+				b2a_bytes_equal(oneshot, readback, stream_case.size)
+			) << stream_case.p_name;
+
+			delete[] oneshot;
+		}
+
+		delete[] readback;
+	}
+
+	// THE OWNER'S HARD REQUIREMENT: the same content streamed from a
+	// pack entry is BYTE-IDENTICAL to the same bytes on native disk
+	{
+		ktk_filesystem_path native_path = folder;
+		native_path /= "b3sp_zlib_native.bin";
+
+		ec.clear();
+		std::filesystem::remove(
+			std::filesystem::path(native_path.c_str()), ec
+		);
+
+		ASSERT_TRUE(
+			instance.Write_File(native_path, payload_zlib, kZlibSize)
+		);
+
+		// the native stream (explicit priority — CRT backend)
+		kun_ktk uint8_t* native_streamed =
+			new kun_ktk uint8_t[kZlibSize + 64];
+		kun_ktk size_t native_streamed_size = 0;
+
+		ASSERT_TRUE(
+			b3_stream_read_all(
+				instance, native_path, 0, native_streamed,
+				kZlibSize + 64, native_streamed_size,
+				eFileSystemPriorityType::kNative
+			)
+		);
+
+		// the pack stream (explicit priority — 64 KB block steps)
+		ktk_filesystem_path packed_path = folder;
+		packed_path /= "b3sp_zlib.bin";
+
+		kun_ktk uint8_t* pack_streamed =
+			new kun_ktk uint8_t[kZlibSize + 64];
+		kun_ktk size_t pack_streamed_size = 0;
+
+		ASSERT_TRUE(
+			b3_stream_read_all(
+				instance, packed_path, 0, pack_streamed,
+				kZlibSize + 64, pack_streamed_size,
+				eFileSystemPriorityType::kPack
+			)
+		);
+
+		EXPECT_TRUE(native_streamed_size == kZlibSize);
+		EXPECT_TRUE(pack_streamed_size == kZlibSize);
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				native_streamed, pack_streamed, kZlibSize
+			)
+		);
+
+		delete[] pack_streamed;
+		delete[] native_streamed;
+
+		ec.clear();
+		std::filesystem::remove(
+			std::filesystem::path(native_path.c_str()), ec
+		);
+	}
+
+	// the override chain under streaming: a same-named file resolves
+	// pack-first by default and native on the explicit priority
+	{
+		const char shared_pack_payload[] = "PACK-WINS-BY-DEFAULT";
+		const char shared_native_payload[] = "NATIVE-ON-EXPLICIT!";
+
+		ktk_filesystem_path shared_pack_path = folder;
+		shared_pack_path /= "b3sp_shared.kpack";
+
+		ec.clear();
+		std::filesystem::remove(
+			std::filesystem::path(shared_pack_path.c_str()), ec
+		);
+
+		const kpack_writer_entry_t shared_entries[] = {
+			{"data_user/tests/b3sp_shared.bin",
+			 reinterpret_cast<const kun_ktk uint8_t*>(
+				 shared_pack_payload
+			 ),
+			 sizeof(shared_pack_payload), eKpackCompression::kStored},
+		};
+
+		ASSERT_TRUE(
+			kpack_write_file(
+				shared_pack_path.c_str(), shared_entries, 1
+			)
+		);
+		ASSERT_TRUE(instance.Mount_Pack(shared_pack_path));
+
+		ktk_filesystem_path shared_path = folder;
+		shared_path /= "b3sp_shared.bin";
+
+		ec.clear();
+		std::filesystem::remove(
+			std::filesystem::path(shared_path.c_str()), ec
+		);
+
+		ASSERT_TRUE(
+			instance.Write_File(
+				shared_path, shared_native_payload,
+				sizeof(shared_native_payload)
+			)
+		);
+
+		kun_ktk uint8_t streamed[64];
+		kun_ktk size_t streamed_size = 0;
+
+		// default: the pack shadows the native file
+		ASSERT_TRUE(
+			b3_stream_read_all(
+				instance, shared_path, 0, streamed, sizeof(streamed),
+				streamed_size
+			)
+		);
+		EXPECT_TRUE(streamed_size == sizeof(shared_pack_payload));
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				streamed,
+				reinterpret_cast<const kun_ktk uint8_t*>(
+					shared_pack_payload
+				),
+				sizeof(shared_pack_payload)
+			)
+		);
+
+		// explicit native priority: the native file answers
+		streamed_size = 0;
+
+		ASSERT_TRUE(
+			b3_stream_read_all(
+				instance, shared_path, 0, streamed, sizeof(streamed),
+				streamed_size, eFileSystemPriorityType::kNative
+			)
+		);
+		EXPECT_TRUE(streamed_size == sizeof(shared_native_payload));
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				streamed,
+				reinterpret_cast<const kun_ktk uint8_t*>(
+					shared_native_payload
+				),
+				sizeof(shared_native_payload)
+			)
+		);
+
+		ec.clear();
+		std::filesystem::remove(
+			std::filesystem::path(shared_path.c_str()), ec
+		);
+
+		// the shared pack file itself is removed after Shutdown (the
+		// mount holds it open — Windows refuses to delete an open file)
+	}
+
+	delete[] payload_stored;
+	delete[] payload_zstd;
+	delete[] payload_zlib;
+
+	// Shutdown BEFORE the fixture cleanup (the mount holds the file)
+	instance.Shutdown();
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(folder.c_str()) / "b3sp_shared.kpack", ec
+	);
+}
+
+TEST(Filesystem, test_b3_stream_pack_corrupt_block_fails_loudly_once)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path pack_path = folder;
+	pack_path /= "b3_stream_corrupt.kpack";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+
+	// a 2-block zstd entry + a small stored entry
+	constexpr kun_ktk size_t kZstdSize =
+		KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE * 2;
+	constexpr kun_ktk size_t kStoredSize = 100;
+
+	kun_ktk uint8_t* payload_zstd = new kun_ktk uint8_t[kZstdSize];
+	kun_ktk uint8_t* payload_stored = new kun_ktk uint8_t[kStoredSize];
+
+	b2a_fill_payload(payload_zstd, kZstdSize);
+	b2a_fill_payload(payload_stored, kStoredSize);
+
+	const kpack_writer_entry_t entries[] = {
+		{"data_user/tests/b3sc_zstd.bin", payload_zstd, kZstdSize,
+		 eKpackCompression::kZstd},
+		{"data_user/tests/b3sc_stored.bin", payload_stored, kStoredSize,
+		 eKpackCompression::kStored},
+	};
+
+	ASSERT_TRUE(kpack_write_file(pack_path.c_str(), entries, 2));
+
+	// corrupt the zstd entry's FIRST packed block on disk: fill its
+	// whole packed span with 0xFF (no valid zstd frame) — the entry
+	// record is the first one after the 20-byte header; its data offset
+	// sits at record+8, the packed size at record+24 (the v1 layout)
+	{
+		kun_ktk uint8_t record[45];
+
+		{
+			std::ifstream pack_in(
+				pack_path.c_str(), std::ios::binary
+			);
+			ASSERT_TRUE(pack_in.is_open());
+			pack_in.seekg(20);
+			pack_in.read(
+				reinterpret_cast<char*>(record), sizeof(record)
+			);
+		}
+
+		const kun_ktk uint64_t data_offset = b3_decode_u64le(record + 8);
+		const kun_ktk uint64_t packed_size =
+			b3_decode_u64le(record + 24);
+
+		std::fstream pack_out(
+			pack_path.c_str(),
+			std::ios::binary | std::ios::in | std::ios::out
+		);
+		ASSERT_TRUE(pack_out.is_open());
+
+		kun_ktk uint8_t garbage[512];
+		memset(garbage, 0xFF, sizeof(garbage));
+
+		pack_out.seekp(static_cast<std::streamoff>(data_offset));
+
+		kun_ktk uint64_t left = packed_size;
+		while (left > 0)
+		{
+			const kun_ktk size_t piece =
+				left < sizeof(garbage)
+				? static_cast<kun_ktk size_t>(left)
+				: sizeof(garbage);
+
+			pack_out.write(
+				reinterpret_cast<const char*>(garbage), piece
+			);
+			left -= piece;
+		}
+	}
+
+	ASSERT_TRUE(instance.Mount_Pack(pack_path));
+
+	cfg.Set_FS_FeaturesFlag(static_cast<kun_ktk uint16_t>(
+		eFileSystemFeatureType::kEnablePriorityWhenFailedToOpenFile
+	));
+
+	// the corrupt entry: the first block read fails LOUDLY (the pack
+	// layer's decompression error + the stream's poison line) and every
+	// later read errors until End_Stream — never an assert
+	ktk_filesystem_path corrupt_path = folder;
+	corrupt_path /= "b3sc_zstd.bin";
+
+	ktkFileHandleType handle = instance.Begin_Stream(corrupt_path);
+
+	ASSERT_TRUE(handle != kInvalidFileHandleType);
+	EXPECT_TRUE(instance.Get_TotalStreamsCount(handle) == 2);
+
+	kun_ktk uint8_t block_buf[KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE];
+
+	kun_ktk size_t read_size = sizeof(block_buf);
+	EXPECT_FALSE(instance.Read_Stream(handle, block_buf, read_size));
+	EXPECT_TRUE(read_size == 0);
+
+	// poisoned: subsequent reads error quietly until End_Stream (no
+	// crash, no second storm)
+	read_size = sizeof(block_buf);
+	EXPECT_FALSE(instance.Read_Stream(handle, block_buf, read_size));
+	EXPECT_TRUE(read_size == 0);
+
+	EXPECT_TRUE(instance.End_Stream(handle));
+
+	// the mount itself is NOT poisoned: the stored sibling entry still
+	// streams byte-identical
+	ktk_filesystem_path good_path = folder;
+	good_path /= "b3sc_stored.bin";
+
+	kun_ktk uint8_t readback[128];
+	kun_ktk size_t readback_size = 0;
+
+	ASSERT_TRUE(
+		b3_stream_read_all(
+			instance, good_path, 0, readback, sizeof(readback),
+			readback_size
+		)
+	);
+	EXPECT_TRUE(readback_size == kStoredSize);
+	EXPECT_TRUE(
+		b2a_bytes_equal(readback, payload_stored, kStoredSize)
+	);
+
+	delete[] payload_zstd;
+	delete[] payload_stored;
+
+	// Shutdown BEFORE the fixture cleanup (the mount holds the file)
+	instance.Shutdown();
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
 	);
 }
 

@@ -3,7 +3,12 @@
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
-ktkFileSystem::ktkFileSystem(void) : m_p_config{} {}
+ktkFileSystem::ktkFileSystem(void) : m_p_config{}
+{
+	this->m_fstream_pool.resize(
+		KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE
+	);
+}
 
 ktkFileSystem::~ktkFileSystem(void) {}
 
@@ -1558,6 +1563,79 @@ bool ktkFileSystem::Write_File(
 	);
 }
 
+ktkFileSystem::fstream_state_t* ktkFileSystem::Get_Stream(
+	ktkFileHandleType file_handle
+) noexcept
+{
+	if (this->m_fstream_pool.empty())
+		return nullptr;
+
+	const kun_ktk uintptr_t handle_value = file_handle;
+	const kun_ktk uintptr_t begin_value =
+		reinterpret_cast<kun_ktk uintptr_t>(
+			this->m_fstream_pool.data()
+		);
+	const kun_ktk uintptr_t end_value =
+		begin_value +
+		this->m_fstream_pool.size() * sizeof(fstream_state_t);
+
+	// foreign/garbage handles are never dereferenced: the handle must
+	// point INSIDE the pool (the handle-as-pointer-into-pool ABI) and at
+	// a live slot
+	if (handle_value < begin_value || handle_value >= end_value)
+		return nullptr;
+
+	if ((handle_value - begin_value) % sizeof(fstream_state_t) != 0)
+		return nullptr;
+
+	fstream_state_t* p_state =
+		reinterpret_cast<fstream_state_t*>(handle_value);
+
+	if (p_state->is_free)
+		return nullptr;
+
+	return p_state;
+}
+
+const ktkFileSystem::fstream_state_t* ktkFileSystem::Get_Stream(
+	ktkFileHandleType file_handle
+) const noexcept
+{
+	return const_cast<ktkFileSystem*>(this)->Get_Stream(file_handle);
+}
+
+void ktkFileSystem::Release_Stream(fstream_state_t& state) noexcept
+{
+	if (state.p_file)
+	{
+		fclose(state.p_file);
+		state.p_file = nullptr;
+	}
+
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+	if (state.is_vfm)
+	{
+		// keeps the B1 map/unmap balance counters exact — a stream's
+		// Begin map always pairs with its End unmap
+		this->m_vfm.UnMapFile(state.vfm_mapping_id);
+	}
+#endif
+
+	state.is_vfm = false;
+	state.vfm_mapping_id = decltype(state.vfm_mapping_id)(-1);
+	state.is_failed = false;
+	state.check_thread = false;
+	state.owner_thread_id = std::thread::id{};
+	state.stream_type = eFileSystemStreamingType::kAuto;
+	state.backend = eFileSystemPriorityType::kAuto;
+	state.step_size = 0;
+	state.total_size = 0;
+	state.position = 0;
+	state.next_block = 0;
+	state.path.clear();
+	state.is_free = true;
+}
+
 ktkFileHandleType ktkFileSystem::Begin_Stream(
 	const ktk_filesystem_path& path_to_file,
 	kun_ktk uint32_t override_stream_reading_length /*= 0*/,
@@ -1570,16 +1648,411 @@ ktkFileHandleType ktkFileSystem::Begin_Stream(
 		features /*= eFileSystemFeatureType::kNone */
 ) noexcept
 {
-	KOTEK_ASSERT(false, "implement");
-	return kInvalidFileHandleType;
+	KOTEK_ASSERT(
+		path_to_file.empty() == false, "you can't pass empty path"
+	);
+
+	KOTEK_ASSERT(
+		this->m_p_config,
+		"you must initialize config before using filesystem!"
+	);
+
+	if (path_to_file.empty())
+	{
+		KOTEK_MESSAGE_WARNING("you passed empty path to file!");
+		return kInvalidFileHandleType;
+	}
+
+	if (streaming_type == eFileSystemStreamingType::kAuto)
+	{
+		streaming_type = eFileSystemStreamingType::kReadOnly;
+	}
+
+	if (streaming_type == eFileSystemStreamingType::kReadAndWrite)
+	{
+		// documented out of scope for this phase
+		KOTEK_MESSAGE_WARNING(
+			"Begin_Stream: kReadAndWrite streams are not supported "
+			"this phase: {}",
+			path_to_file
+		);
+		return kInvalidFileHandleType;
+	}
+
+	if (streaming_type != eFileSystemStreamingType::kReadOnly &&
+	    streaming_type != eFileSystemStreamingType::kWriteOnly)
+	{
+		KOTEK_MESSAGE_WARNING(
+			"Begin_Stream: unknown streaming type {} for: {}",
+			static_cast<std::underlying_type_t<
+				eFileSystemStreamingType>>(streaming_type),
+			path_to_file
+		);
+		return kInvalidFileHandleType;
+	}
+
+	// pool exhaustion is a budget violation (the cap is a named
+	// define): loud error + invalid handle, never an assert
+	fstream_state_t* p_free_state = nullptr;
+
+	for (kun_ktk size_t i = 0; i < this->m_fstream_pool.size(); ++i)
+	{
+		if (this->m_fstream_pool[i].is_free)
+		{
+			p_free_state = &this->m_fstream_pool[i];
+			break;
+		}
+	}
+
+	if (p_free_state == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"Begin_Stream: the stream pool ({}) is exhausted — "
+			"End_Stream some streams or raise "
+			"KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE (file: {})",
+			KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE, path_to_file
+		);
+		return kInvalidFileHandleType;
+	}
+
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
+	if (streaming_type == eFileSystemStreamingType::kWriteOnly)
+	{
+		// append-only writes to a FRESH native file this phase (packs
+		// are read-only — pack writes stay tool-side per B2b)
+		const ktk_filesystem_path absolute_path =
+			this->m_root_path / path_to_file;
+
+		FILE* p_file = fopen(absolute_path.c_str(), "wb");
+
+		if (p_file == nullptr)
+		{
+			// a missing directory / unwritable target is user data
+			KOTEK_MESSAGE_WARNING(
+				"Begin_Stream: failed to open file for write "
+				"streaming: {} (GetLastError={})",
+				absolute_path, GetLastError()
+			);
+			return kInvalidFileHandleType;
+		}
+
+		p_free_state->is_free = false;
+		p_free_state->stream_type = streaming_type;
+		p_free_state->backend = eFileSystemPriorityType::kNative;
+		p_free_state->p_file = p_file;
+		p_free_state->path = path_to_file;
+		p_free_state->step_size =
+			override_stream_reading_length != 0
+			? override_stream_reading_length
+			: KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE;
+		p_free_state->check_thread =
+			force_be_called_from_one_thread_only;
+
+		if (force_be_called_from_one_thread_only)
+			p_free_state->owner_thread_id =
+				std::this_thread::get_id();
+
+		return reinterpret_cast<ktkFileHandleType>(p_free_state);
+	}
+#else
+	if (streaming_type == eFileSystemStreamingType::kWriteOnly)
+	{
+		KOTEK_MESSAGE_WARNING(
+			"Begin_Stream: write streams need the native backend"
+		);
+		return kInvalidFileHandleType;
+	}
+#endif
+
+	// read stream: resolve the backend ONCE through the override chain
+	// (a stream can not migrate backends mid-flight)
+
+	if (features == eFileSystemFeatureType::kNone)
+	{
+		features = static_cast<eFileSystemFeatureType>(
+			this->m_p_config->Get_FS_FeaturesFlag()
+		);
+	}
+
+	const bool is_priority_list_enabled =
+		(features &
+	     eFileSystemFeatureType::kEnablePriorityWhenFailedToOpenFile) ==
+		eFileSystemFeatureType::kEnablePriorityWhenFailedToOpenFile;
+
+	const kun_ktk uint8_t* p_fs_list =
+		this->m_p_config->Get_FS_PriorityList();
+
+	KOTEK_ASSERT(p_fs_list, "must be initialized");
+
+	// the attempt order mirrors the Read_File dispatch semantics:
+	// feature off -> the explicit backend (or the list's first); feature
+	// on + kAuto -> the whole configured list; feature on + explicit ->
+	// the explicit one first, then the rest of the list
+	eFileSystemPriorityType
+		attempts[static_cast<kun_ktk uint8_t>(
+			eFileSystemPriorityType::kEndOfEnum
+		)];
+	kun_ktk uint8_t attempt_count = 0;
+
+	if (is_priority_list_enabled == false)
+	{
+		attempts[0] = priority != eFileSystemPriorityType::kAuto
+			? priority
+			: static_cast<eFileSystemPriorityType>(p_fs_list[0]);
+		attempt_count = 1;
+	}
+	else if (priority == eFileSystemPriorityType::kAuto)
+	{
+		attempt_count = this->m_p_config->Get_FS_PriorityListSize();
+
+		constexpr kun_ktk uint8_t attempts_capacity =
+			sizeof(attempts) / sizeof(attempts[0]);
+
+		// a corrupt/over-long list is a logic error: clamp loud, never
+		// walk past the array
+		KOTEK_ASSERT(
+			attempt_count <= attempts_capacity,
+			"the configured FS priority list ({}) is bigger than the "
+			"backend count ({})",
+			attempt_count, attempts_capacity
+		);
+
+		if (attempt_count > attempts_capacity)
+			attempt_count = attempts_capacity;
+
+		for (kun_ktk uint8_t i = 0; i < attempt_count; ++i)
+			attempts[i] =
+				static_cast<eFileSystemPriorityType>(p_fs_list[i]);
+	}
+	else
+	{
+		attempts[0] = priority;
+		attempt_count = 1;
+
+		const kun_ktk uint8_t list_size =
+			this->m_p_config->Get_FS_PriorityListSize();
+
+		for (kun_ktk uint8_t i = 0; i < list_size; ++i)
+		{
+			const eFileSystemPriorityType entry =
+				static_cast<eFileSystemPriorityType>(p_fs_list[i]);
+
+			if (entry != priority &&
+			    attempt_count < sizeof(attempts) / sizeof(attempts[0]))
+			{
+				attempts[attempt_count] = entry;
+				++attempt_count;
+			}
+		}
+	}
+
+	eFileSystemPriorityType resolved_backend =
+		eFileSystemPriorityType::kAuto;
+	kun_ktk uint64_t resolved_size = 0;
+
+	for (kun_ktk uint8_t i = 0; i < attempt_count; ++i)
+	{
+		switch (attempts[i])
+		{
+		case eFileSystemPriorityType::kNative:
+		{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
+			// a SILENT existence probe (Get_FileSize would log its own
+			// warning on a miss — the single all-failed warning below
+			// is the one warning a missing file gets)
+			if (kun_ktk kun_filesystem exists(
+					this->m_root_path / path_to_file
+				))
+			{
+				resolved_backend = eFileSystemPriorityType::kNative;
+			}
+#endif
+			break;
+		}
+		case eFileSystemPriorityType::kPack:
+		{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+			kun_ktk size_t pack_size = 0;
+
+			// kNotFound is the silent fallthrough (the override-chain
+			// rule) — a pack entry answers with its raw size
+			if (this->m_fs_pack.Get_FileSize(
+					path_to_file, pack_size
+				) == eKpackReadResult::kSuccess)
+			{
+				resolved_backend = eFileSystemPriorityType::kPack;
+				resolved_size = pack_size;
+			}
+#endif
+			break;
+		}
+		case eFileSystemPriorityType::kZlib:
+		{
+			// same graceful skip as the single-shot dispatch
+			KOTEK_MESSAGE_WARNING(
+				"zlib filesystem is not implemented, skipping"
+			);
+			break;
+		}
+		default:
+		{
+			// a corrupt priority list is a logic error, but library
+			// code never exits the process — fail the call
+			KOTEK_ASSERT(false, "can't be!");
+			return kInvalidFileHandleType;
+		}
+		}
+
+		if (resolved_backend != eFileSystemPriorityType::kAuto)
+			break;
+	}
+
+	if (resolved_backend == eFileSystemPriorityType::kAuto)
+	{
+		// a missing file is user data, not a programmer error: invalid
+		// handle + ONE warning, never an assert
+		KOTEK_MESSAGE_WARNING(
+			"can't begin stream on file: {} because all file systems "
+			"couldn't obtain it",
+			path_to_file
+		);
+		return kInvalidFileHandleType;
+	}
+
+	p_free_state->is_free = false;
+	p_free_state->stream_type = streaming_type;
+	p_free_state->backend = resolved_backend;
+	p_free_state->path = path_to_file;
+	p_free_state->total_size = resolved_size;
+	p_free_state->step_size =
+		resolved_backend == eFileSystemPriorityType::kPack
+		? KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE
+		: (override_stream_reading_length != 0
+		       ? override_stream_reading_length
+		       : KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE);
+	p_free_state->check_thread =
+		force_be_called_from_one_thread_only;
+
+	if (force_be_called_from_one_thread_only)
+		p_free_state->owner_thread_id = std::this_thread::get_id();
+
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
+	if (resolved_backend == eFileSystemPriorityType::kNative)
+	{
+		const ktk_filesystem_path absolute_path =
+			this->m_root_path / path_to_file;
+
+		bool is_opened = false;
+
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+		const bool is_vfm_read_enabled =
+			(features & eFileSystemFeatureType::kVFMRead) ==
+			eFileSystemFeatureType::kVFMRead;
+
+		if (is_vfm_read_enabled)
+		{
+			kun_ktk uint32_t mapping_id =
+				static_cast<kun_ktk uint32_t>(-1);
+			kun_ktk size_t mapped_size = 0;
+
+			const eVFMMapFileResult map_result =
+				this->m_vfm.MapFileForRead(
+					absolute_path, mapping_id, mapped_size
+				);
+
+			switch (map_result)
+			{
+			case eVFMMapFileResult::kSuccess:
+			{
+				// the stream holds the mapping for its lifetime:
+				// chunked copies out of it per Read_Stream, unmap at
+				// End_Stream (Begin's map balances End's unmap)
+				p_free_state->is_vfm = true;
+				p_free_state->vfm_mapping_id = mapping_id;
+				p_free_state->total_size = mapped_size;
+				is_opened = true;
+				break;
+			}
+			case eVFMMapFileResult::kEmptyFile:
+			{
+				// a 0-byte file is a legal empty stream (0 steps)
+				p_free_state->total_size = 0;
+				is_opened = true;
+				break;
+			}
+			case eVFMMapFileResult::kMissingFile:
+			{
+				// the file vanished between the probe and the map —
+				// the VFM layer already emitted the single warning
+				this->Release_Stream(*p_free_state);
+				return kInvalidFileHandleType;
+			}
+			case eVFMMapFileResult::kMappingFailed:
+			default:
+			{
+				// an existing file that failed to map degrades to the
+				// CRT stream below (the VFM layer already warned)
+				break;
+			}
+			}
+		}
+#endif
+
+		if (is_opened == false)
+		{
+			FILE* p_file = fopen(absolute_path.c_str(), "rb");
+
+			if (p_file)
+			{
+				auto status_fseek = fseek(p_file, 0, SEEK_END);
+				KOTEK_ASSERT(status_fseek == 0, "fseek failed");
+
+				const long file_size = ftell(p_file);
+
+				status_fseek = fseek(p_file, 0, SEEK_SET);
+				KOTEK_ASSERT(status_fseek == 0, "fseek failed");
+
+				if (status_fseek == 0 && file_size >= 0)
+				{
+					p_free_state->p_file = p_file;
+					p_free_state->total_size =
+						static_cast<kun_ktk uint64_t>(file_size);
+					is_opened = true;
+				}
+				else
+				{
+					fclose(p_file);
+				}
+			}
+
+			if (is_opened == false)
+			{
+				// the probe said the file exists but the open failed
+				// (permissions, a race) — user data, one warning
+				KOTEK_MESSAGE_WARNING(
+					"Begin_Stream: failed to open file for read "
+					"streaming: {} (GetLastError={})",
+					absolute_path, GetLastError()
+				);
+				this->Release_Stream(*p_free_state);
+				return kInvalidFileHandleType;
+			}
+		}
+	}
+#endif
+
+	return reinterpret_cast<ktkFileHandleType>(p_free_state);
 }
 
 bool ktkFileSystem::Write_Stream(
 	ktkFileHandleType file_handle, kun_ktk ustring& input
 ) noexcept
 {
-	KOTEK_ASSERT(false, "implement");
-	return false;
+	return this->Write_Stream(
+		file_handle,
+		reinterpret_cast<const unsigned char*>(input.data()),
+		input.size()
+	);
 }
 
 bool ktkFileSystem::Write_Stream(
@@ -1588,8 +2061,69 @@ bool ktkFileSystem::Write_Stream(
 	kun_ktk size_t override_write_streaming_length /*= 0 */
 ) noexcept
 {
-	KOTEK_ASSERT(false, "implement");
-	return false;
+	KOTEK_ASSERT(p_buffer, "you passed a null buffer");
+
+	fstream_state_t* p_state = this->Get_Stream(file_handle);
+
+	KOTEK_ASSERT(
+		p_state,
+		"you passed an invalid stream handle to Write_Stream"
+	);
+
+	if (p_state == nullptr || p_buffer == nullptr)
+		return false;
+
+	if (p_state->check_thread)
+	{
+		KOTEK_ASSERT(
+			p_state->owner_thread_id == std::this_thread::get_id(),
+			"this stream must be driven from its creating thread only"
+		);
+	}
+
+	if (p_state->stream_type != eFileSystemStreamingType::kWriteOnly)
+	{
+		KOTEK_MESSAGE_WARNING(
+			"Write_Stream on a non-write stream: {}",
+			p_state->path
+		);
+		return false;
+	}
+
+	// a poisoned stream stays failed until End_Stream (the loud error
+	// already fired at the point of failure)
+	if (p_state->is_failed)
+		return false;
+
+	const kun_ktk size_t write_count =
+		override_write_streaming_length != 0
+		? override_write_streaming_length
+		: p_state->step_size;
+
+	if (write_count == 0)
+		return true;
+
+	// append-only sequential write — the forward cursor never seeks
+	const size_t was_written =
+		fwrite(p_buffer, 1, write_count, p_state->p_file);
+
+	if (was_written != write_count)
+	{
+		p_state->is_failed = true;
+
+		KOTEK_MESSAGE_ERROR(
+			"Write_Stream: short write on {} ({} of {} bytes, "
+			"GetLastError={}) — the stream is poisoned until "
+			"End_Stream",
+			p_state->path, was_written, write_count, GetLastError()
+		);
+		return false;
+	}
+
+	p_state->position += write_count;
+	p_state->total_size = p_state->position;
+
+	return true;
 }
 
 bool ktkFileSystem::Read_Stream(
@@ -1598,47 +2132,261 @@ bool ktkFileSystem::Read_Stream(
 	kun_ktk size_t& length_of_streaming_buffer
 ) noexcept
 {
-	KOTEK_ASSERT(false, "implement");
-	return false;
+	KOTEK_ASSERT(p_buffer, "you passed a null buffer");
+
+	fstream_state_t* p_state = this->Get_Stream(file_handle);
+
+	KOTEK_ASSERT(
+		p_state, "you passed an invalid stream handle to Read_Stream"
+	);
+
+	if (p_state == nullptr || p_buffer == nullptr)
+	{
+		length_of_streaming_buffer = 0;
+		return false;
+	}
+
+	if (p_state->check_thread)
+	{
+		KOTEK_ASSERT(
+			p_state->owner_thread_id == std::this_thread::get_id(),
+			"this stream must be driven from its creating thread only"
+		);
+	}
+
+	if (p_state->stream_type != eFileSystemStreamingType::kReadOnly)
+	{
+		KOTEK_MESSAGE_WARNING(
+			"Read_Stream on a non-read stream: {}", p_state->path
+		);
+		length_of_streaming_buffer = 0;
+		return false;
+	}
+
+	// a poisoned stream stays failed until End_Stream — loudly ONCE at
+	// the point of failure, silently false afterwards
+	if (p_state->is_failed)
+	{
+		length_of_streaming_buffer = 0;
+		return false;
+	}
+
+	// a drained stream is not an error: true + 0 bytes
+	if (p_state->position >= p_state->total_size)
+	{
+		length_of_streaming_buffer = 0;
+		return true;
+	}
+
+	const kun_ktk uint64_t remaining =
+		p_state->total_size - p_state->position;
+
+	kun_ktk size_t chunk = p_state->step_size;
+
+	if (remaining < chunk)
+		chunk = static_cast<kun_ktk size_t>(remaining);
+
+	if (length_of_streaming_buffer < chunk)
+	{
+		// a step is ATOMIC (a pack step is one whole compression
+		// block) — the caller's buffer must fit the stream's step; this
+		// is a caller error, the cursor does not advance
+		KOTEK_MESSAGE_WARNING(
+			"Read_Stream: the buffer ({} bytes) is too small for the "
+			"stream's step ({} bytes) on {} — size it by "
+			"Get_StreamingBufferLength",
+			length_of_streaming_buffer, chunk, p_state->path
+		);
+		length_of_streaming_buffer = 0;
+		return false;
+	}
+
+	switch (p_state->backend)
+	{
+	case eFileSystemPriorityType::kNative:
+	{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
+#ifdef KOTEK_USE_FILESYSTEM_FEATURE_VFM
+		if (p_state->is_vfm)
+		{
+			// the mapped stream's step is a chunked copy out of the
+			// live mapping (B1's copy is the reference)
+			const kun_ktk uint8_t* p_mapped =
+				static_cast<const kun_ktk uint8_t*>(
+					this->m_vfm.Get_MappedData(
+						p_state->vfm_mapping_id
+					)
+				);
+
+			if (p_mapped == nullptr)
+			{
+				p_state->is_failed = true;
+
+				KOTEK_MESSAGE_ERROR(
+					"Read_Stream: the mapping of {} is gone — the "
+					"stream is poisoned until End_Stream",
+					p_state->path
+				);
+				length_of_streaming_buffer = 0;
+				return false;
+			}
+
+			std::memcpy(
+				p_buffer,
+				p_mapped + p_state->position,
+				chunk
+			);
+
+			p_state->position += chunk;
+			length_of_streaming_buffer = chunk;
+			return true;
+		}
+#endif
+
+		// the CRT step: one sequential fread at the forward cursor —
+		// no seeks, the disk head stays in the sweep
+		const size_t was_read =
+			fread(p_buffer, 1, chunk, p_state->p_file);
+
+		if (was_read != chunk)
+		{
+			p_state->is_failed = true;
+
+			KOTEK_MESSAGE_ERROR(
+				"Read_Stream: short read on {} ({} of {} bytes) — "
+				"the stream is poisoned until End_Stream",
+				p_state->path, was_read, chunk
+			);
+			length_of_streaming_buffer = 0;
+			return false;
+		}
+
+		p_state->position += chunk;
+		length_of_streaming_buffer = chunk;
+		return true;
+#else
+		length_of_streaming_buffer = 0;
+		return false;
+#endif
+	}
+	case eFileSystemPriorityType::kPack:
+	{
+#ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
+		kun_ktk size_t block_out = length_of_streaming_buffer;
+
+		// the stream step IS the entry's 64 KB compression block —
+		// sequential block indices only (forward-only, one outstanding
+		// read); the entry's blocks are contiguous on disk
+		const eKpackReadResult block_status =
+			this->m_fs_pack.Read_File_Block(
+				p_state->path, p_state->next_block, p_buffer, block_out
+			);
+
+		if (block_status != eKpackReadResult::kSuccess)
+		{
+			// the pack layer already reported the detail loudly — a
+			// corrupt block fails the stream ONCE and poisons it until
+			// End_Stream
+			p_state->is_failed = true;
+
+			KOTEK_MESSAGE_ERROR(
+				"Read_Stream: block {} of {} failed — the stream is "
+				"poisoned until End_Stream",
+				p_state->next_block, p_state->path
+			);
+			length_of_streaming_buffer = 0;
+			return false;
+		}
+
+		++p_state->next_block;
+		p_state->position += block_out;
+		length_of_streaming_buffer = block_out;
+		return true;
+#else
+		length_of_streaming_buffer = 0;
+		return false;
+#endif
+	}
+	default:
+	{
+		KOTEK_ASSERT(false, "corrupt stream state");
+		length_of_streaming_buffer = 0;
+		return false;
+	}
+	}
 }
 
 kun_ktk uint32_t
 ktkFileSystem::Get_DefaultStreamingBufferLength(void
 ) const noexcept
 {
-	KOTEK_ASSERT(false, "implement");
-	return 0;
+	return KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE;
 }
 
 kun_ktk uint32_t ktkFileSystem::Get_StreamingBufferLength(
 	ktkFileHandleType file_handle
 ) const noexcept
 {
-	KOTEK_ASSERT(false, "implement");
-	return 0;
+	const fstream_state_t* p_state = this->Get_Stream(file_handle);
+
+	if (p_state == nullptr)
+		return 0;
+
+	return p_state->step_size;
 }
 
 kun_ktk size_t ktkFileSystem::Get_RemainingStreamsCount(
 	ktkFileHandleType file_handle
 ) const noexcept
 {
-	KOTEK_ASSERT(false, "implement");
-	return 0;
+	const fstream_state_t* p_state = this->Get_Stream(file_handle);
+
+	if (p_state == nullptr ||
+	    p_state->stream_type != eFileSystemStreamingType::kReadOnly ||
+	    p_state->step_size == 0)
+		return 0;
+
+	if (p_state->position >= p_state->total_size)
+		return 0;
+
+	const kun_ktk uint64_t remaining =
+		p_state->total_size - p_state->position;
+
+	return static_cast<kun_ktk size_t>(
+		(remaining + p_state->step_size - 1) / p_state->step_size
+	);
 }
 
 kun_ktk size_t ktkFileSystem::Get_TotalStreamsCount(
 	ktkFileHandleType file_handle
 ) const noexcept
 {
-	KOTEK_ASSERT(false, "implement");
-	return 0;
+	const fstream_state_t* p_state = this->Get_Stream(file_handle);
+
+	if (p_state == nullptr ||
+	    p_state->stream_type != eFileSystemStreamingType::kReadOnly ||
+	    p_state->step_size == 0)
+		return 0;
+
+	return static_cast<kun_ktk size_t>(
+		(p_state->total_size + p_state->step_size - 1) /
+		p_state->step_size
+	);
 }
 
 bool ktkFileSystem::End_Stream(ktkFileHandleType file_handle
 ) noexcept
 {
-	KOTEK_ASSERT(false, "implement");
-	return 0;
+	fstream_state_t* p_state = this->Get_Stream(file_handle);
+
+	// always safe: ending an invalid/already-ended stream is a quiet
+	// no-op (idempotent cleanup), never an assert
+	if (p_state == nullptr)
+		return false;
+
+	this->Release_Stream(*p_state);
+
+	return true;
 }
 
 void ktkFileSystem::Make_Path(
@@ -4367,6 +5115,25 @@ void ktkFileSystem::Initialize(ktkIFrameworkConfig* p_config)
 
 void ktkFileSystem::Shutdown(void)
 {
+	// B3: no state leaks past Shutdown — a still-live stream is a caller
+	// leak, reported loudly and cleaned up anyway (native handles close,
+	// held VFM mappings unmap so the balance counters stay exact)
+	for (kun_ktk size_t i = 0; i < this->m_fstream_pool.size(); ++i)
+	{
+		fstream_state_t& state = this->m_fstream_pool[i];
+
+		if (state.is_free == false)
+		{
+			KOTEK_MESSAGE_ERROR(
+				"Shutdown: a stream on {} was never End_Stream'ed — "
+				"closing it (fix the caller)",
+				state.path
+			);
+
+			this->Release_Stream(state);
+		}
+	}
+
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_NATIVE
 	this->m_fs_native.Shutdown();
 #endif

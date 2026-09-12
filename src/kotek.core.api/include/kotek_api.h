@@ -393,6 +393,45 @@ kun_ktk uint16_t simultaneously_opened_files_count
 
 	/* STREAMING */
 
+	/// @brief \~english opens a FORWARD-ONLY stream over the resolved
+	/// backend (B3) — the override chain is walked like Read_File's
+	/// (mounted packs first when the priority list says so, native as
+	/// the fallback), and a native file is read through a live VFM
+	/// mapping when the kVFMRead feature is in effect (the mapping is
+	/// held for the stream's lifetime: map at Begin, unmap at End).
+	///
+	/// Contract: a missing file is user data, NOT an assert — the call
+	/// returns kInvalidFileHandleType with ONE warning after every
+	/// backend missed. The stream pool is bounded
+	/// (KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE); exhaustion is a loud
+	/// error + invalid handle.
+	///
+	/// streaming_type: kAuto/kReadOnly = a read stream; kWriteOnly = an
+	/// APPEND-ONLY write stream to a FRESH native file (the native
+	/// backend only this phase — packs are read-only; the file is
+	/// truncated/created at open); kReadAndWrite is not supported this
+	/// phase (warning + invalid handle).
+	///
+	/// override_stream_reading_length: 0 = the backend's own step —
+	/// KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE on native/mapped, the pack
+	/// entry's 64 KB compression block on pack streams (the block is the
+	/// atomic step there and can not be subdivided, so the override is
+	/// ignored for pack streams). Get_StreamingBufferLength reports the
+	/// real step.
+	///
+	/// HDD discipline: a stream is a forward cursor with ONE outstanding
+	/// sequential read — no seeks (seeking a stream is an error), the
+	/// steps land on disk in order (a pack stream's blocks are
+	/// contiguous inside the entry). Sync-sequential is this phase's
+	/// floor; the read-ahead double-buffer (block N+1 in flight while
+	/// the consumer decompresses block N) is the documented B-later
+	/// up-scale, deliberately not built yet.
+	///
+	/// THREADING: the filesystem is single-threaded by design this phase
+	/// (per-stream state is independent, but the pool and the pack
+	/// mounts' shared file handles are not synchronized);
+	/// force_be_called_from_one_thread_only pins all later calls on the
+	/// handle to the creating thread (debug assert).
 	virtual ktkFileHandleType Begin_Stream(
 		const ktk_filesystem_path& path_to_file,
 		kun_ktk uint32_t override_stream_reading_length = 0,
@@ -405,47 +444,74 @@ kun_ktk uint16_t simultaneously_opened_files_count
 			eFileSystemFeatureType::kNone
 	) noexcept = 0;
 
+	/// @brief \~english appends the string's bytes to a write stream
+	/// (forwards to the buffer overload with input.size())
 	virtual bool Write_Stream(
 		ktkFileHandleType file_handle, kun_ktk ustring& input
 	) noexcept = 0;
 
+	/// @brief \~english appends bytes to a write stream:
+	/// override_write_streaming_length != 0 writes exactly that many
+	/// bytes, 0 writes the stream's step
+	/// (Get_StreamingBufferLength). A short write is a data error: the
+	/// stream fails loudly ONCE and every later call returns false
+	/// until End_Stream. Writing to a read stream = false.
 	virtual bool Write_Stream(
 		ktkFileHandleType file_handle,
 		const unsigned char* p_buffer,
 		kun_ktk size_t override_write_streaming_length = 0
 	) noexcept = 0;
 
+	/// @brief \~english reads the next step of a read stream.
+	/// length_of_streaming_buffer is in=capacity, out=bytes read; the
+	/// capacity must fit the stream's step (a step is ATOMIC — a pack
+	/// step is one whole compression block), a smaller buffer is a
+	/// caller error (warning + false, the cursor does not advance). A
+	/// drained stream returns true with 0 bytes (EOF is not an error).
+	/// A data error (a corrupt pack block, a short disk read) fails the
+	/// stream loudly ONCE: false here and on every later call until
+	/// End_Stream. Loop shape:
+	/// while (Get_RemainingStreamsCount(h)) Read_Stream(h, buf, size);
 	virtual bool Read_Stream(
 		ktkFileHandleType file_handle,
 		unsigned char* p_buffer,
 		kun_ktk size_t& length_of_streaming_buffer
 	) noexcept = 0;
 
+	/// @brief \~english the default read step for the backends that have
+	/// no block size of their own
+	/// (KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE)
 	virtual kun_ktk uint32_t
 	Get_DefaultStreamingBufferLength(void) const noexcept = 0;
 
+	/// @brief \~english the stream's real step in bytes (the pack block
+	/// size for pack streams); 0 on an invalid handle
 	virtual kun_ktk uint32_t Get_StreamingBufferLength(
 		ktkFileHandleType file_handle
 	) const noexcept = 0;
 
-	/// @brief \~english this is
-	/// useful for streaming,
-	/// but generally you need
-	/// to call only
-	/// Get_TotalStreamsCount
-	/// and do while or any
-	/// other loop iteration for
-	/// streaming
+	/// @brief \~english Read_Stream calls left until the stream is
+	/// drained: ceil((total_size - position) / step). A read-stream
+	/// concept — 0 on write streams and invalid handles.
 	/// @param file_handle
 	/// @return
 	virtual kun_ktk size_t Get_RemainingStreamsCount(
 		ktkFileHandleType file_handle
 	) const noexcept = 0;
 
+	/// @brief \~english total Read_Stream calls needed to drain the
+	/// stream: ceil(total_size / step); 0 for an empty file, a write
+	/// stream or an invalid handle
 	virtual kun_ktk size_t Get_TotalStreamsCount(
 		ktkFileHandleType file_handle
 	) const noexcept = 0;
 
+	/// @brief \~english closes the stream and returns its slot to the
+	/// pool. ALWAYS safe: idempotent cleanup (a second call on an
+	/// ended/invalid handle is a quiet no-op false), no state leaks —
+	/// the native file handle closes, a held VFM mapping unmaps (the
+	/// map/unmap balance counters stay balanced), pack streams hold no
+	/// per-stream OS state.
 	virtual bool End_Stream(ktkFileHandleType file_handle
 	) noexcept = 0;
 

@@ -125,6 +125,59 @@ private:
 		"implementation, but basically it is uint32_t"
 	);
 
+	/// @brief \~english B3 stream slot of the dispatcher-level bounded
+	/// pool (KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE): one slot = one live
+	/// stream, the handle is a pointer into the pool (the documented
+	/// handle-as-pointer-into-pool ABI — plan §Risks, kept as-is). A
+	/// stream is FORWARD-ONLY: a byte cursor plus ONE outstanding
+	/// sequential step, no seeks. The contract lives on
+	/// ktkIFileSystem::Begin_Stream.
+	struct fstream_state_t
+	{
+		bool is_free = true;
+		/// @brief \~english sticky failure: a data error fails the
+		/// stream loudly ONCE and every later Read/Write_Stream returns
+		/// false until End_Stream
+		bool is_failed = false;
+		/// @brief \~english native read streams ride a live mapping when
+		/// the kVFMRead feature is in effect (held for the stream's
+		/// lifetime, released at End_Stream — map/Begin balances
+		/// unmap/End)
+		bool is_vfm = false;
+		/// @brief \~english Begin_Stream's
+		/// force_be_called_from_one_thread_only: pin every later call on
+		/// the handle to owner_thread_id (debug discipline)
+		bool check_thread = false;
+		eFileSystemStreamingType stream_type =
+			eFileSystemStreamingType::kAuto;
+		eFileSystemPriorityType backend =
+			eFileSystemPriorityType::kAuto;
+		/// @brief \~english bytes per Read_Stream step — the backend's
+		/// block size: KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE (or the
+		/// Begin override) on native/mapped,
+		/// KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE on pack entries (the
+		/// compression block is the atomic step there)
+		kun_ktk uint32_t step_size = 0;
+		/// @brief \~english read streams: the file/entry size; write
+		/// streams: bytes written so far
+		kun_ktk uint64_t total_size = 0;
+		/// @brief \~english the forward cursor (bytes consumed/written)
+		kun_ktk uint64_t position = 0;
+		/// @brief \~english the pack cursor: the next compression block
+		/// index (blocks of an entry are contiguous on disk — the steps
+		/// are one sequential sweep, the HDD discipline)
+		kun_ktk uint32_t next_block = 0;
+		kun_ktk uint32_t vfm_mapping_id =
+			decltype(vfm_mapping_id)(-1);
+		FILE* p_file = nullptr;
+		std::thread::id owner_thread_id{};
+		/// @brief \~english pack streams re-resolve the entry per step
+		/// (a hash + binary search per 64 KB block — nothing against the
+		/// block's decompress cost) so no mount pointers are held across
+		/// calls; kept on every backend for the failure/diagnostic lines
+		ktk_filesystem_path path{};
+	};
+
 public:
 	ktkFileSystem(void);
 	~ktkFileSystem(void);
@@ -346,6 +399,22 @@ private:
 	void Create_DefaultFrameworkConfig();
 	void Fill_FrameworkConfigDefaults();
 
+	/// @brief \~english B3: validates a stream handle — null, a pointer
+	/// outside the pool (foreign/garbage handles never get dereferenced)
+	/// or a freed slot all return nullptr
+	fstream_state_t* Get_Stream(
+		ktkFileHandleType file_handle
+	) noexcept;
+
+	const fstream_state_t* Get_Stream(
+		ktkFileHandleType file_handle
+	) const noexcept;
+
+	/// @brief \~english B3: releases one live slot's OS state (native
+	/// fclose, VFM unmap) and returns it to the pool — the shared core
+	/// of End_Stream and Shutdown's leaked-stream sweep
+	void Release_Stream(fstream_state_t& state) noexcept;
+
 #ifdef KOTEK_USE_FILESYSTEM_TYPE_PACK
 	/// @brief \~english B2a: the ONE allowed directory walk — enumerates
 	/// data_game/packs/*.kpack once at Initialize, mounts newest-first.
@@ -387,6 +456,15 @@ private:
 		file_desc_t,
 		KOTEK_DEF_FILESYSTEM_STORAGE_MAX_FILES_COUNT>
 		m_paths_storage;
+
+	/// @brief \~english B3: the bounded stream pool (see
+	/// fstream_state_t), resized to the cap in the ctor — handles are
+	/// pointers into it and stay valid until End_Stream (a static
+	/// vector never reallocates)
+	ktk_vector<
+		fstream_state_t,
+		KOTEK_DEF_FILESYSTEM_FSTREAM_POOL_SIZE>
+		m_fstream_pool;
 };
 
 KOTEK_END_NAMESPACE_CORE
