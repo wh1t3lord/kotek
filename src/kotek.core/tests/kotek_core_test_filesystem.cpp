@@ -3,6 +3,7 @@
 #ifdef KOTEK_USE_TESTS
 	#ifdef KOTEK_DEBUG
 		#include <filesystem>
+		#include <fstream>
 		#include <vector>
 		#include <iostream>
 		#include <gtest/gtest.h>
@@ -4228,6 +4229,593 @@ TEST(Filesystem, test_b2a_pack_conventional_folder_mounts_newest_first)
 	);
 
 	instance_after.Shutdown();
+}
+
+// --- B2b zircon_kpacker tool: the mutation matrix -----------------------
+// the tool's OWN logic (kotek.core.filesystem.pack's kpack_write_file is
+// the only encoder) is driven in-proc for the deterministic matrix; ONE
+// end-to-end suite shells out to the built zircon_kpacker.exe for the real
+// CLI (pack -> list -> add -> remove -> verify). Same fixture discipline
+// as B0/B1/B2a (data_user/tests, self-cleaning).
+
+namespace
+{
+	constexpr const char* kB2B_Name_Readme =
+		"data_user/tests/b2b_mut/readme.txt";
+	constexpr const char* kB2B_Name_Config =
+		"data_user/tests/b2b_mut/config.json";
+	constexpr const char* kB2B_Name_Blob = "data_user/tests/b2b_mut/blob.bin";
+	constexpr const char* kB2B_Name_Added =
+		"data_user/tests/b2b_mut/added.txt";
+
+	constexpr kun_ktk size_t kB2B_BlobSize =
+		KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE * 3 + 3403;
+
+	constexpr const char kB2B_ReadmePayload[] =
+		"b2b mutation readme payload\n";
+	constexpr const char kB2B_ConfigPayload[] =
+		"{\n  \"mutation\": true,\n  \"entries\": [1, 2, 3]\n}\n";
+	constexpr const char kB2B_AddedPayload[] =
+		"added through the wholesale rewrite\n";
+
+	/// reads one entry's raw bytes through the mounted backend (the
+	/// mutation model's read half); nullptr + 0 on miss (never here)
+	kun_ktk uint8_t* b2b_read_entry(
+		ktkFileSystem& instance,
+		const ktk_filesystem_path& folder,
+		const char* p_name,
+		kun_ktk size_t known_size
+	)
+	{
+		ktk_filesystem_path path = folder;
+		path /= (p_name + strlen("data_user/tests/"));
+
+		kun_ktk uint8_t* p_bytes = new kun_ktk uint8_t[known_size + 1];
+		kun_ktk size_t size = known_size + 1;
+
+		const eKpackReadResult result =
+			instance.Get_Pack()->Read_File(path, p_bytes, size);
+
+		if (result != eKpackReadResult::kSuccess || size != known_size)
+		{
+			delete[] p_bytes;
+			return nullptr;
+		}
+
+		return p_bytes;
+	}
+} // namespace
+
+TEST(Filesystem, test_b2b_pack_mutation_rewrite_matrix_inproc)
+{
+	// the OFFLINE mutation model the zircon_kpacker tool implements
+	// (owner requirement): read the existing entry set back, REWRITE the
+	// pack wholesale through the shared encoder — pack -> add -> remove,
+	// the reader seeing exactly the new set after every step; the verify
+	// analog closes the test (every block of every remaining entry
+	// decompresses to the full-read bytes)
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path pack_path = folder;
+	pack_path /= "b2b_mut.kpack";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+	ec.clear();
+
+	kun_ktk uint8_t* payload_blob =
+		new kun_ktk uint8_t[kB2B_BlobSize];
+	b2a_fill_payload(payload_blob, kB2B_BlobSize);
+
+	// pack: three entries, one per codec (the zlib blob crosses three
+	// full blocks + a tail)
+	const kpack_writer_entry_t initial_entries[] = {
+		{kB2B_Name_Readme,
+		 reinterpret_cast<const kun_ktk uint8_t*>(kB2B_ReadmePayload),
+		 sizeof(kB2B_ReadmePayload), eKpackCompression::kStored},
+		{kB2B_Name_Config,
+		 reinterpret_cast<const kun_ktk uint8_t*>(kB2B_ConfigPayload),
+		 sizeof(kB2B_ConfigPayload), eKpackCompression::kZstd},
+		{kB2B_Name_Blob, payload_blob, kB2B_BlobSize,
+		 eKpackCompression::kZlib},
+	};
+
+	ASSERT_TRUE(
+		kpack_write_file(pack_path.c_str(), initial_entries, 3)
+	);
+	ASSERT_TRUE(instance.Mount_Pack(pack_path));
+
+	struct expected_entry_t
+	{
+		const char* p_name;
+		const kun_ktk uint8_t* p_payload;
+		kun_ktk size_t size;
+		eKpackCompression compression;
+	};
+
+	const expected_entry_t expected_after_add[] = {
+		{kB2B_Name_Readme,
+		 reinterpret_cast<const kun_ktk uint8_t*>(kB2B_ReadmePayload),
+		 sizeof(kB2B_ReadmePayload), eKpackCompression::kStored},
+		{kB2B_Name_Config,
+		 reinterpret_cast<const kun_ktk uint8_t*>(kB2B_ConfigPayload),
+		 sizeof(kB2B_ConfigPayload), eKpackCompression::kZstd},
+		{kB2B_Name_Blob, payload_blob, kB2B_BlobSize,
+		 eKpackCompression::kZlib},
+		{kB2B_Name_Added,
+		 reinterpret_cast<const kun_ktk uint8_t*>(kB2B_AddedPayload),
+		 sizeof(kB2B_AddedPayload), eKpackCompression::kZstd},
+	};
+
+	// ADD: read the current set back through the reader, rewrite
+	// wholesale with one more entry (unmount first — a mount holds the
+	// pack file open on Windows)
+	{
+		kun_ktk uint8_t* kept[3] = {};
+
+		for (kun_ktk size_t i = 0; i < 3; ++i)
+		{
+			kept[i] = b2b_read_entry(
+				instance, folder, initial_entries[i].p_name,
+				initial_entries[i].data_size
+			);
+			ASSERT_TRUE(kept[i] != nullptr);
+		}
+
+		instance.Get_Pack()->UnmountAll();
+
+		const kpack_writer_entry_t rewritten[] = {
+			{kB2B_Name_Readme, kept[0], sizeof(kB2B_ReadmePayload),
+			 eKpackCompression::kStored},
+			{kB2B_Name_Config, kept[1], sizeof(kB2B_ConfigPayload),
+			 eKpackCompression::kZstd},
+			{kB2B_Name_Blob, kept[2], kB2B_BlobSize,
+			 eKpackCompression::kZlib},
+			{kB2B_Name_Added,
+			 reinterpret_cast<const kun_ktk uint8_t*>(
+				 kB2B_AddedPayload),
+			 sizeof(kB2B_AddedPayload), eKpackCompression::kZstd},
+		};
+
+		ASSERT_TRUE(
+			kpack_write_file(pack_path.c_str(), rewritten, 4)
+		);
+
+		delete[] kept[0];
+		delete[] kept[1];
+		delete[] kept[2];
+
+		ASSERT_TRUE(instance.Mount_Pack(pack_path));
+	}
+
+	// the reader sees EXACTLY the new set: every old entry byte-identical,
+	// the added entry present, a probe name a silent miss
+	for (const auto& expected : expected_after_add)
+	{
+		ktk_filesystem_path path = folder;
+		path /= (expected.p_name + strlen("data_user/tests/"));
+
+		kun_ktk uint8_t* readback =
+			new kun_ktk uint8_t[expected.size + 1];
+		kun_ktk uint8_t* p_readback = readback;
+		kun_ktk size_t readback_size = expected.size + 1;
+
+		EXPECT_TRUE(
+			instance.Read_File(path, p_readback, readback_size)
+		);
+		EXPECT_TRUE(readback_size == expected.size);
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				readback, expected.p_payload, expected.size
+			)
+		);
+
+		delete[] readback;
+	}
+
+	{
+		ktk_filesystem_path probe = folder;
+		probe /= "b2b_mut/never_packed.txt";
+
+		kun_ktk uint8_t scratch[16];
+		kun_ktk size_t scratch_size = sizeof(scratch);
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File(probe, scratch, scratch_size
+		    ) == eKpackReadResult::kNotFound
+		);
+	}
+
+	// REMOVE: same wholesale rewrite minus the config entry
+	{
+		kun_ktk uint8_t* kept[3] = {};
+
+		kept[0] = b2b_read_entry(
+			instance, folder, kB2B_Name_Readme,
+			sizeof(kB2B_ReadmePayload)
+		);
+		kept[1] = b2b_read_entry(
+			instance, folder, kB2B_Name_Blob, kB2B_BlobSize
+		);
+		kept[2] = b2b_read_entry(
+			instance, folder, kB2B_Name_Added,
+			sizeof(kB2B_AddedPayload)
+		);
+
+		ASSERT_TRUE(
+			kept[0] != nullptr && kept[1] != nullptr &&
+			kept[2] != nullptr
+		);
+
+		instance.Get_Pack()->UnmountAll();
+
+		const kpack_writer_entry_t rewritten[] = {
+			{kB2B_Name_Readme, kept[0], sizeof(kB2B_ReadmePayload),
+			 eKpackCompression::kStored},
+			{kB2B_Name_Blob, kept[1], kB2B_BlobSize,
+			 eKpackCompression::kZlib},
+			{kB2B_Name_Added, kept[2], sizeof(kB2B_AddedPayload),
+			 eKpackCompression::kZstd},
+		};
+
+		ASSERT_TRUE(
+			kpack_write_file(pack_path.c_str(), rewritten, 3)
+		);
+
+		delete[] kept[0];
+		delete[] kept[1];
+		delete[] kept[2];
+
+		ASSERT_TRUE(instance.Mount_Pack(pack_path));
+	}
+
+	// the exact set again: the removed name is a silent miss, the three
+	// survivors byte-identical
+	{
+		ktk_filesystem_path removed_path = folder;
+		removed_path /= (kB2B_Name_Config + strlen("data_user/tests/"));
+
+		kun_ktk uint8_t scratch[16];
+		kun_ktk size_t scratch_size = sizeof(scratch);
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File(
+				removed_path, scratch, scratch_size
+			) == eKpackReadResult::kNotFound
+		);
+	}
+
+	const expected_entry_t expected_after_remove[] = {
+		{kB2B_Name_Readme,
+		 reinterpret_cast<const kun_ktk uint8_t*>(kB2B_ReadmePayload),
+		 sizeof(kB2B_ReadmePayload), eKpackCompression::kStored},
+		{kB2B_Name_Blob, payload_blob, kB2B_BlobSize,
+		 eKpackCompression::kZlib},
+		{kB2B_Name_Added,
+		 reinterpret_cast<const kun_ktk uint8_t*>(kB2B_AddedPayload),
+		 sizeof(kB2B_AddedPayload), eKpackCompression::kZstd},
+	};
+
+	// the verify analog: full read + EVERY block of every entry decoded
+	// to the full-read span (the tool's verify gate driven in-proc)
+	for (const auto& expected : expected_after_remove)
+	{
+		ktk_filesystem_path path = folder;
+		path /= (expected.p_name + strlen("data_user/tests/"));
+
+		kun_ktk uint8_t* full = new kun_ktk uint8_t[expected.size + 1];
+		kun_ktk size_t full_size = expected.size + 1;
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File(path, full, full_size) ==
+			eKpackReadResult::kSuccess
+		);
+		EXPECT_TRUE(full_size == expected.size);
+
+		const kun_ktk uint64_t block_count =
+			kpack_block_count_for_size(expected.size);
+
+		for (kun_ktk uint32_t b = 0; b < block_count; ++b)
+		{
+			kun_ktk uint8_t block
+				[KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE];
+			kun_ktk size_t block_size = sizeof(block);
+
+			EXPECT_TRUE(
+				instance.Get_Pack()->Read_File_Block(
+					path, b, block, block_size
+				) == eKpackReadResult::kSuccess
+			);
+
+			const kun_ktk uint64_t expected_block_size64 =
+				expected.size -
+				static_cast<kun_ktk uint64_t>(b) *
+					KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE;
+			const kun_ktk size_t expected_block_size =
+				static_cast<kun_ktk size_t>(
+					expected_block_size64 <
+							KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE
+						? expected_block_size64
+						: KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE
+				);
+
+			EXPECT_TRUE(block_size == expected_block_size);
+			EXPECT_TRUE(
+				b2a_bytes_equal(
+					block,
+					full +
+						static_cast<kun_ktk size_t>(b) *
+							KOTEK_DEF_FILESYSTEM_PACK_BLOCK_SIZE,
+					expected_block_size
+				)
+			);
+		}
+
+		delete[] full;
+	}
+
+	delete[] payload_blob;
+
+	// Shutdown BEFORE removing the fixture (the mount holds the pack file
+	// open)
+	instance.Shutdown();
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+}
+
+TEST(Filesystem, test_b2b_tool_end_to_end)
+{
+	// ONE real CLI run of the built zircon_kpacker (the B2b host tool):
+	// pack (with the extensions filter) -> list -> add -> remove -> verify
+	// all exit 0, then the final pack is mounted in-proc and the reader
+	// sees exactly the expected set. The tool exe lives in the engine
+	// build tree (cmake/zircon_kpacker.cmake's nested configure) — the
+	// suite SKIPS when no candidate exists (a kotek-only consumer has no
+	// tool, the in-proc suite above still covers the mutation model)
+	const char* candidate_paths[] = {
+		"build/zircon_tools_kpacker/Debug/zircon_kpacker.exe",
+		"build-gfxdev/zircon_tools_kpacker/Debug/zircon_kpacker.exe",
+	};
+
+	std::filesystem::path tool_path;
+
+	for (const char* p_candidate : candidate_paths)
+	{
+		std::error_code ec;
+
+		if (std::filesystem::exists(
+			    std::filesystem::path(p_candidate), ec
+		    ))
+		{
+			tool_path = p_candidate;
+			break;
+		}
+	}
+
+	if (tool_path.empty())
+	{
+		GTEST_SKIP() << "zircon_kpacker.exe not found in the known build "
+		                "trees";
+	}
+
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path fixture_dir = folder;
+	fixture_dir /= "b2b_tool";
+
+	ktk_filesystem_path pack_path = folder;
+	pack_path /= "b2b_tool.kpack";
+
+	// pre-clean (a crashed previous run must not pollute this one)
+	std::error_code ec;
+	std::filesystem::remove_all(
+		std::filesystem::path(fixture_dir.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+	ec.clear();
+
+	ASSERT_TRUE(std::filesystem::create_directories(
+		std::filesystem::path(fixture_dir.c_str()) / "sub", ec
+	));
+
+	// the fixture tree: mixed file types, one multi-block binary, one
+	// file the extensions filter must drop
+	const char app_json_payload[] =
+		"{\n  \"tool\": \"zircon_kpacker\"\n}\n";
+	const char notes_payload[] = "notes for the tool test\n";
+	const char late_payload[] = "{\"late\": true}\n";
+	const char skip_payload[] = "filtered out\n";
+
+	constexpr kun_ktk size_t blob_size = 140000;
+
+	kun_ktk uint8_t* payload_blob = new kun_ktk uint8_t[blob_size];
+	b2a_fill_payload(payload_blob, blob_size);
+
+	{
+		std::ofstream app_json(
+			std::filesystem::path(fixture_dir.c_str()) / "app.json",
+			std::ios::binary
+		);
+		app_json.write(app_json_payload, sizeof(app_json_payload));
+
+		std::ofstream notes(
+			std::filesystem::path(fixture_dir.c_str()) / "sub" /
+				"notes.txt",
+			std::ios::binary
+		);
+		notes.write(notes_payload, sizeof(notes_payload));
+
+		std::ofstream blob(
+			std::filesystem::path(fixture_dir.c_str()) / "sub" /
+				"blob.bin",
+			std::ios::binary
+		);
+		blob.write(
+			reinterpret_cast<const char*>(payload_blob), blob_size
+		);
+
+		std::ofstream skip_me(
+			std::filesystem::path(fixture_dir.c_str()) / "skip.me",
+			std::ios::binary
+		);
+		skip_me.write(skip_payload, sizeof(skip_payload));
+
+		std::ofstream late(
+			std::filesystem::path(folder.c_str()) / "b2b_late.txt",
+			std::ios::binary
+		);
+		late.write(late_payload, sizeof(late_payload));
+	}
+
+	// the CLI sequence — the whole command is double-quoted for cmd (the
+	// exe path is quoted inside)
+	const std::string tool = tool_path.make_preferred().string();
+
+	auto run_tool = [&tool](const std::string& arguments) {
+		const std::string command =
+			"\"\"" + tool + "\" " + arguments + "\"";
+		return std::system(command.c_str());
+	};
+
+	const std::string root_arg = std::string(fixture_dir.c_str());
+	const std::string pack_arg = std::string(pack_path.c_str());
+	const std::string late_arg =
+		std::string(folder.c_str()) + "/b2b_late.txt";
+
+	// pack: the filter drops skip.me; the default codec is zstd
+	EXPECT_TRUE(
+		run_tool("pack --root \"" + root_arg + "\" --out \"" + pack_arg +
+		    "\" --extensions .json,.txt,.bin") == 0
+	);
+
+	EXPECT_TRUE(run_tool("list --pack \"" + pack_arg + "\"") == 0);
+
+	EXPECT_TRUE(
+		run_tool("add --pack \"" + pack_arg + "\" --file \"" + late_arg +
+		    "\" --name added/late.txt") == 0
+	);
+
+	EXPECT_TRUE(
+		run_tool("remove --pack \"" + pack_arg +
+		    "\" --name sub/notes.txt") == 0
+	);
+
+	EXPECT_TRUE(run_tool("verify --pack \"" + pack_arg + "\"") == 0);
+
+	// the final pack through the real reader: exactly the expected set
+	ASSERT_TRUE(instance.Mount_Pack(pack_path));
+
+	struct final_case_t
+	{
+		const char* p_name;
+		const kun_ktk uint8_t* p_payload;
+		kun_ktk size_t size;
+	};
+
+	const final_case_t present_cases[] = {
+		{"app.json",
+		 reinterpret_cast<const kun_ktk uint8_t*>(app_json_payload),
+		 sizeof(app_json_payload)},
+		{"sub/blob.bin", payload_blob, blob_size},
+		{"added/late.txt",
+		 reinterpret_cast<const kun_ktk uint8_t*>(late_payload),
+		 sizeof(late_payload)},
+	};
+
+	for (const auto& present : present_cases)
+	{
+		ktk_filesystem_path path(present.p_name);
+
+		kun_ktk uint8_t* readback =
+			new kun_ktk uint8_t[present.size + 1];
+		kun_ktk size_t readback_size = present.size + 1;
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File(
+				path, readback, readback_size
+			) == eKpackReadResult::kSuccess
+		);
+		EXPECT_TRUE(readback_size == present.size);
+		EXPECT_TRUE(
+			b2a_bytes_equal(
+				readback, present.p_payload, present.size
+			)
+		);
+
+		delete[] readback;
+	}
+
+	// removed / filtered names are silent misses
+	const char* absent_names[] = {"sub/notes.txt", "skip.me"};
+
+	for (const char* p_absent : absent_names)
+	{
+		ktk_filesystem_path path(p_absent);
+
+		kun_ktk uint8_t scratch[16];
+		kun_ktk size_t scratch_size = sizeof(scratch);
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File(path, scratch, scratch_size
+		    ) == eKpackReadResult::kNotFound
+		);
+	}
+
+	// the tool embeds the names manifest as a real last entry
+	{
+		ktk_filesystem_path manifest_path("_kpack_names.json");
+
+		kun_ktk uint8_t scratch[256];
+		kun_ktk size_t scratch_size = sizeof(scratch);
+
+		EXPECT_TRUE(
+			instance.Get_Pack()->Read_File(
+				manifest_path, scratch, scratch_size
+			) == eKpackReadResult::kSuccess
+		);
+	}
+
+	delete[] payload_blob;
+
+	// Shutdown BEFORE the fixture cleanup (the mount holds the file)
+	instance.Shutdown();
+
+	ec.clear();
+	std::filesystem::remove_all(
+		std::filesystem::path(fixture_dir.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(pack_path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(folder.c_str()) / "b2b_late.txt", ec
+	);
 }
 
 #endif
