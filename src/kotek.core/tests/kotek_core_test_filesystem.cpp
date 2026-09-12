@@ -6020,6 +6020,446 @@ TEST(Filesystem, test_b3_stream_pack_corrupt_block_fails_loudly_once)
 
 #endif
 
+// ---------------------------------------------------------------------
+// "API simplicity" helpers (kotek_filesystem_helpers.h) — free
+// functions over ktkIFileSystem, landed after B0/B3
+// ---------------------------------------------------------------------
+
+TEST(Filesystem, test_helpers_read_file_roundtrip_and_contracts)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "helpers_read_file.bin";
+
+	ktk_filesystem_path missing_path;
+	instance.Make_Path(
+		missing_path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	missing_path /= "helpers_read_file_absent.bin";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(missing_path.c_str()), ec
+	);
+
+	kun_ktk uint8_t payload[100];
+
+	for (kun_ktk size_t i = 0; i < sizeof(payload); ++i)
+		payload[i] = static_cast<kun_ktk uint8_t>(i * 7 + 3);
+
+	ASSERT_TRUE(
+		instance.Write_File(path, payload, sizeof(payload))
+	);
+
+	// happy path: capacity in, real size out — no aliasing dance
+	kun_ktk uint8_t readback[128];
+	kun_ktk size_t out_size = 0;
+
+	ASSERT_TRUE(
+		read_file(
+			&instance, path, readback, sizeof(readback), out_size
+		)
+	);
+	EXPECT_TRUE(out_size == sizeof(payload));
+	EXPECT_TRUE(b3_bytes_equal(readback, payload, sizeof(payload)));
+
+	// the B0 too-small contract passes through: false + the REQUIRED
+	// size in out_size, then a retry with the reported size succeeds
+	// (named small_buf — 'small' is an rpcndr.h macro on Windows)
+	kun_ktk uint8_t small_buf[16];
+	out_size = 777;
+
+	EXPECT_FALSE(
+		read_file(&instance, path, small_buf, sizeof(small_buf), out_size)
+	);
+	EXPECT_TRUE(out_size == sizeof(payload));
+
+	out_size = 0;
+	ASSERT_TRUE(
+		read_file(
+			&instance, path, readback, sizeof(readback), out_size
+		)
+	);
+	EXPECT_TRUE(out_size == sizeof(payload));
+
+	// a missing file: false + size 0, never an assert
+	out_size = 123;
+	EXPECT_FALSE(
+		read_file(
+			&instance, missing_path, readback, sizeof(readback),
+			out_size
+		)
+	);
+	EXPECT_TRUE(out_size == 0);
+
+	// file_size is the same contract in path form
+	kun_ktk size_t probed = 0;
+
+	EXPECT_TRUE(file_size(&instance, path, probed));
+	EXPECT_TRUE(probed == sizeof(payload));
+
+	probed = 123;
+	EXPECT_FALSE(file_size(&instance, missing_path, probed));
+	EXPECT_TRUE(probed == 0);
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_helpers_read_json_present_missing_malformed)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path folder;
+	instance.Make_Path(
+		folder, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+
+	ktk_filesystem_path present_path = folder;
+	present_path /= "helpers_read_json.json";
+
+	ktk_filesystem_path missing_path = folder;
+	missing_path /= "helpers_read_json_absent.json";
+
+	ktk_filesystem_path malformed_path = folder;
+	malformed_path /= "helpers_read_json_malformed.json";
+
+	ktk_filesystem_path oversized_path = folder;
+	oversized_path /= "helpers_read_json_oversized.json";
+
+	ktk_filesystem_path empty_path = folder;
+	empty_path /= "helpers_read_json_empty.json";
+
+	std::error_code ec;
+	for (const ktk_filesystem_path* p_path :
+		 {&present_path, &missing_path, &malformed_path,
+			 &oversized_path, &empty_path})
+	{
+		ec.clear();
+		std::filesystem::remove(
+			std::filesystem::path(p_path->c_str()), ec
+		);
+	}
+
+	const char json_text[] =
+		"{\"name\":\"helpers\",\"answer\":42,\"flag\":true}";
+
+	// sizeof-1: the text goes to the parser, the NUL must not
+	ASSERT_TRUE(
+		instance.Write_File(
+			present_path, json_text, sizeof(json_text) - 1
+		)
+	);
+
+	const char malformed_text[] = "{\"a\": 1,,,] not json";
+
+	ASSERT_TRUE(
+		instance.Write_File(
+			malformed_path, malformed_text, sizeof(malformed_text) - 1
+		)
+	);
+
+	// a 0-byte file is user data, not an assert (Write_File's 0-length
+	// fwrite reports failure, so the fixture is created directly — the
+	// same shape as test_b1_vfm_read_empty_file)
+	{
+		FILE* p_file = fopen(empty_path.c_str(), "wb");
+		ASSERT_TRUE(p_file != nullptr);
+		fclose(p_file);
+	}
+
+	// a valid json text that exceeds the target resource's parser
+	// buffer (1024) — Create_FromMemory's size assert must NEVER fire
+	// on user data; the helper rejects it gracefully up front
+	char oversized_text[1500];
+
+	{
+		const char prefix[] = "{\"padding\":\"";
+
+		kun_ktk size_t at = 0;
+		for (; prefix[at] != '\0'; ++at)
+			oversized_text[at] = prefix[at];
+
+		while (at < sizeof(oversized_text) - 3)
+			oversized_text[at++] = 'x';
+
+		oversized_text[at++] = '"';
+		oversized_text[at++] = '}';
+		oversized_text[at++] = '\0';
+
+		// at-1: a VALID json text that simply does not fit — the NUL
+		// stays out of the parser's hands
+		ASSERT_TRUE(
+			instance.Write_File(oversized_path, oversized_text, at - 1)
+		);
+	}
+
+	// present: true + the keys read back through the resource
+	{
+		ktkResourceText<1024, 4096, false> resource;
+
+		ASSERT_TRUE(read_json(&instance, present_path, resource));
+		EXPECT_TRUE(resource.Is_KeyExist("name"));
+		EXPECT_TRUE(resource.Is_KeyExist("answer"));
+		EXPECT_TRUE(resource.Get<int>("answer") == 42);
+		EXPECT_TRUE(resource.Get<bool>("flag") == true);
+	}
+
+	// missing/malformed/empty/oversized: false + at most one warning
+	// from the failing call, never an assert
+	{
+		ktkResourceText<1024, 4096, false> resource;
+
+		EXPECT_FALSE(read_json(&instance, missing_path, resource));
+		EXPECT_FALSE(read_json(&instance, malformed_path, resource));
+		EXPECT_FALSE(read_json(&instance, empty_path, resource));
+		EXPECT_FALSE(read_json(&instance, oversized_path, resource));
+	}
+
+	for (const ktk_filesystem_path* p_path :
+		 {&present_path, &malformed_path, &oversized_path, &empty_path})
+	{
+		ec.clear();
+		std::filesystem::remove(
+			std::filesystem::path(p_path->c_str()), ec
+		);
+	}
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_helpers_write_read_json_roundtrip)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "helpers_json_roundtrip.json";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	ktkResourceText<1024, 4096, false> out_resource;
+
+	const char* p_name_value = "filesystem_helpers";
+
+	out_resource.Write("name", p_name_value);
+	out_resource.Write("answer", 42);
+	out_resource.Write("flag", true);
+
+	ASSERT_TRUE(write_json(&instance, path, out_resource));
+	EXPECT_TRUE(instance.Is_Exists(path));
+
+	ktkResourceText<1024, 4096, false> in_resource;
+
+	ASSERT_TRUE(read_json(&instance, path, in_resource));
+
+	EXPECT_TRUE(in_resource.Is_KeyExist("name"));
+	EXPECT_TRUE(in_resource.Get<int>("answer") == 42);
+	EXPECT_TRUE(in_resource.Get<bool>("flag") == true);
+
+	// the string value through the backend-portable subset (the same
+	// spelling zircon_config::deserialize uses)
+	const auto& object = in_resource.Get_Object();
+	auto it = object.find("name");
+
+	ASSERT_TRUE(it != object.end());
+	ASSERT_TRUE((*it).value().is_string());
+
+	const auto& value = (*it).value().as_string();
+
+	EXPECT_TRUE(value.size() == 18);
+	EXPECT_TRUE(
+		b3_bytes_equal(
+			reinterpret_cast<const kun_ktk uint8_t*>(value.data()),
+			reinterpret_cast<const kun_ktk uint8_t*>(
+				"filesystem_helpers"
+			),
+			value.size()
+		)
+	);
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_helpers_path_for_matches_make_path)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path via_helper;
+	ASSERT_TRUE(
+		path_for(
+			&instance, eFolderIndex::kFolderIndex_DataUser_Tests,
+			"path_for_probe.txt", via_helper
+		)
+	);
+
+	ktk_filesystem_path via_two_step;
+	instance.Make_Path(
+		via_two_step, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	via_two_step /= "path_for_probe.txt";
+
+	// the helper IS the Make_Path + '/=' two-step, byte for byte
+	EXPECT_STREQ(via_helper.c_str(), via_two_step.c_str());
+
+	instance.Shutdown();
+}
+
+TEST(Filesystem, test_helpers_read_json_streaming_matches_one_shot)
+{
+	ktkFrameworkConfig cfg;
+	ktkFileSystem instance;
+
+	instance.Initialize(&cfg);
+
+	ktk_filesystem_path path;
+	instance.Make_Path(
+		path, eFolderIndex::kFolderIndex_DataUser_Tests
+	);
+	path /= "helpers_read_json_big.json";
+
+	std::error_code ec;
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	// a json text bigger than KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE
+	// takes the helper's B3 streaming branch — the bytes (and the
+	// resulting DOM) must match the one-shot read exactly
+	constexpr kun_ktk size_t kTextSize =
+		KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE + 1904;
+
+	char text[kTextSize];
+
+	{
+		const char prefix[] = "{\"padding\":\"";
+
+		kun_ktk size_t at = 0;
+		for (; prefix[at] != '\0'; ++at)
+			text[at] = prefix[at];
+
+		// every byte value appears in the padding (gcd(31,256)=1)
+		while (at < kTextSize - 64)
+		{
+			text[at] = static_cast<char>('a' + (at % 26));
+			++at;
+		}
+
+		const char suffix[] = "\",\"answer\":42,\"flag\":true}";
+
+		for (kun_ktk size_t i = 0; suffix[i] != '\0'; ++i)
+			text[at++] = suffix[i];
+
+		ASSERT_TRUE(at <= kTextSize);
+
+		ASSERT_TRUE(instance.Write_File(path, text, at));
+	}
+
+	kun_ktk size_t probed_size = 0;
+	ASSERT_TRUE(instance.Get_FileSize(path, probed_size));
+	ASSERT_TRUE(probed_size > KOTEK_DEF_FILESYSTEM_STREAM_STEP_SIZE);
+
+	// the helper (streaming branch)
+	ktkResourceText<16384, 16384, false> via_helper;
+
+	ASSERT_TRUE(read_json(&instance, path, via_helper));
+
+	// the reference: the raw one-shot read + Create_FromMemory by hand
+	kun_ktk uint8_t oneshot[kTextSize];
+	kun_ktk uint8_t* p_oneshot = oneshot;
+	kun_ktk size_t oneshot_size = sizeof(oneshot);
+
+	ASSERT_TRUE(instance.Read_File(path, p_oneshot, oneshot_size));
+	EXPECT_TRUE(oneshot_size == probed_size);
+
+	ktkResourceText<16384, 16384, false> via_one_shot;
+
+	ASSERT_TRUE(
+		via_one_shot.Create_FromMemory(oneshot, oneshot_size)
+	);
+
+	// DOM equality pinned through both serializations
+	char helper_serialized[kTextSize];
+	char one_shot_serialized[kTextSize];
+	kun_ktk size_t helper_length = 0;
+	kun_ktk size_t one_shot_length = 0;
+
+	ASSERT_TRUE(
+		via_helper.Serialize_ToString(helper_serialized, helper_length)
+	);
+	ASSERT_TRUE(
+		via_one_shot.Serialize_ToString(
+			one_shot_serialized, one_shot_length
+		)
+	);
+
+	ASSERT_TRUE(helper_length == one_shot_length);
+	EXPECT_TRUE(
+		b3_bytes_equal(
+			reinterpret_cast<const kun_ktk uint8_t*>(helper_serialized),
+			reinterpret_cast<const kun_ktk uint8_t*>(
+				one_shot_serialized
+			),
+			helper_length
+		)
+	);
+
+	// and the content itself survived the stream: the padding value's
+	// length + the scalar keys (12 = the {"padding":" prefix, 26 = the
+	// ","answer":42,"flag":true} suffix)
+	const auto& object = via_helper.Get_Object();
+	auto it = object.find("padding");
+
+	ASSERT_TRUE(it != object.end());
+	ASSERT_TRUE((*it).value().is_string());
+	EXPECT_TRUE((*it).value().as_string().size() ==
+		oneshot_size - 12 - 26);
+
+	EXPECT_TRUE(via_helper.Get<int>("answer") == 42);
+	EXPECT_TRUE(via_helper.Get<bool>("flag") == true);
+
+	ec.clear();
+	std::filesystem::remove(
+		std::filesystem::path(path.c_str()), ec
+	);
+
+	instance.Shutdown();
+}
+
 	#endif
 #endif
 

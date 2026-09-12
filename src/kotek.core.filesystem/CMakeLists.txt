@@ -7,6 +7,7 @@ project(kotek.core.filesystem VERSION 1 LANGUAGES CXX)
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_FileSystem SHUTDOWN ShutdownModule_Core_FileSystem
 	"include/kotek_filesystem.h"
+	"include/kotek_filesystem_helpers.h"
 	"include/kotek_filesystem_native.h"
 	"include/kotek_filesystem_zlib.h"
 	"include/kotek_virtualfilemapper.h"

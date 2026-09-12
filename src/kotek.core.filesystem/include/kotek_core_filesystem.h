@@ -2,6 +2,7 @@
 
 #include <kotek.core.filesystem.file_text/include/kotek_core_filesystem_file_text.h>
 #include "kotek_filesystem.h"
+#include "kotek_filesystem_helpers.h"
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_CORE
