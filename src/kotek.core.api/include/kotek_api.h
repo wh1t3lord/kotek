@@ -34,6 +34,7 @@ class ktkIRenderDevice;
 class ktkIRenderSwapchain;
 class ktkIRenderFramePass;
 class ktkIRenderFramePassContext;
+class ktkIRenderGeometryManager;
 class ktkIRenderGraph;
 class ktkIRenderImgui;
 class ktkIRenderResourceManager;
@@ -103,6 +104,159 @@ public:
 	virtual void GPUFlush(void) = 0;
 };
 
+/// \~english the geometry seam (task K11 phase 3 / zircon Z24 B3b): the
+/// DEVICE-LEVEL geometry manager — buffers and pipelines OUTLIVE frames, so
+/// they live behind this interface next to the swapchain, while the
+/// FRAME-LEVEL draw commands live on ktkIRenderFramePassContext below. All
+/// resources are addressed through OPAQUE VALUE HANDLES (a generation-tagged
+/// index into the backend's own table): no backend pointer, no NRI/D3D12/vk
+/// type ever crosses the module boundary (the Z5 rule). A handle is valid
+/// from its create until its destroy; using a stale or foreign handle is a
+/// programmer error — the backend guards it loudly and degrades, never
+/// crashes on it.
+using ktkRenderGeometryBufferHandle = kun_ktk uint32_t;
+using ktkRenderGeometryPipelineHandle = kun_ktk uint32_t;
+
+/// \~english the invalid-handle sentinel (never a live handle)
+inline constexpr ktkRenderGeometryBufferHandle
+	kInvalidRenderGeometryBufferHandle = 0xFFFFFFFFu;
+inline constexpr ktkRenderGeometryPipelineHandle
+	kInvalidRenderGeometryPipelineHandle = 0xFFFFFFFFu;
+
+/// \~english what a created buffer will be bound as (bit set — a buffer may
+/// serve several usages; the backend picks a compatible memory type)
+enum class eRenderGeometryBufferUsage : kun_ktk uint8_t
+{
+	kVertex = 1 << 0,
+	kIndex = 1 << 1,
+	kConstant = 1 << 2
+};
+KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eRenderGeometryBufferUsage,
+	kun_ktk uint8_t);
+
+/// \~english the index element width of an index buffer
+enum class eRenderGeometryIndexFormat : kun_ktk uint8_t
+{
+	kUint16,
+	kUint32
+};
+
+/// \~english the element format of one vertex attribute (the v1 set the
+/// meshlet path needs; grows additively)
+enum class eRenderGeometryVertexFormat : kun_ktk uint8_t
+{
+	kFloat3,
+	kFloat4
+};
+
+/// \~english the color-attachment format a pipeline is compiled for (today
+/// the NRI swap chain is BT709_G22_8BIT = RGBA8 unorm; the caller spells the
+/// enum, the backend maps it — no backend format type crosses the boundary)
+enum class eRenderGeometryColorFormat : kun_ktk uint8_t
+{
+	kRGBA8Unorm
+};
+
+/// \~english one compiled shader stage's bytecode (DXIL today — the caller
+/// owns the blob's lifetime through the create call; the backend copies what
+/// it needs during creation)
+struct ktkRenderGeometryShaderDesc
+{
+	const void* m_p_bytecode{};
+	kun_ktk uint32_t m_size_bytes{};
+	/// \~english the entry point symbol (e.g. "vs_main"); nullptr = the
+	/// backend's default entry name
+	const char* m_p_entry_point{};
+};
+
+/// \~english one vertex attribute of the (single, interleaved) vertex
+/// stream the v1 pipeline understands
+struct ktkRenderGeometryVertexAttributeDesc
+{
+	/// \~english the shader input semantic ("POSITION", "NORMAL", ...)
+	const char* m_p_semantic_name{};
+	kun_ktk uint32_t m_semantic_index{};
+	eRenderGeometryVertexFormat m_format{};
+	/// \~english the byte offset inside the vertex stride
+	kun_ktk uint32_t m_offset_bytes{};
+};
+
+/// \~english the graphics pipeline description of the v1 draw: one
+/// vertex+pixel pair through one interleaved vertex stream onto one color
+/// attachment. Deliberately narrow — it grows with what the real passes need
+/// (depth, culling modes, mesh stages); nothing backend-specific is
+/// expressible here.
+struct ktkRenderGeometryPipelineDesc
+{
+	ktkRenderGeometryShaderDesc m_vertex_shader{};
+	ktkRenderGeometryShaderDesc m_pixel_shader{};
+	const ktkRenderGeometryVertexAttributeDesc* m_p_attributes{};
+	kun_ktk uint32_t m_attribute_count{};
+	/// \~english the interleaved vertex stride in bytes
+	kun_ktk uint32_t m_vertex_stride_bytes{};
+	eRenderGeometryColorFormat m_color_format{};
+	/// \~english the size of the push-constant (root-constant) block visible
+	/// to BOTH stages at register(b0) — 0 = no push constants. A multiple of
+	/// 4, <= 256 bytes (the D3D12 root-constant discipline)
+	kun_ktk uint32_t m_push_constant_bytes{};
+};
+
+/// \~english the device-level geometry manager (task K11 phase 3 / zircon
+/// Z24 B3b): buffers and pipelines outlive frames, so they are created and
+/// destroyed here — OUTSIDE the frame discipline — while the frame-level
+/// bind/draw commands live on ktkIRenderFramePassContext. Implemented by the
+/// active backend (kotek.render.nri today); a backend without geometry
+/// support simply never registers an instance. All state is owned by the
+/// instance (the no-statics rule) so a whole-module replacement through the
+/// ktkI* locator stays safe.
+class ktkIRenderGeometryManager
+{
+public:
+	virtual ~ktkIRenderGeometryManager(void) {}
+
+	/// \~english binds the manager to the render device of the running
+	/// backend; called once by the backend's module entry after the device
+	/// exists
+	virtual void Initialize(ktkIRenderDevice* p_render_device) = 0;
+
+	/// \~english releases every live buffer and pipeline (the caller
+	/// guarantees the GPU is idle — module shutdown order)
+	virtual void Shutdown(void) = 0;
+
+	/// \~english creates a buffer of the given size for the given usages;
+	/// the invalid sentinel on failure (loud log, never an abort — user
+	/// content must not crash the boot)
+	virtual ktkRenderGeometryBufferHandle Create_Buffer(
+		kun_ktk uint64_t size_bytes,
+		eRenderGeometryBufferUsage usage) = 0;
+
+	/// \~english destroys a buffer created by Create_Buffer; the invalid
+	/// handle and stale/foreign handles are a loud no-op (the guard, not a
+	/// crash)
+	virtual void Destroy_Buffer(
+		ktkRenderGeometryBufferHandle handle) = 0;
+
+	/// \~english CPU -> GPU upload: SYNCHRONOUS and IMMEDIATE (the backend
+	/// writes through host-visible upload memory; the bytes are readable by
+	/// the GPU from the NEXT submitted frame, no fence the caller must
+	/// wait). false when the handle is stale/foreign or the range does not
+	/// fit the buffer
+	virtual bool Upload_Buffer(ktkRenderGeometryBufferHandle handle,
+		kun_ktk uint64_t offset_bytes, const void* p_bytes,
+		kun_ktk uint64_t size_bytes) = 0;
+
+	/// \~english creates a graphics pipeline from compiled bytecode (DXIL
+	/// today); the invalid sentinel on failure (loud log). The caller owns
+	/// the blobs' lifetime through this call
+	virtual ktkRenderGeometryPipelineHandle Create_Pipeline(
+		const ktkRenderGeometryPipelineDesc& desc) = 0;
+
+	/// \~english destroys a pipeline created by Create_Pipeline; invalid /
+	/// stale handles are a loud no-op
+	virtual void Destroy_Pipeline(
+		ktkRenderGeometryPipelineHandle handle) = 0;
+};
+
 /// \~english the narrow frame surface of a pass-driven present (task K11
 /// phase 2 / zircon Z5 P4): a host assembles a list of frame passes and
 /// hands it to ktkIRenderSwapchain::Present_With_Passes; the backend runs
@@ -128,6 +282,52 @@ public:
 	/// backend opens one rendering section with a clear load-op and closes
 	/// it). Only callable from inside ktkIRenderFramePass::Record.
 	virtual void ClearColor(float r, float g, float b, float a) = 0;
+
+	/// \~english the frame's draw commands (task K11 phase 3 / zircon Z24
+	/// B3b) — only callable from inside ktkIRenderFramePass::Record, between
+	/// Begin_Render_Pass and End_Render_Pass, in the natural order: pipeline,
+	/// push constants, vertex/index buffers, draw. The backend resolves the
+	/// opaque handles through its geometry manager and records into the open
+	/// command list; a stale/foreign handle or an out-of-order call is a
+	/// loud no-op for that command, never a crash mid-frame.
+
+	/// \~english opens a rendering section over the acquired back buffer
+	/// with a LOAD load-op (the previous passes' output is preserved —
+	/// order the clear pass BEFORE the drawing passes)
+	virtual void Begin_Render_Pass(void) = 0;
+	/// \~english closes the rendering section opened by Begin_Render_Pass
+	virtual void End_Render_Pass(void) = 0;
+
+	/// \~english binds a pipeline created by the geometry manager
+	virtual void Set_Pipeline(
+		ktkRenderGeometryPipelineHandle pipeline) = 0;
+
+	/// \~english uploads the push-constant block declared at the pipeline's
+	/// creation (register(b0), both stages) for the draws that follow
+	virtual void Set_Push_Constants(const void* p_data,
+		kun_ktk uint32_t size_bytes) = 0;
+
+	/// \~english binds a vertex buffer at the given slot (v1: the single
+	/// interleaved stream, slot 0)
+	virtual void Set_Vertex_Buffer(ktkRenderGeometryBufferHandle buffer,
+		kun_ktk uint64_t offset_bytes, kun_ktk uint32_t stride_bytes,
+		kun_ktk uint32_t slot) = 0;
+
+	/// \~english binds an index buffer
+	virtual void Set_Index_Buffer(ktkRenderGeometryBufferHandle buffer,
+		kun_ktk uint64_t offset_bytes,
+		eRenderGeometryIndexFormat format) = 0;
+
+	/// \~english records an indexed draw
+	virtual void Draw_Indexed(kun_ktk uint32_t index_count,
+		kun_ktk uint32_t instance_count, kun_ktk uint32_t first_index,
+		kun_ktk int32_t vertex_offset,
+		kun_ktk uint32_t first_instance) = 0;
+
+	/// \~english the acquired back-buffer size (the projection the pass
+	/// builds needs the real aspect; no backend type is exposed for it)
+	virtual kun_ktk uint32_t Get_Back_Buffer_Width(void) const = 0;
+	virtual kun_ktk uint32_t Get_Back_Buffer_Height(void) const = 0;
 };
 
 /// \~english one recordable frame pass — the pass-driven counterpart of

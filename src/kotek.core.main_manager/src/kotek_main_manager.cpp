@@ -10,7 +10,8 @@ ktkMainManager::ktkMainManager(int argc, char** argv) :
 	m_argc{argc}, m_argv{argv}, m_p_manager_config{}, m_p_manager_renderer{},
 	m_p_game_manager{}, m_p_manager_filesystem{},
 	m_p_manager_input{}, m_p_manager_render_device{},
-	m_p_manager_render_resource{}, m_p_manager_render_graph{},
+	m_p_manager_render_resource{}, m_p_manager_render_geometry{},
+	m_p_manager_render_graph{},
 	m_p_manager_swapchain{}, m_p_manager_profiler{}, m_p_manager_window{},
 	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{},
 	m_p_splash{}, m_p_console{}, m_p_window_console{}, m_p_plugin_state{}
@@ -27,7 +28,8 @@ ktkMainManager::ktkMainManager() :
 	m_argc{}, m_argv{}, m_p_manager_config{}, m_p_manager_renderer{},
 	m_p_game_manager{}, m_p_manager_filesystem{},
 	m_p_manager_input{}, m_p_manager_render_device{},
-	m_p_manager_render_resource{}, m_p_manager_render_graph{},
+	m_p_manager_render_resource{}, m_p_manager_render_geometry{},
+	m_p_manager_render_graph{},
 	m_p_manager_swapchain{}, m_p_manager_profiler{}, m_p_manager_window{},
 	m_p_manager_imgui_wrapper{}, m_p_game_ui_engine{}, m_p_logger{},
 	m_p_splash{}, m_p_console{}, m_p_window_console{}, m_p_plugin_state{}
@@ -118,6 +120,18 @@ void ktkMainManager::setRenderSwapchainManager(
 	ktkIRenderSwapchain* pointer) noexcept
 {
 	this->m_p_manager_swapchain = pointer;
+}
+
+ktkIRenderGeometryManager* ktkMainManager::GetRenderGeometryManager(
+	void) const noexcept
+{
+	return this->m_p_manager_render_geometry;
+}
+
+void ktkMainManager::SetRenderGeometryManager(
+	ktkIRenderGeometryManager* pointer) noexcept
+{
+	this->m_p_manager_render_geometry = pointer;
 }
 
 void ktkMainManager::Set_FrameworkConfig(ktkIFrameworkConfig* pointer) noexcept

@@ -1,5 +1,6 @@
 #include "../include/kotek_render_nri.h"
 #include "../include/kotek_render_device.h"
+#include "../include/kotek_render_geometry_manager.h"
 #include "../include/kotek_render_resource_manager.h"
 #include "../include/kotek_render_swapchain.h"
 
@@ -18,10 +19,13 @@ bool InitializeModule_Render_NRI(kun_core ktkMainManager* p_main_manager)
 		new nri::ktkRenderResourceManager(p_render_device, p_main_manager);
 	nri::ktkRenderSwapchain* p_render_swapchain =
 		new nri::ktkRenderSwapchain();
+	nri::ktkRenderGeometryManager* p_geometry_manager =
+		new nri::ktkRenderGeometryManager();
 
 	p_main_manager->setRenderDevice(p_render_device);
 	p_main_manager->setRenderSwapchainManager(p_render_swapchain);
 	p_main_manager->SetRenderResourceManager(p_render_resource_manager);
+	p_main_manager->SetRenderGeometryManager(p_geometry_manager);
 
 	if (p_main_manager->Get_Splash())
 	{
@@ -85,10 +89,12 @@ bool InitializeModule_Render_NRI(kun_core ktkMainManager* p_main_manager)
 		p_main_manager->setRenderDevice(nullptr);
 		p_main_manager->SetRenderResourceManager(nullptr);
 		p_main_manager->setRenderSwapchainManager(nullptr);
+		p_main_manager->SetRenderGeometryManager(nullptr);
 
 		delete p_render_device;
 		delete p_render_resource_manager;
 		delete p_render_swapchain;
+		delete p_geometry_manager;
 
 		return false;
 	}
@@ -96,6 +102,7 @@ bool InitializeModule_Render_NRI(kun_core ktkMainManager* p_main_manager)
 	p_render_swapchain->Initialize(p_render_device);
 	p_render_resource_manager->Initialize(p_render_device,
 		p_render_swapchain, p_engine_config->Get_VideoMemoryForInitialize());
+	p_geometry_manager->Initialize(p_render_device);
 
 	p_main_manager->SetRenderResourceManager(p_render_resource_manager);
 
@@ -125,6 +132,19 @@ bool ShutdownModule_Render_NRI(kun_core ktkMainManager* p_main_manager)
 	p_main_manager->GetRenderResourceManager()->Shutdown(
 		p_main_manager->getRenderDevice());
 
+	// the geometry manager releases every live buffer/pipeline while the
+	// device is still alive (the GPU is flushed above)
+	nri::ktkRenderGeometryManager* p_geometry_manager =
+		dynamic_cast<nri::ktkRenderGeometryManager*>(
+			p_main_manager->GetRenderGeometryManager());
+
+	KOTEK_ASSERT(p_geometry_manager,
+		"you must get a valid point of nri::ktkRenderGeometryManager "
+		"(otherwise it is impossible situation and something went "
+		"really wrong)");
+
+	p_geometry_manager->Shutdown();
+
 	p_main_manager->getRenderDevice()->Shutdown();
 
 	nri::ktkRenderDevice* p_render_device =
@@ -151,10 +171,12 @@ bool ShutdownModule_Render_NRI(kun_core ktkMainManager* p_main_manager)
 	delete p_render_device;
 	delete p_render_resource_manager;
 	delete p_render_swapchain;
+	delete p_geometry_manager;
 
 	p_main_manager->setRenderDevice(nullptr);
 	p_main_manager->SetRenderResourceManager(nullptr);
 	p_main_manager->setRenderSwapchainManager(nullptr);
+	p_main_manager->SetRenderGeometryManager(nullptr);
 
 	return true;
 }

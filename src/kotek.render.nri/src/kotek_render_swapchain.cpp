@@ -1,5 +1,6 @@
 #include "../include/kotek_render_swapchain.h"
 #include "../include/kotek_render_frame_pass_context.h"
+#include "../include/kotek_render_geometry_manager.h"
 
 /// \~english the milestone clear color (task K11 phase 1): RGB(0.2, 0.3, 0.6)
 #define KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_R 0.2f
@@ -90,8 +91,12 @@ void ktkRenderSwapchain::Present(Core::ktkMainManager* p_main_manager,
 	if (!this->Begin_Frame(p_device, acquire))
 		return;
 
-	ktkRenderFramePassContext context(
-		p_device, this->m_p_color_views[acquire.texture_index]);
+	ktkRenderFramePassContext context(p_device,
+		this->m_p_color_views[acquire.texture_index],
+		dynamic_cast<ktkRenderGeometryManager*>(
+			p_main_manager->GetRenderGeometryManager()),
+		static_cast<kun_ktk uint32_t>(p_device->GetWidth()),
+		static_cast<kun_ktk uint32_t>(p_device->GetHeight()));
 
 	context.ClearColor(KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_R,
 		KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_G, KOTEK_DEF_RENDER_NRI_CLEAR_COLOR_B,
@@ -155,8 +160,12 @@ void ktkRenderSwapchain::Present_With_Passes(
 		this->m_pass_drive_logged = true;
 	}
 
-	ktkRenderFramePassContext context(
-		p_device, this->m_p_color_views[acquire.texture_index]);
+	ktkRenderFramePassContext context(p_device,
+		this->m_p_color_views[acquire.texture_index],
+		dynamic_cast<ktkRenderGeometryManager*>(
+			p_main_manager->GetRenderGeometryManager()),
+		static_cast<kun_ktk uint32_t>(p_device->GetWidth()),
+		static_cast<kun_ktk uint32_t>(p_device->GetHeight()));
 
 	for (kun_ktk uint32_t pass_index = 0; pass_index < pass_count;
 		 ++pass_index)

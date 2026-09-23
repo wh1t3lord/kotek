@@ -17,6 +17,9 @@ set(to_include_core_files
 	"src/kotek_render_swapchain.cpp"
 	"include/kotek_render_frame_pass_context.h"
 	"src/kotek_render_frame_pass_context.cpp"
+	"include/kotek_render_geometry_handle_table.h"
+	"include/kotek_render_geometry_manager.h"
+	"src/kotek_render_geometry_manager.cpp"
 	"include/kotek_render_resource_manager.h"
 	"src/kotek_render_resource_manager.cpp")
 

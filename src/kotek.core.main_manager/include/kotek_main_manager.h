@@ -12,6 +12,7 @@ class ktkIInput;
 class ktkIGameManager;
 class ktkIRenderDevice;
 class ktkIRenderResourceManager;
+class ktkIRenderGeometryManager;
 class ktkIRenderSwapchain;
 class ktkIRenderer;
 class ktkIFrameworkConfig;
@@ -66,6 +67,16 @@ public:
 
 	void setRenderSwapchainManager(ktkIRenderSwapchain* pointer) noexcept;
 
+	/// \~english the device-level geometry manager (task K11 phase 3 /
+	/// zircon Z24 B3b): buffers/pipelines outlive frames — created by the
+	/// active backend's module entry, nullptr when the backend has no
+	/// geometry support
+	ktkIRenderGeometryManager* GetRenderGeometryManager(
+		void) const noexcept;
+
+	void SetRenderGeometryManager(
+		ktkIRenderGeometryManager* pointer) noexcept;
+
 	void Set_FrameworkConfig(ktkIFrameworkConfig* pointer) noexcept;
 	ktkIFrameworkConfig* Get_EngineConfig(void) const noexcept;
 
@@ -116,6 +127,7 @@ private:
 	ktkIInput* m_p_manager_input;
 	ktkIRenderDevice* m_p_manager_render_device;
 	ktkIRenderResourceManager* m_p_manager_render_resource;
+	ktkIRenderGeometryManager* m_p_manager_render_geometry;
 	ktkIRenderGraph* m_p_manager_render_graph;
 	ktkIRenderSwapchain* m_p_manager_swapchain;
 	ktkIProfiler* m_p_manager_profiler;

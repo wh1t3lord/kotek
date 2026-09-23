@@ -12,10 +12,15 @@
 	// proofs, not mocks): device creation and a 3-frame present on a
 	// swap chain. NRI headers come from the pinned clone in
 	// kotek/external/nri (task K11); the tests-only link edge to the NRI
-	// target is declared in this module's CMakeLists
+	// target is declared in this module's CMakeLists. The geometry
+	// handle-table proof (K11 phase 3) includes the module's table header
+	// directly — it is deliberately free of NRI types, so no extra link
+	// edge is needed
 	#include <NRI.h>
 	#include <Extensions/NRIDeviceCreation.h>
 	#include <Extensions/NRISwapChain.h>
+
+	#include <kotek.render.nri/include/kotek_render_geometry_handle_table.h>
 
 	// the present test binds the swap chain to its own hidden window —
 	// never to the engine's HWND (a flip-model swap chain is 1-per-window,
@@ -96,6 +101,76 @@ namespace
 					kEngine_Feature_Renderer_DirectX_Latest));
 
 		config.Shutdown();
+	}
+
+	// the geometry seam's handle table (task K11 phase 3 / zircon Z24
+	// B3b): pure bookkeeping proofs — no GPU. The table lives in the NRI
+	// module but is deliberately free of NRI types, so the handle
+	// semantics (generation-tagged indices, the stale/foreign guards, the
+	// capacity + upload-range contracts) are provable headlessly. The
+	// device-level half of the seam (real create/upload/destroy against
+	// the D3D12 device) is the NRI boot's job: the zircon meshlet pass
+	// creates its buffers/pipeline through this exact manager and the
+	// boot exits 0 only when the whole frame ran.
+	TEST(KotekRenderNRI, GeometryHandleTableBookkeeping)
+	{
+		using table_t = Render::nri::ktkRenderGeometryHandleTable<4>;
+
+		table_t table;
+
+		// fresh handles: distinct, index-ordered, live
+		const kun_ktk uint32_t first =
+			table.allocate(reinterpret_cast<void*>(0x1),
+				reinterpret_cast<void*>(0x2), 256);
+		const kun_ktk uint32_t second =
+			table.allocate(reinterpret_cast<void*>(0x3),
+				reinterpret_cast<void*>(0x4), 512);
+
+		EXPECT_NE(first, 0u);
+		EXPECT_NE(second, 0u);
+		EXPECT_NE(first, second);
+		EXPECT_EQ(table.get_live_count(), 2u);
+		EXPECT_TRUE(table.is_range_valid(first, 0, 256));
+		EXPECT_TRUE(table.is_range_valid(first, 128, 128));
+		EXPECT_FALSE(table.is_range_valid(first, 128, 129));
+		EXPECT_FALSE(table.is_range_valid(first, 257, 0));
+
+		// the zero handle and the out-of-range sentinel never resolve
+		EXPECT_EQ(table.resolve(0u), nullptr);
+		EXPECT_EQ(table.resolve(0xFFFFFFFFu), nullptr);
+
+		// free makes the handle stale: the slot is gone and a re-create
+		// gets the same index under a NEW generation (the stale copy is
+		// rejected, not silently re-bound)
+		EXPECT_TRUE(table.free(first));
+
+		EXPECT_EQ(table.resolve(first), nullptr);
+		EXPECT_EQ(table.get_live_count(), 1u);
+
+		const kun_ktk uint32_t reused =
+			table.allocate(reinterpret_cast<void*>(0x5),
+				reinterpret_cast<void*>(0x6), 64);
+
+		EXPECT_NE(reused, 0u);
+		EXPECT_EQ(reused & 0xFFFFu, first & 0xFFFFu);
+		EXPECT_NE(reused, first);
+		EXPECT_EQ(table.resolve(first), nullptr);
+		EXPECT_NE(table.resolve(reused), nullptr);
+
+		// freeing a stale/foreign handle is a loud no-op, not a crash
+		EXPECT_FALSE(table.free(first));
+		EXPECT_FALSE(table.free(0xFFFFFFFFu));
+
+		// the capacity contract: the 4th allocation is rejected loudly
+		// (the all-zero pattern), the live set stays intact
+		EXPECT_NE(table.allocate(nullptr, nullptr, 1), 0u);
+		EXPECT_NE(table.allocate(nullptr, nullptr, 1), 0u);
+		EXPECT_EQ(table.allocate(nullptr, nullptr, 1), 0u);
+		EXPECT_EQ(table.get_live_count(), 4u);
+
+		// the upload-range guard keys off the stored per-slot size
+		EXPECT_TRUE(table.is_range_valid(reused, 0, 64));
+		EXPECT_FALSE(table.is_range_valid(reused, 0, 65));
 	}
 
 	// (a) module lifecycle at the device level: the exact objects the

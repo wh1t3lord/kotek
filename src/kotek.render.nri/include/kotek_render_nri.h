@@ -25,6 +25,15 @@ KOTEK_END_NAMESPACE_KOTEK
 /// single command list of phase 1)
 #define KOTEK_DEF_RENDER_NRI_QUEUED_FRAMES 1
 
+/// \~english the geometry manager's buffer table capacity (task K11 phase
+/// 3 / zircon Z24 B3b): static pools + per-cluster buffers of the pass
+/// sets — hundreds, not thousands (the handle low half is a 16-bit index)
+#define KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_BUFFERS 256
+
+/// \~english the geometry manager's pipeline table capacity (a handful of
+/// passes, a few pipelines each)
+#define KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_PIPELINES 64
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 bool InitializeModule_Render_NRI(kun_core ktkMainManager* main_manager);
