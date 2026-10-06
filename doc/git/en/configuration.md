@@ -71,7 +71,7 @@ the same name.
 
 | Argument | Meaning |
 |---|---|
-| `--kotek_plugins_template` | generate `plugins/plugins.json` as a template to fill in (module name → your DLL file) |
+| `--kotek_plugins_template` | generate `plugins/plugins.template.json` as a template to fill in (module name → your DLL file) |
 | `--kotek_plugins_modules` | generate the JSON listing the module names this build was compiled with (the names the registry matches against) |
 
 ### Editor (consumed by the game module — zircon)
