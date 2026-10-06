@@ -173,6 +173,85 @@ namespace
 		EXPECT_FALSE(table.is_range_valid(reused, 0, 65));
 	}
 
+	// the compute path's handle bookkeeping (task K11 phase 4 / zircon
+	// Z24 B3c): the per-pipeline storage-binding cache — a pass
+	// re-declares the same bindings every frame and the cache must no-op
+	// (a backend Descriptor owns a descriptor handle; recreating views per
+	// frame would leak), while any real change (buffer/offset/size) must
+	// demand a fresh view. Pure POD — no GPU needed
+	TEST(KotekRenderNRI, ComputeBindingCacheBookkeeping)
+	{
+		using cache_t = Render::nri::ktkRenderGeometryComputeBindingCache<4>;
+
+		cache_t cache;
+
+		// nothing bound yet: incomplete at any positive declared count
+		// (zero is vacuously complete — a pipeline always declares >= 1)
+		EXPECT_TRUE(cache.is_complete(0u));
+		EXPECT_FALSE(cache.is_complete(1u));
+
+		// first set: changed (first use)
+		EXPECT_TRUE(cache.set(0u, 0x10001u, 0, 1024));
+		EXPECT_TRUE(cache.is_set(0u));
+		EXPECT_FALSE(cache.is_set(1u));
+		EXPECT_TRUE(cache.is_complete(1u)); // one declared binding: done
+		EXPECT_FALSE(cache.is_complete(2u)); // two declared: one missing
+
+		// the identical re-declaration (the per-frame shape): unchanged
+		EXPECT_FALSE(cache.set(0u, 0x10001u, 0, 1024));
+
+		// every change kind demands a fresh view: the buffer, the offset,
+		// the size
+		EXPECT_TRUE(cache.set(0u, 0x10002u, 0, 1024));
+		EXPECT_TRUE(cache.set(0u, 0x10002u, 16, 1024));
+		EXPECT_TRUE(cache.set(0u, 0x10002u, 16, 2048));
+
+		// fill the rest: complete at the declared count only when every
+		// declared slot is bound
+		EXPECT_TRUE(cache.set(1u, 0x10003u, 0, 64));
+		EXPECT_TRUE(cache.set(2u, 0x10004u, 0, 8192));
+		EXPECT_TRUE(cache.is_complete(3u));
+		EXPECT_FALSE(cache.is_complete(4u)); // slot 3 unbound
+		EXPECT_TRUE(cache.set(3u, 0x10005u, 0, 4));
+		EXPECT_TRUE(cache.is_complete(4u));
+		EXPECT_FALSE(cache.is_complete(5u)); // beyond the capacity
+
+		// clear wipes everything (the pipeline-destroy path)
+		cache.clear();
+		EXPECT_FALSE(cache.is_set(0u));
+		EXPECT_FALSE(cache.is_complete(1u));
+		EXPECT_TRUE(cache.set(0u, 0x10001u, 0, 1024));
+	}
+
+	// the handle table's slot_index accessor: the compute side tables key
+	// off it (the binding cache lives per pipeline slot)
+	TEST(KotekRenderNRI, HandleSlotIndex)
+	{
+		using table_t = Render::nri::ktkRenderGeometryHandleTable<4>;
+
+		table_t table;
+
+		const kun_ktk uint32_t first =
+			table.allocate(reinterpret_cast<void*>(0x1),
+				reinterpret_cast<void*>(0x2), 256);
+		const kun_ktk uint32_t second =
+			table.allocate(reinterpret_cast<void*>(0x3),
+				reinterpret_cast<void*>(0x4), 512);
+
+		EXPECT_EQ(table_t::slot_index(first), 0u);
+		EXPECT_EQ(table_t::slot_index(second), 1u);
+
+		// a stale copy addresses the same slot (the generation rides the
+		// high half)
+		EXPECT_TRUE(table.free(first));
+		const kun_ktk uint32_t reused =
+			table.allocate(reinterpret_cast<void*>(0x5),
+				reinterpret_cast<void*>(0x6), 64);
+
+		EXPECT_EQ(table_t::slot_index(reused), 0u);
+		EXPECT_NE(reused, first);
+	}
+
 	// (a) module lifecycle at the device level: the exact objects the
 	// module creates at boot (device -> interfaces -> queue -> command
 	// allocator/list -> fence) come up and go down cleanly. The full

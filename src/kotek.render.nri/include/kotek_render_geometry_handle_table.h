@@ -157,6 +157,15 @@ public:
 		return static_cast<kun_ktk uint32_t>(Capacity);
 	}
 
+	/// \~english the slot index a (valid-shaped) handle names — the
+	/// compute-path side tables key off it (task K11 phase 4); no validity
+	/// check (the caller resolved the handle already)
+	static constexpr kun_ktk uint32_t slot_index(
+		kun_ktk uint32_t handle) noexcept
+	{
+		return index_of(handle);
+	}
+
 	/// \~english the raw slot view (the manager's Shutdown walks every live
 	/// slot directly — no handle indirection needed when tearing down)
 	const ktkRenderGeometrySlot* get_slots(void) const noexcept
@@ -191,6 +200,108 @@ private:
 	/// first allocation; the in-class {} value-initializes every POD
 	/// element deterministically)
 	ktkRenderGeometrySlot m_slots[Capacity]{};
+};
+
+/// \~english the per-compute-pipeline storage-binding cache (task K11
+/// phase 4 / zircon Z24 B3c): pure bookkeeping over opaque values — the
+/// manager stores one per compute pipeline slot and the frame context asks
+/// "did this binding change?" before recreating the backend view (a
+/// Descriptor owns a descriptor handle on every backend, so per-frame
+/// re-creation would leak; the pass re-declares the same bindings every
+/// frame and the cache no-ops). Deliberately free of NRI types so the
+/// change-detection contract is provable headlessly in kotek.core's tests
+/// (the handle-table precedent)
+template <kun_ktk size_t Capacity>
+class ktkRenderGeometryComputeBindingCache
+{
+public:
+	ktkRenderGeometryComputeBindingCache(void) = default;
+	~ktkRenderGeometryComputeBindingCache(void) = default;
+
+	ktkRenderGeometryComputeBindingCache(
+		const ktkRenderGeometryComputeBindingCache&) = delete;
+	ktkRenderGeometryComputeBindingCache& operator=(
+		const ktkRenderGeometryComputeBindingCache&) = delete;
+
+	/// \~english records the binding's current value; true when it CHANGED
+	/// (or on first use) — the caller recreates the backend view; false =
+	/// the cached view is still valid and nothing happens. An
+	/// out-of-capacity binding is a loud assert (a programmer error — the
+	/// pipeline was created with this many bindings)
+	bool set(kun_ktk uint32_t binding_index,
+		Core::ktkRenderGeometryBufferHandle buffer,
+		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes) noexcept
+	{
+		if (binding_index >= Capacity)
+		{
+			KOTEK_ASSERT(false,
+				"[nri] compute binding {} is outside the cache capacity "
+				"{} — the pipeline declares fewer storage bindings",
+				binding_index, Capacity);
+
+			return false;
+		}
+
+		ktkRenderComputeBinding& binding = this->m_bindings[binding_index];
+
+		if (binding.m_is_set && binding.m_buffer == buffer &&
+			binding.m_offset_bytes == offset_bytes &&
+			binding.m_size_bytes == size_bytes)
+		{
+			return false;
+		}
+
+		binding.m_buffer = buffer;
+		binding.m_offset_bytes = offset_bytes;
+		binding.m_size_bytes = size_bytes;
+		binding.m_is_set = true;
+
+		return true;
+	}
+
+	bool is_set(kun_ktk uint32_t binding_index) const noexcept
+	{
+		return binding_index < Capacity &&
+			this->m_bindings[binding_index].m_is_set;
+	}
+
+	/// \~english the first binding_count bindings populated (the Dispatch
+	/// guard: a kernel reading an unbound slot must never record). The
+	/// capacity is the per-pipeline MAXIMUM — a pipeline declares its own
+	/// binding count at creation, completeness is checked against THAT
+	bool is_complete(kun_ktk uint32_t binding_count) const noexcept
+	{
+		if (binding_count > Capacity)
+			return false;
+
+		for (kun_ktk uint32_t index = 0; index < binding_count; ++index)
+		{
+			if (this->m_bindings[index].m_is_set == false)
+				return false;
+		}
+
+		return true;
+	}
+
+	void clear(void) noexcept
+	{
+		for (kun_ktk size_t index = 0; index < Capacity; ++index)
+		{
+			this->m_bindings[index] = ktkRenderComputeBinding{};
+		}
+	}
+
+private:
+	struct ktkRenderComputeBinding
+	{
+		Core::ktkRenderGeometryBufferHandle m_buffer{
+			Core::kInvalidRenderGeometryBufferHandle};
+		kun_ktk uint64_t m_offset_bytes{};
+		kun_ktk uint64_t m_size_bytes{};
+		bool m_is_set{};
+	};
+
+	ktkRenderComputeBinding m_bindings[Capacity]{};
 };
 
 KOTEK_END_NAMESPACE_RENDER_NRI

@@ -124,12 +124,26 @@ inline constexpr ktkRenderGeometryPipelineHandle
 	kInvalidRenderGeometryPipelineHandle = 0xFFFFFFFFu;
 
 /// \~english what a created buffer will be bound as (bit set — a buffer may
-/// serve several usages; the backend picks a compatible memory type)
+/// serve several usages; the backend picks a compatible memory type).
+/// kStorage serves read-write shader access (UAV); kIndirect marks the
+/// buffer consumable by indirect draw/dispatch argument reads; kReadback
+/// changes the CPU-side memory location to readback heap (the Read_Buffer
+/// contract — without it buffers live in upload memory); kDevice changes
+/// the memory location to GPU-local (the only legal location for UAV
+/// storage — D3D12 forbids unordered access on upload heaps; Upload_Buffer
+/// / Read_Buffer are invalid on a device-local buffer, a loud false);
+/// kShaderRead serves READ-ONLY shader access (SRV — legal on upload
+/// memory, the host-uploaded read-only tables)
 enum class eRenderGeometryBufferUsage : kun_ktk uint8_t
 {
 	kVertex = 1 << 0,
 	kIndex = 1 << 1,
-	kConstant = 1 << 2
+	kConstant = 1 << 2,
+	kStorage = 1 << 3,
+	kIndirect = 1 << 4,
+	kReadback = 1 << 5,
+	kDevice = 1 << 6,
+	kShaderRead = 1 << 7
 };
 KOTEK_IMPLEMENTATION_ENUM_FLAG_OPERATORS(eRenderGeometryBufferUsage,
 	kun_ktk uint8_t);
@@ -155,6 +169,28 @@ enum class eRenderGeometryVertexFormat : kun_ktk uint8_t
 enum class eRenderGeometryColorFormat : kun_ktk uint8_t
 {
 	kRGBA8Unorm
+};
+
+/// \~english the buffer barrier vocabulary of the compute path (task K11
+/// phase 4 / zircon Z24 B3c): the narrow access/stage pair set the cull
+/// pipeline needs — the backend maps these onto its own barrier bits, no
+/// backend type crosses the boundary
+enum class eRenderGeometryBarrierAccess : kun_ktk uint8_t
+{
+	kNone,             /// no access (the "don't care" stage edge)
+	kStorage,          /// read-write shader access (UAV)
+	kIndirectArgument, /// indirect draw/dispatch argument reads
+	kCopySource,       /// copy reads
+	kCopyDestination   /// copy writes
+};
+
+enum class eRenderGeometryBarrierStage : kun_ktk uint8_t
+{
+	kNone,
+	kCompute,  /// compute shader work
+	kCopy,     /// copy engine work
+	kIndirect, /// indirect argument consumption
+	kAll       /// the lazy all-stages umbrella (barriers only)
 };
 
 /// \~english one compiled shader stage's bytecode (DXIL today — the caller
@@ -198,6 +234,30 @@ struct ktkRenderGeometryPipelineDesc
 	/// \~english the size of the push-constant (root-constant) block visible
 	/// to BOTH stages at register(b0) — 0 = no push constants. A multiple of
 	/// 4, <= 256 bytes (the D3D12 root-constant discipline)
+	kun_ktk uint32_t m_push_constant_bytes{};
+};
+
+/// \~english the compute pipeline description (task K11 phase 4 / zircon
+/// Z24 B3c): one compute shader over a fixed table of read-write storage
+/// buffer bindings (u0..u(N-1), byte-address form — the kernel loads/stores
+/// with explicit offsets, no element-type coupling) plus the optional
+/// push-constant block at register(b0) visible to the compute stage. The
+/// backend owns the descriptor set over the table; the caller updates
+/// bindings per frame through ktkIRenderFramePassContext and dispatches.
+/// Nothing backend-specific is expressible here.
+struct ktkRenderGeometryComputePipelineDesc
+{
+	ktkRenderGeometryShaderDesc m_compute_shader{};
+	/// \~english the number of storage buffer bindings the kernel declares
+	/// (u0..u(N-1)); <= the backend's named capacity
+	kun_ktk uint32_t m_storage_buffer_count{};
+	/// \~english bit N set: binding N is READ-ONLY (the ByteAddressBuffer /
+	/// SRV form — legal on host-uploaded memory); bit clear: read-write
+	/// (RWByteAddressBuffer / UAV — GPU-local memory only, the D3D12
+	/// upload-heap UAV rule)
+	kun_ktk uint32_t m_read_only_storage_mask{};
+	/// \~english the push-constant size in bytes, 0 = none; a multiple of 4,
+	/// <= 256 (the D3D12 root-constant discipline)
 	kun_ktk uint32_t m_push_constant_bytes{};
 };
 
@@ -255,6 +315,30 @@ public:
 	/// stale handles are a loud no-op
 	virtual void Destroy_Pipeline(
 		ktkRenderGeometryPipelineHandle handle) = 0;
+
+	/// \~english creates a compute pipeline (task K11 phase 4 / zircon Z24
+	/// B3c) from compiled DXIL bytecode over a fixed storage-binding table;
+	/// the invalid sentinel on failure (loud log). The backend owns the
+	/// pipeline's descriptor set — the frame context updates bindings and
+	/// dispatches. Default: backends without compute support return the
+	/// invalid sentinel (the additive contract — existing implementers keep
+	/// compiling)
+	virtual ktkRenderGeometryPipelineHandle Create_Compute_Pipeline(
+		const ktkRenderGeometryComputePipelineDesc&)
+	{
+		return kInvalidRenderGeometryPipelineHandle;
+	}
+
+	/// \~english CPU readback of a kReadback buffer (task K11 phase 4 /
+	/// zircon Z24 B3c): SYNCHRONOUS map-copy, valid only when the GPU is
+	/// done with the buffer (the caller fences — the swapchain's frame
+	/// pacing guarantees N-frames-old copies are complete). false on a
+	/// stale handle / a non-readback buffer / a bad range
+	virtual bool Read_Buffer(ktkRenderGeometryBufferHandle,
+		kun_ktk uint64_t, void*, kun_ktk uint64_t)
+	{
+		return false;
+	}
 };
 
 /// \~english the narrow frame surface of a pass-driven present (task K11
@@ -323,6 +407,82 @@ public:
 		kun_ktk uint32_t instance_count, kun_ktk uint32_t first_index,
 		kun_ktk int32_t vertex_offset,
 		kun_ktk uint32_t first_instance) = 0;
+
+	/// \~english the compute + copy + indirect vocabulary (task K11 phase 4
+	/// / zircon Z24 B3c) — recorded OUTSIDE a render pass (the cull segment
+	/// before Begin_Render_Pass): compute pipeline over the geometry
+	/// manager's storage-binding table, buffer copies, and the indirect
+	/// draw. The backend resolves opaque handles and guards every call (a
+	/// stale handle or an out-of-sequence call is a loud no-op for that
+	/// command); the defaults keep backends without compute support
+	/// compiling — they simply record nothing.
+	///
+	/// The natural order per frame: Set_Compute_Pipeline,
+	/// Set_Compute_Storage_Buffer xN, Set_Compute_Push_Constants,
+	/// Dispatch; Barrier_Buffer between GPU-written storage and its
+	/// consumption (indirect arguments / a copy source); Copy_Buffer for
+	/// the readback hop; then Begin_Render_Pass ... Draw_Indexed_Indirect
+	/// ... End_Render_Pass. Two dispatches back-to-back with the same
+	/// storage buffer bound synchronize implicitly (the UAV contract) — an
+	/// explicit barrier is only needed where the ACCESS KIND changes
+	/// (storage -> indirect-argument / copy-source).
+
+	/// \~english binds a compute pipeline (created by Create_Compute_Pipeline)
+	virtual void Set_Compute_Pipeline(ktkRenderGeometryPipelineHandle)
+	{
+	}
+
+	/// \~english updates one storage binding (u<binding_index>) of the
+	/// bound compute pipeline to the buffer view [offset, offset+size) —
+	/// the backend caches the view, only recreating it when the binding
+	/// actually changes
+	virtual void Set_Compute_Storage_Buffer(kun_ktk uint32_t,
+		ktkRenderGeometryBufferHandle, kun_ktk uint64_t, kun_ktk uint64_t)
+	{
+	}
+
+	/// \~english uploads the compute pipeline's push-constant block for the
+	/// dispatches that follow
+	virtual void Set_Compute_Push_Constants(const void*,
+		kun_ktk uint32_t)
+	{
+	}
+
+	/// \~english dispatches the bound compute pipeline x*y*z threads
+	virtual void Dispatch(kun_ktk uint32_t, kun_ktk uint32_t, kun_ktk uint32_t)
+	{
+	}
+
+	/// \~english a buffer barrier: the GPU work ordered before the call has
+	/// finished accessing the buffer the way "before" says before the GPU
+	/// touches it the way "after" says (the access-kind transition the
+	/// indirect/copy consumption needs)
+	virtual void Barrier_Buffer(ktkRenderGeometryBufferHandle,
+		eRenderGeometryBarrierAccess before_access,
+		eRenderGeometryBarrierAccess after_access,
+		eRenderGeometryBarrierStage before_stage,
+		eRenderGeometryBarrierStage after_stage)
+	{
+	}
+
+	/// \~english records a buffer-to-buffer copy (the readback hop)
+	virtual void Copy_Buffer(ktkRenderGeometryBufferHandle dst,
+		kun_ktk uint64_t dst_offset, ktkRenderGeometryBufferHandle src,
+		kun_ktk uint64_t src_offset, kun_ktk uint64_t size_bytes)
+	{
+	}
+
+	/// \~english an indexed indirect draw: "buffer" holds max_draw_count
+	/// command records of "stride" bytes (the backend's DrawIndexed command
+	/// layout); the GPU reads the executed count from count_buffer (32-bit
+	/// uint at count_buffer_offset) — the compacted-cull discipline. Only
+	/// callable between Begin_Render_Pass and End_Render_Pass
+	virtual void Draw_Indexed_Indirect(ktkRenderGeometryBufferHandle,
+		kun_ktk uint64_t offset_bytes, kun_ktk uint32_t max_draw_count,
+		kun_ktk uint32_t stride_bytes, ktkRenderGeometryBufferHandle,
+		kun_ktk uint64_t count_buffer_offset_bytes)
+	{
+	}
 
 	/// \~english the acquired back-buffer size (the projection the pass
 	/// builds needs the real aspect; no backend type is exposed for it)

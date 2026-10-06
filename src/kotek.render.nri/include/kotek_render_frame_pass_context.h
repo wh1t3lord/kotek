@@ -59,6 +59,32 @@ public:
 		kun_ktk int32_t vertex_offset,
 		kun_ktk uint32_t first_instance) override;
 
+	/// \~english the compute/copy/indirect commands (task K11 phase 4 /
+	/// zircon Z24 B3c) — see the interface for the order contract; all
+	/// record OUTSIDE the render pass
+	void Set_Compute_Pipeline(
+		Core::ktkRenderGeometryPipelineHandle pipeline) override;
+	void Set_Compute_Storage_Buffer(kun_ktk uint32_t binding_index,
+		Core::ktkRenderGeometryBufferHandle buffer,
+		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes) override;
+	void Set_Compute_Push_Constants(const void* p_data,
+		kun_ktk uint32_t size_bytes) override;
+	void Dispatch(kun_ktk uint32_t group_count_x, kun_ktk uint32_t group_count_y,
+		kun_ktk uint32_t group_count_z) override;
+	void Barrier_Buffer(Core::ktkRenderGeometryBufferHandle buffer,
+		Core::eRenderGeometryBarrierAccess before_access,
+		Core::eRenderGeometryBarrierAccess after_access,
+		Core::eRenderGeometryBarrierStage before_stage,
+		Core::eRenderGeometryBarrierStage after_stage) override;
+	void Copy_Buffer(Core::ktkRenderGeometryBufferHandle dst_buffer,
+		kun_ktk uint64_t dst_offset, Core::ktkRenderGeometryBufferHandle src_buffer,
+		kun_ktk uint64_t src_offset, kun_ktk uint64_t size_bytes) override;
+	void Draw_Indexed_Indirect(Core::ktkRenderGeometryBufferHandle buffer,
+		kun_ktk uint64_t offset_bytes, kun_ktk uint32_t max_draw_count,
+		kun_ktk uint32_t stride_bytes,
+		Core::ktkRenderGeometryBufferHandle count_buffer,
+		kun_ktk uint64_t count_buffer_offset_bytes) override;
+
 	kun_ktk uint32_t Get_Back_Buffer_Width(void) const override;
 	kun_ktk uint32_t Get_Back_Buffer_Height(void) const override;
 
@@ -66,7 +92,8 @@ private:
 	/// \~english the frame-level command guard: the bind/draw commands are
 	/// only legal between Begin_Render_Pass and End_Render_Pass — a
 	/// violation is a loud no-op for that command (a programmer error must
-	/// not corrupt the open command list)
+	/// not corrupt the open command list). The compute/copy commands are
+	/// the mirror image: OUTSIDE a render pass only.
 	bool is_inside_render_pass(void) const noexcept;
 
 private:
@@ -76,6 +103,11 @@ private:
 	kun_ktk uint32_t m_width;
 	kun_ktk uint32_t m_height;
 	bool m_is_inside_render_pass{};
+	/// \~english the compute segment state (task K11 phase 4): the bound
+	/// compute pipeline between Set_Compute_Pipeline and Dispatch — the
+	/// push-constant and dispatch commands validate against it
+	Core::ktkRenderGeometryPipelineHandle m_bound_compute_pipeline{
+		Core::kInvalidRenderGeometryPipelineHandle};
 };
 
 KOTEK_END_NAMESPACE_RENDER_NRI
