@@ -2599,6 +2599,17 @@ public:
 	) = 0;
 	virtual void CloseCurrentPopup() = 0;
 
+	/// @brief \~english closes the TOPMOST open popup anywhere in the
+	/// popup stack (a no-op when none is open). CloseCurrentPopup only
+	/// works from INSIDE a BeginPopup scope (it indexes
+	/// g.BeginPopupStack, which is empty between frames) — a semantic
+	/// "dismiss the open modal/menu" call from OUTSIDE any window's
+	/// Begin (e.g. a cancel arbiter's adapter in a pass's OnUpdate)
+	/// would silently no-op; this entry is the scope-free variant
+	/// (found by zircon's UI-press harness, task Z17: the ESC
+	/// consumer's dismissal of the failed-add modal never fired)
+	virtual void CloseTopmostPopup() = 0;
+
 	virtual bool BeginPopupContextItem(
 		const char* str_id = NULL,
 		ImGuiPopupFlags popup_flags = 1

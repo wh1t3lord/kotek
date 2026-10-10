@@ -977,6 +977,7 @@ public:
 		ImGuiPopupFlags popup_flags = 1
 	) override;
 	void CloseCurrentPopup() override;
+	void CloseTopmostPopup() override;
 
 	bool BeginPopupContextItem(
 		const char* str_id = NULL,

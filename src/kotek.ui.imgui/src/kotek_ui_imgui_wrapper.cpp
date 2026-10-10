@@ -1,6 +1,9 @@
 #include "../include/kotek_ui_imgui_wrapper.h"
 
 #include <kotek.ui.imgui/include/kotek_ui_imgui.h>
+// for ClosePopupToLevel + the OpenPopupStack (CloseTopmostPopup — the
+// internal header ships in the same vendored module)
+#include <kotek.ui.imgui/include/imgui_internal.h>
 #include <kotek.core.math/include/kotek_core_math.h>
 
 KOTEK_BEGIN_NAMESPACE_KOTEK
@@ -2088,6 +2091,19 @@ void ktkImguiWrapper::OpenPopupOnItemClick(
 void ktkImguiWrapper::CloseCurrentPopup()
 {
 	::ImGui::CloseCurrentPopup();
+}
+
+void ktkImguiWrapper::CloseTopmostPopup()
+{
+	// the scope-free close: CloseCurrentPopup indexes g.BeginPopupStack
+	// (empty outside a BeginPopup scope, so it no-ops between frames) —
+	// the arbiter-style caller needs the topmost of the OPEN stack
+	ImGuiContext& g = *GImGui;
+
+	if (g.OpenPopupStack.Size > 0)
+	{
+		::ImGui::ClosePopupToLevel(g.OpenPopupStack.Size - 1, true);
+	}
 }
 bool ktkImguiWrapper::BeginPopupContextItem(
 	const char* str_id, ImGuiPopupFlags popup_flags
