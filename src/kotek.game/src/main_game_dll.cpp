@@ -724,7 +724,11 @@ namespace Engine
 		int argc =
 			p_main_manager->Get_EngineConfig()->GetARGC();
 		testing::FLAGS_gtest_catch_exceptions = true;
+	#ifdef KOTEK_USE_ASSERT_STDERR_ROUTING
+		testing::FLAGS_gtest_break_on_failure = false;
+	#else
 		testing::FLAGS_gtest_break_on_failure = true;
+	#endif
 		testing::FLAGS_gtest_print_time = true;
 		testing::FLAGS_gtest_throw_on_failure = true;
 		testing::InitGoogleTest(

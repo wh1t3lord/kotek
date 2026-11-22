@@ -589,14 +589,13 @@ void ktkPluginOverrideStartup(ktkMainManager* p_manager)
 
 	// codegen flags are terminal: the file(s) are the whole job
 #if defined(KOTEK_DEBUG) && defined(_WIN32)
-	// kotek.core.memory.cpu force-enables the CRT exit leak dump
-	// (_CRTDBG_LEAK_CHECK_DF); this path exits WITHOUT running the module
-	// shutdowns where the dump is normally disabled again, and in a
-	// multi-CRT process the dump walks cross-poisoned block lists into an
-	// assert flood — disable it here, the same containment the kotek.exe
-	// entry point applies (allocation tracking itself stays on)
+#ifdef KOTEK_USE_ASSERT_STDERR_ROUTING
+	// This terminal path exits without module shutdowns. Only CLI runs
+	// suppress the unsound multi-CRT exit leak dump; native debugging keeps
+	// the CRT leak-reporting configuration intact.
 	_CrtSetDbgFlag(_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) &
 		~_CRTDBG_LEAK_CHECK_DF);
+#endif
 #endif
 	exit(0);
 }

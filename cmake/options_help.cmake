@@ -34,7 +34,7 @@ set(KOTEK_OPTIONS_REGISTRY
 	"KOTEK_STARTUP_RENDERER_VENDOR|BGFX|startup renderer vendor enum name"
 	"KOTEK_TESTS|OFF|build test targets"
 	"KOTEK_TESTS_RUNTIME|OFF|run gtest suites at engine boot (Debug)"
-	"KOTEK_ASSERT_STDERR_ROUTING|OFF|ON = CRT asserts/errors print to stderr + fail-fast (CI/agents), OFF = stock modal dialog (default, what end users expect)"
+	"KOTEK_ASSERT_STDERR_ROUTING|OFF|CLI/agent mode: ON = no assertion modal or debugger break, print CRT asserts/errors to stderr and fail fast. OFF (native default) = stock assertion dialogs and debugger breakpoints"
 	"KOTEK_WINDOWS_XP|OFF|target Windows XP (forces C++17, use with -T v141_xp)"
 	"KOTEK_CPP_STANDARD|20 (17 for XP)|C++ standard for the whole tree, exposed to code as KOTEK_USE_CPP_STANDARD"
 	"KOTEK_CPU_PROFILER|OFF Debug / ON Release|tracy cpu profiler (lib is built with TRACY_DELAYED_INIT+TRACY_MANUAL_LIFETIME via the pinned port patch)"

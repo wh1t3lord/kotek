@@ -30,16 +30,13 @@ int main(int argc, char** argv)
 {
 #if defined(KOTEK_DEBUG) && defined(KOTEK_PLATFORM_WINDOWS)
 #ifdef KOTEK_USE_ASSERT_STDERR_ROUTING
-	// automation configuration (CI/agents,
-	// -DKOTEK_ASSERT_STDERR_ROUTING=ON): never show the modal CRT dialog
-	// for asserts/errors in debug builds — report to stderr and fail
-	// fast instead (automated runs must not hang on an invisible
-	// dialog). The default configuration keeps the stock modal dialog.
-	_CrtSetReportMode(
-		_CRT_ASSERT, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE);
+	// CLI/CI configuration (-DKOTEK_ASSERT_STDERR_ROUTING=ON): no modal
+	// dialog and no debugger-triggered break — print to stderr and fail
+	// fast so automation can never hang. Native debug builds keep the CRT
+	// defaults: the stock assertion dialog and debugger breakpoints.
+	_CrtSetReportMode(_CRT_ASSERT, _CRTDBG_MODE_FILE);
 	_CrtSetReportFile(_CRT_ASSERT, _CRTDBG_FILE_STDERR);
-	_CrtSetReportMode(
-		_CRT_ERROR, _CRTDBG_MODE_DEBUG | _CRTDBG_MODE_FILE);
+	_CrtSetReportMode(_CRT_ERROR, _CRTDBG_MODE_FILE);
 	_CrtSetReportFile(_CRT_ERROR, _CRTDBG_FILE_STDERR);
 	_set_error_mode(_OUT_TO_STDERR);
 #endif
@@ -51,19 +48,15 @@ int main(int argc, char** argv)
 	kun_kotek Engine::ShutdownEngine(&main_manager);
 
 #if defined(KOTEK_DEBUG) && defined(KOTEK_PLATFORM_WINDOWS)
-	// kotek.core.memory.cpu enabled the CRT exit leak dump
-	// (_CRTDBG_LEAK_CHECK_DF) at core init, but in a multi-CRT
-	// process (static MTd per module) with heap-owning objects
-	// crossing module boundaries the debug block lists are
-	// cross-poisoned by then, and the dump walks them into
-	// foreign/corrupted entries — the megabyte-scale
-	// __acrt_first_block assert flood at process exit. The dump is
-	// unsound here, so it is disabled again before teardown;
-	// allocation tracking itself stays on (see zircon/AGENTS.md §5).
+#ifdef KOTEK_USE_ASSERT_STDERR_ROUTING
+	// Only CLI runs suppress the unsound multi-CRT exit leak dump (the
+	// cross-poisoned debug block lists can flood stderr at teardown).
+	// Native debugging keeps the CRT leak-reporting configuration intact.
 	_CrtSetDbgFlag(
 		_CrtSetDbgFlag(_CRTDBG_REPORT_FLAG) &
 		~_CRTDBG_LEAK_CHECK_DF
 	);
+#endif
 #endif
 
 	return 0;

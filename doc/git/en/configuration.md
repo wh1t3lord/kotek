@@ -38,7 +38,7 @@ the registry is right and this file has a bug (report or fix it).
 | `KOTEK_STARTUP_RENDERER_VENDOR` | `BGFX` | startup renderer vendor enum name |
 | `KOTEK_TESTS` | `OFF` | build test targets |
 | `KOTEK_TESTS_RUNTIME` | `OFF` | run gtest suites at engine boot (Debug) |
-| `KOTEK_ASSERT_STDERR_ROUTING` | `OFF` | `ON` = CRT asserts/errors print to stderr + fail-fast (CI/agents); `OFF` = stock modal dialog (what end users expect) |
+| `KOTEK_ASSERT_STDERR_ROUTING` | `OFF` | CLI/agent mode: `ON` = no assertion modal or debugger break, print CRT asserts/errors to stderr and fail fast; `OFF` (native default) = stock assertion dialogs and debugger breakpoints |
 | `KOTEK_WINDOWS_XP` | `OFF` | target Windows XP (forces C++17; use with `-T v141_xp`) |
 | `KOTEK_CPP_STANDARD` | `20` (`17` for XP) | C++ standard for the whole tree, exposed to code as `KOTEK_USE_CPP_STANDARD` |
 | `KOTEK_CPU_PROFILER` | `OFF` Debug / `ON` Release | Tracy CPU profiler (built with delayed init + manual lifetime) |
@@ -48,6 +48,13 @@ the registry is right and this file has a bug (report or fix it).
 | `KOTEK_USE_MEMORY_TRACKER` | `OFF` | opt-in allocation leak tracker |
 | `KOTEK_CPP_ASAN` | `OFF` | address sanitizer build flags |
 | `KOTEK_HELP` | `OFF` | print the option registry and stop |
+
+Native debugging is the default: `cmake -S . -B build` keeps stock CRT assertion
+dialogs and debugger breakpoints. Agents/CI use
+`cmake -S . -B build_cli -DKOTEK_ASSERT_STDERR_ROUTING=ON`, which prints CRT
+assertions/errors to stderr and fails fast without a modal dialog or
+debugger-triggered break. Ordinary console logging stays enabled; zircon's
+`validate_all_configs.bat` compiles the native tree but boots only `build_cli`.
 
 Capacity knobs: every `KOTEK_DEF_*` element count / buffer size lives in
 `kotek/src/kotek.core.defines.static.cpp/CMakeLists.txt` and becomes a `-D` with

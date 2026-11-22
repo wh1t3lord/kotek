@@ -2,8 +2,8 @@
 
 > Living document. Every agent working in this repo MUST read this first and MUST
 > update the Task Registry (status + date + notes) when it advances or finishes a task.
-> Last updated: 2026-11-22 (K28: shared committed-root-folder discipline;
-> zircon's meshlets are canonical under `data_game/models/meshlets`).
+> Last updated: 2026-11-22 (K29: native assertion/debugger defaults are
+> separated from the `build_cli` automation configuration).
 
 ## 1. What kotek is
 
@@ -325,12 +325,16 @@ module. Mechanism:
 ## 7. Build
 
 ```bash
-mkdir build && cd build
-cmake ..            # default = minimal config, vcpkg deps, all static + kotek.exe + game.ktk
-cmake --build .     # or open the generated solution
+cmake -S . -B build       # native default: stock assert dialogs + debugger breakpoints
+cmake --build build --config Debug --parallel 4
+
+cmake -S . -B build_cli -DKOTEK_ASSERT_STDERR_ROUTING=ON  # agent/CI: stderr fail-fast
+cmake --build build_cli --config Debug --parallel 4
 ```
-Outputs: `build/bin` (exe/dll), `build/lib` (static libs). Last used generator on the
-owner machine: `Visual Studio 18 2026`.
+Outputs: `{build,build_cli}/bin` (exe/dll), `{build,build_cli}/lib` (static libs).
+The native default never overrides CRT assertion presentation; CLI additionally
+suppresses debugger-triggered breaks and the unsound multi-CRT exit leak dump.
+Last used generator on the owner machine: `Visual Studio 18 2026`.
 
 ## 8. Known issues / debts (verified 2026-07-21 — fix when touched)
 
@@ -339,22 +343,23 @@ owner machine: `Visual Studio 18 2026`.
   `KOTEK_VCPKG_TRIPLET` (default `x64-windows-static`) wired in
   `kotek/CMakeLists.txt` + both `vcpkg_nuget*.cmake`. If you ever switch CRT to
   `/MD`, switch the triplet to `x64-windows` too — mixing fails with LNK2038.
-- **Assert presentation flag (2026-07-23)**: default = stock modal CRT dialog
-  (what users/manual debugging expect). `KOTEK_ASSERT_STDERR_ROUTING=ON` →
-  `KOTEK_USE_ASSERT_STDERR_ROUTING`, routes CRT asserts/errors to stderr +
-  fail-fast in both binaries (exe entry + game module init); mandatory for
-  CI/agents — a modal dialog on a headless runner hangs the job. The flag
-  covers CRT-level reports only; `KOTEK_ASSERT` logs through the engine
-  logger in every configuration. **Exe-run modal discipline (mandatory for
-  agents, 2026-08-01)**: before running ANY built .exe (boot, test runner,
-  tool) verify the tree was configured with the routing flag
-  (`grep KOTEK_ASSERT_STDERR_ROUTING <tree>/CMakeCache.txt`); keep captures
-  bounded (`timeout` + size cap); after the run sweep for stuck modals
-  (EnumWindows `#32770` + `tasklist //FI "IMAGENAME eq WerFault.exe"`,
-  clear with `taskkill //F //IM <exe>`). A modal an agent cannot click
-  blocks all automation — the WER `DontShowUI=1` switch (zircon §5, set on
-  the owner's machine 2026-08-01) is the last line of defense for hard
-  crashes, not a substitute for the routing flag.
+- **Assert presentation flag (owner directive 2026-11-22)**: the native
+  `build` tree keeps stock CRT assertion dialogs and debugger breakpoints with
+  no overrides. `build_cli` uses `-DKOTEK_ASSERT_STDERR_ROUTING=ON` →
+  `KOTEK_USE_ASSERT_STDERR_ROUTING`: CRT asserts/errors print to stderr and
+  fail fast without a modal or debugger-triggered break; gtest's
+  `break_on_failure` is false and the unsound multi-CRT exit leak dump is
+  suppressed. Ordinary console logging stays enabled in BOTH trees.
+  **Exe-run modal discipline (mandatory for agents)**: automated runs use
+  `build_cli` (or another explicitly routed tree), never native `build`.
+  Before ANY run verify `KOTEK_ASSERT_STDERR_ROUTING=ON` in its
+  `CMakeCache.txt`; keep captures bounded (`timeout` + size cap); after the
+  run sweep for stuck modals (EnumWindows `#32770` +
+  `tasklist //FI "IMAGENAME eq WerFault.exe"`, clear with
+  `taskkill //F //IM <exe>`). A modal an agent cannot click blocks all
+  automation — the WER `DontShowUI=1` switch (zircon §5, set on the owner's
+  machine 2026-08-01) is the last line of defense for hard crashes, not a
+  substitute for the routing flag.
 - **Cross-CRT file handles (fixed 2026-07-31)**: the logger bridge
   (`Set_LoggerMain` into game.ktk) shares one exe-constructed logger across
   modules; its file sink was a CRT `FILE*`, and game.ktk's header-inline
@@ -497,12 +502,12 @@ owner machine: `Visual Studio 18 2026`.
   on cross-module mutation; (2) any **heap-owning** object (std::string /
   containers / `new`d members) must not be freed by a different module —
   `/MT` gives each module its own CRT debug-heap block list, cross-frees
-  assert `__acrt_first_block == header` and poison the lists. Today's
-  containment: allocation tracking stays ON (do not hide reports), the
-  unsound **exit leak dump** (`_CRTDBG_LEAK_CHECK_DF`, force-enabled by
-  kotek.core.memory.cpu) is disabled at each module's shutdown, and the
-  engine config is intentionally leaked; real fix = **K9 shared
-  allocator** so no cross-CRT free exists.
+  assert `__acrt_first_block == header` and poison the lists. CLI containment:
+  allocation tracking stays ON (do not hide reports), but the unsound **exit
+  leak dump** (`_CRTDBG_LEAK_CHECK_DF`, force-enabled by
+  kotek.core.memory.cpu) is disabled at each module's shutdown. Native `build`
+  leaves the CRT configuration untouched; the engine config is intentionally
+  leaked; real fix = **K9 shared allocator** so no cross-CRT free exists.
 - ~130 micro-modules: fine-grained replaceability but heavy configure/IDE cost.
 - Recurring TODO clusters: `kotek.render.gl` buffer reallocations/sync,
   `kotek.core.containers` unimplemented `shared_mutex/semaphore`, `kotek.game` update
@@ -519,7 +524,7 @@ Status values: `open` / `in-progress` / `done` / `blocked` / `dropped(reason)`.
 | K3 | Validate architecture & plans | done (2026-07-21) | verdict delivered in chat; key points in §10 |
 | K4 | Per-module backend config matrix: {no-deps+kotek impl} / {deps backends} / {user impl}; add missing `KOTEK_USE_*_USER_IMPL`-style guards where absent | in-progress (2026-07-25) | matrix design in §1a; user-impl mechanism = K21 (§5a). VALIDATION: math is the first fully-covered module — all three backends compile-validated again today post-NRI/Z16 (GLM = default in every build; DXM and KOTEK_OWN via `-DKOTEK_MATH_LIBRARY=DXM|KOTEK_OWN`, 0 errors each, parity suite `kotek_core_test_math_backends.cpp` compiles in both). CI: `matrix.yml` gained `math-dxm` + `math-own` legs (it only had math-glm), fixed the latent `--config Debug` for every leg (minimal-release silently built Debug; now `matrix.cfg` per leg), cache key aligned to the v2+hashFiles scheme of the other workflows, timeout 120→180 (cold-cache dep rebuilds), plus the `deps-manual` leg (K10). PER-MODULE GUARD INVENTORY (2026-07-30 audit, the sweep's concrete backlog): **math** GLM/DXM/KOTEK_OWN ✅ complete+CI; **render** bgfx/NRI-D3D12 ✅ (K11, NRI-VK+RT phase 2); **video** dav1d + own-out-of-scope verdict ✅ (K14); **containers** STD/BOOST/ETL(EMB)/HYB ✅ (`KOTEK_LIBRARY_TYPE`) — HYB FIXED (2026-08-01): hybrid_{deque,list,queue} implemented on the hybrid-vector pmr idiom (bounded monotonic_buffer_resource, null_memory_resource upstream when Realloc=false → overflow throws bad_alloc from the resource, never a silent realloc), `is_static()` inversion fixed in vector, never-compiled latent bugs fixed across map/umap/uset/string (bogus typedefs/members the HYB instantiation finally exposed), `uses_allocator=false_type` propagation guards on all 8 hybrid headers, umbrella HYB branches wired (incl. string's 22 ktk_*string* macros + filesystem path taking the EMB branch), 59/59 container tests via standalone runner, CI leg `containers-hyb` (kotek-scoped — zircon refuses non-EMB by Z12 design); **memory** mimalloc/CRT-OFF ✅ (K9 pending); **string** STD/BOOST + RAW/OPTIMIZED ✅; **logging** SPDLOG/BOOST/CUSTOM — CUSTOM own impl LANDED (2026-07-31): header-only `ktkCustomLogger` in kotek.core.log (spdlog-shaped info/warn/error/trace surface incl. the `{}`-variadic forms the macros emit, one macro set serves both backends in `kotek_std_dependent_preprocessors.h`), spdlog dep skipped in CUSTOM config, `-DKOTEK_LOG_LIBRARY=CUSTOM` configures+links green; two systemic fixes landed with it — (a) the generated preprocessors header was APPEND-ONLY across configures, so a backend flip in an existing build tree left the old backend's defines in place and silently shadowed the new one (reset per configure in `kotek_add_defines_subdirectory` — repairs ALL backend switching, not just logging); (b) the file sink is a Win32 OS handle, not a CRT FILE* (§8 cross-CRT handles), writes mutex-serialized for spdlog `_mt` parity; **UI** RMLUI/CEF/ATHENA guards exist (`KOTEK_UI_GAME_LIBRARY`) — ATHENA is the owner's own UI lib, guard only, zero sources; OWNER DECISION 2026-07-31: skip ATHENA for now (guard stays dormant, UI = RMLUI/CEF + imgui wrapper) — do not start it without a fresh directive; **ECS** pico vendored + `kotek::entity_t` backend alias ✅, ENTT branches are dead `#error todo` code (zircon-side task); **window** GLFW-only — no second backend and no own win32-window alternative registered (K17: SDL or own); **json** BOOST/KOTEK_OWN ✅ (`KOTEK_JSON_LIBRARY`, landed 2026-08-01): own no-dep backend — DOM (`kotek_own_json.h`: 24-byte `value`, single-allocation bodies, pmr-style `static_resource` (sticky-fail + warning on exhaustion, never a crash) / `monotonic_resource`, boost-shaped `tag_invoke` interop so `ktkJson` + every call site in both repos compiles unchanged) + streaming (`kotek_own_json_stream.h`: chunk-safe SAX `stream_reader`/`stream_writer`, fixed buffers, capacities as named #defines, comments/trailing-commas opt-in); boost dep skipped under `KOTEK_OWN`; `parse`/`serialize` + `parser`/`serializer` streaming wrappers for `ktkResourceText`; 10 JsonOwn gtests (roundtrip, unicode/escapes, malformed-graceful, number edges, resource exhaustion, stream↔DOM chunk-invariance at 1/7/63/1023 chunk sizes, every-split-point); first DOM revision was 2× boost's footprint and got reworked until `sys_info.json` fits the 1024-byte static_resource in `ktkResourceText` again; verified: 0 errors full tree, boot exit 0 with 187/187 + 14/14 under KOTEK_OWN; CI leg `json-own`; **threading** std is the only alias provider (`mutex_t` & friends map to `ktk::mt::` std-backed types — the no-dep floor by design) and TBB exists as an explicit opt-in module — NOT a switchable-guard design and that is acceptable (verified 2026-07-30); **logging** guards are INCOMPLETE (verified 2026-07-30): code has `KOTEK_USE_LOG_LIBRARY_BOOST`/`_SPDLOG` branches but `kotek.core.log/CMakeLists.txt` unconditionally requires spdlog whatever the flag says, and the CUSTOM backend exists only as a vestigial output flag — no code, no cmake branch (K17: own logging impl; the cmake find must become flag-conditional when it lands). User-impl = K21 for every row. NEXT: the K17 missing own-backends (window, json, ATHENA, logging-CUSTOM) and the logging cmake flag-conditional find |
 | K5 | GitHub CI/CD: compile EACH module isolated (all supported backends; skip user-impl) + whole solution; free plan; disk-space strategy (vcpkg binary cache / ccache; public repo ⇒ unlimited minutes, cache limit 10 GB) | done (2026-07-25) | **ALL THREE WORKFLOWS GREEN on 78cbd58** (build + tests + modules). What it took: vcpkg cache 6.5GB→1.2GB (quota-safe), pin 1bf99941, mimalloc in the dep set, pwsh wildcard sanitize, per-port dep retry, timeouts 90→180, gtest body guard, LNK2038 CRT include order, Tracy `FrameMark` collision + manual-lifetime portfile patch, `contents: write` + clone-based `ci-logs` publishing everywhere, configure retry ×3 with tee'd attempt logs, `restore-keys` cache fallback (the cold-cache tests failure class), math constexpr mismatches (matrix4x4f + vector1f-4f), NRI wiring (OFF propagation, macro dedup). Build legs: Debug-static + Release-static required and green; Debug/Release-dynamic stay continue-on-error by K18 design. matrix.yml (nightly): minimal Debug/Release (per-leg `--config` fixed), plugin-linkage, math-glm/dxm/own. The `ci-logs` branch is the public read path for any future failure |
-| K6 | CMake command printing all kotek options + meaning (help) | done (2026-07-25) | `cmake -DKOTEK_HELP=ON` — prints the curated registry in `cmake/options_help.cmake` (name|default|description, 34 entries) and stops before any dep work (fast, no vcpkg fetch). Registry made current: KOTEK_NRI, the three STATIC-dev-type game-module names, per-config profiler defaults (OFF Debug/ON Release), MIMALLOC default + leak-detection interplay, NRI-live renderer notes; the file header carries the rule that every new option joins the registry in the same commit. Two `;`-in-description bugs fixed (semicolons are CMake list separators and split entries). Verified: 0 errors, 38 options print. Paired human doc (owner directive 2026-08-01): `doc/git/en/configuration.md` carries the CMake-option + runtime-argument tables, referenced from the root README — any option/argument change updates BOTH this registry and that file in the same commit |
+| K6 | CMake command printing all kotek options + meaning (help) | done (2026-07-25) | `cmake -DKOTEK_HELP=ON` — prints the curated registry in `cmake/options_help.cmake` (name|default|description, 34 entries) and stops before any dep work (fast, no vcpkg fetch). Registry made current: KOTEK_NRI, the three STATIC-dev-type game-module names, per-config profiler defaults (OFF Debug/ON Release), MIMALLOC default + leak-detection interplay, NRI-live renderer notes; the file header carries the rule that every new option joins the registry in the same commit. Two `;`-in-description bugs fixed (semicolons are CMake list separators and split entries). Verified: 0 errors, 38 options print. SUPERPROJECT FIX (2026-11-22, zircon Z32): zircon's root now returns after kotek's help early return too; fresh `cmake -S . -B build-help-cli -DKOTEK_HELP=ON` exits 0 instead of reaching zircon targets with `kotek_add_library` undefined. Paired human doc (owner directive 2026-08-01): `doc/git/en/configuration.md` carries the CMake-option + runtime-argument tables, referenced from the root README — any option/argument change updates BOTH this registry and that file in the same commit |
 | K7 | Short, laconic documentation of kotek concepts | open | explicitly LAST task |
 | K8 | AGENTS.md progress tracking | done (2026-07-21) | this file; keep updating |
 | K9 | Fix new/delete override situation (mimalloc problems; dead leak tracker) | in-progress (2026-07-24 analysis) | tracker made opt-in via `KOTEK_USE_MEMORY_TRACKER` (was silently on in Debug). CURRENT STATE: two allocation paths — (a) mimalloc's own new/delete (`mimalloc-new-delete.h`, active in Release where `KOTEK_MEMORY_ALLOCATOR_CPU=MIMALLOC`), (b) manual global `operator new` in `kotek_std_memory.cpp` (std::malloc + leak-tracker map, active in Debug where leak detection disables the custom allocator). PROBLEMS: (1) the manual override `throw`s `std::bad_alloc` (4 sites) and tracker paths throw `runtime_error` (3 sites) — violates the no-exceptions rule; (2) the Debug CRT-malloc fallback is exactly what creates per-module CRT debug heaps → the whole cross-CRT `__acrt_first_block` assert family (§8); (3) mimalloc instances are per-module too (static link), so Release shares the same cross-heap class in milder form; (4) tracker races + unconditional `CaptureStackBackTrace` cost. PLAN: v1 — purge all `throw`s (assert+fatal semantics, no bad_alloc exceptions); route the Debug fallback through `mi_malloc/mi_free` as well (mimalloc in every config, its own debug checks replace the CRT debug heap's role → kills the cross-CRT assert family at the source); keep the tracker opt-in and make it race-safe (sharded map or mimalloc stats). v2 (the real enabler for free .dll swapping): one shared allocator service behind `ktkIMemoryAllocator` so every module allocates from ONE heap regardless of CRT — needs owner sign-off on the exact mimalloc problem he hit before adopting it everywhere |
@@ -547,6 +552,8 @@ Status values: `open` / `in-progress` / `done` / `blocked` / `dropped(reason)`.
 | K27 | Release JSON short keys (3-4 chars with legacy fallback) | done (2026-11-22) | NEW `kotek.core.containers.json/include/kotek_json_key_codec.h`: stable FNV-1a base32 key encoding with constexpr `json_key_hash`/`json_key_char`, explicit short-form APIs for PCH-independent tests, `json_key_encode` (config-selected write form) and `json_key_find[_short]` (encoded-first/full-second read fallback). `ktkJson::Write` and `ktkJsonView::Write` encode; `Get`/`Is_KeyExist` use the fallback, and zircon's direct config/scene/locale-schema readers use it too. CMake adds `KOTEK_JSON_SHORT_KEYS=AUTO|ON|OFF` (AUTO = short outside Debug) and `KOTEK_JSON_KEY_SHORT_LENGTH=3|4`; options registry + both configuration docs updated. TESTS: `JsonKeyCodec.CompactEncodingIsStableAndBounded`, `WriteReadAndLegacyFallback`, `CurrentConfigKeysHaveNoCollisions` — all pass in the normal Debug boot (269/269 kotek + 206/206 zircon + all 27 UI suites). Actual Release boot emits 4-character keys and exits 0; the pre-run config backup was restored. The /INCREMENTAL stale-test issue was fixed by deleting game.ktk/game.lib/game.exp before the final relink. FULL PRE-PUSH GATE: `validate_all_configs.bat` = `VALIDATION: PASS` (default Debug+Release, graphics-development Debug, and both available boots; absent optional trees skipped) |
 
 | K28 | Shared committed-root-folder discipline (zircon Z31) | done (2026-11-22) | §6 now forbids new committed top-level asset/output directories in either repository: game assets live under `data_game/<semantic>`, runtime/user/test output under `data_user`, and build output under the existing ignored build trees. Zircon's stale root `meshlets/` duplicate was byte-verified and removed; the canonical fixture is `data_game/models/meshlets/`. Native meshlet names are content-root-relative (`models/meshlets/...`), while kpack names are repo-root-relative (`data_game/models/meshlets/...`), matching `ktkFileSystem_Pack::Hash_PathName`. No kotek code change was needed. Zircon verification: 21/21 meshlet tests + 269/269 kotek tests and a 40-frame NRI boot with matching A/B evidence. FULL PRE-PUSH GATE: `validate_all_configs.bat` = `VALIDATION: PASS` (default Debug+Release, graphics-development Debug and both available boots; absent optional trees skipped) |
+
+| K29 | Separate native assertion/debugging from CLI automation (zircon Z32) | done (2026-11-22) | native `build` keeps stock CRT assertion dialogs, debugger breakpoints and CRT leak configuration by default (`KOTEK_ASSERT_STDERR_ROUTING=OFF`, verified in the fresh cache). `build_cli` uses the existing flag ON for stderr fail-fast automation. The exe entry no longer ORs `_CRTDBG_MODE_DEBUG` into CLI routing; every exit-leak-dump suppression is now guarded, and both gtest runners set `break_on_failure=false` only in CLI. Ordinary console logging is unchanged. `KOTEK_HELP`, both configuration guides and §7/§8 document the two commands. VERIFIED: clean native build 0 errors; clean CLI Debug+Release builds 0 errors and no relocated-object warnings; CLI boot 208/208 zircon + 269/269 kotek; `validate_all_configs.bat` = `VALIDATION: PASS` (native Debug, CLI Debug+Release, graphics-development Debug and both boots; absent optional trees skipped) |
 
 ## 10. Architecture validation summary (2026-07-21)
 
