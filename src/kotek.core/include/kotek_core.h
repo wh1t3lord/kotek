@@ -59,6 +59,7 @@ void RegisterTests_Math_ForModule_Core(void);
 void RegisterTests_Translation_ForModule_Enum_Core(void);
 void RegisterTests_Json_ForModule_Core(void);
 void RegisterTests_JsonOwn_ForModule_Core(void);
+void RegisterTests_JsonKeyCodec_ForModule_Core(void);
 void RegisterTests_String_ForModule_Core(void);
 void RegisterTests_Input_ForModule_Core(void);
 void RegisterTests_InputWinApi_ForModule_Core(void);

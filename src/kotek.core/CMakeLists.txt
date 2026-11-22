@@ -64,6 +64,7 @@ if ("${KOTEK_TESTS}" STREQUAL "ON" AND "${KOTEK_TESTS_RUNTIME}" STREQUAL "ON" AN
 		"tests/kotek_core_test_filesystem.cpp"
 		"tests/kotek_core_test_json.cpp"
 		"tests/kotek_core_test_json_own.cpp"
+		"tests/kotek_core_test_json_key_codec.cpp"
 		"tests/kotek_core_test_string.cpp"
 		"tests/kotek_core_test_container_deque.cpp"
 		"tests/kotek_core_test_container_vector.cpp"

@@ -214,6 +214,15 @@ if (NOT "${KOTEK_NRI}" STREQUAL "ON")
 	set(KOTEK_RENDER_NRI "OFF")
 endif()
 
+# JSON key minimization (owner directive): AUTO keeps full keys in Debug and
+# emits base32 short keys in every other configuration; ON/OFF force the mode.
+set(KOTEK_JSON_SHORT_KEYS "AUTO" CACHE STRING
+	"JSON key minimization: AUTO (short outside Debug), ON, or OFF")
+set_property(CACHE KOTEK_JSON_SHORT_KEYS PROPERTY STRINGS AUTO ON OFF)
+set(KOTEK_JSON_KEY_SHORT_LENGTH 4 CACHE STRING
+	"encoded JSON key length in characters (3 or 4)")
+set_property(CACHE KOTEK_JSON_KEY_SHORT_LENGTH PROPERTY STRINGS 3 4)
+
 include_directories("src")
 
 # Imported targets created by find_package are directory-scoped by default,

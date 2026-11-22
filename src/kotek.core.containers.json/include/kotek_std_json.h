@@ -1,6 +1,7 @@
 #pragma once
 
 #include "kotek_std_alias_json.h"
+#include "kotek_json_key_codec.h"
 #include <kotek.core.containers.any/include/kotek_core_containers_any.h>
 #include <kotek.core.containers.string/include/kotek_core_containers_string.h>
 #include <kotek.core.containers.vector/include/kotek_core_containers_vector.h>
@@ -88,8 +89,8 @@ public:
 			return result;
 		}
 
-		if (this->m_data.json.find(key_name.c_str()) ==
-		    this->m_data.json.end())
+		auto it = json_key_find(this->m_data.json, key_name.c_str());
+		if (it == this->m_data.json.end())
 		{
 			KOTEK_MESSAGE_WARNING(
 				"your file doesn't contain key: {}", key_name
@@ -98,8 +99,7 @@ public:
 			return result;
 		}
 
-		const auto& json_value =
-			this->m_data.json.at(key_name.c_str());
+		const auto& json_value = it->value();
 
 		result = kun_ktk json::value_to<ReturnType>(json_value);
 #endif
@@ -112,7 +112,7 @@ public:
 				KOTEK_DEF_RESOURCE_TEXT_KEY_FIELD_NAME_LENGTH>&
 	                field_name) const noexcept
 	{
-		return this->m_data.json.find(field_name.c_str()) !=
+		return json_key_find(this->m_data.json, field_name.c_str()) !=
 			this->m_data.json.end();
 	}
 
@@ -132,7 +132,8 @@ public:
 		const DataType& data
 	) noexcept
 	{
-		this->m_data.json[field_name.c_str()] =
+		const auto encoded = json_key_encode(field_name.c_str());
+		this->m_data.json[encoded.c_str()] =
 			kun_ktk json::value_from(data);
 	}
 
@@ -310,8 +311,8 @@ public:
 			return result;
 		}
 
-		if (this->m_p_json->find(key_name.c_str()) ==
-		    this->m_p_json->end())
+		auto it = json_key_find(*this->m_p_json, key_name.c_str());
+		if (it == this->m_p_json->end())
 		{
 			KOTEK_MESSAGE_WARNING(
 				"your file doesn't contain key: {}", key_name
@@ -320,8 +321,7 @@ public:
 			return result;
 		}
 
-		const auto& json_value =
-			this->m_p_json->at(key_name.c_str());
+		const auto& json_value = it->value();
 
 		result = kun_ktk json::value_to<ReturnType>(json_value);
 #endif
@@ -344,7 +344,7 @@ public:
 		if (this->m_p_json == nullptr)
 			return status;
 
-		status = this->m_p_json->find(field_name.c_str()) !=
+		status = json_key_find(*this->m_p_json, field_name.c_str()) !=
 			this->m_p_json->end();
 
 		return status;
@@ -373,7 +373,8 @@ public:
 			"view is not initialized successfully but supposed "
 			"to be valid!"
 		);
-		this->m_p_json->operator[](field_name.c_str()) =
+		const auto encoded = json_key_encode(field_name.c_str());
+		this->m_p_json->operator[](encoded.c_str()) =
 			kun_ktk json::value_from(data);
 	}
 

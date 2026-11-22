@@ -23,6 +23,8 @@ set(KOTEK_OPTIONS_REGISTRY
 	"KOTEK_USER_GAME_MODULE_FOR_LINK_NAME|(layer root sets it)|STATIC dev type only: CMake target of the user game module for kotek.game to link (zircon: zircon)"
 	"KOTEK_MATH_LIBRARY|GLM|math backend: GLM (vcpkg) / DXM (DirectXMath, Windows SDK) / KOTEK_OWN (kotek's own no-deps scalar impl)"
 	"KOTEK_JSON_LIBRARY|BOOST|json backend: BOOST (boost.json, default) / KOTEK_OWN (kotek's own no-deps backend: streaming SAX reader/writer + small DOM, task K4)"
+	"KOTEK_JSON_SHORT_KEYS|AUTO|JSON key minimization: AUTO = full keys in Debug and base32 short keys in every other configuration. ON forces short keys and OFF forces full keys. Reads accept both forms"
+	"KOTEK_JSON_KEY_SHORT_LENGTH|4|encoded JSON key length in characters: 3 or 4 (stable base32 encoding, not truncation)"
 	"KOTEK_WINDOW_LIBRARY|GLFW|windowing backend: GLFW (vcpkg) / WIN32 (kotek's own no-deps Win32 backend)"
 	"KOTEK_LOG_LIBRARY|SPDLOG|logging backend: SPDLOG (default) / BOOST / CUSTOM (kotek's own no-deps logger: OS-handle file sink, console, debug output window)"
 	"KOTEK_ECS_BACKEND|PICO|ECS backend: PICO (pico_ecs, default) / ENTT (branches exist behind KOTEK_USE_ECS_BACKEND_ENTT but are disabled with #error todo)"

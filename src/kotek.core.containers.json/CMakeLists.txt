@@ -27,6 +27,7 @@ endif()
 
 kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Containers_JSON SHUTDOWN ShutdownModule_Core_Containers_JSON
 	"include/kotek_std_alias_json.h"
+	"include/kotek_json_key_codec.h"
 	"include/kotek_std_json.h"
 	"include/kotek_own_json.h"
 	"include/kotek_own_json_stream.h"
@@ -37,6 +38,21 @@ kotek_add_library(${PROJECT_NAME} INIT InitializeModule_Core_Containers_JSON SHU
 set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER "framework/core/containers")
 if (UNIX)
     set_property(TARGET ${PROJECT_NAME} PROPERTY POSITION_INDEPENDENT_CODE ON)
+endif()
+
+if (NOT KOTEK_JSON_KEY_SHORT_LENGTH MATCHES "^[34]$")
+	message(FATAL_ERROR "KOTEK_JSON_KEY_SHORT_LENGTH must be 3 or 4")
+endif()
+target_compile_definitions(${PROJECT_NAME} PUBLIC
+	KOTEK_DEF_JSON_KEY_SHORT_LENGTH=${KOTEK_JSON_KEY_SHORT_LENGTH})
+if ("${KOTEK_JSON_SHORT_KEYS}" STREQUAL "ON")
+	target_compile_definitions(${PROJECT_NAME} PUBLIC KOTEK_USE_JSON_SHORT_KEYS)
+elseif ("${KOTEK_JSON_SHORT_KEYS}" STREQUAL "AUTO")
+	# Multi-config generators select full keys in Debug and short keys elsewhere.
+	target_compile_definitions(${PROJECT_NAME} PUBLIC
+		"$<$<NOT:$<CONFIG:Debug>>:KOTEK_USE_JSON_SHORT_KEYS>")
+elseif (NOT "${KOTEK_JSON_SHORT_KEYS}" STREQUAL "OFF")
+	message(FATAL_ERROR "KOTEK_JSON_SHORT_KEYS must be AUTO, ON, or OFF")
 endif()
 
 # boost.json is the backend for both BOOST and STD library

@@ -27,6 +27,8 @@ the registry is right and this file has a bug (report or fix it).
 | `KOTEK_USER_GAME_MODULE_FOR_LINK_NAME` | layer root sets | STATIC dev type only: CMake target of the game module for kotek.game to link (zircon: `zircon`) |
 | `KOTEK_MATH_LIBRARY` | `GLM` | math backend: `GLM` / `DXM` (DirectXMath) / `KOTEK_OWN` (own no-deps scalar) |
 | `KOTEK_JSON_LIBRARY` | `BOOST` | JSON backend: `BOOST` (Boost.JSON) / `KOTEK_OWN` (own no-deps streaming SAX reader/writer + small DOM) |
+| `KOTEK_JSON_SHORT_KEYS` | `AUTO` | JSON key minimization: `AUTO` = full keys in Debug and stable base32 short keys in every other configuration; `ON` forces short keys, `OFF` forces full keys. Reads accept both old full keys and new short keys |
+| `KOTEK_JSON_KEY_SHORT_LENGTH` | `4` | encoded JSON key length in characters: `3` or `4` (base32 encoding, not truncation) |
 | `KOTEK_WINDOW_LIBRARY` | `GLFW` | windowing backend: `GLFW` / `WIN32` (own no-deps Win32 backend) |
 | `KOTEK_LOG_LIBRARY` | `SPDLOG` | logging backend: `SPDLOG` / `BOOST` / `CUSTOM` (own no-deps logger: OS-handle file sink, console, debug output window) |
 | `KOTEK_ECS_BACKEND` | `PICO` | ECS backend: `PICO` (pico_ecs) / `ENTT` (disabled `#error todo` branches today) |
