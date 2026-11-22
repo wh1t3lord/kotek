@@ -2,8 +2,8 @@
 
 > Living document. Every agent working in this repo MUST read this first and MUST
 > update the Task Registry (status + date + notes) when it advances or finishes a task.
-> Last updated: 2026-11-22 (K27: Release JSON short keys with legacy
-> fallback; K11 phase 6's clustered NRI renderer is complete).
+> Last updated: 2026-11-22 (K28: shared committed-root-folder discipline;
+> zircon's meshlets are canonical under `data_game/models/meshlets`).
 
 ## 1. What kotek is
 
@@ -305,6 +305,17 @@ module. Mechanism:
   matrix (STD / BOOST / kotek-own / user re-registration); direct
   std/third-party calls live only inside wrapper implementations (and in
   `src/tools` host tools).
+- **Committed root-folder discipline (owner directive 2026-11-22, shared with
+  zircon).** Keep the repository root minimal: never create or commit a new
+  top-level asset or output directory. Game assets belong under
+  `data_game/<semantic>` (zircon's models and baked meshlets under
+  `data_game/models/meshlets`); runtime/user settings and generated test data
+  belong under `data_user`; build outputs stay in the existing ignored build
+  directories. Native meshlet paths are content-root-relative
+  (`models/meshlets/...`); packed entries are repo-root-relative
+  (`data_game/models/meshlets/...`). Never leave a duplicate
+  asset copy at the root: verify byte equality, move
+  the canonical content, then remove the stale duplicate.
 - **Test tiers (owner directive 2026-09-02).** Heavy stress suites are gated
   behind `KOTEK_USE_TESTS_HEAVY` (CMake `-DKOTEK_TESTS_HEAVY=ON`, OFF by
   default); every heavy suite keeps a lightweight default tier of the same
@@ -534,6 +545,8 @@ Status values: `open` / `in-progress` / `done` / `blocked` / `dropped(reason)`.
 | K26 | Exe-side input feeding: window callbacks feed `ktkInput` from the LIVE GLFW copy | done (2026-09-05) | THE DISEASE (the static-GLFW-per-module class, zircon §5): GLFW is a static lib, every module owns a private copy of its global state; the window lives in kotek.exe's INITIALIZED copy, so `glfwSet*Callback` issued from game.ktk (`zircon_game_manager::initialize_input`) wrote into that module's never-initialized copy (`_GLFW_REQUIRE_INIT` early-returns) and the callbacks never fired — `ktkInput` was starved in EVERY boot, and the editor gate skipped even the dead installation under `--editor*`. The same class as the imgui two-copies defect (2026-09-02/03) and the opposite of the reverted "event-chain bridge" (e274e42 — never hand game.ktk's raw callback addresses to anything; here NOTHING crosses module boundaries: the callbacks live exe-side and feed the exe-side input manager). THE FIX: (1) `ktkWindow` (kotek.core.window.glfw) receives the main manager at construction from the module entry, and `Initialize` installs `window_callback_key` / `window_callback_mouse_button` / `window_callback_cursor_pos` on the live copy + `glfwSetWindowUserPointer` as the event-time channel — unconditional (no editor gate), both session types fed; (2) key/mouse-button forward as `Update_Controller` with `ktkInputPlatformBackendArgs_GLFW3` (the raw GLFW key/action/scancode/mods, key<0 dropped — the translation tables are indexed by the raw key); cursor-pos does the prev/current `Set_ControllerData` dance + normalized pair (0x0 minimized window skipped without assert) + `Set_ControllerUpdate` so `Update()` publishes `kMouseDeltaX/Y`; scroll NOT forwarded (`eInputControllerMouseData` has no scroll fields); (3) the feed guard is the NEW additive virtual `ktkIInput::Get_PlatformBackend()` (default `kPlatformBackend_Unknown`, `ktkInput` returns its real backend) — the callback only feeds when the manager was initialized for GLFW3, otherwise `Update_Controller`'s backend-mismatch assert would fire on early events (zircon's `initialize_input` runs after the window exists); (4) imgui chaining untouched: the imgui backend installs later via `ImGui_InitForOther(handle, true)` and chains INTO these as PrevUserCallback*. Module edge: kotek.core.window.glfw now links kotek.core.input (the args struct), acyclic. Zircon side: the entire dead GLFW-callback block deleted (10 free functions — none referenced outside the installation; `WindowCallback_Resize` pushed `kConsoleCommand_Render_Resize` but never fired, the console registration of the handler stays), the editor gate and the `RegisterUserMainManager` call gone (the interface method stays for users). Tests: `Input.WindowCallbackFeedingContract_GLFW3` pins the exact callback feeding sequence headlessly (key press → Is_KeyPressed, mouse button, two cursor moves with prev-tracking + deltas, delta zeroing on an eventless frame, the GLFW3/Unknown backend guard). The interactive proof (real RMB-look/WASD) is the owner's manual check |
 
 | K27 | Release JSON short keys (3-4 chars with legacy fallback) | done (2026-11-22) | NEW `kotek.core.containers.json/include/kotek_json_key_codec.h`: stable FNV-1a base32 key encoding with constexpr `json_key_hash`/`json_key_char`, explicit short-form APIs for PCH-independent tests, `json_key_encode` (config-selected write form) and `json_key_find[_short]` (encoded-first/full-second read fallback). `ktkJson::Write` and `ktkJsonView::Write` encode; `Get`/`Is_KeyExist` use the fallback, and zircon's direct config/scene/locale-schema readers use it too. CMake adds `KOTEK_JSON_SHORT_KEYS=AUTO|ON|OFF` (AUTO = short outside Debug) and `KOTEK_JSON_KEY_SHORT_LENGTH=3|4`; options registry + both configuration docs updated. TESTS: `JsonKeyCodec.CompactEncodingIsStableAndBounded`, `WriteReadAndLegacyFallback`, `CurrentConfigKeysHaveNoCollisions` — all pass in the normal Debug boot (269/269 kotek + 206/206 zircon + all 27 UI suites). Actual Release boot emits 4-character keys and exits 0; the pre-run config backup was restored. The /INCREMENTAL stale-test issue was fixed by deleting game.ktk/game.lib/game.exp before the final relink. FULL PRE-PUSH GATE: `validate_all_configs.bat` = `VALIDATION: PASS` (default Debug+Release, graphics-development Debug, and both available boots; absent optional trees skipped) |
+
+| K28 | Shared committed-root-folder discipline (zircon Z31) | done (2026-11-22) | §6 now forbids new committed top-level asset/output directories in either repository: game assets live under `data_game/<semantic>`, runtime/user/test output under `data_user`, and build output under the existing ignored build trees. Zircon's stale root `meshlets/` duplicate was byte-verified and removed; the canonical fixture is `data_game/models/meshlets/`. Native meshlet names are content-root-relative (`models/meshlets/...`), while kpack names are repo-root-relative (`data_game/models/meshlets/...`), matching `ktkFileSystem_Pack::Hash_PathName`. No kotek code change was needed. Zircon verification: 21/21 meshlet tests + 269/269 kotek tests and a 40-frame NRI boot with matching A/B evidence. FULL PRE-PUSH GATE: `validate_all_configs.bat` = `VALIDATION: PASS` (default Debug+Release, graphics-development Debug and both available boots; absent optional trees skipped) |
 
 ## 10. Architecture validation summary (2026-07-21)
 
