@@ -44,6 +44,17 @@ public:
 
 	void Begin_Render_Pass(void) override;
 	void End_Render_Pass(void) override;
+	void Begin_Render_Pass_With_Attachments(
+		Core::ktkRenderGeometryTextureViewHandle color_view,
+		Core::ktkRenderGeometryTextureViewHandle depth_view,
+		const float clear_color[4]) override;
+	void Begin_Render_Pass_With_Back_Buffer_Depth(
+		Core::ktkRenderGeometryTextureViewHandle depth_view) override;
+	void Set_Graphics_Shader_Resource(kun_ktk uint32_t binding_index,
+		Core::ktkRenderGeometryTextureViewHandle view) override;
+	void Barrier_Texture(Core::ktkRenderGeometryTextureHandle texture,
+		Core::eRenderGeometryTextureBarrierLayout before_layout,
+		Core::eRenderGeometryTextureBarrierLayout after_layout) override;
 	void Set_Pipeline(
 		Core::ktkRenderGeometryPipelineHandle pipeline) override;
 	void Set_Push_Constants(const void* p_data,
@@ -107,6 +118,8 @@ private:
 	/// compute pipeline between Set_Compute_Pipeline and Dispatch — the
 	/// push-constant and dispatch commands validate against it
 	Core::ktkRenderGeometryPipelineHandle m_bound_compute_pipeline{
+		Core::kInvalidRenderGeometryPipelineHandle};
+	Core::ktkRenderGeometryPipelineHandle m_bound_graphics_pipeline{
 		Core::kInvalidRenderGeometryPipelineHandle};
 };
 

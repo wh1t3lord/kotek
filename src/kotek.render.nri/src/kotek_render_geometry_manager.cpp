@@ -67,6 +67,8 @@ namespace
 			return ::nri::Format::RGB32_SFLOAT;
 		case Core::eRenderGeometryVertexFormat::kFloat4:
 			return ::nri::Format::RGBA32_SFLOAT;
+		case Core::eRenderGeometryVertexFormat::kUint1:
+			return ::nri::Format::R32_UINT;
 		default:
 			break;
 		}
@@ -85,6 +87,8 @@ namespace
 		{
 		case Core::eRenderGeometryColorFormat::kRGBA8Unorm:
 			return ::nri::Format::RGBA8_UNORM;
+		case Core::eRenderGeometryColorFormat::kR32Uint:
+			return ::nri::Format::R32_UINT;
 		default:
 			break;
 		}
@@ -93,6 +97,24 @@ namespace
 			static_cast<int>(format));
 
 		return ::nri::Format::RGBA8_UNORM;
+	}
+
+	::nri::Format map_depth_format(
+		Core::eRenderGeometryDepthFormat format) noexcept
+	{
+		switch (format)
+		{
+		case Core::eRenderGeometryDepthFormat::kD32Float:
+			return ::nri::Format::D32_SFLOAT;
+		case Core::eRenderGeometryDepthFormat::kNone:
+			return ::nri::Format::UNKNOWN;
+		default:
+			break;
+		}
+
+		KOTEK_ASSERT(false, "unknown depth attachment format {}",
+			static_cast<int>(format));
+		return ::nri::Format::UNKNOWN;
 	}
 } // namespace
 
@@ -154,6 +176,20 @@ void ktkRenderGeometryManager::Shutdown(void)
 		compute_state.m_read_only_mask = 0u;
 		compute_state.m_binding_count = 0u;
 
+		ktkRenderComputePipelineState& graphics_state =
+			this->m_graphics_states[index];
+
+		for (kun_ktk uint32_t binding = 0;
+			 binding < k_max_compute_bindings; ++binding)
+		{
+			graphics_state.m_p_views[binding] = nullptr;
+		}
+
+		graphics_state.m_bindings.clear();
+		graphics_state.m_p_set = nullptr;
+		graphics_state.m_read_only_mask = 0u;
+		graphics_state.m_binding_count = 0u;
+
 		if (slot.m_is_alive == false)
 			continue;
 
@@ -181,6 +217,37 @@ void ktkRenderGeometryManager::Shutdown(void)
 			core.DestroyBuffer(
 				static_cast<::nri::Buffer*>(slot.m_p_object));
 
+		if (slot.m_p_aux)
+			core.FreeMemory(
+				static_cast<::nri::Memory*>(slot.m_p_aux));
+	}
+
+	const ktkRenderGeometrySlot* p_texture_view_slots =
+		this->m_texture_views.get_slots();
+
+	for (kun_ktk uint32_t index = 0;
+		 index < KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_TEXTURE_VIEWS; ++index)
+	{
+		const ktkRenderGeometrySlot& slot = p_texture_view_slots[index];
+
+		if (slot.m_is_alive && slot.m_p_object)
+		{
+			core.DestroyDescriptor(
+				static_cast<::nri::Descriptor*>(slot.m_p_object));
+		}
+	}
+
+	const ktkRenderGeometrySlot* p_texture_slots =
+		this->m_textures.get_slots();
+
+	for (kun_ktk uint32_t index = 0;
+		 index < KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_TEXTURES; ++index)
+	{
+		const ktkRenderGeometrySlot& slot = p_texture_slots[index];
+
+		if (slot.m_p_object)
+			core.DestroyTexture(
+				static_cast<::nri::Texture*>(slot.m_p_object));
 		if (slot.m_p_aux)
 			core.FreeMemory(
 				static_cast<::nri::Memory*>(slot.m_p_aux));
@@ -300,6 +367,166 @@ Core::ktkRenderGeometryBufferHandle
 	return handle;
 }
 
+Core::ktkRenderGeometryTextureHandle
+ktkRenderGeometryManager::Create_Texture(
+	const Core::ktkRenderGeometryTextureDesc& desc)
+{
+	if (this->m_p_device == nullptr || desc.m_width == 0 || desc.m_height == 0)
+		return Core::kInvalidRenderGeometryTextureHandle;
+
+	const bool is_depth =
+		desc.m_depth_format != Core::eRenderGeometryDepthFormat::kNone;
+	::nri::TextureDesc texture_desc{};
+	texture_desc.type = ::nri::TextureType::TEXTURE_2D;
+	texture_desc.usage = is_depth
+		? ::nri::TextureUsageBits::DEPTH_STENCIL_ATTACHMENT
+		: (::nri::TextureUsageBits::COLOR_ATTACHMENT |
+			::nri::TextureUsageBits::SHADER_RESOURCE);
+	texture_desc.format = is_depth ? map_depth_format(desc.m_depth_format)
+								: map_color_format(desc.m_color_format);
+	texture_desc.width = desc.m_width;
+	texture_desc.height = desc.m_height;
+
+	const ::nri::CoreInterface& core = this->m_p_device->Get_CoreInterface();
+	::nri::Texture* p_texture = nullptr;
+	::nri::Result result = core.CreateTexture(*this->m_p_device->Get_Device(),
+		texture_desc, p_texture);
+
+	if (result != ::nri::Result::SUCCESS || p_texture == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR("[nri] geometry Create_Texture failed, result={}",
+			static_cast<int>(result));
+		return Core::kInvalidRenderGeometryTextureHandle;
+	}
+
+	::nri::MemoryDesc memory_desc{};
+	core.GetTextureMemoryDesc(*p_texture, ::nri::MemoryLocation::DEVICE,
+		memory_desc);
+	::nri::AllocateMemoryDesc allocate_desc{};
+	allocate_desc.size = memory_desc.size;
+	allocate_desc.type = memory_desc.type;
+
+	::nri::Memory* p_memory = nullptr;
+	result = core.AllocateMemory(*this->m_p_device->Get_Device(), allocate_desc,
+		p_memory);
+
+	if (result != ::nri::Result::SUCCESS || p_memory == nullptr)
+	{
+		core.DestroyTexture(p_texture);
+		return Core::kInvalidRenderGeometryTextureHandle;
+	}
+
+	::nri::BindTextureMemoryDesc bind_desc{};
+	bind_desc.texture = p_texture;
+	bind_desc.memory = p_memory;
+	bind_desc.offset = 0;
+	result = core.BindTextureMemory(&bind_desc, 1);
+
+	if (result != ::nri::Result::SUCCESS)
+	{
+		core.FreeMemory(p_memory);
+		core.DestroyTexture(p_texture);
+		return Core::kInvalidRenderGeometryTextureHandle;
+	}
+
+	const kun_ktk uint32_t handle =
+		this->m_textures.allocate(p_texture, p_memory, memory_desc.size);
+
+	if (handle == 0u)
+	{
+		core.FreeMemory(p_memory);
+		core.DestroyTexture(p_texture);
+		return Core::kInvalidRenderGeometryTextureHandle;
+	}
+
+	return handle;
+}
+
+void ktkRenderGeometryManager::Destroy_Texture(
+	Core::ktkRenderGeometryTextureHandle handle)
+{
+	ktkRenderGeometrySlot* p_slot = this->m_textures.resolve(handle);
+
+	if (!p_slot)
+		return;
+
+	if (this->m_p_device)
+	{
+		const ::nri::CoreInterface& core = this->m_p_device->Get_CoreInterface();
+
+		if (p_slot->m_p_object)
+			core.DestroyTexture(
+				static_cast<::nri::Texture*>(p_slot->m_p_object));
+		if (p_slot->m_p_aux)
+			core.FreeMemory(static_cast<::nri::Memory*>(p_slot->m_p_aux));
+	}
+
+	this->m_textures.free(handle);
+}
+
+Core::ktkRenderGeometryTextureViewHandle
+ktkRenderGeometryManager::Create_Texture_View(
+	const Core::ktkRenderGeometryTextureViewDesc& desc)
+{
+	if (this->m_p_device == nullptr)
+		return Core::kInvalidRenderGeometryTextureViewHandle;
+
+	::nri::Texture* p_texture = this->Get_NRI_Texture(desc.m_texture);
+
+	if (!p_texture)
+		return Core::kInvalidRenderGeometryTextureViewHandle;
+
+	::nri::TextureViewDesc view_desc{};
+	view_desc.texture = p_texture;
+	view_desc.mipNum = 1;
+	view_desc.layerNum = 1;
+
+	switch (desc.m_type)
+	{
+	case Core::eRenderGeometryTextureViewType::kShaderResource:
+		view_desc.type = ::nri::TextureView::TEXTURE;
+		view_desc.format = map_color_format(desc.m_color_format);
+		break;
+	case Core::eRenderGeometryTextureViewType::kRenderTarget:
+		view_desc.type = ::nri::TextureView::COLOR_ATTACHMENT;
+		view_desc.format = map_color_format(desc.m_color_format);
+		break;
+	case Core::eRenderGeometryTextureViewType::kDepthStencil:
+		view_desc.type = ::nri::TextureView::DEPTH_STENCIL_ATTACHMENT;
+		view_desc.format = map_depth_format(desc.m_depth_format);
+		break;
+	default:
+		return Core::kInvalidRenderGeometryTextureViewHandle;
+	}
+
+	const ::nri::CoreInterface& core = this->m_p_device->Get_CoreInterface();
+	::nri::Descriptor* p_view = nullptr;
+	const ::nri::Result result =
+		core.CreateTextureView(view_desc, p_view);
+
+	if (result != ::nri::Result::SUCCESS || p_view == nullptr)
+		return Core::kInvalidRenderGeometryTextureViewHandle;
+
+	return this->m_texture_views.allocate(p_view, nullptr, 0);
+}
+
+void ktkRenderGeometryManager::Destroy_Texture_View(
+	Core::ktkRenderGeometryTextureViewHandle handle)
+{
+	ktkRenderGeometrySlot* p_slot = this->m_texture_views.resolve(handle);
+
+	if (!p_slot)
+		return;
+
+	if (this->m_p_device && p_slot->m_p_object)
+	{
+		this->m_p_device->Get_CoreInterface().DestroyDescriptor(
+			static_cast<::nri::Descriptor*>(p_slot->m_p_object));
+	}
+
+	this->m_texture_views.free(handle);
+}
+
 void ktkRenderGeometryManager::Destroy_Buffer(
 	Core::ktkRenderGeometryBufferHandle handle)
 {
@@ -415,6 +642,15 @@ Core::ktkRenderGeometryPipelineHandle
 		return Core::kInvalidRenderGeometryPipelineHandle;
 	}
 
+	if (desc.m_shader_resource_count >
+		KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] geometry Create_Pipeline: {} texture bindings exceed the capacity",
+			desc.m_shader_resource_count);
+		return Core::kInvalidRenderGeometryPipelineHandle;
+	}
+
 	if ((desc.m_push_constant_bytes % 4u) != 0u ||
 		desc.m_push_constant_bytes > 256u)
 	{
@@ -438,12 +674,33 @@ Core::ktkRenderGeometryPipelineHandle
 	root_constants[0].shaderStages = ::nri::StageBits::VERTEX_SHADER |
 		::nri::StageBits::FRAGMENT_SHADER;
 
+	::nri::DescriptorRangeDesc
+		texture_ranges[KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS]{};
+
+	for (kun_ktk uint32_t binding = 0; binding < desc.m_shader_resource_count;
+		 ++binding)
+	{
+		texture_ranges[binding].baseRegisterIndex = binding;
+		texture_ranges[binding].descriptorNum = 1;
+		texture_ranges[binding].descriptorType = ::nri::DescriptorType::TEXTURE;
+		texture_ranges[binding].shaderStages = ::nri::StageBits::VERTEX_SHADER |
+			::nri::StageBits::FRAGMENT_SHADER;
+	}
+
+	::nri::DescriptorSetDesc texture_set_desc{};
+	texture_set_desc.registerSpace = 0;
+	texture_set_desc.ranges = texture_ranges;
+	texture_set_desc.rangeNum = desc.m_shader_resource_count;
+
 	::nri::PipelineLayoutDesc layout_desc{};
 	layout_desc.rootRegisterSpace = 0;
 	layout_desc.rootConstants =
 		desc.m_push_constant_bytes ? root_constants : nullptr;
 	layout_desc.rootConstantNum =
 		desc.m_push_constant_bytes ? 1u : 0u;
+	layout_desc.descriptorSets =
+		desc.m_shader_resource_count ? &texture_set_desc : nullptr;
+	layout_desc.descriptorSetNum = desc.m_shader_resource_count ? 1u : 0u;
 	layout_desc.shaderStages = ::nri::StageBits::VERTEX_SHADER |
 		::nri::StageBits::FRAGMENT_SHADER;
 
@@ -508,6 +765,15 @@ Core::ktkRenderGeometryPipelineHandle
 	::nri::OutputMergerDesc output_merger{};
 	output_merger.colors = &color_attachment;
 	output_merger.colorNum = 1;
+	output_merger.depthStencilFormat = map_depth_format(desc.m_depth_format);
+	const bool has_depth =
+		desc.m_depth_format != Core::eRenderGeometryDepthFormat::kNone;
+	output_merger.depth.compareOp = !has_depth
+		? ::nri::CompareOp::NONE
+		: (desc.m_depth_compare == Core::eRenderGeometryDepthCompareOp::kEqual
+				? ::nri::CompareOp::EQUAL
+				: ::nri::CompareOp::LESS);
+	output_merger.depth.write = has_depth && desc.m_depth_write;
 
 	::nri::ShaderDesc shaders[2]{};
 	shaders[0].stage = ::nri::StageBits::VERTEX_SHADER;
@@ -569,6 +835,53 @@ Core::ktkRenderGeometryPipelineHandle
 		return Core::kInvalidRenderGeometryPipelineHandle;
 	}
 
+	if (desc.m_shader_resource_count)
+	{
+		if (this->m_p_descriptor_pool == nullptr)
+		{
+			::nri::DescriptorPoolDesc pool_desc{};
+			pool_desc.descriptorSetMaxNum =
+				KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_PIPELINES;
+			pool_desc.structuredBufferMaxNum =
+				KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_PIPELINES *
+				k_max_compute_bindings;
+			pool_desc.storageStructuredBufferMaxNum =
+				KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_PIPELINES *
+				k_max_compute_bindings;
+			pool_desc.textureMaxNum =
+				KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_PIPELINES *
+				KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS;
+
+			result = core.CreateDescriptorPool(*p_device, pool_desc,
+				this->m_p_descriptor_pool);
+
+			if (result != ::nri::Result::SUCCESS ||
+				this->m_p_descriptor_pool == nullptr)
+			{
+				this->m_pipelines.free(handle);
+				core.DestroyPipeline(p_pipeline);
+				core.DestroyPipelineLayout(p_layout);
+				return Core::kInvalidRenderGeometryPipelineHandle;
+			}
+		}
+
+		ktkRenderComputePipelineState& graphics_state =
+			this->m_graphics_states[this->m_pipelines.slot_index(handle)];
+		graphics_state.m_binding_count = desc.m_shader_resource_count;
+		graphics_state.m_read_only_mask = (1u << desc.m_shader_resource_count) - 1u;
+
+		result = core.AllocateDescriptorSets(*this->m_p_descriptor_pool,
+			*p_layout, 0, &graphics_state.m_p_set, 1, 0);
+
+		if (result != ::nri::Result::SUCCESS || graphics_state.m_p_set == nullptr)
+		{
+			this->m_pipelines.free(handle);
+			core.DestroyPipeline(p_pipeline);
+			core.DestroyPipelineLayout(p_layout);
+			return Core::kInvalidRenderGeometryPipelineHandle;
+		}
+	}
+
 	return handle;
 }
 
@@ -621,6 +934,21 @@ void ktkRenderGeometryManager::Destroy_Pipeline(
 		compute_state.m_p_set = nullptr;
 		compute_state.m_read_only_mask = 0u;
 		compute_state.m_binding_count = 0u;
+
+		ktkRenderComputePipelineState& graphics_state =
+			this->m_graphics_states[
+				this->m_pipelines.slot_index(handle)];
+
+		for (kun_ktk uint32_t binding = 0;
+			 binding < k_max_compute_bindings; ++binding)
+		{
+			graphics_state.m_p_views[binding] = nullptr;
+		}
+
+		graphics_state.m_bindings.clear();
+		graphics_state.m_p_set = nullptr;
+		graphics_state.m_read_only_mask = 0u;
+		graphics_state.m_binding_count = 0u;
 	}
 
 	this->m_pipelines.free(handle);
@@ -676,6 +1004,9 @@ Core::ktkRenderGeometryPipelineHandle
 		pool_desc.storageStructuredBufferMaxNum =
 			KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_PIPELINES *
 			k_max_compute_bindings;
+		pool_desc.textureMaxNum =
+			KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_PIPELINES *
+			KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS;
 
 		::nri::Result result = core.CreateDescriptorPool(*p_device,
 			pool_desc, this->m_p_descriptor_pool);
@@ -896,6 +1227,20 @@ bool ktkRenderGeometryManager::Read_Buffer(
 				  : nullptr;
 }
 
+::nri::Texture* ktkRenderGeometryManager::Get_NRI_Texture(
+	Core::ktkRenderGeometryTextureHandle handle) noexcept
+{
+	ktkRenderGeometrySlot* p_slot = this->m_textures.resolve(handle);
+	return p_slot ? static_cast<::nri::Texture*>(p_slot->m_p_object) : nullptr;
+}
+
+::nri::Descriptor* ktkRenderGeometryManager::Get_NRI_Texture_View(
+	Core::ktkRenderGeometryTextureViewHandle handle) noexcept
+{
+	ktkRenderGeometrySlot* p_slot = this->m_texture_views.resolve(handle);
+	return p_slot ? static_cast<::nri::Descriptor*>(p_slot->m_p_object) : nullptr;
+}
+
 ::nri::Pipeline* ktkRenderGeometryManager::Get_NRI_Pipeline(
 	Core::ktkRenderGeometryPipelineHandle handle) noexcept
 {
@@ -948,6 +1293,73 @@ bool ktkRenderGeometryManager::Is_Buffer_Range_Valid(
 	ktkRenderGeometryManager::Get_NRI_Descriptor_Pool(void) const noexcept
 {
 	return this->m_p_descriptor_pool;
+}
+
+::nri::DescriptorSet*
+ktkRenderGeometryManager::Get_NRI_Graphics_Descriptor_Set(
+	Core::ktkRenderGeometryPipelineHandle handle) noexcept
+{
+	if (this->m_pipelines.resolve(handle) == nullptr)
+		return nullptr;
+
+	return this->m_graphics_states[this->m_pipelines.slot_index(handle)]
+		.m_p_set;
+}
+
+bool ktkRenderGeometryManager::Update_Graphics_Binding(
+	Core::ktkRenderGeometryPipelineHandle pipeline,
+	kun_ktk uint32_t binding_index,
+	Core::ktkRenderGeometryTextureViewHandle view) noexcept
+{
+	if (binding_index >= KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS ||
+		this->m_pipelines.resolve(pipeline) == nullptr)
+	{
+		return false;
+	}
+
+	return this->m_graphics_states[this->m_pipelines.slot_index(pipeline)]
+		.m_bindings.set(binding_index, view, 0, 0);
+}
+
+bool ktkRenderGeometryManager::Is_Graphics_Binding_Complete(
+	Core::ktkRenderGeometryPipelineHandle handle) const noexcept
+{
+	if (this->m_pipelines.resolve(handle) == nullptr)
+		return false;
+
+	const ktkRenderComputePipelineState& graphics_state =
+		this->m_graphics_states[this->m_pipelines.slot_index(handle)];
+
+	return graphics_state.m_bindings.is_complete(
+		graphics_state.m_binding_count);
+}
+
+void ktkRenderGeometryManager::Set_Graphics_Binding_View(
+	Core::ktkRenderGeometryPipelineHandle pipeline,
+	kun_ktk uint32_t binding_index, void* p_view) noexcept
+{
+	if (binding_index >= KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS ||
+		this->m_pipelines.resolve(pipeline) == nullptr)
+	{
+		return;
+	}
+
+	this->m_graphics_states[this->m_pipelines.slot_index(pipeline)]
+		.m_p_views[binding_index] = p_view;
+}
+
+void* ktkRenderGeometryManager::Get_Graphics_Binding_View(
+	Core::ktkRenderGeometryPipelineHandle pipeline,
+	kun_ktk uint32_t binding_index) const noexcept
+{
+	if (binding_index >= KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS ||
+		this->m_pipelines.resolve(pipeline) == nullptr)
+	{
+		return nullptr;
+	}
+
+	return this->m_graphics_states[this->m_pipelines.slot_index(pipeline)]
+		.m_p_views[binding_index];
 }
 
 bool ktkRenderGeometryManager::Is_Compute_Pipeline(

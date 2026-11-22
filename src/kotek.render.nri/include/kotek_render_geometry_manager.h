@@ -15,6 +15,10 @@
 #include "kotek_render_device.h"
 #include "kotek_render_geometry_handle_table.h"
 
+#define KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_TEXTURES 64
+#define KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_TEXTURE_VIEWS 128
+#define KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS 8
+
 KOTEK_BEGIN_NAMESPACE_KOTEK
 KOTEK_BEGIN_NAMESPACE_RENDER
 KOTEK_BEGIN_NAMESPACE_RENDER_NRI
@@ -34,6 +38,14 @@ public:
 
 	void Destroy_Buffer(
 		Core::ktkRenderGeometryBufferHandle handle) override;
+
+	Core::ktkRenderGeometryTextureHandle Create_Texture(
+		const Core::ktkRenderGeometryTextureDesc& desc) override;
+	void Destroy_Texture(Core::ktkRenderGeometryTextureHandle handle) override;
+	Core::ktkRenderGeometryTextureViewHandle Create_Texture_View(
+		const Core::ktkRenderGeometryTextureViewDesc& desc) override;
+	void Destroy_Texture_View(
+		Core::ktkRenderGeometryTextureViewHandle handle) override;
 
 	bool Upload_Buffer(Core::ktkRenderGeometryBufferHandle handle,
 		kun_ktk uint64_t offset_bytes, const void* p_bytes,
@@ -94,6 +106,25 @@ public:
 	/// stale handle or a graphics pipeline
 	::nri::DescriptorSet* Get_NRI_Compute_Descriptor_Set(
 		Core::ktkRenderGeometryPipelineHandle handle) noexcept;
+
+	::nri::Texture* Get_NRI_Texture(
+		Core::ktkRenderGeometryTextureHandle handle) noexcept;
+	::nri::Descriptor* Get_NRI_Texture_View(
+		Core::ktkRenderGeometryTextureViewHandle handle) noexcept;
+	::nri::DescriptorSet* Get_NRI_Graphics_Descriptor_Set(
+		Core::ktkRenderGeometryPipelineHandle handle) noexcept;
+	bool Update_Graphics_Binding(
+		Core::ktkRenderGeometryPipelineHandle pipeline,
+		kun_ktk uint32_t binding_index,
+		Core::ktkRenderGeometryTextureViewHandle view) noexcept;
+	bool Is_Graphics_Binding_Complete(
+		Core::ktkRenderGeometryPipelineHandle handle) const noexcept;
+	void Set_Graphics_Binding_View(
+		Core::ktkRenderGeometryPipelineHandle pipeline,
+		kun_ktk uint32_t binding_index, void* p_view) noexcept;
+	void* Get_Graphics_Binding_View(
+		Core::ktkRenderGeometryPipelineHandle pipeline,
+		kun_ktk uint32_t binding_index) const noexcept;
 
 	/// \~english true when the pipeline slot is a COMPUTE pipeline (the
 	/// context's Set_Compute_Pipeline guard — binding a graphics pipeline
@@ -168,12 +199,18 @@ private:
 
 	ktkRenderComputePipelineState m_compute_states[
 		KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_PIPELINES]{};
+	ktkRenderComputePipelineState m_graphics_states[
+		KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_PIPELINES]{};
 
 private:
 	ktkRenderDevice* m_p_device{};
 	::nri::DescriptorPool* m_p_descriptor_pool{};
 	ktkRenderGeometryHandleTable<KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_BUFFERS>
 		m_buffers{};
+	ktkRenderGeometryHandleTable<KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_TEXTURES>
+		m_textures{};
+	ktkRenderGeometryHandleTable<KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_TEXTURE_VIEWS>
+		m_texture_views{};
 	ktkRenderGeometryHandleTable<KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_PIPELINES>
 		m_pipelines{};
 	/// \~english the buffer memory-location side table (task K11 phase

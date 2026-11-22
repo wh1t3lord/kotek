@@ -63,6 +63,22 @@ namespace
 
 		return ::nri::StageBits::ALL;
 	}
+
+	void set_default_viewport_and_scissor(const ::nri::CoreInterface& core,
+		::nri::CommandBuffer& command_buffer, kun_ktk uint32_t width,
+		kun_ktk uint32_t height) noexcept
+	{
+		::nri::Viewport viewport{};
+		viewport.width = static_cast<float>(width);
+		viewport.height = static_cast<float>(height);
+		viewport.depthMax = 1.0f;
+		core.CmdSetViewports(command_buffer, &viewport, 1);
+
+		::nri::Rect scissor{};
+		scissor.width = static_cast<::nri::Dim_t>(width);
+		scissor.height = static_cast<::nri::Dim_t>(height);
+		core.CmdSetScissors(command_buffer, &scissor, 1);
+	}
 } // namespace
 
 ktkRenderFramePassContext::ktkRenderFramePassContext(
@@ -101,6 +117,8 @@ void ktkRenderFramePassContext::ClearColor(float r, float g, float b,
 	const ::nri::CoreInterface& core = this->m_p_device->Get_CoreInterface();
 
 	core.CmdBeginRendering(*this->m_p_device->Get_CommandBuffer(), rendering);
+	set_default_viewport_and_scissor(core,
+		*this->m_p_device->Get_CommandBuffer(), this->m_width, this->m_height);
 	core.CmdEndRendering(*this->m_p_device->Get_CommandBuffer());
 }
 
@@ -127,6 +145,99 @@ void ktkRenderFramePassContext::Begin_Render_Pass(void)
 	const ::nri::CoreInterface& core = this->m_p_device->Get_CoreInterface();
 
 	core.CmdBeginRendering(*this->m_p_device->Get_CommandBuffer(), rendering);
+	set_default_viewport_and_scissor(core,
+		*this->m_p_device->Get_CommandBuffer(), this->m_width, this->m_height);
+
+	this->m_is_inside_render_pass = true;
+}
+
+void ktkRenderFramePassContext::Begin_Render_Pass_With_Back_Buffer_Depth(
+	Core::ktkRenderGeometryTextureViewHandle depth_view)
+{
+	if (this->m_is_inside_render_pass)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Begin_Render_Pass_With_Back_Buffer_Depth while a render "
+			"pass is open — ignored");
+		return;
+	}
+	if (this->m_p_geometry_manager == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] back-buffer depth section: no geometry manager — ignored");
+		return;
+	}
+
+	::nri::Descriptor* p_depth =
+		this->m_p_geometry_manager->Get_NRI_Texture_View(depth_view);
+	if (p_depth == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] back-buffer depth section: invalid depth view ({}) — ignored",
+			depth_view);
+		return;
+	}
+
+	::nri::AttachmentDesc color_attachment{};
+	color_attachment.descriptor = this->m_p_color_view;
+	color_attachment.loadOp = ::nri::LoadOp::LOAD;
+	color_attachment.storeOp = ::nri::StoreOp::STORE;
+
+	::nri::RenderingDesc rendering{};
+	rendering.colors = &color_attachment;
+	rendering.colorNum = 1;
+	rendering.depth.descriptor = p_depth;
+	rendering.depth.loadOp = ::nri::LoadOp::LOAD;
+	rendering.depth.storeOp = ::nri::StoreOp::STORE;
+
+	const ::nri::CoreInterface& core = this->m_p_device->Get_CoreInterface();
+	core.CmdBeginRendering(*this->m_p_device->Get_CommandBuffer(), rendering);
+	set_default_viewport_and_scissor(core,
+		*this->m_p_device->Get_CommandBuffer(), this->m_width, this->m_height);
+
+	this->m_is_inside_render_pass = true;
+}
+
+void ktkRenderFramePassContext::Begin_Render_Pass_With_Attachments(
+	Core::ktkRenderGeometryTextureViewHandle color_view,
+	Core::ktkRenderGeometryTextureViewHandle depth_view,
+	const float clear_color[4])
+{
+	if (this->m_is_inside_render_pass)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Begin_Render_Pass_With_Attachments while a render pass is open — ignored");
+		return;
+	}
+
+	::nri::AttachmentDesc color_attachment{};
+	color_attachment.descriptor =
+		this->m_p_geometry_manager->Get_NRI_Texture_View(color_view);
+	color_attachment.loadOp = ::nri::LoadOp::CLEAR;
+	color_attachment.storeOp = ::nri::StoreOp::STORE;
+	color_attachment.clearValue.color.f.x = clear_color[0];
+	color_attachment.clearValue.color.f.y = clear_color[1];
+	color_attachment.clearValue.color.f.z = clear_color[2];
+	color_attachment.clearValue.color.f.w = clear_color[3];
+
+	::nri::RenderingDesc rendering{};
+	rendering.colors = &color_attachment;
+	rendering.colorNum = 1;
+
+	if (depth_view != Core::kInvalidRenderGeometryTextureViewHandle)
+	{
+		rendering.depth.descriptor =
+			this->m_p_geometry_manager->Get_NRI_Texture_View(depth_view);
+		rendering.depth.loadOp = ::nri::LoadOp::CLEAR;
+		rendering.depth.storeOp = ::nri::StoreOp::STORE;
+		rendering.depth.clearValue.depthStencil.depth = 1.0f;
+		rendering.depth.clearValue.depthStencil.stencil = 0;
+	}
+
+	const ::nri::CoreInterface& core = this->m_p_device->Get_CoreInterface();
+	core.CmdBeginRendering(*this->m_p_device->Get_CommandBuffer(), rendering);
+	set_default_viewport_and_scissor(core,
+		*this->m_p_device->Get_CommandBuffer(), this->m_width, this->m_height);
 
 	this->m_is_inside_render_pass = true;
 }
@@ -193,6 +304,33 @@ void ktkRenderFramePassContext::Set_Pipeline(
 	// pipeline layout — the validation layer enforces the order)
 	core.CmdSetPipelineLayout(*this->m_p_device->Get_CommandBuffer(),
 		::nri::BindPoint::GRAPHICS, *p_layout);
+
+	if (::nri::DescriptorPool* p_pool =
+			this->m_p_geometry_manager->Get_NRI_Descriptor_Pool())
+	{
+		core.CmdSetDescriptorPool(*this->m_p_device->Get_CommandBuffer(),
+			*p_pool);
+	}
+
+	// D3D12 validates STATIC descriptor ranges at the table bind itself.
+	// A first-use pipeline gets its set bound by Set_Graphics_Shader_Resource
+	// AFTER the SRV update; an already-complete set can bind immediately.
+	if (::nri::DescriptorSet* p_set =
+			this->m_p_geometry_manager->Get_NRI_Graphics_Descriptor_Set(
+				pipeline))
+	{
+		if (this->m_p_geometry_manager->Is_Graphics_Binding_Complete(pipeline))
+		{
+			::nri::SetDescriptorSetDesc set_desc{};
+			set_desc.setIndex = 0;
+			set_desc.descriptorSet = p_set;
+			set_desc.bindPoint = ::nri::BindPoint::GRAPHICS;
+			core.CmdSetDescriptorSet(*this->m_p_device->Get_CommandBuffer(),
+				set_desc);
+		}
+	}
+
+	this->m_bound_graphics_pipeline = pipeline;
 }
 
 void ktkRenderFramePassContext::Set_Push_Constants(const void* p_data,
@@ -221,6 +359,136 @@ void ktkRenderFramePassContext::Set_Push_Constants(const void* p_data,
 
 	core.CmdSetRootConstants(*this->m_p_device->Get_CommandBuffer(),
 		constants);
+}
+
+void ktkRenderFramePassContext::Set_Graphics_Shader_Resource(
+	kun_ktk uint32_t binding_index,
+	Core::ktkRenderGeometryTextureViewHandle view)
+{
+	if (this->is_inside_render_pass() == false)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Set_Graphics_Shader_Resource outside a render pass — ignored");
+		return;
+	}
+
+	if (this->m_bound_graphics_pipeline ==
+		Core::kInvalidRenderGeometryPipelineHandle)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Set_Graphics_Shader_Resource: no graphics pipeline bound — ignored");
+		return;
+	}
+
+	::nri::Descriptor* p_view =
+		this->m_p_geometry_manager->Get_NRI_Texture_View(view);
+
+	if (p_view == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Set_Graphics_Shader_Resource of an invalid/stale view ({}) — ignored",
+			view);
+		return;
+	}
+
+	if (this->m_p_geometry_manager->Update_Graphics_Binding(
+			this->m_bound_graphics_pipeline, binding_index, view) == false)
+	{
+		return;
+	}
+
+	const ::nri::CoreInterface& core = this->m_p_device->Get_CoreInterface();
+	::nri::UpdateDescriptorRangeDesc update{};
+	update.descriptorSet =
+		this->m_p_geometry_manager->Get_NRI_Graphics_Descriptor_Set(
+			this->m_bound_graphics_pipeline);
+	update.rangeIndex = binding_index;
+	update.baseDescriptor = 0;
+	update.descriptors = &p_view;
+	update.descriptorNum = 1;
+	if (update.descriptorSet == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Set_Graphics_Shader_Resource: pipeline has no descriptor set — ignored");
+		return;
+	}
+	core.UpdateDescriptorRanges(&update, 1);
+
+	// First-use binding: Set_Pipeline deliberately skipped the then-empty
+	// set. Now that D3D12 sees an initialized STATIC range, bind it.
+	::nri::SetDescriptorSetDesc set_desc{};
+	set_desc.setIndex = 0;
+	set_desc.descriptorSet = update.descriptorSet;
+	set_desc.bindPoint = ::nri::BindPoint::GRAPHICS;
+	core.CmdSetDescriptorSet(*this->m_p_device->Get_CommandBuffer(), set_desc);
+}
+
+void ktkRenderFramePassContext::Barrier_Texture(
+	Core::ktkRenderGeometryTextureHandle texture,
+	Core::eRenderGeometryTextureBarrierLayout before_layout,
+	Core::eRenderGeometryTextureBarrierLayout after_layout)
+{
+	::nri::Texture* p_texture =
+		this->m_p_geometry_manager->Get_NRI_Texture(texture);
+
+	if (p_texture == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Barrier_Texture of an invalid/stale texture ({}) — ignored",
+			texture);
+		return;
+	}
+
+	auto map_layout = [](Core::eRenderGeometryTextureBarrierLayout layout,
+		::nri::AccessLayoutStage& out) noexcept
+	{
+		switch (layout)
+		{
+		case Core::eRenderGeometryTextureBarrierLayout::kShaderResource:
+			out.access = ::nri::AccessBits::SHADER_RESOURCE;
+			out.layout = ::nri::Layout::SHADER_RESOURCE;
+			out.stages = ::nri::StageBits::ALL;
+			break;
+		case Core::eRenderGeometryTextureBarrierLayout::kColorAttachment:
+			out.access = ::nri::AccessBits::COLOR_ATTACHMENT;
+			out.layout = ::nri::Layout::COLOR_ATTACHMENT;
+			out.stages = ::nri::StageBits::COLOR_ATTACHMENT;
+			break;
+		case Core::eRenderGeometryTextureBarrierLayout::kDepthAttachment:
+			// DEPTH_STENCIL_ATTACHMENT is READ|WRITE, an illegal D3D12
+			// state combination; a writable attachment is WRITE-only
+			out.access = ::nri::AccessBits::DEPTH_STENCIL_ATTACHMENT_WRITE;
+			out.layout = ::nri::Layout::DEPTH_STENCIL_ATTACHMENT;
+			out.stages = ::nri::StageBits::DEPTH_STENCIL_ATTACHMENT;
+			break;
+		case Core::eRenderGeometryTextureBarrierLayout::kUndefined:
+			out.access = ::nri::AccessBits::NONE;
+			out.layout = ::nri::Layout::UNDEFINED;
+			out.stages = ::nri::StageBits::NONE;
+			break;
+		default:
+			break;
+		}
+	};
+
+	::nri::TextureBarrierDesc texture_barrier{};
+	texture_barrier.texture = p_texture;
+	map_layout(before_layout, texture_barrier.before);
+	map_layout(after_layout, texture_barrier.after);
+	texture_barrier.mipNum = 1;
+	texture_barrier.layerNum = 1;
+	const bool is_depth_transition =
+		before_layout == Core::eRenderGeometryTextureBarrierLayout::kDepthAttachment ||
+		after_layout == Core::eRenderGeometryTextureBarrierLayout::kDepthAttachment;
+	texture_barrier.planes = is_depth_transition
+		? ::nri::PlaneBits::DEPTH
+		: ::nri::PlaneBits::ALL;
+
+	::nri::BarrierDesc barrier{};
+	barrier.textures = &texture_barrier;
+	barrier.textureNum = 1;
+	this->m_p_device->Get_CoreInterface().CmdBarrier(
+		*this->m_p_device->Get_CommandBuffer(), barrier);
 }
 
 void ktkRenderFramePassContext::Set_Vertex_Buffer(
@@ -752,6 +1020,15 @@ void ktkRenderFramePassContext::Draw_Indexed_Indirect(
 			"[nri] Draw_Indexed_Indirect: no geometry manager — "
 			"ignored");
 
+		return;
+	}
+
+	if (this->m_p_geometry_manager->Is_Graphics_Binding_Complete(
+			this->m_bound_graphics_pipeline) == false)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Draw_Indexed_Indirect: declared texture bindings are "
+			"incomplete — ignored");
 		return;
 	}
 

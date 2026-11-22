@@ -155,12 +155,13 @@ enum class eRenderGeometryIndexFormat : kun_ktk uint8_t
 	kUint32
 };
 
-/// \~english the element format of one vertex attribute (the v1 set the
-/// meshlet path needs; grows additively)
+/// \~english the element format of one vertex attribute (the meshlet path's
+/// position/normal/visibility-id set; grows additively)
 enum class eRenderGeometryVertexFormat : kun_ktk uint8_t
 {
 	kFloat3,
-	kFloat4
+	kFloat4,
+	kUint1
 };
 
 /// \~english the color-attachment format a pipeline is compiled for (today
@@ -168,7 +169,64 @@ enum class eRenderGeometryVertexFormat : kun_ktk uint8_t
 /// enum, the backend maps it — no backend format type crosses the boundary)
 enum class eRenderGeometryColorFormat : kun_ktk uint8_t
 {
-	kRGBA8Unorm
+	kRGBA8Unorm,
+	kR32Uint
+};
+
+/// \~english optional depth-attachment format (kNone preserves the old
+/// color-only pipeline contract)
+enum class eRenderGeometryDepthFormat : kun_ktk uint8_t
+{
+	kNone,
+	kD32Float
+};
+
+/// depth test used by a depth-capable pipeline; writes default ON so the
+/// existing depth-prepass contract is unchanged
+enum class eRenderGeometryDepthCompareOp : kun_ktk uint8_t
+{
+	kLess,
+	kEqual
+};
+
+using ktkRenderGeometryTextureHandle = kun_ktk uint32_t;
+using ktkRenderGeometryTextureViewHandle = kun_ktk uint32_t;
+inline constexpr ktkRenderGeometryTextureHandle
+	kInvalidRenderGeometryTextureHandle = 0xFFFFFFFFu;
+inline constexpr ktkRenderGeometryTextureViewHandle
+	kInvalidRenderGeometryTextureViewHandle = 0xFFFFFFFFu;
+
+enum class eRenderGeometryTextureViewType : kun_ktk uint8_t
+{
+	kShaderResource,
+	kRenderTarget,
+	kDepthStencil
+};
+
+enum class eRenderGeometryTextureBarrierLayout : kun_ktk uint8_t
+{
+	kShaderResource,
+	kColorAttachment,
+	kDepthAttachment,
+	/// a newly created texture's initial layout; discards previous contents
+	kUndefined
+};
+
+struct ktkRenderGeometryTextureDesc
+{
+	kun_ktk uint32_t m_width{};
+	kun_ktk uint32_t m_height{};
+	eRenderGeometryColorFormat m_color_format{};
+	eRenderGeometryDepthFormat m_depth_format{eRenderGeometryDepthFormat::kNone};
+};
+
+struct ktkRenderGeometryTextureViewDesc
+{
+	ktkRenderGeometryTextureHandle m_texture{
+		kInvalidRenderGeometryTextureHandle};
+	eRenderGeometryTextureViewType m_type{};
+	eRenderGeometryColorFormat m_color_format{};
+	eRenderGeometryDepthFormat m_depth_format{eRenderGeometryDepthFormat::kNone};
 };
 
 /// \~english the buffer barrier vocabulary of the compute path (task K11
@@ -231,6 +289,13 @@ struct ktkRenderGeometryPipelineDesc
 	/// \~english the interleaved vertex stride in bytes
 	kun_ktk uint32_t m_vertex_stride_bytes{};
 	eRenderGeometryColorFormat m_color_format{};
+	eRenderGeometryDepthFormat m_depth_format{eRenderGeometryDepthFormat::kNone};
+	eRenderGeometryDepthCompareOp m_depth_compare{
+		eRenderGeometryDepthCompareOp::kLess};
+	bool m_depth_write{true};
+	/// \~english the number of READ-ONLY texture SRV bindings (t0..t(N-1),
+	/// <= the backend's named capacity; 0 preserves the old no-SRV contract)
+	kun_ktk uint32_t m_shader_resource_count{};
 	/// \~english the size of the push-constant (root-constant) block visible
 	/// to BOTH stages at register(b0) — 0 = no push constants. A multiple of
 	/// 4, <= 256 bytes (the D3D12 root-constant discipline)
@@ -295,6 +360,21 @@ public:
 	/// crash)
 	virtual void Destroy_Buffer(
 		ktkRenderGeometryBufferHandle handle) = 0;
+
+	/// \~english optional texture/depth surface support (additive; existing
+	/// backends keep returning the invalid sentinel)
+	virtual ktkRenderGeometryTextureHandle Create_Texture(
+		const ktkRenderGeometryTextureDesc&)
+	{
+		return kInvalidRenderGeometryTextureHandle;
+	}
+	virtual void Destroy_Texture(ktkRenderGeometryTextureHandle) {}
+	virtual ktkRenderGeometryTextureViewHandle Create_Texture_View(
+		const ktkRenderGeometryTextureViewDesc&)
+	{
+		return kInvalidRenderGeometryTextureViewHandle;
+	}
+	virtual void Destroy_Texture_View(ktkRenderGeometryTextureViewHandle) {}
 
 	/// \~english CPU -> GPU upload: SYNCHRONOUS and IMMEDIATE (the backend
 	/// writes through host-visible upload memory; the bytes are readable by
@@ -381,6 +461,31 @@ public:
 	virtual void Begin_Render_Pass(void) = 0;
 	/// \~english closes the rendering section opened by Begin_Render_Pass
 	virtual void End_Render_Pass(void) = 0;
+
+	/// \~english optional offscreen color/depth attachments with a clear
+	/// value (additive; the backend implements only what it supports)
+	virtual void Begin_Render_Pass_With_Attachments(
+		ktkRenderGeometryTextureViewHandle,
+		ktkRenderGeometryTextureViewHandle, const float[4])
+	{
+	}
+	/// \~english opens the acquired back buffer with LOAD color+depth; use a
+	/// depth-capable pipeline (EQUAL/read-only for a visibility resolve)
+	virtual void Begin_Render_Pass_With_Back_Buffer_Depth(
+		ktkRenderGeometryTextureViewHandle)
+	{
+	}
+	/// \~english binds one READ-ONLY texture SRV at the graphics pipeline's
+	/// declared binding index (tN), after Set_Pipeline
+	virtual void Set_Graphics_Shader_Resource(kun_ktk uint32_t,
+		ktkRenderGeometryTextureViewHandle)
+	{
+	}
+	/// \~english texture layout transition (before/after)
+	virtual void Barrier_Texture(ktkRenderGeometryTextureHandle,
+		eRenderGeometryTextureBarrierLayout, eRenderGeometryTextureBarrierLayout)
+	{
+	}
 
 	/// \~english binds a pipeline created by the geometry manager
 	virtual void Set_Pipeline(
