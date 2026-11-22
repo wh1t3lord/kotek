@@ -117,6 +117,15 @@ public:
 		Core::ktkRenderGeometryPipelineHandle pipeline,
 		kun_ktk uint32_t binding_index,
 		Core::ktkRenderGeometryTextureViewHandle view) noexcept;
+	/// true when a structured binding changed; out_range_index is its
+	/// descriptor range (the texture ranges precede the structured ones)
+	bool Update_Graphics_Structured_Binding(
+		Core::ktkRenderGeometryPipelineHandle pipeline,
+		kun_ktk uint32_t binding_index,
+		Core::ktkRenderGeometryBufferHandle buffer,
+		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+		kun_ktk uint32_t structure_stride,
+		kun_ktk uint32_t& out_range_index) noexcept;
 	bool Is_Graphics_Binding_Complete(
 		Core::ktkRenderGeometryPipelineHandle handle) const noexcept;
 	void Set_Graphics_Binding_View(
@@ -140,7 +149,8 @@ public:
 		Core::ktkRenderGeometryPipelineHandle pipeline,
 		kun_ktk uint32_t binding_index,
 		Core::ktkRenderGeometryBufferHandle buffer,
-		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes) noexcept;
+		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+		kun_ktk uint32_t structure_stride = 0) noexcept;
 
 	/// \~english every storage binding of the pipeline populated (the
 	/// Dispatch guard)
@@ -195,6 +205,11 @@ private:
 		/// completeness guard checks this many bindings, not the
 		/// capacity
 		kun_ktk uint32_t m_binding_count{};
+		/// graphics splits: texture ranges first, structured ranges after;
+		/// the strides are needed to validate the view form on every rebind
+		kun_ktk uint32_t m_texture_binding_count{};
+		kun_ktk uint32_t m_structured_buffer_count{};
+		kun_ktk uint32_t m_structured_strides[k_max_compute_bindings]{};
 	};
 
 	ktkRenderComputePipelineState m_compute_states[

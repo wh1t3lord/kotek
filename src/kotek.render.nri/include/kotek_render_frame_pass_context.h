@@ -52,6 +52,10 @@ public:
 		Core::ktkRenderGeometryTextureViewHandle depth_view) override;
 	void Set_Graphics_Shader_Resource(kun_ktk uint32_t binding_index,
 		Core::ktkRenderGeometryTextureViewHandle view) override;
+	void Set_Graphics_Structured_Buffer(kun_ktk uint32_t binding_index,
+		Core::ktkRenderGeometryBufferHandle buffer,
+		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+		kun_ktk uint32_t structure_stride) override;
 	void Barrier_Texture(Core::ktkRenderGeometryTextureHandle texture,
 		Core::eRenderGeometryTextureBarrierLayout before_layout,
 		Core::eRenderGeometryTextureBarrierLayout after_layout) override;
@@ -78,6 +82,10 @@ public:
 	void Set_Compute_Storage_Buffer(kun_ktk uint32_t binding_index,
 		Core::ktkRenderGeometryBufferHandle buffer,
 		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes) override;
+	void Set_Compute_Structured_Buffer(kun_ktk uint32_t binding_index,
+		Core::ktkRenderGeometryBufferHandle buffer,
+		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+		kun_ktk uint32_t structure_stride) override;
 	void Set_Compute_Push_Constants(const void* p_data,
 		kun_ktk uint32_t size_bytes) override;
 	void Dispatch(kun_ktk uint32_t group_count_x, kun_ktk uint32_t group_count_y,
@@ -106,6 +114,12 @@ private:
 	/// not corrupt the open command list). The compute/copy commands are
 	/// the mirror image: OUTSIDE a render pass only.
 	bool is_inside_render_pass(void) const noexcept;
+	void set_compute_buffer_binding(kun_ktk uint32_t binding_index,
+		Core::ktkRenderGeometryBufferHandle buffer,
+		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+		kun_ktk uint32_t structure_stride);
+	void bind_graphics_descriptor_set_if_complete(
+		Core::ktkRenderGeometryPipelineHandle pipeline);
 
 private:
 	ktkRenderDevice* m_p_device;

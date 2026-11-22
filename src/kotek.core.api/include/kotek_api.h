@@ -239,7 +239,8 @@ enum class eRenderGeometryBarrierAccess : kun_ktk uint8_t
 	kStorage,          /// read-write shader access (UAV)
 	kIndirectArgument, /// indirect draw/dispatch argument reads
 	kCopySource,       /// copy reads
-	kCopyDestination   /// copy writes
+	kCopyDestination,  /// copy writes
+	kShaderRead        /// read-only shader access (SRV)
 };
 
 enum class eRenderGeometryBarrierStage : kun_ktk uint8_t
@@ -296,6 +297,10 @@ struct ktkRenderGeometryPipelineDesc
 	/// \~english the number of READ-ONLY texture SRV bindings (t0..t(N-1),
 	/// <= the backend's named capacity; 0 preserves the old no-SRV contract)
 	kun_ktk uint32_t m_shader_resource_count{};
+	/// \~english READ-ONLY structured-buffer SRVs whose t registers FOLLOW
+	/// the textures (tN..t(N+M-1)); one nonzero stride per binding
+	kun_ktk uint32_t m_structured_buffer_count{};
+	const kun_ktk uint32_t* m_p_structured_buffer_strides{};
 	/// \~english the size of the push-constant (root-constant) block visible
 	/// to BOTH stages at register(b0) — 0 = no push constants. A multiple of
 	/// 4, <= 256 bytes (the D3D12 root-constant discipline)
@@ -481,6 +486,13 @@ public:
 		ktkRenderGeometryTextureViewHandle)
 	{
 	}
+	/// \~english binds one READ-ONLY structured-buffer SRV at the declared
+	/// structured index (its t register follows the pipeline's textures)
+	virtual void Set_Graphics_Structured_Buffer(kun_ktk uint32_t,
+		ktkRenderGeometryBufferHandle, kun_ktk uint64_t, kun_ktk uint64_t,
+		kun_ktk uint32_t)
+	{
+	}
 	/// \~english texture layout transition (before/after)
 	virtual void Barrier_Texture(ktkRenderGeometryTextureHandle,
 		eRenderGeometryTextureBarrierLayout, eRenderGeometryTextureBarrierLayout)
@@ -543,6 +555,13 @@ public:
 	/// actually changes
 	virtual void Set_Compute_Storage_Buffer(kun_ktk uint32_t,
 		ktkRenderGeometryBufferHandle, kun_ktk uint64_t, kun_ktk uint64_t)
+	{
+	}
+	/// \~english structured-buffer form of the same binding (a nonzero
+	/// element stride); read-only/read-write selection stays pipeline-defined
+	virtual void Set_Compute_Structured_Buffer(kun_ktk uint32_t,
+		ktkRenderGeometryBufferHandle, kun_ktk uint64_t, kun_ktk uint64_t,
+		kun_ktk uint32_t)
 	{
 	}
 

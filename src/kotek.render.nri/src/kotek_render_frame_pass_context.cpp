@@ -27,6 +27,8 @@ namespace
 			return ::nri::AccessBits::COPY_SOURCE;
 		case eAccess::kCopyDestination:
 			return ::nri::AccessBits::COPY_DESTINATION;
+		case eAccess::kShaderRead:
+			return ::nri::AccessBits::SHADER_RESOURCE;
 		default:
 			break;
 		}
@@ -333,6 +335,28 @@ void ktkRenderFramePassContext::Set_Pipeline(
 	this->m_bound_graphics_pipeline = pipeline;
 }
 
+void ktkRenderFramePassContext::bind_graphics_descriptor_set_if_complete(
+	Core::ktkRenderGeometryPipelineHandle pipeline)
+{
+	if (this->m_p_geometry_manager->Is_Graphics_Binding_Complete(pipeline) ==
+		false)
+	{
+		return;
+	}
+
+	::nri::DescriptorSet* p_set =
+		this->m_p_geometry_manager->Get_NRI_Graphics_Descriptor_Set(pipeline);
+	if (p_set == nullptr)
+		return;
+
+	::nri::SetDescriptorSetDesc set_desc{};
+	set_desc.setIndex = 0;
+	set_desc.descriptorSet = p_set;
+	set_desc.bindPoint = ::nri::BindPoint::GRAPHICS;
+	this->m_p_device->Get_CoreInterface().CmdSetDescriptorSet(
+		*this->m_p_device->Get_CommandBuffer(), set_desc);
+}
+
 void ktkRenderFramePassContext::Set_Push_Constants(const void* p_data,
 	kun_ktk uint32_t size_bytes)
 {
@@ -414,13 +438,105 @@ void ktkRenderFramePassContext::Set_Graphics_Shader_Resource(
 	}
 	core.UpdateDescriptorRanges(&update, 1);
 
-	// First-use binding: Set_Pipeline deliberately skipped the then-empty
-	// set. Now that D3D12 sees an initialized STATIC range, bind it.
-	::nri::SetDescriptorSetDesc set_desc{};
-	set_desc.setIndex = 0;
-	set_desc.descriptorSet = update.descriptorSet;
-	set_desc.bindPoint = ::nri::BindPoint::GRAPHICS;
-	core.CmdSetDescriptorSet(*this->m_p_device->Get_CommandBuffer(), set_desc);
+	this->bind_graphics_descriptor_set_if_complete(
+		this->m_bound_graphics_pipeline);
+}
+
+void ktkRenderFramePassContext::Set_Graphics_Structured_Buffer(
+	kun_ktk uint32_t binding_index,
+	Core::ktkRenderGeometryBufferHandle buffer,
+	kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+	kun_ktk uint32_t structure_stride)
+{
+	if (this->is_inside_render_pass() == false)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Set_Graphics_Structured_Buffer outside a render pass — ignored");
+		return;
+	}
+	if (this->m_p_geometry_manager == nullptr ||
+		this->m_bound_graphics_pipeline ==
+			Core::kInvalidRenderGeometryPipelineHandle)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Set_Graphics_Structured_Buffer: no graphics pipeline bound — ignored");
+		return;
+	}
+
+	::nri::Buffer* p_buffer =
+		this->m_p_geometry_manager->Get_NRI_Buffer(buffer);
+	if (p_buffer == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Set_Graphics_Structured_Buffer: invalid buffer ({}) — ignored",
+			buffer);
+		return;
+	}
+	if (this->m_p_geometry_manager->Is_Buffer_Range_Valid(
+			buffer, offset_bytes, size_bytes) == false)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Set_Graphics_Structured_Buffer range ({} + {} B) does "
+			"not fit — ignored", offset_bytes, size_bytes);
+		return;
+	}
+
+	const Core::ktkRenderGeometryPipelineHandle pipeline =
+		this->m_bound_graphics_pipeline;
+	kun_ktk uint32_t range_index = 0;
+	if (this->m_p_geometry_manager->Update_Graphics_Structured_Binding(
+			pipeline, binding_index, buffer, offset_bytes, size_bytes,
+			structure_stride, range_index) == false)
+	{
+		return;
+	}
+
+	::nri::DescriptorSet* p_set =
+		this->m_p_geometry_manager->Get_NRI_Graphics_Descriptor_Set(pipeline);
+	if (p_set == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Set_Graphics_Structured_Buffer: pipeline has no set — ignored");
+		return;
+	}
+
+	const ::nri::CoreInterface& core = this->m_p_device->Get_CoreInterface();
+	if (void* p_old_view =
+			this->m_p_geometry_manager->Get_Graphics_Binding_View(
+				pipeline, range_index))
+	{
+		core.DestroyDescriptor(static_cast<::nri::Descriptor*>(p_old_view));
+	}
+
+	::nri::BufferViewDesc view_desc{};
+	view_desc.buffer = p_buffer;
+	view_desc.type = ::nri::BufferView::STRUCTURED_BUFFER;
+	view_desc.offset = offset_bytes;
+	view_desc.size = size_bytes;
+	view_desc.structureStride = structure_stride;
+
+	::nri::Descriptor* p_view = nullptr;
+	const ::nri::Result result = core.CreateBufferView(view_desc, p_view);
+	if (result != ::nri::Result::SUCCESS || p_view == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] Set_Graphics_Structured_Buffer view creation failed, "
+			"result={} — ignored", static_cast<int>(result));
+		return;
+	}
+	this->m_p_geometry_manager->Set_Graphics_Binding_View(
+		pipeline, range_index, p_view);
+
+	::nri::Descriptor* p_view_for_update = p_view;
+	::nri::UpdateDescriptorRangeDesc update{};
+	update.descriptorSet = p_set;
+	update.rangeIndex = range_index;
+	update.baseDescriptor = 0;
+	update.descriptors = &p_view_for_update;
+	update.descriptorNum = 1;
+	core.UpdateDescriptorRanges(&update, 1);
+
+	this->bind_graphics_descriptor_set_if_complete(pipeline);
 }
 
 void ktkRenderFramePassContext::Barrier_Texture(
@@ -686,116 +802,119 @@ void ktkRenderFramePassContext::Set_Compute_Storage_Buffer(
 	Core::ktkRenderGeometryBufferHandle buffer,
 	kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes)
 {
+	this->set_compute_buffer_binding(
+		binding_index, buffer, offset_bytes, size_bytes, 0u);
+}
+
+void ktkRenderFramePassContext::Set_Compute_Structured_Buffer(
+	kun_ktk uint32_t binding_index,
+	Core::ktkRenderGeometryBufferHandle buffer,
+	kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+	kun_ktk uint32_t structure_stride)
+{
+	this->set_compute_buffer_binding(
+		binding_index, buffer, offset_bytes, size_bytes, structure_stride);
+}
+
+void ktkRenderFramePassContext::set_compute_buffer_binding(
+	kun_ktk uint32_t binding_index,
+	Core::ktkRenderGeometryBufferHandle buffer,
+	kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+	kun_ktk uint32_t structure_stride)
+{
 	if (this->is_inside_render_pass())
 	{
 		KOTEK_MESSAGE_ERROR(
-			"[nri] Set_Compute_Storage_Buffer inside a render pass — "
-			"ignored");
-
+			"[nri] compute buffer binding inside a render pass — ignored");
 		return;
 	}
-
 	if (this->m_p_geometry_manager == nullptr ||
 		this->m_bound_compute_pipeline ==
 			Core::kInvalidRenderGeometryPipelineHandle)
 	{
 		KOTEK_MESSAGE_ERROR(
-			"[nri] Set_Compute_Storage_Buffer: no compute pipeline bound "
-			"— ignored");
-
+			"[nri] compute buffer binding: no compute pipeline bound — ignored");
 		return;
 	}
 
 	::nri::Buffer* p_buffer =
 		this->m_p_geometry_manager->Get_NRI_Buffer(buffer);
-
 	if (p_buffer == nullptr)
 	{
 		KOTEK_MESSAGE_ERROR(
-			"[nri] Set_Compute_Storage_Buffer of an invalid/stale "
-			"buffer handle ({}) — ignored", buffer);
-
+			"[nri] compute buffer binding of an invalid/stale buffer ({}) — ignored",
+			buffer);
 		return;
 	}
-
 	if (this->m_p_geometry_manager->Is_Buffer_Range_Valid(
 			buffer, offset_bytes, size_bytes) == false)
 	{
 		KOTEK_MESSAGE_ERROR(
-			"[nri] Set_Compute_Storage_Buffer range ({} + {} B) does "
-			"not fit the buffer — ignored", offset_bytes, size_bytes);
-
+			"[nri] compute buffer range ({} + {} B) does not fit — ignored",
+			offset_bytes, size_bytes);
 		return;
 	}
 
 	const Core::ktkRenderGeometryPipelineHandle pipeline =
 		this->m_bound_compute_pipeline;
-
-	// the change-detecting bookkeeping: an unchanged binding keeps its
-	// live view (a Descriptor owns a descriptor handle — recreating it
-	// per frame would leak)
 	if (this->m_p_geometry_manager->Update_Compute_Binding(pipeline,
-			binding_index, buffer, offset_bytes, size_bytes) == false)
+			binding_index, buffer, offset_bytes, size_bytes,
+			structure_stride) == false)
 	{
 		return;
 	}
 
 	const ::nri::CoreInterface& core = this->m_p_device->Get_CoreInterface();
-
-	// the old view dies BEFORE the new one is created (the slot hands it
-	// out one last time)
 	if (void* p_old_view =
 			this->m_p_geometry_manager->Get_Compute_Binding_View(pipeline,
 				binding_index))
 	{
-		core.DestroyDescriptor(
-			static_cast<::nri::Descriptor*>(p_old_view));
+		core.DestroyDescriptor(static_cast<::nri::Descriptor*>(p_old_view));
 	}
 
-	// the byte-address view: the READ-ONLY binding gets the SRV form
-	// (host-uploaded memory stays legal), the read-write the UAV form
-	// (GPU-local only — the D3D12 upload-heap UAV rule)
 	const bool is_read_only =
 		this->m_p_geometry_manager->Is_Compute_Binding_Read_Only(
 			pipeline, binding_index);
 
 	::nri::BufferViewDesc view_desc{};
 	view_desc.buffer = p_buffer;
-	view_desc.type = is_read_only
-		? ::nri::BufferView::BYTE_ADDRESS_BUFFER
-		: ::nri::BufferView::STORAGE_BYTE_ADDRESS_BUFFER;
+	if (structure_stride)
+	{
+		view_desc.type = is_read_only
+			? ::nri::BufferView::STRUCTURED_BUFFER
+			: ::nri::BufferView::STORAGE_STRUCTURED_BUFFER;
+		view_desc.structureStride = structure_stride;
+	}
+	else
+	{
+		view_desc.type = is_read_only
+			? ::nri::BufferView::BYTE_ADDRESS_BUFFER
+			: ::nri::BufferView::STORAGE_BYTE_ADDRESS_BUFFER;
+	}
 	view_desc.offset = offset_bytes;
 	view_desc.size = size_bytes;
 
 	::nri::Descriptor* p_view = nullptr;
-	::nri::Result result = core.CreateBufferView(view_desc, p_view);
-
+	const ::nri::Result result = core.CreateBufferView(view_desc, p_view);
 	if (result != ::nri::Result::SUCCESS || p_view == nullptr)
 	{
 		KOTEK_MESSAGE_ERROR(
-			"[nri] Set_Compute_Storage_Buffer view creation failed, "
-			"result={} — the binding stays unbound",
+			"[nri] compute buffer view creation failed, result={} — unbound",
 			static_cast<int>(result));
-
 		return;
 	}
 
 	this->m_p_geometry_manager->Set_Compute_Binding_View(
 		pipeline, binding_index, p_view);
 
-	// the descriptor set update (legal until the submit — NRI's update
-	// contract; the set is bound at Dispatch)
 	::nri::Descriptor* p_view_for_update = p_view;
-
 	::nri::UpdateDescriptorRangeDesc update{};
 	update.descriptorSet =
-		this->m_p_geometry_manager->Get_NRI_Compute_Descriptor_Set(
-			pipeline);
+		this->m_p_geometry_manager->Get_NRI_Compute_Descriptor_Set(pipeline);
 	update.rangeIndex = binding_index;
 	update.baseDescriptor = 0;
 	update.descriptors = &p_view_for_update;
 	update.descriptorNum = 1;
-
 	core.UpdateDescriptorRanges(&update, 1);
 }
 

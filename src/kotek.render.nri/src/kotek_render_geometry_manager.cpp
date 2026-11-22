@@ -182,13 +182,21 @@ void ktkRenderGeometryManager::Shutdown(void)
 		for (kun_ktk uint32_t binding = 0;
 			 binding < k_max_compute_bindings; ++binding)
 		{
-			graphics_state.m_p_views[binding] = nullptr;
+			if (graphics_state.m_p_views[binding])
+			{
+				core.DestroyDescriptor(static_cast<::nri::Descriptor*>(
+					graphics_state.m_p_views[binding]));
+				graphics_state.m_p_views[binding] = nullptr;
+			}
+			graphics_state.m_structured_strides[binding] = 0u;
 		}
 
 		graphics_state.m_bindings.clear();
 		graphics_state.m_p_set = nullptr;
 		graphics_state.m_read_only_mask = 0u;
 		graphics_state.m_binding_count = 0u;
+		graphics_state.m_texture_binding_count = 0u;
+		graphics_state.m_structured_buffer_count = 0u;
 
 		if (slot.m_is_alive == false)
 			continue;
@@ -642,13 +650,33 @@ Core::ktkRenderGeometryPipelineHandle
 		return Core::kInvalidRenderGeometryPipelineHandle;
 	}
 
-	if (desc.m_shader_resource_count >
+	const kun_ktk uint32_t total_binding_count =
+		desc.m_shader_resource_count + desc.m_structured_buffer_count;
+	if (total_binding_count >
 		KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS)
 	{
 		KOTEK_MESSAGE_ERROR(
-			"[nri] geometry Create_Pipeline: {} texture bindings exceed the capacity",
-			desc.m_shader_resource_count);
+			"[nri] geometry Create_Pipeline: {} total SRV bindings exceed the capacity",
+			total_binding_count);
 		return Core::kInvalidRenderGeometryPipelineHandle;
+	}
+	if (desc.m_structured_buffer_count &&
+		desc.m_p_structured_buffer_strides == nullptr)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] geometry Create_Pipeline: structured bindings need their strides");
+		return Core::kInvalidRenderGeometryPipelineHandle;
+	}
+	for (kun_ktk uint32_t binding = 0;
+		 binding < desc.m_structured_buffer_count; ++binding)
+	{
+		if (desc.m_p_structured_buffer_strides[binding] == 0)
+		{
+			KOTEK_MESSAGE_ERROR(
+				"[nri] geometry Create_Pipeline: structured binding {} has a zero stride",
+				binding);
+			return Core::kInvalidRenderGeometryPipelineHandle;
+		}
 	}
 
 	if ((desc.m_push_constant_bytes % 4u) != 0u ||
@@ -675,22 +703,34 @@ Core::ktkRenderGeometryPipelineHandle
 		::nri::StageBits::FRAGMENT_SHADER;
 
 	::nri::DescriptorRangeDesc
-		texture_ranges[KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS]{};
+		resource_ranges[KOTEK_DEF_RENDER_NRI_GEOMETRY_MAX_GRAPHICS_BINDINGS]{};
 
 	for (kun_ktk uint32_t binding = 0; binding < desc.m_shader_resource_count;
 		 ++binding)
 	{
-		texture_ranges[binding].baseRegisterIndex = binding;
-		texture_ranges[binding].descriptorNum = 1;
-		texture_ranges[binding].descriptorType = ::nri::DescriptorType::TEXTURE;
-		texture_ranges[binding].shaderStages = ::nri::StageBits::VERTEX_SHADER |
+		resource_ranges[binding].baseRegisterIndex = binding;
+		resource_ranges[binding].descriptorNum = 1;
+		resource_ranges[binding].descriptorType = ::nri::DescriptorType::TEXTURE;
+		resource_ranges[binding].shaderStages = ::nri::StageBits::VERTEX_SHADER |
 			::nri::StageBits::FRAGMENT_SHADER;
 	}
+	for (kun_ktk uint32_t binding = 0;
+		 binding < desc.m_structured_buffer_count; ++binding)
+	{
+		const kun_ktk uint32_t range_index =
+			desc.m_shader_resource_count + binding;
+		resource_ranges[range_index].baseRegisterIndex = range_index;
+		resource_ranges[range_index].descriptorNum = 1;
+		resource_ranges[range_index].descriptorType =
+			::nri::DescriptorType::STRUCTURED_BUFFER;
+		resource_ranges[range_index].shaderStages =
+			::nri::StageBits::VERTEX_SHADER | ::nri::StageBits::FRAGMENT_SHADER;
+	}
 
-	::nri::DescriptorSetDesc texture_set_desc{};
-	texture_set_desc.registerSpace = 0;
-	texture_set_desc.ranges = texture_ranges;
-	texture_set_desc.rangeNum = desc.m_shader_resource_count;
+	::nri::DescriptorSetDesc resource_set_desc{};
+	resource_set_desc.registerSpace = 0;
+	resource_set_desc.ranges = resource_ranges;
+	resource_set_desc.rangeNum = total_binding_count;
 
 	::nri::PipelineLayoutDesc layout_desc{};
 	layout_desc.rootRegisterSpace = 0;
@@ -699,8 +739,8 @@ Core::ktkRenderGeometryPipelineHandle
 	layout_desc.rootConstantNum =
 		desc.m_push_constant_bytes ? 1u : 0u;
 	layout_desc.descriptorSets =
-		desc.m_shader_resource_count ? &texture_set_desc : nullptr;
-	layout_desc.descriptorSetNum = desc.m_shader_resource_count ? 1u : 0u;
+		total_binding_count ? &resource_set_desc : nullptr;
+	layout_desc.descriptorSetNum = total_binding_count ? 1u : 0u;
 	layout_desc.shaderStages = ::nri::StageBits::VERTEX_SHADER |
 		::nri::StageBits::FRAGMENT_SHADER;
 
@@ -835,7 +875,7 @@ Core::ktkRenderGeometryPipelineHandle
 		return Core::kInvalidRenderGeometryPipelineHandle;
 	}
 
-	if (desc.m_shader_resource_count)
+	if (total_binding_count)
 	{
 		if (this->m_p_descriptor_pool == nullptr)
 		{
@@ -867,8 +907,17 @@ Core::ktkRenderGeometryPipelineHandle
 
 		ktkRenderComputePipelineState& graphics_state =
 			this->m_graphics_states[this->m_pipelines.slot_index(handle)];
-		graphics_state.m_binding_count = desc.m_shader_resource_count;
-		graphics_state.m_read_only_mask = (1u << desc.m_shader_resource_count) - 1u;
+		graphics_state.m_binding_count = total_binding_count;
+		graphics_state.m_texture_binding_count = desc.m_shader_resource_count;
+		graphics_state.m_structured_buffer_count =
+			desc.m_structured_buffer_count;
+		graphics_state.m_read_only_mask = (1u << total_binding_count) - 1u;
+		for (kun_ktk uint32_t binding = 0;
+			 binding < desc.m_structured_buffer_count; ++binding)
+		{
+			graphics_state.m_structured_strides[binding] =
+				desc.m_p_structured_buffer_strides[binding];
+		}
 
 		result = core.AllocateDescriptorSets(*this->m_p_descriptor_pool,
 			*p_layout, 0, &graphics_state.m_p_set, 1, 0);
@@ -942,13 +991,21 @@ void ktkRenderGeometryManager::Destroy_Pipeline(
 		for (kun_ktk uint32_t binding = 0;
 			 binding < k_max_compute_bindings; ++binding)
 		{
-			graphics_state.m_p_views[binding] = nullptr;
+			if (graphics_state.m_p_views[binding])
+			{
+				core.DestroyDescriptor(static_cast<::nri::Descriptor*>(
+					graphics_state.m_p_views[binding]));
+				graphics_state.m_p_views[binding] = nullptr;
+			}
+			graphics_state.m_structured_strides[binding] = 0u;
 		}
 
 		graphics_state.m_bindings.clear();
 		graphics_state.m_p_set = nullptr;
 		graphics_state.m_read_only_mask = 0u;
 		graphics_state.m_binding_count = 0u;
+		graphics_state.m_texture_binding_count = 0u;
+		graphics_state.m_structured_buffer_count = 0u;
 	}
 
 	this->m_pipelines.free(handle);
@@ -1321,6 +1378,36 @@ bool ktkRenderGeometryManager::Update_Graphics_Binding(
 		.m_bindings.set(binding_index, view, 0, 0);
 }
 
+bool ktkRenderGeometryManager::Update_Graphics_Structured_Binding(
+	Core::ktkRenderGeometryPipelineHandle pipeline,
+	kun_ktk uint32_t binding_index,
+	Core::ktkRenderGeometryBufferHandle buffer,
+	kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+	kun_ktk uint32_t structure_stride,
+	kun_ktk uint32_t& out_range_index) noexcept
+{
+	out_range_index = 0;
+	if (this->m_pipelines.resolve(pipeline) == nullptr)
+		return false;
+
+	ktkRenderComputePipelineState& state =
+		this->m_graphics_states[this->m_pipelines.slot_index(pipeline)];
+	if (binding_index >= state.m_structured_buffer_count ||
+		structure_stride == 0 ||
+		state.m_structured_strides[binding_index] != structure_stride)
+	{
+		KOTEK_MESSAGE_ERROR(
+			"[nri] graphics structured binding {} with stride {} is outside "
+			"the pipeline's declared table",
+			binding_index, structure_stride);
+		return false;
+	}
+
+	out_range_index = state.m_texture_binding_count + binding_index;
+	return state.m_bindings.set(out_range_index, buffer, offset_bytes,
+		size_bytes, structure_stride);
+}
+
 bool ktkRenderGeometryManager::Is_Graphics_Binding_Complete(
 	Core::ktkRenderGeometryPipelineHandle handle) const noexcept
 {
@@ -1375,7 +1462,8 @@ bool ktkRenderGeometryManager::Is_Compute_Pipeline(
 bool ktkRenderGeometryManager::Update_Compute_Binding(
 	Core::ktkRenderGeometryPipelineHandle pipeline,
 	kun_ktk uint32_t binding_index, Core::ktkRenderGeometryBufferHandle buffer,
-	kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes) noexcept
+	kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+	kun_ktk uint32_t structure_stride) noexcept
 {
 	if (binding_index >= k_max_compute_bindings ||
 		this->m_pipelines.resolve(pipeline) == nullptr)
@@ -1384,7 +1472,8 @@ bool ktkRenderGeometryManager::Update_Compute_Binding(
 	}
 
 	return this->m_compute_states[this->m_pipelines.slot_index(pipeline)]
-		.m_bindings.set(binding_index, buffer, offset_bytes, size_bytes);
+		.m_bindings.set(binding_index, buffer, offset_bytes, size_bytes,
+			structure_stride);
 }
 
 bool ktkRenderGeometryManager::Is_Compute_Binding_Complete(

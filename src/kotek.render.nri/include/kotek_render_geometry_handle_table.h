@@ -230,7 +230,8 @@ public:
 	/// pipeline was created with this many bindings)
 	bool set(kun_ktk uint32_t binding_index,
 		Core::ktkRenderGeometryBufferHandle buffer,
-		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes) noexcept
+		kun_ktk uint64_t offset_bytes, kun_ktk uint64_t size_bytes,
+		kun_ktk uint32_t structure_stride = 0) noexcept
 	{
 		if (binding_index >= Capacity)
 		{
@@ -246,7 +247,8 @@ public:
 
 		if (binding.m_is_set && binding.m_buffer == buffer &&
 			binding.m_offset_bytes == offset_bytes &&
-			binding.m_size_bytes == size_bytes)
+			binding.m_size_bytes == size_bytes &&
+			binding.m_structure_stride == structure_stride)
 		{
 			return false;
 		}
@@ -254,6 +256,7 @@ public:
 		binding.m_buffer = buffer;
 		binding.m_offset_bytes = offset_bytes;
 		binding.m_size_bytes = size_bytes;
+		binding.m_structure_stride = structure_stride;
 		binding.m_is_set = true;
 
 		return true;
@@ -298,6 +301,7 @@ private:
 			Core::kInvalidRenderGeometryBufferHandle};
 		kun_ktk uint64_t m_offset_bytes{};
 		kun_ktk uint64_t m_size_bytes{};
+		kun_ktk uint32_t m_structure_stride{};
 		bool m_is_set{};
 	};
 

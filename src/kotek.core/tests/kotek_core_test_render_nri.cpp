@@ -206,6 +206,13 @@ namespace
 		EXPECT_TRUE(cache.set(0u, 0x10002u, 16, 1024));
 		EXPECT_TRUE(cache.set(0u, 0x10002u, 16, 2048));
 
+		// a view-form change (byte-address <-> structured) and a structured
+		// stride change both demand a fresh descriptor; identical rebinds do not
+		EXPECT_TRUE(cache.set(0u, 0x10002u, 16, 2048, 16u));
+		EXPECT_FALSE(cache.set(0u, 0x10002u, 16, 2048, 16u));
+		EXPECT_TRUE(cache.set(0u, 0x10002u, 16, 2048, 4u));
+		EXPECT_TRUE(cache.set(0u, 0x10002u, 16, 2048, 0u));
+
 		// fill the rest: complete at the declared count only when every
 		// declared slot is bound
 		EXPECT_TRUE(cache.set(1u, 0x10003u, 0, 64));
