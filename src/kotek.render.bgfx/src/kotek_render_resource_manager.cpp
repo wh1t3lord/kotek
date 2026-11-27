@@ -270,6 +270,32 @@ ktkRenderStats* ktkRenderResourceManager::Get_Statistic(
 
 	return p_result;
 }
+
+bool ktkRenderResourceManager::Get_GpuStats(
+	kun_core ktkRenderGpuStats& out_stats) noexcept
+{
+	const ::bgfx::Stats* p_stats = ::bgfx::getStats();
+	if (p_stats == nullptr)
+	{
+		out_stats = {};
+		return false;
+	}
+
+	out_stats.m_texture_memory_used = p_stats->textureMemoryUsed;
+	out_stats.m_render_target_memory_used = p_stats->rtMemoryUsed;
+	out_stats.m_transient_vertex_memory_used = p_stats->transientVbUsed;
+	out_stats.m_transient_index_memory_used = p_stats->transientIbUsed;
+	out_stats.m_dynamic_vertex_buffer_count = p_stats->numDynamicVertexBuffers;
+	out_stats.m_dynamic_index_buffer_count = p_stats->numDynamicIndexBuffers;
+	out_stats.m_vertex_buffer_count = p_stats->numVertexBuffers;
+	out_stats.m_index_buffer_count = p_stats->numIndexBuffers;
+	out_stats.m_texture_count = p_stats->numTextures;
+	out_stats.m_frame_buffer_count = p_stats->numFrameBuffers;
+	out_stats.m_program_count = p_stats->numPrograms;
+	out_stats.m_shader_count = p_stats->numShaders;
+	out_stats.m_uniform_count = p_stats->numUniforms;
+	return true;
+}
 KOTEK_END_NAMESPACE_RENDER_BGFX
 KOTEK_END_NAMESPACE_RENDER
 KOTEK_END_NAMESPACE_KOTEK

@@ -671,6 +671,23 @@ public:
 	}
 };
 
+struct ktkRenderGpuStats
+{
+	kun_ktk uint64_t m_texture_memory_used;
+	kun_ktk uint64_t m_render_target_memory_used;
+	kun_ktk uint64_t m_transient_vertex_memory_used;
+	kun_ktk uint64_t m_transient_index_memory_used;
+	kun_ktk uint32_t m_dynamic_vertex_buffer_count;
+	kun_ktk uint32_t m_dynamic_index_buffer_count;
+	kun_ktk uint32_t m_vertex_buffer_count;
+	kun_ktk uint32_t m_index_buffer_count;
+	kun_ktk uint32_t m_texture_count;
+	kun_ktk uint32_t m_frame_buffer_count;
+	kun_ktk uint32_t m_program_count;
+	kun_ktk uint32_t m_shader_count;
+	kun_ktk uint32_t m_uniform_count;
+};
+
 class ktkIRenderResourceManager
 {
 public:
@@ -722,6 +739,15 @@ public:
 
 	virtual kun_render ktkRenderStats*
 	Get_Statistic(kun_core eRenderStatistics type) noexcept = 0;
+
+	/// @brief \~english backend-owned frame counters. The default keeps
+	/// existing backends/source-compatible user implementations valid:
+	/// unsupported statistics clear the output and return false.
+	virtual bool Get_GpuStats(ktkRenderGpuStats& out_stats) noexcept
+	{
+		out_stats = {};
+		return false;
+	}
 };
 
 class ktkIRenderGraphResourceManager

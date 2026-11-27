@@ -82,6 +82,9 @@ public:
 	Get_Statistic(kun_core eRenderStatistics type
 	) noexcept override;
 
+	bool Get_GpuStats(kun_core ktkRenderGpuStats& out_stats
+	) noexcept override;
+
 private:
 	kun_core ktkIRenderDevice* m_p_render_device;
 	ktkRenderTextureManager* m_p_render_manager_texture;
